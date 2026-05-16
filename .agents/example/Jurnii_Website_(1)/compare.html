@@ -1,0 +1,90 @@
+<!doctype html>
+<html data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jurnii vs alternatives — comparison</title>
+<meta name="description" content="See how Jurnii compares to Ekimetrics, Nielsen, traditional UX agencies, and in-house manual tracking.">
+<link rel="icon" href="assets/jurnii-icon-light.svg">
+<link rel="stylesheet" href="assets/site.css">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="assets/site.jsx"></script>
+<script type="text/babel" src="assets/blocks.jsx"></script>
+<script type="text/babel" src="assets/compare-data.jsx"></script>
+<script type="text/babel">
+function App() {
+  const slug = new URLSearchParams(window.location.search).get('slug');
+  if (slug && window.COMPARE_DATA[slug]) {
+    const d = window.COMPARE_DATA[slug];
+    return (
+      <PageChrome active="compare">
+        <PageHero kicker="JURNII vs" eyebrow={d.eyebrow} title={d.title} lede={d.lede} primaryCta={{label:'Book a demo', href:'contact.html'}} secondaryCta={{label:'See all comparisons', href:'compare.html'}}/>
+        <section className="section reveal">
+          <div className="container">
+            <div className="section-head">
+              <p className="eyebrow"><span className="dot"/>Side by side</p>
+              <h2 className="h2-section">Where each option wins.</h2>
+            </div>
+            <div className="compare-table-wrap">
+              <table className="compare-table">
+                <thead><tr><th></th><th className="is-jurnii">Jurnii</th><th>{d.them}</th></tr></thead>
+                <tbody>
+                  {d.rows.map((r,i) => (
+                    <tr key={i}>
+                      <td>{r.row}</td>
+                      <td className={`is-jurnii ${r.usCls}`}>{r.us}</td>
+                      <td className={r.themCls}>{r.them}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+        <section className="section reveal">
+          <div className="container-narrow">
+            {d.body.map((s,i) => (
+              <section key={i} style={{marginBottom: 32}}>
+                <h2 style={{fontSize: 24, fontWeight: 600, letterSpacing: '-0.012em', margin: '0 0 14px'}}>{s.h}</h2>
+                <p style={{fontSize: 16, lineHeight: 1.75, color: 'var(--foreground)', margin: 0, maxWidth: '68ch'}}>{s.p}</p>
+              </section>
+            ))}
+          </div>
+        </section>
+        <CTABand heading="Bring this comparison to a real demo." sub="We'll show you the live product against your actual competitor set, in 30 minutes." primary={{label:'Book a demo', href:'contact.html'}}/>
+      </PageChrome>
+    );
+  }
+  // Hub
+  const items = Object.entries(window.COMPARE_DATA);
+  return (
+    <PageChrome active="compare">
+      <PageHero kicker="COMPARISONS" eyebrow="Compare" title="Honest comparisons against the alternatives." lede="No marketing fluff. We name the competition, mark the boxes, and tell you when they're the right call." primaryCta={{label:'Book a demo', href:'contact.html'}}/>
+      <section className="section reveal">
+        <div className="container">
+          <div className="resources-grid">
+            {items.map(([slug, d]) => (
+              <a key={slug} className="resource-card" href={`compare.html?slug=${slug}`}>
+                <span className="badge cat-comparison">Comparison</span>
+                <h3>{d.title}</h3>
+                <p>{d.lede}</p>
+                <div className="meta"><span>5–7 min read</span><span className="read-arrow">Compare <i data-lucide="arrow-right" style={{ width: 12, height: 12 }}/></span></div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+      <CTABand heading="Still deciding?" sub="A 30-minute demo against your actual competitor set will tell you more than any comparison." primary={{label:'Book a demo', href:'contact.html'}}/>
+    </PageChrome>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

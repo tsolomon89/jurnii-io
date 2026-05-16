@@ -1,0 +1,78 @@
+<!doctype html>
+<html data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact · Jurnii</title>
+<meta name="description" content="Book a 30-minute demo or get in touch with the Jurnii team.">
+<link rel="icon" href="assets/jurnii-icon-light.svg">
+<link rel="stylesheet" href="assets/site.css">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="assets/site.jsx"></script>
+<script type="text/babel" src="assets/blocks.jsx"></script>
+<script type="text/babel">
+const { useState: cuS } = React;
+function ContactForm() {
+  const [sent, setSent] = cuS(false);
+  const onSubmit = (e) => { e.preventDefault(); setSent(true); };
+  if (sent) return (
+    <div className="contact-form">
+      <h3 style={{fontSize: 22, fontWeight: 600, letterSpacing: '-0.012em', margin: 0}}>Thanks — we'll be in touch within a working day.</h3>
+      <p style={{color: 'var(--muted-foreground)', margin: 0, lineHeight: 1.6}}>You'll get a calendar link from <b>fraser@jurnii.io</b>. If you don't see it, check your junk folder or email us directly.</p>
+    </div>
+  );
+  return (
+    <form className="contact-form" onSubmit={onSubmit}>
+      <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16}}>
+        <div className="form-row"><label>First name</label><input required name="first" placeholder="Fraser"/></div>
+        <div className="form-row"><label>Last name</label><input required name="last" placeholder="Davidson"/></div>
+      </div>
+      <div className="form-row"><label>Work email</label><input required type="email" name="email" placeholder="you@operator.com"/></div>
+      <div className="form-row"><label>Company</label><input required name="company" placeholder="Operator name"/></div>
+      <div className="form-row"><label>Role</label><select required name="role" defaultValue=""><option value="" disabled>Select a role…</option><option>CEO / MD</option><option>CMO / Group Marketing</option><option>Head of CRM / Promotions</option><option>Head of Product</option><option>Head of Trading</option><option>Data / Analytics lead</option><option>Other</option></select></div>
+      <div className="form-row"><label>What are you looking at?</label><select required name="interest" defaultValue=""><option value="" disabled>Select…</option><option>Jurnii 360 — competitor intelligence</option><option>Jurnii UX — UX benchmarking</option><option>Jurnii MMM — media mix modelling</option><option>The full 360 product suite</option><option>Partnership / B2B</option></select></div>
+      <div className="form-row"><label>Anything we should know?</label><textarea name="notes" rows="4" placeholder="Markets, competitor set, timing — whatever helps us prepare."/></div>
+      <button type="submit" className="btn primary lg" style={{justifyContent: 'center', marginTop: 6}}>Request a demo <i data-lucide="arrow-right" style={{width:14,height:14}} className="arrow"/></button>
+      <p style={{fontSize: 12, color: 'var(--muted-foreground)', margin: 0, lineHeight: 1.5}}>By submitting, you agree to be contacted about Jurnii. We don't share your details. Read our <a href="#" style={{textDecoration: 'underline'}}>privacy notice</a>.</p>
+    </form>
+  );
+}
+function App() {
+  React.useEffect(() => { window.lucide && window.lucide.createIcons(); }, []);
+  return (
+    <PageChrome active="contact">
+      <PageHero kicker="CONTACT" eyebrow="Talk to us" title="Book a 30-minute demo." lede="We'll show you live data from your actual competitor set. No slides, no script — just the product." />
+      <section className="section reveal">
+        <div className="container">
+          <div className="contact-grid">
+            <ContactForm/>
+            <aside className="contact-aside">
+              <h3>What to expect</h3>
+              <ul>
+                <li>30 minutes, video call.</li>
+                <li>Live walkthrough of Jurnii 360 against your competitor set.</li>
+                <li>If we're not the right fit, we'll tell you in the call.</li>
+              </ul>
+              <h3>Direct contact</h3>
+              <p><b>Demos &amp; sales</b><br/>fraser@jurnii.io</p>
+              <p><b>Partnerships</b><br/>partnerships@jurnii.io</p>
+              <p><b>Press &amp; reports</b><br/>press@jurnii.io</p>
+              <h3>Office</h3>
+              <p>Jurnii Ltd<br/>London, United Kingdom</p>
+            </aside>
+          </div>
+        </div>
+      </section>
+    </PageChrome>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
