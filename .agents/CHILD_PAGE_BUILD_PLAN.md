@@ -2,11 +2,13 @@
 
 This plan maps all missing child pages to be built, derived strictly from source-backed product capabilities, commercial problems, and ICP definitions.
 
-## Excluded For Now
+## Excluded For Now / Deferred
 - **Jurnii Studio**
 - **Service Pages**: `/services/`, `implementation-services.html`
 - **Generic Feature Pages**: `Budgets`, `Channels`, `Models`, `Reports`, `Scenarios`
-- **Bare Industry Pages**: `Operators`, `Suppliers` (must use Company Type paths)
+- **Non-Solution Cortex Features**: `/solutions/finance-reconciliation.html`, `/solutions/scenario-planning.html` (these are features, not solutions).
+- **Category Framing Solutions**: `/solutions/commercial-intelligence.html` (use `/solutions/index.html` instead).
+- **Secondary Partners**: `/use-cases/company-type/enterprise-suppliers.html`, `/use-cases/company-type/strategic-partners.html`
 
 ---
 
@@ -69,14 +71,11 @@ Commercial problem and outcome pages.
 | `/solutions/retention-intelligence.html` | Retention Intelligence |
 | `/solutions/marketing-attribution.html` | Marketing Attribution |
 | `/solutions/marketing-mix-modelling.html` | Marketing Mix Modelling |
-| `/solutions/commercial-intelligence.html` | Commercial Intelligence |
-| `/solutions/finance-reconciliation.html` | Finance Reconciliation |
-| `/solutions/scenario-planning.html` | Scenario Planning |
 
 ---
 
 ## 4. Use Case Value Pages
-Built hierarchically based on the field/value ontology. Do not use legacy `/use-cases/industry/operators`.
+Built hierarchically based on the field/value ontology.
 
 ### Role (Build First)
 | Target Path | Value |
@@ -88,23 +87,10 @@ Built hierarchically based on the field/value ontology. Do not use legacy `/use-
 | `/use-cases/role/head-of-crm-retention.html` | Head of CRM / Retention |
 | `/use-cases/role/head-of-ux-cx.html` | Head of UX / CX |
 
-### Company Type (Build Second)
+### Company Type (Build Now)
 | Target Path | Value |
 |---|---|
 | `/use-cases/company-type/igaming-operators.html` | iGaming Operators |
-| `/use-cases/company-type/enterprise-suppliers.html`| Enterprise Suppliers |
-| `/use-cases/company-type/strategic-partners.html` | Strategic Partners |
-
-### Commercial Problem (Build Third)
-| Target Path | Value |
-|---|---|
-| `/use-cases/problem/rising-cac.html` | Rising CAC |
-| `/use-cases/problem/player-multi-homing.html` | Player Multi-Homing |
-| `/use-cases/problem/platform-commoditisation.html` | Platform Commoditisation |
-| `/use-cases/problem/manual-benchmarking.html` | Manual Benchmarking |
-| `/use-cases/problem/no-attribution.html` | No Attribution |
-| `/use-cases/problem/siloed-intelligence.html` | Siloed Intelligence |
-| `/use-cases/problem/regulatory-margin-compression.html`| Regulatory Margin Compression |
 
 ---
 
@@ -114,9 +100,14 @@ Old legacy paths will be maintained as structural gateways directing to the new 
 | Legacy Path | Canonical Target |
 |---|---|
 | `/solutions/auditing.html` | `/solutions/ux-benchmarking.html` |
-| `/solutions/intelligence.html` | `/solutions/competitor-intelligence.html` |
 | `/solutions/improvement.html` | `/solutions/conversion-optimisation.html` |
-| `/services/cro.html` | `/solutions/conversion-optimisation.html` (since services are deferred) |
-| `/services/analysis.html` | `/solutions/commercial-intelligence.html` |
+| `/solutions/intelligence.html` | `/solutions/competitor-intelligence.html` |
+| `/services/cro.html` | `/solutions/conversion-optimisation.html` |
+| `/services/analysis.html` | `/solutions/index.html` (or category frame) |
+| `/features/journeys.html` | `/features/journey-effectiveness.html` |
+| `/features/indices.html` | `/features/promo-richness-index.html` |
+| `/features/promotions.html` | `/features/competitor-promotion-tracking.html` |
 | `/use-cases/industry/operators.html` | `/use-cases/company-type/igaming-operators.html` |
-| `/use-cases/industry/suppliers.html` | `/use-cases/company-type/enterprise-suppliers.html` |
+| `/use-cases/industry/suppliers.html` | Deferred (Gateway to partner-channel later) |
+| `/use-cases/role/head-of-crm.html` | `/use-cases/role/head-of-crm-retention.html` |
+| `/use-cases/role/head-of-ux.html` | `/use-cases/role/head-of-ux-cx.html` |

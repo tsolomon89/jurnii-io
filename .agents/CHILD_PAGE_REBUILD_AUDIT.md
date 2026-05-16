@@ -1,13 +1,44 @@
 # Child Page Rebuild Audit
 
-This audit classifies current on-page references (cards, links, section titles) according to the corrected 3-product architecture. 
+This audit evaluates current and legacy on-page references (cards, links, section titles, global nav, and footer) against the corrected 3-product architecture.
 
 **Classification Key:**
 - `Build Page`: A valid, source-backed child page needs to be created.
 - `Link Existing Page`: The canonical page already exists.
-- `Keep as Section`: This is a structural component or proof point, not a child page.
+- `Keep as Section`: This is a structural component, proof point, or vague claim, not a child page.
 - `Rename / Map`: The label should be updated to point to a canonical child page.
+- `Remove`: A reference to a deprecated or invalid concept (e.g. Jurnii Studio).
 - `Gateway`: Preserve a legacy path that redirects to a canonical target.
+- `Defer`: A valid concept (e.g. enterprise suppliers) that is not built in this phase.
+
+---
+
+## Global Navigation & Footer
+
+| Location | Label / Path | Action | Target / Resolution |
+|---|---|---|---|
+| Nav / Footer | Products > Jurnii UX | `Link Existing Page` | `/products/jurnii-ux.html` |
+| Nav / Footer | Products > Jurnii 360 | `Link Existing Page` | `/products/jurnii-360.html` |
+| Nav / Footer | Products > Cortex | `Link Existing Page` | `/products/cortex.html` |
+| Nav / Footer | Products > Jurnii Studio | `Remove` | Excluded from current product suite. |
+| Nav / Footer | Features > *Various* | `Rename / Map` | Re-map to the new canonical feature routes based on the product messaging doc. |
+| Nav / Footer | Solutions > UX Benchmarking | `Build Page` | `/solutions/ux-benchmarking.html` |
+| Nav / Footer | Solutions > Conversion Optimisation | `Build Page` | `/solutions/conversion-optimisation.html` |
+| Nav / Footer | Solutions > Competitor Intelligence | `Build Page` | `/solutions/competitor-intelligence.html` |
+| Nav / Footer | Use Cases > Operators | `Rename / Map` | `/use-cases/company-type/igaming-operators.html` |
+| Nav / Footer | Use Cases > CPO | `Build Page` | `/use-cases/role/cpo.html` |
+| Footer | Implementation Services | `Remove` | Services deferred. |
+
+---
+
+## `index.html`
+
+| Section / Card | Label | Action | Target / Resolution |
+|---|---|---|---|
+| Section | Jurnii UX | `Link Existing Page` | `/products/jurnii-ux.html` |
+| Section | Jurnii 360 | `Link Existing Page` | `/products/jurnii-360.html` |
+| Section | Cortex | `Link Existing Page` | `/products/cortex.html` |
+| Section | Jurnii Studio | `Remove` | Excluded from current product suite. |
 
 ---
 
@@ -25,10 +56,10 @@ This audit classifies current on-page references (cards, links, section titles) 
 | Card | UX Benchmarking | `Build Page` | `/solutions/ux-benchmarking.html` |
 | Card | Conversion Optimisation | `Build Page` | `/solutions/conversion-optimisation.html` |
 | Card | CPO | `Build Page` | `/use-cases/role/cpo.html` |
-| Card | Head of UX | `Build Page` | `/use-cases/role/head-of-ux-cx.html` |
+| Card | Head of UX | `Rename / Map` | Point to `/use-cases/role/head-of-ux-cx.html` |
 | Card | Operators | `Rename / Map` | Point to `/use-cases/company-type/igaming-operators.html` |
-| Card | Jurnii 360 | `Link Existing Page` | `/products/jurnii-360.html` |
-| Card | Cortex | `Link Existing Page` | `/products/cortex.html` |
+
+---
 
 ## `products/jurnii-360.html`
 
@@ -49,10 +80,12 @@ This audit classifies current on-page references (cards, links, section titles) 
 | Card | Exports | `Rename / Map` | Point to `MMM-Ready Data Export` |
 | Card | Competitor Intelligence | `Build Page` | `/solutions/competitor-intelligence.html` |
 | Card | Retention Intelligence | `Build Page` | `/solutions/retention-intelligence.html` |
-| Card | Commercial Intelligence | `Build Page` | `/solutions/commercial-intelligence.html` |
+| Card | Commercial Intelligence | `Remove` or `Keep as Section` | Category frame, not a specific solution page. |
 | Card | CCO | `Build Page` | `/use-cases/role/cco.html` |
 | Card | CMO | `Build Page` | `/use-cases/role/cmo.html` |
-| Card | Head of CRM | `Build Page` | `/use-cases/role/head-of-crm-retention.html` |
+| Card | Head of CRM | `Rename / Map` | Point to `/use-cases/role/head-of-crm-retention.html` |
+
+---
 
 ## `products/cortex.html`
 
@@ -69,22 +102,27 @@ This audit classifies current on-page references (cards, links, section titles) 
 | Card | Scenario Planning | `Build Page` | `/features/scenario-planning.html` |
 | Card | Marketing Attribution | `Build Page` | `/solutions/marketing-attribution.html` |
 | Card | Marketing Mix Modelling | `Build Page` | `/solutions/marketing-mix-modelling.html` |
-| Card | Commercial Intelligence | `Build Page` | `/solutions/commercial-intelligence.html` |
+| Card | Commercial Intelligence | `Remove` or `Keep as Section` | Category frame, not a specific solution page. |
 | Card | CMO | `Build Page` | `/use-cases/role/cmo.html` |
 | Card | CEO | `Build Page` | `/use-cases/role/ceo.html` |
 | Card | Operators | `Rename / Map` | Point to `/use-cases/company-type/igaming-operators.html` |
-| Card | +46% | `Keep as Section` | Metric/Proof |
-| Card | 3× | `Keep as Section` | Metric/Proof |
-| Card | 40× | `Keep as Section` | Metric/Proof |
-| Card | $4.85M | `Keep as Section` | Metric/Proof |
+| Card | +46% / 3x / $4.85M | `Keep as Section` | Proof points, not pages. |
 
-## `features/` & `solutions/` Legacy Gateway Paths
+---
 
-| Current Path | Action | Target / Resolution |
+## `features/` , `solutions/` , and `use-cases/` Legacy Gateway Paths
+
+| Current / Legacy Path | Action | Target / Resolution |
 |---|---|---|
 | `/solutions/auditing.html` | `Gateway` | `/solutions/ux-benchmarking.html` |
 | `/solutions/improvement.html` | `Gateway` | `/solutions/conversion-optimisation.html` |
 | `/solutions/intelligence.html` | `Gateway` | `/solutions/competitor-intelligence.html` |
-| `/features/indices.html` | `Gateway` | `/features/promo-richness-index.html` |
+| `/services/cro.html` | `Gateway` | `/solutions/conversion-optimisation.html` |
+| `/services/analysis.html` | `Gateway` | `/solutions/index.html` (or category frame) |
 | `/features/journeys.html` | `Gateway` | `/features/journey-effectiveness.html` |
+| `/features/indices.html` | `Gateway` | `/features/promo-richness-index.html` |
 | `/features/promotions.html` | `Gateway` | `/features/competitor-promotion-tracking.html` |
+| `/use-cases/industry/operators.html` | `Gateway` | `/use-cases/company-type/igaming-operators.html` |
+| `/use-cases/industry/suppliers.html` | `Gateway` / `Defer` | Deferred to future partner-channel phase. |
+| `/use-cases/role/head-of-crm.html` | `Gateway` | `/use-cases/role/head-of-crm-retention.html` |
+| `/use-cases/role/head-of-ux.html` | `Gateway` | `/use-cases/role/head-of-ux-cx.html` |
