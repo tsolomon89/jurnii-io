@@ -430,3 +430,17 @@ P4 Studio â†’ (delivers against P1 findings) â†’ SO10 Design â†’ V8 Head of UX â
 ---
 
 *End of document.*
+
+
+## Implementation Correction — Child Page Architecture
+
+**Date:** May 2026
+
+Following a review of the child-page building documentation, several corrections have been made to align with the canonical product messaging (Jurnii_Overview.pdf and  5 · Product Messaging):
+
+- **Service Pages Removed:** The site architecture focuses strictly on the three software products (Jurnii UX, Jurnii 360, Cortex). Jurnii Studio and broader service pages have been deferred to avoid diluting the SaaS proposition.
+- **Use Case Fields Corrected:** Operators and Suppliers are not industries; they are classified under the Company Type field. Industry is strictly iGaming.
+- **Vague Feature Atoms Replaced:** Generic nouns (e.g., Budgets, Models, Channels) were incorrect targets for public child pages. The public pages now map directly to the source-grounded capabilities listed in the messaging docs (e.g., Causal Impact & MMM Attribution, Competitor Promotion Tracking).
+- **Solutions Restructured:** Solutions are maintained strictly as commercial problem/outcome hubs without generating arbitrary new solutions from legacy copy.
+
+These corrections ensure that the public website faithfully represents the **Three products. One intelligence layer.** architecture without hallucinating non-existent pages or collapsing the commercial ontology.
