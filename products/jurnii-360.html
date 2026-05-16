@@ -12,7 +12,7 @@
 <body>
 
   <!-- Global Nav -->
-            <nav class="nav">
+                <nav class="nav">
     <div class="container nav-inner">
       <div class="nav-brand">
         <a href="../index.html"><img src="../assets/jurnii-dark-full.svg" alt="Jurnii Logo" class="logo-light"></a>
@@ -49,6 +49,23 @@
           </div>
         </div>
         <div class="dropdown">
+          <button>Solutions <i data-lucide="chevron-down" style="width:14px;height:14px;"></i></button>
+          <div class="dropdown-panel cols-2">
+            <a href="../solutions/ux-benchmarking.html" class="dropdown-item">
+              <div class="ico"><i data-lucide="bar-chart"></i></div>
+              <div><b>UX Benchmarking</b></div>
+            </a>
+            <a href="../solutions/conversion-optimisation.html" class="dropdown-item">
+              <div class="ico"><i data-lucide="trending-up"></i></div>
+              <div><b>Conversion Optimisation</b></div>
+            </a>
+            <a href="../solutions/competitor-intelligence.html" class="dropdown-item">
+              <div class="ico"><i data-lucide="shield-alert"></i></div>
+              <div><b>Competitor Intelligence</b></div>
+            </a>
+          </div>
+        </div>
+        <div class="dropdown">
           <button>Use Cases <i data-lucide="chevron-down" style="width:14px;height:14px;"></i></button>
           <div class="dropdown-panel cols-2">
             <a href="../use-cases/industry/operators.html" class="dropdown-item">
@@ -68,14 +85,71 @@
 
   <main>
     <!-- HERO SECTION -->
-    <section class="page-hero">
-      <div class="container">
-        <p class="page-hero-kicker">Product</p>
-        <h1 class="h1-page">Jurnii 360</h1>
-        <p class="page-hero-lede">Automated competitor promotional intelligence. See what your competitors launch.</p>
-        <div class="cta-row" style="margin-top: 32px;">
-          <a href="#" class="btn primary">Book a Demo</a>
-          <a href="#details" class="btn ghost">Explore Architecture</a>
+    <section class="page-hero visual-hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="page-hero-kicker">Product</p>
+          <h1 class="h1-page">Jurnii 360</h1>
+          <p class="page-hero-lede">Automated competitor promotional intelligence. See what your competitors launch.</p>
+          <div class="cta-row" style="margin-top: 32px;">
+            <a href="#" class="btn primary">Book a Demo</a>
+            <a href="#details" class="btn ghost">Explore Architecture</a>
+          </div>
+        </div>
+        <div class="interface-artifact float-slow">
+          <div class="artifact-browser-frame" style="max-width: 900px; margin: 0 auto; height: 500px;">
+            <div class="artifact-window-bar">
+              <div class="dots">
+                <span style="background: #ff5f56;"></span>
+                <span style="background: #ffbd2e;"></span>
+                <span style="background: #27c93f;"></span>
+              </div>
+              <div class="title">intelligence.jurnii.io/commercial-radar</div>
+            </div>
+            <div class="artifact-window">
+              <div class="artifact-sidebar">
+                <div class="ico" style="color: var(--jurnii-500);"><i data-lucide="radar"></i></div>
+              </div>
+              <div class="artifact-canvas">
+                <div class="artifact-grid-bg"></div>
+                <img src="../assets/images/generated/jurnii-360-commercial-radar.webp" alt="Radar Atmospheric Layer">
+                <svg class="artifact-path-layer radar-sweep" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" style="opacity: 0.5;">
+                  <circle cx="400" cy="250" r="200" fill="none" stroke="rgba(87,255,96,0.1)" stroke-width="1" />
+                  <circle cx="400" cy="250" r="100" fill="none" stroke="rgba(87,255,96,0.1)" stroke-width="1" />
+                  <path d="M 400,250 L 400,50" stroke="url(#radarGradient)" stroke-width="2" />
+                  <defs>
+                    <linearGradient id="radarGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+                      <stop offset="0%" stop-color="var(--jurnii-500)" stop-opacity="1" />
+                      <stop offset="100%" stop-color="var(--jurnii-500)" stop-opacity="0" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div class="artifact-node pulse-soft" style="width: 24px; height: 24px; top: 150px; left: 300px; background: rgba(87,255,96,0.2); border-color: var(--jurnii-500);"></div>
+                <div class="artifact-node pulse-soft" style="width: 16px; height: 16px; top: 320px; left: 500px; background: rgba(82,153,255,0.2); border-color: #5299ff; animation-delay: 1s;"></div>
+                <div class="artifact-node pulse-soft" style="width: 20px; height: 20px; top: 200px; left: 450px; background: rgba(255,189,46,0.2); border-color: #ffbd2e; animation-delay: 2s;"></div>
+                <div class="artifact-glass artifact-alert-card float-fast" style="top: 130px; left: 80px; border-left-color: var(--jurnii-500);">
+                  <span style="font-family: var(--font-mono); font-size: 11px; color: var(--jurnii-500); display: block; margin-bottom: 4px;">Live Alert</span>
+                  <span class="artifact-metric" style="font-size: 14px; margin-bottom: 0;">Competitor X launched Boost</span>
+                </div>
+                <div style="position: absolute; bottom: 40px; left: 40px; right: 40px; height: 80px; display: flex; gap: 16px;">
+                  <div class="artifact-glass" style="flex: 1; padding: 16px; display: flex; flex-direction: column; justify-content: center;">
+                    <span style="font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,0.5);">Promo Density</span>
+                    <div style="height: 24px; width: 100%; display: flex; align-items: flex-end; gap: 4px; margin-top: 8px;">
+                       <div style="width: 10%; height: 40%; background: rgba(255,255,255,0.1);"></div>
+                       <div style="width: 10%; height: 60%; background: rgba(255,255,255,0.1);"></div>
+                       <div style="width: 10%; height: 30%; background: rgba(255,255,255,0.1);"></div>
+                       <div style="width: 10%; height: 80%; background: rgba(87,255,96,0.4);"></div>
+                       <div style="width: 10%; height: 100%; background: var(--jurnii-500);"></div>
+                    </div>
+                  </div>
+                  <div class="artifact-glass" style="width: 200px; padding: 16px; display: flex; flex-direction: column; justify-content: center;">
+                     <span class="artifact-metric">142</span>
+                     <span style="font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,0.5);">Active Promotions</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -96,6 +170,9 @@
         <div class="section-head">
           <h2 class="h2-section">How Jurnii 360 Solves This</h2>
           <p style="max-width: 600px; margin-bottom: 24px;">Jurnii 360 automates competitor intelligence across 21 feature areas, capturing 100% of competitor moves automatically. It turns unstructured market activity into board-ready metrics like the Promo Richness Index.</p>
+        </div>
+        <div class="svg-panel radar-panel" style="margin-bottom: 48px;">
+          <img src="../assets/visuals/commercial-radar.svg" alt="Commercial Radar Tracking" width="100%">
         </div>
         <div class="feature-grid">
            <div class="feature-cell">
@@ -127,37 +204,37 @@
             <p>Track all live offers across competitors automatically.</p>
             <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
           </a>
-          <a href="../features/timings.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>Timings</h3>
             <p>Know exactly when competitors launch daily boosts.</p>
             <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
           </a>
-          <a href="../features/offers.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>Offers</h3>
             <p>Compare bonus sizes and free bet values against the market.</p>
             <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
           </a>
-          <a href="../features/banners.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>Banners</h3>
             <p>Monitor homepage creative and messaging approaches.</p>
             <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
           </a>
-          <a href="../features/segments.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>Segments</h3>
             <p>Reveal which player cohorts your competitors target.</p>
             <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
           </a>
-          <a href="../features/trends.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>Trends</h3>
             <p>Identify emerging promotional trends across the industry.</p>
             <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
           </a>
-          <a href="../features/alerts.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>Alerts</h3>
             <p>Instant notifications when competitors launch an offer.</p>
             <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
           </a>
-          <a href="../features/database.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>Database</h3>
             <p>Full promotional history for longitudinal trend analysis.</p>
             <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
@@ -167,7 +244,7 @@
             <p>Proprietary metric quantifying promotional generosity.</p>
             <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
           </a>
-          <a href="../features/exports.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>Exports</h3>
             <p>Pre-formatted competitive data that feeds directly into systems.</p>
             <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
@@ -186,12 +263,12 @@
             <p>Automated, market-wide visibility into competitor moves.</p>
             <div class="card-meta"><span>View Solution</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
           </a>
-          <a href="../solutions/retention-intelligence.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>Retention Intelligence</h3>
             <p>Defend your base by monitoring competitor retention offers.</p>
             <div class="card-meta"><span>View Solution</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
           </a>
-          <a href="../solutions/commercial-intelligence.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>Commercial Intelligence</h3>
             <p>Align leadership with a single view of market truth.</p>
             <div class="card-meta"><span>View Solution</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
@@ -205,17 +282,17 @@
       <div class="container">
         <h2 class="h2-section" style="margin-bottom: 24px;">Built For</h2>
         <div class="feature-grid">
-          <a href="../use-cases/role/cco.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>CCO</h3>
             <p>Track market generosity and competitor promo strategies.</p>
             <div class="card-meta"><span>View Role Value</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
           </a>
-          <a href="../use-cases/role/cmo.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>CMO</h3>
             <p>Explain performance variance with market evidence.</p>
             <div class="card-meta"><span>View Role Value</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
           </a>
-          <a href="../use-cases/role/head-of-crm.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>Head of CRM</h3>
             <p>Track competitor retention offers and protect your players.</p>
             <div class="card-meta"><span>View Role Value</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>

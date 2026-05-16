@@ -10,7 +10,9 @@ const ontology = {
     { name: "Promotions", slug: "features/promotions.html", icon: "tag" }
   ],
   solutions: [
-    // Empty until solutions are created
+    { name: 'UX Benchmarking', slug: 'solutions/ux-benchmarking.html', icon: 'bar-chart' },
+    { name: 'Conversion Optimisation', slug: 'solutions/conversion-optimisation.html', icon: 'trending-up' },
+    { name: 'Competitor Intelligence', slug: 'solutions/competitor-intelligence.html', icon: 'shield-alert' }
   ],
   useCases: [
     { name: "Operators", slug: "use-cases/industry/operators.html", icon: "building" },

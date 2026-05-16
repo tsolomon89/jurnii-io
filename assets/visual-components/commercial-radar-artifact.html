@@ -1,0 +1,67 @@
+<div class="interface-artifact float-slow">
+  <div class="artifact-browser-frame" style="max-width: 900px; margin: 0 auto; height: 500px;">
+    
+    <div class="artifact-window-bar">
+      <div class="dots">
+        <span style="background: #ff5f56;"></span>
+        <span style="background: #ffbd2e;"></span>
+        <span style="background: #27c93f;"></span>
+      </div>
+      <div class="title">intelligence.jurnii.io/commercial-radar</div>
+    </div>
+
+    <div class="artifact-window">
+      <div class="artifact-sidebar">
+        <div class="ico" style="color: var(--jurnii-500);"><i data-lucide="radar"></i></div>
+      </div>
+
+      <div class="artifact-canvas">
+        <div class="artifact-grid-bg"></div>
+        <img src="../images/generated/jurnii-360-commercial-radar.webp" alt="Radar Atmospheric Layer">
+        
+        <!-- SVG Radar Sweep -->
+        <svg class="artifact-path-layer radar-sweep" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" style="opacity: 0.5;">
+          <circle cx="400" cy="250" r="200" fill="none" stroke="rgba(87,255,96,0.1)" stroke-width="1" />
+          <circle cx="400" cy="250" r="100" fill="none" stroke="rgba(87,255,96,0.1)" stroke-width="1" />
+          <path d="M 400,250 L 400,50" stroke="url(#radarGradient)" stroke-width="2" />
+          <defs>
+            <linearGradient id="radarGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+              <stop offset="0%" stop-color="var(--jurnii-500)" stop-opacity="1" />
+              <stop offset="100%" stop-color="var(--jurnii-500)" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+        </svg>
+
+        <!-- Offer Markers -->
+        <div class="artifact-node pulse-soft" style="width: 24px; height: 24px; top: 150px; left: 300px; background: rgba(87,255,96,0.2); border-color: var(--jurnii-500);"></div>
+        <div class="artifact-node pulse-soft" style="width: 16px; height: 16px; top: 320px; left: 500px; background: rgba(82,153,255,0.2); border-color: #5299ff; animation-delay: 1s;"></div>
+        <div class="artifact-node pulse-soft" style="width: 20px; height: 20px; top: 200px; left: 450px; background: rgba(255,189,46,0.2); border-color: #ffbd2e; animation-delay: 2s;"></div>
+
+        <!-- Alert Pulse Card -->
+        <div class="artifact-glass artifact-alert-card float-fast" style="top: 130px; left: 80px; border-left-color: var(--jurnii-500);">
+          <span style="font-family: var(--font-mono); font-size: 11px; color: var(--jurnii-500); display: block; margin-bottom: 4px;">Live Alert</span>
+          <span class="artifact-metric" style="font-size: 14px; margin-bottom: 0;">Competitor X launched Boost</span>
+        </div>
+
+        <!-- Market Movement Strip -->
+        <div style="position: absolute; bottom: 40px; left: 40px; right: 40px; height: 80px; display: flex; gap: 16px;">
+          <div class="artifact-glass" style="flex: 1; padding: 16px; display: flex; flex-direction: column; justify-content: center;">
+            <span style="font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,0.5);">Promo Density</span>
+            <div style="height: 24px; width: 100%; display: flex; align-items: flex-end; gap: 4px; margin-top: 8px;">
+               <div style="width: 10%; height: 40%; background: rgba(255,255,255,0.1);"></div>
+               <div style="width: 10%; height: 60%; background: rgba(255,255,255,0.1);"></div>
+               <div style="width: 10%; height: 30%; background: rgba(255,255,255,0.1);"></div>
+               <div style="width: 10%; height: 80%; background: rgba(87,255,96,0.4);"></div>
+               <div style="width: 10%; height: 100%; background: var(--jurnii-500);"></div>
+            </div>
+          </div>
+          <div class="artifact-glass" style="width: 200px; padding: 16px; display: flex; flex-direction: column; justify-content: center;">
+             <span class="artifact-metric">142</span>
+             <span style="font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,0.5);">Active Promotions</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

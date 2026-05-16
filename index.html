@@ -12,7 +12,7 @@
 <body>
 
   <!-- Navigation -->
-            <nav class="nav">
+                <nav class="nav">
     <div class="container nav-inner">
       <div class="nav-brand">
         <a href="index.html"><img src="assets/jurnii-dark-full.svg" alt="Jurnii Logo" class="logo-light"></a>
@@ -45,6 +45,23 @@
             <a href="features/promotions.html" class="dropdown-item">
               <div class="ico"><i data-lucide="tag"></i></div>
               <div><b>Promotions</b></div>
+            </a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button>Solutions <i data-lucide="chevron-down" style="width:14px;height:14px;"></i></button>
+          <div class="dropdown-panel cols-2">
+            <a href="solutions/ux-benchmarking.html" class="dropdown-item">
+              <div class="ico"><i data-lucide="bar-chart"></i></div>
+              <div><b>UX Benchmarking</b></div>
+            </a>
+            <a href="solutions/conversion-optimisation.html" class="dropdown-item">
+              <div class="ico"><i data-lucide="trending-up"></i></div>
+              <div><b>Conversion Optimisation</b></div>
+            </a>
+            <a href="solutions/competitor-intelligence.html" class="dropdown-item">
+              <div class="ico"><i data-lucide="shield-alert"></i></div>
+              <div><b>Competitor Intelligence</b></div>
             </a>
           </div>
         </div>
@@ -82,32 +99,61 @@
             <a href="products/jurnii-360.html" class="btn ghost lg">Explore Jurnii 360</a>
           </div>
         </div>
-        <div class="hero-visual">
-          <div class="hero-dashboard">
-            <div class="hero-dash-head">
-              <div class="left">
-                <div class="dots"><span></span><span></span><span></span></div>
-                <div class="url">intelligence.jurnii.io</div>
+        <div class="interface-artifact float-slow" style="margin-top: 32px;">
+          <div class="artifact-browser-frame" style="max-width: 900px; margin: 0 auto; height: 500px;">
+            <div class="artifact-window-bar">
+              <div class="dots">
+                <span style="background: #ff5f56;"></span>
+                <span style="background: #ffbd2e;"></span>
+                <span style="background: #27c93f;"></span>
               </div>
-              <div class="live"><i></i> Live Market Feed</div>
+              <div class="title">intelligence.jurnii.io/layer</div>
             </div>
-            <div class="hero-dash-body">
-              <div class="hero-dash-stats">
-                <div class="hero-dash-stat">
-                  <span class="lbl">UX Audits</span>
-                  <span class="val">300<small>+</small></span>
+            <div class="artifact-window">
+              <div class="artifact-sidebar">
+                <div class="ico" style="color: var(--jurnii-500);"><i data-lucide="layout-template"></i></div>
+                <div class="ico"><i data-lucide="radar"></i></div>
+                <div class="ico"><i data-lucide="network"></i></div>
+              </div>
+              <div class="artifact-canvas">
+                <div class="artifact-grid-bg"></div>
+                <img src="assets/images/generated/jurnii-intelligence-layer-hero.webp" alt="Atmospheric Layer">
+                <svg class="artifact-path-layer" viewBox="0 0 800 400" preserveAspectRatio="none">
+                  <path d="M 200,100 C 350,100 350,200 600,200" fill="none" stroke="rgba(87,255,96,0.3)" stroke-width="2" class="signal-dash" />
+                  <path d="M 200,300 C 350,300 350,200 600,200" fill="none" stroke="rgba(82,153,255,0.3)" stroke-width="2" class="signal-dash" style="animation-delay: 0.5s;" />
+                </svg>
+                <div class="artifact-node float-fast" style="top: 80px; left: 150px;">UX</div>
+                <div class="artifact-node float-medium" style="top: 280px; left: 150px;">360</div>
+                <div class="artifact-node artifact-node-primary float-slow" style="top: 180px; left: 580px; width: 80px; height: 80px;">CORTEX</div>
+                <div class="artifact-glass artifact-floating-card float-medium" style="top: 40px; left: 240px;">
+                  <span class="artifact-metric">300+<span>brands</span></span>
+                  <div class="artifact-chip">Commercial signal</div>
                 </div>
-                <div class="hero-dash-stat">
-                  <span class="lbl">Promo Index</span>
-                  <span class="val">84<small>%</small></span>
+                <div class="artifact-glass artifact-floating-card float-fast" style="bottom: 60px; left: 240px;">
+                  <span class="artifact-metric">1,000+<span>offers</span></span>
+                  <div class="artifact-chip" style="color: #5299ff; background: rgba(82,153,255,0.1); border-color: rgba(82,153,255,0.2);">Market movement</div>
                 </div>
-                <div class="hero-dash-stat">
-                  <span class="lbl">Competitors</span>
-                  <span class="val">12</span>
+                <div class="artifact-glass artifact-success-card float-slow" style="top: 100px; right: 40px;">
+                  <span class="artifact-metric" style="font-size: 16px;">Attribution model</span>
+                  <span style="font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,0.5);">Converging intelligence</span>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Intelligence Architecture -->
+    <section class="section section-dark product-system-map">
+      <div class="container">
+        <div class="section-head centered">
+          <p class="eyebrow"><span class="dot"></span> Platform Architecture</p>
+          <h2 class="h2-section">One unified decision layer</h2>
+          <p class="section-lede">Connecting UX benchmarking, competitor moves, and commercial attribution in real-time.</p>
+        </div>
+        <div class="svg-panel" style="margin-top: 48px;">
+          <img src="assets/visuals/intelligence-layer-map.svg" alt="Intelligence Layer Architecture" width="100%">
         </div>
       </div>
     </section>
@@ -156,7 +202,7 @@
   </main>
 
   <!-- Footer -->
-  <footer class="footer">
+        <footer class="footer">
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
@@ -174,20 +220,17 @@
             <div class="footer-head">Features</div>
             <a href="features/journeys.html">Journeys</a>
             <a href="features/promotions.html">Promotions</a>
-            <a href="features/indices.html">Indices</a>
           </div>
           <div>
             <div class="footer-head">Solutions</div>
-            <a href="solutions/intelligence.html">Intelligence</a>
-            <a href="solutions/auditing.html">Auditing</a>
-            <a href="solutions/improvement.html">Improvement</a>
+            <a href="solutions/ux-benchmarking.html">UX Benchmarking</a>
+            <a href="solutions/conversion-optimisation.html">Conversion Optimisation</a>
+            <a href="solutions/competitor-intelligence.html">Competitor Intelligence</a>
           </div>
           <div>
             <div class="footer-head">Use Cases</div>
             <a href="use-cases/industry/operators.html">For Operators</a>
-            <a href="use-cases/industry/suppliers.html">For Suppliers</a>
             <a href="use-cases/role/cpo.html">For CPOs</a>
-            <a href="use-cases/role/cmo.html">For CMOs</a>
           </div>
         </div>
       </div>

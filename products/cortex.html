@@ -12,7 +12,7 @@
 <body>
 
   <!-- Global Nav -->
-            <nav class="nav">
+                <nav class="nav">
     <div class="container nav-inner">
       <div class="nav-brand">
         <a href="../index.html"><img src="../assets/jurnii-dark-full.svg" alt="Jurnii Logo" class="logo-light"></a>
@@ -49,6 +49,23 @@
           </div>
         </div>
         <div class="dropdown">
+          <button>Solutions <i data-lucide="chevron-down" style="width:14px;height:14px;"></i></button>
+          <div class="dropdown-panel cols-2">
+            <a href="../solutions/ux-benchmarking.html" class="dropdown-item">
+              <div class="ico"><i data-lucide="bar-chart"></i></div>
+              <div><b>UX Benchmarking</b></div>
+            </a>
+            <a href="../solutions/conversion-optimisation.html" class="dropdown-item">
+              <div class="ico"><i data-lucide="trending-up"></i></div>
+              <div><b>Conversion Optimisation</b></div>
+            </a>
+            <a href="../solutions/competitor-intelligence.html" class="dropdown-item">
+              <div class="ico"><i data-lucide="shield-alert"></i></div>
+              <div><b>Competitor Intelligence</b></div>
+            </a>
+          </div>
+        </div>
+        <div class="dropdown">
           <button>Use Cases <i data-lucide="chevron-down" style="width:14px;height:14px;"></i></button>
           <div class="dropdown-panel cols-2">
             <a href="../use-cases/industry/operators.html" class="dropdown-item">
@@ -68,14 +85,60 @@
 
   <main>
     <!-- 1. HERO SECTION -->
-    <section class="page-hero">
-      <div class="container">
-        <p class="page-hero-kicker">Product</p>
-        <h1 class="h1-page">Cortex</h1>
-        <p class="page-hero-lede">Marketing intelligence and attribution for iGaming operators.</p>
-        <div class="cta-row" style="margin-top: 32px;">
-          <a href="#" class="btn primary">Book a Demo</a>
-          <a href="#details" class="btn ghost">Explore Architecture</a>
+    <section class="page-hero visual-hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="page-hero-kicker">Product</p>
+          <h1 class="h1-page">Cortex</h1>
+          <p class="page-hero-lede">Marketing intelligence and attribution for iGaming operators.</p>
+          <div class="cta-row" style="margin-top: 32px;">
+            <a href="#" class="btn primary">Book a Demo</a>
+            <a href="#details" class="btn ghost">Explore Architecture</a>
+          </div>
+        </div>
+        <div class="interface-artifact float-slow">
+          <div class="artifact-browser-frame" style="max-width: 900px; margin: 0 auto; height: 500px;">
+            <div class="artifact-window-bar">
+              <div class="dots">
+                <span style="background: #ff5f56;"></span>
+                <span style="background: #ffbd2e;"></span>
+                <span style="background: #27c93f;"></span>
+              </div>
+              <div class="title">intelligence.jurnii.io/cortex-attribution</div>
+            </div>
+            <div class="artifact-window">
+              <div class="artifact-sidebar">
+                <div class="ico" style="color: var(--jurnii-500);"><i data-lucide="network"></i></div>
+              </div>
+              <div class="artifact-canvas">
+                <div class="artifact-grid-bg"></div>
+                <img src="../assets/images/generated/cortex-attribution-interface.webp" alt="Attribution Atmospheric Layer">
+                <svg class="artifact-path-layer" viewBox="0 0 800 400" preserveAspectRatio="none">
+                  <path d="M 150,100 C 300,100 400,200 600,200" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
+                  <path d="M 150,200 C 300,200 400,200 600,200" fill="none" stroke="rgba(87,255,96,0.3)" stroke-width="3" class="signal-dash" />
+                  <path d="M 150,300 C 300,300 400,200 600,200" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
+                </svg>
+                <div style="position: absolute; top: 80px; left: 40px; display: flex; flex-direction: column; gap: 60px;">
+                   <div class="artifact-glass" style="padding: 8px 16px; border-radius: 20px; font-family: var(--font-mono); font-size: 11px; color: #fff;">Social Spend</div>
+                   <div class="artifact-glass" style="padding: 8px 16px; border-radius: 20px; font-family: var(--font-mono); font-size: 11px; color: var(--jurnii-500); border-color: var(--jurnii-500);">Promo Mechanics</div>
+                   <div class="artifact-glass" style="padding: 8px 16px; border-radius: 20px; font-family: var(--font-mono); font-size: 11px; color: #fff;">Affiliates</div>
+                </div>
+                <div class="artifact-glass float-medium" style="position: absolute; top: 120px; left: 350px; width: 120px; height: 160px; display: flex; align-items: center; justify-content: center; flex-direction: column; border-color: rgba(87,255,96,0.3); background: rgba(20,20,20,0.8);">
+                   <i data-lucide="calculator" style="color: var(--jurnii-500); margin-bottom: 8px;"></i>
+                   <span style="font-family: var(--font-mono); font-size: 11px; color: #fff;">MMM Core</span>
+                </div>
+                <div class="artifact-glass artifact-success-card float-fast" style="top: 150px; right: 40px; width: 200px;">
+                  <span style="font-family: var(--font-mono); font-size: 11px; color: var(--jurnii-500); display: block; margin-bottom: 4px;">Causal Impact</span>
+                  <span class="artifact-metric" style="font-size: 24px; margin-bottom: 4px;">+46%</span>
+                  <span style="font-family: var(--font-mono); font-size: 10px; color: rgba(255,255,255,0.5);">True ROI validated</span>
+                </div>
+                <div class="artifact-glass float-slow" style="position: absolute; bottom: 40px; right: 40px; padding: 12px 16px; display: flex; align-items: center; gap: 8px;">
+                  <div class="artifact-chip" style="color: #fff; background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2);">Scenario Plan</div>
+                  <span style="font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,0.7);">Reallocating 15% budget</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -125,6 +188,9 @@
           <h2 class="h2-section">Powered by Jurnii 360</h2>
           <p style="max-width: 600px; margin: 0 auto 24px auto;">Each product in our intelligence layer feeds the others. Jurnii 360 captures and structures competitor promotional intelligence, feeding that context directly into Cortex to power its MMM models.</p>
         </div>
+        <div class="svg-panel attribution-panel" style="margin-top: 48px;">
+          <img src="../assets/visuals/cortex-attribution-graph.svg" alt="Cortex Attribution Graph" width="100%">
+        </div>
       </div>
     </section>
 
@@ -133,32 +199,32 @@
       <div class="container">
         <h2 class="h2-section" style="margin-bottom: 24px;">Core Capabilities</h2>
         <div class="feature-grid">
-          <a href="../features/causal-impact-mmm.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>Causal Impact & MMM</h3>
             <p>Determine the true ROI of your cross-channel marketing spend.</p>
             <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
           </a>
-          <a href="../features/cross-channel-gantt.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>Cross-channel Gantt Planning</h3>
             <p>Align marketing and product roadmaps with clear visual planning.</p>
             <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
           </a>
-          <a href="../features/ai-analytics-assistant.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>AI Analytics Assistant</h3>
             <p>Get answers to complex commercial queries instantly.</p>
             <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
           </a>
-          <a href="../features/finance-reconciliation.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>Finance Reconciliation</h3>
             <p>Bridge the gap between marketing spend and finance reporting.</p>
             <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
           </a>
-          <a href="../features/ai-snapshot-reports.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>AI Snapshot Reports</h3>
             <p>Generate board-ready commercial summaries with one click.</p>
             <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
           </a>
-          <a href="../features/scenario-planning.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>Scenario Planning</h3>
             <p>Model the potential impact of future promotional strategies.</p>
             <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
@@ -172,17 +238,17 @@
       <div class="container">
         <h2 class="h2-section" style="margin-bottom: 24px;">Marketing Attribution Solutions</h2>
         <div class="feature-grid">
-          <a href="../solutions/marketing-attribution.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>Marketing Attribution</h3>
             <p>Reveal the true ROI of promotional spend across channels.</p>
             <div class="card-meta"><span>View Solution</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
           </a>
-          <a href="../solutions/marketing-mix-modelling.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>Marketing Mix Modelling</h3>
             <p>Feed structural market context into your acquisition calculations.</p>
             <div class="card-meta"><span>View Solution</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
           </a>
-          <a href="../solutions/commercial-intelligence.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>Commercial Intelligence</h3>
             <p>Align leadership with a single view of market truth.</p>
             <div class="card-meta"><span>View Solution</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
@@ -196,12 +262,12 @@
       <div class="container">
         <h2 class="h2-section" style="margin-bottom: 24px;">Built For</h2>
         <div class="feature-grid">
-          <a href="../use-cases/role/cmo.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>CMO</h3>
             <p>Explain performance variance with market evidence.</p>
             <div class="card-meta"><span>View Role Value</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
           </a>
-          <a href="../use-cases/role/ceo.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>CEO</h3>
             <p>Defensible, board-ready market context to align the organisation.</p>
             <div class="card-meta"><span>View Role Value</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>

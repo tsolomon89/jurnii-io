@@ -12,7 +12,7 @@
 <body>
 
   <!-- Global Nav -->
-            <nav class="nav">
+                <nav class="nav">
     <div class="container nav-inner">
       <div class="nav-brand">
         <a href="../index.html"><img src="../assets/jurnii-dark-full.svg" alt="Jurnii Logo" class="logo-light"></a>
@@ -49,6 +49,23 @@
           </div>
         </div>
         <div class="dropdown">
+          <button>Solutions <i data-lucide="chevron-down" style="width:14px;height:14px;"></i></button>
+          <div class="dropdown-panel cols-2">
+            <a href="../solutions/ux-benchmarking.html" class="dropdown-item">
+              <div class="ico"><i data-lucide="bar-chart"></i></div>
+              <div><b>UX Benchmarking</b></div>
+            </a>
+            <a href="../solutions/conversion-optimisation.html" class="dropdown-item">
+              <div class="ico"><i data-lucide="trending-up"></i></div>
+              <div><b>Conversion Optimisation</b></div>
+            </a>
+            <a href="../solutions/competitor-intelligence.html" class="dropdown-item">
+              <div class="ico"><i data-lucide="shield-alert"></i></div>
+              <div><b>Competitor Intelligence</b></div>
+            </a>
+          </div>
+        </div>
+        <div class="dropdown">
           <button>Use Cases <i data-lucide="chevron-down" style="width:14px;height:14px;"></i></button>
           <div class="dropdown-panel cols-2">
             <a href="../use-cases/industry/operators.html" class="dropdown-item">
@@ -68,14 +85,69 @@
 
   <main>
     <!-- HERO SECTION -->
-    <section class="page-hero">
-      <div class="container">
-        <p class="page-hero-kicker">Product</p>
-        <h1 class="h1-page">Jurnii UX</h1>
-        <p class="page-hero-lede">AI-powered UX benchmarking. See what your customers see.</p>
-        <div class="cta-row" style="margin-top: 32px;">
-          <a href="#" class="btn primary">Book a Demo</a>
-          <a href="#details" class="btn ghost">Explore Architecture</a>
+    <section class="page-hero visual-hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="page-hero-kicker">Product</p>
+          <h1 class="h1-page">Jurnii UX</h1>
+          <p class="page-hero-lede">AI-powered UX benchmarking. See what your customers see.</p>
+          <div class="cta-row" style="margin-top: 32px;">
+            <a href="#" class="btn primary">Book a Demo</a>
+            <a href="#details" class="btn ghost">Explore Architecture</a>
+          </div>
+        </div>
+        <div class="interface-artifact float-slow">
+          <div class="artifact-browser-frame" style="max-width: 900px; margin: 0 auto; height: 500px;">
+            <div class="artifact-window-bar">
+              <div class="dots">
+                <span style="background: #ff5f56;"></span>
+                <span style="background: #ffbd2e;"></span>
+                <span style="background: #27c93f;"></span>
+              </div>
+              <div class="title">intelligence.jurnii.io/ux-benchmarking</div>
+            </div>
+            <div class="artifact-window">
+              <div class="artifact-sidebar">
+                <div class="ico" style="color: var(--jurnii-500);"><i data-lucide="layout-template"></i></div>
+              </div>
+              <div class="artifact-canvas">
+                <div class="artifact-grid-bg"></div>
+                <img src="../assets/images/generated/jurnii-ux-interface.webp" alt="UX Atmospheric Layer">
+                <svg class="artifact-path-layer" viewBox="0 0 800 400" preserveAspectRatio="none">
+                  <path d="M 100,200 L 700,200" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
+                  <path d="M 100,200 L 400,200" fill="none" stroke="var(--jurnii-500)" stroke-width="3" class="signal-dash" />
+                  <circle cx="250" cy="200" r="6" fill="#111" stroke="var(--jurnii-500)" stroke-width="2" />
+                  <circle cx="400" cy="200" r="8" fill="#111" stroke="#ff4d4d" stroke-width="2" class="pulse-soft" />
+                </svg>
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;">
+                   <div style="position: absolute; top: 120px; left: 100px; right: 100px; height: 40px; background: rgba(87,255,96,0.05); border-top: 1px dashed rgba(87,255,96,0.2);"></div>
+                   <div style="position: absolute; top: 240px; left: 100px; right: 100px; height: 40px; background: rgba(255,77,77,0.05); border-bottom: 1px dashed rgba(255,77,77,0.2);"></div>
+                </div>
+                <div class="artifact-glass artifact-floating-card float-medium" style="top: 40px; left: 80px; width: 140px;">
+                  <div class="artifact-chip" style="margin-bottom: 8px;">Journeys</div>
+                  <div style="height: 4px; width: 100%; background: #222; border-radius: 2px;"><div style="height: 100%; width: 85%; background: var(--jurnii-500); border-radius: 2px;"></div></div>
+                </div>
+                <div class="artifact-glass artifact-floating-card float-slow" style="top: 40px; left: 240px; width: 140px;">
+                  <div class="artifact-chip" style="margin-bottom: 8px; color: #5299ff; background: rgba(82,153,255,0.1); border-color: rgba(82,153,255,0.2);">Usability</div>
+                  <div style="height: 4px; width: 100%; background: #222; border-radius: 2px;"><div style="height: 100%; width: 70%; background: #5299ff; border-radius: 2px;"></div></div>
+                </div>
+                <div class="artifact-glass artifact-alert-card float-fast" style="top: 140px; left: 350px;">
+                  <span style="font-family: var(--font-mono); font-size: 11px; color: #ff4d4d; display: block; margin-bottom: 4px;">Friction Detected</span>
+                  <span class="artifact-metric" style="font-size: 14px; margin-bottom: 0;">Registration Drop-off</span>
+                </div>
+                <div style="position: absolute; bottom: 40px; right: 40px; width: 260px; display: flex; flex-direction: column; gap: 8px;">
+                  <div class="artifact-glass" style="padding: 12px; display: flex; justify-content: space-between; align-items: center;">
+                     <span style="font-family: var(--font-mono); font-size: 11px; color: #fff;">1. Simplify deposit UI</span>
+                     <span class="artifact-chip">High Impact</span>
+                  </div>
+                  <div class="artifact-glass" style="padding: 12px; display: flex; justify-content: space-between; align-items: center; opacity: 0.7;">
+                     <span style="font-family: var(--font-mono); font-size: 11px; color: #fff;">2. Tooltip visibility</span>
+                     <span class="artifact-chip" style="color: #fff; background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2);">Med Impact</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -96,6 +168,9 @@
         <div class="section-head">
           <h2 class="h2-section">How Jurnii UX Solves This</h2>
           <p style="max-width: 600px; margin-bottom: 24px;">Jurnii UX runs a deep structural analysis against a set of 300+ brands. It delivers 70+ commercially weighted recommendations per audit, mapped directly to revenue impact.</p>
+        </div>
+        <div class="svg-panel journey-panel" style="margin-bottom: 48px;">
+          <img src="../assets/visuals/ux-journey-map.svg" alt="UX Journey Mapping" width="100%">
         </div>
         <div class="feature-grid">
            <div class="feature-cell">
@@ -127,17 +202,17 @@
             <p>Identify where players stall and why critical flows break down.</p>
             <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
           </a>
-          <a href="../features/usability.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>Usability</h3>
             <p>Deep heuristic analysis benchmarking ease of use against 300+ brands.</p>
             <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
           </a>
-          <a href="../features/performance.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>Performance</h3>
             <p>Measure the technical quality and load speed of your front-end experience.</p>
             <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
           </a>
-          <a href="../features/brand.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>Brand</h3>
             <p>Quantify how your product experience shapes user trust.</p>
             <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
@@ -175,7 +250,7 @@
             <p>Evidence-based roadmap prioritisation mapped to revenue impact.</p>
             <div class="card-meta"><span>View Role Value</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
           </a>
-          <a href="../use-cases/role/head-of-ux.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
             <h3>Head of UX</h3>
             <p>Commercially weighted design advocacy replacing subjective heuristic audits.</p>
             <div class="card-meta"><span>View Role Value</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
