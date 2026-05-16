@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const root = 'c:/Development/Projects/jurnii';
+const root = process.cwd();
 let hasErrors = false;
 
 function scanHtmlFiles(dir) {

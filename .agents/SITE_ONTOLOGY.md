@@ -24,15 +24,33 @@ This matrix is the single source of truth for the generation of all detail pages
 - **Page Slug:** `/products/jurnii-360.html`
 - **Category:** Product
 - **Parent Category:** `/products/index.html`
+- **Product Category:** Commercial Radar
 - **Short Value Proposition:** Automated competitor promotional intelligence.
 - **Primary Audience:** CCO, CMO, Head of CRM
 - **Business Problem:** Blind spots in competitor promotions, unexplainable CPA spikes, reacting too slowly to market shifts.
-- **Related Products:** Jurnii UX
+- **Related Products:** Jurnii UX, Cortex
 - **Related Features:** Promotions, Alerts, Indices, Exports, Timings, Offers, Banners, Segments, Trends, Database
-- **Related Solutions:** Intelligence, Retention, Modelling
+- **Related Solutions:** Competitor Intelligence, Retention Intelligence, Commercial Intelligence
 - **Related Use Cases:** Operators, CCO, CMO, Head of CRM
 - **Primary CTA:** Book a Demo
 - **Secondary CTA:** Explore 360 Capabilities
+
+### Cortex
+- **Canonical Name:** Cortex
+- **Page Slug:** `/products/cortex.html`
+- **Category:** Product
+- **Parent Category:** `/products/index.html`
+- **Product Category:** Marketing Attribution
+- **Short Value Proposition:** Marketing intelligence and attribution for iGaming operators.
+- **Primary Audience:** CMO, CEO, Finance/Commercial leadership
+- **Business Problem:** Operators cannot measure the true commercial impact of promotions, pricing, and cross-channel marketing spend.
+- **Related Products:** Jurnii 360, Jurnii UX
+- **Related Features:** Causal Impact & MMM, Cross-channel Gantt Planning, AI Analytics Assistant, Finance Reconciliation, AI Snapshot Reports, Scenario Planning
+- **Related Solutions:** Marketing Attribution, Marketing Mix Modelling, Commercial Intelligence
+- **Related Use Cases:** CMO, CEO, Operators
+- **Primary CTA:** Book a Demo
+- **Secondary CTA:** Explore Attribution Intelligence
+- **Source:** Jurnii_Overview.pdf
 
 ## 2. Features (Jurnii UX)
 
@@ -203,14 +221,59 @@ This matrix is the single source of truth for the generation of all detail pages
 - **Business Problem:** Marketing models lack external competitive context, treating all variance as internal failure.
 - **Related Products:** Jurnii 360
 - **Related Features:** Database
-- **Related Solutions:** Modelling
+- **Related Solutions:** Marketing Mix Modelling, Marketing Attribution
 - **Related Use Cases:** CMO
 
-## 4. Solutions
+## 4. Features (Cortex)
 
-### Intelligence
-- **Canonical Name:** Intelligence
-- **Page Slug:** `/solutions/intelligence.html`
+### Causal Impact & MMM
+- **Canonical Name:** Causal Impact & MMM
+- **Page Slug:** `/features/causal-impact-mmm.html`
+- **Category:** Feature
+- **Parent Category:** `/features/index.html`
+- **Related Products:** Cortex
+- **Related Solutions:** Marketing Mix Modelling
+
+### Cross-channel Gantt Planning
+- **Canonical Name:** Cross-channel Gantt Planning
+- **Page Slug:** `/features/cross-channel-gantt.html`
+- **Category:** Feature
+- **Parent Category:** `/features/index.html`
+- **Related Products:** Cortex
+
+### AI Analytics Assistant
+- **Canonical Name:** AI Analytics Assistant
+- **Page Slug:** `/features/ai-analytics-assistant.html`
+- **Category:** Feature
+- **Parent Category:** `/features/index.html`
+- **Related Products:** Cortex
+
+### Finance Reconciliation
+- **Canonical Name:** Finance Reconciliation
+- **Page Slug:** `/features/finance-reconciliation.html`
+- **Category:** Feature
+- **Parent Category:** `/features/index.html`
+- **Related Products:** Cortex
+
+### AI Snapshot Reports
+- **Canonical Name:** AI Snapshot Reports
+- **Page Slug:** `/features/ai-snapshot-reports.html`
+- **Category:** Feature
+- **Parent Category:** `/features/index.html`
+- **Related Products:** Cortex
+
+### Scenario Planning
+- **Canonical Name:** Scenario Planning
+- **Page Slug:** `/features/scenario-planning.html`
+- **Category:** Feature
+- **Parent Category:** `/features/index.html`
+- **Related Products:** Cortex
+
+## 5. Solutions
+
+### Competitor Intelligence
+- **Canonical Name:** Competitor Intelligence
+- **Page Slug:** `/solutions/competitor-intelligence.html`
 - **Category:** Solution
 - **Parent Category:** `/solutions/index.html`
 - **Short Value Proposition:** Replace manual spreadsheets with automated, market-wide visibility into competitor moves.
@@ -219,9 +282,9 @@ This matrix is the single source of truth for the generation of all detail pages
 - **Related Features:** Alerts, Offers, Promotions
 - **Related Use Cases:** CCO, CMO
 
-### Auditing
-- **Canonical Name:** Auditing
-- **Page Slug:** `/solutions/auditing.html`
+### UX Benchmarking
+- **Canonical Name:** UX Benchmarking
+- **Page Slug:** `/solutions/ux-benchmarking.html`
 - **Category:** Solution
 - **Parent Category:** `/solutions/index.html`
 - **Short Value Proposition:** Continuous, commercially weighted UX benchmarking replacing slow agency snapshots.
@@ -230,31 +293,20 @@ This matrix is the single source of truth for the generation of all detail pages
 - **Related Features:** Journeys, Usability
 - **Related Use Cases:** CPO, Head of UX
 
-### Optimisation
-- **Canonical Name:** Optimisation
-- **Page Slug:** `/solutions/optimisation.html`
+### Conversion Optimisation
+- **Canonical Name:** Conversion Optimisation
+- **Page Slug:** `/solutions/conversion-optimisation.html`
 - **Category:** Solution
 - **Parent Category:** `/solutions/index.html`
-- **Short Value Proposition:** Remove friction in registration and initial deposit flows to protect expensive acquisitions.
-- **Business Problem:** High CAC is wasted when players abandon registration due to poor KYC integration or lengthy forms.
+- **Short Value Proposition:** Identify and fix the exact drop-off points in your betslip, registration, and initial deposit flows.
+- **Business Problem:** High CAC is wasted when players abandon flows due to poor KYC integration or navigation friction.
 - **Related Products:** Jurnii UX
 - **Related Features:** Journeys, Usability
-- **Related Use Cases:** CPO, CMO
+- **Related Use Cases:** CPO, CMO, CCO
 
-### Improvement
-- **Canonical Name:** Improvement
-- **Page Slug:** `/solutions/improvement.html`
-- **Category:** Solution
-- **Parent Category:** `/solutions/index.html`
-- **Short Value Proposition:** Identify and fix the exact drop-off points in your betslip and market navigation.
-- **Business Problem:** Platform commoditisation means you are losing conversion battles to competitors on the exact same tech stack.
-- **Related Products:** Jurnii UX
-- **Related Features:** Journeys, Usability
-- **Related Use Cases:** CPO, CCO
-
-### Retention
-- **Canonical Name:** Retention
-- **Page Slug:** `/solutions/retention.html`
+### Retention Intelligence
+- **Canonical Name:** Retention Intelligence
+- **Page Slug:** `/solutions/retention-intelligence.html`
 - **Category:** Solution
 - **Parent Category:** `/solutions/index.html`
 - **Short Value Proposition:** Defend your player base by monitoring competitor retention offers and fixing withdrawal friction.
@@ -263,18 +315,40 @@ This matrix is the single source of truth for the generation of all detail pages
 - **Related Features:** Promotions, Journeys
 - **Related Use Cases:** Head of CRM
 
-### Modelling
-- **Canonical Name:** Modelling
-- **Page Slug:** `/solutions/modelling.html`
+### Marketing Mix Modelling
+- **Canonical Name:** Marketing Mix Modelling
+- **Page Slug:** `/solutions/marketing-mix-modelling.html`
 - **Category:** Solution
 - **Parent Category:** `/solutions/index.html`
-- **Short Value Proposition:** Feed structural market context into your acquisition calculations.
+- **Short Value Proposition:** Feed structural market context and causal impact models into your acquisition calculations.
 - **Business Problem:** Marketing models lack external competitive context, treating all CPA variance as an internal failure.
-- **Related Products:** Jurnii 360
-- **Related Features:** Exports, Database
+- **Related Products:** Cortex
+- **Related Features:** Causal Impact & MMM
 - **Related Use Cases:** CMO
 
-## 5. Use Cases (Field: Industry)
+### Marketing Attribution
+- **Canonical Name:** Marketing Attribution
+- **Page Slug:** `/solutions/marketing-attribution.html`
+- **Category:** Solution
+- **Parent Category:** `/solutions/index.html`
+- **Short Value Proposition:** Reveal the true ROI of promotional spend across channels with AI-powered causal impact models.
+- **Business Problem:** Over-crediting last-click conversions while misattributing the value of overarching promo strategies.
+- **Related Products:** Cortex
+- **Related Features:** AI Analytics Assistant, Finance Reconciliation
+- **Related Use Cases:** CMO, CEO
+
+### Commercial Intelligence
+- **Canonical Name:** Commercial Intelligence
+- **Page Slug:** `/solutions/commercial-intelligence.html`
+- **Category:** Solution
+- **Parent Category:** `/solutions/index.html`
+- **Short Value Proposition:** Align marketing, product, and leadership with a single view of market truth.
+- **Business Problem:** Siloed teams operate on fragmented data, leading to conflicting roadmaps and missed market opportunities.
+- **Related Products:** Cortex, Jurnii 360
+- **Related Features:** AI Snapshot Reports, Scenario Planning, Database
+- **Related Use Cases:** CEO, CCO
+
+## 6. Use Cases (Field: Industry)
 
 ### Operators
 - **Canonical Name:** Operators
@@ -283,9 +357,9 @@ This matrix is the single source of truth for the generation of all detail pages
 - **Parent Category:** `/use-cases/index.html`
 - **Short Value Proposition:** Defend market share against aggressive player multi-homing and regulatory margin compression.
 - **Business Problem:** Rising CAC, platform commoditisation, and 10% of players driving 80% of revenue while holding 4+ competitor accounts.
-- **Related Products:** Jurnii UX, Jurnii 360
-- **Related Features:** Indices, Journeys
-- **Related Solutions:** Intelligence, Auditing
+- **Related Products:** Jurnii UX, Jurnii 360, Cortex
+- **Related Features:** Indices, Journeys, Causal Impact & MMM
+- **Related Solutions:** Competitor Intelligence, UX Benchmarking, Marketing Attribution
 
 ### Suppliers
 - **Canonical Name:** Suppliers
@@ -296,9 +370,9 @@ This matrix is the single source of truth for the generation of all detail pages
 - **Business Problem:** Saturated market where claims of "flexible" architecture no longer differentiate a platform.
 - **Related Products:** Jurnii UX, Jurnii 360
 - **Related Features:** Exports, Alerts
-- **Related Solutions:** Intelligence
+- **Related Solutions:** Competitor Intelligence
 
-## 6. Use Cases (Field: Role)
+## 7. Use Cases (Field: Role)
 
 ### CPO
 - **Canonical Name:** CPO
@@ -309,7 +383,7 @@ This matrix is the single source of truth for the generation of all detail pages
 - **Business Problem:** Internal misalignment on what to build next, constrained by slow B2B vendor roadmaps.
 - **Related Products:** Jurnii UX
 - **Related Features:** Journeys, Usability
-- **Related Solutions:** Auditing, Improvement
+- **Related Solutions:** UX Benchmarking, Conversion Optimisation
 
 ### CCO
 - **Canonical Name:** CCO
@@ -320,7 +394,7 @@ This matrix is the single source of truth for the generation of all detail pages
 - **Business Problem:** Promotional budget under pressure; waking up to find a competitor launched a major acquisition offer unannounced.
 - **Related Products:** Jurnii 360
 - **Related Features:** Indices, Offers
-- **Related Solutions:** Intelligence
+- **Related Solutions:** Competitor Intelligence
 
 ### CMO
 - **Canonical Name:** CMO
@@ -329,9 +403,9 @@ This matrix is the single source of truth for the generation of all detail pages
 - **Parent Category:** `/use-cases/index.html`
 - **Short Value Proposition:** Explain performance variance with market evidence and feed competitor data into MMM.
 - **Business Problem:** Unable to explain why CPA spiked or if acquisition offers are actually competitive.
-- **Related Products:** Jurnii 360
-- **Related Features:** Exports, Banners
-- **Related Solutions:** Intelligence
+- **Related Products:** Jurnii 360, Cortex
+- **Related Features:** Exports, Banners, Causal Impact & MMM
+- **Related Solutions:** Competitor Intelligence, Marketing Attribution, Marketing Mix Modelling
 
 ### CEO
 - **Canonical Name:** CEO
@@ -340,9 +414,9 @@ This matrix is the single source of truth for the generation of all detail pages
 - **Parent Category:** `/use-cases/index.html`
 - **Short Value Proposition:** Defensible, board-ready market context to align the entire organisation.
 - **Business Problem:** Being outmanoeuvred by a competitor while the organisation debates internally what to do.
-- **Related Products:** Jurnii UX, Jurnii 360
-- **Related Features:** Indices, Brand
-- **Related Solutions:** Intelligence
+- **Related Products:** Jurnii UX, Jurnii 360, Cortex
+- **Related Features:** Indices, Brand, AI Snapshot Reports
+- **Related Solutions:** Commercial Intelligence
 
 ### Head of CRM
 - **Canonical Name:** Head of CRM
@@ -353,7 +427,7 @@ This matrix is the single source of truth for the generation of all detail pages
 - **Business Problem:** Retaining players who are receiving 3-5 concurrent offers from competitors daily.
 - **Related Products:** Jurnii 360, Jurnii UX
 - **Related Features:** Promotions, Segments
-- **Related Solutions:** Retention
+- **Related Solutions:** Retention Intelligence
 
 ### Head of UX
 - **Canonical Name:** Head of UX
@@ -364,4 +438,4 @@ This matrix is the single source of truth for the generation of all detail pages
 - **Business Problem:** Lacking the organisational weight to push UX improvements up the priority list because friction is hard to quantify.
 - **Related Products:** Jurnii UX
 - **Related Features:** Usability, Journeys
-- **Related Solutions:** Auditing
+- **Related Solutions:** UX Benchmarking
