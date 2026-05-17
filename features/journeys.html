@@ -85,23 +85,58 @@
 
   <main>
     <!-- HERO SECTION -->
-    <section class="page-hero">
-      <div class="container">
-        <p class="page-hero-kicker">Feature</p>
-        <h1 class="h1-page">Journeys</h1>
-        <p class="page-hero-lede">Identify where players stall and why flows break down before they impact conversion.</p>
-        <div class="cta-row" style="margin-top: 32px;">
-          <a href="#" class="btn primary">See Journey Analysis</a>
+    <section class="feature-hero">
+      <div class="container feature-hero-grid">
+        <div class="feature-hero-copy">
+          <p class="page-hero-kicker">Feature</p>
+          <h1 class="h1-page">Journeys</h1>
+          <p class="page-hero-lede">Identify where players stall and why flows break down before they impact conversion.</p>
+          <div class="cta-row">
+            <a href="#" class="btn primary">See Journey Analysis</a>
+          </div>
+        </div>
+        <div class="feature-hero-visual">
+          <div class="journey-map-panel">
+            <div class="journey-map-head">
+              <span>Journey Analysis</span>
+              <span class="journey-map-status">High Friction</span>
+            </div>
+            <div class="journey-step">
+              <div class="journey-dot active"><i data-lucide="check" style="width:12px;height:12px;color:#000;"></i></div>
+              <div class="journey-label">Landing Page</div>
+              <div class="journey-drop">100%</div>
+            </div>
+            <div class="journey-step">
+              <div class="journey-dot active"><i data-lucide="check" style="width:12px;height:12px;color:#000;"></i></div>
+              <div class="journey-label">Registration Start</div>
+              <div class="journey-drop">85%</div>
+            </div>
+            <div class="journey-step">
+              <div class="journey-dot fail"><i data-lucide="x" style="width:12px;height:12px;color:#000;"></i></div>
+              <div class="journey-label">Address Lookup</div>
+              <div class="journey-drop high">-42% Drop-off</div>
+            </div>
+            <div class="journey-step">
+              <div class="journey-dot"></div>
+              <div class="journey-label" style="color: #666;">Deposit Screen</div>
+              <div class="journey-drop">--</div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- THE PROBLEM SECTION -->
     <section class="section" id="details">
-      <div class="container">
-        <div class="section-head">
+      <div class="container feature-problem-layout">
+        <div class="feature-problem-copy">
           <h2 class="h2-section">The Commercial Problem</h2>
-          <p style="max-width: 600px; margin-bottom: 24px;">High drop-off rates in critical flows—like registration, initial deposit, and withdrawal—are often invisible to traditional analytics. You know the conversion rate dropped, but you don't know the specific structural friction causing players to abandon the journey.</p>
+          <p>High drop-off rates in critical flows—like registration, initial deposit, and withdrawal—are often invisible to traditional analytics.</p>
+          <p>You know the conversion rate dropped, but you don't know the specific structural friction causing players to abandon the journey. This blind spot forces product teams to guess rather than optimize.</p>
+        </div>
+        <div class="feature-commercial-panel">
+          <div class="panel-label"><i data-lucide="alert-triangle" style="width:14px;height:14px;"></i> What analytics misses</div>
+          <p>Standard product analytics will tell you that 40% of users drop off at registration step 2. It will not tell you that your address lookup API is failing for users in specific postcodes.</p>
         </div>
       </div>
     </section>
@@ -111,94 +146,97 @@
       <div class="container">
         <div class="section-head">
           <h2 class="h2-section">How Jurnii Solves This</h2>
-          <p style="max-width: 600px; margin-bottom: 24px;">By auditing the exact step-by-step journeys against market best practice, Jurnii maps specific UX flaws directly to funnel leakage. This allows you to fix the flow before it permanently damages CAC.</p>
+          <p style="max-width: 600px;">By auditing the exact step-by-step journeys against market best practice, Jurnii maps specific UX flaws directly to funnel leakage. This allows you to fix the flow before it permanently damages CAC.</p>
         </div>
-        <div class="feature-grid">
-           <div class="feature-cell">
-             <i data-lucide="zap"></i>
+        <div class="feature-capability-grid">
+           <div class="feature-capability-card">
+             <div class="cap-num">01.</div>
              <h3>Friction Identification</h3>
              <p>Pinpoint the exact field, button, or logic jump causing users to stall during registration.</p>
+             <div class="cap-implication">Isolate technical vs UX failure</div>
            </div>
-           <div class="feature-cell">
-             <i data-lucide="bar-chart-3"></i>
+           <div class="feature-capability-card">
+             <div class="cap-num">02.</div>
              <h3>Competitor Benchmarking</h3>
              <p>Compare your flow efficiency (steps to bet) against the top 300+ brands in the market.</p>
+             <div class="cap-implication">Know where you lag the market</div>
            </div>
-           <div class="feature-cell">
-             <i data-lucide="shield"></i>
+           <div class="feature-capability-card">
+             <div class="cap-num">03.</div>
              <h3>Revenue Mapping</h3>
              <p>Translate journey friction into a commercially weighted priority score for your product roadmap.</p>
+             <div class="cap-implication">Prioritise by commercial impact</div>
            </div>
         </div>
       </div>
     </section>
 
     <!-- CROSS-LINKING: PRODUCTS -->
-    <section class="section">
+    <section class="section feature-link-section">
       <div class="container">
-        <h2 class="h2-section" style="margin-bottom: 24px;">Supported Products</h2>
-        <div class="feature-grid">
-          <a href="../products/jurnii-ux.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+        <h2 class="h2-section">Supported Products</h2>
+        <div class="feature-link-grid cols-2" style="margin-top: 32px;">
+          <a href="../products/jurnii-ux.html" class="feature-link-card product">
             <h3>Jurnii UX</h3>
             <p>AI-powered UX benchmarking & roadmap prioritisation.</p>
-            <div class="card-meta"><span>View Product</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
+            <div class="card-meta"><span>View Product</span> <i data-lucide="arrow-right"></i></div>
           </a>
         </div>
       </div>
     </section>
 
     <!-- CROSS-LINKING: FEATURES -->
-    <section class="section bg-slate">
+    <section class="section bg-slate feature-link-section">
       <div class="container">
-        <h2 class="h2-section" style="margin-bottom: 24px;">Related Features</h2>
-        <div class="feature-grid">
-          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+        <h2 class="h2-section">Related Features</h2>
+        <div class="feature-link-grid cols-2" style="margin-top: 32px;">
+          <a href="#" class="feature-link-card related">
             <h3>Usability</h3>
             <p>Deep heuristic analysis benchmarking ease of use against 300+ competitor brands.</p>
-            <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
+            <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right"></i></div>
           </a>
-          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="#" class="feature-link-card related">
             <h3>Performance</h3>
             <p>Measure the technical quality of your front-end experience against the market.</p>
-            <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
+            <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right"></i></div>
           </a>
         </div>
       </div>
     </section>
 
     <!-- CROSS-LINKING: SOLUTIONS -->
-    <section class="section">
+    <section class="section feature-link-section">
       <div class="container">
-        <h2 class="h2-section" style="margin-bottom: 24px;">Supported Solutions</h2>
-        <div class="feature-grid">
-          <a href="../solutions/conversion-optimisation.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+        <h2 class="h2-section">Supported Solutions</h2>
+        <div class="feature-link-grid cols-2" style="margin-top: 32px;">
+          <a href="../solutions/conversion-optimisation.html" class="feature-link-card solution">
             <h3>Improvement</h3>
             <p>Identify and fix the exact drop-off points in your betslip and market navigation.</p>
-            <div class="card-meta"><span>View Solution</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
+            <div class="card-meta"><span>View Solution</span> <i data-lucide="arrow-right"></i></div>
           </a>
-          <a href="../solutions/conversion-optimisation.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="../solutions/conversion-optimisation.html" class="feature-link-card solution">
             <h3>Optimisation</h3>
             <p>Remove friction in registration and initial deposit flows to protect expensive acquisitions.</p>
-            <div class="card-meta"><span>View Solution</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
+            <div class="card-meta"><span>View Solution</span> <i data-lucide="arrow-right"></i></div>
           </a>
         </div>
       </div>
     </section>
 
     <!-- CROSS-LINKING: USE CASES -->
-    <section class="section bg-slate">
+    <section class="section bg-slate feature-link-section">
       <div class="container">
-        <h2 class="h2-section" style="margin-bottom: 24px;">Built For</h2>
-        <div class="feature-grid">
-          <a href="../use-cases/role/cpo.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+        <h2 class="h2-section">Built For</h2>
+        <div class="feature-link-grid cols-2" style="margin-top: 32px;">
+          <a href="../use-cases/role/cpo.html" class="feature-link-card persona">
             <h3>CPO</h3>
             <p>Evidence-based UX roadmap prioritisation mapped to revenue impact.</p>
-            <div class="card-meta"><span>View Role Value</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
+            <div class="card-meta"><span>View Role Value</span> <i data-lucide="arrow-right"></i></div>
           </a>
-          <a href="../use-cases/industry/operators.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
+          <a href="../use-cases/industry/operators.html" class="feature-link-card persona">
             <h3>Operators</h3>
             <p>Defend market share against aggressive player multi-homing and regulatory margin compression.</p>
-            <div class="card-meta"><span>View Industry Value</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
+            <div class="card-meta"><span>View Industry Value</span> <i data-lucide="arrow-right"></i></div>
           </a>
         </div>
       </div>
