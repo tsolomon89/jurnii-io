@@ -995,10 +995,12 @@ h1.page-title { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.02; letter-s
 /* ---------- FEATURE PAGE SYSTEM ---------- */
 .feature-hero {
   background-color: var(--concrete-950);
+  background-image: radial-gradient(circle at 70% 0%, rgba(82,153,255,0.12) 0%, transparent 60%);
   color: var(--concrete-50);
   padding: 80px 0 96px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
   overflow: hidden;
+  position: relative;
 }
 .feature-hero-grid {
   display: grid;
@@ -1020,7 +1022,7 @@ h1.page-title { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.02; letter-s
   font-size: clamp(40px, 4.5vw, 56px);
   font-weight: 700;
   line-height: 1.1;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.04em;
   margin-bottom: 24px;
 }
 .feature-hero-copy .page-hero-lede {
@@ -1051,13 +1053,15 @@ h1.page-title { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.02; letter-s
 
 /* Diagnostic Visual: Journey Map */
 .journey-map-panel {
-  background: #111;
-  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: 16px;
   padding: 32px;
   width: 100%;
   max-width: 480px;
-  box-shadow: 0 24px 48px rgba(0,0,0,0.4);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 24px 48px rgba(0,0,0,0.6);
   font-family: var(--font-sans);
 }
 .journey-map-head {
@@ -1113,8 +1117,18 @@ h1.page-title { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.02; letter-s
   justify-content: center;
   z-index: 1;
 }
-.journey-dot.active { border-color: #57ff60; background: rgba(87,255,96,0.2); }
-.journey-dot.fail { border-color: #ff5f56; background: rgba(255,95,86,0.2); }
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(87,255,96,0.3); }
+  70% { box-shadow: 0 0 0 8px rgba(87,255,96,0); }
+  100% { box-shadow: 0 0 0 0 rgba(87,255,96,0); }
+}
+@keyframes pulseFail {
+  0% { box-shadow: 0 0 0 0 rgba(255,95,86,0.3); }
+  70% { box-shadow: 0 0 0 8px rgba(255,95,86,0); }
+  100% { box-shadow: 0 0 0 0 rgba(255,95,86,0); }
+}
+.journey-dot.active { border-color: #57ff60; background: rgba(87,255,96,0.15); animation: pulseGlow 2s infinite; }
+.journey-dot.fail { border-color: #ff5f56; background: rgba(255,95,86,0.15); animation: pulseFail 2s infinite; }
 .journey-label {
   font-size: 15px;
   font-weight: 500;
@@ -1139,9 +1153,10 @@ h1.page-title { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.02; letter-s
 .feature-commercial-panel {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-left: 4px solid var(--destructive);
+  border-radius: 12px;
   padding: 32px;
-  box-shadow: 0 12px 24px rgba(0,0,0,0.04);
+  box-shadow: 8px 16px 32px rgba(0,0,0,0.06);
 }
 .feature-commercial-panel .panel-label {
   font-family: var(--font-mono);
@@ -1178,17 +1193,34 @@ h1.page-title { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.02; letter-s
 .feature-capability-card {
   background: var(--background);
   border: 1px solid var(--border);
+  border-top: 2px solid transparent;
   border-radius: 16px;
-  padding: 32px;
+  padding: 36px 32px;
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-image: linear-gradient(var(--background), var(--background)), linear-gradient(90deg, rgba(82,153,255,0.4), rgba(87,255,96,0.3));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+.feature-capability-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.06);
 }
 .feature-capability-card .cap-num {
+  position: absolute;
+  top: -16px;
+  right: 16px;
   font-family: var(--font-mono);
-  font-size: 13px;
-  color: var(--jurnii-600);
-  margin-bottom: 16px;
-  font-weight: 600;
+  font-size: 80px;
+  font-weight: 800;
+  color: var(--foreground);
+  opacity: 0.03;
+  margin: 0;
+  line-height: 1;
+  pointer-events: none;
 }
 .feature-capability-card h3 {
   font-size: 20px;
