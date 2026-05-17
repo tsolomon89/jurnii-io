@@ -1315,3 +1315,69 @@ h1.page-title { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.02; letter-s
 .feature-link-card.persona {
   border-color: var(--border);
 }
+
+/* Theme Dark Context overrides */
+.theme-dark {
+  background-color: var(--concrete-950);
+  color: var(--concrete-50);
+}
+.theme-dark .h2-section { color: var(--concrete-50); }
+.theme-dark p { color: var(--concrete-300); }
+.theme-dark .feature-capability-card {
+  background: var(--concrete-900);
+  border-color: rgba(255,255,255,0.05);
+  background-image: linear-gradient(var(--concrete-900), var(--concrete-900)), linear-gradient(90deg, rgba(82,153,255,0.4), rgba(87,255,96,0.3));
+}
+.theme-dark .feature-capability-card h3 { color: var(--concrete-50); }
+.theme-dark .feature-capability-card p { color: var(--concrete-300); }
+.theme-dark .feature-capability-card .cap-num { color: var(--concrete-50); opacity: 0.05; }
+.theme-dark .feature-capability-card .cap-implication { border-top-color: rgba(255,255,255,0.05); color: var(--concrete-50); }
+
+/* Ecosystem Section */
+.ecosystem-section {
+  background-color: var(--concrete-950);
+  border-top: 1px solid rgba(255,255,255,0.05);
+  color: var(--concrete-50);
+  padding: 96px 0;
+}
+.ecosystem-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+.ecosystem-header .h2-section { color: var(--concrete-50); margin-bottom: 16px; }
+.ecosystem-header p { color: var(--concrete-300); max-width: 600px; margin: 0 auto; }
+
+.ecosystem-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+}
+@media (max-width: 1024px) { .ecosystem-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .ecosystem-grid { grid-template-columns: 1fr; } }
+
+.ecosystem-column h3.col-label {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--jurnii-500);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 12px;
+}
+.ecosystem-column .feature-link-grid {
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+.ecosystem-column .feature-link-card {
+  background: rgba(255,255,255,0.02);
+  border-color: rgba(255,255,255,0.05);
+  padding: 20px;
+}
+.ecosystem-column .feature-link-card:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.1);
+}
+.ecosystem-column .feature-link-card h3 { color: var(--concrete-50); font-size: 16px; }
+.ecosystem-column .feature-link-card p { color: var(--concrete-300); font-size: 13px; margin-bottom: 16px;}
+.ecosystem-column .feature-link-card .card-meta { color: var(--jurnii-500); }
