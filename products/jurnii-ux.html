@@ -85,18 +85,19 @@
 
   <main>
     <!-- HERO SECTION -->
-    <section class="page-hero visual-hero">
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <p class="page-hero-kicker">Product</p>
+    <!-- HERO SECTION -->
+    <section class="product-hero">
+      <div class="container">
+        <div style="max-width: 800px; margin: 0 auto;">
+          <p class="page-hero-kicker" style="color: var(--jurnii-500); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;">Product</p>
           <h1 class="h1-page">Jurnii UX</h1>
           <p class="page-hero-lede">AI-powered UX benchmarking. See what your customers see.</p>
-          <div class="cta-row" style="margin-top: 32px;">
+          <div class="cta-row" style="margin-bottom: 64px; justify-content: center;">
             <a href="#" class="btn primary">Book a Demo</a>
-            <a href="#details" class="btn ghost">Explore Architecture</a>
+            <a href="#details" class="btn" style="color: var(--concrete-50); border: 1px solid rgba(255,255,255,0.2);">Explore Architecture</a>
           </div>
         </div>
-        <div class="interface-artifact float-slow">
+        <div class="interface-artifact float-slow" style="margin-bottom: -100px;">
           <div class="artifact-browser-frame" style="max-width: 900px; margin: 0 auto; height: 500px;">
             <div class="artifact-window-bar">
               <div class="dots">
@@ -112,7 +113,7 @@
               </div>
               <div class="artifact-canvas">
                 <div class="artifact-grid-bg"></div>
-                <img src="../assets/images/generated/jurnii-ux-interface.webp" alt="UX Atmospheric Layer">
+                <img src="../assets/images/generated/jurnii-ux-interface.webp" alt="UX Atmospheric Layer" style="opacity: 0.5;">
                 <svg class="artifact-path-layer" viewBox="0 0 800 400" preserveAspectRatio="none">
                   <path d="M 100,200 L 700,200" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
                   <path d="M 100,200 L 400,200" fill="none" stroke="var(--jurnii-500)" stroke-width="3" class="signal-dash" />
@@ -153,134 +154,140 @@
     </section>
 
     <!-- THE PROBLEM SECTION -->
-    <section class="section" id="details">
+    <!-- THE MANIFESTO -->
+    <section class="product-manifesto" id="details">
       <div class="container">
-        <div class="section-head">
-          <h2 class="h2-section">The Commercial Problem</h2>
-          <p style="max-width: 600px; margin-bottom: 24px;">Product roadmaps are often driven by subjective UX debates or slow agency heuristic audits. This latency masks genuine usability friction across registration and withdrawal, leading to unseen revenue loss before the product team can react.</p>
+        <div class="product-manifesto-text">
+          Product roadmaps are often driven by subjective UX debates or slow heuristic audits. This latency masks genuine usability friction, leading to <span class="highlight">unseen revenue loss</span> before the product team can react.
         </div>
       </div>
     </section>
 
     <!-- THE CAPABILITY SECTION -->
-    <section class="section bg-slate">
+    <!-- PRODUCT TOUR SECTION -->
+    <section class="product-tour-section">
       <div class="container">
-        <div class="section-head">
-          <h2 class="h2-section">How Jurnii UX Solves This</h2>
-          <p style="max-width: 600px; margin-bottom: 24px;">Jurnii UX runs a deep structural analysis against a set of 300+ brands. It delivers 70+ commercially weighted recommendations per audit, mapped directly to revenue impact.</p>
+        <div class="section-head" style="text-align: center; margin-bottom: 120px;">
+          <h2 class="h2-section" style="color: var(--concrete-50);">How Jurnii UX Solves This</h2>
+          <p style="color: var(--concrete-300); max-width: 600px; margin: 0 auto;">Jurnii UX runs a deep structural analysis against a set of 300+ brands. It delivers 70+ commercially weighted recommendations per audit.</p>
         </div>
-        <div class="svg-panel journey-panel" style="margin-bottom: 48px;">
-          <img src="../assets/visuals/ux-journey-map.svg" alt="UX Journey Mapping" width="100%">
+
+        <div class="product-feature-row">
+          <div class="product-feature-copy">
+            <div class="cap-num">01.</div>
+            <h3>Minutes, Not Weeks</h3>
+            <p>Replaces the slow agency heuristic model with immediate structural benchmarking. Deploy an audit and receive a detailed breakdown of UX flaws across your entire user journey in real-time.</p>
+            <div class="cap-implication">Immediate friction identification</div>
+          </div>
+          <div class="product-feature-visual">
+            <i data-lucide="zap" style="width: 64px; height: 64px; color: var(--jurnii-500);"></i>
+          </div>
         </div>
-        <div class="feature-grid">
-           <div class="feature-cell">
-             <i data-lucide="zap"></i>
-             <h3>Minutes, Not Weeks</h3>
-             <p>Replaces the slow agency heuristic model with immediate structural benchmarking.</p>
-           </div>
-           <div class="feature-cell">
-             <i data-lucide="bar-chart-3"></i>
-             <h3>Commercially Weighted</h3>
-             <p>Every finding is categorised, ranked by severity, and mapped to a specific commercial consequence.</p>
-           </div>
-           <div class="feature-cell">
-             <i data-lucide="shield"></i>
-             <h3>Defensible Prioritisation</h3>
-             <p>Equips product leadership with the quantitative evidence required to align the roadmap to revenue.</p>
-           </div>
+
+        <div class="product-feature-row order-inverse">
+          <div class="product-feature-copy">
+            <div class="cap-num">02.</div>
+            <h3>Commercially Weighted</h3>
+            <p>Every finding is categorised, ranked by severity, and mapped to a specific commercial consequence. Stop guessing which UX improvements will actually move the needle on your bottom line.</p>
+            <div class="cap-implication">Direct revenue mapping</div>
+          </div>
+          <div class="product-feature-visual">
+            <i data-lucide="bar-chart-3" style="width: 64px; height: 64px; color: var(--jurnii-500);"></i>
+          </div>
+        </div>
+
+        <div class="product-feature-row">
+          <div class="product-feature-copy">
+            <div class="cap-num">03.</div>
+            <h3>Defensible Prioritisation</h3>
+            <p>Equips product leadership with the quantitative evidence required to align the roadmap to revenue, ending internal debates and protecting your engineering bandwidth.</p>
+            <div class="cap-implication">Protect engineering capacity</div>
+          </div>
+          <div class="product-feature-visual">
+            <i data-lucide="shield" style="width: 64px; height: 64px; color: var(--jurnii-500);"></i>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- CROSS-LINKING: FEATURES -->
-    <section class="section">
+    <!-- PLATFORM ECOSYSTEM -->
+    <section class="ecosystem-section">
       <div class="container">
-        <h2 class="h2-section" style="margin-bottom: 24px;">Core Capabilities</h2>
-        <div class="feature-grid">
-          <a href="../features/journeys.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
-            <h3>Journeys</h3>
-            <p>Identify where players stall and why critical flows break down.</p>
-            <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
-          </a>
-          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
-            <h3>Usability</h3>
-            <p>Deep heuristic analysis benchmarking ease of use against 300+ brands.</p>
-            <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
-          </a>
-          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
-            <h3>Performance</h3>
-            <p>Measure the technical quality and load speed of your front-end experience.</p>
-            <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
-          </a>
-          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
-            <h3>Brand</h3>
-            <p>Quantify how your product experience shapes user trust.</p>
-            <div class="card-meta"><span>View Feature</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
-          </a>
+        <div class="ecosystem-header">
+          <h2 class="h2-section">Platform Ecosystem</h2>
+          <p>Jurnii intelligence is designed to flow seamlessly across products, features, and workflows.</p>
         </div>
-      </div>
-    </section>
+        <div class="ecosystem-grid">
+          
+          <div class="ecosystem-column">
+            <h3 class="col-label">Related Products</h3>
+            <div class="feature-link-grid">
+              <a href="../products/jurnii-360.html" class="feature-link-card product">
+                <h3>Jurnii 360</h3>
+                <p>Automated competitor promotional intelligence and real-time alerts.</p>
+                <div class="card-meta"><span>View</span> <i data-lucide="arrow-right"></i></div>
+              </a>
+              <a href="../products/cortex.html" class="feature-link-card product">
+                <h3>Cortex</h3>
+                <p>Combine UX and competitor data into attribution and planning intelligence.</p>
+                <div class="card-meta"><span>View</span> <i data-lucide="arrow-right"></i></div>
+              </a>
+            </div>
+          </div>
 
-    <!-- CROSS-LINKING: SOLUTIONS -->
-    <section class="section bg-slate">
-      <div class="container">
-        <h2 class="h2-section" style="margin-bottom: 24px;">Commercial Outcomes</h2>
-        <div class="feature-grid">
-          <a href="../solutions/ux-benchmarking.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
-            <h3>UX Benchmarking</h3>
-            <p>Continuous UX benchmarking replacing slow agency snapshots.</p>
-            <div class="card-meta"><span>View Solution</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
-          </a>
-          <a href="../solutions/conversion-optimisation.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
-            <h3>Conversion Optimisation</h3>
-            <p>Remove friction in registration and initial deposit flows.</p>
-            <div class="card-meta"><span>View Solution</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
-          </a>
-        </div>
-      </div>
-    </section>
+          <div class="ecosystem-column">
+            <h3 class="col-label">Core Features</h3>
+            <div class="feature-link-grid">
+              <a href="../features/journeys.html" class="feature-link-card related">
+                <h3>Journeys</h3>
+                <p>Identify where players stall and why critical flows break down.</p>
+                <div class="card-meta"><span>View</span> <i data-lucide="arrow-right"></i></div>
+              </a>
+              <a href="#" class="feature-link-card related">
+                <h3>Usability</h3>
+                <p>Deep heuristic analysis benchmarking ease of use against 300+ brands.</p>
+                <div class="card-meta"><span>View</span> <i data-lucide="arrow-right"></i></div>
+              </a>
+              <a href="#" class="feature-link-card related">
+                <h3>Performance</h3>
+                <p>Measure the technical quality and load speed of your front-end experience.</p>
+                <div class="card-meta"><span>View</span> <i data-lucide="arrow-right"></i></div>
+              </a>
+            </div>
+          </div>
 
-    <!-- CROSS-LINKING: USE CASES -->
-    <section class="section">
-      <div class="container">
-        <h2 class="h2-section" style="margin-bottom: 24px;">Built For</h2>
-        <div class="feature-grid">
-          <a href="../use-cases/role/cpo.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
-            <h3>CPO</h3>
-            <p>Evidence-based roadmap prioritisation mapped to revenue impact.</p>
-            <div class="card-meta"><span>View Role Value</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
-          </a>
-          <a href="#" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
-            <h3>Head of UX</h3>
-            <p>Commercially weighted design advocacy replacing subjective heuristic audits.</p>
-            <div class="card-meta"><span>View Role Value</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
-          </a>
-          <a href="../use-cases/industry/operators.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
-            <h3>Operators</h3>
-            <p>Defend market share against aggressive player multi-homing.</p>
-            <div class="card-meta"><span>View Industry Value</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
-          </a>
-        </div>
-      </div>
-    </section>
+          <div class="ecosystem-column">
+            <h3 class="col-label">Outcomes</h3>
+            <div class="feature-link-grid">
+              <a href="../solutions/ux-benchmarking.html" class="feature-link-card solution">
+                <h3>UX Benchmarking</h3>
+                <p>Continuous UX benchmarking replacing slow agency snapshots.</p>
+                <div class="card-meta"><span>View</span> <i data-lucide="arrow-right"></i></div>
+              </a>
+              <a href="../solutions/conversion-optimisation.html" class="feature-link-card solution">
+                <h3>Optimisation</h3>
+                <p>Remove friction in registration and initial deposit flows.</p>
+                <div class="card-meta"><span>View</span> <i data-lucide="arrow-right"></i></div>
+              </a>
+            </div>
+          </div>
 
-    <!-- CROSS-LINKING: RELATED PRODUCTS -->
-    <section class="section bg-slate">
-      <div class="container">
-        <h2 class="h2-section" style="margin-bottom: 24px;">The Intelligence Suite</h2>
-        <div class="feature-grid">
-          <a href="../products/jurnii-360.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
-            <div class="ico"><i data-lucide="radar"></i></div>
-            <h3>Jurnii 360</h3>
-            <p>Automated competitor promotional intelligence and real-time alerts.</p>
-            <div class="card-meta"><span>View Product</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
-          </a>
-          <a href="../products/cortex.html" class="feature-cell" style="text-decoration: none; color: inherit; display: block;">
-            <div class="ico"><i data-lucide="network"></i></div>
-            <h3>Cortex</h3>
-            <p>Combine UX and competitor data into attribution and planning intelligence.</p>
-            <div class="card-meta"><span>View Product</span> <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></div>
-          </a>
+          <div class="ecosystem-column">
+            <h3 class="col-label">Built For</h3>
+            <div class="feature-link-grid">
+              <a href="../use-cases/role/cpo.html" class="feature-link-card persona">
+                <h3>CPO</h3>
+                <p>Evidence-based roadmap prioritisation mapped to revenue.</p>
+                <div class="card-meta"><span>View</span> <i data-lucide="arrow-right"></i></div>
+              </a>
+              <a href="../use-cases/industry/operators.html" class="feature-link-card persona">
+                <h3>Operators</h3>
+                <p>Defend market share against aggressive player multi-homing.</p>
+                <div class="card-meta"><span>View</span> <i data-lucide="arrow-right"></i></div>
+              </a>
+            </div>
+          </div>
+
         </div>
       </div>
     </section>
