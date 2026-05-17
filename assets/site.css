@@ -1498,3 +1498,135 @@ h1.page-title { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.02; letter-s
     order: unset;
   }
 }
+
+/* ---------- SOLUTION PAGE SYSTEM ---------- */
+.solution-hero {
+  background-color: var(--background);
+  color: var(--foreground);
+  padding: 120px 0;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.solution-hero-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 80px;
+  align-items: center;
+}
+.solution-hero .page-hero-kicker {
+  color: var(--jurnii-600);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+.solution-hero .h1-page {
+  font-size: clamp(40px, 5vw, 64px);
+  letter-spacing: -0.04em;
+  margin-bottom: 24px;
+}
+.solution-hero-metric-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 64px 32px;
+  box-shadow: 0 24px 48px rgba(0,0,0,0.04);
+}
+.solution-hero-metric-panel .metric-value {
+  font-family: var(--font-mono);
+  font-size: clamp(80px, 8vw, 120px);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--foreground);
+  letter-spacing: -0.05em;
+  margin-bottom: 16px;
+}
+.solution-hero-metric-panel .metric-label {
+  font-size: 18px;
+  color: var(--muted-foreground);
+  font-weight: 500;
+}
+
+.solution-bento-section {
+  background-color: var(--concrete-950);
+  color: var(--concrete-50);
+  padding: 120px 0;
+}
+.solution-bento-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 64px;
+}
+.solution-bento-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 24px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+}
+.solution-bento-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255,255,255,0.04);
+}
+.solution-bento-card.span-2 {
+  grid-column: span 2;
+}
+.solution-bento-card .bento-icon {
+  margin-bottom: 24px;
+  color: var(--jurnii-500);
+}
+.solution-bento-card h3 {
+  font-size: 24px;
+  letter-spacing: -0.02em;
+  color: var(--concrete-50);
+  margin-bottom: 16px;
+}
+.solution-bento-card p {
+  color: var(--concrete-300);
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.solution-outcome-panel {
+  background: var(--background);
+  padding: 120px 0;
+}
+.solution-outcome-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 32px 64px rgba(0,0,0,0.06);
+}
+.solution-outcome-copy {
+  max-width: 500px;
+}
+.solution-outcome-copy h2 {
+  font-size: 32px;
+  letter-spacing: -0.03em;
+  margin-bottom: 16px;
+}
+.solution-outcome-copy p {
+  color: var(--muted-foreground);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+@media (max-width: 1024px) {
+  .solution-hero-grid { grid-template-columns: 1fr; gap: 48px; }
+  .solution-bento-grid { grid-template-columns: 1fr; }
+  .solution-bento-card.span-2 { grid-column: span 1; }
+  .solution-outcome-card { flex-direction: column; align-items: flex-start; gap: 40px; padding: 40px; }
+}
