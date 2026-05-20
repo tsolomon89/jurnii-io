@@ -20,19 +20,24 @@ function buildFooter(levelPrefix) {
           </div>
           <div>
             <div class="footer-head">Features</div>
-            <a href="${levelPrefix}features/journeys.html">Journeys</a>
-            <a href="${levelPrefix}features/promotions.html">Promotions</a>
+            <a href="${levelPrefix}features/competitor-promotions.html">Promotions</a>
+            <a href="${levelPrefix}features/brand-usability.html">Usability</a>
+            <a href="${levelPrefix}features/index.html" style="font-weight:600; margin-top:8px; display:inline-block; color:var(--jurnii-500);">All Features &rarr;</a>
           </div>
           <div>
             <div class="footer-head">Solutions</div>
-            <a href="${levelPrefix}solutions/ux-benchmarking.html">UX Benchmarking</a>
-            <a href="${levelPrefix}solutions/conversion-optimisation.html">Conversion Optimisation</a>
-            <a href="${levelPrefix}solutions/competitor-intelligence.html">Competitor Intelligence</a>
+            <a href="${levelPrefix}solutions/user-experience-benchmarking.html">UX Benchmarking</a>
+            <a href="${levelPrefix}solutions/conversion-rate-optimization.html">Conversion Rate</a>
+            <a href="${levelPrefix}solutions/competition-offers.html">Competitor Offers</a>
+            <a href="${levelPrefix}solutions/index.html" style="font-weight:600; margin-top:8px; display:inline-block; color:var(--jurnii-500);">All Solutions &rarr;</a>
           </div>
           <div>
             <div class="footer-head">Use Cases</div>
-            <a href="${levelPrefix}use-cases/industry/operators.html">For Operators</a>
-            <a href="${levelPrefix}use-cases/role/cpo.html">For CPOs</a>
+            <a href="${levelPrefix}use-cases/roles.html">Roles</a>
+            <a href="${levelPrefix}use-cases/company-sizes.html">Company Size</a>
+            <a href="${levelPrefix}use-cases/departments.html">Departments</a>
+            <a href="${levelPrefix}use-cases/sectors.html">Sectors</a>
+            <a href="${levelPrefix}use-cases/index.html" style="font-weight:600; margin-top:8px; display:inline-block; color:var(--jurnii-500);">All Use Cases &rarr;</a>
           </div>
         </div>
       </div>
@@ -53,7 +58,7 @@ function scanHtmlFiles(dir) {
     list.forEach(file => {
         file = path.join(dir, file);
         const stat = fs.statSync(file);
-        if (stat && stat.isDirectory() && !file.includes('.agents') && !file.includes('assets') && !file.includes('.git')) { 
+        if (stat && stat.isDirectory() && !file.includes('.agents') && !file.includes('assets') && !file.includes('.git') && !file.includes('node_modules')) { 
             results = results.concat(scanHtmlFiles(file));
         } else if (file.endsWith('.html')) {
             results.push(file);

@@ -1,5 +1,8 @@
 # Workflow: Jurnii Design Orchestrator
 
+> [!WARNING]
+> This is an older, lower-level design workflow. For premium page redesigns and style upgrades, you **MUST** use `/jurnii-uiux-style-orchestrator` instead.
+
 ## Description
 The master workflow for managing the Jurnii website redesign. Runs research, audit, design-system planning, component upgrades, page upgrades, browser QA, and final reporting sequentially.
 

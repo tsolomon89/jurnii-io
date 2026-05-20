@@ -12,7 +12,7 @@
 <body>
 
   <!-- Navigation -->
-                <nav class="nav">
+                                              <nav class="nav">
     <div class="container nav-inner">
       <div class="nav-brand">
         <a href="index.html"><img src="assets/jurnii-dark-full.svg" alt="Jurnii Logo" class="logo-light"></a>
@@ -20,7 +20,7 @@
       <div class="nav-links">
         <div class="dropdown">
           <button>Products <i data-lucide="chevron-down" style="width:14px;height:14px;"></i></button>
-          <div class="dropdown-panel">
+          <div class="dropdown-panel ">
             <a href="products/jurnii-ux.html" class="dropdown-item">
               <div class="ico"><i data-lucide="layout-template"></i></div>
               <div><b>Jurnii UX</b><span>UX Intelligence</span></div>
@@ -37,69 +37,271 @@
         </div>
         <div class="dropdown">
           <button>Features <i data-lucide="chevron-down" style="width:14px;height:14px;"></i></button>
-          <div class="dropdown-panel cols-2">
-            <a href="features/journeys.html" class="dropdown-item">
-              <div class="ico"><i data-lucide="zap"></i></div>
-              <div><b>Journeys</b></div>
-            </a>
-            <a href="features/promotions.html" class="dropdown-item">
-              <div class="ico"><i data-lucide="tag"></i></div>
-              <div><b>Promotions</b></div>
+          <div class="dropdown-panel features-dropdown">
+            <div class="dropdown-parent-column">
+              <span class="dropdown-parent-header">Competitor</span>
+              <div class="dropdown-sub-columns">
+                <div class="dropdown-column-links">
+                  <a href="features/competitor-promotions.html" class="dropdown-column-item">
+                    <i data-lucide="tag"></i> Promotions
+                  </a>
+                  <a href="features/competitor-positioning.html" class="dropdown-column-item">
+                    <i data-lucide="map-pin"></i> Positioning
+                  </a>
+                  <a href="features/competitor-comparison.html" class="dropdown-column-item">
+                    <i data-lucide="git-compare"></i> Comparison
+                  </a>
+                  <a href="features/competitor-analysis.html" class="dropdown-column-item">
+                    <i data-lucide="bar-chart-2"></i> Analysis
+                  </a>
+                </div>
+                <div class="dropdown-column-links">
+                  <a href="features/competitor-offer-feed.html" class="dropdown-column-item">
+                    <i data-lucide="rss"></i> Offer Feed
+                  </a>
+                  <a href="features/competitor-live-feed.html" class="dropdown-column-item">
+                    <i data-lucide="activity"></i> Live Feed
+                  </a>
+                  <a href="features/competitor-alerts.html" class="dropdown-column-item">
+                    <i data-lucide="bell"></i> Alerts
+                  </a>
+                  <a href="features/competitor-ai-insights.html" class="dropdown-column-item">
+                    <i data-lucide="brain"></i> AI Insights
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="dropdown-parent-column">
+              <span class="dropdown-parent-header">Brand</span>
+              <div class="dropdown-sub-columns">
+                <div class="dropdown-column-links">
+                  <a href="features/brand-meta-scoring.html" class="dropdown-column-item">
+                    <i data-lucide="sparkles"></i> Meta Scoring
+                  </a>
+                  <a href="features/brand-market-trends.html" class="dropdown-column-item">
+                    <i data-lucide="trending-up"></i> Market Trends
+                  </a>
+                  <a href="features/brand-design-themes.html" class="dropdown-column-item">
+                    <i data-lucide="palette"></i> Design Themes
+                  </a>
+                  <a href="features/brand-promotion-analysis.html" class="dropdown-column-item">
+                    <i data-lucide="layers"></i> Promotion Analysis
+                  </a>
+                </div>
+                <div class="dropdown-column-links">
+                  <a href="features/brand-perfomance.html" class="dropdown-column-item">
+                    <i data-lucide="zap"></i> Perfomance
+                  </a>
+                  <a href="features/brand-usability.html" class="dropdown-column-item">
+                    <i data-lucide="check-circle"></i> Usability
+                  </a>
+                  <a href="features/brand-preception.html" class="dropdown-column-item">
+                    <i data-lucide="eye"></i> Preception
+                  </a>
+                  <a href="features/brand-recommendations.html" class="dropdown-column-item">
+                    <i data-lucide="thumbs-up"></i> Recommendations
+                  </a>
+                </div>
+              </div>
+            </div>
+            <a href="features/index.html" class="dropdown-footer">
+              View all features <i data-lucide="arrow-right" style="width:14px;height:14px;"></i>
             </a>
           </div>
         </div>
         <div class="dropdown">
           <button>Solutions <i data-lucide="chevron-down" style="width:14px;height:14px;"></i></button>
-          <div class="dropdown-panel cols-2">
-            <a href="solutions/ux-benchmarking.html" class="dropdown-item">
-              <div class="ico"><i data-lucide="bar-chart"></i></div>
-              <div><b>UX Benchmarking</b></div>
-            </a>
-            <a href="solutions/conversion-optimisation.html" class="dropdown-item">
-              <div class="ico"><i data-lucide="trending-up"></i></div>
-              <div><b>Conversion Optimisation</b></div>
-            </a>
-            <a href="solutions/competitor-intelligence.html" class="dropdown-item">
-              <div class="ico"><i data-lucide="shield-alert"></i></div>
-              <div><b>Competitor Intelligence</b></div>
+          <div class="dropdown-panel cols-4">
+            <div class="dropdown-column">
+              <span class="dropdown-column-header">Competition</span>
+              <div class="dropdown-column-links">
+                <a href="solutions/competition-discovery.html" class="dropdown-column-item">
+                  <i data-lucide="search"></i> Discovery
+                </a>
+                <a href="solutions/competition-offers.html" class="dropdown-column-item">
+                  <i data-lucide="gift"></i> Offers
+                </a>
+                <a href="solutions/competition-pricing.html" class="dropdown-column-item">
+                  <i data-lucide="dollar-sign"></i> Pricing
+                </a>
+                <a href="solutions/competition-postitioning.html" class="dropdown-column-item">
+                  <i data-lucide="compass"></i> Postitioning
+                </a>
+              </div>
+            </div>
+            <div class="dropdown-column">
+              <span class="dropdown-column-header">Benchmarking</span>
+              <div class="dropdown-column-links">
+                <a href="solutions/user-interface-benchmarking.html" class="dropdown-column-item">
+                  <i data-lucide="layout"></i> User Interface
+                </a>
+                <a href="solutions/user-experience-benchmarking.html" class="dropdown-column-item">
+                  <i data-lucide="smile"></i> User Experience
+                </a>
+                <a href="solutions/customer-journey-benchmarking.html" class="dropdown-column-item">
+                  <i data-lucide="milestone"></i> Customer Journey
+                </a>
+                <a href="solutions/market-positioning-benchmarking.html" class="dropdown-column-item">
+                  <i data-lucide="globe"></i> Market Positioning
+                </a>
+              </div>
+            </div>
+            <div class="dropdown-column">
+              <span class="dropdown-column-header">Attribution</span>
+              <div class="dropdown-column-links">
+                <a href="solutions/marketing-roi-attribution.html" class="dropdown-column-item">
+                  <i data-lucide="pie-chart"></i> Marketing ROI
+                </a>
+                <a href="solutions/cross-channel-attribution.html" class="dropdown-column-item">
+                  <i data-lucide="split"></i> Cross-Channel
+                </a>
+                <a href="solutions/marketing-mix-modeling-attribution.html" class="dropdown-column-item">
+                  <i data-lucide="bar-chart-3"></i> Marketing Mix Modeling
+                </a>
+                <a href="solutions/market-growth-attribution.html" class="dropdown-column-item">
+                  <i data-lucide="trending-up"></i> Market Growth
+                </a>
+              </div>
+            </div>
+            <div class="dropdown-column">
+              <span class="dropdown-column-header">Optimization</span>
+              <div class="dropdown-column-links">
+                <a href="solutions/conversion-rate-optimization.html" class="dropdown-column-item">
+                  <i data-lucide="percent"></i> Conversion Rate
+                </a>
+                <a href="solutions/life-time-value-optimization.html" class="dropdown-column-item">
+                  <i data-lucide="heart"></i> Life Time Value
+                </a>
+                <a href="solutions/churn-rate-optimization.html" class="dropdown-column-item">
+                  <i data-lucide="user-minus"></i> Churn Rate
+                </a>
+                <a href="solutions/customer-aquistion-cost-optimization.html" class="dropdown-column-item">
+                  <i data-lucide="shopping-bag"></i> Customer Aquistion Cost
+                </a>
+              </div>
+            </div>
+            <a href="solutions/index.html" class="dropdown-footer">
+              View all solutions <i data-lucide="arrow-right" style="width:14px;height:14px;"></i>
             </a>
           </div>
         </div>
         <div class="dropdown">
           <button>Use Cases <i data-lucide="chevron-down" style="width:14px;height:14px;"></i></button>
-          <div class="dropdown-panel cols-2">
-            <a href="use-cases/industry/operators.html" class="dropdown-item">
-              <div class="ico"><i data-lucide="building"></i></div>
-              <div><b>Operators</b></div>
-            </a>
-            <a href="use-cases/role/cpo.html" class="dropdown-item">
-              <div class="ico"><i data-lucide="layout"></i></div>
-              <div><b>CPO</b></div>
+          <div class="dropdown-panel cols-4">
+            <div class="dropdown-column">
+              <a href="use-cases/roles.html" class="dropdown-column-header">Roles</a>
+              <div class="dropdown-column-links">
+                <a href="use-cases/roles/cmo.html" class="dropdown-column-item">
+                  <i data-lucide="megaphone"></i> CMO
+                </a>
+                <a href="use-cases/roles/coo.html" class="dropdown-column-item">
+                  <i data-lucide="briefcase"></i> COO
+                </a>
+                <a href="use-cases/roles/cco.html" class="dropdown-column-item">
+                  <i data-lucide="coins"></i> CCO
+                </a>
+              </div>
+            </div>
+            <div class="dropdown-column">
+              <a href="use-cases/company-sizes.html" class="dropdown-column-header">Company Size</a>
+              <div class="dropdown-column-links">
+                <a href="use-cases/company-sizes/smb.html" class="dropdown-column-item">
+                  <i data-lucide="store"></i> SMB
+                </a>
+                <a href="use-cases/company-sizes/midmarket.html" class="dropdown-column-item">
+                  <i data-lucide="building"></i> MidMarket
+                </a>
+                <a href="use-cases/company-sizes/enterprise.html" class="dropdown-column-item">
+                  <i data-lucide="building-2"></i> Enterprise
+                </a>
+              </div>
+            </div>
+            <div class="dropdown-column">
+              <a href="use-cases/departments.html" class="dropdown-column-header">Departments</a>
+              <div class="dropdown-column-links">
+                <a href="use-cases/departments/marketing.html" class="dropdown-column-item">
+                  <i data-lucide="users"></i> Marketing
+                </a>
+                <a href="use-cases/departments/commercial.html" class="dropdown-column-item">
+                  <i data-lucide="trending-up"></i> Commercial
+                </a>
+                <a href="use-cases/departments/product.html" class="dropdown-column-item">
+                  <i data-lucide="layout"></i> Product
+                </a>
+              </div>
+            </div>
+            <div class="dropdown-column">
+              <a href="use-cases/sectors.html" class="dropdown-column-header">Sectors</a>
+              <div class="dropdown-column-links">
+                <a href="use-cases/sectors/igaming.html" class="dropdown-column-item">
+                  <i data-lucide="trophy"></i> iGaming
+                </a>
+                <a href="use-cases/sectors/ecommerce.html" class="dropdown-column-item">
+                  <i data-lucide="shopping-bag"></i> eCommerce
+                </a>
+                <a href="use-cases/sectors/fintech.html" class="dropdown-column-item">
+                  <i data-lucide="credit-card"></i> FinTech
+                </a>
+              </div>
+            </div>
+            <a href="use-cases/index.html" class="dropdown-footer">
+              View all use cases <i data-lucide="arrow-right" style="width:14px;height:14px;"></i>
             </a>
           </div>
         </div>
       </div>
       <div class="nav-cta"><a href="#" class="btn primary">Book Demo</a></div>
     </div>
+    <script>
+      (function() {
+        function initNav() {
+          if (typeof lucide !== "undefined") {
+            lucide.createIcons();
+          }
+          const dropdowns = document.querySelectorAll(".dropdown");
+          dropdowns.forEach(drop => {
+            const btn = drop.querySelector("button");
+            if (!btn) return;
+            btn.addEventListener("click", (e) => {
+              e.stopPropagation();
+              dropdowns.forEach(d => {
+                if (d !== drop) d.classList.remove("open");
+              });
+              drop.classList.toggle("open");
+            });
+          });
+          document.addEventListener("click", () => {
+            dropdowns.forEach(d => d.classList.remove("open"));
+          });
+        }
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", initNav);
+        } else {
+          initNav();
+        }
+      })();
+    </script>
   </nav>
 
   <main>
-    <!-- Hero Section -->
-    <section class="hero" data-variant="dashboard">
+    <!-- Section 1: Hero -->
+    <section class="hero dark-strategic" data-variant="dashboard">
       <div class="container hero-grid">
         <div class="hero-copy">
-          <div class="pill">
-            <div class="dot"></div>
-            <span>Jurnii 360 now tracks 21 feature areas daily</span>
-          </div>
-          <h1 class="display">Turn fragmented market data into decision-ready insight.</h1>
-          <p class="lede">Jurnii is the intelligence layer for iGaming operators. See exactly what your customers see and what your competitors launch in near real-time.</p>
+          <div class="eyebrow" style="margin-bottom: 22px;"><span class="dot"></span> The intelligence layer for iGaming</div>
+          <h1 class="display">Compete on experience. Win on intelligence.</h1>
           <div class="hero-ctas">
-            <a href="#" class="btn primary lg">Book a Demo <i data-lucide="arrow-right" class="arrow" style="width:16px;height:16px;"></i></a>
-            <a href="products/jurnii-360.html" class="btn ghost lg">Explore Jurnii 360</a>
+            <a href="mailto:fraser@jurnii.io" class="btn primary lg" style="background: var(--jurnii-500); color: var(--concrete-950); border-color: var(--jurnii-500);">Book a Demo</a>
+            <a href="#" class="btn ghost-on-dark lg">Explore the docs</a>
+          </div>
+          <div class="hero-products" style="margin-top: 40px; display: flex; gap: 24px; font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.05em; color: rgba(255,255,255,0.4); flex-wrap: wrap;">
+            <span style="color: rgba(255,255,255,0.6);">INTELLIGENCE SUITE:</span>
+            <a href="products/jurnii-ux.html" style="color: var(--jurnii-500); text-decoration: none; display: flex; align-items: center; gap: 6px; font-weight: 500;"><span style="display:inline-block; width:6px; height:6px; background:var(--jurnii-500); border-radius:50%;"></span> Jurnii UX</a>
+            <a href="products/jurnii-360.html" style="color: #5299ff; text-decoration: none; display: flex; align-items: center; gap: 6px; font-weight: 500;"><span style="display:inline-block; width:6px; height:6px; background:#5299ff; border-radius:50%;"></span> Jurnii 360</a>
+            <a href="products/cortex.html" style="color: #a855f7; text-decoration: none; display: flex; align-items: center; gap: 6px; font-weight: 500;"><span style="display:inline-block; width:6px; height:6px; background:#a855f7; border-radius:50%;"></span> Cortex</a>
           </div>
         </div>
-        <div class="interface-artifact float-slow" style="margin-top: 32px;">
+        <div class="interface-artifact float-slow desktop-only" style="margin-top: 32px;">
           <div class="artifact-browser-frame" style="max-width: 900px; margin: 0 auto; height: 500px;">
             <div class="artifact-window-bar">
               <div class="dots">
@@ -144,65 +346,578 @@
       </div>
     </section>
 
-    <!-- Intelligence Architecture -->
-    <section class="section section-dark product-system-map">
+    <!-- Section 2: The Challenge (PDF Page 2) -->
+    <section class="section" style="position: relative;">
       <div class="container">
         <div class="section-head centered">
-          <p class="eyebrow"><span class="dot"></span> Platform Architecture</p>
-          <h2 class="h2-section">One unified decision layer</h2>
-          <p class="section-lede">Connecting UX benchmarking, competitor moves, and commercial attribution in real-time.</p>
+          <p class="eyebrow" style="color: var(--jurnii-600);"><span class="dot" style="background: var(--jurnii-600);"></span> 01 THE CHALLENGE</p>
+          <h2 class="h2-section">iGaming operators are flying blind in a commoditised market.</h2>
         </div>
-        <div class="svg-panel" style="margin-top: 48px;">
-          <img src="assets/visuals/intelligence-layer-map.svg" alt="Intelligence Layer Architecture" width="100%">
+        <div class="problem-grid" style="grid-template-columns: repeat(2, 1fr);">
+          <div class="problem-card">
+            <div class="problem-card-num">01</div>
+            <h3>Manual & reactive</h3>
+            <p>UX benchmarking done by hand takes weeks. By the time insight arrives, the market has already moved.</p>
+          </div>
+          <div class="problem-card">
+            <div class="problem-card-num">02</div>
+            <h3>Siloed intelligence</h3>
+            <p>Product, marketing, and leadership operate from different data — no shared commercial view.</p>
+          </div>
+          <div class="problem-card">
+            <div class="problem-card-num">03</div>
+            <h3>Rising CAC</h3>
+            <p>With 3–5 accounts per player, loyalty is fragile. Minor friction compounds and kills conversion silently.</p>
+          </div>
+          <div class="problem-card">
+            <div class="problem-card-num">04</div>
+            <h3>No attribution</h3>
+            <p>Operators can't measure the true impact of one of the key levers of their marketing spend — their promo and pricing offering.</p>
+          </div>
+        </div>
+        <div style="margin-top: 64px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 20px; font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground);">
+          <div>jurnii.io</div>
+          <div>02/10</div>
         </div>
       </div>
     </section>
 
-    <!-- Core Products -->
-    <section class="section">
+    <!-- Section 3: Who Jurnii Is (PDF Page 3) -->
+    <section class="section section-dark" style="position: relative;">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-narrative">
+            <div class="eyebrow" style="margin-bottom: 16px;"><span class="dot" style="background: var(--jurnii-500);"></span> 02 WHO WE ARE</div>
+            <h2 class="h2-section" style="margin-bottom: 24px;">Not an agency.<br>Not an analytics tool.<br>An intelligence layer.</h2>
+            <p style="color: rgba(255,255,255,0.7); line-height: 1.6;">Jurnii is the proprietary commercial intelligence platform for iGaming operators. We automate UX benchmarking and competitor proposition tracking at scale — transforming manual research, subjective opinion, and reactive analytics into structured, near-real-time intelligence.</p>
+          </div>
+          <div class="about-values">
+            <div class="about-value">
+              <div class="num" style="color: var(--jurnii-500);">01</div>
+              <div>
+                <b style="color: #fff;">Proactive > reactive</b>
+                <span style="color: rgba(255,255,255,0.6);">Identify what will go wrong before users churn.</span>
+              </div>
+            </div>
+            <div class="about-value">
+              <div class="num" style="color: var(--jurnii-500);">02</div>
+              <div>
+                <b style="color: #fff;">Continuous intelligence</b>
+                <span style="color: rgba(255,255,255,0.6);">Always-on benchmarking, not point-in-time snapshots.</span>
+              </div>
+            </div>
+            <div class="about-value">
+              <div class="num" style="color: var(--jurnii-500);">03</div>
+              <div>
+                <b style="color: #fff;">Commercial relevance</b>
+                <span style="color: rgba(255,255,255,0.6);">Connected directly to NGR, churn, and conversion.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ICP Segment cards from PDF Page 3 -->
+        <div class="icp-container" style="margin-top: 64px; padding-top: 48px; border-top: 1px dashed rgba(255,255,255,0.15);">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 32px;">
+            <div class="eyebrow" style="color: var(--jurnii-500);"><span class="dot" style="background: var(--jurnii-500);"></span> TARGET AUDIENCE SEGMENTS (ICP)</div>
+            <div style="font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,0.4);">ONTOLOGY MAP · ICP</div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px;">
+            <div class="card" style="background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.06); padding: 32px; border-radius: 12px;">
+              <span class="eyebrow" style="color: var(--jurnii-500); margin-bottom: 12px; display: block;">PRIMARY ICP</span>
+              <h3 style="font-size: 20px; font-weight: 600; color: #fff; margin-bottom: 12px;">iGaming Operators</h3>
+              <p style="font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.6; margin-bottom: 20px;">Sportsbook and casino operators (£50M+ revenue) facing intense CAC pressure and conversion leakage across B2B platforms.</p>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                <span style="font-family: var(--font-mono); font-size: 10px; padding: 4px 10px; border-radius: 4px; background: rgba(87,255,96,0.08); color: var(--jurnii-500); border: 1px solid rgba(87,255,96,0.15);">Chief Product Officer</span>
+                <span style="font-family: var(--font-mono); font-size: 10px; padding: 4px 10px; border-radius: 4px; background: rgba(87,255,96,0.08); color: var(--jurnii-500); border: 1px solid rgba(87,255,96,0.15);">Chief Commercial Officer</span>
+                <span style="font-family: var(--font-mono); font-size: 10px; padding: 4px 10px; border-radius: 4px; background: rgba(87,255,96,0.08); color: var(--jurnii-500); border: 1px solid rgba(87,255,96,0.15);">Chief Marketing Officer</span>
+              </div>
+            </div>
+            <div class="card" style="background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.06); padding: 32px; border-radius: 12px;">
+              <span class="eyebrow" style="color: #5299ff; margin-bottom: 12px; display: block;">SECONDARY ICP</span>
+              <h3 style="font-size: 20px; font-weight: 600; color: #fff; margin-bottom: 12px;">B2B Enterprise Suppliers</h3>
+              <p style="font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.6; margin-bottom: 20px;">Platform and CRM software providers looking to embed Jurnii's competitive radar and intelligence layer within their customer ecosystem.</p>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                <span style="font-family: var(--font-mono); font-size: 10px; padding: 4px 10px; border-radius: 4px; background: rgba(82,153,255,0.08); color: #5299ff; border: 1px solid rgba(82,153,255,0.15);">B2B Platform Vendors</span>
+                <span style="font-family: var(--font-mono); font-size: 10px; padding: 4px 10px; border-radius: 4px; background: rgba(82,153,255,0.08); color: #5299ff; border: 1px solid rgba(82,153,255,0.15);">CRM & Retention Suppliers</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 64px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,0.4);">
+          <div>jurnii.io</div>
+          <div>03/10</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: The Product Suite 3-Column Overview (PDF Page 4) -->
+    <section class="section" style="background: var(--background); border-bottom: 1px solid var(--border);">
       <div class="container">
         <div class="section-head centered">
-          <p class="eyebrow"><span class="dot"></span> Our Products</p>
+          <p class="eyebrow" style="color: var(--jurnii-600);"><span class="dot" style="background: var(--jurnii-600);"></span> 03 THE PRODUCT SUITE</p>
           <h2 class="h2-section">Three products. One intelligence layer.</h2>
+          <p class="section-lede">Each product feeds the others — UX data enriches 360; 360 data powers Cortex MMM models.</p>
         </div>
-        <div class="problem-grid">
-          <div class="problem-card">
-            <div class="how-icon"><i data-lucide="layout-template"></i></div>
-            <h3>Jurnii UX</h3>
-            <p>UX Intelligence. Benchmark your digital experience against your competitive set. Receive 70+ commercially weighted recommendations ranked by revenue impact.</p>
-            <a href="products/jurnii-ux.html" class="link-arrow">Explore Jurnii UX <i data-lucide="arrow-right" class="arrow" style="width:14px;height:14px;"></i></a>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; margin-top: 48px;">
+          <!-- Column 1: Jurnii UX -->
+          <div class="card hover-lift" style="padding: 40px 32px; display: flex; flex-direction: column; justify-content: space-between; border-radius: 12px;">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;">
+                <div>
+                  <span class="eyebrow" style="font-size: 11px; margin-bottom: 4px; display: block; color: var(--jurnii-600);">UX INTELLIGENCE</span>
+                  <h3 style="font-size: 24px; font-weight: 700; color: var(--foreground); margin: 0;">Jurnii UX</h3>
+                </div>
+                <div style="font-size: 36px; font-weight: 800; color: var(--jurnii-500); font-family: var(--font-mono); line-height: 1;">70+</div>
+              </div>
+              <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px;">
+                <li style="font-size: 14px; color: var(--muted-foreground); display: flex; align-items: center; gap: 10px;">
+                  <span style="display:inline-block; width:6px; height:6px; background:var(--jurnii-500); border-radius:50%;"></span> Instant AI-powered UX audit
+                </li>
+                <li style="font-size: 14px; color: var(--muted-foreground); display: flex; align-items: center; gap: 10px;">
+                  <span style="display:inline-block; width:6px; height:6px; background:var(--jurnii-500); border-radius:50%;"></span> Competitor benchmarking
+                </li>
+                <li style="font-size: 14px; color: var(--muted-foreground); display: flex; align-items: center; gap: 10px;">
+                  <span style="display:inline-block; width:6px; height:6px; background:var(--jurnii-500); border-radius:50%;"></span> Severity-ranked roadmap
+                </li>
+                <li style="font-size: 14px; color: var(--muted-foreground); display: flex; align-items: center; gap: 10px;">
+                  <span style="display:inline-block; width:6px; height:6px; background:var(--jurnii-500); border-radius:50%;"></span> Delivered in minutes, not weeks
+                </li>
+              </ul>
+            </div>
+            <div style="margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border);">
+              <a href="products/jurnii-ux.html" style="font-family: var(--font-mono); font-size: 12px; color: var(--jurnii-600); text-decoration: none; display: flex; align-items: center; gap: 6px; font-weight: 600; letter-spacing: 0.05em;">
+                EXPLORE JURNII UX <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+              </a>
+            </div>
           </div>
-          <div class="problem-card">
-            <div class="how-icon"><i data-lucide="radar"></i></div>
-            <h3>Jurnii 360</h3>
-            <p>Commercial Radar. Know what every competitor is promoting the moment it goes live. Capture and structure commercial activity across 21 feature areas.</p>
-            <a href="products/jurnii-360.html" class="link-arrow">Explore Jurnii 360 <i data-lucide="arrow-right" class="arrow" style="width:14px;height:14px;"></i></a>
+          
+          <!-- Column 2: Jurnii 360 -->
+          <div class="card hover-lift" style="padding: 40px 32px; display: flex; flex-direction: column; justify-content: space-between; border-radius: 12px;">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;">
+                <div>
+                  <span class="eyebrow" style="font-size: 11px; margin-bottom: 4px; display: block; color: #5299ff;">COMMERCIAL RADAR</span>
+                  <h3 style="font-size: 24px; font-weight: 700; color: var(--foreground); margin: 0;">Jurnii 360</h3>
+                </div>
+                <div style="font-size: 36px; font-weight: 800; color: #5299ff; font-family: var(--font-mono); line-height: 1;">1,000+</div>
+              </div>
+              <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px;">
+                <li style="font-size: 14px; color: var(--muted-foreground); display: flex; align-items: center; gap: 10px;">
+                  <span style="display:inline-block; width:6px; height:6px; background:#5299ff; border-radius:50%;"></span> Live promotion & boost tracking
+                </li>
+                <li style="font-size: 14px; color: var(--muted-foreground); display: flex; align-items: center; gap: 10px;">
+                  <span style="display:inline-block; width:6px; height:6px; background:#5299ff; border-radius:50%;"></span> Timing & sequencing intelligence
+                </li>
+                <li style="font-size: 14px; color: var(--muted-foreground); display: flex; align-items: center; gap: 10px;">
+                  <span style="display:inline-block; width:6px; height:6px; background:#5299ff; border-radius:50%;"></span> Offer benchmarking vs competitors
+                </li>
+                <li style="font-size: 14px; color: var(--muted-foreground); display: flex; align-items: center; gap: 10px;">
+                  <span style="display:inline-block; width:6px; height:6px; background:#5299ff; border-radius:50%;"></span> Real-time alerts & database
+                </li>
+              </ul>
+            </div>
+            <div style="margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border);">
+              <a href="products/jurnii-360.html" style="font-family: var(--font-mono); font-size: 12px; color: #5299ff; text-decoration: none; display: flex; align-items: center; gap: 6px; font-weight: 600; letter-spacing: 0.05em;">
+                EXPLORE JURNII 360 <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+              </a>
+            </div>
           </div>
-          <div class="problem-card">
-            <div class="how-icon"><i data-lucide="network"></i></div>
-            <h3>Cortex</h3>
-            <p>Marketing Attribution. Turn UX and competitor data into attribution and planning intelligence with causal impact and MMM modeling.</p>
-            <a href="products/cortex.html" class="link-arrow">Explore Cortex <i data-lucide="arrow-right" class="arrow" style="width:14px;height:14px;"></i></a>
+          
+          <!-- Column 3: Cortex -->
+          <div class="card hover-lift" style="padding: 40px 32px; display: flex; flex-direction: column; justify-content: space-between; border-radius: 12px;">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;">
+                <div>
+                  <span class="eyebrow" style="font-size: 11px; margin-bottom: 4px; display: block; color: #a855f7;">MARKETING ATTRIBUTION</span>
+                  <h3 style="font-size: 24px; font-weight: 700; color: var(--foreground); margin: 0;">Cortex</h3>
+                </div>
+                <div style="font-size: 36px; font-weight: 800; color: #a855f7; font-family: var(--font-mono); line-height: 1;">+46%</div>
+              </div>
+              <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px;">
+                <li style="font-size: 14px; color: var(--muted-foreground); display: flex; align-items: center; gap: 10px;">
+                  <span style="display:inline-block; width:6px; height:6px; background:#a855f7; border-radius:50%;"></span> Causal impact & MMM attribution
+                </li>
+                <li style="font-size: 14px; color: var(--muted-foreground); display: flex; align-items: center; gap: 10px;">
+                  <span style="display:inline-block; width:6px; height:6px; background:#a855f7; border-radius:50%;"></span> Cross-channel Gantt planning
+                </li>
+                <li style="font-size: 14px; color: var(--muted-foreground); display: flex; align-items: center; gap: 10px;">
+                  <span style="display:inline-block; width:6px; height:6px; background:#a855f7; border-radius:50%;"></span> AI analytics assistant
+                </li>
+                <li style="font-size: 14px; color: var(--muted-foreground); display: flex; align-items: center; gap: 10px;">
+                  <span style="display:inline-block; width:6px; height:6px; background:#a855f7; border-radius:50%;"></span> Finance reconciliation & reporting
+                </li>
+              </ul>
+            </div>
+            <div style="margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border);">
+              <a href="products/cortex.html" style="font-family: var(--font-mono); font-size: 12px; color: #a855f7; text-decoration: none; display: flex; align-items: center; gap: 6px; font-weight: 600; letter-spacing: 0.05em;">
+                EXPLORE CORTEX <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+              </a>
+            </div>
           </div>
+        </div>
+        
+        <div style="margin-top: 64px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 20px; font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground);">
+          <div>jurnii.io</div>
+          <div>04/10</div>
         </div>
       </div>
     </section>
 
-    <!-- Final CTA -->
-    <section class="demo-cta">
-      <div class="container demo-cta-inner">
-        <h2>Stop guessing. Start knowing.</h2>
-        <p>Replace manual research with automated, near real-time competitive and UX intelligence.</p>
-        <div class="actions">
-          <a href="#" class="btn accent lg">Book a Demo</a>
-          <a href="products/jurnii-ux.html" class="btn ghost-on-dark lg">Explore the Platform</a>
+    <!-- Deep-Dive Product Sections -->
+    <section class="section" style="background: var(--background);">
+      <div class="container">
+        <!-- P/01 JURNII UX (PDF Page 5) -->
+        <div class="split-section" style="padding: 64px 0;">
+          <div>
+            <div class="eyebrow" style="margin-bottom: 24px;">P/01 PRODUCT 01 · JURNII UX</div>
+            <h2 class="display" style="font-size: clamp(36px, 4vw, 56px); margin-bottom: 24px;">Proactive <span style="color: var(--jurnii-500);">UX</span><br><span style="color: var(--jurnii-500);">intelligence.</span></h2>
+            <p class="lede" style="font-size: 16px;">AI-powered UX audit platform that analyses iGaming brands across 4 key dimensions, delivering 70+ ranked, commercially weighted recommendations in minutes — not weeks.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border);">
+              <div>
+                <div style="font-size: 32px; font-weight: 700; color: var(--jurnii-500); line-height: 1;">70+</div>
+                <div style="font-size: 11px; color: var(--muted-foreground); margin-top: 12px;">Ranked recommendations per audit</div>
+              </div>
+              <div>
+                <div style="font-size: 32px; font-weight: 700; color: var(--jurnii-500); line-height: 1;">4</div>
+                <div style="font-size: 11px; color: var(--muted-foreground); margin-top: 12px;">Key UX dimensions analysed</div>
+              </div>
+              <div>
+                <div style="font-size: 32px; font-weight: 700; color: var(--jurnii-500); line-height: 1;">Minutes</div>
+                <div style="font-size: 11px; color: var(--muted-foreground); margin-top: 12px;">Time to full audit — not weeks</div>
+              </div>
+              <div>
+                <div style="font-size: 32px; font-weight: 700; color: var(--jurnii-500); line-height: 1;">300+</div>
+                <div style="font-size: 11px; color: var(--muted-foreground); margin-top: 12px;">Brands analysed since launch</div>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <div class="eyebrow" style="margin-bottom: 24px;">THE FOUR DIMENSIONS</div>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <!-- card 1 -->
+              <div class="card hover-lift" style="display: grid; grid-template-columns: 40px 1fr 40px; gap: 16px; align-items: center; padding: 20px;">
+                <div style="width: 32px; height: 32px; background: rgba(87,255,96,0.1); color: var(--jurnii-600); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">1</div>
+                <div>
+                  <b style="font-size: 15px; display: block; color: var(--foreground);">Journey effectiveness</b>
+                  <span style="font-size: 13px; color: var(--muted-foreground);">How well your site guides users to their goals</span>
+                </div>
+                <div style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--jurnii-500); color: var(--jurnii-600); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px;">78</div>
+              </div>
+              <!-- card 2 -->
+              <div class="card hover-lift" style="display: grid; grid-template-columns: 40px 1fr 40px; gap: 16px; align-items: center; padding: 20px;">
+                <div style="width: 32px; height: 32px; background: rgba(255,189,46,0.1); color: #ffbd2e; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">2</div>
+                <div>
+                  <b style="font-size: 15px; display: block; color: var(--foreground);">Usability</b>
+                  <span style="font-size: 13px; color: var(--muted-foreground);">Navigation, clarity, and heuristic quality</span>
+                </div>
+                <div style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid #ffbd2e; color: #ffbd2e; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px;">82</div>
+              </div>
+              <!-- card 3 -->
+              <div class="card hover-lift" style="display: grid; grid-template-columns: 40px 1fr 40px; gap: 16px; align-items: center; padding: 20px;">
+                <div style="width: 32px; height: 32px; background: rgba(154,103,234,0.1); color: #9a67ea; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">3</div>
+                <div>
+                  <b style="font-size: 15px; display: block; color: var(--foreground);">Performance</b>
+                  <span style="font-size: 13px; color: var(--muted-foreground);">Page load, SEO, accessibility, and front-end quality</span>
+                </div>
+                <div style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid #9a67ea; color: #9a67ea; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px;">71</div>
+              </div>
+              <!-- card 4 -->
+              <div class="card hover-lift" style="display: grid; grid-template-columns: 40px 1fr 40px; gap: 16px; align-items: center; padding: 20px;">
+                <div style="width: 32px; height: 32px; background: rgba(255,95,86,0.1); color: #ff5f56; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">4</div>
+                <div>
+                  <b style="font-size: 15px; display: block; color: var(--foreground);">Perception</b>
+                  <span style="font-size: 13px; color: var(--muted-foreground);">How your experience makes users feel about your brand</span>
+                </div>
+                <div style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid #ff5f56; color: #ff5f56; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px;">86</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 20px; margin-bottom: 64px; font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground);">
+          <div>jurnii.io</div>
+          <div>05/10</div>
+        </div>
+
+        <!-- P/02 JURNII 360 (PDF Page 6) -->
+        <div class="split-section" style="padding: 64px 0; border-top: 1px solid var(--border);">
+          <div>
+            <div class="eyebrow" style="margin-bottom: 24px;">P/02 PRODUCT 02 · JURNII 360</div>
+            <h2 class="display" style="font-size: clamp(36px, 4vw, 56px); margin-bottom: 24px;">Commercial<br>Radar.</h2>
+            <p class="lede" style="font-size: 16px;">Automated competitor proposition intelligence. Track every promotion, bonus, and campaign across your competitive set — updated daily with real-time alerts, structured for MMM use.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border);">
+              <div>
+                <div style="font-size: 32px; font-weight: 700; color: var(--foreground); line-height: 1;">1,000+</div>
+                <div style="font-size: 11px; color: var(--muted-foreground); margin-top: 12px;">Offers tracked per week</div>
+              </div>
+              <div>
+                <div style="font-size: 32px; font-weight: 700; color: var(--foreground); line-height: 1;">35</div>
+                <div style="font-size: 11px; color: var(--muted-foreground); margin-top: 12px;">Markets monitored simultaneously</div>
+              </div>
+              <div>
+                <div style="font-size: 32px; font-weight: 700; color: var(--foreground); line-height: 1;">40+ hrs</div>
+                <div style="font-size: 11px; color: var(--muted-foreground); margin-top: 12px;">Saved per week vs manual monitoring</div>
+              </div>
+              <div>
+                <div style="font-size: 32px; font-weight: 700; color: var(--foreground); line-height: 1;">Hours</div>
+                <div style="font-size: 11px; color: var(--muted-foreground); margin-top: 12px;">Competitive response time — not days</div>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <div class="eyebrow" style="margin-bottom: 24px;">CAPABILITIES</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+              <div>
+                <div style="font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--muted-foreground); margin-bottom: 8px;">01</div>
+                <b style="font-size: 16px; display: block; margin-bottom: 6px;">Live promotion tracking</b>
+                <span style="font-size: 14px; line-height: 1.5; color: var(--muted-foreground); display: block;">All competitor offers surfaced within hours of launch</span>
+              </div>
+              <div>
+                <div style="font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--muted-foreground); margin-bottom: 8px;">02</div>
+                <b style="font-size: 16px; display: block; margin-bottom: 6px;">Timing & sequencing</b>
+                <span style="font-size: 14px; line-height: 1.5; color: var(--muted-foreground); display: block;">Know exactly when competitors move relative to events</span>
+              </div>
+              <div>
+                <div style="font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--muted-foreground); margin-bottom: 8px;">03</div>
+                <b style="font-size: 16px; display: block; margin-bottom: 6px;">Offer benchmarking</b>
+                <span style="font-size: 14px; line-height: 1.5; color: var(--muted-foreground); display: block;">Compare bonus value, mechanics, and targeting strategy</span>
+              </div>
+              <div>
+                <div style="font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--muted-foreground); margin-bottom: 8px;">04</div>
+                <b style="font-size: 16px; display: block; margin-bottom: 6px;">Trend spotting</b>
+                <span style="font-size: 14px; line-height: 1.5; color: var(--muted-foreground); display: block;">Detect emerging mechanics — gamified, parlay, cross-sell</span>
+              </div>
+              <div>
+                <div style="font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--muted-foreground); margin-bottom: 8px;">05</div>
+                <b style="font-size: 16px; display: block; margin-bottom: 6px;">Real-time alerts</b>
+                <span style="font-size: 14px; line-height: 1.5; color: var(--muted-foreground); display: block;">Instant notifications; trading, CRM, and marketing aligned</span>
+              </div>
+              <div>
+                <div style="font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--muted-foreground); margin-bottom: 8px;">06</div>
+                <b style="font-size: 16px; display: block; margin-bottom: 6px;">Historical database</b>
+                <span style="font-size: 14px; line-height: 1.5; color: var(--muted-foreground); display: block;">Full archive for seasonal trend and playbook analysis</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 20px; margin-bottom: 64px; font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground);">
+          <div>jurnii.io</div>
+          <div>06/10</div>
+        </div>
+
+        <!-- P/03 CORTEX (PDF Page 7) -->
+        <div class="split-section" style="padding: 64px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+          <div>
+            <div class="eyebrow" style="margin-bottom: 24px;">P/03 PRODUCT 03 · CORTEX</div>
+            <h2 class="display" style="font-size: clamp(36px, 4vw, 56px); margin-bottom: 24px;">Marketing intelligence<br>& attribution.</h2>
+            <p class="lede" style="font-size: 16px;">Turns UX and competitor/proposition data into attribution and planning intelligence.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border);">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 24px; height: 24px; border-radius: 6px; background: rgba(87,255,96,0.1); color: var(--jurnii-600); display: flex; align-items: center; justify-content: center;"><i data-lucide="check" style="width: 14px; height: 14px;"></i></div>
+                <b style="font-size: 15px;">AI analytics assistant</b>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 24px; height: 24px; border-radius: 6px; background: rgba(87,255,96,0.1); color: var(--jurnii-600); display: flex; align-items: center; justify-content: center;"><i data-lucide="check" style="width: 14px; height: 14px;"></i></div>
+                <b style="font-size: 15px;">Causal impact & MMM</b>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 24px; height: 24px; border-radius: 6px; background: rgba(87,255,96,0.1); color: var(--jurnii-600); display: flex; align-items: center; justify-content: center;"><i data-lucide="check" style="width: 14px; height: 14px;"></i></div>
+                <b style="font-size: 15px;">Cross-channel Gantt</b>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 24px; height: 24px; border-radius: 6px; background: rgba(87,255,96,0.1); color: var(--jurnii-600); display: flex; align-items: center; justify-content: center;"><i data-lucide="check" style="width: 14px; height: 14px;"></i></div>
+                <b style="font-size: 15px;">Finance reconciliation</b>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 24px; height: 24px; border-radius: 6px; background: rgba(87,255,96,0.1); color: var(--jurnii-600); display: flex; align-items: center; justify-content: center;"><i data-lucide="check" style="width: 14px; height: 14px;"></i></div>
+                <b style="font-size: 15px;">AI snapshot reports</b>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 24px; height: 24px; border-radius: 6px; background: rgba(87,255,96,0.1); color: var(--jurnii-600); display: flex; align-items: center; justify-content: center;"><i data-lucide="check" style="width: 14px; height: 14px;"></i></div>
+                <b style="font-size: 15px;">Scenario planning</b>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <div class="eyebrow" style="margin-bottom: 24px;">REAL RESULTS</div>
+            <p style="font-size: 16px; margin-bottom: 32px; color: var(--muted-foreground);">$17.1M marketing budget, one operator engagement.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+              <div>
+                <div style="font-size: 40px; font-weight: 700; color: var(--jurnii-600); line-height: 1; margin-bottom: 8px; font-family: var(--font-mono);">+46%</div>
+                <div style="font-size: 13px; font-weight: 600; color: var(--foreground);">ROI improvement</div>
+              </div>
+              <div>
+                <div style="font-size: 40px; font-weight: 700; color: var(--jurnii-600); line-height: 1; margin-bottom: 8px; font-family: var(--font-mono);">3×</div>
+                <div style="font-size: 13px; font-weight: 600; color: var(--foreground);">Reporting speed improvement</div>
+              </div>
+              <div>
+                <div style="font-size: 40px; font-weight: 700; color: var(--jurnii-600); line-height: 1; margin-bottom: 8px; font-family: var(--font-mono);">40×</div>
+                <div style="font-size: 13px; font-weight: 600; color: var(--foreground);">Annual planning acceleration</div>
+              </div>
+              <div>
+                <div style="font-size: 40px; font-weight: 700; color: var(--jurnii-600); line-height: 1; margin-bottom: 8px; font-family: var(--font-mono);">$4.85M</div>
+                <div style="font-size: 13px; font-weight: 600; color: var(--foreground);">Budget reconciliation surfaced</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 20px; font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground);">
+          <div>jurnii.io</div>
+          <div>07/10</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 8: Why Jurnii (PDF Page 8) -->
+    <section class="section section-tight" style="background: var(--muted);">
+      <div class="container">
+        <div class="section-head centered">
+          <p class="eyebrow" style="color: var(--jurnii-600);"><span class="dot" style="background: var(--jurnii-600);"></span> 04 WHY JURNII</p>
+          <h2 class="h2-section">Not built for yesterday's market.</h2>
+        </div>
+        <div class="compare-table-wrap" style="background: var(--card);">
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th>Dimension</th>
+                <th>Traditional agencies</th>
+                <th>Generic analytics</th>
+                <th class="us-col">Jurnii</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Speed to insight</td>
+                <td>Weeks / months</td>
+                <td>Reactive, post-event</td>
+                <td class="compare-us">Near real-time</td>
+              </tr>
+              <tr>
+                <td>UX benchmarking</td>
+                <td>Opinion-led</td>
+                <td>—</td>
+                <td class="compare-us">AI-powered, structured</td>
+              </tr>
+              <tr>
+                <td>Competitor intelligence</td>
+                <td>Manual snapshots</td>
+                <td>Internal data only</td>
+                <td class="compare-us">Automated, always-on</td>
+              </tr>
+              <tr>
+                <td>Commercial connection</td>
+                <td>Deliverable docs</td>
+                <td>Vanity metrics</td>
+                <td class="compare-us">NGR, churn, conversion</td>
+              </tr>
+              <tr>
+                <td>Marketing attribution</td>
+                <td>Not in scope</td>
+                <td>Last-click only</td>
+                <td class="compare-us">Causal MMM modelling</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="margin-top: 64px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 20px; font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground);">
+          <div>jurnii.io</div>
+          <div>08/10</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 9: Proof Metrics & Clients (PDF Page 9) -->
+    <section class="section section-tight" style="background: var(--background);">
+      <div class="container">
+        <div class="section-head centered">
+          <p class="eyebrow" style="color: var(--jurnii-600);"><span class="dot" style="background: var(--jurnii-600);"></span> 05 PROVING VALUE</p>
+          <h2 class="h2-section">Growing fast. Proving value.</h2>
+        </div>
+        <div class="proof-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 32px; text-align: center;">
+          <div class="proof-stat">
+            <div class="n" style="font-size: 48px; font-weight: 800; color: var(--jurnii-600); font-family: var(--font-mono);">~25</div>
+            <div class="l" style="font-size: 13px; color: var(--muted-foreground); margin-top: 8px;">iGaming Operators</div>
+          </div>
+          <div class="proof-stat">
+            <div class="n" style="font-size: 48px; font-weight: 800; color: var(--jurnii-600); font-family: var(--font-mono);">300+</div>
+            <div class="l" style="font-size: 13px; color: var(--muted-foreground); margin-top: 8px;">Brands Analysed</div>
+          </div>
+          <div class="proof-stat">
+            <div class="n" style="font-size: 48px; font-weight: 800; color: var(--jurnii-600); font-family: var(--font-mono);">1,000+</div>
+            <div class="l" style="font-size: 13px; color: var(--muted-foreground); margin-top: 8px;">Offers Tracked</div>
+          </div>
+          <div class="proof-stat">
+            <div class="n" style="font-size: 48px; font-weight: 800; color: var(--jurnii-600); font-family: var(--font-mono);">+46%</div>
+            <div class="l" style="font-size: 13px; color: var(--muted-foreground); margin-top: 8px;">Cortex ROI Improvement</div>
+          </div>
+        </div>
+        <div class="logo-bar-row" style="margin-top: 48px; border-top: 1px solid var(--border); padding-top: 48px; display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 24px;">
+          <span style="font-size: 24px; font-weight: 700; opacity: 0.4; letter-spacing: 0.05em; font-family: var(--font-display);">Flutter</span>
+          <span style="font-size: 24px; font-weight: 700; opacity: 0.4; letter-spacing: 0.05em; font-family: var(--font-display);">Betsson</span>
+          <span style="font-size: 24px; font-weight: 700; opacity: 0.4; letter-spacing: 0.05em; font-family: var(--font-display);">ComeOn</span>
+          <span style="font-size: 24px; font-weight: 700; opacity: 0.4; letter-spacing: 0.05em; font-family: var(--font-display);">SuperBet</span>
+          <span style="font-size: 24px; font-weight: 700; opacity: 0.4; letter-spacing: 0.05em; font-family: var(--font-display);">LeoVegas</span>
+        </div>
+        <div style="margin-top: 64px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 20px; font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground);">
+          <div>jurnii.io</div>
+          <div>09/10</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 10: Get Started / Final CTA (PDF Page 10) -->
+    <section class="demo-cta" style="background: var(--concrete-950); padding: 80px 0; border-top: 1px solid rgba(255,255,255,0.05); position: relative;">
+      <div class="container demo-cta-inner" style="max-width: 800px; margin: 0 auto; text-align: center;">
+        <div class="eyebrow" style="color: var(--jurnii-500); margin-bottom: 24px;"><span class="dot" style="background: var(--jurnii-500);"></span> GET STARTED</div>
+        <h2 style="font-size: clamp(32px, 5vw, 48px); font-weight: 700; color: #fff; margin-bottom: 48px;">Ready to compete on intelligence?</h2>
+        
+        <div class="actions-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; text-align: left; margin-bottom: 64px;">
+          <a href="mailto:fraser@jurnii.io" class="card hover-lift" style="padding: 24px; background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.08); text-decoration: none; display: block; border-radius: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <span class="eyebrow" style="color: var(--jurnii-500); font-size: 11px;">BOOK A DEMO</span>
+              <i data-lucide="arrow-up-right" style="width: 16px; height: 16px; color: var(--jurnii-500);"></i>
+            </div>
+            <div style="font-size: 16px; font-weight: 600; color: #fff;">fraser@jurnii.io</div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 4px;">Schedule a personal platform walk-through</div>
+          </a>
+          
+          <a href="https://jurnii.io" target="_blank" class="card hover-lift" style="padding: 24px; background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.08); text-decoration: none; display: block; border-radius: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <span class="eyebrow" style="color: #5299ff; font-size: 11px;">EXPLORE THE DOCS</span>
+              <i data-lucide="arrow-up-right" style="width: 16px; height: 16px; color: #5299ff;"></i>
+            </div>
+            <div style="font-size: 16px; font-weight: 600; color: #fff;">jurnii.io/docs</div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 4px;">Read technical guides & metrics schema</div>
+          </a>
+          
+          <a href="mailto:hello@jurnii.io" class="card hover-lift" style="padding: 24px; background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.08); text-decoration: none; display: block; border-radius: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <span class="eyebrow" style="color: #a855f7; font-size: 11px;">START A PILOT</span>
+              <i data-lucide="arrow-up-right" style="width: 16px; height: 16px; color: #a855f7;"></i>
+            </div>
+            <div style="font-size: 16px; font-weight: 600; color: #fff;">hello@jurnii.io</div>
+            <div style="font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 4px;">Establish benchmark data for your brands</div>
+          </a>
+        </div>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,0.4);">
+          <div>jurnii.io</div>
+          <div>10/10</div>
         </div>
       </div>
     </section>
   </main>
 
   <!-- Footer -->
-        <footer class="footer">
+                                    <footer class="footer">
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
@@ -218,19 +933,24 @@
           </div>
           <div>
             <div class="footer-head">Features</div>
-            <a href="features/journeys.html">Journeys</a>
-            <a href="features/promotions.html">Promotions</a>
+            <a href="features/competitor-promotions.html">Promotions</a>
+            <a href="features/brand-usability.html">Usability</a>
+            <a href="features/index.html" style="font-weight:600; margin-top:8px; display:inline-block; color:var(--jurnii-500);">All Features &rarr;</a>
           </div>
           <div>
             <div class="footer-head">Solutions</div>
-            <a href="solutions/ux-benchmarking.html">UX Benchmarking</a>
-            <a href="solutions/conversion-optimisation.html">Conversion Optimisation</a>
-            <a href="solutions/competitor-intelligence.html">Competitor Intelligence</a>
+            <a href="solutions/user-experience-benchmarking.html">UX Benchmarking</a>
+            <a href="solutions/conversion-rate-optimization.html">Conversion Rate</a>
+            <a href="solutions/competition-offers.html">Competitor Offers</a>
+            <a href="solutions/index.html" style="font-weight:600; margin-top:8px; display:inline-block; color:var(--jurnii-500);">All Solutions &rarr;</a>
           </div>
           <div>
             <div class="footer-head">Use Cases</div>
-            <a href="use-cases/industry/operators.html">For Operators</a>
-            <a href="use-cases/role/cpo.html">For CPOs</a>
+            <a href="use-cases/roles.html">Roles</a>
+            <a href="use-cases/company-sizes.html">Company Size</a>
+            <a href="use-cases/departments.html">Departments</a>
+            <a href="use-cases/sectors.html">Sectors</a>
+            <a href="use-cases/index.html" style="font-weight:600; margin-top:8px; display:inline-block; color:var(--jurnii-500);">All Use Cases &rarr;</a>
           </div>
         </div>
       </div>
@@ -249,20 +969,7 @@
       lucide.createIcons();
     }
     
-    // Simple dropdown toggle logic
-    document.querySelectorAll('.dropdown button').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const drop = btn.closest('.dropdown');
-        document.querySelectorAll('.dropdown').forEach(d => {
-          if(d !== drop) d.classList.remove('open');
-        });
-        drop.classList.toggle('open');
-      });
-    });
-    document.addEventListener('click', () => {
-      document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open'));
-    });
+    
   </script>
 </body>
 </html>

@@ -5,6 +5,9 @@ description: Create a redesign plan before implementation
 
 # Workflow: Plan Redesign
 
+> [!WARNING]
+> This is a structural planning workflow. If you are conducting a premium visual style sprint, please use `/jurnii-uiux-style-orchestrator` instead.
+
 **Purpose**: Create a redesign plan before implementation.
 
 Execute the following steps to build an implementation plan. **Do not modify files until the plan is approved.**

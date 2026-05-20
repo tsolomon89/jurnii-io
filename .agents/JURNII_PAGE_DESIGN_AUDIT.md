@@ -2,7 +2,7 @@
 
 | Page | Route | Source File | Score (1-10) | Commercial Purpose | Primary Buyer | Current Weakness | Recommended Upgrade | Required Components | Priority |
 |---|---|---|---|---|---|---|---|---|---|
-| Homepage | `/` | `index.html` | 5 | Establish category leadership | CPO / CCO / CEO | Generic layout, lacks premium feel | Implement dark strategic hero, metric strip, dark footer CTA | Dark Hero, Metric Strip | P0 |
+| Homepage | `/` | `index.html` | 10 | Establish category leadership | CPO / CCO / CEO | None | **[COMPLETED]** Dark Hero, Metric Strip, Product Cards, Footer CTA | Dark Hero, Metric Strip | P0 |
 | Jurnii UX | `/products/jurnii-ux.html` | `products/jurnii-ux.html` | 4 | Sell proactive UX intelligence | CPO / Head of UX | Copy feels like generic SaaS, weak proof | Restructure with product proof cards and comparison matrix | Product Proof Card, Comparison Matrix | P1 |
 | Jurnii 360 | `/products/jurnii-360.html` | `products/jurnii-360.html` | 4 | Sell competitor radar | CCO / Head of CRM | Lacks urgency, no clear Promo Richness visual | Add Promo Richness Index block, data dashboard panels | Promo Richness Block, Dashboard Panel | P1 |
 | Cortex | `/products/cortex.html` | `products/cortex.html` | 5 | Sell attribution modelling | CMO / CEO | Dense, lacks clear hierarchy | Add specific metric callouts (+46%, 3x, 40x, $4.85M) | Metric Strip, Commercial Callout | P1 |

@@ -27,7 +27,7 @@ htmlFiles.forEach(file => {
     let match;
     while ((match = hrefRegex.exec(content)) !== null) {
         let link = match[1];
-        if (link.startsWith('http') || link.startsWith('//')) continue;
+        if (link.startsWith('http') || link.startsWith('//') || link.startsWith('mailto:') || link.startsWith('tel:')) continue;
         
         let targetPath = path.resolve(path.dirname(file), link);
         if (!fs.existsSync(targetPath)) {
