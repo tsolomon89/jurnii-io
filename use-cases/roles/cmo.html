@@ -298,6 +298,30 @@
       </div>
     </section>
 
+    <!-- Metric Strip Component -->
+    <div class="metric-strip-wrapper">
+      <div class="container">
+        <div class="metric-strip-grid">
+          <div class="metric-strip-item">
+            <span class="metric-strip-num">35 Markets</span>
+            <span class="metric-strip-label">Monitored Simultaneously</span>
+          </div>
+          <div class="metric-strip-item">
+            <span class="metric-strip-num">1,000+ Offers</span>
+            <span class="metric-strip-label">Tracked & Normalized Weekly</span>
+          </div>
+          <div class="metric-strip-item">
+            <span class="metric-strip-num">+46% ROI</span>
+            <span class="metric-strip-label">Cortex Causal Marketing ROAS</span>
+          </div>
+          <div class="metric-strip-item">
+            <span class="metric-strip-num">30+ Hours</span>
+            <span class="metric-strip-label">Saved per Week in Audits</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Manifesto & Context -->
     <section class="feature-manifesto" id="details" style="padding: 60px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--card);">
       <div class="container" style="max-width: 900px; text-align: center;">
@@ -327,7 +351,15 @@
             <p style="font-size: 14.5px; color: var(--muted-foreground); line-height: 1.5; margin: 0 0 24px 0;">
               Jurnii 360 tracks 100% of competitor moves automatically, cataloging over 1,000 active campaigns weekly. Cortex ingests competitor promotions data from Jurnii 360 across 21 feature areas and integrates them into causal models. This eliminates last-click attribution leaks and isolates the true incremental lift of programmatic and search spends against competitor actions. It allows CMOs to calibrate acquisition thresholds, predict churn, and model competitor campaign reactiveness across 35 markets monitored simultaneously.
             </p>
-            <div style="border-top: 1px solid var(--border); padding-top: 20px; font-size: 13px; font-style: italic; color: var(--jurnii-700); font-weight: 600;">
+            <div class="implication-callout">
+              <div class="implication-callout-header">
+                <i data-lucide="trending-up" style="width: 14px; height: 14px;"></i> Commercial Implication
+              </div>
+              <p class="implication-callout-body">
+                Friction in onboarding and mismatched promotion structures dilutes Net Gaming Revenue (<b>NGR</b>) and increases Customer Acquisition Cost (<b>CAC</b>) by up to <b>35%</b>.
+              </p>
+            </div>
+            <div style="border-top: 1px solid var(--border); padding-top: 20px; margin-top: 20px; font-size: 13px; font-style: italic; color: var(--jurnii-700); font-weight: 600;">
               Chief Marketing Officers deploy Jurnii positioning maps and Cortex modeling to optimize media mix budgets and validate spend efficiency.
             </div>
           </div>
@@ -372,6 +404,61 @@
       </div>
     </section>
 
+    <!-- Competitor Benchmark Table Section -->
+    <section class="benchmark-section">
+      <div class="container" style="max-width: 1100px;">
+        <div class="section-head centered">
+          <span class="eyebrow"><span class="dot"></span>Performance Matrix</span>
+          <h2 class="h2-section">How Jurnii Outpaces the Market</h2>
+          <p class="section-lede" style="margin-left: auto; margin-right: auto;">A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.</p>
+        </div>
+        <div class="benchmark-table-card">
+          <table class="benchmark-table">
+            <thead>
+              <tr>
+                <th>Capabilities Matrix</th>
+                <th class="jurnii-col">Jurnii Intelligence</th>
+                <th>Legacy Analytics</th>
+                <th>Manual Agencies</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="feature-name">Audit Frequency</td>
+                <td class="jurnii-col"><span class="benchmark-badge success">Continuous Real-Time</span></td>
+                <td>Ad-Hoc / Event Triggered</td>
+                <td>Monthly / Retrospective</td>
+              </tr>
+              <tr>
+                <td class="feature-name">Attribution Logic</td>
+                <td class="jurnii-col"><span class="benchmark-badge success">Cortex Causal Models</span></td>
+                <td>First-Click / Last-Click Errors</td>
+                <td>Subjective / Gut Feel</td>
+              </tr>
+              <tr>
+                <td class="feature-name">Data Structure</td>
+                <td class="jurnii-col"><span class="benchmark-badge success">Normalized Promo Richness</span></td>
+                <td>Raw Text Snippets</td>
+                <td>Scattered Spreadsheets</td>
+              </tr>
+              <tr>
+                <td class="feature-name">UX Recommendations</td>
+                <td class="jurnii-col"><span class="benchmark-badge success">70+ Ranked Heuristics</span></td>
+                <td>Simple Funnel Dropout Counts</td>
+                <td>High-Level Consultant Slideware</td>
+              </tr>
+              <tr>
+                <td class="feature-name">Jurisdictional Coverage</td>
+                <td class="jurnii-col"><span class="benchmark-badge success">35 Simultaneous Markets</span></td>
+                <td>Single Market / Restricted</td>
+                <td>Local Only</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
     <!-- Cortex Integration & Proof Points Section -->
     <section class="cortex-section" style="padding: 100px 0; background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
       <div class="container" style="max-width: 1100px;">
@@ -386,14 +473,90 @@
               By cataloging competitor promotions, pricing richness, and interface friction, Jurnii enables your data scientists to export MMM-ready datasets. Model the defensive strength of programmatic and search channels in real-time.
             </p>
           </div>
-          <div style="background: #1c2217; border-radius: 16px; padding: 40px; color: #fff;">
-            <span style="font-family: var(--font-mono); font-size: 10px; color: var(--jurnii-400); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 8px;">Attribution Results</span>
-            <h3 style="font-size: 40px; font-weight: 800; color: #fff; margin: 0 0 8px 0;">+46%</h3>
-            <p style="font-size: 13.5px; color: rgba(255,255,255,0.7); line-height: 1.5; margin: 0 0 24px 0;">
-              Attributed campaign yield and marketing ROAS lift achieved through Cortex causal models.
-            </p>
-            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; font-size: 13.5px; color: rgba(255,255,255,0.6); line-height: 1.4;">
+          
+          <!-- Dashboard Mock Panel -->
+          <div class="dashboard-mockup-wrapper">
+            <div class="dashboard-mockup-header">
+              <span class="dashboard-mockup-title">
+                <span class="dashboard-mockup-dot"></span> Jurnii Cortex Live Benchmarks
+              </span>
+              <span style="color: var(--jurnii-400); font-family: var(--font-mono); font-size: 11px; font-weight: 700;">Active Feed</span>
+            </div>
+            <div class="dashboard-mockup-grid">
+              <!-- Column 1: Promo Richness Index Card -->
+              <div class="dashboard-card-inner">
+                <div class="promo-index-header">
+                  <h4 class="promo-index-title">Promo Richness Index</h4>
+                  <span class="promo-index-value">84</span>
+                </div>
+                <div style="margin-bottom: 12px;">
+                  <span class="promo-index-comparison">+4.2% vs Market Avg</span>
+                </div>
+                <div class="dashboard-mini-chart">
+                  <div class="mini-chart-bar" style="height: 35%;"></div>
+                  <div class="mini-chart-bar" style="height: 48%;"></div>
+                  <div class="mini-chart-bar" style="height: 60%;"></div>
+                  <div class="mini-chart-bar active" style="height: 84%;"></div>
+                  <div class="mini-chart-bar" style="height: 72%;"></div>
+                  <div class="mini-chart-bar" style="height: 68%;"></div>
+                  <div class="mini-chart-bar active" style="height: 80%;"></div>
+                </div>
+              </div>
+              
+              <!-- Column 2: Onboarding Funnel Progress -->
+              <div class="dashboard-card-inner">
+                <h4 class="onboarding-funnel-header">Player Onboarding Funnel</h4>
+                <div class="funnel-step">
+                  <div class="funnel-step-meta">
+                    <span class="funnel-step-name">Registration</span>
+                    <span>98%</span>
+                  </div>
+                  <div class="funnel-step-bar-bg">
+                    <div class="funnel-step-bar-fill jurnii-fill" style="width: 98%;"></div>
+                  </div>
+                </div>
+                <div class="funnel-step">
+                  <div class="funnel-step-meta">
+                    <span class="funnel-step-name">KYC Checkpoint</span>
+                    <span style="color: #ff6b6b; font-weight: 600;">82% (Friction Leak)</span>
+                  </div>
+                  <div class="funnel-step-bar-bg">
+                    <div class="funnel-step-bar-fill leak-fill" style="width: 82%;"></div>
+                  </div>
+                </div>
+                <div class="funnel-step">
+                  <div class="funnel-step-meta">
+                    <span class="funnel-step-name">First Deposit</span>
+                    <span>64%</span>
+                  </div>
+                  <div class="funnel-step-bar-bg">
+                    <div class="funnel-step-bar-fill jurnii-fill" style="width: 64%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div style="border-top: 1px solid rgba(255,255,255,0.08); margin-top: 24px; padding-top: 20px; font-size: 13.5px; color: rgba(255,255,255,0.6); line-height: 1.5;">
+              <span style="color: var(--jurnii-300); font-weight: 700; display: block; margin-bottom: 4px;">Cortex Attribution Yield Result: +46% ROAS Lift</span>
               Cortex verified +46% campaign yield and true marketing ROAS lift, validating performance on a real-world $17.1M budget, surfacing $4.85M in savings.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Editorial Testimonial Section -->
+    <section style="padding: 60px 0 100px; background: var(--background);">
+      <div class="container" style="max-width: 900px;">
+        <div class="editorial-testimonial-card">
+          <blockquote class="editorial-quote">
+            <em>"Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely."</em>
+          </blockquote>
+          <div class="editorial-author-meta">
+            <div class="editorial-author-avatar">GM</div>
+            <div class="editorial-author-details">
+              <cite class="editorial-author-name">General Manager, Europe iGaming Conglomerate</cite>
+              <span class="editorial-author-title">Integrated Portfolio Operations</span>
             </div>
           </div>
         </div>
