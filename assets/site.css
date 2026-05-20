@@ -100,7 +100,7 @@ h1.page-title { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.02; letter-s
 
 /* Dropdowns */
 .dropdown { position: relative; }
-.dropdown-panel { position: absolute; top: calc(100% + 8px); left: 0; min-width: 320px; background: var(--popover); border: 1px solid var(--border); border-radius: 14px; padding: 10px; box-shadow: 0 12px 32px -10px rgba(0,0,0,0.16), 0 2px 6px rgba(0,0,0,0.04); opacity: 0; visibility: hidden; transform: translateY(-4px); transition: opacity 180ms ease, transform 180ms ease, visibility 0s linear 180ms; z-index: 60; }
+.dropdown-panel { position: absolute; top: calc(100% + 8px); left: 50%; min-width: 320px; background: var(--popover); border: 1px solid var(--border); border-radius: 14px; padding: 10px; box-shadow: 0 12px 32px -10px rgba(0,0,0,0.16), 0 2px 6px rgba(0,0,0,0.04); opacity: 0; visibility: hidden; transform: translateX(-50%) translateY(-4px); transition: opacity 180ms ease, transform 180ms ease, visibility 0s linear 180ms; z-index: 60; }
 .dropdown-panel.cols-2 { display: grid; grid-template-columns: 240px 240px; min-width: max-content; gap: 4px; }
 .dropdown-panel.cols-3 { display: grid; grid-template-columns: 240px 240px 240px; min-width: max-content; gap: 4px; }
 .dropdown-panel.cols-4 { display: grid; grid-template-columns: 210px 210px 210px 210px; min-width: max-content; gap: 16px; padding: 20px; }
@@ -153,7 +153,7 @@ h1.page-title { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.02; letter-s
   margin-top: 10px;
 }
 
-.dropdown.open .dropdown-panel { opacity: 1; visibility: visible; transform: translateY(0); transition-delay: 0s; }
+.dropdown.open .dropdown-panel { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); transition-delay: 0s; }
 .dropdown-item { display: grid; grid-template-columns: 36px 1fr; gap: 12px; padding: 10px; border-radius: 10px; align-items: center; transition: background 150ms ease; }
 .dropdown-item:hover { background: var(--accent); }
 .dropdown-item .ico { width: 36px; height: 36px; border-radius: 8px; background: var(--jurnii-50); color: var(--jurnii-700); display: flex; align-items: center; justify-content: center; }

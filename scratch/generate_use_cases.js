@@ -20,6 +20,10 @@ const useCasesData = {
         kicker: "Growth Attribution",
         lede: "Validate promotional ROI, model competitor campaign reactiveness, and target market gaps.",
         manifesto: "Jurnii parses competitor promotions and ad copy in real-time, giving Chief Marketing Officers the objective intelligence needed to maximize acquisition efficiency and justify marketing investment strategies.",
+        challenge: "CMOs must defend market share and allocate budgets in highly competitive jurisdictions. Relying on last-click attribution masks the true causal impact of competitor promo shifts, while rising CPAs erode campaigns ROI.",
+        mechanics: "Cortex ingests competitor promotions data from Jurnii 360 and visual UX scores from Jurnii UX, running causal modeling and marketing mix attribution. This isolates the true incremental lift of programmatics and search spends.",
+        proofText: "Cortex verified +46% campaign yield and true marketing ROAS lift, validating performance on a real-world $17.1M budget.",
+        targetPersona: "Chief Marketing Officers deploy Jurnii positioning maps and Cortex modeling to optimize media mix budgets and validate spend efficiency.",
         capabilities: [
           { title: "Attribution Modelling", icon: "network", desc: "Quantify competitor campaign impacts on your acquisition CAC and channel share." },
           { title: "Creative Analytics", icon: "megaphone", desc: "Monitor competitor banner messaging, creative hooks, and copywriting shifts instantly." },
@@ -34,6 +38,10 @@ const useCasesData = {
         kicker: "Operational Excellence",
         lede: "Streamline digital product workflows, eliminate player journey friction, and secure conversions.",
         manifesto: "Operations leaders utilize Jurnii to align product, engineering, and marketing pipelines around objective UX indicators, eliminating manual competitive auditing and accelerating sprint impact.",
+        challenge: "Hand-offs between product, marketing, and trading teams are slowed by opinion-driven disagreements. Manual tracking takes 30+ hours per week, while latency or onboarding friction at verification (KYC) steps causes silent player abandonment.",
+        mechanics: "Jurnii normalizes competitor registration processes and deposit requirements, delivering automated heuristic maps that isolate actual UX bottlenecks and accelerate sprint alignment.",
+        proofText: "Eliminate manual spreadsheet competitive auditing, saving 30+ hours per week across CRM and product teams.",
+        targetPersona: "Chief Operating Officers deploy Jurnii automated surveillance to align technical pipelines and eliminate conversion latency.",
         capabilities: [
           { title: "Process Automation", icon: "settings", desc: "Eliminate manual competitive audits with automated active data feeds." },
           { title: "Friction Identification", icon: "alert-circle", desc: "Identify conversion leaks across registration, deposit, and verification pipelines." },
@@ -48,6 +56,10 @@ const useCasesData = {
         kicker: "Margin Defence",
         lede: "Maximize margin and player lifetime value by systematically identifying conversion path leaks.",
         manifesto: "Commercial directors leverage Jurnii to protect yields, optimizing promotional richness and bonus wagering conditions based on continuous, automated market visibility.",
+        challenge: "CCOs are responsible for Net Gaming Revenue (NGR), but over-generous player bonuses erode EBITDA margins. Without live visibility, CRM teams duplicate rival promos reactively, risking severe margin dilution.",
+        mechanics: "Jurnii 360's Promo Richness Index standardizes wagering rules and deposit incentives. This enables CCOs to calibrate margin thresholds and defend player lifetime value (LTV).",
+        proofText: "Jurnii 360 tracks 100% of competitor promotion moves automatically, scraping over 1,000 active campaigns weekly.",
+        targetPersona: "Chief Commercial Officers leverage Jurnii promotions surveillance to balance customer acquisition generosity with strict yield safety.",
         capabilities: [
           { title: "Yield Optimisation", icon: "trending-up", desc: "Prevent margin erosion by calibrating deposit bonus and pricing richness against rivals." },
           { title: "LTV Protection", icon: "heart", desc: "Stop player churn before it starts by monitoring rival retention plays in real-time." },
@@ -71,6 +83,10 @@ const useCasesData = {
         kicker: "Market Penetration",
         lede: "Scale player acquisition and secure regional market share without enterprise-level overheads.",
         manifesto: "Jurnii delivers rapid, high-impact intelligence tailored for emerging brands, allowing SMB operators to compete directly with global conglomerates by acting on precise, localized market facts.",
+        challenge: "Squeezed by massive operator conglomerates, fast-growing challengers spend limited budgets copying market generics. Without clear competitive context, they miss micro-campaign opportunities and experience high client leakage.",
+        mechanics: "Jurnii provides immediate, low-overhead competitor surveillance. Challenging operators can easily detect value claims and welcome offer gaps to deploy agile, highly targeted counter-campaigns.",
+        proofText: "By analyzing 300+ global brands, Jurnii enables boutique operators to discover high-value market voids and lower acquisition CPA.",
+        targetPersona: "Scaling Founders and C-Suite leaders at SMB operators use Jurnii's out-of-the-box dashboards to maintain parity without enterprise-level overheads.",
         capabilities: [
           { title: "Agile Positioning", icon: "zap", desc: "Exploit market gaps and creative opportunities left open by slower, institutional competitors." },
           { title: "Budget Efficiency", icon: "coins", desc: "Maximize every marketing dollar by analyzing and refining winning regional promotional frameworks." },
@@ -85,6 +101,10 @@ const useCasesData = {
         kicker: "Scale & Expansion",
         lede: "Defend your territory and expand aggressively across new jurisdictions with structured intelligence.",
         manifesto: "Mid-market operators utilize Jurnii to transition from regional player to national leader. Systematize competitive tracking and align scaling executive teams around standardized indicators.",
+        challenge: "Scaling operators face high operational friction when entering new regulated markets. Replatforming or launching new brands creates immense UX drift and exposes player onboarding funnels to massive drop-offs.",
+        mechanics: "Jurnii automates customer journey audits and competitor indexing in target jurisdictions (e.g., Ontario, Sweden, UK), providing structured UX scores and promo tracking data to guide expansion roadmaps.",
+        proofText: "Calibrating UX against Jurnii's global repository of 300+ brands ensures mid-market players scale acquisition cleanly.",
+        targetPersona: "VP of Growth and Commercial Directors utilize Jurnii's regional maps to secure expansion margins and validate brand launches.",
         capabilities: [
           { title: "Jurisdictional Expansion", icon: "globe", desc: "Instantly understand player conversion loops and local UX expectations in new target markets." },
           { title: "Organizational Alignment", icon: "users", desc: "Establish a single-source-of-truth usability database across growing marketing and product departments." },
@@ -99,6 +119,10 @@ const useCasesData = {
         kicker: "Market Domination",
         lede: "Benchmark multi-brand portfolios, streamline global compliance, and dominate major jurisdictions.",
         manifesto: "For top-tier multi-brand operators, Jurnii serves as the central intelligence layer. Harmonize UX scoring and competitor campaign scraping across complex, highly-regulated international markets.",
+        challenge: "Multi-brand, multi-jurisdiction conglomerates operate in data siloes. Boards are flooded with subjective design feedback, while CRM teams manually scrape competitor welcome offers across 35 regulated markets.",
+        mechanics: "Jurnii serves as the central competitive infrastructure. We stream normalized, structured API data directly into enterprise data warehouses, enabling automated multi-brand scoring and always-on compliance audits.",
+        proofText: "Cortex causal engines processed a $17.1M real-world budget, surfacing $4.85M in inefficiency savings and 3x performance validation.",
+        targetPersona: "Enterprise Chief Executive Officers and Boards leverage Jurnii Meta Scores to manage brand portfolios and defend global EBITDA.",
         capabilities: [
           { title: "Multi-Brand Benchmarking", icon: "layers", desc: "Evaluate and grade your entire portfolio of brands side-by-side under a unified metric system." },
           { title: "Regulatory Compliance", icon: "shield-check", desc: "Keep automated audit trails of promotional terms, active bonuses, and creative copy changes." },
@@ -122,6 +146,10 @@ const useCasesData = {
         kicker: "Growth Strategy",
         lede: "Increase acquisition yields and build highly defensible cross-channel budget plans.",
         manifesto: "Eliminate subjectivity from marketing investments. Jurnii delivers the database, tracking, and attribution tools to optimize campaigns based on real-time competitor actions.",
+        challenge: "Marketing managers operate under blind CPA metrics. Last-click attribution fails to account for competitor sports boosts or casino wagering shifts, leading to bad budget allocations during peak sporting seasons.",
+        mechanics: "Jurnii 360 parses and indices competitor active banner creative, copy claims, and promo rich structures, syncing always-on competitor feeds with marketing mix models.",
+        proofText: "Continuous automated tracking captures 400+ monthly campaigns, transforming raw competitive copy into predictive intelligence.",
+        targetPersona: "Acquisition Heads and Media Buyers use Jurnii campaign timelines to optimize ad spends and improve paid media ROAS.",
         capabilities: [
           { title: "Campaign Scraping", icon: "tag", desc: "Track all competitor promotions, deposit matches, and free spins dynamically." },
           { title: "Ad Creative Intel", icon: "image", desc: "Review banner placements, positioning, and copywriting hooks across competitors." },
@@ -136,6 +164,10 @@ const useCasesData = {
         kicker: "Commercial Optimization",
         lede: "Calibrate pricing models, optimize promo richness, and defend net gaming revenues.",
         manifesto: "Commercial departments run on margins. Jurnii bridges the gap between player acquisition costs and gaming yields, supplying clear indices to evaluate pricing richness.",
+        challenge: "Commercial teams struggle to balance player bonus incentives with net yield hold rates. Copying rival wagering thresholds by hand is slow, error-prone, and leads to margin erosion or sudden customer churn.",
+        mechanics: "Jurnii models competitor payout curves across sports and casino verticals. By cataloging minimum deposit targets and affiliate terms, we protect NGR from competitive dilution.",
+        proofText: "Normalizing promotion tracking across 35 markets saves 30+ hours of commercial analyst time every week.",
+        targetPersona: "Commercial Analysts and CRM Directors leverage Jurnii margin calibrators to deploy high-yield loyalty rewards.",
         capabilities: [
           { title: "Promo Richness Index", icon: "bar-chart-3", desc: "Standardize the mathematical cost and yield margin impact of deposit and retention bonuses." },
           { title: "Churn Analytics", icon: "user-minus", desc: "Trace rival product changes and promotions causing customer leakage to competitors." },
@@ -150,6 +182,10 @@ const useCasesData = {
         kicker: "Product Excellence",
         lede: "Drive product sprint success, optimize user flows, and automate competitive UX audits.",
         manifesto: "Product managers utilize Jurnii to validate interface roadmaps. Base development sprints on objective heuristic rankings rather than ad-hoc specifications or subjective opinions.",
+        challenge: "Product roadmaps are plagued by internal opinions. Usability reviews are slow and expensive, while B2B vendor platform constraints force product managers to ship features blindly without competitive context.",
+        mechanics: "Jurnii UX delivers automated usability heuristics scoring across registration, KYC verification, and checkout funnels, supplying product teams with ranked, actionable updates.",
+        proofText: "Jurnii UX audits deliver 70+ commercially weighted recommendations ranked by conversion yield impact in minutes.",
+        targetPersona: "Chief Product Officers and Heads of UX deploy Jurnii heuristic scores to prioritize development cycles and outpace rival portals.",
         capabilities: [
           { title: "Heuristic UX Scoring", icon: "award", desc: "Automate user interface audits across core registration, verification, and deposit pipelines." },
           { title: "Journey Mapping", icon: "route", desc: "Visualize player navigation pathways and friction points objectively." },
@@ -173,6 +209,10 @@ const useCasesData = {
         kicker: "iGaming Excellence",
         lede: "Automate player conversion, track competitive campaigns, and dominate highly regulated jurisdictions.",
         manifesto: "Jurnii is native to digital gaming. Empowering sportsbooks, casinos, and lotteries with real-time visibility into competitor player UX, deposit bonuses, and marketing attribution.",
+        challenge: "High multi-homing rates (70-80% players holding 3-5 competitor accounts) mean player loyalty is extremely fragile. Saturated marketing channels, rising CPAs, and tight compliance rules restrict traditional growth.",
+        mechanics: "Jurnii is native to digital gaming. We continuously monitor live casino and sportsbook onboarding pathways, tracking wagering hurdles and deposit multipliers dynamically.",
+        proofText: "Scraping over 1,000 gaming promos weekly guarantees 100% visibility into target regulated markets.",
+        targetPersona: "Chief Executive Officers at sportsbooks and casinos deploy Jurnii to secure player conversions and optimize net gaming yield.",
         capabilities: [
           { title: "iGaming Heuristics", icon: "dices", desc: "Track gaming registration, verification (KYC), deposit, and betslip usability." },
           { title: "Bonus Scraping", icon: "gift", desc: "Parse competitor sports and casino campaigns automatically as soon as they go live." },
@@ -187,6 +227,10 @@ const useCasesData = {
         kicker: "Conversion Scaling",
         lede: "Maximize checkout conversions, audit checkout friction, and outpace competitor pricing.",
         manifesto: "High-volume digital brands utilize Jurnii to map player purchase journeys, identify cart abandonment causes, and benchmark promotional campaign effectiveness.",
+        challenge: "eCommerce platforms suffer from severe cart abandonment at checkouts and payment gateway selections. Traditional analytics show *where* players drop off, but fail to explain the visual layout errors causing cognitive fatigue.",
+        mechanics: "Jurnii maps checkout grids, button placement, and copywriting clarity, benchmarking transaction states against leading high-converting digital portals.",
+        proofText: "Repairing transaction journey friction dramatically increases customer conversion rate and purchase yields.",
+        targetPersona: "Heads of eCommerce and Digital Merchandising utilize journey mapping to streamline multi-step checkouts and increase LTV.",
         capabilities: [
           { title: "Checkout Optimization", icon: "shopping-cart", desc: "Pinpoint interaction and UI friction causing cart abandonment in high-value flows." },
           { title: "Price Benchmarking", icon: "tag", desc: "Track competitor discounting, coupon codes, and loyalty perks in real time." },
@@ -201,6 +245,10 @@ const useCasesData = {
         kicker: "Financial Platforms",
         lede: "Streamline onboarding verification pipelines, minimize onboarding dropoffs, and build platform trust.",
         manifesto: "FinTech platforms leverage Jurnii to secure high-security customer registration, audit KYC and AML processing delays, and design conversion-optimized banking interfaces.",
+        challenge: "FinTech applications face extreme signup drop-offs during high-security AML, KYC, and document verification steps. Players lose trust when secure interfaces look generic, outdated, or confusing.",
+        mechanics: "Jurnii audits security styling, compliance signals, and input validation messages to ensure onboarding paths project maximum credibility and safety.",
+        proofText: "Optimizing trust elements and mobile load speeds prevents registration funnel leakage and stabilizes acquisition costs.",
+        targetPersona: "VP of Risk and Product Leads at FinTech platforms deploy Jurnii perception scores to secure compliance conversions.",
         capabilities: [
           { title: "Onboarding Friction Audits", icon: "user-check", desc: "Optimize and accelerate high-security AML, KYC, and document upload pipelines." },
           { title: "Trust Elements Evaluation", icon: "lock", desc: "Measure visual security indicators, compliance badges, and customer trust perception levels." },
@@ -211,14 +259,14 @@ const useCasesData = {
   }
 };
 
-// HTML Templates Generator
-function getPageHTML(metaTitle, metaDesc, kicker, title, lede, manifesto, capabilities, relatedLinks, levelPrefix) {
+// Rich, multi-section layout template for Use Cases
+function getPageHTML(metaTitle, metaDesc, kicker, title, lede, manifesto, capabilities, relatedLinks, levelPrefix, challenge, mechanics, proofText, targetPersona) {
   return `<!doctype html>
 <html data-theme="light" lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${metaTitle} — Jurnii Intelligence</title>
+  <title>${metaTitle} — Jurnii Use Cases</title>
   <meta name="description" content="${metaDesc}">
   <link rel="icon" href="${levelPrefix}assets/jurnii-icon-light.svg">
   <link rel="stylesheet" href="${levelPrefix}assets/site.css">
@@ -260,12 +308,42 @@ function getPageHTML(metaTitle, metaDesc, kicker, title, lede, manifesto, capabi
       </div>
     </section>
 
+    <!-- The iGaming Commercial Challenge Section -->
+    <section class="challenge-section" style="padding: 100px 0; background: var(--background);">
+      <div class="container" style="max-width: 1100px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;">
+          <div>
+            <span style="color: var(--jurnii-600); font-family: var(--font-mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 12px;">The Commercial Challenge</span>
+            <h2 style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 20px 0; color: var(--foreground); line-height: 1.2;">Operating Blind in a Saturated Market</h2>
+            <p style="font-size: 15.5px; color: var(--muted-foreground); line-height: 1.6; margin-bottom: 16px;">
+              ${challenge}
+            </p>
+            <p style="font-size: 15.5px; color: var(--muted-foreground); line-height: 1.6;">
+              When betting portals share the same suppliers, customer experience is the only durable barrier to player defection. Failing to benchmark your flow speed and copywriting clarity against competitor movements leaves your team fighting fires reactively.
+            </p>
+          </div>
+          <div style="background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+            <div style="width: 40px; height: 40px; border-radius: 8px; background: rgba(148,255,150,0.12); color: var(--jurnii-700); display: flex; align-items: center; justify-content: center; margin-bottom: 24px;">
+              <i data-lucide="shield-alert" style="width: 20px; height: 20px;"></i>
+            </div>
+            <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 12px 0;">How Jurnii Solves This</h3>
+            <p style="font-size: 14.5px; color: var(--muted-foreground); line-height: 1.5; margin: 0 0 24px 0;">
+              ${mechanics}
+            </p>
+            <div style="border-top: 1px solid var(--border); padding-top: 20px; font-size: 13px; font-style: italic; color: var(--jurnii-700); font-weight: 600;">
+              ${targetPersona}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Capability Cards Section -->
     <section class="feature-capability-section theme-dark" style="padding: 100px 0; background: #252c1e; color: #fff;">
       <div class="container" style="max-width: 1100px;">
         <div class="section-head" style="margin-bottom: 56px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 24px;">
           <h2 class="h2-section" style="font-size: 32px; font-weight: 800; color: #fff; letter-spacing: -0.02em; margin: 0 0 12px 0;">Strategic Capabilities</h2>
-          <p style="font-size: 16px; color: rgba(255,255,255,0.7); max-width: 600px; margin: 0;">Objective tools designed to replace speculation with verified competitive data.</p>
+          <p style="font-size: 16px; color: rgba(255,255,255,0.7); max-width: 600px; margin: 0;">Objective tools designed to replace subjective opinion with verified digital and commercial facts.</p>
         </div>
         <div class="feature-capability-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;">
           ${capabilities.map(c => `
@@ -277,6 +355,34 @@ function getPageHTML(metaTitle, metaDesc, kicker, title, lede, manifesto, capabi
             <p style="font-size: 14.5px; color: rgba(255,255,255,0.65); line-height: 1.6; margin: 0;">${c.desc}</p>
           </div>
           `).join('')}
+        </div>
+      </div>
+    </section>
+
+    <!-- Cortex Integration & Proof Points Section -->
+    <section class="cortex-section" style="padding: 100px 0; background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+      <div class="container" style="max-width: 1100px;">
+        <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 64px; align-items: center;">
+          <div>
+            <span style="color: var(--jurnii-600); font-family: var(--font-mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 12px;">Cortex Attribution & Yield Impact</span>
+            <h2 style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 20px 0; color: var(--foreground); line-height: 1.2;">Causal ROI Optimization</h2>
+            <p style="font-size: 15.5px; color: var(--muted-foreground); line-height: 1.6; margin-bottom: 16px;">
+              All data harvested by Jurnii UX and Jurnii 360 is normalized and streamed directly into Cortex, our causal modeling and marketing mix attribution engine. Cortex eliminates last-click errors to attribute campaign success with statistical accuracy.
+            </p>
+            <p style="font-size: 15.5px; color: var(--muted-foreground); line-height: 1.6;">
+              By cataloging competitor promotions, pricing richness, and interface friction, Jurnii enables your data scientists to export MMM-ready datasets. Model the defensive strength of programmatic and search channels in real-time.
+            </p>
+          </div>
+          <div style="background: #1c2217; border-radius: 16px; padding: 40px; color: #fff;">
+            <span style="font-family: var(--font-mono); font-size: 10px; color: var(--jurnii-400); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 8px;">Attribution Results</span>
+            <h3 style="font-size: 40px; font-weight: 800; color: #fff; margin: 0 0 8px 0;">+46%</h3>
+            <p style="font-size: 13.5px; color: rgba(255,255,255,0.7); line-height: 1.5; margin: 0 0 24px 0;">
+              Attributed campaign yield and marketing ROAS lift achieved through Cortex causal models.
+            </p>
+            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; font-size: 13.5px; color: rgba(255,255,255,0.6); line-height: 1.4;">
+              ${proofText}
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -307,11 +413,11 @@ function getPageHTML(metaTitle, metaDesc, kicker, title, lede, manifesto, capabi
           <div class="ecosystem-column">
             <h3 class="col-label" style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--jurnii-600); border-bottom: 1px solid var(--border); padding-bottom: 8px; margin: 0 0 16px 0;">Core Features</h3>
             <div class="feature-link-grid" style="display:flex; flex-direction:column; gap:12px;">
-              <a href="${levelPrefix}features/journeys.html" class="feature-link-card related" style="display:block; text-decoration:none; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px;">
-                <h4 style="font-size: 14.5px; font-weight: 700; color: var(--foreground); margin:0 0 8px 0;">Journeys</h4>
-                <p style="font-size: 12px; color: var(--muted-foreground); line-height:1.4; margin:0;">Identify where players drop off pipelines.</p>
+              <a href="${levelPrefix}features/brand-usability.html" class="feature-link-card related" style="display:block; text-decoration:none; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px;">
+                <h4 style="font-size: 14.5px; font-weight: 700; color: var(--foreground); margin:0 0 8px 0;">Usability</h4>
+                <p style="font-size: 12px; color: var(--muted-foreground); line-height:1.4; margin:0;">Standardized heuristic usability auditing.</p>
               </a>
-              <a href="${levelPrefix}features/promotions.html" class="feature-link-card related" style="display:block; text-decoration:none; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px;">
+              <a href="${levelPrefix}features/competitor-promotions.html" class="feature-link-card related" style="display:block; text-decoration:none; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px;">
                 <h4 style="font-size: 14.5px; font-weight: 700; color: var(--foreground); margin:0 0 8px 0;">Promotions</h4>
                 <p style="font-size: 12px; color: var(--muted-foreground); line-height:1.4; margin:0;">Automate promotional campaign tracking.</p>
               </a>
@@ -321,11 +427,11 @@ function getPageHTML(metaTitle, metaDesc, kicker, title, lede, manifesto, capabi
           <div class="ecosystem-column">
             <h3 class="col-label" style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--jurnii-600); border-bottom: 1px solid var(--border); padding-bottom: 8px; margin: 0 0 16px 0;">Outcomes</h3>
             <div class="feature-link-grid" style="display:flex; flex-direction:column; gap:12px;">
-              <a href="${levelPrefix}solutions/ux-benchmarking.html" class="feature-link-card solution" style="display:block; text-decoration:none; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px;">
+              <a href="${levelPrefix}solutions/user-experience-benchmarking.html" class="feature-link-card solution" style="display:block; text-decoration:none; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px;">
                 <h4 style="font-size: 14.5px; font-weight: 700; color: var(--foreground); margin:0 0 8px 0;">UX Benchmarking</h4>
                 <p style="font-size: 12px; color: var(--muted-foreground); line-height:1.4; margin:0;">Heuristics-based experience index scores.</p>
               </a>
-              <a href="${levelPrefix}solutions/competitor-intelligence.html" class="feature-link-card solution" style="display:block; text-decoration:none; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px;">
+              <a href="${levelPrefix}solutions/competition-offers.html" class="feature-link-card solution" style="display:block; text-decoration:none; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px;">
                 <h4 style="font-size: 14.5px; font-weight: 700; color: var(--foreground); margin:0 0 8px 0;">Competitor Intel</h4>
                 <p style="font-size: 12px; color: var(--muted-foreground); line-height:1.4; margin:0;">Continuous surveillance of competitor campaigns.</p>
               </a>
@@ -407,7 +513,7 @@ function getHubHTML(title, kicker, lede, description, items, levelPrefix) {
           ${items.map(item => `
           <a href="${item.slug.substring('use-cases/'.length)}" class="resource-card" style="text-decoration: none; color: inherit; display: block; border: 1px solid var(--border); border-radius: 12px; padding: 32px; background: var(--card); transition: transform 150ms ease;">
             <div style="width: 40px; height: 40px; border-radius: 8px; background: rgba(148,255,150,0.12); color: var(--jurnii-700); display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-              <i data-lucide="${item.icon || 'circle'}" style="width: 20px; height: 20px;"></i>
+              <i data-lucide="${item.capabilities[0].icon || 'circle'}" style="width: 20px; height: 20px;"></i>
             </div>
             <h3 style="font-size: 20px; font-weight: 700; margin: 0 0 12px 0;">${item.name}</h3>
             <p style="font-size: 14.5px; color: var(--muted-foreground); line-height: 1.5; margin: 0 0 24px 0;">${item.lede}</p>
@@ -595,7 +701,11 @@ groupsKeys.forEach(gKey => {
       item.manifesto,
       item.capabilities,
       builtForItems,
-      '../../'
+      '../../',
+      item.challenge,
+      item.mechanics,
+      item.proofText,
+      item.targetPersona
     );
     fs.writeFileSync(itemFilePath, pageHTML, 'utf8');
     console.log('Generated Sub-Group LP:', item.slug);
