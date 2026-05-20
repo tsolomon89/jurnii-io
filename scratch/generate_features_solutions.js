@@ -21,15 +21,15 @@ const featuresData = [
     fullName: "Competitor Promotions Tracking",
     kicker: "Competitor Core",
     lede: "Track live competitor sign-up offers, sports/casino bonuses, and wagering multiples in real-time.",
-    manifesto: "Never let a competitor promotion go unnoticed. Jurnii monitors active sign-up offers across key regulated jurisdictions, helping operators calibrate margins and acquire players dynamically.",
-    challenge: "In highly commoditised gaming jurisdictions, operators waste millions copying rival promo terms blind. Manual compilation takes weeks, leaving CRM teams two steps behind the market.",
-    mechanics: "Using Jurnii 360's continuous tracking engine, Jurnii maps competitive bonus terms, welcome incentives, and CRM triggers across 35 regulated markets simultaneously. Our platform normalizes and scores offer generosity to deliver instant strategic clarity.",
+    manifesto: "Never let a competitor promotion go unnoticed. Jurnii monitors active sign-up offers across key regulated jurisdictions, helping operators calibrate margins, protect Net Gaming Revenue (NGR), and acquire players dynamically in high-volatility environments.",
+    challenge: "In highly commoditised gaming jurisdictions where B2B platform stacks converge, operators waste millions copying rival promo terms blind. Manual compilation of wagering requirements and bonus values takes weeks, leaving CRM and trading teams two steps behind the market and causing severe margin dilution.",
+    mechanics: "Using Jurnii 360's continuous tracking engine, Jurnii maps competitive bonus terms, welcome incentives, and CRM triggers across 35 regulated markets simultaneously. Our platform normalizes and scores offer generosity through the proprietary Promo Richness Index to deliver instant strategic clarity.",
     capabilities: [
-      { title: "Wagering Hurdles Tracking", icon: "tag", desc: "Compare deposit wagering requirements, play-through multipliers, and spin constraints side-by-side to understand true player acquisition effort." },
-      { title: "Geo-Targeted Audits", icon: "globe", desc: "Isolate regional campaign variations deployed by rival conglomerates in specific states, provinces, or countries to exploit promotional voids." },
-      { title: "Active Signup Scanning", icon: "activity", desc: "Detect and log newly introduced welcome offers within minutes of launching to empower trading and CRM response teams instantly." }
+      { title: "Wagering Hurdles Tracking", icon: "tag", desc: "Compare deposit wagering requirements, play-through multipliers, and spin constraints side-by-side to understand true player acquisition effort and protect operator hold rates." },
+      { title: "Geo-Targeted Audits", icon: "globe", desc: "Isolate regional campaign variations deployed by rival conglomerates in specific states, provinces, or countries to exploit promotional voids and optimize local customer acquisition cost." },
+      { title: "Active Signup Scanning", icon: "activity", desc: "Detect and log newly introduced welcome offers within minutes of launching to empower trading, CRM, and customer marketing response teams instantly." }
     ],
-    proofText: "Jurnii 360 tracks 100% of competitor moves automatically, scraping over 1,000 promotions weekly across key regions.",
+    proofText: "Jurnii 360 tracks 100% of competitor moves automatically, scraping over 1,000 promotions weekly across key regulated jurisdictions.",
     targetPersona: "Chief Commercial Officers utilize this feature to safeguard operator margins and maintain active market parity."
   },
   {
@@ -38,15 +38,15 @@ const featuresData = [
     fullName: "Competitor Positioning Analytics",
     kicker: "Competitor Core",
     lede: "Analyze rival market claims, value propositions, and unique landing page positioning hooks.",
-    manifesto: "Identify how competitors differentiate themselves. Jurnii continuously maps promotional angles to highlight underserved positioning opportunities in sports and casino markets.",
-    challenge: "Operators copy-paste generic slogans ('fast payouts', 'widest markets') without visual or textual distinction, driving customer acquisition costs (CAC) higher as bidding wars intensify.",
-    mechanics: "Jurnii parses all on-site copy and homepage banner states, cataloging active value claims. It maps the visual dominance of competitive claims to identify untapped promotional angles.",
+    manifesto: "Identify how competitors differentiate themselves in saturated markets. Jurnii continuously maps promotional angles and copywriting claims to highlight underserved positioning opportunities in sports and casino markets, driving acquisition yield higher.",
+    challenge: "Operators copy-paste generic slogans like 'fast payouts' or 'widest markets' without visual or textual distinction. This lack of differentiation drives customer acquisition costs (CAC) higher as bidding wars intensify on identical copy hooks.",
+    mechanics: "Jurnii parses all on-site copy and homepage banner states, cataloging active value claims and layout structures. It maps the visual dominance of competitive claims to identify untapped promotional angles and copywriting vulnerabilities.",
     capabilities: [
-      { title: "Value Claim Analysis", icon: "award", desc: "Extract and index all digital copywriting claims, tracking the exact focus of competitor messaging across key landing zones." },
-      { title: "Differentiated Angles", icon: "compass", desc: "Spot messaging voids in rival advertising matrices to launch highly unique counter-campaigns that stand out in saturated markets." },
-      { title: "Competitive Matrix Maps", icon: "layers", desc: "Visualize brand placements based on pricing structures, visual premium qualities, and overall ease-of-use indicators." }
+      { title: "Value Claim Analysis", icon: "award", desc: "Extract and index all digital copywriting claims, tracking the exact focus of competitor messaging across key player landing zones and signup funnels." },
+      { title: "Differentiated Angles", icon: "compass", desc: "Spot messaging voids in rival advertising matrices to launch highly unique counter-campaigns that stand out in saturated market segments." },
+      { title: "Competitive Matrix Maps", icon: "layers", desc: "Visualize brand placements based on pricing structures, visual premium qualities, and overall ease-of-use indicators relative to regulatory frameworks." }
     ],
-    proofText: "By analyzing 300+ global brands, Jurnii helps positioning strategy transition from subjective guesswork to objective data.",
+    proofText: "By analyzing 300+ global brands, Jurnii helps positioning strategy transition from subjective guesswork to objective, data-backed evidence.",
     targetPersona: "Chief Marketing Officers deploy Jurnii positioning maps to defend brand share and optimize digital spend."
   },
   {
@@ -55,13 +55,13 @@ const featuresData = [
     fullName: "Competitor Comparison Engines",
     kicker: "Competitor Core",
     lede: "Compare player acquisition pathways, sign-up structures, and deposit requirements side-by-side.",
-    manifesto: "Run detailed mathematical comparisons. Calibrate your operator margins by evaluating wagering rules and bonus depth directly against major regional operators.",
-    challenge: "70-80% of players hold accounts with 3-5 operators simultaneously. If your signup requires two more clicks than a rival, players abandon the funnel permanently.",
-    mechanics: "Jurnii Normalizes competitive flows into standardized user journey sequences. It maps steps, inputs, KYC checks, and payment integrations side-by-side with global best practices.",
+    manifesto: "Run detailed mathematical comparisons of competitive player flows. Calibrate your operator margins by evaluating wagering rules and bonus depth directly against major regional operators on a single canvas.",
+    challenge: "With 70-80% of players holding accounts with 3-5 operators simultaneously, loyalty is fragile. If your signup requires two more clicks or has slower KYC checks than a rival, players abandon the funnel permanently.",
+    mechanics: "Jurnii Normalizes competitive flows into standardized user journey sequences. It maps steps, inputs, KYC checks, and payment integrations side-by-side with global best practices to pinpoint conversion rate leaks.",
     capabilities: [
-      { title: "Side-by-Side Scoring", icon: "git-compare", desc: "Evaluate registration, verification (KYC), and payment pipelines against three chosen rivals simultaneously." },
-      { title: "Bonus Calibration Matrix", icon: "gift", desc: "Compare wagering multipliers and free spin richness across target categories to determine competitive generosity." },
-      { title: "Friction Auditing", icon: "filter", desc: "Compare click counts, form requirements, and page load delays across competitor checkout pathways." }
+      { title: "Side-by-Side Scoring", icon: "git-compare", desc: "Evaluate registration, verification (KYC), and payment pipelines against three chosen rivals simultaneously under real-world mobile network conditions." },
+      { title: "Bonus Calibration Matrix", icon: "gift", desc: "Compare wagering multipliers and free spin richness across target categories to determine competitive generosity and prevent CRM margin dilution." },
+      { title: "Friction Auditing", icon: "filter", desc: "Compare click counts, form requirements, and page load delays across competitor checkout pathways to identify strategic interface vulnerabilities." }
     ],
     proofText: "Identify and resolve friction bottlenecks using Jurnii UX audits that deliver 70+ commercially weighted recommendations in minutes.",
     targetPersona: "Heads of UX utilize Jurnii comparisons to justify interface updates and outpace regional platform benchmarks."
@@ -72,13 +72,13 @@ const featuresData = [
     fullName: "Competitor Analysis Sprints",
     kicker: "Competitor Core",
     lede: "Synthesize large-scale competitor marketing moves, promotional patterns, and timing frameworks.",
-    manifesto: "Uncover competitor playbooks. Synthesize months of campaign data to identify launch frequencies, product milestones, and strategic market timing.",
-    challenge: "Siloed data prevents executive alignment. Product, marketing, and commercial teams operate on separate gut-feels rather than shared market truths.",
+    manifesto: "Uncover competitor playbooks systematically. Synthesize months of competitive campaign data to identify launch frequencies, product milestones, and strategic market timing across multiple regulated markets.",
+    challenge: "Siloed data prevents executive alignment. Product, marketing, and commercial teams operate on separate gut-feels rather than shared market truths, leading to bad budget allocations during peak sporting seasons.",
     mechanics: "Jurnii compiles continuous market tracking into executive-ready dashboards and longitudinal reports, enabling strategic planning at 85% confidence rather than reactive 50% guesses.",
     capabilities: [
-      { title: "Historical Sequencing", icon: "calendar", desc: "Chart competitor campaign durations over seasons to anticipate product updates and aggressive marketing spend pushes." },
-      { title: "Margin Calibration Sprints", icon: "trending-up", desc: "Evaluate average competitor bonus payout metrics to benchmark your net yield efficiency and hold rates." },
-      { title: "Executive Summaries", icon: "file-text", desc: "Generate board-ready competitor profiles, market generics, and compliance histories in a single click." }
+      { title: "Historical Sequencing", icon: "calendar", desc: "Chart competitor campaign durations over seasons to anticipate product updates, mobile updates, and aggressive marketing spend pushes." },
+      { title: "Margin Calibration Sprints", icon: "trending-up", desc: "Evaluate average competitor bonus payout metrics to benchmark your net yield efficiency and hold rates against regional peers." },
+      { title: "Executive Summaries", icon: "file-text", desc: "Generate board-ready competitor profiles, market generics, and compliance histories in a single click for fast corporate planning." }
     ],
     proofText: "Save 30+ hours per week in manual spreadsheet tracking, freeing commercial analysts to focus on active campaign yield management.",
     targetPersona: "Chief Executive Officers utilize Jurnii summaries to align board presentations and streamline M&A competitive due diligence."
@@ -89,12 +89,12 @@ const featuresData = [
     fullName: "Competitor Offer Feed Integrations",
     kicker: "Competitor Feed",
     lede: "Access continuous, structured data streams of active competitor promotional campaign terms.",
-    manifesto: "Transform promotions into machine-readable data. Feed structured competitor promotion files directly into local modeling systems, pricing algorithms, or internal dashboards.",
-    challenge: "Scraping competitor campaigns by hand is slow, error-prone, and cannot scale across 400+ weekly offers and 5,000+ monthly sports boosts.",
-    mechanics: "Jurnii delivers direct API endpoints and webhook channels that stream normalized, structured campaign data into your database, CRM, or Marketing Mix Model (MMM).",
+    manifesto: "Transform promotions into machine-readable data. Feed structured competitor promotion files directly into local modeling systems, pricing algorithms, or internal dashboards for always-on visibility.",
+    challenge: "Scraping competitor campaigns by hand is slow, error-prone, and cannot scale across 400+ weekly offers and 5,000+ monthly sports boosts. This leaves data science teams starved of timely modeling datasets.",
+    mechanics: "Jurnii delivers direct API endpoints and webhook channels that stream normalized, structured campaign data into your database, CRM, or Marketing Mix Model (MMM) for rapid processing.",
     capabilities: [
-      { title: "Structured API Access", icon: "database", desc: "Feed clean competitor offer JSON data directly into your CRM or player platforms for dynamic margin pricing." },
-      { title: "Historical Archive", icon: "archive", desc: "Access comprehensive records of expired competitor promos to research holiday trends and winter seasonal playbooks." },
+      { title: "Structured API Access", icon: "database", desc: "Feed clean competitor offer JSON data directly into your CRM or player platforms for dynamic margin pricing and acquisition calibration." },
+      { title: "Historical Archive", icon: "archive", desc: "Access comprehensive records of expired competitor promos to research holiday trends and winter seasonal playbooks across jurisdictions." },
       { title: "Wagering Decoders", icon: "code", desc: "Automatically translate complex bonus terms and conditions into clean data rows, including deposit matches, rollovers, and spin values." }
     ],
     proofText: "Streamlined data exports map directly into local attribution databases, eliminating the complexity of traditional manual scraping.",
@@ -106,13 +106,13 @@ const featuresData = [
     fullName: "Competitor Live Feed Surveillance",
     kicker: "Competitor Feed",
     lede: "Monitor real-time product updates, page modifications, and creative updates.",
-    manifesto: "Stay continuously connected to rival movements. Monitor live landing page visual edits and copywriting adjustments as they happen across multi-brand operators.",
-    challenge: "Competitors launch aggressive welcome campaigns during major sporting events, catching your commercial team off-guard and eroding active market share.",
-    mechanics: "Our scraper network crawls operator domains multiple times daily, tracking DOM shifts, image updates, CSS adjustments, and CTA copywriting edits.",
+    manifesto: "Stay continuously connected to rival movements. Monitor live landing page visual edits and copywriting adjustments as they happen across multi-brand operators to preserve your competitive edge.",
+    challenge: "Competitors launch aggressive welcome campaigns during major sporting events, catching your commercial team off-guard and eroding active market share in a matter of hours.",
+    mechanics: "Our scraper network crawls operator domains multiple times daily, tracking DOM shifts, image updates, CSS adjustments, and CTA copywriting edits under simulated user flows.",
     capabilities: [
-      { title: "Visual Shift Tracking", icon: "eye", desc: "Detect visual interface alterations, branding shifts, and structural design adjustments on competitive pages." },
-      { title: "Real-time Monitors", icon: "refresh-cw", desc: "Run continuous server-side monitors to detect active page changes, pricing models, and affiliate links." },
-      { title: "Changelog Reporting", icon: "clipboard", desc: "Compile daily logs detailing rival feature introductions, navigation shifts, and digital wallet integrations." }
+      { title: "Visual Shift Tracking", icon: "eye", desc: "Detect visual interface alterations, branding shifts, and structural design adjustments on competitive pages the moment they go live." },
+      { title: "Real-time Monitors", icon: "refresh-cw", desc: "Run continuous server-side monitors to detect active page changes, pricing models, payment portals, and affiliate links." },
+      { title: "Changelog Reporting", icon: "clipboard", desc: "Compile daily logs detailing rival feature introductions, navigation shifts, digital wallet integrations, and verification alterations." }
     ],
     proofText: "Compress reaction time from weeks to hours, tracking competitor movements automatically the moment they are deployed.",
     targetPersona: "Heads of CRM use the Live Feed to monitor retention bonuses, adjusting internal rewards to prevent player churn."
@@ -123,15 +123,15 @@ const featuresData = [
     fullName: "Competitor Alerts Network",
     kicker: "Competitor Feed",
     lede: "Receive instant notifications when competitors launch new offers, adjust rates, or shift copy.",
-    manifesto: "React instantly to market events. Receive direct slack or web notifications the exact moment a competitor adjustments their registration, deposit, or retention bonuses.",
-    challenge: "Missing a rival’s major campaign shift means playing catch-up for weeks while high-value players defect to more generous platforms.",
-    mechanics: "Configure threshold triggers based on bonus value, wagering multiples, or visual shifts, sending push updates to your commercial team channels.",
+    manifesto: "React instantly to market events. Receive direct alerts the exact moment a competitor adjusts their registration, deposit, or retention bonuses to maintain absolute parity.",
+    challenge: "Missing a rival’s major campaign shift means playing catch-up for weeks while high-value players (who drive 80% of revenue) defect to more generous platforms.",
+    mechanics: "Configure threshold triggers based on bonus value, wagering multiples, or visual shifts, sending push updates to your commercial team channels via Slack or webhooks.",
     capabilities: [
-      { title: "Multi-channel Alerts", icon: "bell", desc: "Configure custom push alerts via Slack, Microsoft Teams, email, or direct webhook integrations." },
-      { title: "Bonus Shift Detection", icon: "sliders", desc: "Trigger notifications only when wagering terms, deposit percentages, or free spin values shift." },
-      { title: "Custom Thresholds", icon: "percent", desc: "Define triggers based on maximum bonus values or promotional payout richness indices to avoid spam." }
+      { title: "Multi-channel Alerts", icon: "bell", desc: "Configure custom push alerts via Slack, Microsoft Teams, email, or direct webhook integrations into trading platforms." },
+      { title: "Bonus Shift Detection", icon: "sliders", desc: "Trigger notifications only when wagering terms, deposit percentages, or free spin values shift beyond predefined thresholds." },
+      { title: "Custom Thresholds", icon: "percent", desc: "Define triggers based on maximum bonus values or promotional payout richness indices to avoid alert fatigue." }
     ],
-    proofText: "Always-on competitive surveillance ensures your team is never blindside by competitor campaigns.",
+    proofText: "Always-on competitive surveillance ensures your team is never blindsided by competitor campaigns.",
     targetPersona: "Chief Commercial Officers set up alerts for local competitor moves, ensuring their brand remains a market leader."
   },
   {
@@ -140,13 +140,13 @@ const featuresData = [
     fullName: "Competitor AI Insights & Predictions",
     kicker: "Competitor Feed",
     lede: "Deploy advanced ML models to predict competitor marketing pushes and summarize campaign angles.",
-    manifesto: "Gain predictive foresight. Leverage specialized neural nets to summarize massive campaign databases and predict rival product timing and advertising strategies.",
-    challenge: "Raw competitor data is overwhelming. Sorting through thousands of sports boosts and copy variations prevents analysts from finding patterns.",
-    mechanics: "Jurnii utilizes proprietary domain-specific ML models to digest competitive databases, classifying campaigns, detecting trends, and predicting launch windows.",
+    manifesto: "Gain predictive foresight in competitive markets. Leverage specialized neural nets to summarize massive campaign databases and predict rival product timing and advertising strategies.",
+    challenge: "Raw competitor data is overwhelming. Sorting through thousands of sports boosts, casino offers, and copy variations manually prevents analysts from identifying real strategic patterns.",
+    mechanics: "Jurnii utilizes proprietary domain-specific ML models to digest competitive databases, classifying campaigns, detecting trends, and predicting launch windows with 85% confidence.",
     capabilities: [
-      { title: "Timing Prediction", icon: "brain", desc: "Anticipate rival marketing deployments and product launches using deep temporal predictive models." },
-      { title: "Ad Copy Summaries", icon: "message-square", desc: "Utilize natural language processing to isolate winning competitor copywriting hooks and visual messaging angles." },
-      { title: "Anomaly Spotting", icon: "alert-circle", desc: "Flag unusual competitor acquisition spikes, non-standard bonus structures, or regulatory compliance failures." }
+      { title: "Timing Prediction", icon: "brain", desc: "Anticipate rival marketing deployments and product launches using deep temporal predictive models trained on historical operator behaviors." },
+      { title: "Ad Copy Summaries", icon: "message-square", desc: "Utilize natural language processing to isolate winning competitor copywriting hooks and visual messaging angles across landing zones." },
+      { title: "Anomaly Spotting", icon: "alert-circle", desc: "Flag unusual competitor acquisition spikes, non-standard bonus structures, or regulatory compliance failures instantly." }
     ],
     proofText: "Jurnii's domain-specific models are trained on 300+ top operators, avoiding the parity of generic AI wrappers.",
     targetPersona: "Chief Marketing Officers use AI Insights to allocate advertising budget toward highly defensive channels."
@@ -157,13 +157,13 @@ const featuresData = [
     fullName: "Brand Meta Scoring Index",
     kicker: "Brand Core",
     lede: "Evaluate and aggregate overall user experience, visual quality, and compliance metrics into unified scores.",
-    manifesto: "Establish a single metric for design. Aggregate visual, usability, speed, and onboarding indicators to score your brand portfolios side-by-side with global peers.",
-    challenge: "Design discussions are plagued by subjectivity. Executive teams debate colors and fonts instead of focusing on verified conversion friction.",
-    mechanics: "Jurnii UX normalizes hundreds of design and performance metrics into a single, authoritative, commercially weighted Meta Score for board reporting.",
+    manifesto: "Establish a single metric for design and conversion quality. Aggregate visual, usability, speed, and onboarding indicators to score your brand portfolios side-by-side with global peers.",
+    challenge: "Design discussions are plagued by subjectivity. Executive teams debate colors and fonts instead of focusing on verified conversion friction that drains acquisition efficiency.",
+    mechanics: "Jurnii UX normalizes hundreds of design, compliance, and performance metrics into a single, authoritative, commercially weighted Meta Score for board reporting.",
     capabilities: [
       { title: "Unified Visual Index", icon: "sparkles", desc: "Combine multiple UX vectors, technical vitals, and accessibility factors into a single, board-ready brand grade." },
-      { title: "Portfolio Scoring", icon: "layers", desc: "Score and compare internal sister brands and regional domains under one standard metric system." },
-      { title: "Executive Benchmark Dashboards", icon: "bar-chart", desc: "Present high-fidelity design metrics directly to product, marketing, and compliance leadership." }
+      { title: "Portfolio Scoring", icon: "layers", desc: "Score and compare internal sister brands and regional domains under one standard metric system to track performance." },
+      { title: "Executive Benchmark Dashboards", icon: "bar-chart", desc: "Present high-fidelity design metrics directly to product, marketing, and compliance leadership with absolute clarity." }
     ],
     proofText: "Over 300 global brands are indexed on the Jurnii UX database, establishing the benchmark standard for gaming portals.",
     targetPersona: "Chief Product Officers leverage Meta Scores to establish clear design standards across their entire operator portfolio."
@@ -174,13 +174,13 @@ const featuresData = [
     fullName: "Brand Market Trends Auditing",
     kicker: "Brand Core",
     lede: "Benchmark industry design patterns, color systems, and interactive trends across major operators.",
-    manifesto: "Adopt modern UX trends ahead of the competition. Track the evolution of gaming interfaces, dark mode styles, and betslip integrations across global markets.",
-    challenge: "Product roadmaps are built in silos. Operators miss significant market shifts like digital wallets or instant KYC integrations until they lose share.",
-    mechanics: "Jurnii constantly indexes visual and functional elements of leading operators, reporting on adoption speeds of new designs and UI patterns.",
+    manifesto: "Adopt modern UX trends ahead of the competition. Track the evolution of gaming interfaces, dark mode styles, and betslip integrations across global markets to ensure design relevance.",
+    challenge: "Product roadmaps are built in silos. Operators miss significant market shifts like digital wallets or instant KYC integrations until they have already lost strategic market share.",
+    mechanics: "Jurnii constantly indexes visual and functional elements of leading operators, reporting on adoption speeds of new designs and UI patterns to guide product priorities.",
     capabilities: [
-      { title: "Design System Mapping", icon: "palette", desc: "Identify color palettes, border styling, and layout spacing systems gaining regional traction." },
-      { title: "Feature Adoption Rates", icon: "check-square", desc: "Measure how fast rival operators deploy new digital wallet or quick-bet features to guide product prioritization." },
-      { title: "Global Shift Analysis", icon: "globe", desc: "Review visual design trends in pioneering markets like Sweden, the UK, and Ontario to anticipate local shifts." }
+      { title: "Design System Mapping", icon: "palette", desc: "Identify color palettes, border styling, and layout spacing systems gaining regional traction across key demographics." },
+      { title: "Feature Adoption Rates", icon: "check-square", desc: "Measure how fast rival operators deploy new digital wallet or quick-bet features to guide product prioritization decisions." },
+      { title: "Global Shift Analysis", icon: "globe", desc: "Review visual design trends in pioneering markets like Sweden, the UK, and Ontario to anticipate local structural shifts." }
     ],
     proofText: "Continuous benchmarking helps product teams design layouts backed by real-world competitive context.",
     targetPersona: "Heads of UX deploy trend reports to keep interfaces modern and aligned with evolving player expectations."
@@ -191,13 +191,13 @@ const featuresData = [
     fullName: "Brand Design Themes Auditing",
     kicker: "Brand Core",
     lede: "Audit visual stylesheet systems, typography scale, and layout systems in use by rivals.",
-    manifesto: "Standardize aesthetic measurements. Automatically catalog font families, button border-radius systems, and visual padding to understand contemporary iGaming design standards.",
-    challenge: "Aesthetic consistency is hard to enforce across multiple regional brands, resulting in visual drift and a compromised premium feel.",
-    mechanics: "Jurnii's CSS scraper normalizes styling properties, documenting typographic scales, font family combinations, spacing utilities, and visual variables.",
+    manifesto: "Standardize aesthetic measurements across competitors. Automatically catalog font families, button border-radius systems, and visual padding to understand contemporary iGaming design standards.",
+    challenge: "Aesthetic consistency is hard to enforce across multiple regional brands, resulting in visual drift, technical debt, and a compromised premium brand feel.",
+    mechanics: "Jurnii's CSS scraper normalizes styling properties, documenting typographic scales, font family combinations, spacing utilities, and visual variables automatically.",
     capabilities: [
-      { title: "Style Sheet Scraping", icon: "code", desc: "Scrape and log CSS variables, layout spacing, and visual styling properties across competitor domains." },
-      { title: "Typography Analysis", icon: "type", desc: "Audit visual reading levels, typography hierarchy, and reading ease across player registration flows." },
-      { title: "Theme Comparison Matrix", icon: "columns", desc: "Map brands across minimalist layouts, hyper-promotional patterns, or high-density gaming UIs." }
+      { title: "Style Sheet Scraping", icon: "code", desc: "Scrape and log CSS variables, layout spacing, and visual styling properties across competitor domains to benchmark technical execution." },
+      { title: "Typography Analysis", icon: "type", desc: "Audit visual reading levels, typography hierarchy, and reading ease across player registration flows to prevent cognitive fatigue." },
+      { title: "Theme Comparison Matrix", icon: "columns", desc: "Map brands across minimalist layouts, hyper-promotional patterns, or high-density gaming UIs to locate styling voids." }
     ],
     proofText: "Proven visual analytics ensure your brands maintain design integrity, preserving a premium gaming environment.",
     targetPersona: "Design Systems Architects use Theme Auditing to establish strict tokens and prevent internal style drift."
@@ -209,12 +209,12 @@ const featuresData = [
     kicker: "Brand Core",
     lede: "Correlate promotional structures and wagering richness to visual placement and layout design.",
     manifesto: "Optimize landing page conversion. Correlate promotional bonus richness directly with structural design, banner sizes, and copywriting placement to maximize player registration yields.",
-    challenge: "Operators offer rich sign-up incentives but fail to convert players because the promotional design is cluttered, slow, or visually hard to read.",
-    mechanics: "Jurnii maps promotional banner real estate and layout formats to active bonus richness, indicating which visual formats drive optimal signup yield.",
+    challenge: "Operators offer rich sign-up incentives but fail to convert players because the promotional design is cluttered, slow, or visually hard to read, diluting marketing spend.",
+    mechanics: "Jurnii maps promotional banner real estate and layout formats to active bonus richness, indicating which visual formats drive optimal signup yield and lower acquisition CPA.",
     capabilities: [
-      { title: "Copywriting Optimization", icon: "edit-3", desc: "Correlate player conversion yields against headline text lengths and deposit CTA button positions." },
-      { title: "Banner Size Audits", icon: "layout", desc: "Measure how visual real estate allocation on homepages influences registration success." },
-      { title: "Creative Performance Logs", icon: "activity", desc: "Map historical competitor banner deployments against promotional click-through indicators." }
+      { title: "Copywriting Optimization", icon: "edit-3", desc: "Correlate player conversion yields against headline text lengths, CTA button positions, and terms visibility." },
+      { title: "Banner Size Audits", icon: "layout", desc: "Measure how visual real estate allocation on homepages and affiliate landing zones influences player registration success." },
+      { title: "Creative Performance Logs", icon: "activity", desc: "Map historical competitor banner deployments against promotional click-through indicators to model layout efficiency." }
     ],
     proofText: "Aligning visual layout with promotional richness drives optimal player acquisition, maximizing marketing ROAS.",
     targetPersona: "Chief Marketing Officers use these insights to balance creative design with promotional yield expectations."
@@ -225,13 +225,13 @@ const featuresData = [
     fullName: "Brand Technical Perfomance",
     kicker: "Brand Performance",
     lede: "Measure actual page loading metrics, core web vitals, and asset performance dynamically.",
-    manifesto: "Eliminate latency before player abandonment. Measure and track core web vitals and mobile connection delays under simulated network loads directly against rivals.",
-    challenge: "10% of players drive 80% of revenue, and these high-value players are highly sensitive to latency. A 1-second delay in page load causes immediate abandonment.",
+    manifesto: "Eliminate latency before player abandonment. Measure and track core web vitals and mobile connection delays under simulated network loads directly against rivals to preserve NGR.",
+    challenge: "10% of players drive 80% of revenue, and these high-value players are highly sensitive to latency. A 1-second delay in page load on checkout or betslip causes immediate abandonment.",
     mechanics: "Jurnii simulates real-world mobile connection scenarios to test operator domains, cataloging LCP, FID, and CLS scores side-by-side with regional competitors.",
     capabilities: [
-      { title: "Core Web Vitals Auditing", icon: "zap", desc: "Track LCP, FID, and CLS scores dynamically under low-bandwidth mobile environments." },
-      { title: "Asset Size Monitoring", icon: "hard-drive", desc: "Monitor script file weights, asset packaging, and media optimization indicators." },
-      { title: "Competitive Speed Index", icon: "gauge", desc: "Rank operator checkout and betslip speed side-by-side with regional industry competitors." }
+      { title: "Core Web Vitals Auditing", icon: "zap", desc: "Track LCP, FID, and CLS scores dynamically under low-bandwidth mobile environments to catch performance drift." },
+      { title: "Asset Size Monitoring", icon: "hard-drive", desc: "Monitor script file weights, asset packaging, and media optimization indicators to eliminate engineering bloat." },
+      { title: "Competitive Speed Index", icon: "gauge", desc: "Rank operator checkout and betslip speed side-by-side with regional industry competitors to maintain speed supremacy." }
     ],
     proofText: "Continuous technical diagnostics ensure your product is optimized for player retention and mobile conversion.",
     targetPersona: "Chief Operating Officers deploy speed metrics to eliminate infrastructure bottlenecks and defend NGR."
@@ -243,12 +243,12 @@ const featuresData = [
     kicker: "Brand Performance",
     lede: "Run exhaustive heuristic user experience evaluations on key player onboarding pathways.",
     manifesto: "Evaluate ease-of-use with mathematical objectivity. Identify friction points in sports betting checkout, payment selection, and document upload stages.",
-    challenge: "Usability evaluations are slow, expensive, and subjective when conducted by traditional design agencies.",
-    mechanics: "Jurnii UX runs automated heuristic audits mapped across four dimensions, providing ranked recommendations to clear onboarding pathways.",
+    challenge: "Usability evaluations are slow, expensive, and highly subjective when conducted by traditional design agencies, delaying sprint cycles by weeks.",
+    mechanics: "Jurnii UX runs automated heuristic audits mapped across four dimensions, providing ranked recommendations to clear player onboarding pathways.",
     capabilities: [
-      { title: "Heuristic Frameworks", icon: "check-circle", desc: "Evaluate experience against 12 core onboarding design criteria systematically." },
-      { title: "Cognitive Load Evaluation", icon: "activity", desc: "Spot redundant form fields and interactive elements causing checkout and registration leakage." },
-      { title: "Error Recovery Audits", icon: "alert-triangle", desc: "Analyze validation prompts, instruction clarity, and error feedback systems across player flows." }
+      { title: "Heuristic Frameworks", icon: "check-circle", desc: "Evaluate experience against 12 core onboarding design criteria systematically to replace opinions with facts." },
+      { title: "Cognitive Load Evaluation", icon: "activity", desc: "Spot redundant form fields, confusing terms layouts, and interactive elements causing checkout and registration leakage." },
+      { title: "Error Recovery Audits", icon: "alert-triangle", desc: "Analyze validation prompts, instruction clarity, and error feedback systems across player signup flows." }
     ],
     proofText: "Obtain 70+ commercially weighted UX recommendations in minutes, not weeks, to drive product sprint success.",
     targetPersona: "Chief Product Officers leverage usability scoring to prioritize features and accelerate development roadmaps."
@@ -260,12 +260,12 @@ const featuresData = [
     kicker: "Brand Performance",
     lede: "Audit customer trust, security signals, and visual safety perceptions across key pipelines.",
     manifesto: "Enhance onboarding security confidence. Audit regulatory badges, terms visibility, and data privacy styling elements to maximize player signup success.",
-    challenge: "Players drop out of verification (KYC) funnels because the secure screens look generic, causing a collapse in visual trust.",
+    challenge: "Players drop out of verification (KYC) funnels because the secure screens look generic, outdated, or confusing, causing a total collapse in visual trust.",
     mechanics: "We audit trust signals, compliance badges, SSL visibility, and secure layout designs to ensure interfaces project maximum authority and safety.",
     capabilities: [
-      { title: "Trust Signals Scraping", icon: "shield", desc: "Log compliance logos, regulatory text, and payout certifications across landing zones." },
-      { title: "Security Styling Audits", icon: "lock", desc: "Optimize password forms, terms checkboxes, and account verification panels to reassure players." },
-      { title: "Visual Safety Rankings", icon: "eye", desc: "Grade player onboarding trust perceptions side-by-side with premier operator portals." }
+      { title: "Trust Signals Scraping", icon: "shield", desc: "Log compliance logos, regulatory text, and payout certifications across landing zones to ensure regulatory safety." },
+      { title: "Security Styling Audits", icon: "lock", desc: "Optimize password forms, terms checkboxes, and account verification panels to reassure players during security steps." },
+      { title: "Visual Safety Rankings", icon: "eye", desc: "Grade player onboarding trust perceptions side-by-side with premier operator portals to locate visual drop-offs." }
     ],
     proofText: "Building visual trust is a commercial necessity, directly driving conversion on high-security flows.",
     targetPersona: "Heads of CRM utilize trust scores to align customer messaging and defend brand retention."
@@ -277,12 +277,12 @@ const featuresData = [
     kicker: "Brand Performance",
     lede: "Obtain automated, high-fidelity actionable suggestions to address UX deficiencies and outpace rivals.",
     manifesto: "Receive immediate development blueprints. Access step-by-step UI adjustments to resolve identified friction leaks and outpace adjacent operator competitors.",
-    challenge: "Product teams struggle to prioritize bugs based on revenue, wasting development cycles on low-impact layout changes.",
-    mechanics: "Jurnii ranks all audit findings by severity and commercial weight, providing a development checklist mapped to revenue consequences.",
+    challenge: "Product and engineering teams struggle to prioritize bugs based on revenue, wasting development cycles on low-impact layout changes.",
+    mechanics: "Jurnii ranks all audit findings by severity and commercial weight, providing a development checklist mapped directly to revenue consequences.",
     capabilities: [
-      { title: "Actionable Sprints", icon: "clipboard-list", desc: "Obtain clean development task checklists to address identified user onboarding leaks." },
-      { title: "Visual Reference Cards", icon: "image", desc: "Match recommended UI corrections to verified industry-leading interface layouts." },
-      { title: "Yield Impact Mapping", icon: "dollar-sign", desc: "Prioritize design updates based on estimated player conversion and acquisition impact." }
+      { title: "Actionable Sprints", icon: "clipboard-list", desc: "Obtain clean development task checklists to address identified user onboarding leaks with zero guesswork." },
+      { title: "Visual Reference Cards", icon: "image", desc: "Match recommended UI corrections to verified industry-leading interface layouts for fast developer implementation." },
+      { title: "Yield Impact Mapping", icon: "dollar-sign", desc: "Prioritize design updates based on estimated player conversion, acquisition impact, and NGR recovery potential." }
     ],
     proofText: "Commercially weighted recommendations align product and business priorities around a shared roadmap.",
     targetPersona: "Chief Product Officers use Jurnii recommendations to build bulletproof roadmap sprints."
@@ -300,9 +300,9 @@ const solutionsData = [
     challenge: "Boutique operators enter regulated markets quietly, bidding up player acquisition keywords and eroding your regional market share before you notice.",
     mechanics: "Jurnii scans regional licensing databases and ad registries, notifying you the moment a new brand launches welcome offers in your jurisdiction.",
     capabilities: [
-      { title: "Operator Mapping", icon: "map", desc: "Map active gaming and casino sites inside regulated regional boundaries." },
-      { title: "New Entrant Alerts", icon: "alert-circle", desc: "Receive immediate notifications the moment a new brand launches welcome offers in your region." },
-      { title: "Jurisdictional Audits", icon: "globe", desc: "Audit regional operator saturation across Ontario, Sweden, UK, and emerging states." }
+      { title: "Operator Mapping", icon: "map", desc: "Map active gaming and casino sites inside regulated regional boundaries automatically to preserve market share." },
+      { title: "New Entrant Alerts", icon: "alert-circle", desc: "Receive immediate notifications the moment a new brand launches welcome offers or CRM campaigns in your region." },
+      { title: "Jurisdictional Audits", icon: "globe", desc: "Audit regional operator saturation across Ontario, Sweden, UK, and emerging states to identify market voids." }
     ],
     proofText: "Continuous automated scanning prevents competitive blind spots across 35 monitored markets.",
     targetPersona: "Chief Executive Officers use discovery solutions to maintain strategic market leadership."
@@ -314,12 +314,12 @@ const solutionsData = [
     kicker: "Competition",
     lede: "Standardize competitor promotion tracking to continuously deploy winning acquisition campaigns.",
     manifesto: "Eliminate promotional speculation. Systematize tracking of deposit bonus percentages, spin counts, and sports betting boosts across your competitors.",
-    challenge: "CRM teams duplicate competitor promotions reactively without knowing if those mechanics actually drive incrementality.",
+    challenge: "CRM and trading teams duplicate competitor promotions reactively without knowing if those mechanics actually drive incrementality, causing margin dilution.",
     mechanics: "Jurnii normalizes competitor sports and casino offers, scoring their generosity using the proprietary Promo Richness Index.",
     capabilities: [
-      { title: "Bonus Richness Index", icon: "gift", desc: "Standardize bonus yield calculations based on active wagering hurdles." },
-      { title: "Ad Campaign Parsing", icon: "tag", desc: "Extract competitor banner messaging, creative headers, and copy hooks dynamically." },
-      { title: "Holiday Trend Logs", icon: "calendar", desc: "Review competitor Christmas, World Cup, and Super Bowl promotional timelines." }
+      { title: "Bonus Richness Index", icon: "gift", desc: "Standardize bonus yield calculations based on active wagering hurdles and rollover requirements." },
+      { title: "Ad Campaign Parsing", icon: "tag", desc: "Extract competitor banner messaging, creative headers, and copywriting hooks dynamically across landing zones." },
+      { title: "Holiday Trend Logs", icon: "calendar", desc: "Review competitor Christmas, World Cup, and Super Bowl promotional timelines to anticipate spend." }
     ],
     proofText: "Track competitor campaigns automatically, saving 30+ hours per week per commercial team.",
     targetPersona: "Chief Commercial Officers deploy offers intelligence to align CRM strategy with real-world market context."
@@ -331,12 +331,12 @@ const solutionsData = [
     kicker: "Competition",
     lede: "Calibrate player margins, deposit rules, and wagering requirements against real-time market data.",
     manifesto: "Protect operator margin while remaining highly competitive. Align welcome offers and player rewards with continuous, structured regional metrics.",
-    challenge: "Over-generous sign-up bonuses erode operator margins, while overly restrictive wagering rules kill player acquisition.",
+    challenge: "Over-generous sign-up bonuses erode operator margins, while overly restrictive wagering rules kill player acquisition and drive players to rivals.",
     mechanics: "We model payout curves and margin impact across different spin multipliers and wagering requirements to find the commercial sweet spot.",
     capabilities: [
-      { title: "Margin Defense Tools", icon: "dollar-sign", desc: "Prevent margin erosion by tracking minimum deposit and payout limits across competitors." },
-      { title: "Wagering Calibrators", icon: "sliders", desc: "Model payout curves across different spin multipliers and sports wagering terms." },
-      { title: "ROI Auditing Engine", icon: "activity", desc: "Audit rival affiliate rewards and player acquisition pipelines automatically." }
+      { title: "Margin Defense Tools", icon: "dollar-sign", desc: "Prevent margin erosion by tracking minimum deposit and payout limits across competitors in real-time." },
+      { title: "Wagering Calibrators", icon: "sliders", desc: "Model payout curves across different spin multipliers and sports wagering terms to optimize yields." },
+      { title: "ROI Auditing Engine", icon: "activity", desc: "Audit rival affiliate rewards and player acquisition pipelines automatically to detect pricing shifts." }
     ],
     proofText: "Calibrating margins prevents promotional spend erosion, directly defending operator EBITDA.",
     targetPersona: "Chief Commercial Officers use pricing calibration to defend yield thresholds across target markets."
@@ -347,13 +347,13 @@ const solutionsData = [
     fullName: "Competition Postitioning Strategy",
     kicker: "Competition",
     lede: "Discover untapped marketing hooks and value claims by mapping rival operator positioning.",
-    manifesto: "Differentiate with absolute precision. Isolate positioning angles left open by competitor marketing layouts to establish highly defensive campaigns.",
-    challenge: "Acquisition campaigns collapse when operators fail to stand out, forcing them to rely on price Generosity alone.",
+    manifesto: "Differentiate with absolute precision. Isolate positioning angles left open by competitor marketing layouts to establish highly defensive, low-CPA campaigns.",
+    challenge: "Acquisition campaigns collapse when operators fail to stand out, forcing them to rely on price generosity and bonus size alone.",
     mechanics: "Jurnii maps the copywriting and messaging space, signaling where competitors have left visual or conceptual voids.",
     capabilities: [
-      { title: "Value Claim Maps", icon: "compass", desc: "Graph active brands based on core value propositions, speed, or bonus size." },
-      { title: "Copywriting Auditing", icon: "file-text", desc: "Parse competitor landing page copy to identify dominant positioning themes." },
-      { title: "Segment Expansion", icon: "crosshair", desc: "Target player personas ignored by slow-moving regional operators." }
+      { title: "Value Claim Maps", icon: "compass", desc: "Graph active brands based on core value propositions, speed, safety, or bonus size." },
+      { title: "Copywriting Auditing", icon: "file-text", desc: "Parse competitor landing page copy to identify dominant positioning themes and messaging voids." },
+      { title: "Segment Expansion", icon: "crosshair", desc: "Target high-value player personas ignored by slow-moving regional operators with custom copy." }
     ],
     proofText: "Objective positioning strategies lower CPA by avoiding direct competition on generic value claims.",
     targetPersona: "Chief Marketing Officers deploy positioning strategy to optimize ROAS across paid media channels."
@@ -365,12 +365,12 @@ const solutionsData = [
     kicker: "Benchmarking",
     lede: "Grade aesthetic layouts, grid structure, and visual clarity against leading global operators.",
     manifesto: "Establish visual excellence without subjective debates. Benchmark stylesheet setups, typographic layouts, and visual real estate side-by-side with global peers.",
-    challenge: "Subjective design reviews delay product releases by weeks and often fail to fix the layout errors that actually block players.",
+    challenge: "Subjective design reviews delay product releases by weeks and often fail to fix the layout errors that actually block players and kill conversion.",
     mechanics: "We run automated visual audits, scoring layout spacing, color contrast accessibility, and grid balance against industry best practice.",
     capabilities: [
-      { title: "Aesthetic Scoring", icon: "layout", desc: "Grade interface quality, layout spacing, and grid balance using structural analysis." },
-      { title: "Design System Logs", icon: "palette", desc: "Scrape and archive rival typographic scales, border systems, and color systems." },
-      { title: "Contrast Integrity Checks", icon: "eye", desc: "Assert readability and styling accessibility requirements across player flows." }
+      { title: "Aesthetic Scoring", icon: "layout", desc: "Grade interface quality, layout spacing, and grid balance using automated structural analysis." },
+      { title: "Design System Logs", icon: "palette", desc: "Scrape and archive rival typographic scales, border systems, and color systems for fast engineering reuse." },
+      { title: "Contrast Integrity Checks", icon: "eye", desc: "Assert readability and styling accessibility requirements across player flows to satisfy compliance." }
     ],
     proofText: "Normalizing UI scoring aligns designers, product managers, and developers around a shared objective standard.",
     targetPersona: "Design Systems Architects use UI Benchmarking to enforce brand guidelines and visual consistency."
@@ -385,9 +385,9 @@ const solutionsData = [
     challenge: "Manual UX audits are slow, retrospective, and fail to scale across multi-brand and multi-market operator portfolios.",
     mechanics: "Jurnii UX runs automated usability scans across key player journeys, grading each against 12 core onboarding heuristics.",
     capabilities: [
-      { title: "Heuristic Benchmarks", icon: "smile", desc: "Benchmark player flows against 12 core onboarding design principles." },
+      { title: "Heuristic Benchmarks", icon: "smile", desc: "Benchmark player flows against 12 core onboarding design principles to replace opinion with facts." },
       { title: "Cognitive Fatigue Audits", icon: "zap", desc: "Isolate interaction points and redundant inputs causing player dropoffs during signup." },
-      { title: "Onboarding Flow Scores", icon: "route", desc: "Grade transaction flow paths against leading global sportsbooks." }
+      { title: "Onboarding Flow Scores", icon: "route", desc: "Grade transaction flow paths against leading global sportsbooks to guide sprint updates." }
     ],
     proofText: "Deliver board-ready comparative UX scores in minutes, not weeks, with Jurnii UX's AI-powered engine.",
     targetPersona: "Chief Product Officers leverage UX benchmarking to prioritize development sprints and vindicate roadmaps."
@@ -402,9 +402,9 @@ const solutionsData = [
     challenge: "Players abandon transactions at secure verification and wallet selection steps, but analytics logs fail to show the visual cause.",
     mechanics: "Jurnii models the visual flow of transactions, documenting friction thresholds and identifying design bottlenecks.",
     capabilities: [
-      { title: "Transition State Maps", icon: "milestone", desc: "Model user progress through verification (KYC), wallet selection, and checkouts." },
-      { title: "Friction Point Logs", icon: "alert-triangle", desc: "Flag redundant form entries, laggy inputs, and validation obstacles." },
-      { title: "Dropoff Analytics", icon: "filter", desc: "Track where high-value customers abandon onboarding steps." }
+      { title: "Transition State Maps", icon: "milestone", desc: "Model user progress through verification (KYC), wallet selection, and checkouts systematically." },
+      { title: "Friction Point Logs", icon: "alert-triangle", desc: "Flag redundant form entries, laggy inputs, and validation obstacles across multi-brand setups." },
+      { title: "Dropoff Analytics", icon: "filter", desc: "Track where high-value customers abandon onboarding steps to target UX updates." }
     ],
     proofText: "Quantifying visual friction allows product teams to clear funnels, boosting conversion rate and player lifetime value.",
     targetPersona: "Heads of UX deploy journey benchmarking to repair leaky pipelines and secure player loyalty."
@@ -419,9 +419,9 @@ const solutionsData = [
     challenge: "Entering a new jurisdiction is high-risk when operators are blind to the exact design expectations and promotional rules of the local market.",
     mechanics: "We analyze local competitors, mapping their visual scores and Promo Richness Index positions to outline regional growth blueprints.",
     capabilities: [
-      { title: "Regional Strategy Matrix", icon: "globe", desc: "Map competitor strength and design grades across target states and countries." },
-      { title: "Market Gaps Detection", icon: "plus-circle", desc: "Spot underserved visual preferences or promotional voids in target regions." },
-      { title: "Competitor Strength Index", icon: "shield", desc: "Identify highly entrenched operators to refine acquisition spend strategies." }
+      { title: "Regional Strategy Matrix", icon: "globe", desc: "Map competitor strength and design grades across target states and countries dynamically." },
+      { title: "Market Gaps Detection", icon: "plus-circle", desc: "Spot underserved visual preferences or promotional voids in target regions to launch counter-campaigns." },
+      { title: "Competitor Strength Index", icon: "shield", desc: "Identify highly entrenched operators to refine acquisition spend strategies and protect margins." }
     ],
     proofText: "Calibrating products against regional benchmarks accelerates time-to-market and stabilizes acquisition.",
     targetPersona: "Chief Executive Officers deploy market benchmarking to guide international expansion budgets."
@@ -433,12 +433,12 @@ const solutionsData = [
     kicker: "Attribution",
     lede: "Correlate marketing yield directly with competitor promotions and onboarding design changes.",
     manifesto: "Isolate true campaign impact. Determine how competitor deposit boosts and copywriting pivots influence your regional acquisition yield and CPA rates.",
-    challenge: "Marketing attribution is broken, relying on last-click attribution that ignores competitor promotions and regional UX quality.",
+    challenge: "Marketing attribution is broken, relying on last-click attribution that ignores competitor promotions and regional UX quality, causing massive budget waste.",
     mechanics: "Cortex correlates competitor promotional richness and internal UX scores with campaign yield to reveal true marketing contribution.",
     capabilities: [
-      { title: "CPA Correlation Engine", icon: "pie-chart", desc: "Correlate customer acquisition cost fluctuations against competitor campaign shifts." },
-      { title: "Promo Richness Modeling", icon: "gift", desc: "Measure player acquisition yields against rival bonus and wagering conditions." },
-      { title: "Yield Protection Planning", icon: "shield", desc: "Refine campaign budgets when competitor promo richness spikes." }
+      { title: "CPA Correlation Engine", icon: "pie-chart", desc: "Correlate customer acquisition cost fluctuations against competitor campaign shifts and bonus variables." },
+      { title: "Promo Richness Modeling", icon: "gift", desc: "Measure player acquisition yields against rival bonus and wagering conditions using proprietary Cortex models." },
+      { title: "Yield Protection Planning", icon: "shield", desc: "Refine campaign budgets when competitor promo richness spikes to protect overall marketing ROAS." }
     ],
     proofText: "Cortex models have proven their efficiency, surfacing massive attribution corrections on millions of dollars of budget.",
     targetPersona: "Chief Marketing Officers use Cortex to justify marketing mix updates and defend acquisition budgets."
@@ -450,12 +450,12 @@ const solutionsData = [
     kicker: "Attribution",
     lede: "Model competitor campaign impacts across digital programmatic, social, and search channels.",
     manifesto: "Gain complete cross-channel foresight. Map competitor campaign footprints to understand where acquisition spend is most defensive and high-yielding.",
-    challenge: "Programmatic, affiliate, and search budgets operate in siloes, leaving operators blind to the combined impact of competitive moves.",
+    challenge: "Programmatic, affiliate, and search budgets operate in siloes, leaving operators blind to the combined impact of competitive moves across channels.",
     mechanics: "Cortex integrates competitor promotion streams with cross-channel spend data to model the defensive strength of each channel.",
     capabilities: [
-      { title: "Channel Footprint Analysis", icon: "split", desc: "Map competitor campaign footprints across programmatic, search, and social." },
-      { title: "Spend Efficiency Audits", icon: "dollar-sign", desc: "Identify channels where rival promo richness is driving customer acquisition spikes." },
-      { title: "Defensive Budgeting", icon: "sliders", desc: "Calibrate cross-channel spend strategies based on real-time competitor campaign shifts." }
+      { title: "Channel Footprint Analysis", icon: "split", desc: "Map competitor campaign footprints across programmatic, search, and social dynamically." },
+      { title: "Spend Efficiency Audits", icon: "dollar-sign", desc: "Identify channels where rival promo richness is driving customer acquisition spikes to re-allocate funds." },
+      { title: "Defensive Budgeting", icon: "sliders", desc: "Calibrate cross-channel spend strategies based on real-time competitor campaign shifts to defend market share." }
     ],
     proofText: "Optimizing multi-channel allocation ensures operators preserve player acquisition yields in aggressive markets.",
     targetPersona: "Heads of Acquisition use Jurnii cross-channel data to balance programmatic bids with CRM retention campaigns."
@@ -467,12 +467,12 @@ const solutionsData = [
     kicker: "Attribution",
     lede: "Feed structured, clean competitor promotional metrics directly into local analytics data warehouses.",
     manifesto: "Build automated, data-driven marketing models. Streamline competitor promotional tracking data to feed custom predictive models and yield optimization boards.",
-    challenge: "Data scientists waste 80% of their time scraping and normalizing competitor data instead of modeling budget allocation.",
+    challenge: "Data scientists waste 80% of their time scraping and normalizing competitor data instead of modeling budget allocation and incrementality.",
     mechanics: "Jurnii streams clean competitor data straight into local data warehouses, ready for direct MMM processing.",
     capabilities: [
-      { title: "Structured Data Pipes", icon: "database", desc: "Export competitor campaign histories via automated JSON or CSV feeds." },
-      { title: "Predictive Spend Engines", icon: "bar-chart-3", desc: "Model acquisition yields based on historical regional competitor promo patterns." },
-      { title: "Cortex API Integration", icon: "network", desc: "Synchronize local player analytics databases with comprehensive competitor datasets." }
+      { title: "Structured Data Pipes", icon: "database", desc: "Export competitor campaign histories via automated JSON or CSV feeds into local datastores." },
+      { title: "Predictive Spend Engines", icon: "bar-chart-3", desc: "Model acquisition yields based on historical regional competitor promo patterns and media footprints." },
+      { title: "Cortex API Integration", icon: "network", desc: "Synchronize local player analytics databases with comprehensive competitor datasets for causal modeling." }
     ],
     proofText: "Seamless API integrations eliminate manual data compilation, supplying robust modeling data instantly.",
     targetPersona: "Chief Marketing Officers use Cortex MMM pipes to provide board-ready marketing yield models."
@@ -484,12 +484,12 @@ const solutionsData = [
     kicker: "Attribution",
     lede: "Attribute regional user acquisition and market share gains to visual design updates.",
     manifesto: "Prove design return on investment. Quantify how resolved player journey friction directly translates into market share gains and user onboarding yields.",
-    challenge: "Design and product teams struggle to prove the direct revenue contribution of usability improvements to the board.",
+    challenge: "Design and product teams struggle to prove the direct revenue contribution of usability improvements to the board, stalling investment.",
     mechanics: "Cortex models player signup yield fluctuations against resolved Jurnii UX audit findings, proving design ROI.",
     capabilities: [
-      { title: "UX ROI Attribution", icon: "trending-up", desc: "Correlate design system improvements directly with customer onboarding rates." },
-      { title: "Regional Growth Logs", icon: "globe", desc: "Audit market share growth following targeted usability and visual refinement sprints." },
-      { title: "Executive Yield Summaries", icon: "award", desc: "Present structured design and commercial conversion correlations directly to product leadership." }
+      { title: "UX ROI Attribution", icon: "trending-up", desc: "Correlate design system improvements directly with customer onboarding rates and registration yields." },
+      { title: "Regional Growth Logs", icon: "globe", desc: "Audit market share growth following targeted usability and visual refinement sprints in specific states." },
+      { title: "Executive Yield Summaries", icon: "award", desc: "Present structured design and commercial conversion correlations directly to product and finance leadership." }
     ],
     proofText: "Proving design contribution aligns product development goals directly with operator revenue expansion.",
     targetPersona: "Chief Product Officers deploy UX ROI models to secure investment for core product infrastructure."
@@ -501,12 +501,12 @@ const solutionsData = [
     kicker: "Optimization",
     lede: "Isolate and repair player conversion leaks inside high-security registration and deposit funnels.",
     manifesto: "Maximize player signup yields. Calibrate checkout fields, security badges, and layout aesthetics to minimize abandonment and accelerate active conversions.",
-    challenge: "Minor UX details in registration and KYC checkpoints cause silent abandonment, draining marketing budgets.",
+    challenge: "Minor UX details in registration and KYC checkpoints cause silent abandonment, draining marketing budgets and driving up CPA.",
     mechanics: "Jurnii UX identifies exact usability issues, ranking them by severity so development teams can clear funnels immediately.",
     capabilities: [
-      { title: "Friction Minimization", icon: "percent", desc: "Isolate and remove fields causing player dropoffs during verification." },
-      { title: "Checkout Redesigns", icon: "layout", desc: "Adopt verified, high-converting checkout grids and deposit button configurations." },
-      { title: "A/B Benchmark Sprints", icon: "check-circle", desc: "Validate interface revisions directly against leading sportsbook portals." }
+      { title: "Friction Minimization", icon: "percent", desc: "Isolate and remove fields causing player dropoffs during verification, KYC, and first deposit." },
+      { title: "Checkout Redesigns", icon: "layout", desc: "Adopt verified, high-converting checkout grids and deposit button configurations to clear paths." },
+      { title: "A/B Benchmark Sprints", icon: "check-circle", desc: "Validate interface revisions directly against leading sportsbook portals under real user conditions." }
     ],
     proofText: "Targeted usability adjustments recover lost players, directly boosting campaign acquisition yields.",
     targetPersona: "Heads of UX use conversion optimization to optimize mobile flows and outpace competitors."
@@ -518,12 +518,12 @@ const solutionsData = [
     kicker: "Optimization",
     lede: "Boost player loyalty and retention by auditing layout usability and visual experience.",
     manifesto: "Protect customer lifetime value. Audit post-login betting boards, loyalty perks UI, and deposit ease to build deep visual trust and engagement.",
-    challenge: "iGaming players hold multiple accounts, and will immediately defect if their post-login betting experience is slow or confusing.",
+    challenge: "iGaming players hold multiple accounts, and will immediately defect if their post-login betting experience is slow, laggy, or confusing.",
     mechanics: "Jurnii UX benchmarks post-login dashboards and reward pages, highlighting layout upgrades that secure player loyalty.",
     capabilities: [
-      { title: "Retention Audits", icon: "heart", desc: "Isolate usability friction points causing player churn post-registration." },
-      { title: "Loyalty UI Evaluation", icon: "award", desc: "Optimize presentation of player clubs, loyalty milestones, and reward claims." },
-      { title: "Engagement Logs", icon: "activity", desc: "Monitor betslip usability and payout speed parameters systematically." }
+      { title: "Retention Audits", icon: "heart", desc: "Isolate usability friction points causing player churn post-registration during daily active bet cycles." },
+      { title: "Loyalty UI Evaluation", icon: "award", desc: "Optimize presentation of player clubs, loyalty milestones, and reward claims to maximize engagement." },
+      { title: "Engagement Logs", icon: "activity", desc: "Monitor betslip usability, payout speed parameters, and deposit pathways systematically." }
     ],
     proofText: "Optimizing layouts fosters visual trust, encouraging recurring deposits and securing LTV.",
     targetPersona: "Heads of CRM use usability audits to build high-converting reward pages and VIP dashboards."
@@ -535,12 +535,12 @@ const solutionsData = [
     kicker: "Optimization",
     lede: "Identify and prevent customer loss by analyzing competitor promotions and onboarding updates.",
     manifesto: "Combat player churn proactively. Track competitor retention campaigns and usability enhancements that are pulling players away from your platform.",
-    challenge: "Traditional retention strategies are reactive, attempting to recover players only after they have already defected.",
-    mechanics: "Jurnii 360 warns CRM teams when competitors deploy highly generous retention offers, enabling timely defensive pricing.",
+    challenge: "Traditional retention strategies are reactive, attempting to recover players with expensive bonus cash only after they have already defected.",
+    mechanics: "Jurnii 360 warns CRM teams when competitors deploy highly generous retention offers, enabling timely defensive pricing and margin calibration.",
     capabilities: [
-      { title: "Competitor Move Warnings", icon: "user-minus", desc: "Receive alerts when rivals introduce high-richness loyalty promos in your region." },
-      { title: "Product Gap Analysis", icon: "plus-circle", desc: "Isolate product features rivals are deploying to secure active customer retention." },
-      { title: "Margin Calibration Sprints", icon: "sliders", desc: "Re-calibrate payout metrics to protect yields when competitor churn triggers spike." }
+      { title: "Competitor Move Warnings", icon: "user-minus", desc: "Receive alerts when rivals introduce high-richness loyalty promos or sports boosts in your region." },
+      { title: "Product Gap Analysis", icon: "plus-circle", desc: "Isolate product features rivals are deploying to secure active customer retention and prevent churn." },
+      { title: "Margin Calibration Sprints", icon: "sliders", desc: "Re-calibrate payout metrics to protect yields and NGR when competitor churn triggers spike." }
     ],
     proofText: "Defending player retention proactively preserves long-term net gaming revenue.",
     targetPersona: "Chief Commercial Officers deploy churn alerts to protect active margins in aggressive markets."
@@ -552,12 +552,12 @@ const solutionsData = [
     kicker: "Optimization",
     lede: "Decrease player acquisition costs by resolving player onboarding friction and optimizing layouts.",
     manifesto: "Achieve acquisition efficiency. Lower overall customer acquisition cost by securing registration pathways and optimizing welcome offer layouts using data-backed designs.",
-    challenge: "High customer acquisition costs (CAC) drain marketing budgets, eroding operator NGR in highly competitive regions.",
-    mechanics: "Jurnii UX and 360 optimize landing pages and signup paths, ensuring every click translates to a successful conversion.",
+    challenge: "High customer acquisition costs (CAC) drain marketing budgets, eroding operator NGR and GGR in highly competitive regions.",
+    mechanics: "Jurnii UX and Jurnii 360 optimize landing pages and signup paths, ensuring every marketing click translates to a successful active player conversion.",
     capabilities: [
-      { title: "CPA Reduction Engine", icon: "shopping-bag", desc: "Correlate resolved player journey friction directly with reduced marketing CPA." },
-      { title: "Welcome Page Optimization", icon: "layout", desc: "Refine landing zone layouts, button spacing, and trust badges systematically." },
-      { title: "Promo Calibrators", icon: "sliders", desc: "Deploy ideal signup bonuses and wagering rules calculated to lower customer CAC." }
+      { title: "CPA Reduction Engine", icon: "shopping-bag", desc: "Correlate resolved player journey friction directly with reduced marketing CPA and higher yields." },
+      { title: "Welcome Page Optimization", icon: "layout", desc: "Refine landing zone layouts, button spacing, typographic clarity, and trust badges systematically." },
+      { title: "Promo Calibrators", icon: "sliders", desc: "Deploy ideal signup bonuses and wagering rules calculated to lower customer CAC while protecting margins." }
     ],
     proofText: "Improving landing page conversion recovers acquisition spend, directly boosting promotional ROI.",
     targetPersona: "Chief Marketing Officers use CAC optimization to optimize digital campaigns and improve media ROAS."
@@ -629,7 +629,7 @@ function getPageHTML(metaTitle, metaDesc, kicker, title, lede, manifesto, capabi
               ${challenge}
             </p>
             <p style="font-size: 15.5px; color: var(--muted-foreground); line-height: 1.6;">
-              When betting portals share the same suppliers, customer experience is the only durable barrier to player defection. Failing to benchmark your flow speed and copywriting clarity against competitor movements leaves your team fighting fires reactively.
+              When betting portals share the same suppliers and identical platform configurations, customer experience is the only durable barrier to player defection. Failing to benchmark your flow speed and copywriting clarity against competitor movements leaves your team fighting fires reactively, eroding margins over time.
             </p>
           </div>
           <div style="background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
