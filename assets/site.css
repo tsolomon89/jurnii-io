@@ -2297,8 +2297,505 @@ h1.page-title { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.02; letter-s
   color: var(--foreground);
   margin: 0;
 }
+.editorial-author-name {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0;
+}
 .editorial-author-title {
   font-size: 13px;
   color: var(--muted-foreground);
   margin: 0;
 }
+
+/* ============================================================
+   Jurnii Homepage Semantic CSS Rules
+   ============================================================ */
+
+/* 1. Spacing Helpers & Global Overrides */
+.home-section-footer {
+  margin-top: 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted-foreground);
+}
+.home-section-footer.dark {
+  border-top-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* 2. Home Hero Products List */
+.home-hero-products {
+  margin-top: 40px;
+  display: flex;
+  gap: 24px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.4);
+  flex-wrap: wrap;
+}
+.home-hero-products span {
+  color: rgba(255,255,255,0.6);
+}
+.home-hero-products a {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+.home-hero-products a:hover {
+  opacity: 0.8;
+}
+.home-hero-products a .dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.home-hero-products a.product-ux { color: var(--jurnii-500); }
+.home-hero-products a.product-ux .dot { background: var(--jurnii-500); }
+.home-hero-products a.product-360 { color: #5299ff; }
+.home-hero-products a.product-360 .dot { background: #5299ff; }
+.home-hero-products a.product-cortex { color: #a855f7; }
+.home-hero-products a.product-cortex .dot { background: #a855f7; }
+
+/* 3. Ideal Customer Profile (ICP) Segment Cards */
+.home-icp-container {
+  margin-top: 64px;
+  padding-top: 48px;
+  border-top: 1px dashed rgba(255,255,255,0.15);
+}
+.home-icp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 32px;
+}
+.home-icp-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+}
+.home-icp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+}
+.home-icp-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 32px;
+  border-radius: 12px;
+}
+.home-icp-card .eyebrow {
+  margin-bottom: 12px;
+  display: block;
+}
+.home-icp-card.primary .eyebrow { color: var(--jurnii-500); }
+.home-icp-card.secondary .eyebrow { color: #5299ff; }
+.home-icp-card h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 12px;
+}
+.home-icp-card p {
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+.home-icp-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.home-icp-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+.home-icp-tag.primary {
+  background: rgba(87,255,96,0.08);
+  color: var(--jurnii-500);
+  border: 1px solid rgba(87,255,96,0.15);
+}
+.home-icp-tag.secondary {
+  background: rgba(82,153,255,0.08);
+  color: #5299ff;
+  border: 1px solid rgba(82,153,255,0.15);
+}
+
+/* 4. Product Suite 3-Column Grid & Cards */
+.home-suite-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px;
+  margin-top: 48px;
+}
+.home-suite-card {
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 12px;
+}
+.home-suite-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+.home-suite-card-header .eyebrow {
+  font-size: 11px;
+  margin-bottom: 4px;
+  display: block;
+}
+.home-suite-card-header h3 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0;
+}
+.home-suite-card-header .metric {
+  font-size: 36px;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  line-height: 1;
+}
+.home-suite-card-header.ux .eyebrow { color: var(--jurnii-600); }
+.home-suite-card-header.ux .metric { color: var(--jurnii-500); }
+.home-suite-card-header.radar .eyebrow { color: #5299ff; }
+.home-suite-card-header.radar .metric { color: #5299ff; }
+.home-suite-card-header.cortex .eyebrow { color: #a855f7; }
+.home-suite-card-header.cortex .metric { color: #a855f7; }
+
+.home-suite-card-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.home-suite-card-list li {
+  font-size: 14px;
+  color: var(--muted-foreground);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.home-suite-card-list li .dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.home-suite-card-list.ux li .dot { background: var(--jurnii-500); }
+.home-suite-card-list.radar li .dot { background: #5299ff; }
+.home-suite-card-list.cortex li .dot { background: #a855f7; }
+
+.home-suite-card-footer {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.home-suite-card-footer a {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+.home-suite-card-footer.ux a { color: var(--jurnii-600); }
+.home-suite-card-footer.radar a { color: #5299ff; }
+.home-suite-card-footer.cortex a { color: #a855f7; }
+
+/* 5. Deep-Dive Split-Sections */
+.home-split-section {
+  padding: 64px 0;
+}
+.home-split-section .eyebrow {
+  margin-bottom: 24px;
+}
+.home-split-section .display {
+  font-size: clamp(36px, 4vw, 56px);
+  margin-bottom: 24px;
+}
+.home-split-section .lede {
+  font-size: 16px;
+}
+.home-split-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+.home-split-stats.dark {
+  border-top-color: rgba(255,255,255,0.1);
+}
+.home-split-stat-num {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+}
+.home-split-stat-num.primary { color: var(--jurnii-500); }
+.home-split-stat-num.secondary { color: #5299ff; }
+.home-split-stat-num.tertiary { color: #a855f7; }
+
+.home-split-stat-label {
+  font-size: 11px;
+  color: var(--muted-foreground);
+  margin-top: 12px;
+}
+.home-split-stat-label.dark {
+  color: rgba(255,255,255,0.5);
+}
+
+/* 6. Four-Dimension Detail Cards */
+.home-dimension-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.home-dimension-card {
+  display: grid;
+  grid-template-columns: 40px 1fr 40px;
+  gap: 16px;
+  align-items: center;
+  padding: 20px;
+}
+.home-dimension-card-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+}
+.home-dimension-card-num.green {
+  background: rgba(87,255,96,0.1);
+  color: var(--jurnii-600);
+}
+.home-dimension-card-num.yellow {
+  background: rgba(255,189,46,0.1);
+  color: #ffbd2e;
+}
+.home-dimension-card-num.purple {
+  background: rgba(154,103,234,0.1);
+  color: #9a67ea;
+}
+.home-dimension-card-num.red {
+  background: rgba(255,95,86,0.1);
+  color: #ff5f56;
+}
+.home-dimension-card-text b {
+  font-size: 15px;
+  display: block;
+  color: var(--foreground);
+}
+.home-dimension-card-text span {
+  font-size: 13px;
+  color: var(--muted-foreground);
+}
+.home-dimension-card-score {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 12px;
+}
+.home-dimension-card-score.green {
+  border: 2px solid var(--jurnii-500);
+  color: var(--jurnii-600);
+}
+.home-dimension-card-score.yellow {
+  border: 2px solid #ffbd2e;
+  color: #ffbd2e;
+}
+.home-dimension-card-score.purple {
+  border: 2px solid #9a67ea;
+  color: #9a67ea;
+}
+.home-dimension-card-score.red {
+  border: 2px solid #ff5f56;
+  color: #ff5f56;
+}
+
+/* 7. Homepage Proof Metrics & Logo Bar */
+.home-proof-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 32px;
+  text-align: center;
+}
+.home-proof-stat .n {
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--jurnii-600);
+  font-family: var(--font-mono);
+}
+.home-proof-stat .l {
+  font-size: 13px;
+  color: var(--muted-foreground);
+  margin-top: 8px;
+}
+.home-logo-bar {
+  margin-top: 48px;
+  border-top: 1px solid var(--border);
+  padding-top: 48px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.home-logo-bar span {
+  font-size: 24px;
+  font-weight: 700;
+  opacity: 0.4;
+  letter-spacing: 0.05em;
+  font-family: var(--font-display);
+}
+
+/* 8. Demo CTA Section & Actions Grid */
+.home-demo-cta {
+  background: var(--concrete-950);
+  padding: 80px 0;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  position: relative;
+}
+.home-demo-cta-inner {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+.home-demo-cta-inner h2 {
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 48px;
+}
+.home-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  text-align: left;
+  margin-bottom: 64px;
+}
+.home-action-card {
+  padding: 24px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.08);
+  text-decoration: none;
+  display: block;
+  border-radius: 12px;
+}
+.home-action-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.home-action-card-header .eyebrow {
+  font-size: 11px;
+}
+.home-action-card-header i {
+  width: 16px;
+  height: 16px;
+}
+.home-action-card-header.demo .eyebrow,
+.home-action-card-header.demo i {
+  color: var(--jurnii-500);
+}
+.home-action-card-header.docs .eyebrow,
+.home-action-card-header.docs i {
+  color: #5299ff;
+}
+.home-action-card-header.pilot .eyebrow,
+.home-action-card-header.pilot i {
+  color: #a855f7;
+}
+.home-action-card .value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+}
+.home-action-card .desc {
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  margin-top: 4px;
+}
+
+/* 9. Home Problem Grid and Cards (Challenge Section) */
+.home-problem-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+  margin-top: 48px;
+}
+.home-problem-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: border-color 220ms ease, transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.home-problem-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--concrete-300);
+}
+[data-theme="dark"] .home-problem-card:hover,
+[data-theme="jurnii-v1"] .home-problem-card:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+}
+.home-problem-card .num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--muted-foreground);
+}
+.home-problem-card h3 {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  margin: 0;
+  line-height: 1.2;
+}
+.home-problem-card p {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .home-problem-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
