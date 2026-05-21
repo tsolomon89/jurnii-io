@@ -565,12 +565,75 @@ const solutionsData = [
 ];
 
 // Rich, multi-section layout template
-function getPageHTML(metaTitle, metaDesc, kicker, title, lede, manifesto, capabilities, levelPrefix, isFeature, challenge, mechanics, proofText, targetPersona) {
+function getPageHTML(metaTitle, metaDesc, kicker, title, lede, manifesto, capabilities, levelPrefix, isFeature, challenge, mechanics, proofText, targetPersona, slug) {
   const typeLabel = isFeature ? "Feature" : "Solution";
   const parentName = isFeature ? "Features" : "Solutions";
   const parentSlug = isFeature ? "features" : "solutions";
   const sectionHead = isFeature ? "Strategic Capabilities" : "Operational Capabilities";
   
+  let metricStripHTML = '';
+  const uxRegex = /(ux|journey|conversion|usability|benchmarking|friction|flow|checkout|signup|registration)/i;
+  const cortexRegex = /(attribution|roi|spend|cortex|marketing|mmm|causal|incrementality|budget|allocation)/i;
+  
+  if (uxRegex.test(slug)) {
+    metricStripHTML = `
+          <div class="metric-strip-item">
+            <span class="metric-strip-num">300+</span>
+            <span class="metric-strip-label">Brands Analysed</span>
+          </div>
+          <div class="metric-strip-item">
+            <span class="metric-strip-num">70+</span>
+            <span class="metric-strip-label">Recommendations per Audit</span>
+          </div>
+          <div class="metric-strip-item">
+            <span class="metric-strip-num">4</span>
+            <span class="metric-strip-label">Key UX Dimensions</span>
+          </div>
+          <div class="metric-strip-item">
+            <span class="metric-strip-num">Mins</span>
+            <span class="metric-strip-label">Time to Full Audit</span>
+          </div>
+    `;
+  } else if (cortexRegex.test(slug)) {
+    metricStripHTML = `
+          <div class="metric-strip-item">
+            <span class="metric-strip-num">+46%</span>
+            <span class="metric-strip-label">True Marketing ROI Lift</span>
+          </div>
+          <div class="metric-strip-item">
+            <span class="metric-strip-num">$4.85M</span>
+            <span class="metric-strip-label">Budget Reallocated</span>
+          </div>
+          <div class="metric-strip-item">
+            <span class="metric-strip-num">3x</span>
+            <span class="metric-strip-label">Attribution Speed</span>
+          </div>
+          <div class="metric-strip-item">
+            <span class="metric-strip-num">40x</span>
+            <span class="metric-strip-label">ROI on Platform Investment</span>
+          </div>
+    `;
+  } else {
+    metricStripHTML = `
+          <div class="metric-strip-item">
+            <span class="metric-strip-num">1,000+</span>
+            <span class="metric-strip-label">Offers Tracked Weekly</span>
+          </div>
+          <div class="metric-strip-item">
+            <span class="metric-strip-num">35</span>
+            <span class="metric-strip-label">Regulated Markets Monitored</span>
+          </div>
+          <div class="metric-strip-item">
+            <span class="metric-strip-num">21</span>
+            <span class="metric-strip-label">Feature Areas Scanned</span>
+          </div>
+          <div class="metric-strip-item">
+            <span class="metric-strip-num">30+</span>
+            <span class="metric-strip-label">Hours Saved per Week</span>
+          </div>
+    `;
+  }
+
   return `<!doctype html>
 <html data-theme="light" lang="en">
 <head>
@@ -615,22 +678,7 @@ function getPageHTML(metaTitle, metaDesc, kicker, title, lede, manifesto, capabi
     <div class="metric-strip-wrapper">
       <div class="container">
         <div class="metric-strip-grid">
-          <div class="metric-strip-item">
-            <span class="metric-strip-num">35 Markets</span>
-            <span class="metric-strip-label">Monitored Simultaneously</span>
-          </div>
-          <div class="metric-strip-item">
-            <span class="metric-strip-num">1,000+ Offers</span>
-            <span class="metric-strip-label">Tracked & Normalized Weekly</span>
-          </div>
-          <div class="metric-strip-item">
-            <span class="metric-strip-num">+46% ROI</span>
-            <span class="metric-strip-label">Cortex Causal Marketing ROAS</span>
-          </div>
-          <div class="metric-strip-item">
-            <span class="metric-strip-num">30+ Hours</span>
-            <span class="metric-strip-label">Saved per Week in Audits</span>
-          </div>
+          ${metricStripHTML}
         </div>
       </div>
     </div>
@@ -950,7 +998,7 @@ function getPageHTML(metaTitle, metaDesc, kicker, title, lede, manifesto, capabi
 featuresData.forEach(item => {
   const itemFilePath = path.join(root, item.slug);
   ensureDirectoryExistence(itemFilePath);
-  const html = getPageHTML(item.fullName, item.lede, item.kicker, item.fullName, item.lede, item.manifesto, item.capabilities, '../', true, item.challenge, item.mechanics, item.proofText, item.targetPersona);
+  const html = getPageHTML(item.fullName, item.lede, item.kicker, item.fullName, item.lede, item.manifesto, item.capabilities, '../', true, item.challenge, item.mechanics, item.proofText, item.targetPersona, item.slug);
   fs.writeFileSync(itemFilePath, html, 'utf8');
   console.log('Generated Feature LP:', item.slug);
 });
@@ -959,7 +1007,7 @@ featuresData.forEach(item => {
 solutionsData.forEach(item => {
   const itemFilePath = path.join(root, item.slug);
   ensureDirectoryExistence(itemFilePath);
-  const html = getPageHTML(item.fullName, item.lede, item.kicker, item.fullName, item.lede, item.manifesto, item.capabilities, '../', false, item.challenge, item.mechanics, item.proofText, item.targetPersona);
+  const html = getPageHTML(item.fullName, item.lede, item.kicker, item.fullName, item.lede, item.manifesto, item.capabilities, '../', false, item.challenge, item.mechanics, item.proofText, item.targetPersona, item.slug);
   fs.writeFileSync(itemFilePath, html, 'utf8');
   console.log('Generated Solution LP:', item.slug);
 });
