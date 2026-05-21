@@ -1,0 +1,553 @@
+﻿diff --git a/index.html b/index.html
+index e0801b8..dcd05a1 100644
+--- a/index.html
++++ b/index.html
+@@ -12,7 +12,7 @@
+ <body>
+ 
+   <!-- Navigation -->
+-                                                                        <nav class="nav">
++                                                                          <nav class="nav">
+     <div class="container nav-inner">
+       <div class="nav-brand">
+         <a href="index.html"><img src="assets/jurnii-dark-full.svg" alt="Jurnii Logo" class="logo-light"></a>
+@@ -440,76 +440,479 @@
+       </div>
+     </section>
+ 
+-    <!-- Brand IQ Diagnostic Section -->
+-    <section class="section section-dark" style="padding-top: 0;">
++    <!-- Competitor UX Benchmarking Section -->
++    <section class="section section-dark" style="padding-top: 0; padding-bottom: 80px;">
+       <div class="container">
+-        <div class="jurnii-diagnostic-wrapper animate-on-scroll">
++        <div id="jurnii-dashboard" class="jurnii-diagnostic-wrapper animate-on-scroll is-visible">
++          
++          <!-- Header -->
+           <div class="diagnostic-header">
+-            <p class="eyebrow" style="color: var(--jurnii-400); margin: 0;"><span class="dot" style="background: var(--jurnii-400);"></span> INTERACTIVE DIAGNOSTIC</p>
+-            <h3>Calculate Your Brand Intelligence IQ & Commercial Leakage</h3>
+-            <p>Adjust your operational parameters below to reveal estimated promo leakage, manual overhead, and insight latency under your current tooling setup.</p>
++            <p class="eyebrow" style="color: var(--jurnii-400); margin: 0;"><span class="dot" style="background: var(--jurnii-400);"></span> LIVE DEMO</p>
++            <h3>Interactive Competitor UX Benchmarking Hub</h3>
++            <p>Explore real-world competitor scorecards, mobile vs. desktop audits, and multi-brand journey matrices compiled directly from Jurnii's live iGaming intelligence platform.</p>
+           </div>
+-          <div class="diagnostic-grid">
+-            <div class="diagnostic-controls">
+-              <div class="diagnostic-input-group">
+-                <div class="diagnostic-label-row">
+-                  <span>Monthly Promotional Budget</span>
+-                  <span id="diag-budget-val" class="diagnostic-val-badge">€1.5M</span>
++
++          <!-- Tabs Selector Control -->
++          <div class="dashboard-tabs">
++                    <button class="device-btn active" data-device="desktop">
++                      <i data-lucide="monitor"></i> Desktop
++                    </button>
++                    <button class="device-btn" data-device="mobile">
++                      <i data-lucide="smartphone"></i> Mobile
++                    </button>
++                  </div>
+                 </div>
+-                <input type="range" id="diag-budget" class="diagnostic-range-slider" min="10000" max="2000000" step="10000" value="1500000">
+               </div>
+-              <div class="diagnostic-input-group">
+-                <div class="diagnostic-label-row">
+-                  <span>Active Jurisdictions / Markets</span>
+-                  <span id="diag-markets-val" class="diagnostic-val-badge">5 MARKETS</span>
++
++              <div class="performance-audit-layout">
++                <!-- Sidebar operator selector -->
++                <div class="performance-operators-sidebar">
++                  <div class="op-select-btn active" data-brand="vv">
++                    <div class="brand-crest vv">V</div>
++                    <div class="op-select-info">
++                      <span class="op-name">VidaVegas</span>
++                      <span class="op-meta">Overall: 66 · Speed: <span class="op-speed-lbl">52</span></span>
++                    </div>
++                  </div>
++                  <div class="op-select-btn" data-brand="mc">
++                    <div class="brand-crest mc">M</div>
++                    <div class="op-select-info">
++                      <span class="op-name">MiCasino</span>
++                      <span class="op-meta">Overall: 54 · Speed: <span class="op-speed-lbl">41</span></span>
++                    </div>
++                  </div>
++                  <div class="op-select-btn" data-brand="cb">
++                    <div class="brand-crest cb">C</div>
++                    <div class="op-select-info">
++                      <span class="op-name">CoolBetChile</span>
++                      <span class="op-meta">Overall: 60 · Speed: <span class="op-speed-lbl">04</span></span>
++                    </div>
++                  </div>
++                  <div class="op-select-btn" data-brand="bt">
++                    <div class="brand-crest bt">B</div>
++                    <div class="op-select-info">
++                      <span class="op-name">Betsson1001</span>
++                      <span class="op-meta">Overall: 62 · Speed: <span class="op-speed-lbl">43</span></span>
++                    </div>
++                  </div>
+                 </div>
+-                <input type="range" id="diag-markets" class="diagnostic-range-slider" min="1" max="15" step="1" value="5">
+-              </div>
+-              <div class="diagnostic-input-group">
+-                <div class="diagnostic-label-row">
+-                  <span>Weekly Report Compilation Overhead</span>
+-                  <span id="diag-hours-val" class="diagnostic-val-badge">51 HRS/WK</span>
++
++                <!-- Right Side Performance Metrics -->
++                <div class="performance-details-board">
++                  
++                  <!-- Circular Lighthouse Rings -->
++                  <div class="lighthouse-metrics-row">
++                    
++                    <div class="lh-metric-ring-wrap">
++                      <div class="ring-svg-container">
++                        <svg class="ring-svg" viewBox="0 0 36 36">
++                          <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3"></path>
++                          <path id="lh-speed-ring" class="ring-fill color-warn" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#fbbf24" stroke-width="3" stroke-dasharray="52, 100"></path>
++                        </svg>
++                        <div id="lh-speed-val" class="ring-value">52</div>
++                      </div>
++                      <span class="ring-label">Performance</span>
++                    </div>
++
++                    <div class="lh-metric-ring-wrap">
++                      <div class="ring-svg-container">
++                        <svg class="ring-svg" viewBox="0 0 36 36">
++                          <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3"></path>
++                          <path id="lh-access-ring" class="ring-fill color-success" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#34f741" stroke-width="3" stroke-dasharray="100, 100"></path>
++                        </svg>
++                        <div id="lh-access-val" class="ring-value">100</div>
++                      </div>
++                      <span class="ring-label">Accessibility</span>
++                    </div>
++
++                    <div class="lh-metric-ring-wrap">
++                      <div class="ring-svg-container">
++                        <svg class="ring-svg" viewBox="0 0 36 36">
++                          <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3"></path>
++                          <path id="lh-best-ring" class="ring-fill color-warn" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#fbbf24" stroke-width="3" stroke-dasharray="85, 100"></path>
++                        </svg>
++                        <div id="lh-best-val" class="ring-value">85</div>
++                      </div>
++                      <span class="ring-label">Best Practices</span>
++                    </div>
++
++                    <div class="lh-metric-ring-wrap">
++                      <div class="ring-svg-container">
++                        <svg class="ring-svg" viewBox="0 0 36 36">
++                          <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3"></path>
++                          <path id="lh-seo-ring" class="ring-fill color-success" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#34f741" stroke-width="3" stroke-dasharray="90, 100"></path>
++                        </svg>
++                        <div id="lh-seo-val" class="ring-value">90</div>
++                      </div>
++                      <span class="ring-label">SEO</span>
++                    </div>
++
++                  </div>
++
++                  <!-- 6 Core Lighthouse Audits -->
++                  <div class="lighthouse-audits-grid">
++                    
++                    <div class="audit-card">
++                      <div class="audit-header">
++                        <span class="audit-title">First Contentful Paint (FCP)</span>
++                        <div id="fcp-dot" class="audit-status-dot dot-warn"></div>
++                      </div>
++                      <div id="fcp-val" class="audit-value">3.28s</div>
++                    </div>
++
++                    <div class="audit-card">
++                      <div class="audit-header">
++                        <span class="audit-title">Total Blocking Time (TBT)</span>
++                        <div id="tbt-dot" class="audit-status-dot dot-warn"></div>
++                      </div>
++                      <div id="tbt-val" class="audit-value">1.11s</div>
++                    </div>
++
++                    <div class="audit-card">
++                      <div class="audit-header">
++                        <span class="audit-title">Time to Interactive (TTI)</span>
++                        <div id="tti-dot" class="audit-status-dot dot-poor"></div>
++                      </div>
++                      <div id="tti-val" class="audit-value">9.8s</div>
++                    </div>
++
++                    <div class="audit-card">
++                      <div class="audit-header">
++                        <span class="audit-title">Largest Contentful Paint (LCP)</span>
++                        <div id="lcp-dot" class="audit-status-dot dot-warn"></div>
++                      </div>
++                      <div id="lcp-val" class="audit-value">4.09s</div>
++                    </div>
++
++                    <div class="audit-card">
++                      <div class="audit-header">
++                        <span class="audit-title">Speed Index (SI)</span>
++                        <div id="si-dot" class="audit-status-dot dot-warn"></div>
++                      </div>
++                      <div id="si-val" class="audit-value">5.8s</div>
++                    </div>
++
++                    <div class="audit-card">
++                      <div class="audit-header">
++                        <span class="audit-title">Cumulative Layout Shift (CLS)</span>
++                        <div id="cls-dot" class="audit-status-dot dot-success"></div>
++                      </div>
++                      <div id="cls-val" class="audit-value">0.057</div>
++                    </div>
++
++                  </div>
++
+                 </div>
+-                <input type="range" id="diag-hours" class="diagnostic-range-slider" min="2" max="80" step="1" value="51">
+               </div>
+             </div>
+-            <div class="diagnostic-results-panel">
+-              <div class="diagnostic-score-row">
+-                <div class="diagnostic-score-box">
+-                  <span class="diagnostic-score-label">Brand IQ Score</span>
+-                  <span id="diag-score" class="diagnostic-score-number">63/100</span>
+-                </div>
+-                <span id="diag-rating" class="diagnostic-rating-badge warn">Vulnerable</span>
++
++            <!-- PANEL 3: JOURNEY MATRIX -->
++            <div class="dashboard-panel" data-panel="journeys">
++              <div class="journey-matrix-overflow">
++                <table class="journey-matrix-table">
++                  <thead>
++                    <tr>
++                      <th>Touchpoint Journey</th>
++                      <th>VidaVegas</th>
++                      <th>MiCasino</th>
++                      <th>CoolBetChile</th>
++                      <th>Betsson1001</th>
++                      <th class="jurnii-bench-col">Jurnii Avg</th>
++                    </tr>
++                  </thead>
++                  <tbody>
++                    <tr>
++                      <td class="journey-touchpoint">01. Entry & Homepage</td>
++                      <td><span class="score-badge badge-success">87</span></td>
++                      <td><span class="score-badge badge-poor">55</span></td>
++                      <td><span class="score-badge badge-warn">68</span></td>
++                      <td><span class="score-badge badge-warn">70</span></td>
++                      <td class="jurnii-bench-col"><span class="score-badge badge-warn">70.0</span></td>
++                    </tr>
++                    <tr>
++                      <td class="journey-touchpoint">02. Registration</td>
++                      <td><span class="score-badge badge-warn">62</span></td>
++                      <td><span class="score-badge badge-warn">68</span></td>
++                      <td><span class="score-badge badge-warn">72</span></td>
++                      <td><span class="score-badge badge-warn">65</span></td>
++                      <td class="jurnii-bench-col"><span class="score-badge badge-warn">66.8</span></td>
++                    </tr>
++                    <tr>
++                      <td class="journey-touchpoint">03. Signing-in</td>
++                      <td><span class="score-badge badge-warn">64</span></td>
++                      <td><span class="score-badge badge-warn">60</span></td>
++                      <td><span class="score-badge badge-warn">70</span></td>
++                      <td><span class="score-badge badge-warn">68</span></td>
++                      <td class="jurnii-bench-col"><span class="score-badge badge-warn">65.5</span></td>
++                    </tr>
++                    <tr>
++                      <td class="journey-touchpoint">04. Finding Games</td>
++                      <td><span class="score-badge badge-warn">60</span></td>
++                      <td><span class="score-badge badge-warn">62</span></td>
++                      <td><span class="score-badge badge-warn">64</span></td>
++                      <td><span class="score-badge badge-warn">62</span></td>
++                      <td class="jurnii-bench-col"><span class="score-badge badge-warn">62.0</span></td>
++                    </tr>
++                    <tr>
++                      <td class="journey-touchpoint">05. Playing Games</td>
++                      <td><span class="score-badge badge-warn">65</span></td>
++                      <td><span class="score-badge badge-poor">58</span></td>
++                      <td><span class="score-badge badge-warn">66</span></td>
++                      <td><span class="score-badge badge-warn">64</span></td>
++                      <td class="jurnii-bench-col"><span class="score-badge badge-warn">63.3</span></td>
++                    </tr>
++                    <tr>
++                      <td class="journey-touchpoint">06. Finding Bets</td>
++                      <td><span class="score-badge badge-poor">58</span></td>
++                      <td><span class="score-badge badge-poor">52</span></td>
++                      <td><span class="score-badge badge-warn">60</span></td>
++                      <td><span class="score-badge badge-warn">60</span></td>
++                      <td class="jurnii-bench-col"><span class="score-badge badge-poor">57.5</span></td>
++                    </tr>
++                    <tr>
++                      <td class="journey-touchpoint">07. Placing Bets</td>
++                      <td><span class="score-badge badge-warn">69</span></td>
++                      <td><span class="score-badge badge-poor">56</span></td>
++                      <td><span class="score-badge badge-warn">62</span></td>
++                      <td><span class="score-badge badge-warn">66</span></td>
++                      <td class="jurnii-bench-col"><span class="score-badge badge-warn">63.3</span></td>
++                    </tr>
++                    <tr>
++                      <td class="journey-touchpoint">08. Bonuses & Promotions</td>
++                      <td><span class="score-badge badge-warn">63</span></td>
++                      <td><span class="score-badge badge-warn">70</span></td>
++                      <td><span class="score-badge badge-success">80</span></td>
++                      <td><span class="score-badge badge-warn">74</span></td>
++                      <td class="jurnii-bench-col"><span class="score-badge badge-warn">71.8</span></td>
++                    </tr>
++                    <tr>
++                      <td class="journey-touchpoint">09. Getting Help</td>
++                      <td><span class="score-badge badge-poor">58</span></td>
++                      <td><span class="score-badge badge-poor">48</span></td>
++                      <td><span class="score-badge badge-warn">75</span></td>
++                      <td><span class="score-badge badge-poor">58</span></td>
++                      <td class="jurnii-bench-col"><span class="score-badge badge-poor">59.8</span></td>
++                    </tr>
++                    <tr>
++                      <td class="journey-touchpoint">10. Account Management</td>
++                      <td><span class="score-badge badge-warn">62</span></td>
++                      <td><span class="score-badge badge-warn">62</span></td>
++                      <td><span class="score-badge badge-warn">65</span></td>
++                      <td><span class="score-badge badge-warn">63</span></td>
++                      <td class="jurnii-bench-col"><span class="score-badge badge-warn">63.0</span></td>
++                    </tr>
++                  </tbody>
++                </table>
+               </div>
+-              <div class="diagnostic-breakdown">
+-                <div class="diagnostic-metric-card">
+-                  <div class="label-group">
+-                    <span class="title">Est. Annual Promo Leakage</span>
+-                    <span class="desc">Promotional abuse, over-generosity & delays</span>
++            </div>
++
++            <!-- PANEL 4: USABILITY HEURISTICS -->
++            <div class="dashboard-panel" data-panel="usability">
++              <div class="usability-heuristics-grid">
++                
++                <!-- Feedback -->
++                <div class="heuristic-card">
++                  <div class="heuristic-meta">
++                    <span class="h-num">01</span>
++                    <span class="h-name">System Feedback</span>
++                  </div>
++                  <p class="h-desc">Frictionless transitions, loader cues, and visual response latencies across core checkout and login funnels.</p>
++                  <div class="heuristic-chart">
++                    <div class="h-bar-row">
++                      <span class="h-brand-lbl">VV</span>
++                      <div class="h-bar-track"><div class="h-bar-fill color-poor" style="width: 60%;"></div></div>
++                      <span class="h-val-lbl">60</span>
++                    </div>
++                    <div class="h-bar-row">
++                      <span class="h-brand-lbl">MC</span>
++                      <div class="h-bar-track"><div class="h-bar-fill color-warn" style="width: 72%;"></div></div>
++                      <span class="h-val-lbl">72</span>
++                    </div>
++                    <div class="h-bar-row">
++                      <span class="h-brand-lbl">CB</span>
++                      <div class="h-bar-track"><div class="h-bar-fill color-warn" style="width: 75%;"></div></div>
++                      <span class="h-val-lbl">75</span>
++                    </div>
++                    <div class="h-bar-row">
++                      <span class="h-brand-lbl">BT</span>
++                      <div class="h-bar-track"><div class="h-bar-fill color-warn" style="width: 68%;"></div></div>
++                      <span class="h-val-lbl">68</span>
++                    </div>
++                  </div>
++                </div>
++
++                <!-- Match -->
++                <div class="heuristic-card">
++                  <div class="heuristic-meta">
++                    <span class="h-num">02</span>
++                    <span class="h-name">Match System & Real World</span>
++                  </div>
++                  <p class="h-desc">Natural terminology, intuitive sports betting slippage controls, and familiar payment/payout layouts.</p>
++                  <div class="heuristic-chart">
++                    <div class="h-bar-row">
++                      <span class="h-brand-lbl">VV</span>
++                      <div class="h-bar-track"><div class="h-bar-fill color-purple" style="width: 91%;"></div></div>
++                      <span class="h-val-lbl">91</span>
++                    </div>
++                    <div class="h-bar-row">
++                      <span class="h-brand-lbl">MC</span>
++                      <div class="h-bar-track"><div class="h-bar-fill color-success" style="width: 78%;"></div></div>
++                      <span class="h-val-lbl">78</span>
++                    </div>
++                    <div class="h-bar-row">
++                      <span class="h-brand-lbl">CB</span>
++                      <div class="h-bar-track"><div class="h-bar-fill color-success" style="width: 84%;"></div></div>
++                      <span class="h-val-lbl">84</span>
++                    </div>
++                    <div class="h-bar-row">
++                      <span class="h-brand-lbl">BT</span>
++                      <div class="h-bar-track"><div class="h-bar-fill color-success" style="width: 80%;"></div></div>
++                      <span class="h-val-lbl">80</span>
++                    </div>
++                  </div>
++                </div>
++
++                <!-- Control -->
++                <div class="heuristic-card">
++                  <div class="heuristic-meta">
++                    <span class="h-num">03</span>
++                    <span class="h-name">User Control & Freedom</span>
++                  </div>
++                  <p class="h-desc">Simplicity of canceling bets, returning to prior screens, withdrawing deposits, and exiting modals.</p>
++                  <div class="heuristic-chart">
++                    <div class="h-bar-row">
++                      <span class="h-brand-lbl">VV</span>
++                      <div class="h-bar-track"><div class="h-bar-fill color-warn" style="width: 62%;"></div></div>
++                      <span class="h-val-lbl">62</span>
++                    </div>
++                    <div class="h-bar-row">
++                      <span class="h-brand-lbl">MC</span>
++                      <div class="h-bar-track"><div class="h-bar-fill color-warn" style="width: 75%;"></div></div>
++                      <span class="h-val-lbl">75</span>
++                    </div>
++                    <div class="h-bar-row">
++                      <span class="h-brand-lbl">CB</span>
++                      <div class="h-bar-track"><div class="h-bar-fill color-success" style="width: 78%;"></div></div>
++                      <span class="h-val-lbl">78</span>
++                    </div>
++                    <div class="h-bar-row">
++                      <span class="h-brand-lbl">BT</span>
++                      <div class="h-bar-track"><div class="h-bar-fill color-warn" style="width: 72%;"></div></div>
++                      <span class="h-val-lbl">72</span>
++                    </div>
++                  </div>
++                </div>
++
++                <!-- Consistency -->
++                <div class="heuristic-card">
++                  <div class="heuristic-meta">
++                    <span class="h-num">04</span>
++                    <span class="h-name">Consistency & Standards</span>
++                  </div>
++                  <p class="h-desc">Adherence to established patterns in game categorization, sports lobby headers, and wallet locations.</p>
++                  <div class="heuristic-chart">
++                    <div class="h-bar-row">
++                      <span class="h-brand-lbl">VV</span>
++                      <div class="h-bar-track"><div class="h-bar-fill color-warn" style="width: 65%;"></div></div>
++                      <span class="h-val-lbl">65</span>
++                    </div>
++                    <div class="h-bar-row">
++                      <span class="h-brand-lbl">MC</span>
++                      <div class="h-bar-track"><div class="h-bar-fill color-success" style="width: 82%;"></div></div>
++                      <span class="h-val-lbl">82</span>
++                    </div>
++                    <div class="h-bar-row">
++                      <span class="h-brand-lbl">CB</span>
++                      <div class="h-bar-track"><div class="h-bar-fill color-success" style="width: 85%;"></div></div>
++                      <span class="h-val-lbl">85</span>
++                    </div>
++                    <div class="h-bar-row">
++                      <span class="h-brand-lbl">BT</span>
++                      <div class="h-bar-track"><div class="h-bar-fill color-success" style="width: 78%;"></div></div>
++                      <span class="h-val-lbl">78</span>
++                    </div>
+                   </div>
+-                  <span id="diag-leakage" class="val leak">€1.9M</span>
+                 </div>
+-                <div class="diagnostic-metric-card">
+-                  <div class="label-group">
+-                    <span class="title">Manual Burden Cost</span>
+-                    <span class="desc">Compiling, cleaning & benchmarking sheets</span>
++
++                <!-- Prevention -->
++                <div class="heuristic-card">
++                  <div class="heuristic-meta">
++                    <span class="h-num">05</span>
++                    <span class="h-name">Error Prevention</span>
++                  </div>
++                  <p class="h-desc">Proactive alerts for invalid card inputs, mismatched registration details, or bet limits before execution.</p>
++                  <div class="heuristic-chart">
++                    <div class="h-bar-row">
++                      <span class="h-brand-lbl">VV</span>
++                      <div class="h-bar-track"><div class="h-bar-fill color-poor" style="width: 58%;"></div></div>
++                      <span class="h-val-lbl">58</span>
++                    </div>
++                    <div class="h-bar-row">
++                      <span class="h-brand-lbl">MC</span>
++                      <div class="h-bar-track"><div class="h-bar-fill color-success" style="width: 80%;"></div></div>
++                      <span class="h-val-lbl">80</span>
++                    </div>
++                    <div class="h-bar-row">
++                      <span class="h-brand-lbl">CB</span>
++                      <div class="h-bar-track"><div class="h-bar-fill color-success" style="width: 82%;"></div></div>
++                      <span class="h-val-lbl">82</span>
++                    </div>
++                    <div class="h-bar-row">
++                      <span class="h-brand-lbl">BT</span>
++                      <div class="h-bar-track"><div class="h-bar-fill color-warn" style="width: 74%;"></div></div>
++                      <span class="h-val-lbl">74</span>
++                    </div>
+                   </div>
+-                  <span id="diag-overhead" class="val muted">€127,296</span>
+                 </div>
+-                <div class="diagnostic-metric-card">
+-                  <div class="label-group">
+-                    <span class="title">Speed-to-Insight Latency</span>
+-                    <span class="desc">Competitor promo timeline delay</span>
++
++                <!-- Flexibility -->
++                <div class="heuristic-card">
++                  <div class="heuristic-meta">
++                    <span class="h-num">06</span>
++                    <span class="h-name">Flexibility & Efficiency</span>
++                  </div>
++                  <p class="h-desc">Accelerators for returning players, favorites lobbies, and streamlined quick-bet modules on live sports.</p>
++                  <div class="heuristic-chart">
++                    <div class="h-bar-row">
++                      <span class="h-brand-lbl">VV</span>
++                      <div class="h-bar-track"><div class="h-bar-fill color-poor" style="width: 52%;"></div></div>
++                      <span class="h-val-lbl">52</span>
++                    </div>
++                    <div class="h-bar-row">
++                      <span class="h-brand-lbl">MC</span>
++                      <div class="h-bar-track"><div class="h-bar-fill color-warn" style="width: 72%;"></div></div>
++                      <span class="h-val-lbl">72</span>
++                    </div>
++                    <div class="h-bar-row">
++                      <span class="h-brand-lbl">CB</span>
++                      <div class="h-bar-track"><div class="h-bar-fill color-success" style="width: 78%;"></div></div>
++                      <span class="h-val-lbl">78</span>
++                    </div>
++                    <div class="h-bar-row">
++                      <span class="h-brand-lbl">BT</span>
++                      <div class="h-bar-track"><div class="h-bar-fill color-warn" style="width: 70%;"></div></div>
++                      <span class="h-val-lbl">70</span>
++                    </div>
+                   </div>
+-                  <span id="diag-latency" class="val warn">7.3 days</span>
+                 </div>
++
+               </div>
+-              <a href="#demo" class="diagnostic-cta-btn">
+-                <span>Unlock Full Optimization Plan</span>
+-                <i data-lucide="arrow-right"></i>
+-              </a>
+             </div>
++
+           </div>
++
++          <!-- Bottom Banner CTA -->
++          <div class="dashboard-footer-cta">
++            <div class="cta-narrative">
++              <h4>Benchmark Your Platform Against 300+ Competitors</h4>
++              <p>Get a comprehensive, automated audit mapping your direct user experience friction and speed indices against market leaders.</p>
++            </div>
++            <a href="#demo" class="diagnostic-cta-btn" style="max-width: 320px;">
++              <span>Explore Full Intelligence Suite</span>
++              <i data-lucide="arrow-right"></i>
++            </a>
++          </div>
++
+         </div>
+       </div>
+     </section>
+@@ -1028,7 +1431,7 @@
+   </main>
+ 
+   <!-- Footer -->
+-                                                              <footer class="footer">
++                                                                <footer class="footer">
+     <div class="container">
+       <div class="footer-grid">
+         <div class="footer-brand">
