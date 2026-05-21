@@ -2988,19 +2988,19 @@ h1.page-title { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.02; letter-s
 .jurnii-diagnostic-wrapper {
   margin-top: 64px;
   padding: 48px;
-  background: var(--concrete-950);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
+  background: #171a15;
+  border: 1px solid rgba(52, 247, 65, 0.12);
+  border-radius: 24px;
   color: #fff;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.6);
 }
 .jurnii-diagnostic-wrapper::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 80% 20%, rgba(52, 247, 65, 0.05) 0%, transparent 60%);
+  background: radial-gradient(circle at 80% 20%, rgba(52, 247, 65, 0.06) 0%, transparent 60%);
   pointer-events: none;
 }
 .diagnostic-header {
@@ -3041,7 +3041,7 @@ h1.page-title { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.02; letter-s
 .diagnostic-input-group {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 .diagnostic-label-row {
   display: flex;
@@ -3051,63 +3051,65 @@ h1.page-title { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.02; letter-s
   font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.55);
 }
 .diagnostic-val-badge {
-  padding: 4px 10px;
+  padding: 4px 12px;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--jurnii-400);
+  background: rgba(52, 247, 65, 0.08);
+  border: 1px solid rgba(52, 247, 65, 0.25);
+  color: #34f741;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  text-shadow: 0 0 10px rgba(52, 247, 65, 0.15);
 }
 .diagnostic-range-slider {
   -webkit-appearance: none;
   width: 100%;
   height: 6px;
   border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.12);
+  background: #2b3026;
   outline: none;
   cursor: pointer;
   transition: background 150ms ease;
 }
 .diagnostic-range-slider:hover {
-  background: rgba(255, 255, 255, 0.18);
+  background: #333a2e;
 }
 .diagnostic-range-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 9999px;
-  background: var(--jurnii-500);
-  box-shadow: 0 0 8px var(--jurnii-600);
-  transition: transform 100ms ease, background-color 100ms ease;
+  background: #34f741;
+  box-shadow: 0 0 12px rgba(52, 247, 65, 0.7);
+  transition: transform 100ms ease, background-color 100ms ease, box-shadow 100ms ease;
 }
 .diagnostic-range-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.15);
-  background: var(--jurnii-400);
+  transform: scale(1.2);
+  box-shadow: 0 0 16px rgba(52, 247, 65, 0.9);
 }
 .diagnostic-range-slider::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 9999px;
-  background: var(--jurnii-500);
-  box-shadow: 0 0 8px var(--jurnii-600);
+  background: #34f741;
+  box-shadow: 0 0 12px rgba(52, 247, 65, 0.7);
   border: none;
   cursor: pointer;
-  transition: transform 100ms ease, background-color 100ms ease;
+  transition: transform 100ms ease, background-color 100ms ease, box-shadow 100ms ease;
 }
 .diagnostic-range-slider::-moz-range-thumb:hover {
-  transform: scale(1.15);
-  background: var(--jurnii-400);
+  transform: scale(1.2);
+  box-shadow: 0 0 16px rgba(52, 247, 65, 0.9);
 }
 
 .diagnostic-results-panel {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
+  background: rgba(19, 22, 17, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
   padding: 32px;
   display: flex;
   flex-direction: column;
@@ -3120,7 +3122,7 @@ h1.page-title { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.02; letter-s
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 10% 90%, rgba(255, 82, 82, 0.03) 0%, transparent 60%);
+  background: radial-gradient(circle at 10% 90%, rgba(255, 82, 82, 0.02) 0%, transparent 60%);
   pointer-events: none;
 }
 .diagnostic-score-row {
@@ -3133,21 +3135,22 @@ h1.page-title { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.02; letter-s
 .diagnostic-score-box {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 .diagnostic-score-label {
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.45);
 }
 .diagnostic-score-number {
-  font-size: 36px;
+  font-size: 42px;
   font-weight: 800;
-  color: var(--jurnii-400);
+  color: #34f741;
   font-family: var(--font-mono);
   line-height: 1;
+  text-shadow: 0 0 20px rgba(52, 247, 65, 0.25);
 }
 .diagnostic-rating-badge {
   padding: 6px 14px;
@@ -3157,22 +3160,22 @@ h1.page-title { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.02; letter-s
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-family: var(--font-mono);
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.03);
 }
 .diagnostic-rating-badge.fail {
-  background: rgba(239, 68, 68, 0.12);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.06);
+  border: 1px solid rgba(239, 68, 68, 0.35);
   color: #ef4444;
 }
 .diagnostic-rating-badge.warn {
-  background: rgba(245, 158, 11, 0.12);
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  background: rgba(245, 158, 11, 0.06);
+  border: 1px solid rgba(245, 158, 11, 0.35);
   color: #f59e0b;
 }
 .diagnostic-rating-badge.success {
-  background: rgba(52, 247, 65, 0.12);
-  border: 1px solid rgba(52, 247, 65, 0.3);
-  color: var(--jurnii-400);
+  background: rgba(52, 247, 65, 0.06);
+  border: 1px solid rgba(52, 247, 65, 0.35);
+  color: #34f741;
+  text-shadow: 0 0 10px rgba(52, 247, 65, 0.15);
 }
 
 .diagnostic-breakdown {
@@ -3184,10 +3187,10 @@ h1.page-title { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.02; letter-s
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 16px;
+  padding: 14px 18px;
   background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
 }
 .diagnostic-metric-card .label-group {
   display: flex;
@@ -3213,10 +3216,11 @@ h1.page-title { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.02; letter-s
   text-shadow: 0 0 10px rgba(248, 113, 113, 0.25);
 }
 .diagnostic-metric-card .val.muted {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.9);
 }
 .diagnostic-metric-card .val.warn {
   color: #fbbf24;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.25);
 }
 
 .diagnostic-cta-btn {
@@ -3226,22 +3230,22 @@ h1.page-title { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.02; letter-s
   gap: 8px;
   width: 100%;
   padding: 14px;
-  background: var(--jurnii-500);
-  border: 1px solid var(--jurnii-500);
-  color: var(--concrete-950);
+  background: #34f741;
+  border: 1px solid #34f741;
+  color: #131611;
   font-size: 14px;
   font-weight: 700;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   transition: transform 150ms cubic-bezier(0.2, 0.8, 0.2, 1), background 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
-  box-shadow: 0 0 12px rgba(52, 247, 65, 0.25);
+  box-shadow: 0 4px 20px rgba(52, 247, 65, 0.25);
   text-decoration: none;
 }
 .diagnostic-cta-btn:hover {
   transform: translateY(-1px);
-  background: var(--jurnii-400);
-  border-color: var(--jurnii-400);
-  box-shadow: 0 0 16px rgba(52, 247, 65, 0.4);
+  background: #2ee63b;
+  border-color: #2ee63b;
+  box-shadow: 0 6px 24px rgba(52, 247, 65, 0.4);
 }
 .diagnostic-cta-btn i {
   width: 16px;

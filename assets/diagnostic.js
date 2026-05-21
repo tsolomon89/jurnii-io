@@ -54,8 +54,8 @@
 
     // Update slider badges
     budgetVal.innerText = formatCurrency(budgetMonthly);
-    marketsVal.innerText = `${marketsCount} market${marketsCount > 1 ? "s" : ""}`;
-    hoursVal.innerText = `${manualHoursWeekly} hr${manualHoursWeekly > 1 ? "s" : ""}/wk`;
+    marketsVal.innerText = `${marketsCount} MARKET${marketsCount > 1 ? "S" : ""}`;
+    hoursVal.innerText = `${manualHoursWeekly} HRS/WK`;
 
     // 1. Estimate Causal ROI Leakage
     // Base leakage is 4.5% of promotional budget, scaling with complexity (markets & manual labor friction)
