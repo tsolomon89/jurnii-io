@@ -12,7 +12,7 @@
 <body>
 
   <!-- Navigation -->
-                                                            <nav class="nav">
+                                                              <nav class="nav">
     <div class="container nav-inner">
       <div class="nav-brand">
         <a href="index.html"><img src="assets/jurnii-dark-full.svg" alt="Jurnii Logo" class="logo-light"></a>
@@ -440,6 +440,80 @@
       </div>
     </section>
 
+    <!-- Brand IQ Diagnostic Section -->
+    <section class="section section-dark" style="padding-top: 0;">
+      <div class="container">
+        <div class="jurnii-diagnostic-wrapper animate-on-scroll">
+          <div class="diagnostic-header">
+            <p class="eyebrow" style="color: var(--jurnii-400); margin: 0;"><span class="dot" style="background: var(--jurnii-400);"></span> INTERACTIVE DIAGNOSTIC</p>
+            <h3>Calculate Your Brand Intelligence IQ & Commercial Leakage</h3>
+            <p>Adjust your operational parameters below to reveal estimated promo leakage, manual overhead, and insight latency under your current tooling setup.</p>
+          </div>
+          <div class="diagnostic-grid">
+            <div class="diagnostic-controls">
+              <div class="diagnostic-input-group">
+                <div class="diagnostic-label-row">
+                  <span>Monthly Promotional Budget</span>
+                  <span id="diag-budget-val" class="diagnostic-val-badge">€250,000</span>
+                </div>
+                <input type="range" id="diag-budget" class="diagnostic-range-slider" min="10000" max="2000000" step="10000" value="250000">
+              </div>
+              <div class="diagnostic-input-group">
+                <div class="diagnostic-label-row">
+                  <span>Active Jurisdictions / Markets</span>
+                  <span id="diag-markets-val" class="diagnostic-val-badge">4 markets</span>
+                </div>
+                <input type="range" id="diag-markets" class="diagnostic-range-slider" min="1" max="15" step="1" value="4">
+              </div>
+              <div class="diagnostic-input-group">
+                <div class="diagnostic-label-row">
+                  <span>Weekly Report Compilation Overhead</span>
+                  <span id="diag-hours-val" class="diagnostic-val-badge">15 hrs/wk</span>
+                </div>
+                <input type="range" id="diag-hours" class="diagnostic-range-slider" min="2" max="80" step="1" value="15">
+              </div>
+            </div>
+            <div class="diagnostic-results-panel">
+              <div class="diagnostic-score-row">
+                <div class="diagnostic-score-box">
+                  <span class="diagnostic-score-label">Brand IQ Score</span>
+                  <span id="diag-score" class="diagnostic-score-number">72/100</span>
+                </div>
+                <span id="diag-rating" class="diagnostic-rating-badge success">Optimizing</span>
+              </div>
+              <div class="diagnostic-breakdown">
+                <div class="diagnostic-metric-card">
+                  <div class="label-group">
+                    <span class="title">Est. Annual Promo Leakage</span>
+                    <span class="desc">Promotional abuse, over-generosity & delays</span>
+                  </div>
+                  <span id="diag-leakage" class="val leak">€230,000</span>
+                </div>
+                <div class="diagnostic-metric-card">
+                  <div class="label-group">
+                    <span class="title">Manual Burden Cost</span>
+                    <span class="desc">Compiling, cleaning & benchmarking sheets</span>
+                  </div>
+                  <span id="diag-overhead" class="val muted">€37,440</span>
+                </div>
+                <div class="diagnostic-metric-card">
+                  <div class="label-group">
+                    <span class="title">Speed-to-Insight Latency</span>
+                    <span class="desc">Competitor promo timeline delay</span>
+                  </div>
+                  <span id="diag-latency" class="val warn">4.0 days</span>
+                </div>
+              </div>
+              <a href="#demo" class="diagnostic-cta-btn">
+                <span>Unlock Full Optimization Plan</span>
+                <i data-lucide="arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Section 3: Who Jurnii Is (PDF Page 3) -->
     <section class="section section-dark">
       <div class="container">
@@ -809,12 +883,14 @@
               </div>
               <div class="dashboard-mockup-grid">
                 <!-- Promo Index (Left) -->
-                <div class="dashboard-card-inner">
+                <div class="dashboard-card-inner animate-on-scroll">
                   <div class="promo-index-header">
                     <h4 class="promo-index-title">Generosity Index</h4>
                     <span class="promo-index-comparison">+4.2%</span>
                   </div>
-                  <div class="promo-index-value">84/100</div>
+                  <div class="promo-index-value">
+                    <span class="count-up-stat animate-on-scroll" data-target-value="84" data-suffix="/100">0/100</span>
+                  </div>
                   <div class="dashboard-mini-chart">
                     <div class="mini-chart-bar" style="height: 40%"></div>
                     <div class="mini-chart-bar" style="height: 55%"></div>
@@ -825,7 +901,7 @@
                 </div>
                 
                 <!-- Onboarding Funnel (Right) -->
-                <div class="dashboard-card-inner">
+                <div class="dashboard-card-inner animate-on-scroll">
                   <h4 class="onboarding-funnel-header">Funnel Leakage Audit</h4>
                   
                   <div class="funnel-step">
@@ -834,17 +910,17 @@
                       <span>92%</span>
                     </div>
                     <div class="funnel-step-bar-bg">
-                      <div class="funnel-step-bar-fill jurnii-fill" style="width: 92%"></div>
+                      <div class="funnel-step-bar-fill jurnii-fill funnel-progress-fill" data-target-width="92%"></div>
                     </div>
                   </div>
                   
                   <div class="funnel-step">
                     <div class="funnel-step-meta">
                       <span class="funnel-step-name">2. KYC Checkpoint</span>
-                      <span style="color: #ff6b6b; font-weight: 600;">58% (Leakage)</span>
+                      <span style="color: #ff6b6b; font-weight: 600;">78% (Leakage)</span>
                     </div>
                     <div class="funnel-step-bar-bg">
-                      <div class="funnel-step-bar-fill leak-fill" style="width: 58%"></div>
+                      <div class="funnel-step-bar-fill leak-fill funnel-progress-fill" data-target-width="78%"></div>
                     </div>
                   </div>
                   
@@ -854,7 +930,7 @@
                       <span>44%</span>
                     </div>
                     <div class="funnel-step-bar-bg">
-                      <div class="funnel-step-bar-fill jurnii-fill" style="width: 44%"></div>
+                      <div class="funnel-step-bar-fill jurnii-fill funnel-progress-fill" data-target-width="44%"></div>
                     </div>
                   </div>
                 </div>
@@ -952,7 +1028,7 @@
   </main>
 
   <!-- Footer -->
-                                                  <footer class="footer">
+                                                    <footer class="footer">
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
@@ -999,12 +1075,12 @@
     </div>
   </footer>
 
+  <script src="assets/animations.js"></script>
+  <script src="assets/diagnostic.js"></script>
   <script>
     if (typeof lucide !== 'undefined') {
       lucide.createIcons();
     }
-    
-    
   </script>
 </body>
 </html>

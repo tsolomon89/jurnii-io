@@ -372,6 +372,26 @@ h1.page-title { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.02; letter-s
 .resource-card .meta { display: flex; justify-content: space-between; align-items: center; padding-top: 16px; margin-top: auto; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted-foreground); }
 .resource-card .meta .read-arrow { display: inline-flex; align-items: center; gap: 6px; color: var(--foreground); font-weight: 500; transition: gap 150ms ease; }
 .resource-card:hover .meta .read-arrow { gap: 10px; }
+.resource-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: rgba(148, 255, 150, 0.12);
+  color: var(--jurnii-700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+[data-theme="dark"] .resource-card-icon,
+[data-theme="jurnii-v1"] .resource-card-icon {
+  background: rgba(87, 255, 96, 0.15);
+  color: var(--jurnii-300);
+}
+.resource-card-icon i {
+  width: 20px;
+  height: 20px;
+}
 
 @media (max-width: 1024px) { .resources-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 640px) { .resources-grid { grid-template-columns: 1fr; } }
@@ -2798,4 +2818,438 @@ h1.page-title { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.02; letter-s
     gap: 24px;
   }
 }
+
+/* ============================================================
+   VISUAL COHERENCE SPRINT ADDITIONS
+   ============================================================ */
+
+/* 10. Scroll-Based Micro-Animations & Transitions (Option 5) */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 800ms cubic-bezier(0.16, 1, 0.3, 1), transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+.animate-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Specific Delay Utilities */
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+.delay-400 { transition-delay: 400ms; }
+
+/* Dynamic Progress Bar Smooth Loading */
+.funnel-progress-fill {
+  width: 0%;
+  transition: width 1400ms cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: width;
+}
+
+/* 11. Master Directory & Hub Page Semantic Classes (Option 3) */
+.hub-hero-section {
+  background: linear-gradient(180deg, var(--jurnii-50) 0%, transparent 100%);
+  padding: 80px 0 60px;
+}
+[data-theme="dark"] .hub-hero-section {
+  background: linear-gradient(180deg, rgba(87, 255, 96, 0.04) 0%, transparent 100%);
+}
+[data-theme="jurnii-v1"] .hub-hero-section {
+  background: linear-gradient(180deg, rgba(148, 255, 150, 0.04) 0%, transparent 100%);
+}
+.hub-hero-container {
+  max-width: 1100px;
+}
+.hub-hero-kicker {
+  color: var(--jurnii-600);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+[data-theme="dark"] .hub-hero-kicker,
+[data-theme="jurnii-v1"] .hub-hero-kicker {
+  color: var(--jurnii-300);
+}
+.hub-hero-title {
+  font-size: clamp(36px, 4.4vw, 48px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 12px 0 24px;
+  line-height: 1.1;
+}
+.hub-hero-lede {
+  font-size: 18px;
+  color: var(--muted-foreground);
+  max-width: 720px;
+  line-height: 1.6;
+  margin: 0;
+}
+.hub-grid-section {
+  padding: 40px 0 100px;
+}
+.hub-grid-container {
+  max-width: 1100px;
+}
+.hub-directory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+@media (max-width: 1024px) {
+  .hub-directory-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .hub-directory-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.hub-directory-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 220ms ease, transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.hub-directory-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--concrete-300);
+}
+[data-theme="dark"] .hub-directory-card:hover,
+[data-theme="jurnii-v1"] .hub-directory-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+.hub-card-header {
+  text-decoration: none;
+  display: block;
+  margin-bottom: 16px;
+}
+.hub-card-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-bottom: 8px;
+  border-bottom: 1px dotted var(--border);
+  margin: 0;
+  transition: color 150ms ease;
+}
+.hub-directory-card:hover .hub-card-title {
+  color: var(--jurnii-600);
+}
+[data-theme="dark"] .hub-directory-card:hover .hub-card-title,
+[data-theme="jurnii-v1"] .hub-directory-card:hover .hub-card-title {
+  color: var(--jurnii-300);
+}
+.hub-card-desc {
+  font-size: 13px;
+  color: var(--muted-foreground);
+  line-height: 1.4;
+  margin: 0 0 20px 0;
+}
+.hub-card-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.hub-card-link-item {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--jurnii-700);
+  transition: color 150ms ease, padding-left 150ms ease;
+}
+[data-theme="dark"] .hub-card-link-item,
+[data-theme="jurnii-v1"] .hub-card-link-item {
+  color: var(--jurnii-200);
+}
+.hub-card-link-item:hover {
+  color: var(--jurnii-500);
+  padding-left: 4px;
+}
+.hub-card-link-item i {
+  width: 14px;
+  height: 14px;
+}
+
+/* 12. Interactive Brand Intelligence Diagnostic (Option 1) */
+.jurnii-diagnostic-wrapper {
+  margin-top: 64px;
+  padding: 48px;
+  background: var(--concrete-950);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.4);
+}
+.jurnii-diagnostic-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(52, 247, 65, 0.05) 0%, transparent 60%);
+  pointer-events: none;
+}
+.diagnostic-header {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 40px;
+}
+.diagnostic-header h3 {
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 8px 0 12px;
+  color: #fff;
+}
+.diagnostic-header p {
+  font-size: 14.5px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.5;
+  margin: 0;
+}
+.diagnostic-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .diagnostic-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+}
+.diagnostic-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.diagnostic-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.diagnostic-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+.diagnostic-val-badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--jurnii-400);
+  font-weight: 700;
+  font-size: 13px;
+}
+.diagnostic-range-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.12);
+  outline: none;
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+.diagnostic-range-slider:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+.diagnostic-range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  background: var(--jurnii-500);
+  box-shadow: 0 0 8px var(--jurnii-600);
+  transition: transform 100ms ease, background-color 100ms ease;
+}
+.diagnostic-range-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  background: var(--jurnii-400);
+}
+.diagnostic-range-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  background: var(--jurnii-500);
+  box-shadow: 0 0 8px var(--jurnii-600);
+  border: none;
+  cursor: pointer;
+  transition: transform 100ms ease, background-color 100ms ease;
+}
+.diagnostic-range-slider::-moz-range-thumb:hover {
+  transform: scale(1.15);
+  background: var(--jurnii-400);
+}
+
+.diagnostic-results-panel {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  position: relative;
+}
+.diagnostic-results-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 10% 90%, rgba(255, 82, 82, 0.03) 0%, transparent 60%);
+  pointer-events: none;
+}
+.diagnostic-score-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.diagnostic-score-box {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.diagnostic-score-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+.diagnostic-score-number {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--jurnii-400);
+  font-family: var(--font-mono);
+  line-height: 1;
+}
+.diagnostic-rating-badge {
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.03);
+}
+.diagnostic-rating-badge.fail {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}
+.diagnostic-rating-badge.warn {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #f59e0b;
+}
+.diagnostic-rating-badge.success {
+  background: rgba(52, 247, 65, 0.12);
+  border: 1px solid rgba(52, 247, 65, 0.3);
+  color: var(--jurnii-400);
+}
+
+.diagnostic-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.diagnostic-metric-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+.diagnostic-metric-card .label-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.diagnostic-metric-card .title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+}
+.diagnostic-metric-card .desc {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+}
+.diagnostic-metric-card .val {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 700;
+}
+.diagnostic-metric-card .val.leak {
+  color: #f87171;
+  text-shadow: 0 0 10px rgba(248, 113, 113, 0.25);
+}
+.diagnostic-metric-card .val.muted {
+  color: rgba(255, 255, 255, 0.6);
+}
+.diagnostic-metric-card .val.warn {
+  color: #fbbf24;
+}
+
+.diagnostic-cta-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px;
+  background: var(--jurnii-500);
+  border: 1px solid var(--jurnii-500);
+  color: var(--concrete-950);
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 150ms cubic-bezier(0.2, 0.8, 0.2, 1), background 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+  box-shadow: 0 0 12px rgba(52, 247, 65, 0.25);
+  text-decoration: none;
+}
+.diagnostic-cta-btn:hover {
+  transform: translateY(-1px);
+  background: var(--jurnii-400);
+  border-color: var(--jurnii-400);
+  box-shadow: 0 0 16px rgba(52, 247, 65, 0.4);
+}
+.diagnostic-cta-btn i {
+  width: 16px;
+  height: 16px;
+  transition: transform 150ms ease;
+}
+.diagnostic-cta-btn:hover i {
+  transform: translateX(2px);
+}
+
 

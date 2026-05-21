@@ -12,7 +12,7 @@
 <body>
 
   <!-- Navigation (Populated by script) -->
-                                        <nav class="nav">
+                                          <nav class="nav">
     <div class="container nav-inner">
       <div class="nav-brand">
         <a href="../index.html"><img src="../assets/jurnii-dark-full.svg" alt="Jurnii Logo" class="logo-light"></a>
@@ -284,155 +284,69 @@
   </nav>
 
   <main>
-    <!-- Features Hero -->
-    <section class="solution-hero" style="background: linear-gradient(180deg, var(--jurnii-50) 0%, transparent 100%); padding: 80px 0 60px;">
-      <div class="container" style="max-width: 1100px;">
-        <p class="page-hero-kicker" style="color: var(--jurnii-600); font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase;">Directory</p>
-        <h1 class="h1-page" style="font-size: 48px; font-weight: 800; letter-spacing: -0.03em; margin: 12px 0 24px;">Features & Toolsets</h1>
-        <p class="page-hero-lede" style="font-size: 18px; color: var(--muted-foreground); max-width: 720px; line-height: 1.6; margin: 0;">
+    <section class="hub-hero-section">
+      <div class="container hub-hero-container">
+        <p class="hub-hero-kicker">Directory</p>
+        <h1 class="hub-hero-title">Features & Toolsets</h1>
+        <p class="hub-hero-lede">
           Dive deep into the 16 granular features powering Jurnii's three primary intelligence layers. Select a toolset below to view product details, interface metrics, and integration capabilities.
         </p>
       </div>
     </section>
 
-    <!-- Features Directory Master Grid -->
-    <section style="padding: 40px 0 100px;">
-      <div class="container" style="max-width: 1100px;">
-        <div class="resources-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;">
+    <section class="hub-grid-section">
+      <div class="container hub-grid-container">
+        <div class="hub-directory-grid">
           
-          <!-- Column 1: Competitor Core -->
-          <div style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 20px;">
-            <div>
-              <h3 style="font-size: 16px; font-weight: 800; color: var(--foreground); text-transform: uppercase; letter-spacing: 0.05em; padding-bottom: 8px; border-bottom: 1px dotted var(--border); margin:0;">Competitor</h3>
-              <p style="font-size: 13px; color: var(--muted-foreground); line-height: 1.4; margin: 8px 0 0 0;">Automated parsing, positioning, and analysis of competitor structures.</p>
+          <div class="hub-directory-card">
+            <div class="hub-card-header">
+              <h3 class="hub-card-title">Competitor</h3>
             </div>
-            <div style="display: flex; flex-direction: column; gap: 16px;">
-              <a href="competitor-promotions.html" style="text-decoration:none; display:flex; flex-direction:column; gap:4px; font-size:14px; color:var(--foreground); transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
-                <span style="font-weight:700; color:var(--jurnii-700); display:flex; align-items:center; gap:8px;">
-                  <i data-lucide="tag" style="width:14px;height:14px;"></i> Promotions
-                </span>
-                <span style="font-size:12px; color:var(--muted-foreground); padding-left:22px; line-height:1.3;">Automate competitor campaign scraping.</span>
-              </a>
-              <a href="competitor-positioning.html" style="text-decoration:none; display:flex; flex-direction:column; gap:4px; font-size:14px; color:var(--foreground); transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
-                <span style="font-weight:700; color:var(--jurnii-700); display:flex; align-items:center; gap:8px;">
-                  <i data-lucide="map-pin" style="width:14px;height:14px;"></i> Positioning
-                </span>
-                <span style="font-size:12px; color:var(--muted-foreground); padding-left:22px; line-height:1.3;">Track rival brand core value propositions.</span>
-              </a>
-              <a href="competitor-comparison.html" style="text-decoration:none; display:flex; flex-direction:column; gap:4px; font-size:14px; color:var(--foreground); transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
-                <span style="font-weight:700; color:var(--jurnii-700); display:flex; align-items:center; gap:8px;">
-                  <i data-lucide="git-compare" style="width:14px;height:14px;"></i> Comparison
-                </span>
-                <span style="font-size:12px; color:var(--muted-foreground); padding-left:22px; line-height:1.3;">Side-by-side feature and technical audits.</span>
-              </a>
-              <a href="competitor-analysis.html" style="text-decoration:none; display:flex; flex-direction:column; gap:4px; font-size:14px; color:var(--foreground); transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
-                <span style="font-weight:700; color:var(--jurnii-700); display:flex; align-items:center; gap:8px;">
-                  <i data-lucide="bar-chart-2" style="width:14px;height:14px;"></i> Analysis
-                </span>
-                <span style="font-size:12px; color:var(--muted-foreground); padding-left:22px; line-height:1.3;">Deep statistical breakdown of market shares.</span>
-              </a>
+            <p class="hub-card-desc">Automated parsing, positioning, and analysis of competitor structures.</p>
+            <div class="hub-card-links">
+              <a href="competitor-promotions.html" class="hub-card-link-item"><i data-lucide="tag"></i> Promotions</a>
+              <a href="competitor-positioning.html" class="hub-card-link-item"><i data-lucide="map-pin"></i> Positioning</a>
+              <a href="competitor-comparison.html" class="hub-card-link-item"><i data-lucide="git-compare"></i> Comparison</a>
+              <a href="competitor-analysis.html" class="hub-card-link-item"><i data-lucide="bar-chart-2"></i> Analysis</a>
             </div>
           </div>
 
-          <!-- Column 2: Competitor Feed -->
-          <div style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 20px;">
-            <div>
-              <h3 style="font-size: 16px; font-weight: 800; color: var(--foreground); text-transform: uppercase; letter-spacing: 0.05em; padding-bottom: 8px; border-bottom: 1px dotted var(--border); margin:0;">Competitor Feed</h3>
-              <p style="font-size: 13px; color: var(--muted-foreground); line-height: 1.4; margin: 8px 0 0 0;">Real-time notifications, offer monitoring, and AI competitive insights.</p>
+          <div class="hub-directory-card">
+            <div class="hub-card-header">
+              <h3 class="hub-card-title">Competitor Feed</h3>
             </div>
-            <div style="display: flex; flex-direction: column; gap: 16px;">
-              <a href="competitor-offer-feed.html" style="text-decoration:none; display:flex; flex-direction:column; gap:4px; font-size:14px; color:var(--foreground); transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
-                <span style="font-weight:700; color:var(--jurnii-700); display:flex; align-items:center; gap:8px;">
-                  <i data-lucide="rss" style="width:14px;height:14px;"></i> Offer Feed
-                </span>
-                <span style="font-size:12px; color:var(--muted-foreground); padding-left:22px; line-height:1.3;">Continuous stream of promotional structures.</span>
-              </a>
-              <a href="competitor-live-feed.html" style="text-decoration:none; display:flex; flex-direction:column; gap:4px; font-size:14px; color:var(--foreground); transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
-                <span style="font-weight:700; color:var(--jurnii-700); display:flex; align-items:center; gap:8px;">
-                  <i data-lucide="activity" style="width:14px;height:14px;"></i> Live Feed
-                </span>
-                <span style="font-size:12px; color:var(--muted-foreground); padding-left:22px; line-height:1.3;">Real-time action logs of competitor updates.</span>
-              </a>
-              <a href="competitor-alerts.html" style="text-decoration:none; display:flex; flex-direction:column; gap:4px; font-size:14px; color:var(--foreground); transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
-                <span style="font-weight:700; color:var(--jurnii-700); display:flex; align-items:center; gap:8px;">
-                  <i data-lucide="bell" style="width:14px;height:14px;"></i> Alerts
-                </span>
-                <span style="font-size:12px; color:var(--muted-foreground); padding-left:22px; line-height:1.3;">Proactive alerts on competitor movements.</span>
-              </a>
-              <a href="competitor-ai-insights.html" style="text-decoration:none; display:flex; flex-direction:column; gap:4px; font-size:14px; color:var(--foreground); transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
-                <span style="font-weight:700; color:var(--jurnii-700); display:flex; align-items:center; gap:8px;">
-                  <i data-lucide="brain" style="width:14px;height:14px;"></i> AI Insights
-                </span>
-                <span style="font-size:12px; color:var(--muted-foreground); padding-left:22px; line-height:1.3;">AI-driven synthesis of rival marketing hooks.</span>
-              </a>
+            <p class="hub-card-desc">Real-time notifications, offer monitoring, and AI competitive insights.</p>
+            <div class="hub-card-links">
+              <a href="competitor-offer-feed.html" class="hub-card-link-item"><i data-lucide="rss"></i> Offer Feed</a>
+              <a href="competitor-live-feed.html" class="hub-card-link-item"><i data-lucide="activity"></i> Live Feed</a>
+              <a href="competitor-alerts.html" class="hub-card-link-item"><i data-lucide="bell"></i> Alerts</a>
+              <a href="competitor-ai-insights.html" class="hub-card-link-item"><i data-lucide="brain"></i> AI Insights</a>
             </div>
           </div>
 
-          <!-- Column 3: Brand Core -->
-          <div style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 20px;">
-            <div>
-              <h3 style="font-size: 16px; font-weight: 800; color: var(--foreground); text-transform: uppercase; letter-spacing: 0.05em; padding-bottom: 8px; border-bottom: 1px dotted var(--border); margin:0;">Brand</h3>
-              <p style="font-size: 13px; color: var(--muted-foreground); line-height: 1.4; margin: 8px 0 0 0;">Evaluate brand design themes, meta scoring, and promotion richness.</p>
+          <div class="hub-directory-card">
+            <div class="hub-card-header">
+              <h3 class="hub-card-title">Brand</h3>
             </div>
-            <div style="display: flex; flex-direction: column; gap: 16px;">
-              <a href="brand-meta-scoring.html" style="text-decoration:none; display:flex; flex-direction:column; gap:4px; font-size:14px; color:var(--foreground); transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
-                <span style="font-weight:700; color:var(--jurnii-700); display:flex; align-items:center; gap:8px;">
-                  <i data-lucide="sparkles" style="width:14px;height:14px;"></i> Meta Scoring
-                </span>
-                <span style="font-size:12px; color:var(--muted-foreground); padding-left:22px; line-height:1.3;">Multi-point composite brand performance metrics.</span>
-              </a>
-              <a href="brand-market-trends.html" style="text-decoration:none; display:flex; flex-direction:column; gap:4px; font-size:14px; color:var(--foreground); transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
-                <span style="font-weight:700; color:var(--jurnii-700); display:flex; align-items:center; gap:8px;">
-                  <i data-lucide="trending-up" style="width:14px;height:14px;"></i> Market Trends
-                </span>
-                <span style="font-size:12px; color:var(--muted-foreground); padding-left:22px; line-height:1.3;">Track long-term product and style trends.</span>
-              </a>
-              <a href="brand-design-themes.html" style="text-decoration:none; display:flex; flex-direction:column; gap:4px; font-size:14px; color:var(--foreground); transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
-                <span style="font-weight:700; color:var(--jurnii-700); display:flex; align-items:center; gap:8px;">
-                  <i data-lucide="palette" style="width:14px;height:14px;"></i> Design Themes
-                </span>
-                <span style="font-size:12px; color:var(--muted-foreground); padding-left:22px; line-height:1.3;">Parse interface design and visual choices.</span>
-              </a>
-              <a href="brand-promotion-analysis.html" style="text-decoration:none; display:flex; flex-direction:column; gap:4px; font-size:14px; color:var(--foreground); transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
-                <span style="font-weight:700; color:var(--jurnii-700); display:flex; align-items:center; gap:8px;">
-                  <i data-lucide="layers" style="width:14px;height:14px;"></i> Promotion Analysis
-                </span>
-                <span style="font-size:12px; color:var(--muted-foreground); padding-left:22px; line-height:1.3;">Mathematical scoring of active local campaigns.</span>
-              </a>
+            <p class="hub-card-desc">Evaluate brand design themes, meta scoring, and promotion richness.</p>
+            <div class="hub-card-links">
+              <a href="brand-meta-scoring.html" class="hub-card-link-item"><i data-lucide="sparkles"></i> Meta Scoring</a>
+              <a href="brand-market-trends.html" class="hub-card-link-item"><i data-lucide="trending-up"></i> Market Trends</a>
+              <a href="brand-design-themes.html" class="hub-card-link-item"><i data-lucide="palette"></i> Design Themes</a>
+              <a href="brand-promotion-analysis.html" class="hub-card-link-item"><i data-lucide="layers"></i> Promotion Analysis</a>
             </div>
           </div>
 
-          <!-- Column 4: Brand Performance -->
-          <div style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 20px;">
-            <div>
-              <h3 style="font-size: 16px; font-weight: 800; color: var(--foreground); text-transform: uppercase; letter-spacing: 0.05em; padding-bottom: 8px; border-bottom: 1px dotted var(--border); margin:0;">Brand Performance</h3>
-              <p style="font-size: 13px; color: var(--muted-foreground); line-height: 1.4; margin: 8px 0 0 0;">Assess performance, usability, perception, and optimizations.</p>
+          <div class="hub-directory-card">
+            <div class="hub-card-header">
+              <h3 class="hub-card-title">Brand Performance</h3>
             </div>
-            <div style="display: flex; flex-direction: column; gap: 16px;">
-              <a href="brand-perfomance.html" style="text-decoration:none; display:flex; flex-direction:column; gap:4px; font-size:14px; color:var(--foreground); transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
-                <span style="font-weight:700; color:var(--jurnii-700); display:flex; align-items:center; gap:8px;">
-                  <i data-lucide="zap" style="width:14px;height:14px;"></i> Perfomance
-                </span>
-                <span style="font-size:12px; color:var(--muted-foreground); padding-left:22px; line-height:1.3;">Grade platform speed, loading, and CWV.</span>
-              </a>
-              <a href="brand-usability.html" style="text-decoration:none; display:flex; flex-direction:column; gap:4px; font-size:14px; color:var(--foreground); transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
-                <span style="font-weight:700; color:var(--jurnii-700); display:flex; align-items:center; gap:8px;">
-                  <i data-lucide="check-circle" style="width:14px;height:14px;"></i> Usability
-                </span>
-                <span style="font-size:12px; color:var(--muted-foreground); padding-left:22px; line-height:1.3;">Heuristic audits of flow friction levels.</span>
-              </a>
-              <a href="brand-preception.html" style="text-decoration:none; display:flex; flex-direction:column; gap:4px; font-size:14px; color:var(--foreground); transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
-                <span style="font-weight:700; color:var(--jurnii-700); display:flex; align-items:center; gap:8px;">
-                  <i data-lucide="eye" style="width:14px;height:14px;"></i> Preception
-                </span>
-                <span style="font-size:12px; color:var(--muted-foreground); padding-left:22px; line-height:1.3;">Quantify visual trust and design hierarchy.</span>
-              </a>
-              <a href="brand-recommendations.html" style="text-decoration:none; display:flex; flex-direction:column; gap:4px; font-size:14px; color:var(--foreground); transition: opacity 0.2s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
-                <span style="font-weight:700; color:var(--jurnii-700); display:flex; align-items:center; gap:8px;">
-                  <i data-lucide="thumbs-up" style="width:14px;height:14px;"></i> Recommendations
-                </span>
-                <span style="font-size:12px; color:var(--muted-foreground); padding-left:22px; line-height:1.3;">Prescriptive interface fixes to close gaps.</span>
-              </a>
+            <p class="hub-card-desc">Assess performance, usability, perception, and optimizations.</p>
+            <div class="hub-card-links">
+              <a href="brand-perfomance.html" class="hub-card-link-item"><i data-lucide="zap"></i> Perfomance</a>
+              <a href="brand-usability.html" class="hub-card-link-item"><i data-lucide="check-circle"></i> Usability</a>
+              <a href="brand-preception.html" class="hub-card-link-item"><i data-lucide="eye"></i> Preception</a>
+              <a href="brand-recommendations.html" class="hub-card-link-item"><i data-lucide="thumbs-up"></i> Recommendations</a>
             </div>
           </div>
 
@@ -442,7 +356,7 @@
   </main>
 
   <!-- Footer (Populated by script) -->
-                                        <footer class="footer">
+                                          <footer class="footer">
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
