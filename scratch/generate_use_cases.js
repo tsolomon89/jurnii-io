@@ -1121,8 +1121,8 @@ const useCasesData = {
         slug: "use-cases/sectors/ecommerce.html",
         kicker: "Conversion Scaling",
         lede: "Maximize checkout conversions, audit transactional friction, and outpace competitor promotion strategies.",
-        manifesto: "High-volume digital brands utilize Jurnii to map player purchase journeys, identify cart abandonment causes, and benchmark promotional campaign effectiveness. By translating visual layout errors and cognitive fatigue into ranked heuristic recommendations, Jurnii ensures eCommerce operators maximize transaction yields and customer lifetime value.",
-        challenge: "eCommerce platforms suffer from severe cart abandonment at checkouts and payment gateway selections. Traditional analytics show *where* players drop off, but fail to explain the visual layout errors, confusing input validation messages, or pricing friction causing cognitive fatigue. Teams spend days debating design updates without objective data, while competitors adjust pricing and promotional codes dynamically.",
+        manifesto: "High-volume digital brands utilize Jurnii to map customer purchase journeys, identify cart abandonment causes, and benchmark promotional campaign effectiveness. By translating visual layout errors and cognitive fatigue into ranked heuristic recommendations, Jurnii ensures eCommerce operators maximize transaction yields and customer lifetime value.",
+        challenge: "eCommerce platforms suffer from severe cart abandonment at checkouts and payment gateway selections. Traditional analytics show *where* shoppers drop off, but fail to explain the visual layout errors, confusing input validation messages, or pricing friction causing cognitive fatigue. Teams spend days debating design updates without objective data, while competitors adjust pricing and promotional codes dynamically.",
         mechanics: "Jurnii maps checkout grids, button placement, and copywriting clarity, benchmarking transaction states against leading high-converting digital portals. Jurnii UX audits security signals, payment gateways, and input validation to deliver commercially weighted recommendations that streamline checkout flows and increase purchase yields.",
         proofText: "Repairing transaction journey friction dramatically increases customer conversion rate and purchase yields.",
         targetPersona: "Heads of eCommerce and Digital Merchandising utilize journey mapping to streamline multi-step checkouts and increase LTV.",
@@ -1134,7 +1134,7 @@ const useCasesData = {
         pressure: "Minimize checkout cart abandonment rates, outpace dynamic rival discount coupons, and maximize average order transaction values.",
         decisions: [
           { decision: "Where does checkout cart drop off?", signal: "Payment gateway styling checkboxes + input validation errors", output: "Streamlined single-page checkout grid wireframe" },
-          { decision: "Are coupon codes driving incrementality?", signal: "programmatic coupon payouts vs seasonal margin wagers", output: "Causal coupon spent allocation recommendations" }
+          { decision: "Are coupon codes driving incrementality?", signal: "programmatic coupon payouts vs seasonal campaign investments", output: "Causal coupon spend allocation recommendations" }
         ],
         missingInfo: "Objective usability checklist mapping checkout styling barriers to purchase yields.",
         weeklyRhythm: [
@@ -1144,9 +1144,9 @@ const useCasesData = {
           { day: "Fri", title: "Ship UI", desc: "Deploy streamlined checkout grids to optimize checkouts." }
         ],
         beforeWorkflow: [
-          { marker: "01", desc: "Digital teams discuss checkout styling elements without conversion wagers." },
-          { marker: "02", desc: "Players abandon transactions due to heavy validation forms." },
-          { marker: "03", desc: "heavy stylesheets delay payment gateways loading, leaking GGR." }
+          { marker: "01", desc: "Digital teams discuss checkout styling elements without conversion metrics." },
+          { marker: "02", desc: "Customers abandon transactions due to heavy validation forms." },
+          { marker: "03", desc: "heavy stylesheets delay payment gateways loading, leaking revenue." }
         ],
         afterWorkflow: [
           { marker: "01", desc: "Jurnii scorecards establish unified usability checks across checkouts." },
@@ -1179,7 +1179,7 @@ const useCasesData = {
         productStack: ["jurnii-ux", "jurnii-360"],
         commercialOutcomes: [
           { title: "Healed Checkout Leaks", desc: "Minimize cart abandonment rates by optimizing validation error guidance and button positions." },
-          { title: "Dynamic Promo Strategy", desc: "Track competitor discount wagers in real-time, defending product profit margins." }
+          { title: "Dynamic Promo Strategy", desc: "Track competitor discount campaigns in real-time, defending product profit margins." }
         ],
         finalCTA: "Benchmark your eCommerce purchase Conversions"
       },
@@ -1191,7 +1191,7 @@ const useCasesData = {
         kicker: "Financial Platforms",
         lede: "Streamline onboarding verification pipelines, minimize registration drop-offs, and build platform trust.",
         manifesto: "FinTech platforms deploy Jurnii to secure high-security customer registration, audit KYC and AML processing delays, and design conversion-optimized banking interfaces. By optimizing trust elements and mobile load speeds, Jurnii prevents registration funnel leakage and stabilizes acquisition costs.",
-        challenge: "FinTech applications face extreme signup drop-offs during high-security AML, KYC, and document verification steps. Players lose trust when secure interfaces look generic, outdated, or confusing. Standard analytics tools cannot measure how layout security signals and compliance branding affect user confidence, leading to high abandonment rates and lost acquisition spends.",
+        challenge: "FinTech applications face extreme signup drop-offs during high-security AML, KYC, and document verification steps. Users lose trust when secure interfaces look generic, outdated, or confusing. Standard analytics tools cannot measure how layout security signals and compliance branding affect user confidence, leading to high abandonment rates and lost acquisition spends.",
         mechanics: "Jurnii audits security styling, compliance signals, and input validation messages across FinTech registration funnels. By comparing onboarding flows with industry best practices and 300+ analysed brands, Jurnii UX delivers commercially weighted improvements to ensure onboarding paths project maximum credibility, compliance, and safety.",
         proofText: "Optimizing trust elements and mobile load speeds prevents registration funnel leakage and stabilizes acquisition costs.",
         targetPersona: "VP of Risk and Product Leads at FinTech platforms deploy Jurnii perception scores to secure compliance conversions.",
@@ -1202,7 +1202,7 @@ const useCasesData = {
         ],
         pressure: "Secure customer trust during AML checks, minimize document upload dropout rates, and satisfy strict compliance requirements.",
         decisions: [
-          { decision: "Is secure KYC flow causing dropouts?", signal: "KYC document gate wagers vs competitor verification speeds", output: "Compliance-optimized signup interface wireframe" },
+          { decision: "Is secure KYC flow causing dropouts?", signal: "KYC document gate friction vs competitor verification speeds", output: "Compliance-optimized signup interface wireframe" },
           { decision: "Do styling safety signals affect trust?", signal: "Compliance badge visibilities + secure SSL alignments", output: "Trust-optimized visual onboarding framework" }
         ],
         missingInfo: "Standardized visual safety scores mapping secure layout elements to signup conversion parities.",
@@ -1213,8 +1213,8 @@ const useCasesData = {
           { day: "Fri", title: "Deploy UI", desc: "Launch trust-optimized registration elements to production." }
         ],
         beforeWorkflow: [
-          { marker: "01", desc: "FinTech secure forms look generic, causing players to lose trust." },
-          { marker: "02", desc: "onboarding KYC checkpoints leak acquired players due to input friction." },
+          { marker: "01", desc: "FinTech secure forms look generic, causing users to lose trust." },
+          { marker: "02", desc: "onboarding KYC checkpoints leak acquired users due to input friction." },
           { marker: "03", desc: "mobile verification steps lag under low-bandwidth networks." }
         ],
         afterWorkflow: [
@@ -1248,7 +1248,7 @@ const useCasesData = {
         productStack: ["jurnii-ux"],
         commercialOutcomes: [
           { title: "protected customer Trust", desc: "Project absolute credibility during high-security verification checks, maximizing signup completions." },
-          { title: "Lowered acquisition CAC", desc: "Reduce document upload dropouts, protecting programmatic spent from conversion leaks." }
+          { title: "Lowered acquisition CAC", desc: "Reduce document upload dropouts, protecting programmatic spend from conversion leaks." }
         ],
         finalCTA: "Benchmark your FinTech signup Conversions"
       }
