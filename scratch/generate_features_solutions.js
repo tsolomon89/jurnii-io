@@ -286,6 +286,431 @@ const featuresData = [
     ],
     proofText: "Commercially weighted recommendations align product and business priorities around a shared roadmap.",
     targetPersona: "Chief Product Officers use Jurnii recommendations to build bulletproof roadmap sprints."
+  },
+  {
+    slug: "features/usability.html",
+    name: "Usability",
+    fullName: "Onboarding Usability Diagnostics",
+    kicker: "UX Intelligence",
+    lede: "Identify and eliminate registration and deposit funnel obstacles through automated heuristic mapping.",
+    manifesto: "Optimize the first-mile experience. Jurnii UX usability audits replace subjective debates with structured, commercially weighted diagnostics that flag cognitive friction and technical blockers in player signup pathways.",
+    challenge: "Operators lose up to 45% of prospective players during account verification and first deposit. Product teams struggle with vague analytics that indicate dropout locations but fail to reveal the root interface or cognitive causes, leading to misdirected development work.",
+    mechanics: "Jurnii runs automated heuristic engines across player registration sequences, evaluating form complexity, field constraints, visual guidance, and error recovery states against 12 core design criteria.",
+    capabilities: [
+      { title: "Cognitive Load Reduction", icon: "activity", desc: "Detect excessive text inputs, confusing checkboxes, and redundant steps that fatigue players during registration." },
+      { title: "Friction Point Scoring", icon: "bar-chart", desc: "Quantify and rank user flow interface hurdles mathematically based on conversion severity and NGR impact." },
+      { title: "Validation Guidance Assert", icon: "check-square", desc: "Ensure inline form field verification instructions are clean, context-sensitive, and error-proof under mobile screens." }
+    ],
+    proofText: "Recover lost players and lower acquisition CPA by identifying key conversion leaks automatically.",
+    targetPersona: "Heads of UX deploy usability diagnostics to align developer sprints with high-impact registration upgrades."
+  },
+  {
+    slug: "features/performance.html",
+    name: "Performance",
+    fullName: "Core Web Vitals Speed Tracking",
+    kicker: "UX Intelligence",
+    lede: "Audit latency, page load speed, and script weight fluctuations under mobile network environments.",
+    manifesto: "Speed is a critical commercial buffer. Jurnii monitors technical vitals across transactional pipelines to ensure that slow assets, heavy images, and unoptimized libraries do not compromise player holds.",
+    challenge: "High-value players are highly sensitive to delay. A 1-second lag in betslip interaction or checkout load causes immediate customer defection to regional competitors, bleeding GGR silently.",
+    mechanics: "Jurnii simulates real-world mobile network speeds, constantly auditing LCP, FID, and CLS across player landing zones, registration pipelines, and betslip portals.",
+    capabilities: [
+      { title: "Core Web Vitals Scans", icon: "zap", desc: "Monitor Largest Contentful Paint, First Input Delay, and Cumulative Layout Shift under restricted mobile bandwidth." },
+      { title: "Asset Weight Auditing", icon: "hard-drive", desc: "Analyze CSS variables, script sizes, and image weights to locate optimization targets and eliminate engineering bloat." },
+      { title: "LCP Attrition Correlator", icon: "trending-down", desc: "Correlate platform latency delays directly with funnel abandonment and player conversion drop-offs." }
+    ],
+    proofText: "Compressing page load limits player attrition, securing consistent NGR hold rates.",
+    targetPersona: "Chief Operating Officers deploy performance tracking to defend transaction speed and prevent revenue leakage."
+  },
+  {
+    slug: "features/journeys.html",
+    name: "Journeys",
+    fullName: "End-to-End Player Onboarding Journeys",
+    kicker: "UX Intelligence",
+    lede: "Map entire player conversion sequences from landing zone to verification and first deposit.",
+    manifesto: "Understand player behavior across every touchpoint. Visualize transitions, KYC checkpoints, and payment gates as a single, continuous user journey to discover conversion leakage.",
+    challenge: "Analytics platforms capture disconnected page hits, leaving teams blind to the actual visual states and interaction obstacles that players experience during verification.",
+    mechanics: "Jurnii UX captures flow pathways, modeling transitions, KYC document upload prompts, and wallet setups into visual user journey maps.",
+    capabilities: [
+      { title: "Transition State Mapping", icon: "milestone", desc: "Model player progression stages from initial landing, through verification, to successful transactional funding." },
+      { title: "Funnel Leak Auditing", icon: "filter", desc: "Isolate exact fields, buttons, or validation rules where registration momentum stalls and drop-off spikes." },
+      { title: "Onboarding Path Compare", icon: "git-compare", desc: "Benchmark onboarding flow stages directly against three regional operators to identify competitive friction." }
+    ],
+    proofText: "Optimizing transitions heals leaky registration funnels, increasing player acquisition efficiency.",
+    targetPersona: "Chief Product Officers utilize journey mapping to identify strategic conversion opportunities."
+  },
+  {
+    slug: "features/indices.html",
+    name: "Indices",
+    fullName: "Cortex Intelligence Indices",
+    kicker: "Cortex Core",
+    lede: "Evaluate brand experience, visual design quality, and promotional value through normalized metrics.",
+    manifesto: "Drive decisions from objective ratings. Cortex indexes hundreds of usability, technical speed, and campaign generosity variables into standardized benchmarks.",
+    challenge: "Executive discussions about digital platforms suffer from subjective design opinions and marketing assumptions, leading to bad budget allocations.",
+    mechanics: "Our intelligence engine crawls operators, converting visual, technical, and campaign attributes into normalized index scores.",
+    capabilities: [
+      { title: "Experience Scoring", icon: "sparkles", desc: "Combine usability, speed, and trust indicators into a board-ready Experience Index to track product growth." },
+      { title: "Generosity Ratings", icon: "gift", desc: "Score competitor welcome incentives mathematically based on active wagering hurdles and rollover requirements." },
+      { title: "Market Position Mapping", icon: "map", desc: "Visualize operator rankings across regional segments to identify strategic promotional and usability voids." }
+    ],
+    proofText: "Standardized indices replace subjective opinions with objective, board-ready facts.",
+    targetPersona: "Chief Executive Officers utilize Jurnii indices to align board presentations and guide corporate growth."
+  },
+  {
+    slug: "features/scenario-planning.html",
+    name: "Scenario Planning",
+    fullName: "Cortex Scenario Planning & Forecasts",
+    kicker: "Cortex Core",
+    lede: "Model the commercial yield effect of prospective budget reallocations and welcome offer shifts.",
+    manifesto: "Test strategic decisions before deployment. Cortex simulates Net Gaming Revenue impact, hold rates, and acquisition CPA across multiple market scenarios.",
+    challenge: "CMOs and CFOs allocate multi-million dollar campaign budgets blindly, relying on historical spreadsheet models that fail to account for active competitor surges.",
+    mechanics: "Jurnii integrates active competitor promotions data with local player acquisition history to build forward predictive market simulations.",
+    capabilities: [
+      { title: "Causal Budget Simulators", icon: "sliders", desc: "Simulate NGR lift, player acquisition counts, and hold yield variations across prospective channel budget updates." },
+      { title: "Generosity Volatility Models", icon: "activity", desc: "Model acquisition drop-off rates if regional rivals suddenly spike free spins or drop wagering requirements." },
+      { title: "Defensive Pricing Tools", icon: "shield", desc: "Calculate the minimum bonus match and rollover target needed to defend regional market share during peaks." }
+    ],
+    proofText: "Simulating scenario forecasts ensures strategic confidence and protects operator margins.",
+    targetPersona: "Chief Marketing Officers deploy scenario forecasting to secure campaign budgets and protect ROAS."
+  },
+  {
+    slug: "features/ai-analytics-assistant.html",
+    name: "AI Assistant",
+    fullName: "Cortex AI Analytics Assistant",
+    kicker: "Cortex Core",
+    lede: "Query massive competitor campaign databases and internal attribution tables via natural language.",
+    manifesto: "Get instant strategic answers. Our specialized, domain-trained AI parses market data to produce board-ready summaries and margin recommendations.",
+    challenge: "Extracting clean competitor metrics or campaign attribution statistics requires weeks of manual database parsing and analyst coordination.",
+    mechanics: "We utilize advanced domain-specific NLP models trained on historical iGaming metrics to translate complex data queries into clean reports.",
+    capabilities: [
+      { title: "Natural Language Querying", icon: "message-square", desc: "Query active competitive offers, regional speed metrics, and attribution models in plain conversational English." },
+      { title: "Automated Report Builders", icon: "file-text", desc: "Compile high-fidelity, board-ready competitor summaries and marketing attribution sheets in a single click." },
+      { title: "Predictive Alerts Feed", icon: "brain", desc: "Receive automated notifications on predicted competitor promotions and budget opportunities generated by ML." }
+    ],
+    proofText: "Domain-specific models save hours of database scripting, delivering instant clarity.",
+    targetPersona: "Heads of CRM use the AI Assistant to model retention rules and prevent customer churn."
+  },
+  {
+    slug: "features/market-segmentation-targeting-analysis.html",
+    name: "Targeting",
+    fullName: "Market Segmentation & Targeting Analysis",
+    kicker: "Cortex Core",
+    lede: "Isolate highly valuable player personas and regional niches through predictive yield modeling.",
+    manifesto: "Optimize customer acquisition yields. Segment target markets by player value, visual design tastes, and bonus sensitivity to maximize marketing efficiency.",
+    challenge: "Operators run uniform campaigns that treat all players identically, resulting in low conversion, high acquisition costs, and wasted marketing spend.",
+    mechanics: "Cortex groups player behavior, design preferences, and regional competitor promotions data to pinpoint high-converting audience segments.",
+    capabilities: [
+      { title: "Yield Modeling Grid", icon: "crosshair", desc: "Map audience segments against estimated lifetime value, promotional responsiveness, and overall acquisition CPA." },
+      { title: "Design Taste Profiles", icon: "palette", desc: "Identify visual themes, layout preferences, and usability thresholds that drive conversion within target age groups." },
+      { title: "Niche Opportunities Detector", icon: "compass", desc: "Spot regional demographic clusters underserved by competitor welcome offers to deploy high-yield campaigns." }
+    ],
+    proofText: "Targeting high-yield audience niches drives customer acquisition cost down, protecting margins.",
+    targetPersona: "Chief Commercial Officers deploy segment targeting to balance acquisition targets and marketing spend."
+  },
+  {
+    slug: "features/banner-creative-messaging-intelligence.html",
+    name: "Creative Messaging",
+    fullName: "Banner Creative & Messaging Intelligence",
+    kicker: "Cortex Core",
+    lede: "Audit visual banner layouts, value proposition claims, and copywriting formats dynamically.",
+    manifesto: "Differentiate your brand. Track competitor banner designs, typographic priorities, and advertising claims to optimize marketing conversions.",
+    challenge: "Creative teams design landing page banners and copywriting hooks in isolation, resulting in layout generics that fail to stand out.",
+    mechanics: "We crawl competitor registration page states, logging banner sizes, primary copywriting hooks, CTA colors, and terms layout formats.",
+    capabilities: [
+      { title: "Copy Claim Tracking", icon: "edit-3", desc: "Index all copywriting claims, tracking the exact focus of competitor advertising hooks across jurisdictions." },
+      { title: "Visual Real Estate Maps", icon: "layout", desc: "Audit how rival designers distribute page layout space between bonus terms and imagery." },
+      { title: "Design Grid Auditing", icon: "columns", desc: "Benchmark design frameworks, color palettes, and typographic reading levels against industry top-performers." }
+    ],
+    proofText: "Designing banners backed by competitive context increases digital marketing yields.",
+    targetPersona: "Chief Marketing Officers utilize messaging intelligence to refine copywriting hooks and lower CPA."
+  },
+  {
+    slug: "features/promo-richness-index.html",
+    name: "Promo Richness",
+    fullName: "Promo Richness Index Calibrations",
+    kicker: "Cortex Core",
+    lede: "Calculate true promotional generosity mathematically based on wagering hurdles and rules.",
+    manifesto: "Understand competitor generosity with absolute precision. Normalize deposits, wagering rollovers, and spin rules into a single comparable value score.",
+    challenge: "Evaluating competitor welcome offers manually leads to bad margin pricing because the true promotional cost differs from the nominal bonus.",
+    mechanics: "Our proprietary index weights bonus amounts, wagering play-through multipliers, and expiration rules to determine actual operator generosity.",
+    capabilities: [
+      { title: "Wagering Normalizers", icon: "sliders", desc: "Convert complex deposit matches and play-through terms into standardized mathematical operator generosity metrics." },
+      { title: "Generosity Shift Triggers", icon: "trending-up", desc: "Detect when rival welcome offers suddenly become more generous, threatening regional player acquisition." },
+      { title: "Hold Yield Modelers", icon: "dollar-sign", desc: "Model operator hold yields against different wagering targets to optimize promotional re-investment rates." }
+    ],
+    proofText: "Calibrating welcome offers prevents margin erosion, defending long-term operator EBITDA.",
+    targetPersona: "Chief Commercial Officers use the Richness Index to refine CRM loyalty programs and welcome targets."
+  },
+  {
+    slug: "features/brand-performance.html",
+    name: "Brand Performance",
+    fullName: "Brand Technical Performance Speed",
+    kicker: "Brand Performance",
+    lede: "Measure page load speeds and technical core web vitals under real mobile connections.",
+    manifesto: "Protect player holds from technical friction. Jurnii monitors page rendering delays and layout shifts across transactional paths to keep customer conversions high.",
+    challenge: "Product and engineering teams suffer from slow feedback cycles, failing to catch script bloat or heavy assets that trigger player drop-off.",
+    mechanics: "We simulate regional mobile network latency to test operator domains, grading LCP, FID, and CLS scores side-by-side with rivals.",
+    capabilities: [
+      { title: "Core Vitals Monitoring", icon: "zap", desc: "Track mobile Largest Contentful Paint and Cumulative Layout Shift in low-bandwidth regional environments." },
+      { title: "Script Payload Scans", icon: "hard-drive", desc: "Audit layout CSS weight, script libraries, and uncompressed graphics to eliminate conversion-killing latency." },
+      { title: "Technical Speed Index", icon: "gauge", desc: "Rank operator registration and transaction speed directly against regional competitors to maintain speed supremacy." }
+    ],
+    proofText: "Eliminating latency drops player attrition, stabilizing Net Gaming Revenue during traffic sweeps.",
+    targetPersona: "Chief Operating Officers deploy technical audits to protect checkout pathways and secure holds."
+  },
+  {
+    slug: "features/brand-perception.html",
+    name: "Brand Perception",
+    fullName: "Brand Perception & Visual Safety",
+    kicker: "Brand Performance",
+    lede: "Audit safety signals, regulatory trust badges, and data privacy layouts across secure flows.",
+    manifesto: "Maximize verification conversions by projecting authority. Audit how compliance badges, secure SSL signals, and checkbox styling impact player signup trust.",
+    challenge: "Prospects abandon KYC sequences because verification forms look generic, outdated, or lack visible security indicators, causing a collapse in trust.",
+    mechanics: "Jurnii audits trust indicators, privacy styling, and secure layout signals side-by-side with premier operator portals to locate visual drop-offs.",
+    capabilities: [
+      { title: "Trust Signals Indexing", icon: "shield", desc: "Audit presence of compliance badges, licensing logos, and secure certifications across landing zones." },
+      { title: "KYC Security Styling", icon: "lock", desc: "Optimize password inputs, verification prompts, and legal checkboxes to reassure players during signup steps." },
+      { title: "Visual Authority Score", icon: "eye", desc: "Benchmark your brand trust presentation directly against leading regional competitors to ensure security compliance." }
+    ],
+    proofText: "Building visible safety directly drives conversion on high-security transactional funnels.",
+    targetPersona: "Heads of CRM deploy trust benchmarking to improve player retention and secure verification funnels."
+  },
+  {
+    slug: "features/ai-snapshot-reports.html",
+    name: "AI Reports",
+    fullName: "AI Snapshot Competitor Reports",
+    kicker: "Cortex Core",
+    lede: "Generate board-ready competitor campaign intelligence summaries with a single click.",
+    manifesto: "Stay aligned across departments. AI Snapshot compiles continuous competitor monitoring into executive-ready reports, summarizing campaign trends.",
+    challenge: "Commercial analysts waste hours copying metrics into slides before board meetings, delaying strategy and limiting active response times.",
+    mechanics: "We synthesize complex market tracking files, copywriting changes, and index scores into comprehensive corporate briefings.",
+    capabilities: [
+      { title: "One-Click Summaries", icon: "file-text", desc: "Create high-fidelity strategic summaries detailing competitor promotion adjustments and styling pivots." },
+      { title: "NGR Volatility Forecasts", icon: "trending-up", desc: "Estimate the EBITDA risk of competitor welcome offer upgrades across key regional jurisdictions." },
+      { title: "Cross-Team Syncing", icon: "share-2", desc: "Distribute structured PDF or HTML competitor briefings straight to product, marketing, and trading desks." }
+    ],
+    proofText: "Board-ready competitor profiles streamline M&A due diligence and align corporate strategy.",
+    targetPersona: "Chief Executive Officers use AI Snapshot to align board presentations and competitive strategy."
+  },
+  {
+    slug: "features/causal-impact-mmm-attribution.html",
+    name: "Causal Impact",
+    fullName: "Causal Impact & MMM Attribution",
+    kicker: "Cortex Core",
+    lede: "Feed structured competitor promotions variables into local analytics data warehouses.",
+    manifesto: "Isolate campaign contribution accurately. Feed clean competitor promotional tracking data directly into Marketing Mix Models (MMM).",
+    challenge: "Data science teams spend 80% of their time manual-scraping and cleaning competitor promotions datasets instead of modeling budget attribution.",
+    mechanics: "Cortex exports machine-readable CSV or JSON datasets of competitor welcome matches, play-throughs, and active spin counts.",
+    capabilities: [
+      { title: "Structured Promotions Feed", icon: "database", desc: "Export clean, structured historical competitor campaigns data straight into local predictive data repositories." },
+      { title: "LTV Contribution Modeling", icon: "bar-chart", desc: "Model player value fluctuations against rival welcome bonus shifts to optimize promotional allocations." },
+      { title: "Causal Modeling Endpoints", icon: "code", desc: "Feed verified pricing and generosity indices into local attribution neural networks via clean APIs." }
+    ],
+    proofText: "Structured promotional datasets eliminate the complexity of manual web scraping.",
+    targetPersona: "Chief Marketing Officers utilize causal impact modeling to validate multi-million dollar programmatic channels."
+  },
+  {
+    slug: "features/competitor-promotion-tracking.html",
+    name: "Competitor Promos",
+    fullName: "Competitor Promotion Auditing",
+    kicker: "Competitor Core",
+    lede: "Monitor competitor welcome bonuses, active sign-up targets, and wagering rollovers.",
+    manifesto: "Never let a competitor move impact your conversions. Jurnii continuously maps sign-up offers across key regional markets to defend your margins.",
+    challenge: "Operators waste millions copy-pasting rival sign-up terms without knowing their true player value, eroding yields.",
+    mechanics: "Jurnii captures active sign-up offers, deposit requirements, and spins across operators in 35 regulated markets.",
+    capabilities: [
+      { title: "Active Offer Monitoring", icon: "tag", desc: "Log competitor sports boosts and welcome match modifications within minutes of deployment." },
+      { title: "Regional Campaign Scans", icon: "globe", desc: "Track regional offer tweaks across key regulated states to identify localized promo gaps." },
+      { title: "Wagering Decoder Engine", icon: "sliders", desc: "Translate complex promotional terms into structured play-through multipliers and deposit requirements." }
+    ],
+    proofText: "Track competitor campaigns automatically, compressing active reaction times.",
+    targetPersona: "Chief Commercial Officers use promotions tracking to safeguard margins and secure holds."
+  },
+  {
+    slug: "features/cross-channel-gantt-planning.html",
+    name: "Gantt Planning",
+    fullName: "Cross-Channel Gantt Planning",
+    kicker: "Cortex Core",
+    lede: "Visualize competitor promotional duration and launch frequency on a unified timeline.",
+    manifesto: "Anticipate competitive marketing sweeps. Map seasonal campaign patterns across rivals to calibrate budget schedules.",
+    challenge: "Marketing and CRM teams schedule seasonal pushes in silos, leaving them vulnerable to rival promotion sweeps during peak sporting events.",
+    mechanics: "We organize months of historical competitor marketing deployments into structured interactive chronological timelines.",
+    capabilities: [
+      { title: "Chronological Maps", icon: "calendar", desc: "Chart rival campaign timelines over seasonal windows to predict mobile updates and advertising pushes." },
+      { title: "Duration Tracking", icon: "clock", desc: "Measure average competitor welcome offer lifespans to optimize regional CRM re-investment timing." },
+      { title: "Defensive Schedulers", icon: "sliders", desc: "Align your retention and sportsbook boost campaigns to exploit competitive market voids." }
+    ],
+    proofText: "Longitudinal campaign modeling turns reactive guesses into defensible timing strategy.",
+    targetPersona: "Chief Marketing Officers deploy timeline models to allocate advertising spend with timing confidence."
+  },
+  {
+    slug: "features/finance-reconciliation-reporting.html",
+    name: "Reconciliation",
+    fullName: "Finance Reconciliation Reporting",
+    kicker: "Cortex Core",
+    lede: "Attribute fluctuations in player acquisition yields directly to competitor bonus surges.",
+    manifesto: "Verify marketing cost efficiency. Reconcile player acquisition yields directly against competitor wagering matches.",
+    challenge: "Finance teams struggle to attribute drops in player conversions, blaming internal product roadmaps when the cause is a competitor promotion surge.",
+    mechanics: "Cortex correlates player sign-up flows with competitor generosity index surges to prove attribution factors.",
+    capabilities: [
+      { title: "EBITDA Protection Logs", icon: "shield", desc: "Isolate campaign cost spikes triggered by defensive promo matches, stabilizing marketing ROI metrics." },
+      { title: "Yield Contribution Mapping", icon: "trending-up", desc: "Proportionally allocate conversion changes between internal product quality and competitor activities." },
+      { title: "Margin Calibration Summaries", icon: "dollar-sign", desc: "Export board-ready financial reports that vindicate product and promotional budgets." }
+    ],
+    proofText: "Financial attribution modeling protects marketing spend integrity and operator margins.",
+    targetPersona: "Chief Commercial Officers utilize finance reports to align budget allocations with the board."
+  },
+  {
+    slug: "features/historical-database-reporting.html",
+    name: "Historical Database",
+    fullName: "Historical Promotions Database",
+    kicker: "Cortex Core",
+    lede: "Access historical campaign records and design styling properties across global operators.",
+    manifesto: "Research past competitor moves systematically. Access exhaustive archives of competitor promotions, welcome layouts, and pricing histories.",
+    challenge: "Product and creative teams struggle to find visual references of rival promotions from past seasons, copying ideas blindly.",
+    mechanics: "We index years of global operator welcome layouts, copywriting claims, and campaign structures in a structured repository.",
+    capabilities: [
+      { title: "Longitudinal Campaign Search", icon: "search", desc: "Search historical welcome offers by operator name, state, and wagering requirements." },
+      { title: "Visual Styling Archives", icon: "image", desc: "Access stylesheets, typographic setups, and banner design patterns deployed by rivals in past years." },
+      { title: "Generosity Index Logs", icon: "trending-up", desc: "Map historical welcome offer generosity shifts to identify long-term structural market margins." }
+    ],
+    proofText: "Structured historical context enables product teams to design layouts with strategic confidence.",
+    targetPersona: "Design Systems Architects deploy historical archives to establish strict brand benchmarks."
+  },
+  {
+    slug: "features/journey-effectiveness.html",
+    name: "Journey Effectiveness",
+    fullName: "UX Journey Effectiveness Scoring",
+    kicker: "UX Intelligence",
+    lede: "Grade player transition momentum and friction levels across core transaction paths.",
+    manifesto: "Benchmark player journey efficiency. Quantify ease-of-use, cognitive load levels, and error recovery across multi-brand funnels.",
+    challenge: "Operators manage multiple brands across jurisdictions with no shared standard for user experience quality, causing high friction.",
+    mechanics: "Jurnii UX measures steps, input rules, and delays across target sequences to grade journey success.",
+    capabilities: [
+      { title: "Conversion Momentum Index", icon: "activity", desc: "Grade registration, verification, and deposit ease into a single board-ready experience indicator." },
+      { title: "Redundant Field Detection", icon: "user-minus", desc: "Flag form fields, legal panels, or validation checks that trigger cognitive fatigue and abandonment." },
+      { title: "Competitor Flow Comparisons", icon: "git-compare", desc: "Compare player transition pathways side-by-side with regional top-performers to guide updates." }
+    ],
+    proofText: "Quantifying visual friction allows product teams to clear funnels and boost loyalty.",
+    targetPersona: "Chief Product Officers leverage effectiveness scores to prioritize feature sprints."
+  },
+  {
+    slug: "features/mmm-ready-data-export.html",
+    name: "MMM Export",
+    fullName: "MMM-Ready Data Export Pipes",
+    kicker: "Cortex Core",
+    lede: "Streamline competitor campaign indices directly into internal modeling databases.",
+    manifesto: "Feed structured market variables straight to data science workflows. Access raw, normalized datasets for advanced modeling.",
+    challenge: "Scraping and normalizing competitor promo histories manually blocks analytics teams, causing months of delay.",
+    mechanics: "We deliver direct API webhooks and data exports that stream normalized promotional records into local environments.",
+    capabilities: [
+      { title: "Normalized JSON / CSV Feeds", icon: "database", desc: "Access structured historical competitor promotions data ready for direct attribution modeling." },
+      { title: "Always-on API Pipes", icon: "refresh-cw", desc: "Integrate real-time competitor campaign shifts and index scores directly with local databases." },
+      { title: "Attribution Calibration Models", icon: "network", desc: "Calibrate player lifetime values and hold yields with robust external competitive context." }
+    ],
+    proofText: "Structured data pipes eliminate developer overhead, supplying clean datasets instantly.",
+    targetPersona: "Chief Marketing Officers deploy data exports to justify marketing reallocations."
+  },
+  {
+    slug: "features/offer-benchmarking.html",
+    name: "Offer Benchmarking",
+    fullName: "UX Welcome Offer Benchmarking",
+    kicker: "UX Intelligence",
+    lede: "Assess the layout layout styling and visual presentation of welcome promo banners.",
+    manifesto: "Optimize welcome banner yield. Correlate promotional matching variables with visual button positions and read levels.",
+    challenge: "Operators deploy rich sign-up incentives but fail to convert players because the design layout is slow or cluttered.",
+    mechanics: "We map competitor landing zone banner sizes, copywriting hooks, and checkbox setups to active conversions.",
+    capabilities: [
+      { title: "Copy Readability Audits", icon: "type", desc: "Audit text sizes, typographic contrasts, and legibility on competitor registration landing zones." },
+      { title: "CTA Layout Diagnostics", icon: "layout", desc: "Measure how button visual weights, spacing, and page placements affect welcome flow conversion." },
+      { title: "Creative Optimization Sprints", icon: "sparkles", desc: "Obtain ranked layout modifications to ensure your sign-up offers stand out from rival platforms." }
+    ],
+    proofText: "Improving welcome design layout translates to lower CPA and higher marketing yields.",
+    targetPersona: "Chief Marketing Officers use design auditing to balance visual brand quality and conversion."
+  },
+  {
+    slug: "features/perception.html",
+    name: "UX Perception",
+    fullName: "UX Trust & Safety Signals Auditing",
+    kicker: "UX Intelligence",
+    lede: "Heuristically analyze brand authority, compliance layout, and user trust indicators.",
+    manifesto: "Build absolute player trust during KYC verification. Optimize licensing logos, legal checkbox styling, and payment visibility.",
+    challenge: "High-value players abandon verification flows because insecure screens look generic, outdated, or confusing.",
+    mechanics: "We grade operator security badges, terms readability, and payment pathways to suggest visual confidence upgrades.",
+    capabilities: [
+      { title: "Authority Badge Scraping", icon: "shield", desc: "Verify the presence and visual placement of licensing seals across player flows." },
+      { title: "Compliance Layout Checks", icon: "check-circle", desc: "Assert readability of terms and conditions pages and legal checkboxes on mobile screens." },
+      { title: "Verification Confidence Grades", icon: "lock", desc: "Score player trust perceptions across onboarding funnels to optimize KYC document uploads." }
+    ],
+    proofText: "Building visual trust is a commercial necessity, driving onboarding conversions.",
+    targetPersona: "Chief Product Officers leverage trust auditing to satisfy compliance and secure registration."
+  },
+  {
+    slug: "features/promotions.html",
+    name: "Promotions Dashboard",
+    fullName: "Generic Promotions Tracking Dashboard",
+    kicker: "Competitor Core",
+    lede: "Continuous surveillance of rival welcome offers and wagering multipliers.",
+    manifesto: "Calibrate operator margin while remaining highly competitive. Monitor wagering rules, deposit splits, and bonus depth.",
+    challenge: "Manual compilation of competitor promotions takes weeks, leaving CRM and commercial teams blind to active market parities.",
+    mechanics: "Jurnii scraper bots log competitive deposit bonus values, spin count adjustments, and active sports boosts.",
+    capabilities: [
+      { title: "Wagering Hurdle Indexes", icon: "tag", desc: "Compare Deposit play-through multiples side-by-side to protect operator hold rates." },
+      { title: "Welcome Incentives Surveillance", icon: "gift", desc: "Log freshly deployed sign-up offers within minutes of competitor deployment." },
+      { title: "Regional Offer Mapping", icon: "globe", desc: "Track promotional variations deployed by competitors in target regulated states." }
+    ],
+    proofText: "Always-on promotions tracking defends operator NGR from aggressive rival campaign spikes.",
+    targetPersona: "Chief Commercial Officers deploy promotions dashboards to defend market margins."
+  },
+  {
+    slug: "features/real-time-alerts.html",
+    name: "Real-Time Alerts",
+    fullName: "Real-Time Competitor Alerts Network",
+    kicker: "Competitor Core",
+    lede: "Receive immediate notifications when competitors adjust bonuses, rates, or value claims.",
+    manifesto: "React instantly to market events. Receive direct push alerts the exact moment a competitor adjusts welcoming terms.",
+    challenge: "Missing a rival welcome campaign tweak causes player churn to more generous platforms before your CRM can respond.",
+    mechanics: "Configure custom trigger channels based on maximum bonus values or promotional payout indexes.",
+    capabilities: [
+      { title: "Slack & Webhook Integrations", icon: "bell", desc: "Push critical competitive moves straight to trading desk channels and email databases." },
+      { title: "Threshold Triggering", icon: "percent", desc: "Set triggers based on wagering hurdles or free spin value shifts to avoid alert fatigue." },
+      { title: "Parity Defense Updates", icon: "shield", desc: "Protect regional conversions through real-time notifications of regional competitor campaigns." }
+    ],
+    proofText: "Always-on competitive surveillance ensures your commercial team is never blindsided.",
+    targetPersona: "Chief Commercial Officers set up real-time alerts to defend active regional market share."
+  },
+  {
+    slug: "features/release-timing-insights.html",
+    name: "Release Timing",
+    fullName: "Competitor Product Release Timing",
+    kicker: "Cortex Core",
+    lede: "Anticipate rival product deployments, mobile app changes, and campaign launch windows.",
+    manifesto: "Gain predictive advantage. Track the release intervals, styling modifications, and feature updates deployed by competitors.",
+    challenge: "Operators launch defensive campaigns reactively, playing catch-up after competitors have already captured peak seasonal traffic.",
+    mechanics: "Jurnii models historical competitor styling iterations and feature updates to predict upcoming launch windows.",
+    capabilities: [
+      { title: "Product Launch Forecasts", icon: "brain", desc: "Anticipate competitor software updates and welcome offer changes using temporal predictive models." },
+      { title: "Styling Adjustment Alerts", icon: "refresh-cw", desc: "Track when rivals begin testing styling, new payment options, or quick bet features." },
+      { title: "Market Gap Trackers", icon: "compass", desc: "Identify when competitors are undergoing transitions, creating timing opportunities for aggressive acquisitions." }
+    ],
+    proofText: "Predictive temporal models turn reactive scrambles into robust defensive planning.",
+    targetPersona: "Chief Marketing Officers use timing analytics to plan paid search and media schedules."
+  },
+  {
+    slug: "features/trend-spotting-market-shifts.html",
+    name: "Trend Spotting",
+    fullName: "Trend-Spotting & Market Shifts",
+    kicker: "Cortex Core",
+    lede: "Detect emerging industry stylesheet trends, visual color systems, and payment portals.",
+    manifesto: "Adopt winning designs before the market converges. Track global usability themes and checkout frameworks to maintain aesthetic leadership.",
+    challenge: "Product teams work in silos, missing regional adoptions of digital wallets or instant KYC updates until players start defection.",
+    mechanics: "We crawl pioneering markets, indexing visual grids, border systems, and typography standards to outline design trends.",
+    capabilities: [
+      { title: "Styling Systems Audits", icon: "palette", desc: "Identify color palettes, border-radius sets, and card styling gaining traction in major gaming hubs." },
+      { title: "Feature Adoption Scans", icon: "check-square", desc: "Measure adoption velocities of new interface components across competitors to guide updates." },
+      { title: "Global Spacing Auditing", icon: "globe", desc: "Identify visual styling standards in pioneering jurisdictions to guide local mobile redesigns." }
+    ],
+    proofText: "Continuous aesthetic auditing keeps your platform design modern and highly engaging.",
+    targetPersona: "Design Systems Architects deploy trend audits to maintain a premium visual environment."
   }
 ];
 
