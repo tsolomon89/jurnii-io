@@ -96,8 +96,14 @@ const useCasesOntology = {
     slug: "use-cases/roles.html",
     items: [
       { name: "CMO", slug: "use-cases/roles/cmo.html", icon: "megaphone" },
+      { name: "CCO", slug: "use-cases/roles/cco.html", icon: "coins" },
       { name: "COO", slug: "use-cases/roles/coo.html", icon: "briefcase" },
-      { name: "CCO", slug: "use-cases/roles/cco.html", icon: "coins" }
+      { name: "CPO", slug: "use-cases/roles/cpo.html", icon: "layout" },
+      { name: "CFO", slug: "use-cases/roles/cfo.html", icon: "bar-chart-2" },
+      { name: "CEO", slug: "use-cases/roles/ceo.html", icon: "shield" },
+      { name: "Head of Product", slug: "use-cases/roles/head-of-product.html", icon: "layout-template" },
+      { name: "Head of Marketing", slug: "use-cases/roles/head-of-marketing.html", icon: "award" },
+      { name: "Head of CRM", slug: "use-cases/roles/head-of-crm.html", icon: "users" }
     ]
   },
   companySizes: {
