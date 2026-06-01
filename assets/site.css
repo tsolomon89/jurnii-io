@@ -107,6 +107,8 @@ h1.page-title { font-size: clamp(36px, 4.6vw, 60px); line-height: 1.12; letter-s
 .dropdown-column { display: flex; flex-direction: column; gap: 10px; }
 .dropdown-column-header { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--jurnii-600); padding-bottom: 6px; border-bottom: 1px dotted var(--border); text-decoration: none; transition: color 150ms ease; margin-bottom: 4px; }
 .dropdown-column-header:hover { color: var(--jurnii-500); }
+.nav-links a.dropdown-column-header { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--jurnii-600); padding: 0 0 6px 0; border-bottom: 1px dotted var(--border); border-radius: 0; opacity: 1; background: transparent; transition: color 150ms ease; margin-bottom: 4px; }
+.nav-links a.dropdown-column-header:hover { color: var(--jurnii-500); background: transparent; opacity: 1; }
 .dropdown-column-links { display: flex; flex-direction: column; gap: 2px; }
 .dropdown-column-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 500; color: var(--foreground); transition: background 150ms ease, color 150ms ease; }
 .dropdown-column-item:hover { background: var(--accent); color: var(--jurnii-600); }
