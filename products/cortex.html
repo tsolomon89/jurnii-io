@@ -285,7 +285,7 @@
 
   <main>
     <!-- 1. HERO SECTION -->
-    <section class="product-hero">
+    <section class="product-hero" data-theme="dark">
       <div class="container product-hero-grid">
         <div class="product-hero-copy">
           <div class="product-badge">
@@ -404,7 +404,7 @@
     </section>
 
     <!-- 4. BEFORE/AFTER SECTION -->
-    <section class="section section-dark">
+    <section class="section section-dark" data-theme="dark">
       <div class="container">
         <div class="section-head centered">
           <p class="eyebrow"><span class="dot"></span> Operational Shift</p>
@@ -437,7 +437,7 @@
     </section>
 
     <!-- 5. SCENARIO PLANNING SIMULATOR (Mechanism & finance x marketing) -->
-    <section class="section">
+    <section class="section section-dark" data-theme="dark">
       <div class="container">
         <div class="problem-breakdown" style="align-items: stretch;">
           <div class="product-feature-copy" style="display: flex; flex-direction: column; justify-content: center; gap: 20px;">
@@ -451,7 +451,7 @@
               <li style="color: var(--muted-foreground);"><i data-lucide="check-circle" style="color: var(--jurnii-500);"></i> <strong>Finance x Marketing Reconciliation</strong>: Bridge the gap between marketing attribution and finance ledger reporting.</li>
             </ul>
           </div>
-          <div class="scenario-sim-panel" style="background: var(--popover); box-shadow: 0 10px 40px rgba(0,0,0,0.15);">
+          <div class="scenario-sim-panel" style="box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
             <div class="sim-header">
               <span class="sim-title"><span></span> Portfolio Allocator</span>
               <span class="sim-status">Causal Model Live</span>
@@ -483,7 +483,7 @@
     </section>
 
     <!-- 6. HOW IT WORKS / WORKFLOW DIAGRAM -->
-    <section class="section section-dark" id="architecture">
+    <section class="section section-dark" id="architecture" data-theme="dark">
       <div class="container">
         <div class="section-head centered">
           <p class="eyebrow"><span class="dot"></span> Mechanics</p>
@@ -515,22 +515,8 @@
       </div>
     </section>
 
-    <!-- 7. ATTRIBUTION ENGINE WORKFLOW / SYSTEM DIAGRAM -->
-    <section class="section">
-      <div class="container">
-        <div class="section-head centered">
-          <p class="eyebrow"><span class="dot"></span> Architecture</p>
-          <h2 class="h2-section">Powered by Jurnii 360</h2>
-          <p class="section-lede">Each product in our intelligence layer feeds the others. Jurnii 360 captures and structures competitor promotional intelligence, feeding that context directly into Cortex to power its MMM models.</p>
-        </div>
-        <div class="svg-panel attribution-panel" style="margin-top: 48px; background: var(--concrete-900); padding: 48px; border-radius: 24px;">
-          <img src="../assets/visuals/cortex-attribution-graph.svg" alt="Cortex Attribution Graph" width="100%">
-        </div>
-      </div>
-    </section>
-
     <!-- 8. ROLE / PERSONA SECTION -->
-    <section class="section section-dark">
+    <section class="section section-dark" data-theme="dark">
       <div class="container">
         <div class="section-head centered">
           <p class="eyebrow"><span class="dot"></span> Audience Mapping</p>
@@ -538,7 +524,7 @@
           <p class="section-lede">Align marketing investment with verified bottom-line performance.</p>
         </div>
         <div class="persona-grid">
-          <div class="persona-card" style="background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.08);">
+          <div class="persona-card">
             <div class="persona-card-header">
               <div class="persona-icon-box"><i data-lucide="megaphone"></i></div>
               <div class="persona-title-box">
@@ -546,13 +532,13 @@
                 <span>CMO</span>
               </div>
             </div>
-            <div class="persona-metric-brief" style="border-color: rgba(255,255,255,0.08);">
+            <div class="persona-metric-brief">
               <span class="lbl">Primary Goal</span>
-              <span class="val" style="color:#fff;">Spend Efficiency</span>
+              <span class="val">Spend Efficiency</span>
             </div>
-            <p style="color: var(--concrete-300);">CMOs use Cortex to prove the true incremental value of campaigns and defend budget requests before the board with empirical evidence.</p>
+            <p>CMOs use Cortex to prove the true incremental value of campaigns and defend budget requests before the board with empirical evidence.</p>
           </div>
-          <div class="persona-card" style="background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.08);">
+          <div class="persona-card">
             <div class="persona-card-header">
               <div class="persona-icon-box"><i data-lucide="coins"></i></div>
               <div class="persona-title-box">
@@ -560,13 +546,13 @@
                 <span>CFO</span>
               </div>
             </div>
-            <div class="persona-metric-brief" style="border-color: rgba(255,255,255,0.08);">
+            <div class="persona-metric-brief">
               <span class="lbl">Primary Goal</span>
-              <span class="val" style="color:#fff;">Reconciliation</span>
+              <span class="val">Reconciliation</span>
             </div>
-            <p style="color: var(--concrete-300);">CFOs rely on Cortex to reconcile marketing investment against bottom-line outcomes, ensuring zero overspending on saturated channels.</p>
+            <p>CFOs rely on Cortex to reconcile marketing investment against bottom-line outcomes, ensuring zero overspending on saturated channels.</p>
           </div>
-          <div class="persona-card" style="background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.08);">
+          <div class="persona-card">
             <div class="persona-card-header">
               <div class="persona-icon-box"><i data-lucide="trending-up"></i></div>
               <div class="persona-title-box">
@@ -574,11 +560,11 @@
                 <span>CCO</span>
               </div>
             </div>
-            <div class="persona-metric-brief" style="border-color: rgba(255,255,255,0.08);">
+            <div class="persona-metric-brief">
               <span class="lbl">Primary Goal</span>
-              <span class="val" style="color:#fff;">Portfolio ROI</span>
+              <span class="val">Portfolio ROI</span>
             </div>
-            <p style="color: var(--concrete-300);">CCOs analyze multi-channel conversion curves to optimize the commercial portfolio and model ROI shifts under aggressive promotions.</p>
+            <p>CCOs analyze multi-channel conversion curves to optimize the commercial portfolio and model ROI shifts under aggressive promotions.</p>
           </div>
         </div>
       </div>
@@ -657,7 +643,7 @@
     </section>
 
     <!-- 10. STRONGER FINAL CTA SECTION -->
-    <section class="product-footer-cta">
+    <section class="product-footer-cta" data-theme="dark">
       <div class="container">
         <h2>Reconcile marketing spend with commercial value.</h2>
         <p>Stop overpaying for non-incremental promotions. Leverage causal impact models to defend and optimize your budget.</p>
