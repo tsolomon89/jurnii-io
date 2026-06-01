@@ -4213,6 +4213,887 @@ th.jurnii-bench-col {
   overflow: hidden;
 }
 
+/* ============================================================
+   JURNII PRODUCT PAGES SYSTEM-WIDE OVERHAUL STYLES
+   ============================================================ */
+
+/* 1. Base Product Hero Primitive */
+.product-hero {
+  padding: 120px 0 100px;
+  background: #252c1e;
+  color: var(--concrete-50);
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.product-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(148, 255, 150, 0.08), transparent 50%),
+              radial-gradient(circle at 20% 85%, rgba(82, 153, 255, 0.04), transparent 50%);
+  pointer-events: none;
+}
+.product-hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 64px;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+.product-hero-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.product-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  background: rgba(148, 255, 150, 0.08);
+  border: 1px solid rgba(148, 255, 150, 0.18);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--jurnii-300);
+  margin-bottom: 24px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.product-badge .pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--jurnii-300);
+  box-shadow: 0 0 10px var(--jurnii-300);
+  animation: pulse-active 2s infinite;
+}
+@keyframes pulse-active {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(87, 255, 96, 0.5); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(87, 255, 96, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(87, 255, 96, 0); }
+}
+
+/* 2. Commercial Challenge Primitives */
+.problem-breakdown {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 64px;
+  align-items: center;
+  margin-top: 48px;
+}
+.problem-pain-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.02), inset 0 1px 0 rgba(255,255,255,0.6);
+  position: relative;
+  overflow: hidden;
+}
+.problem-pain-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background: #ef4444;
+}
+.problem-pain-card.solved::before {
+  background: var(--jurnii-500);
+}
+.implication-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+/* 3. Before/After Visual Matrices */
+.before-after-matrix {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 48px;
+}
+.before-after-card {
+  border-radius: 14px;
+  padding: 32px;
+  border: 1px solid var(--border);
+  position: relative;
+}
+.before-after-card.before {
+  background: rgba(239, 68, 68, 0.01);
+  border-color: rgba(239, 68, 68, 0.1);
+}
+.before-after-card.after {
+  background: rgba(148, 255, 150, 0.01);
+  border-color: rgba(148, 255, 150, 0.15);
+  box-shadow: 0 10px 30px -10px rgba(148, 255, 150, 0.05);
+}
+.before-after-state {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+.before-after-card.before .before-after-state { color: #ef4444; }
+.before-after-card.after .before-after-state { color: var(--jurnii-600); }
+
+.before-after-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0;
+}
+.before-after-list li {
+  font-size: 14.5px;
+  display: flex;
+  align-items: start;
+  gap: 10px;
+  line-height: 1.5;
+}
+.before-after-list li i {
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+.before-after-card.before .before-after-list li i { color: #ef4444; }
+.before-after-card.after .before-after-list li i { color: var(--jurnii-500); }
+
+/* 4. High-Fidelity Product Flow / Workflow Diagrams */
+.workflow-map {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-top: 48px;
+  position: relative;
+}
+.workflow-step-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.01);
+}
+.workflow-step-card:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: -14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 14px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(0,0,0,0.15)' stroke-width='3'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M8.25 4.5l7.5 7.5-7.5 7.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: 10;
+}
+[data-theme="dark"] .workflow-step-card:not(:last-child)::after,
+[data-theme="jurnii-v1"] .workflow-step-card:not(:last-child)::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(255,255,255,0.15)' stroke-width='3'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M8.25 4.5l7.5 7.5-7.5 7.5'/%3E%3C/svg%3E");
+}
+.workflow-step-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--jurnii-600);
+  background: rgba(148, 255, 150, 0.1);
+  padding: 4px 10px;
+  border-radius: 6px;
+  width: max-content;
+}
+[data-theme="dark"] .workflow-step-num,
+[data-theme="jurnii-v1"] .workflow-step-num {
+  color: var(--jurnii-300);
+}
+.workflow-step-card h3 {
+  font-size: 17px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.25;
+}
+.workflow-step-card p {
+  font-size: 13.5px;
+  color: var(--muted-foreground);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* 5. CORTEX: Causal Channels Model Diagram Visual */
+.cortex-channels-diagram {
+  background: var(--popover);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 40px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+  display: grid;
+  grid-template-columns: 200px 1fr 240px;
+  gap: 40px;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.cortex-channels-diagram::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(82, 153, 255, 0.05) 0%, transparent 60%);
+  pointer-events: none;
+}
+.cortex-input-channels {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.cortex-channel-node {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255,255,255,0.8);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  transition: border-color 200ms ease;
+}
+.cortex-channel-node.active {
+  border-color: rgba(87,255,96,0.3);
+  color: var(--jurnii-300);
+}
+.cortex-channel-node i {
+  width: 14px;
+  height: 14px;
+}
+.cortex-model-engine {
+  border: 1px solid rgba(82, 153, 255, 0.3);
+  background: rgba(17, 24, 39, 0.9);
+  border-radius: 14px;
+  padding: 32px 24px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3), 0 0 20px rgba(82, 153, 255, 0.1);
+}
+.cortex-model-engine::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 10%;
+  width: 80%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(82, 153, 255, 0.5), transparent);
+}
+.cortex-model-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(82, 153, 255, 0.1);
+  color: #5299ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+.cortex-model-engine h4 {
+  font-size: 16px;
+  color: #fff;
+  margin: 0 0 6px;
+  font-weight: 700;
+}
+.cortex-model-engine p {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: rgba(255,255,255,0.4);
+  margin: 0;
+}
+.cortex-model-outputs {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.cortex-output-node {
+  background: rgba(87, 255, 96, 0.02);
+  border: 1px solid rgba(87, 255, 96, 0.2);
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2), 0 0 15px rgba(87, 255, 96, 0.05);
+}
+.cortex-output-node .lbl {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 4px;
+}
+.cortex-output-node .val {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--jurnii-300);
+  line-height: 1;
+}
+.cortex-output-node .meta {
+  font-size: 11px;
+  color: rgba(255,255,255,0.6);
+  margin-top: 6px;
+  display: block;
+}
+
+/* 6. CORTEX: Scenario Planning Interactive Mock Visual */
+.scenario-sim-panel {
+  background: var(--popover);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+}
+.sim-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+.sim-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sim-title span {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--jurnii-500);
+}
+.sim-status {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--jurnii-300);
+  background: rgba(148, 255, 150, 0.08);
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+.sim-controls-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+.sim-sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.sim-control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sim-control-group label {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  display: flex;
+  justify-content: space-between;
+}
+.sim-control-group label span {
+  font-family: var(--font-mono);
+  color: var(--jurnii-300);
+}
+.sim-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.1);
+  outline: none;
+}
+.sim-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--jurnii-200);
+  cursor: pointer;
+  box-shadow: 0 0 10px var(--jurnii-200);
+}
+.sim-output-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.sim-output-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 3px;
+  background: var(--jurnii-500);
+}
+.sim-output-val {
+  font-family: var(--font-mono);
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--jurnii-200);
+  line-height: 1;
+  margin-bottom: 8px;
+  text-shadow: 0 0 15px rgba(148, 255, 150, 0.2);
+}
+.sim-output-card p {
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  margin: 0;
+}
+
+/* 7. JURNII 360: Competitor Intelligence Visuals */
+.jurnii-alert-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 32px;
+  position: relative;
+  padding-left: 20px;
+}
+.jurnii-alert-timeline::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 10px;
+  bottom: 10px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+.timeline-event-item {
+  display: flex;
+  gap: 16px;
+  align-items: start;
+  position: relative;
+}
+.timeline-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 9999px;
+  background: var(--concrete-950);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  margin-left: -19px;
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+}
+.timeline-event-item.active .timeline-dot {
+  background: var(--jurnii-300);
+  border-color: var(--jurnii-950);
+  box-shadow: 0 0 10px var(--jurnii-300);
+}
+.timeline-event-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 16px 20px;
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.timeline-event-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.timeline-event-time {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+}
+.timeline-event-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+.timeline-event-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.timeline-event-badge.high-priority {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+.timeline-event-badge.normal-priority {
+  background: rgba(82, 153, 255, 0.1);
+  color: #5299ff;
+  border: 1px solid rgba(82, 153, 255, 0.2);
+}
+
+/* 8. JURNII UX: Custom Audit Scorecard & Prioritization panels */
+.ux-scorecard-matrix {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.ux-score-badge-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.01);
+}
+.ux-radial-display {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 16px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ux-radial-svg {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+.ux-radial-bg {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 6;
+}
+.ux-radial-fill {
+  fill: none;
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+.ux-radial-fill.excellent { stroke: var(--jurnii-500); }
+.ux-radial-fill.good { stroke: #22c55e; }
+.ux-radial-fill.average { stroke: #eab308; }
+.ux-radial-fill.poor { stroke: #ef4444; }
+
+.ux-radial-text {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--foreground);
+}
+.ux-score-badge-card h4 {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+.ux-score-badge-card p {
+  font-size: 12.5px;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+.ux-prioritisation-panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.01);
+}
+.ux-audit-item-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 120px 100px;
+  gap: 20px;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+.ux-audit-item-row:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.ux-audit-item-row:first-child {
+  padding-top: 0;
+}
+.ux-audit-severity {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-align: center;
+}
+.ux-audit-severity.critical {
+  background: rgba(239, 68, 68, 0.08);
+  color: #ef4444;
+}
+.ux-audit-severity.medium {
+  background: rgba(234, 179, 8, 0.08);
+  color: #eab308;
+}
+.ux-audit-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ux-audit-desc {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--foreground);
+}
+.ux-audit-flow-tag {
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+.ux-audit-impact {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--foreground);
+}
+.ux-audit-action-btn {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--jurnii-600);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.ux-audit-action-btn:hover {
+  color: var(--jurnii-700);
+}
+
+/* 9. Shared Persona Layout Cards */
+.persona-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+.persona-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.01), inset 0 1px 0 rgba(255,255,255,0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+[data-theme="dark"] .persona-card,
+[data-theme="jurnii-v1"] .persona-card {
+  box-shadow: 0 4px 30px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.persona-card-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.persona-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: rgba(148, 255, 150, 0.1);
+  color: var(--jurnii-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+[data-theme="dark"] .persona-icon-box,
+[data-theme="jurnii-v1"] .persona-icon-box {
+  color: var(--jurnii-300);
+}
+.persona-title-box h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+.persona-title-box span {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.persona-metric-brief {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.persona-metric-brief .lbl {
+  font-size: 13px;
+  color: var(--muted-foreground);
+}
+.persona-metric-brief .val {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--foreground);
+}
+.persona-card p {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+/* 10. Reusable Dark Pre-Footer CTA Panel */
+.product-footer-cta {
+  padding: 120px 0;
+  background: #252c1e;
+  color: var(--concrete-50);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+.product-footer-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 100%, rgba(148, 255, 150, 0.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+.product-footer-cta .container {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+}
+.product-footer-cta h2 {
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin: 0 0 20px;
+}
+.product-footer-cta p {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 600px;
+  margin: 0 auto 36px;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   RESPONSIVE DESIGN SYSTEM UPDATES & GRID REPAIR
+   ============================================================ */
+@media (max-width: 1024px) {
+  .product-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+    text-align: center;
+  }
+  .product-hero-copy {
+    align-items: center;
+  }
+  .product-hero-copy .lede {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .problem-breakdown {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .workflow-map {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  .workflow-step-card:not(:last-child)::after {
+    display: none;
+  }
+  .cortex-channels-diagram {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .cortex-channels-diagram::before {
+    display: none;
+  }
+  .cortex-input-channels {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .sim-controls-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .persona-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .ux-scorecard-matrix {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .before-after-matrix {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .workflow-map {
+    grid-template-columns: 1fr;
+  }
+  .ux-audit-item-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    text-align: left;
+    padding: 24px 0;
+  }
+  .ux-audit-severity {
+    width: max-content;
+  }
+  .ux-scorecard-matrix {
+    grid-template-columns: 1fr;
+  }
+}
+
 
 
 
