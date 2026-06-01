@@ -986,6 +986,142 @@ const solutionsData = [
     ],
     proofText: "Improving landing page conversion recovers acquisition spend, directly boosting promotional ROI.",
     targetPersona: "Chief Marketing Officers use CAC optimization to optimize digital campaigns and improve media ROAS."
+  },
+  {
+    slug: "solutions/competitor-intelligence.html",
+    name: "Competitor Intelligence",
+    fullName: "Competitor Intelligence Solutions",
+    kicker: "Competition",
+    lede: "Track competitor promotions, value claims, and active sign-up incentives to defend GGR.",
+    manifesto: "Gain complete competitive market visibility. Automate the tracking of competitorwelcome matches, sports boosts, and wagering rollovers across jurisdictions.",
+    challenge: "Operators lose millions copying rival welcome terms blindly. Manual scrapes are slow and fail to catch newly introduced welcome offers in real-time, resulting in severe margin drops.",
+    mechanics: "Jurnii scraper bots log active sign-up offers, deposit rollovers, and CRM incentives across 35 regulated markets.",
+    capabilities: [
+      { title: "Generosity Benchmarks", icon: "gift", desc: "Evaluate rival welcoming generosity mathematically through the Promo Richness Index." },
+      { title: "Active Scan Alerts", icon: "bell", desc: "Receive immediate notifications the moment a regional competitor tweaks welcome rollovers." },
+      { title: "Parity Optimization", icon: "shield", desc: "Optimize regional player acquisition rates through structured, real-time market parities." }
+    ],
+    proofText: "Always-on promotions surveillance protects operator hold rates and campaigns yield.",
+    targetPersona: "Chief Commercial Officers utilize competitor intelligence to defend GGR holds."
+  },
+  {
+    slug: "solutions/conversion-optimisation.html",
+    name: "Conversion Optimisation",
+    fullName: "Conversion Optimisation Solutions",
+    kicker: "Optimization",
+    lede: "Identify and resolve friction bottlenecks across player registration, verification, and checkouts.",
+    manifesto: "Heal registration funnels objectively. Optimize signup grids, security indicators, and terms readability to lower CPA.",
+    challenge: "Minor stylesheet errors and form redundancies cause silent player abandonment, diluting media budgets and increasing CPA.",
+    mechanics: "Jurnii UX runs automated usability scans, ranking friction points by severity to guide sprint updates.",
+    capabilities: [
+      { title: "Funnel Optimization", icon: "percent", desc: "Minimize field requirements and KYC blocks to accelerate first-mile player conversions." },
+      { title: "Trust Audits", icon: "shield", desc: "Enhance visual authority during verification steps by auditing compliance layouts." },
+      { title: "Performance Benchmarking", icon: "zap", desc: "Benchmark page speed technical vitals side-by-side with industry top-performers." }
+    ],
+    proofText: "Improving interface flow recovers acquired marketing clicks, maximizing promotional ROI.",
+    targetPersona: "Heads of UX deploy conversion optimization sprints to heal leaky paths."
+  },
+  {
+    slug: "solutions/marketing-attribution.html",
+    name: "Marketing Attribution",
+    fullName: "Marketing Attribution Solutions",
+    kicker: "Attribution",
+    lede: "Attribute player lifetime value and acquisitions directly to design updates and competitor moves.",
+    manifesto: "Establish causal campaign attribution. Cortex integrates competitor promotions with organic flows to isolate marketing contribution.",
+    challenge: "Traditional last-click models misattribute conversions, leaving operators blind to competitor generosity sweeps during sports peaks.",
+    mechanics: "We model marketing contribution curves against external competitor campaigns variables and internal UX scores.",
+    capabilities: [
+      { title: "Causal ROI Attribution", icon: "pie-chart", desc: "Isolate true campaign yield lift relative to competitor pricing and active promo variables." },
+      { title: "Attribution Reallocation", icon: "sliders", desc: "Identify underperforming programmatic or search loops to redirect spend towards high-yield channels." },
+      { title: "Reconciliation Reporting", icon: "file-text", desc: "Synthesize board-ready attribution data to justify marketing mix updates." }
+    ],
+    proofText: "Attributing campaign success with causal accuracy avoids massive spreadsheet bloat.",
+    targetPersona: "Chief Marketing Officers deploy Cortex attribution to secure campaign ROAS."
+  },
+  {
+    slug: "solutions/marketing-mix-modelling.html",
+    name: "Marketing Mix Modelling",
+    fullName: "Marketing Mix Modelling Solutions",
+    kicker: "Attribution",
+    lede: "Streamline competitor promotions datasets directly into local analytics modeling networks.",
+    manifesto: "Empower analytics workflows. Cortex pipes normalized competitor welcome matches and rollovers history for direct processing.",
+    challenge: "Analysts waste 80% of their time manual-compiling competitor data instead of modeling media contribution models.",
+    mechanics: "We export clean CSV or JSON datasets of competitor campaign histories ready for Marketing Mix Modeling integration.",
+    capabilities: [
+      { title: "Structured Exports", icon: "database", desc: "Pipes structured promotional campaigns variables directly into local predictive servers." },
+      { title: "Predictive Models", icon: "brain", desc: "Model seasonal campaigns contribution based on years of competitor welcome and design histories." },
+      { title: "Cortex API Integration", icon: "code", desc: "Integrate regional pricing datasets and UX grades with player databases." }
+    ],
+    proofText: "Structured promotions exports eliminate developer manual scraping overhead.",
+    targetPersona: "Chief Marketing Officers deploy Cortex data streams to provide board-ready yield forecasts."
+  },
+  {
+    slug: "solutions/retention-intelligence.html",
+    name: "Retention Intelligence",
+    fullName: "Retention Intelligence Solutions",
+    kicker: "Optimization",
+    lede: "Combat player churn by correlating CRM triggers with competitor promotions pressure.",
+    manifesto: "Protect customer lifetime value. Cortex detects when competitor generosity spikes, enabling defensive CRM response loops.",
+    challenge: "CRM teams operate in isolation, attempting to recover lost players with costly bonuses only after defection has occurred.",
+    mechanics: "We map competitor welcome match generosity to internal player engagement drops, alerting retention desks instantly.",
+    capabilities: [
+      { title: "Churn Risk Prevention", icon: "heart", desc: "Detect player attrition flags triggered by competitor promotional surges." },
+      { title: "Defensive Bonus Calibrating", icon: "sliders", desc: "Calibrate regional loyalty rewards to neutralize rival acquisition campaigns." },
+      { title: "Active Parity Calibrations", icon: "shield", desc: "Stabilize player holds through contextual competitor CRM surveillance." }
+    ],
+    proofText: "Proactive CRM calibrations lower active customer attrition and preserve margins.",
+    targetPersona: "Heads of CRM deploy retention intelligence to balance VIP loyalty and NGR holds."
+  },
+  {
+    slug: "solutions/ux-benchmarking.html",
+    name: "UX Benchmarking",
+    fullName: "UX Benchmarking Solutions",
+    kicker: "Benchmarking",
+    lede: "Benchmark stylesheet grids, user experience checklists, and load delays against rival brands.",
+    manifesto: "Establish visual excellence objectively. Compare your operator portfolios with global peers on a single, standardized scorecard.",
+    challenge: "Product teams debate layout updates based on subjective design opinions, stalling development and leaking revenue.",
+    mechanics: "Jurnii UX runs automated heuristic evaluations, scoring and ranking interfaces against regional competitors.",
+    capabilities: [
+      { title: "Heuristic Scorecards", icon: "sparkles", desc: "Grade interface quality, form ease, and layout clarity using objective frameworks." },
+      { title: "Technical Spacing Audits", icon: "layout", desc: "Scrape and archive CSS spacing variables, typographic grids, and color contrasts." },
+      { title: "Roadmap Prioritization", icon: "clipboard-list", desc: "Prioritize design updates based on estimated revenue restoration potential." }
+    ],
+    proofText: "Normalizing UI scoring aligns product, engineering, and commercial leadership.",
+    targetPersona: "Design Systems Architects deploy UX benchmarking to enforce strict brand guidelines."
+  },
+  {
+    slug: "solutions/customer-acquisition-cost-optimization.html",
+    name: "Customer Acquisition Cost",
+    fullName: "Customer Acquisition Cost Optimization",
+    kicker: "Optimization",
+    lede: "Minimize player onboarding friction and optimize welcome layouts to lower CPA rates.",
+    manifesto: "Secure registration pathways. Optimize welcome banners, layout spacing, and legal checkout panels to maximize media click yield.",
+    challenge: "High customer acquisition costs (CAC) drain operator GGR in highly competitive regions due to silent onboarding funnel abandonment.",
+    mechanics: "Jurnii UX identifies exact usability bugs across signup paths, ensuring every marketing click translates to an active player.",
+    capabilities: [
+      { title: "CPA Reduction Engine", icon: "shopping-bag", desc: "Correlate resolved player journey friction directly with reduced marketing CPA." },
+      { title: "Welcome Page Optimization", icon: "layout", desc: "Refine landing zone layouts, button spacing, and trust badges systematically." },
+      { title: "Generosity Calibrations", icon: "sliders", desc: "Deploy ideal signup bonuses calculated to lower customer CAC while protecting margins." }
+    ],
+    proofText: "Improving landing page conversion recovers acquisition spend, directly boosting promotional ROI.",
+    targetPersona: "Chief Marketing Officers use CAC optimization to optimize digital campaigns and improve media ROAS."
+  },
+  {
+    slug: "solutions/competition-positioning.html",
+    name: "Competition Positioning",
+    fullName: "Competition Positioning Strategy",
+    kicker: "Competition",
+    lede: "Discover copywriting claims and visual voids by mapping rival operator positioning.",
+    manifesto: "Differentiate with absolute precision. Isolate positioning angles left open by competitor marketing layouts to establish highly defensive campaigns.",
+    challenge: "Acquisition campaigns collapse when operators fail to stand out, forcing them to rely on price generosity and bonus size alone.",
+    mechanics: "Jurnii maps the copywriting and messaging space, signaling where competitors have left visual or conceptual voids.",
+    capabilities: [
+      { title: "Value Claim Maps", icon: "compass", desc: "Graph active brands based on core value propositions, speed, safety, or bonus size." },
+      { title: "Copywriting Auditing", icon: "file-text", desc: "Parse competitor landing page copy to identify dominant positioning themes and messaging voids." },
+      { title: "Segment Expansion", icon: "crosshair", desc: "Target high-value player personas ignored by slow-moving regional operators with custom copy." }
+    ],
+    proofText: "Objective positioning strategies lower CPA by avoiding direct competition on generic value claims.",
+    targetPersona: "Chief Marketing Officers deploy positioning strategy to optimize ROAS across paid media channels."
   }
 ];
 
@@ -1815,6 +1951,731 @@ function getPageHTML(metaTitle, metaDesc, kicker, title, lede, manifesto, capabi
 </html>`;
 }
 
+// Custom, premium Solution page multi-section layout template generator (Buyer Problem Narrative)
+function getSolutionPageHTML(item, levelPrefix) {
+  const slugLower = item.slug.toLowerCase();
+  const kickerLower = item.kicker.toLowerCase();
+  
+  // 1. Determine Category, Badges, parent Product Stacks
+  let category = 'cortex';
+  let categoryLabel = 'Marketing Mix & ROI Attribution';
+  let parentProductUrl = `${levelPrefix}products/cortex.html`;
+  let parentProductName = 'Cortex';
+  let productStackBadges = `
+    <a href="${levelPrefix}products/cortex.html" class="product-badge" data-product="cortex" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+      <i data-lucide="network" style="width: 12px; height: 12px;"></i> Powered by Cortex
+    </a>
+  `;
+  
+  if (slugLower.includes('competitor') || slugLower.includes('competition') || kickerLower.includes('competitor') || kickerLower.includes('competition')) {
+    category = 'competitor';
+    categoryLabel = 'Competitor & Market Intelligence';
+    parentProductUrl = `${levelPrefix}products/jurnii-360.html`;
+    parentProductName = 'Jurnii 360';
+    productStackBadges = `
+      <a href="${levelPrefix}products/jurnii-360.html" class="product-badge" data-product="jurnii-300" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px; background:rgba(5,221,22,0.1); color:var(--jurnii-700); border:1px solid rgba(5,221,22,0.2);">
+        <i data-lucide="radar" style="width: 12px; height: 12px;"></i> Powered by Jurnii 360
+      </a>
+    `;
+  } else if (slugLower.includes('ux') || slugLower.includes('usability') || slugLower.includes('journey') || slugLower.includes('perception') || slugLower.includes('design') || slugLower.includes('performance') || slugLower.includes('theme') || slugLower.includes('trends') || slugLower.includes('scoring') || slugLower.includes('benchmarking') || kickerLower.includes('brand') || kickerLower.includes('benchmarking') || kickerLower.includes('usability')) {
+    category = 'brand';
+    categoryLabel = 'UX Benchmarking & Funnel Optimization';
+    parentProductUrl = `${levelPrefix}products/jurnii-ux.html`;
+    parentProductName = 'Jurnii UX';
+    productStackBadges = `
+      <a href="${levelPrefix}products/jurnii-ux.html" class="product-badge" data-product="jurnii-ux" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px; background:rgba(0,145,255,0.1); color:#007aff; border:1px solid rgba(0,145,255,0.2);">
+        <i data-lucide="layout-template" style="width: 12px; height: 12px;"></i> Part of Jurnii UX
+      </a>
+    `;
+  } else if (slugLower.includes('retention') || slugLower.includes('churn') || slugLower.includes('value') || slugLower.includes('ltv')) {
+    category = 'retention';
+    categoryLabel = 'CRM & Retention Intelligence';
+    parentProductUrl = `${levelPrefix}products/jurnii-360.html`;
+    parentProductName = 'Jurnii 360 + Cortex';
+    productStackBadges = `
+      <a href="${levelPrefix}products/jurnii-360.html" class="product-badge" data-product="jurnii-300" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px; background:rgba(5,221,22,0.1); color:var(--jurnii-700); border:1px solid rgba(5,221,22,0.2); margin-right:8px;">
+        <i data-lucide="radar" style="width: 12px; height: 12px;"></i> Jurnii 360
+      </a>
+      <a href="${levelPrefix}products/cortex.html" class="product-badge" data-product="cortex" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+        <i data-lucide="network" style="width: 12px; height: 12px;"></i> Cortex
+      </a>
+    `;
+  }
+
+  // 2. Category-Specific Hero visuals, failure modes, cost of inaction, workflows, and personas
+  let heroVisualHTML = '';
+  let costOfInactionHTML = '';
+  let workflowHTML = '';
+  let evidenceVisualHTML = '';
+  let productStackHTML = '';
+  let personasHTML = '';
+  let finalCTATitle = '';
+  let finalCTADesc = '';
+  let primaryCTALabel = '';
+  let primaryCTAUrl = `mailto:demo@jurnii.io?subject=Request%20Demo%20-%20${encodeURIComponent(item.fullName)}`;
+
+  if (category === 'competitor') {
+    heroVisualHTML = `
+      <div class="solution-market-radar" data-theme="dark">
+        <div class="command-centre-header">
+          <span class="command-centre-title">Live Competitive Command Centre</span>
+          <div class="command-pulse">
+            <span class="command-pulse-dot"></span> Radar Active
+          </div>
+        </div>
+        <div class="command-centre-row">
+          <span class="command-centre-brand">Rival Brand A</span>
+          <span class="benchmark-badge danger">Generosity Surge</span>
+          <span class="command-centre-action">+100% Match Added</span>
+        </div>
+        <div class="command-centre-row">
+          <span class="command-centre-brand">Conglomerate B</span>
+          <span class="benchmark-badge warning">Wagering Shift</span>
+          <span class="command-centre-action">35x &rarr; 15x</span>
+        </div>
+      </div>
+    `;
+    costOfInactionHTML = `
+      <div class="solution-cost-card">
+        <h3>Wasted Marketing Budget</h3>
+        <p>CMO allocates acquisition search and programmatic display funds blindly, duplicating competitor promo terms with no incrementality metrics.</p>
+      </div>
+      <div class="solution-cost-card">
+        <h3>Margin Hold Dilution</h3>
+        <p>Trading and CRM desks copy rival pricing match changes reactively, bleeding GGR holds through unoptimized bonus payouts.</p>
+      </div>
+      <div class="solution-cost-card">
+        <h3>Competitive Blind Spots</h3>
+        <p>Conglomerates modify welcome overlays and registration rules, eroding your local acquisitions before leadership sees the threat.</p>
+      </div>
+    `;
+    workflowHTML = `
+      <div class="solution-workflow-step">
+        <span class="solution-workflow-num">Step 01</span>
+        <h3>Monitor</h3>
+        <p>Scrape real-time campaign details, welcome matches, and wagering hurdles across competitors automatically.</p>
+      </div>
+      <div class="solution-workflow-step">
+        <span class="solution-workflow-num">Step 02</span>
+        <h3>Structure</h3>
+        <p>Normalize disparate landing zone copywriting and terms text into structured machine-ready datastores.</p>
+      </div>
+      <div class="solution-workflow-step">
+        <span class="solution-workflow-num">Step 03</span>
+        <h3>Benchmark</h3>
+        <p>Grade welcome generosity indexes mathematically to determine absolute operator competitive generosity levels.</p>
+      </div>
+      <div class="solution-workflow-step">
+        <span class="solution-workflow-num">Step 04</span>
+        <h3>Alert</h3>
+        <p>Push critical competitive movement alerts straight to Slack webhooks and CRM marketing desks for parities.</p>
+      </div>
+    `;
+    evidenceVisualHTML = `
+      <div class="feature-alert-feed" data-theme="dark">
+        <div class="alert-feed-item">
+          <div class="alert-feed-meta">
+            <span class="alert-feed-badge" style="color: #ff5f56;">Market Discovery</span>
+            <span>1 min ago</span>
+          </div>
+          <p class="alert-feed-text">Competitor C launched welcome promo 'Deposit $10 Get $50 spins' in Ontario segment.</p>
+        </div>
+        <div class="alert-feed-item warning">
+          <div class="alert-feed-meta">
+            <span class="alert-feed-badge" style="color: #ffbd2e;">Generosity Shift</span>
+            <span>2 hours ago</span>
+          </div>
+          <p class="alert-feed-text">Competitor A lowered wagering hurdles from 40x to 20x, increasing Generosity Index to 72.4.</p>
+        </div>
+      </div>
+    `;
+    productStackHTML = `
+      <div class="product-stack-card">
+        <span class="related-type">Primary Radar Product</span>
+        <h3>Jurnii 360</h3>
+        <p>Continuous real-time competitive intelligence radar scraping over 1,000 global gaming promotions weekly to protect operator margins.</p>
+        <a href="${levelPrefix}products/jurnii-360.html" class="btn secondary">Explore Jurnii 360 &rarr;</a>
+      </div>
+      <div class="product-stack-card">
+        <span class="related-type">Supporting Attribution</span>
+        <h3>Cortex</h3>
+        <p>Feeds clean competitor promotion databases straight into causal modeling systems to validate media allocations.</p>
+        <a href="${levelPrefix}products/cortex.html" class="btn secondary">Explore Cortex &rarr;</a>
+      </div>
+    `;
+    personasHTML = `
+      <div class="solution-persona-card">
+        <div class="use-case-icon"><i data-lucide="megaphone"></i></div>
+        <div class="use-case-details">
+          <h3>Chief Marketing Officer</h3>
+          <p>Defend search media spend with objective competitive insights, reallocating budget away from aggressive rival surges.</p>
+        </div>
+      </div>
+      <div class="solution-persona-card">
+        <div class="use-case-icon"><i data-lucide="coins"></i></div>
+        <div class="use-case-details">
+          <h3>Chief Commercial Officer</h3>
+          <p>Safeguard Net Gaming Revenue (NGR) margins by optimizing deposit matches targets based on real-time market data.</p>
+        </div>
+      </div>
+    `;
+    finalCTATitle = 'Establish Real-Time Competitor Surveillance';
+    finalCTADesc = 'Stop scraping rival welcome terms manually. Receive immediate Slack alerts the moment competitors adjust welcome targets and protect your local margins.';
+    primaryCTALabel = 'Connect Live Competitor Radar';
+  } else if (category === 'brand') {
+    heroVisualHTML = `
+      <div class="solution-funnel-map" data-theme="dark">
+        <div class="command-centre-header">
+          <span class="command-centre-title">UX Usability Scorecard</span>
+          <span class="benchmark-badge success" style="font-size:10px;">Audit Complete</span>
+        </div>
+        <div class="scorecard-item" style="background:rgba(255,255,255,0.02); margin-bottom: 8px;">
+          <div class="scorecard-meta">
+            <span class="scorecard-label">Onboarding Funnel Completion</span>
+            <span class="scorecard-value">64%</span>
+          </div>
+          <div class="scorecard-bar-bg"><div class="scorecard-bar-fill" style="width: 64%; background:#ff5f56;"></div></div>
+        </div>
+        <div class="scorecard-item" style="background:rgba(255,255,255,0.02);">
+          <div class="scorecard-meta">
+            <span class="scorecard-label">Betslip Interaction Speed</span>
+            <span class="scorecard-value">1.2s</span>
+          </div>
+          <div class="scorecard-bar-bg"><div class="scorecard-bar-fill" style="width: 92%;"></div></div>
+        </div>
+      </div>
+    `;
+    costOfInactionHTML = `
+      <div class="solution-cost-card">
+        <h3>Paid Programmatic Leakage</h3>
+        <p>Acquired traffic is driven straight into registration blocks, KYC obstacles, and document load failures, triggering 45%+ dropout rates.</p>
+      </div>
+      <div class="solution-cost-card">
+        <h3>Subjective Roadmapping</h3>
+        <p>Creative and product teams debate styling choices and interface changes without commercial proof, wasting engineer capacity.</p>
+      </div>
+      <div class="solution-cost-card">
+        <h3>Mobile Connection Lag</h3>
+        <p>Unoptimized CSS payloads and heavy assets slow betslip loads under restricted mobile grids, causing player defection.</p>
+      </div>
+    `;
+    workflowHTML = `
+      <div class="solution-workflow-step">
+        <span class="solution-workflow-num">Step 01</span>
+        <h3>Audit</h3>
+        <p>Run automated usability and core vitals diagnostics across player registration and deposit funnels.</p>
+      </div>
+      <div class="solution-workflow-step">
+        <span class="solution-workflow-num">Step 02</span>
+        <h3>Diagnose</h3>
+        <p>Pinpoint exact stylesheet bugs, cognitive barriers, and security trust drop-offs causing funnel leaks.</p>
+      </div>
+      <div class="solution-workflow-step">
+        <span class="solution-workflow-num">Step 03</span>
+        <h3>Prioritize</h3>
+        <p>Rank UX findings mathematically based on player conversion severity and revenue impact variables.</p>
+      </div>
+      <div class="solution-workflow-step">
+        <span class="solution-workflow-num">Step 04</span>
+        <h3>Fix</h3>
+        <p>Provide engineering desks with clear visual checklists and layout templates for rapid corrections.</p>
+      </div>
+    `;
+    evidenceVisualHTML = `
+      <div class="feature-journey-map" data-theme="dark">
+        <div class="journey-phase">
+          <div class="journey-card before">
+            <h4>Before Jurnii Auditing</h4>
+            <p>14 input fields, redundant checkboxes, and slow loading. Player signup drop-offs spike to 48% at KYC checkpoint.</p>
+          </div>
+          <div class="journey-card after">
+            <h4>After Jurnii UX optimization</h4>
+            <p>Single-page registration sequence, trust badges added. funnel conversions jump by +35% immediately.</p>
+          </div>
+        </div>
+      </div>
+    `;
+    productStackHTML = `
+      <div class="product-stack-card">
+        <span class="related-type">Primary Experience Product</span>
+        <h3>Jurnii UX</h3>
+        <p>Automated heuristic auditing scorecards and technical Core Web Vitals speed diagnostics mapped to revenue restoration.</p>
+        <a href="${levelPrefix}products/jurnii-ux.html" class="btn secondary">Explore Jurnii UX &rarr;</a>
+      </div>
+      <div class="product-stack-card">
+        <span class="related-type">Supporting Attribution</span>
+        <h3>Cortex</h3>
+        <p>Correlates resolved player journey leaks directly with regional customer acquisition costs and hold rates.</p>
+        <a href="${levelPrefix}products/cortex.html" class="btn secondary">Explore Cortex &rarr;</a>
+      </div>
+    `;
+    personasHTML = `
+      <div class="solution-persona-card">
+        <div class="use-case-icon"><i data-lucide="layout"></i></div>
+        <div class="use-case-details">
+          <h3>Chief Product Officer</h3>
+          <p>Prioritize developer updates based on objective yield recovery, accelerating onboarding sprint success cycles.</p>
+        </div>
+      </div>
+      <div class="solution-persona-card">
+        <div class="use-case-icon"><i data-lucide="briefcase"></i></div>
+        <div class="use-case-details">
+          <h3>Chief Operating Officer</h3>
+          <p>Defend checkout performance and transactions speed under volatile mobile peak wagering loads.</p>
+        </div>
+      </div>
+    `;
+    finalCTATitle = 'Diagnose Funnel Friction & Heal Conversions';
+    finalCTADesc = 'Stop copy-pasting generic layouts. Benchmark onboarding funnels objectively and clear KYC registration barriers in minutes.';
+    primaryCTALabel = 'Run Free Usability Diagnostic';
+  } else if (category === 'cortex') {
+    heroVisualHTML = `
+      <div class="solution-attribution-board" data-theme="dark">
+        <div class="command-centre-header">
+          <span class="command-centre-title">Cortex Attribution Engine</span>
+          <span class="benchmark-badge success" style="font-size:10px;">MMM Complete</span>
+        </div>
+        <div class="scenario-slider-row">
+          <span class="scenario-slider-label">Paid Search Allocation</span>
+          <span style="font-family:var(--font-mono); font-weight:700; color:#fff;">$2.4M</span>
+        </div>
+        <div class="scenario-forecast-box" style="margin-top:8px;">
+          <span class="scenario-forecast-num">+46% Marketing ROI Lift</span>
+          <span class="scenario-forecast-label">Attributed by Causal modeling</span>
+        </div>
+      </div>
+    `;
+    costOfInactionHTML = `
+      <div class="solution-cost-card">
+        <h3>Flawed Last-Click Modeling</h3>
+        <p>CFO and CMO make multi-million dollar programmatic display budget decisions using models that ignore competitor promotions shifts.</p>
+      </div>
+      <div class="solution-cost-card">
+        <h3>Marketing & Finance Friction</h3>
+        <p>Inability to prove actual promotional incrementality drives internal budget arguments and strategic delays.</p>
+      </div>
+      <div class="solution-cost-card">
+        <h3>Inefficient Spend Attribution</h3>
+        <p>Programmatic bids copy rival generosity boosts blind, causing severe operator hold erosion during peaks.</p>
+      </div>
+    `;
+    workflowHTML = `
+      <div class="solution-workflow-step">
+        <span class="solution-workflow-num">Step 01</span>
+        <h3>Ingest</h3>
+        <p>Consolidate clean competitor promotions data, welcome indices, and organic campaign databases.</p>
+      </div>
+      <div class="solution-workflow-step">
+        <span class="solution-workflow-num">Step 02</span>
+        <h3>Model</h3>
+        <p>Separate organic contributions from competitor campaigns generosity volatility casual factors.</p>
+      </div>
+      <div class="solution-workflow-step">
+        <span class="solution-workflow-num">Step 03</span>
+        <h3>Simulate</h3>
+        <p>Model Net Gaming Revenue yields, LTV, and conversion hold metrics under multiple budget scenarios.</p>
+      </div>
+      <div class="solution-workflow-step">
+        <span class="solution-workflow-num">Step 04</span>
+        <h3>Report</h3>
+        <p>Generate board-ready marketing mix reallocation maps to defend campaigns ROAS.</p>
+      </div>
+    `;
+    evidenceVisualHTML = `
+      <div class="feature-ai-panel" data-theme="dark">
+        <div class="ai-bubble-user">Isolate true Paid Social ROI against Rival sports boosts.</div>
+        <div class="ai-bubble-assistant">
+          Cortex causal models show Rival A's sports boost increased your Paid Social CPA by <strong>+18%</strong>. Recommend reallocating <strong>$450K</strong> from search display to defensive programmatic channels.
+        </div>
+      </div>
+    `;
+    productStackHTML = `
+      <div class="product-stack-card">
+        <span class="related-type">Primary Attribution Product</span>
+        <h3>Cortex</h3>
+        <p>Causal marketing mix attribution and scenario planning simulation dashboards to optimize multi-channel operators allocations.</p>
+        <a href="${levelPrefix}products/cortex.html" class="btn secondary">Explore Cortex &rarr;</a>
+      </div>
+      <div class="product-stack-card">
+        <span class="related-type">Supporting Radar Product</span>
+        <h3>Jurnii 360</h3>
+        <p>Streams continuous competitor welcome matches and rollovers databases directly to Cortex causal engines.</p>
+        <a href="${levelPrefix}products/jurnii-360.html" class="btn secondary">Explore Jurnii 360 &rarr;</a>
+      </div>
+    `;
+    personasHTML = `
+      <div class="solution-persona-card">
+        <div class="use-case-icon"><i data-lucide="megaphone"></i></div>
+        <div class="use-case-details">
+          <h3>Chief Marketing Officer</h3>
+          <p>Justify programmatic media investments to the board using defensible, causal contribution models.</p>
+        </div>
+      </div>
+      <div class="solution-persona-card">
+        <div class="use-case-icon"><i data-lucide="coins"></i></div>
+        <div class="use-case-details">
+          <h3>Chief Financial Officer</h3>
+          <p>Verify acquisition cost efficiency and protect EBITDA margin allocations before seasonal sporting campaigns.</p>
+        </div>
+      </div>
+    `;
+    finalCTATitle = 'Establish Defensible Causal Attribution';
+    finalCTADesc = 'Stop allocating campaigns budgets blindly. Model prospective media mix allocations against active competitor movements with Cortex causal forecasting.';
+    primaryCTALabel = 'Run Scenario Attribution Model';
+  } else {
+    // CRM/Retention
+    heroVisualHTML = `
+      <div class="solution-retention-panel" data-theme="dark">
+        <div class="command-centre-header">
+          <span class="command-centre-title">CRM Player Retention Trigger</span>
+          <div class="command-pulse">
+            <span class="command-pulse-dot" style="background:#ffbd2e;"></span> Alert Active
+          </div>
+        </div>
+        <div class="command-centre-row" style="background:rgba(255,255,255,0.01);">
+          <span class="command-centre-brand">Segment: VIP Sports</span>
+          <span class="benchmark-badge warning">Churn Risk: High</span>
+          <span class="command-centre-action">Rival matched promo</span>
+        </div>
+      </div>
+    `;
+    costOfInactionHTML = `
+      <div class="solution-cost-card">
+        <h3>Reactive CRM Bonus Spends</h3>
+        <p>CRM teams attempt to recover high-value player cohorts with costly bonus cash after defection triggers are already pulled.</p>
+      </div>
+      <div class="solution-cost-card">
+        <h3>CRM Loyalty Margin Waste</h3>
+        <p>Re-investing margins in copycat CRM rewards without understanding true welcome offer parities, diluting holds.</p>
+      </div>
+      <div class="solution-cost-card">
+        <h3>Silent VIP Attrition</h3>
+        <p>10% of players drive 80% of revenue, and these high-value VIPs defect silently to competitors deploying targeted welcome offers.</p>
+      </div>
+    `;
+    workflowHTML = `
+      <div class="solution-workflow-step">
+        <span class="solution-workflow-num">Step 01</span>
+        <h3>Detect</h3>
+        <p>Monitor competitor VIP welcome promos and CRM target adjustments regional surges.</p>
+      </div>
+      <div class="solution-workflow-step">
+        <span class="solution-workflow-num">Step 02</span>
+        <h3>Segment</h3>
+        <p>Isolate high-value player cohorts most vulnerable to rival promotional generosity spikes.</p>
+      </div>
+      <div class="solution-workflow-step">
+        <span class="solution-workflow-num">Step 03</span>
+        <h3>Calibrate</h3>
+        <p>Calculate the ideal loyalty match and wagering rollover needed to defend active conversions.</p>
+      </div>
+      <div class="solution-workflow-step">
+        <span class="solution-workflow-num">Step 04</span>
+        <h3>Retain</h3>
+        <p>Deploy automated defensive welcome offers before competitors seasonal pushes trigger churn.</p>
+      </div>
+    `;
+    evidenceVisualHTML = `
+      <div class="feature-scorecard" data-theme="dark">
+        <div class="scorecard-item">
+          <div class="scorecard-meta">
+            <span class="scorecard-label">VIP Cohort Churn Risk</span>
+            <span class="scorecard-value">Low</span>
+          </div>
+          <div class="scorecard-bar-bg"><div class="scorecard-bar-fill" style="width: 14%; background:#57ff60;"></div></div>
+        </div>
+      </div>
+    `;
+    productStackHTML = `
+      <div class="product-stack-card">
+        <span class="related-type">Primary Radar Product</span>
+        <h3>Jurnii 360</h3>
+        <p>Surveys global competitor welcoming updates and CRM promotions activity to alert retention desks.</p>
+        <a href="${levelPrefix}products/jurnii-360.html" class="btn secondary">Explore Jurnii 360 &rarr;</a>
+      </div>
+      <div class="product-stack-card">
+        <span class="related-type">Supporting Forecast Product</span>
+        <h3>Cortex</h3>
+        <p>Models player churn thresholds and optimizes loyalty reward rates to prevent margin erosion.</p>
+        <a href="${levelPrefix}products/cortex.html" class="btn secondary">Explore Cortex &rarr;</a>
+      </div>
+    `;
+    personasHTML = `
+      <div class="solution-persona-card">
+        <div class="use-case-icon"><i data-lucide="users"></i></div>
+        <div class="use-case-details">
+          <h3>Head of CRM</h3>
+          <p>Protect player lifetime values systematically, neutralizing rival campaigns sweeps before attrition triggers.</p>
+        </div>
+      </div>
+      <div class="solution-persona-card">
+        <div class="use-case-icon"><i data-lucide="coins"></i></div>
+        <div class="use-case-details">
+          <h3>Chief Commercial Officer</h3>
+          <p>Optimize CRM loyalty allocations and re-investment yields relative to real competitor actions.</p>
+        </div>
+      </div>
+    `;
+    finalCTATitle = 'Combat Player Churn Contextually';
+    finalCTADesc = 'Stop managing retention blind to alternative options. Track rival loyalty welcome strategies and deploy automated retention triggers today.';
+    primaryCTALabel = 'Map VIP Player Churn Risk';
+  }
+
+  // 3. Resolve Adjacent Solutions relative links dynamically
+  let rel1 = `${levelPrefix}solutions/competition-discovery.html`;
+  let rel1Title = 'Discovery';
+  let rel2 = `${levelPrefix}solutions/competition-offers.html`;
+  let rel2Title = 'Offers';
+  let rel3 = `${levelPrefix}solutions/competition-pricing.html`;
+  let rel3Title = 'Pricing';
+  
+  if (category === 'brand') {
+    rel1 = `${levelPrefix}solutions/user-interface-benchmarking.html`;
+    rel1Title = 'UI Benchmarking';
+    rel2 = `${levelPrefix}solutions/user-experience-benchmarking.html`;
+    rel2Title = 'UX Benchmarking';
+    rel3 = `${levelPrefix}solutions/conversion-rate-optimization.html`;
+    rel3Title = 'CRO Optimization';
+  } else if (category === 'cortex') {
+    rel1 = `${levelPrefix}solutions/marketing-roi-attribution.html`;
+    rel1Title = 'ROI Attribution';
+    rel2 = `${levelPrefix}solutions/cross-channel-attribution.html`;
+    rel2Title = 'Cross-Channel';
+    rel3 = `${levelPrefix}solutions/marketing-mix-modeling-attribution.html`;
+    rel3Title = 'MMM Modeling';
+  } else if (category === 'retention') {
+    rel1 = `${levelPrefix}solutions/life-time-value-optimization.html`;
+    rel1Title = 'LTV Optimization';
+    rel2 = `${levelPrefix}solutions/churn-rate-optimization.html`;
+    rel2Title = 'Churn Optimization';
+    rel3 = `${levelPrefix}solutions/competition-offers.html`;
+    rel3Title = 'Offers Intelligence';
+  }
+
+  return `<!doctype html>
+<html data-theme="light" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${item.fullName} — Jurnii Solutions</title>
+  <meta name="description" content="${item.lede}">
+  <link rel="icon" href="${levelPrefix}assets/jurnii-icon-light.svg">
+  <link rel="stylesheet" href="${levelPrefix}assets/site.css">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body class="solution-page">
+
+  <!-- Navigation (Populated by script) -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="nav-brand">
+        <a href="${levelPrefix}index.html"><img src="${levelPrefix}assets/jurnii-dark-full.svg" alt="Jurnii Logo" class="logo-light"></a>
+      </div>
+      <div class="nav-links">
+        <!-- Temporary placeholder to be filled by update_nav.js -->
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Buyer Problem Hero -->
+    <section class="solution-hero-premium">
+      <div class="container">
+        <div class="solution-hero-copy">
+          ${productStackBadges}
+          <p style="color: var(--jurnii-600); font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; margin: 16px 0 12px 0;">${categoryLabel}</p>
+          <h1 style="font-size: clamp(32px, 4vw, 48px); font-weight: 800; letter-spacing: -0.03em; margin: 0 0 20px 0; color: var(--foreground); line-height: 1.1;">
+            ${item.fullName.replace('Solutions', '').replace('Optimization', '').replace('Strategy', '')}
+          </h1>
+          <p class="page-hero-lede" style="font-size: 18px; color: var(--muted-foreground); line-height: 1.6; max-width: 680px; margin: 0 0 32px 0;">
+            ${item.lede}
+          </p>
+          <div class="cta-row" style="display: flex; gap: 16px;">
+            <a href="${primaryCTAUrl}" class="btn primary">${primaryCTALabel}</a>
+            <a href="${parentProductUrl}" class="btn secondary">Explore product Stack</a>
+          </div>
+        </div>
+        
+        <!-- Hero Mockup Panel -->
+        <div class="solution-hero-visual">
+          ${heroVisualHTML}
+        </div>
+      </div>
+    </section>
+
+    <!-- Manifesto Block -->
+    <section class="solution-manifesto" style="padding: 80px 0; border-bottom: 1px solid var(--border); background: var(--card); text-align: center;">
+      <div class="container" style="max-width: 960px;">
+        <p style="font-size: clamp(18px, 2.2vw, 22px); font-weight: 500; line-height: 1.7; color: var(--foreground); margin: 0; font-family: var(--font-sans); letter-spacing: -0.01em;">
+          ${item.manifesto}
+        </p>
+      </div>
+    </section>
+
+    <!-- The Commercial Failure Mode -->
+    <section class="solution-failure-mode">
+      <div class="container" style="max-width: 1100px;">
+        <div class="solution-failure-grid">
+          <div>
+            <span style="color: var(--jurnii-600); font-family: var(--font-mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 12px;">Operational Failure Mode</span>
+            <h2 style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 20px 0; color: var(--foreground); line-height: 1.2;">The Cost of Operating Blind</h2>
+            <p style="font-size: 15.5px; color: var(--muted-foreground); line-height: 1.6; margin-bottom: 16px;">
+              ${item.challenge}
+            </p>
+            <p style="font-size: 15.5px; color: var(--muted-foreground); line-height: 1.6;">
+              When operator stacks rely on retrospective metrics and siloed data, they remain highly vulnerable to sudden competitive campaigns sweeps and hidden onboarding friction hurdles. Copying rival strategies blindly dilutes margins and erosion acquisition efficiency.
+            </p>
+          </div>
+          
+          <div style="background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.015);">
+            <div style="width: 40px; height: 40px; border-radius: 8px; background: rgba(148,255,150,0.12); color: var(--jurnii-700); display: flex; align-items: center; justify-content: center; margin-bottom: 24px;">
+              <i data-lucide="shield-alert" style="width: 20px; height: 20px;"></i>
+            </div>
+            <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 12px 0;">How Jurnii Resolves This</h3>
+            <p style="font-size: 14.5px; color: var(--muted-foreground); line-height: 1.55; margin: 0 0 24px 0;">
+              ${item.mechanics}
+            </p>
+            <div class="implication-callout" style="background:rgba(255,95,86,0.04); border-left:3px solid #ff5f56; padding: 16px; border-radius: 4px;">
+              <span style="font-weight:700; color:#ff5f56; display:block; font-size:13px; margin-bottom:6px;">Commercial Threat</span>
+              <p style="font-size: 13.5px; color: var(--muted-foreground); line-height: 1.45; margin:0;">
+                Unresolved conversions leaks and copycat bonus generosity pricing dilutes Net Gaming Revenue yields by up to <b>35%</b>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cost of Inaction Section -->
+    <section class="solution-cost-section">
+      <div class="container" style="max-width: 1100px;">
+        <div style="text-align: center; margin-bottom: 48px;">
+          <span style="color: var(--jurnii-600); font-family: var(--font-mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 12px;">Financial Cost</span>
+          <h2 style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin: 0;">The Cost of Inaction</h2>
+        </div>
+        <div class="solution-cost-grid">
+          ${costOfInactionHTML}
+        </div>
+      </div>
+    </section>
+
+    <!-- Practical Solution Workflow -->
+    <section class="solution-workflow-section">
+      <div class="container" style="max-width: 1100px;">
+        <div style="text-align: center; margin-bottom: 48px;">
+          <span style="color: var(--jurnii-400); font-family: var(--font-mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 12px;">Operational Workflow</span>
+          <h2 style="font-size: 32px; font-weight: 800; color: #fff; letter-spacing: -0.02em; margin: 0;">How Jurnii Executes</h2>
+        </div>
+        <div class="solution-workflow">
+          ${workflowHTML}
+        </div>
+      </div>
+    </section>
+
+    <!-- High-Fidelity Custom Evidence Section -->
+    <section class="solution-evidence-section">
+      <div class="container" style="max-width: 1100px;">
+        <div class="solution-evidence-grid">
+          <div>
+            <span style="color: var(--jurnii-600); font-family: var(--font-mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 12px;">Platform Evidence Output</span>
+            <h2 style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em; color: var(--foreground); line-height: 1.2;">What The Buyer Gets</h2>
+            <p style="font-size: 15.5px; color: var(--muted-foreground); line-height: 1.6; margin-bottom: 24px;">
+              Our platform supplies decision desks with board-ready competitive profiles, quantitative usability scorecards, and causal spend allocation simulations.
+            </p>
+            <p style="font-size: 15.5px; color: var(--muted-foreground); line-height: 1.6; margin-bottom: 0;">
+              Verify marketing कॉस्ट efficiencies dynamically, reconcile player acquisition costs against regional welcome shifts, and synchronize product priorities.
+            </p>
+          </div>
+          
+          <div class="solution-interface-panel">
+            ${evidenceVisualHTML}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Product Stack Section -->
+    <section class="solution-product-section">
+      <div class="container" style="max-width: 1100px;">
+        <div style="text-align: center; margin-bottom: 48px;">
+          <span style="color: var(--jurnii-600); font-family: var(--font-mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 12px;">Product Integrations</span>
+          <h2 style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin: 0;">The Jurnii Product Stack</h2>
+        </div>
+        <div class="solution-product-stack">
+          ${productStackHTML}
+        </div>
+      </div>
+    </section>
+
+    <!-- Key Executive Personas -->
+    <section class="solution-persona-section">
+      <div class="container" style="max-width: 1100px;">
+        <div style="text-align: center; margin-bottom: 48px;">
+          <span style="color: var(--jurnii-600); font-family: var(--font-mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 12px;">Buyer Personas</span>
+          <h2 style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin: 0;">Who Owns This Solution</h2>
+        </div>
+        <div class="solution-persona-grid">
+          ${personasHTML}
+        </div>
+      </div>
+    </section>
+
+    <!-- Ecosystem Connections -->
+    <section class="solution-related-section">
+      <div class="container" style="max-width: 1100px;">
+        <div style="margin-bottom: 48px;">
+          <h2 style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px 0;">Adjacent Solutions & Use-Cases</h2>
+          <p style="font-size: 16px; color: var(--muted-foreground); margin: 0;">Explore how this solution coordinates with target business pathways.</p>
+        </div>
+        <div class="solution-related-grid">
+          <a href="${rel1}" class="related-card">
+            <span class="related-type">Adjacent Solution</span>
+            <h3>${rel1Title}</h3>
+            <p>Optimize yield performance against specialized regional parameters.</p>
+          </a>
+          <a href="${rel2}" class="related-card">
+            <span class="related-type">Adjacent Solution</span>
+            <h3>${rel2Title}</h3>
+            <p>Standardize target promotions benchmarks side-by-side with global peers.</p>
+          </a>
+          <a href="${rel3}" class="related-card">
+            <span class="related-type">Adjacent Solution</span>
+            <h3>${rel3Title}</h3>
+            <p>Model operator hold rates relative to multi-channel allocations.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bespoke Final CTA -->
+    <section class="solution-final-cta">
+      <div class="solution-final-cta-card">
+        <h2>${finalCTATitle}</h2>
+        <p>${finalCTADesc}</p>
+        <div class="cta-row" style="display: flex; gap: 16px; justify-content: center;">
+          <a href="${primaryCTAUrl}" class="btn primary">${primaryCTALabel}</a>
+          <a href="${parentProductUrl}" class="btn secondary">Explore product Stack</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (Populated by script) -->
+  <footer class="footer">
+    <div class="container">
+      <!-- Footer details injected by update_footer.js -->
+    </div>
+  </footer>
+
+  <script>
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+  </script>
+</body>
+</html>`;
+}
+
 // Generate the feature pages
 featuresData.forEach(item => {
   const itemFilePath = path.join(root, item.slug);
@@ -1828,9 +2689,10 @@ featuresData.forEach(item => {
 solutionsData.forEach(item => {
   const itemFilePath = path.join(root, item.slug);
   ensureDirectoryExistence(itemFilePath);
-  const html = getPageHTML(item.fullName, item.lede, item.kicker, item.fullName, item.lede, item.manifesto, item.capabilities, '../', false, item.challenge, item.mechanics, item.proofText, item.targetPersona, item.slug);
+  const html = getSolutionPageHTML(item, '../');
   fs.writeFileSync(itemFilePath, html, 'utf8');
   console.log('Generated Solution LP:', item.slug);
 });
 
 console.log('Successfully generated all 32 expanded features and solutions pages!');
+

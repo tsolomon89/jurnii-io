@@ -58,7 +58,7 @@ const solutionsOntology = {
       { name: "Discovery", slug: "solutions/competition-discovery.html", icon: "search" },
       { name: "Offers", slug: "solutions/competition-offers.html", icon: "gift" },
       { name: "Pricing", slug: "solutions/competition-pricing.html", icon: "dollar-sign" },
-      { name: "Postitioning", slug: "solutions/competition-postitioning.html", icon: "compass" }
+      { name: "Positioning", slug: "solutions/competition-positioning.html", icon: "compass" }
     ]
   },
   benchmarking: {
@@ -85,7 +85,7 @@ const solutionsOntology = {
       { name: "Conversion Rate", slug: "solutions/conversion-rate-optimization.html", icon: "percent" },
       { name: "Life Time Value", slug: "solutions/life-time-value-optimization.html", icon: "heart" },
       { name: "Churn Rate", slug: "solutions/churn-rate-optimization.html", icon: "user-minus" },
-      { name: "Customer Aquistion Cost", slug: "solutions/customer-aquistion-cost-optimization.html", icon: "shopping-bag" }
+      { name: "Customer Acquisition Cost", slug: "solutions/customer-acquisition-cost-optimization.html", icon: "shopping-bag" }
     ]
   }
 };

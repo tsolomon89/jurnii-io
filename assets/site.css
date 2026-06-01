@@ -5786,7 +5786,311 @@ th.jurnii-bench-col {
   }
 }
 
+/* ==========================================
+   PREMIUM SOLUTIONS LANDING LAYOUT SYSTEM
+   ========================================== */
+.solution-page {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
 
+.solution-hero-premium {
+  padding: 120px 0 80px 0;
+  background: radial-gradient(circle at 80% 20%, rgba(148, 255, 150, 0.05) 0%, transparent 60%);
+  border-bottom: 1px solid var(--border);
+}
+.solution-hero-premium .container {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 64px;
+  align-items: center;
+}
+.solution-hero-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.solution-hero-visual {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.04);
+  position: relative;
+  overflow: hidden;
+}
 
+/* Solutions Failure Mode */
+.solution-failure-mode {
+  padding: 100px 0;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+}
+.solution-failure-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
 
+/* Cost of Inaction Grid */
+.solution-cost-section {
+  padding: 100px 0;
+  background: var(--background);
+  border-bottom: 1px solid var(--border);
+}
+.solution-cost-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: 48px;
+}
+.solution-cost-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 4px solid #ff5f56;
+  border-radius: 12px;
+  padding: 28px;
+}
+.solution-cost-card h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0 0 12px 0;
+}
+.solution-cost-card p {
+  font-size: 14px;
+  color: var(--muted-foreground);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Solutions Workflow */
+.solution-workflow-section {
+  padding: 100px 0;
+  background: var(--concrete-950);
+  color: #fff;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.solution-workflow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  margin-top: 48px;
+  position: relative;
+}
+.solution-workflow-step {
+  position: relative;
+  text-align: left;
+}
+.solution-workflow-step::after {
+  content: "";
+  position: absolute;
+  top: 24px;
+  right: -16px;
+  width: 32px;
+  height: 1px;
+  background: rgba(255,255,255,0.1);
+}
+.solution-workflow-step:last-child::after {
+  display: none;
+}
+.solution-workflow-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--jurnii-400);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: 8px;
+}
+.solution-workflow-step h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 12px 0;
+}
+.solution-workflow-step p {
+  font-size: 13.5px;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* High Fidelity Evidence Widget */
+.solution-evidence-section {
+  padding: 100px 0;
+  background: var(--background);
+  border-bottom: 1px solid var(--border);
+}
+.solution-evidence-grid {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 64px;
+  align-items: center;
+}
+.solution-interface-panel {
+  background: #141719;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+}
+
+/* Product Stack Mapping */
+.solution-product-section {
+  padding: 100px 0;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+}
+.solution-product-stack {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 48px;
+}
+.product-stack-card {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 40px;
+  transition: border-color 0.2s ease;
+}
+.product-stack-card:hover {
+  border-color: var(--jurnii-500);
+}
+.product-stack-card h3 {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0 0 16px 0;
+}
+.product-stack-card p {
+  font-size: 15px;
+  color: var(--muted-foreground);
+  line-height: 1.6;
+  margin: 0 0 24px 0;
+}
+
+/* Persona Section */
+.solution-persona-section {
+  padding: 100px 0;
+  background: var(--background);
+  border-bottom: 1px solid var(--border);
+}
+.solution-persona-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 48px;
+}
+.solution-persona-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 32px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+/* Solutions Related Grid */
+.solution-related-section {
+  padding: 100px 0;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+}
+.solution-related-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+
+/* Solutions Final CTA */
+.solution-final-cta {
+  padding: 100px 0;
+  background: radial-gradient(circle at center, rgba(148, 255, 150, 0.04) 0%, transparent 70%);
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+.solution-final-cta-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 64px 48px;
+  max-width: 800px;
+  margin: 0 auto;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.02);
+}
+
+/* Category-specific solution panels */
+.solution-market-radar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.solution-funnel-map {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.solution-attribution-board {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.solution-retention-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+@media (max-width: 1024px) {
+  .solution-hero-premium .container {
+    grid-template-columns: 1fr;
+    gap: 48px;
+    text-align: center;
+  }
+  .solution-hero-premium .solution-hero-copy {
+    align-items: center;
+  }
+  .solution-failure-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .solution-cost-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .solution-workflow {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  .solution-workflow-step:nth-child(2)::after {
+    display: none;
+  }
+  .solution-evidence-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .solution-product-stack {
+    grid-template-columns: 1fr;
+  }
+  .solution-persona-grid {
+    grid-template-columns: 1fr;
+  }
+  .solution-related-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .solution-workflow {
+    grid-template-columns: 1fr;
+  }
+  .solution-workflow-step::after {
+    display: none !important;
+  }
+}
 
