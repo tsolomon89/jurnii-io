@@ -636,8 +636,8 @@ const useCasesData = {
         lede: "Scale player acquisition, secure regional market share, and compete directly with global conglomerates without enterprise-level overheads.",
         manifesto: "Jurnii delivers rapid, high-impact intelligence tailored for emerging brands, allowing fast-scaling challenger operators to compete directly with global conglomerates by acting on precise, localized market facts. By providing immediate competitive tracking, Jurnii enables boutique operators to capture high-value market voids and lower acquisition CPA.",
         challenge: "Squeezed by massive operator conglomerates, fast-growing challengers spend limited budgets copying market generics. Without clear competitive context, they miss micro-campaign opportunities, experience high player leakage, and struggle with high CPAs. Manual competitive auditing is impossible at their scale, while hiring expensive consulting agencies to benchmark their experience takes weeks they cannot afford.",
-        mechanics: "Jurnii provides immediate, low-overhead competitor surveillance by tracking competitor welcome offers and usability states across target jurisdictions. Operators leverage Jurnii's global repository of 300+ brands analysed to identify welcome offer gaps, and deploy agile, highly targeted counter-campaigns that maximize every dollar spent on paid channels.",
-        proofText: "Leverage Jurnii's repository of 300+ brands analysed to identify high-value market voids and lower acquisition CPA.",
+        mechanics: "Jurnii provides immediate, low-overhead competitor surveillance by tracking competitor welcome offers and usability states across target jurisdictions. Operators use Jurnii's global repository of 300+ brands analysed to identify welcome offer gaps, and deploy agile, highly targeted counter-campaigns that maximize every dollar spent on paid channels.",
+        proofText: "Use Jurnii's repository of 300+ brands analysed to identify high-value market voids and lower acquisition CPA.",
         targetPersona: "Scaling Founders and C-Suite leaders at SMB operators use Jurnii's out-of-the-box dashboards to maintain parity without enterprise-level overheads.",
         capabilities: [
           { title: "Agile Positioning", icon: "zap", desc: "Exploit local market gaps, welcome offer voids, and creative messaging opportunities left open by slower competitor conglomerates." },
@@ -681,7 +681,7 @@ const useCasesData = {
         `,
         productStack: ["jurnii-360", "jurnii-ux"],
         commercialOutcomes: [
-          { title: "Compete Like Giants", desc: "Leverage global competitive data to launch campaigns out-positioning massive conglomerates." },
+          { title: "Compete Like Giants", desc: "Use global competitive data to launch campaigns out-positioning massive conglomerates." },
           { title: "Lowered CPA Rates", desc: "Recover leaked player momentum at signup checkouts, maximizing media click value." }
         ],
         finalCTA: "Automate Intelligence for Your Lean Team"
@@ -750,7 +750,7 @@ const useCasesData = {
         `,
         productStack: ["jurnii-360", "jurnii-ux", "cortex"],
         commercialOutcomes: [
-          { title: "Seamless Launches", desc: "Validate brand launches and platform migrations through continuous automated onboarding scorecards." },
+          { title: "Risk-Free Launches", desc: "Validate brand launches and platform migrations through continuous automated onboarding scorecards." },
           { title: "EBITDA Yield Protection", desc: "Model media campaign causal ROI before scaling budgets across competitive channels." }
         ],
         finalCTA: "Build Your Commercial Response Workflow"
@@ -766,7 +766,7 @@ const useCasesData = {
         challenge: "Multi-brand, multi-jurisdiction conglomerates operate in data siloes where boards are flooded with subjective design feedback and manual reporting. Squeezed by player multi-homing rates of 70–80% across 35 regulated markets, teams struggle to track 1,000+ weekly competitor offers, leading to last-click attribution leaks and massive CRM margin dilution.",
         mechanics: "Jurnii streams structured, continuous competitor data directly into enterprise data warehouses. Cortex causal engines process multi-million dollar budgets to isolate campaign incrementality and true ROAS. Simultaneously, Jurnii UX automates usability audits across all portfolio brands, delivering 70+ commercially weighted recommendations ranked by conversion yield impact.",
         proofText: "Cortex causal engines processed a $17.1M real-world budget, surfacing $4.85M in inefficiency savings and 3x performance validation.",
-        targetPersona: "Enterprise Chief Executive Officers and Boards leverage Jurnii Meta Scores to manage brand portfolios and defend global EBITDA.",
+        targetPersona: "Enterprise Chief Executive Officers and Boards use Jurnii Meta Scores to manage brand portfolios and defend global EBITDA.",
         capabilities: [
           { title: "Multi-Brand Benchmarking", icon: "layers", desc: "Evaluate, rank, and grade your entire portfolio of brands side-by-side under a unified, commercially weighted metric system." },
           { title: "Regulatory Compliance", icon: "shield-check", desc: "Maintain automated audit trails of competitor promotional terms, active welcome bonuses, and creative copy changes." },
@@ -913,7 +913,7 @@ const useCasesData = {
         challenge: "Commercial teams struggle to balance player bonus incentives with net yield hold rates. Copying rival wagering thresholds by hand is slow, error-prone, and leads to margin erosion or sudden customer churn. Squeezed by player multi-homing rates of 70–80%, CRM teams duplicate rival promos reactively, causing severe margin dilution.",
         mechanics: "Jurnii models competitor payout curves across sports and casino verticals. Jurnii 360's Promo Richness Index standardizes wagering rules and deposit incentives. This enables commercial analysts to calibrate margin thresholds, protect NGR from competitive dilution, and optimize player lifetime value (LTV) across 35 markets monitored simultaneously.",
         proofText: "Normalizing promotion tracking across 35 markets saves 30+ hours of commercial analyst time every single week.",
-        targetPersona: "Commercial Analysts and CRM Directors leverage Jurnii margin calibrators to deploy high-yield loyalty rewards.",
+        targetPersona: "Commercial Analysts and CRM Directors deploy Jurnii margin calibrators to deploy high-yield loyalty rewards.",
         capabilities: [
           { title: "Promo Richness Index", icon: "bar-chart-3", desc: "Standardize the mathematical cost and yield margin impact of competitor deposit matches and retention bonuses." },
           { title: "Churn Analytics", icon: "user-minus", desc: "Trace rival product changes and promotions causing high player leakage and multi-homing defection." },
@@ -1190,7 +1190,7 @@ const useCasesData = {
         slug: "use-cases/sectors/fintech.html",
         kicker: "Financial Platforms",
         lede: "Streamline onboarding verification pipelines, minimize registration drop-offs, and build platform trust.",
-        manifesto: "FinTech platforms leverage Jurnii to secure high-security customer registration, audit KYC and AML processing delays, and design conversion-optimized banking interfaces. By optimizing trust elements and mobile load speeds, Jurnii prevents registration funnel leakage and stabilizes acquisition costs.",
+        manifesto: "FinTech platforms deploy Jurnii to secure high-security customer registration, audit KYC and AML processing delays, and design conversion-optimized banking interfaces. By optimizing trust elements and mobile load speeds, Jurnii prevents registration funnel leakage and stabilizes acquisition costs.",
         challenge: "FinTech applications face extreme signup drop-offs during high-security AML, KYC, and document verification steps. Players lose trust when secure interfaces look generic, outdated, or confusing. Standard analytics tools cannot measure how layout security signals and compliance branding affect user confidence, leading to high abandonment rates and lost acquisition spends.",
         mechanics: "Jurnii audits security styling, compliance signals, and input validation messages across FinTech registration funnels. By comparing onboarding flows with industry best practices and 300+ analysed brands, Jurnii UX delivers commercially weighted improvements to ensure onboarding paths project maximum credibility, compliance, and safety.",
         proofText: "Optimizing trust elements and mobile load speeds prevents registration funnel leakage and stabilizes acquisition costs.",
@@ -1607,11 +1607,11 @@ function getPageHTML(metaTitle, metaDesc, kicker, title, lede, manifesto, capabi
       </div>
     </section>
 
-    <!-- Sibling Use Cases Ecosystem Links -->
+    <!-- Sibling Use Cases Platform Links -->
     <section class="usecase-related-section">
       <div class="container" style="max-width: 1100px;">
         <div style="margin-bottom: 48px;">
-          <span style="color: var(--jurnii-600); font-family: var(--font-mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 12px;">Ecosystem Connections</span>
+          <span style="color: var(--jurnii-600); font-family: var(--font-mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 12px;">Platform Connections</span>
           <h2 style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px 0;">Adjacent Use-Cases</h2>
           <p style="font-size: 16px; color: var(--muted-foreground); margin: 0;">Explore how Jurnii coordinates across adjacent segments.</p>
         </div>

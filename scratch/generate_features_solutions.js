@@ -140,7 +140,7 @@ const featuresData = [
     fullName: "Competitor AI Insights & Predictions",
     kicker: "Competitor Feed",
     lede: "Deploy advanced ML models to predict competitor marketing pushes and summarize campaign angles.",
-    manifesto: "Gain predictive foresight in competitive markets. Leverage specialized neural nets to summarize massive campaign databases and predict rival product timing and advertising strategies.",
+    manifesto: "Gain predictive foresight in competitive markets. Deploy specialized neural nets to summarize massive campaign databases and predict rival product timing and advertising strategies.",
     challenge: "Raw competitor data is overwhelming. Sorting through thousands of sports boosts, casino offers, and copy variations manually prevents analysts from identifying real strategic patterns.",
     mechanics: "Jurnii utilizes proprietary domain-specific ML models to digest competitive databases, classifying campaigns, detecting trends, and predicting launch windows with 85% confidence.",
     capabilities: [
@@ -166,7 +166,7 @@ const featuresData = [
       { title: "Executive Benchmark Dashboards", icon: "bar-chart", desc: "Present high-fidelity design metrics directly to product, marketing, and compliance leadership with absolute clarity." }
     ],
     proofText: "Over 300 global brands are indexed on the Jurnii UX database, establishing the benchmark standard for gaming portals.",
-    targetPersona: "Chief Product Officers leverage Meta Scores to establish clear design standards across their entire operator portfolio."
+    targetPersona: "Chief Product Officers deploy Meta Scores to establish clear design standards across their entire operator portfolio."
   },
   {
     slug: "features/brand-market-trends.html",
@@ -220,9 +220,9 @@ const featuresData = [
     targetPersona: "Chief Marketing Officers use these insights to balance creative design with promotional yield expectations."
   },
   {
-    slug: "features/brand-perfomance.html",
-    name: "Perfomance",
-    fullName: "Brand Technical Perfomance",
+    slug: "features/brand-performance.html",
+    name: "Performance",
+    fullName: "Brand Technical Performance",
     kicker: "Brand Performance",
     lede: "Measure actual page loading metrics, core web vitals, and asset performance dynamically.",
     manifesto: "Eliminate latency before player abandonment. Measure and track core web vitals and mobile connection delays under simulated network loads directly against rivals to preserve NGR.",
@@ -251,12 +251,12 @@ const featuresData = [
       { title: "Error Recovery Audits", icon: "alert-triangle", desc: "Analyze validation prompts, instruction clarity, and error feedback systems across player signup flows." }
     ],
     proofText: "Obtain 70+ commercially weighted UX recommendations in minutes, not weeks, to drive product sprint success.",
-    targetPersona: "Chief Product Officers leverage usability scoring to prioritize features and accelerate development roadmaps."
+    targetPersona: "Chief Product Officers use usability scoring to prioritize features and accelerate development roadmaps."
   },
   {
-    slug: "features/brand-preception.html",
-    name: "Preception",
-    fullName: "Brand Trust & Preception",
+    slug: "features/brand-perception.html",
+    name: "Perception",
+    fullName: "Brand Trust & Perception",
     kicker: "Brand Performance",
     lede: "Audit customer trust, security signals, and visual safety perceptions across key pipelines.",
     manifesto: "Enhance onboarding security confidence. Audit regulatory badges, terms visibility, and data privacy styling elements to maximize player signup success.",
@@ -324,7 +324,7 @@ const featuresData = [
   {
     slug: "features/journeys.html",
     name: "Journeys",
-    fullName: "End-to-End Player Onboarding Journeys",
+    fullName: "Onboarding Player Journeys",
     kicker: "UX Intelligence",
     lede: "Map entire player conversion sequences from landing zone to verification and first deposit.",
     manifesto: "Understand player behavior across every touchpoint. Visualize transitions, KYC checkpoints, and payment gates as a single, continuous user journey to discover conversion leakage.",
@@ -591,7 +591,7 @@ const featuresData = [
       { title: "Competitor Flow Comparisons", icon: "git-compare", desc: "Compare player transition pathways side-by-side with regional top-performers to guide updates." }
     ],
     proofText: "Quantifying visual friction allows product teams to clear funnels and boost loyalty.",
-    targetPersona: "Chief Product Officers leverage effectiveness scores to prioritize feature sprints."
+    targetPersona: "Chief Product Officers use effectiveness scores to prioritize feature sprints."
   },
   {
     slug: "features/mmm-ready-data-export.html",
@@ -642,7 +642,7 @@ const featuresData = [
       { title: "Verification Confidence Grades", icon: "lock", desc: "Score player trust perceptions across onboarding funnels to optimize KYC document uploads." }
     ],
     proofText: "Building visual trust is a commercial necessity, driving onboarding conversions.",
-    targetPersona: "Chief Product Officers leverage trust auditing to satisfy compliance and secure registration."
+    targetPersona: "Chief Product Officers deploy trust auditing to satisfy compliance and secure registration."
   },
   {
     slug: "features/promotions.html",
@@ -767,9 +767,9 @@ const solutionsData = [
     targetPersona: "Chief Commercial Officers use pricing calibration to defend yield thresholds across target markets."
   },
   {
-    slug: "solutions/competition-postitioning.html",
-    name: "Postitioning",
-    fullName: "Competition Postitioning Strategy",
+    slug: "solutions/competition-positioning.html",
+    name: "Positioning",
+    fullName: "Competition Positioning Strategy",
     kicker: "Competition",
     lede: "Discover untapped marketing hooks and value claims by mapping rival operator positioning.",
     manifesto: "Differentiate with absolute precision. Isolate positioning angles left open by competitor marketing layouts to establish highly defensive, low-CPA campaigns.",
@@ -814,8 +814,8 @@ const solutionsData = [
       { title: "Cognitive Fatigue Audits", icon: "zap", desc: "Isolate interaction points and redundant inputs causing player dropoffs during signup." },
       { title: "Onboarding Flow Scores", icon: "route", desc: "Grade transaction flow paths against leading global sportsbooks to guide sprint updates." }
     ],
-    proofText: "Deliver board-ready comparative UX scores in minutes, not weeks, with Jurnii UX's AI-powered engine.",
-    targetPersona: "Chief Product Officers leverage UX benchmarking to prioritize development sprints and vindicate roadmaps."
+    proofText: "Deliver board-ready comparative UX scores in minutes, not weeks, with Jurnii UX's heuristically-driven engine.",
+    targetPersona: "Chief Product Officers deploy UX benchmarking to prioritize development sprints and vindicate roadmaps."
   },
   {
     slug: "solutions/customer-journey-benchmarking.html",
@@ -899,7 +899,7 @@ const solutionsData = [
       { title: "Predictive Spend Engines", icon: "bar-chart-3", desc: "Model acquisition yields based on historical regional competitor promo patterns and media footprints." },
       { title: "Cortex API Integration", icon: "network", desc: "Synchronize local player analytics databases with comprehensive competitor datasets for causal modeling." }
     ],
-    proofText: "Seamless API integrations eliminate manual data compilation, supplying robust modeling data instantly.",
+    proofText: "Automated API integrations eliminate manual data compilation, supplying robust modeling data instantly.",
     targetPersona: "Chief Marketing Officers use Cortex MMM pipes to provide board-ready marketing yield models."
   },
   {
@@ -971,9 +971,9 @@ const solutionsData = [
     targetPersona: "Chief Commercial Officers deploy churn alerts to protect active margins in aggressive markets."
   },
   {
-    slug: "solutions/customer-aquistion-cost-optimization.html",
-    name: "Customer Aquistion Cost",
-    fullName: "Customer Aquistion Cost Optimization",
+    slug: "solutions/customer-acquisition-cost-optimization.html",
+    name: "Customer Acquisition Cost",
+    fullName: "Customer Acquisition Cost Optimization",
     kicker: "Optimization",
     lede: "Decrease player acquisition costs by resolving player onboarding friction and optimizing layouts.",
     manifesto: "Achieve acquisition efficiency. Lower overall customer acquisition cost by securing registration pathways and optimizing welcome offer layouts using data-backed designs.",
@@ -1524,7 +1524,7 @@ function getPageHTML(metaTitle, metaDesc, kicker, title, lede, manifesto, capabi
     relatedSolution1Name = 'Pricing Calibration';
     relatedSolution1Desc = 'Re-calibrate player acquisition margins dynamically.';
     
-    relatedSolution2Url = `${levelPrefix}solutions/competition-postitioning.html`;
+    relatedSolution2Url = `${levelPrefix}solutions/competition-positioning.html`;
     relatedSolution2Name = 'Positioning Strategy';
     relatedSolution2Desc = 'Discover copywriting claims and value gaps.';
   } else if (category === 'cortex') {
@@ -1880,11 +1880,11 @@ function getPageHTML(metaTitle, metaDesc, kicker, title, lede, manifesto, capabi
       </div>
     </section>
 
-    <!-- Unified Ecosystem Connections (Resolved URLs, NO placeholder '#' links) -->
+    <!-- Unified Platform Connections (Resolved URLs, NO placeholder '#' links) -->
     <section class="feature-related-section">
       <div class="container" style="max-width: 1100px;">
         <div class="section-head" style="margin-bottom: 48px;">
-          <h2 style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px 0;">Ecosystem Integrations</h2>
+          <h2 style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px 0;">Platform Integrations</h2>
           <p style="font-size: 16px; color: var(--muted-foreground); margin: 0;">Explore how this ${typeLabel.toLowerCase()} coordinates with products and adjacent pathways.</p>
         </div>
         <div class="feature-related-grid">
@@ -2620,7 +2620,7 @@ function getSolutionPageHTML(item, levelPrefix) {
       </div>
     </section>
 
-    <!-- Ecosystem Connections -->
+    <!-- Platform Connections -->
     <section class="solution-related-section">
       <div class="container" style="max-width: 1100px;">
         <div style="margin-bottom: 48px;">

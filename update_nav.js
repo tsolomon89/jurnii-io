@@ -43,9 +43,9 @@ const featuresOntology = {
   brandPerformance: {
     title: "Brand Performance",
     items: [
-      { name: "Perfomance", slug: "features/brand-perfomance.html", icon: "zap" },
+      { name: "Performance", slug: "features/brand-performance.html", icon: "zap" },
       { name: "Usability", slug: "features/brand-usability.html", icon: "check-circle" },
-      { name: "Preception", slug: "features/brand-preception.html", icon: "eye" },
+      { name: "Perception", slug: "features/brand-perception.html", icon: "eye" },
       { name: "Recommendations", slug: "features/brand-recommendations.html", icon: "thumbs-up" }
     ]
   }
