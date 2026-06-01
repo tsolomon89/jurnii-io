@@ -564,74 +564,500 @@ const solutionsData = [
   }
 ];
 
-// Rich, multi-section layout template
+// Rich, category-specific premium multi-section layout template generator
 function getPageHTML(metaTitle, metaDesc, kicker, title, lede, manifesto, capabilities, levelPrefix, isFeature, challenge, mechanics, proofText, targetPersona, slug) {
   const typeLabel = isFeature ? "Feature" : "Solution";
   const parentName = isFeature ? "Features" : "Solutions";
-  const parentSlug = isFeature ? "features" : "solutions";
-  const sectionHead = isFeature ? "Strategic Capabilities" : "Operational Capabilities";
   
+  const slugLower = slug.toLowerCase();
+  const kickerLower = kicker.toLowerCase();
+  
+  // 1. Determine Category and Product Affiliation
+  let category = 'cortex';
+  let productBadgeText = 'Powered by Cortex';
+  let productBadgeAttr = 'cortex';
+  let parentProductUrl = `${levelPrefix}products/cortex.html`;
+  let parentProductName = 'Cortex';
+  let primaryCTA = `mailto:demo@jurnii.io?subject=Request%20Cortex%20Demo&body=Hello,%20I'd%20like%20to%20request%20a%20demo%20of%20Cortex%20Scenario%20Planning%20and%20Attribution.`;
+  let primaryCTALabel = 'Run Scenario Simulation';
+  
+  if (slugLower.includes('competitor') || slugLower.includes('competition') || kickerLower.includes('competitor') || kickerLower.includes('competition')) {
+    category = 'competitor';
+    productBadgeText = 'Powered by Jurnii 360';
+    productBadgeAttr = 'jurnii-360';
+    parentProductUrl = `${levelPrefix}products/jurnii-360.html`;
+    parentProductName = 'Jurnii 360';
+    primaryCTA = `mailto:demo@jurnii.io?subject=Request%20Jurnii%20360%20Demo&body=Hello,%20I'd%20like%20to%20request%20a%20demo%20of%20Jurnii%20360%20Competitor%20Intelligence.`;
+    primaryCTALabel = 'Get Live Competitor Feed';
+  } else if (slugLower.includes('ux') || slugLower.includes('usability') || slugLower.includes('journey') || slugLower.includes('perception') || slugLower.includes('design') || slugLower.includes('performance') || slugLower.includes('theme') || slugLower.includes('trends') || slugLower.includes('scoring') || slugLower.includes('benchmarking') || kickerLower.includes('brand') || kickerLower.includes('benchmarking') || kickerLower.includes('usability')) {
+    category = 'brand';
+    productBadgeText = 'Part of Jurnii UX';
+    productBadgeAttr = 'jurnii-ux';
+    parentProductUrl = `${levelPrefix}products/jurnii-ux.html`;
+    parentProductName = 'Jurnii UX';
+    primaryCTA = `mailto:demo@jurnii.io?subject=Request%20Jurnii%20UX%20Demo&body=Hello,%20I'd%20like%20to%20request%20a%20demo%20of%20Jurnii%20UX%20Heuristic%20Auditing.`;
+    primaryCTALabel = 'Run a Free Heuristic UX Audit';
+  }
+
+  // 2. Generate Category-Specific Metric Strip
   let metricStripHTML = '';
-  const uxRegex = /(ux|journey|conversion|usability|benchmarking|friction|flow|checkout|signup|registration)/i;
-  const cortexRegex = /(attribution|roi|spend|cortex|marketing|mmm|causal|incrementality|budget|allocation)/i;
-  
-  if (uxRegex.test(slug)) {
+  if (category === 'brand') {
     metricStripHTML = `
-          <div class="metric-strip-item">
-            <span class="metric-strip-num">300+</span>
-            <span class="metric-strip-label">Brands Analysed</span>
-          </div>
-          <div class="metric-strip-item">
-            <span class="metric-strip-num">70+</span>
-            <span class="metric-strip-label">Recommendations per Audit</span>
-          </div>
-          <div class="metric-strip-item">
-            <span class="metric-strip-num">4</span>
-            <span class="metric-strip-label">Key UX Dimensions</span>
-          </div>
-          <div class="metric-strip-item">
-            <span class="metric-strip-num">Mins</span>
-            <span class="metric-strip-label">Time to Full Audit</span>
-          </div>
+      <div class="metric-strip-item">
+        <span class="metric-strip-num">300+</span>
+        <span class="metric-strip-label">Global Brands Monitored</span>
+      </div>
+      <div class="metric-strip-item">
+        <span class="metric-strip-num">70+</span>
+        <span class="metric-strip-label">Recommendations per Audit</span>
+      </div>
+      <div class="metric-strip-item">
+        <span class="metric-strip-num">12</span>
+        <span class="metric-strip-label">Core Heuristic Vectors</span>
+      </div>
+      <div class="metric-strip-item">
+        <span class="metric-strip-num">Mins</span>
+        <span class="metric-strip-label">Continuous Audit Execution</span>
+      </div>
     `;
-  } else if (cortexRegex.test(slug)) {
+  } else if (category === 'cortex') {
     metricStripHTML = `
-          <div class="metric-strip-item">
-            <span class="metric-strip-num">+46%</span>
-            <span class="metric-strip-label">True Marketing ROI Lift</span>
-          </div>
-          <div class="metric-strip-item">
-            <span class="metric-strip-num">$4.85M</span>
-            <span class="metric-strip-label">Budget Reallocated</span>
-          </div>
-          <div class="metric-strip-item">
-            <span class="metric-strip-num">3x</span>
-            <span class="metric-strip-label">Attribution Speed</span>
-          </div>
-          <div class="metric-strip-item">
-            <span class="metric-strip-num">40x</span>
-            <span class="metric-strip-label">ROI on Platform Investment</span>
-          </div>
+      <div class="metric-strip-item">
+        <span class="metric-strip-num">+46%</span>
+        <span class="metric-strip-label">True Marketing ROI Lift</span>
+      </div>
+      <div class="metric-strip-item">
+        <span class="metric-strip-num">$4.85M</span>
+        <span class="metric-strip-label">Inefficient Spend Reallocated</span>
+      </div>
+      <div class="metric-strip-item">
+        <span class="metric-strip-num">3x</span>
+        <span class="metric-strip-label">Attribution Analysis Speed</span>
+      </div>
+      <div class="metric-strip-item">
+        <span class="metric-strip-num">40x</span>
+        <span class="metric-strip-label">ROI on Cortex Investment</span>
+      </div>
     `;
   } else {
+    // competitor
     metricStripHTML = `
-          <div class="metric-strip-item">
-            <span class="metric-strip-num">1,000+</span>
-            <span class="metric-strip-label">Offers Tracked Weekly</span>
-          </div>
-          <div class="metric-strip-item">
-            <span class="metric-strip-num">35</span>
-            <span class="metric-strip-label">Regulated Markets Monitored</span>
-          </div>
-          <div class="metric-strip-item">
-            <span class="metric-strip-num">21</span>
-            <span class="metric-strip-label">Feature Areas Scanned</span>
-          </div>
-          <div class="metric-strip-item">
-            <span class="metric-strip-num">30+</span>
-            <span class="metric-strip-label">Hours Saved per Week</span>
-          </div>
+      <div class="metric-strip-item">
+        <span class="metric-strip-num">1,000+</span>
+        <span class="metric-strip-label">Offers Scanned Weekly</span>
+      </div>
+      <div class="metric-strip-item">
+        <span class="metric-strip-num">35</span>
+        <span class="metric-strip-label">Regulated States & Jurisdictions</span>
+      </div>
+      <div class="metric-strip-item">
+        <span class="metric-strip-num">21</span>
+        <span class="metric-strip-label">Competitor Feature Vectors</span>
+      </div>
+      <div class="metric-strip-item">
+        <span class="metric-strip-num">30+</span>
+        <span class="metric-strip-label">Hours Saved Weekly vs Manual</span>
+      </div>
     `;
+  }
+
+  // 3. Generate Category-Specific Hero Interactive Visual Widget
+  let heroVisualHTML = '';
+  if (category === 'competitor') {
+    heroVisualHTML = `
+      <div class="feature-command-centre" data-theme="dark">
+        <div class="command-centre-header">
+          <span class="command-centre-title">Real-Time Competitor Radar</span>
+          <div class="command-pulse">
+            <span class="command-pulse-dot"></span> Active Scanning
+          </div>
+        </div>
+        <div class="command-centre-row">
+          <span class="command-centre-brand">RivalSportsbook</span>
+          <span class="benchmark-badge warning" style="font-size: 10px; padding: 2px 8px;">Generosity Alert</span>
+          <span class="command-centre-action">+50 Free Spins Added</span>
+        </div>
+        <div class="command-centre-row">
+          <span class="command-centre-brand">CrownCasino</span>
+          <span class="benchmark-badge danger" style="font-size: 10px; padding: 2px 8px;">Wagering Hurdle Drop</span>
+          <span class="command-centre-action">40x &rarr; 25x play-through</span>
+        </div>
+        <div class="command-centre-row">
+          <span class="command-centre-brand">SpinEmpire</span>
+          <span class="benchmark-badge success" style="font-size: 10px; padding: 2px 8px;">Campaign Launch</span>
+          <span class="command-centre-action">Weekly Sportsbook Boost</span>
+        </div>
+      </div>
+    `;
+  } else if (category === 'brand') {
+    heroVisualHTML = `
+      <div class="feature-scorecard" data-theme="dark">
+        <div class="scorecard-item">
+          <div class="scorecard-meta">
+            <span class="scorecard-label">Performance Core</span>
+            <span class="scorecard-value">94%</span>
+          </div>
+          <div class="scorecard-bar-bg">
+            <div class="scorecard-bar-fill" style="width: 94%;"></div>
+          </div>
+        </div>
+        <div class="scorecard-item">
+          <div class="scorecard-meta">
+            <span class="scorecard-label">Heuristic Usability</span>
+            <span class="scorecard-value">88%</span>
+          </div>
+          <div class="scorecard-bar-bg">
+            <div class="scorecard-bar-fill" style="width: 88%;"></div>
+          </div>
+        </div>
+        <div class="scorecard-item">
+          <div class="scorecard-meta">
+            <span class="scorecard-label">User Journeys Flow</span>
+            <span class="scorecard-value">76%</span>
+          </div>
+          <div class="scorecard-bar-bg">
+            <div class="scorecard-bar-fill" style="width: 76%; background: #ffbd2e;"></div>
+          </div>
+        </div>
+        <div class="scorecard-item">
+          <div class="scorecard-meta">
+            <span class="scorecard-label">Brand Trust Signal</span>
+            <span class="scorecard-value">91%</span>
+          </div>
+          <div class="scorecard-bar-bg">
+            <div class="scorecard-bar-fill" style="width: 91%;"></div>
+          </div>
+        </div>
+      </div>
+    `;
+  } else {
+    // cortex
+    heroVisualHTML = `
+      <div class="feature-scenario-panel" data-theme="dark">
+        <div class="scenario-slider-row">
+          <span class="scenario-slider-label">Paid Search Allocation</span>
+          <div class="scenario-slider-track">
+            <div class="scenario-slider-fill" style="width: 60%;"></div>
+            <div class="scenario-slider-thumb" style="left: 60%;"></div>
+          </div>
+          <span style="font-family: var(--font-mono); font-size: 11px;">$2.4M</span>
+        </div>
+        <div class="scenario-slider-row">
+          <span class="scenario-slider-label">Affiliate Generosity</span>
+          <div class="scenario-slider-track">
+            <div class="scenario-slider-fill" style="width: 45%;"></div>
+            <div class="scenario-slider-thumb" style="left: 45%;"></div>
+          </div>
+          <span style="font-family: var(--font-mono); font-size: 11px;">Index 45</span>
+        </div>
+        <div class="scenario-forecast-box">
+          <span class="scenario-forecast-num">+34% NGR Lift</span>
+          <span class="scenario-forecast-label">Cortex Simulated Commercial Attribution Impact</span>
+        </div>
+      </div>
+    `;
+  }
+
+  // 4. Generate Category-Specific Workflow steps
+  let workflowHTML = '';
+  if (category === 'competitor') {
+    workflowHTML = `
+      <div class="feature-workflow-step">
+        <span class="feature-workflow-num">Step 01</span>
+        <h3>Capture</h3>
+        <p>Scrape real-time campaign details, welcome incentives, and free spin levels across active competitors.</p>
+      </div>
+      <div class="feature-workflow-step">
+        <span class="feature-workflow-num">Step 02</span>
+        <h3>Normalize</h3>
+        <p>Convert disparate text paragraphs into structured, machine-readable database records automatically.</p>
+      </div>
+      <div class="feature-workflow-step">
+        <span class="feature-workflow-num">Step 03</span>
+        <h3>Score</h3>
+        <p>Run terms through the Promo Richness Index to calculate true player acquisition value mathematically.</p>
+      </div>
+      <div class="feature-workflow-step">
+        <span class="feature-workflow-num">Step 04</span>
+        <h3>Alert</h3>
+        <p>Push critical pricing and generosity surges straight to Slack webhooks and trading desks for instant calibrations.</p>
+      </div>
+    `;
+  } else if (category === 'brand') {
+    workflowHTML = `
+      <div class="feature-workflow-step">
+        <span class="feature-workflow-num">Step 01</span>
+        <h3>Audit</h3>
+        <p>Run continuous, automated UX evaluations on player onboarding and verification (KYC) funnels.</p>
+      </div>
+      <div class="feature-workflow-step">
+        <span class="feature-workflow-num">Step 02</span>
+        <h3>Diagnose</h3>
+        <p>Pinpoint exact styling latency barriers, confusing forms, and security confidence drop-offs.</p>
+      </div>
+      <div class="feature-workflow-step">
+        <span class="feature-workflow-num">Step 03</span>
+        <h3>Rank</h3>
+        <p>Sort identified UI deficiencies by commercial severity and direct net gaming revenue implications.</p>
+      </div>
+      <div class="feature-workflow-step">
+        <span class="feature-workflow-num">Step 04</span>
+        <h3>Improve</h3>
+        <p>Provide developers with clear visual reference cards and step-by-step layout update checklists.</p>
+      </div>
+    `;
+  } else {
+    // cortex
+    workflowHTML = `
+      <div class="feature-workflow-step">
+        <span class="feature-workflow-num">Step 01</span>
+        <h3>Query</h3>
+        <p>Input prospective budget shifts, affiliate variables, or competitive positioning strategies.</p>
+      </div>
+      <div class="feature-workflow-step">
+        <span class="feature-workflow-num">Step 02</span>
+        <h3>Model</h3>
+        <p>Analyze massive competitor campaigns and internal signup volumes via Cortex's causal attribution system.</p>
+      </div>
+      <div class="feature-workflow-step">
+        <span class="feature-workflow-num">Step 03</span>
+        <h3>Simulate</h3>
+        <p>Simulate Net Gaming Revenue lift, GGR holds, and player acquisition yields under high market volatility.</p>
+      </div>
+      <div class="feature-workflow-step">
+        <span class="feature-workflow-num">Step 04</span>
+        <h3>Recommend</h3>
+        <p>Generate board-ready marketing mix reallocation strategies to optimize acquisition spend yield.</p>
+      </div>
+    `;
+  }
+
+  // 5. Generate Category-Specific Evidence Widget
+  let evidenceVisualHTML = '';
+  if (category === 'competitor') {
+    evidenceVisualHTML = `
+      <div class="feature-alert-feed" data-theme="dark">
+        <div class="alert-feed-item">
+          <div class="alert-feed-meta">
+            <span class="alert-feed-badge" style="color: #ff5f56;">Critical Move</span>
+            <span>5 minutes ago</span>
+          </div>
+          <p class="alert-feed-text">Competitor A adjusted deposit match wagering multiplier from 35x to 20x in Ontario market.</p>
+        </div>
+        <div class="alert-feed-item warning">
+          <div class="alert-feed-meta">
+            <span class="alert-feed-badge" style="color: #ffbd2e;">Generosity Shift</span>
+            <span>2 hours ago</span>
+          </div>
+          <p class="alert-feed-text">Competitor B added 50 spins on sign-up welcome offer, increasing Promo Richness Index by 8.4 points.</p>
+        </div>
+        <div class="alert-feed-item info">
+          <div class="alert-feed-meta">
+            <span class="alert-feed-badge" style="color: #5299ff;">Ad Campaign Launch</span>
+            <span>4 hours ago</span>
+          </div>
+          <p class="alert-feed-text">Competitor C deployed fresh value proposition claim 'Payouts in under 2 minutes' on main landing zone.</p>
+        </div>
+      </div>
+    `;
+  } else if (category === 'brand') {
+    evidenceVisualHTML = `
+      <div class="feature-journey-map" data-theme="dark">
+        <div class="journey-phase">
+          <div class="journey-card before">
+            <h4>Before: Manual Sign-Up</h4>
+            <p>Registration flow contains 14 input fields across 3 nested panels. Cognitive fatigue triggers 42% exit rate at KYC checkpoint.</p>
+          </div>
+          <div class="journey-card after">
+            <h4>After: Jurnii Optimized</h4>
+            <p>Fields normalized to single-page verify layout. Visual safety trust badges added. Conversion yield jumps by +35% instantly.</p>
+          </div>
+        </div>
+        <div class="journey-phase">
+          <div class="journey-card before">
+            <h4>Before: Legacy Betslip</h4>
+            <p>Core Web Vitals reveal LCP delay of 4.2 seconds under mobile connection. Player abandonment spikes during active live-betting sweeps.</p>
+          </div>
+          <div class="journey-card after">
+            <h4>After: Jurnii Optimized</h4>
+            <p>Betslip asset payload compiled cleanly, LCP compressed to 1.1s. Margin holds stabilized and player attrition minimized.</p>
+          </div>
+        </div>
+      </div>
+    `;
+  } else {
+    // cortex
+    evidenceVisualHTML = `
+      <div class="feature-ai-panel" data-theme="dark">
+        <div class="ai-bubble-user">
+          Model the margin effect of increasing wagering hurdles on Europe campaigns.
+        </div>
+        <div class="ai-bubble-assistant">
+          Cortex MMM models show that raising wagering hurdles from 20x to 35x protects short-term margin, but increases acquisition drop-off by <strong>18%</strong> due to rival parity. Recommend a defensive <strong>25x play-through target</strong> to balance customer lifetime value (LTV) and margin yield.
+        </div>
+        <div class="ai-bubble-user">
+          Export this simulation to commercial dashboard.
+        </div>
+        <div class="ai-bubble-assistant">
+          Simulation successfully synchronized and exported to board-ready report under <strong>Integrated Operations</strong> catalog.
+        </div>
+      </div>
+    `;
+  }
+
+  // 6. Resolve Related Links without placeholders
+  let relatedProduct1Url = `${levelPrefix}products/jurnii-ux.html`;
+  let relatedProduct1Name = 'Jurnii UX';
+  let relatedProduct1Desc = 'Automated usability and visual scoring indices.';
+  
+  let relatedProduct2Url = `${levelPrefix}products/cortex.html`;
+  let relatedProduct2Name = 'Cortex';
+  let relatedProduct2Desc = 'Causal attribution modeling and planning mix.';
+  
+  if (category === 'brand') {
+    relatedProduct1Url = `${levelPrefix}products/jurnii-360.html`;
+    relatedProduct1Name = 'Jurnii 360';
+    relatedProduct1Desc = 'Real-time competitive radar command centers.';
+  } else if (category === 'cortex') {
+    relatedProduct2Url = `${levelPrefix}products/jurnii-360.html`;
+    relatedProduct2Name = 'Jurnii 360';
+    relatedProduct2Desc = 'Real-time competitive radar command centers.';
+  }
+
+  let relatedFeature1Url = `${levelPrefix}features/competitor-promotions.html`;
+  let relatedFeature1Name = 'Promotions';
+  let relatedFeature1Desc = 'Continuous monitoring of rival bonus terms.';
+  
+  let relatedFeature2Url = `${levelPrefix}features/brand-usability.html`;
+  let relatedFeature2Name = 'Usability';
+  let relatedFeature2Desc = 'Standardized heuristic onboarding audits.';
+
+  if (category === 'competitor') {
+    relatedFeature1Url = `${levelPrefix}features/competitor-alerts.html`;
+    relatedFeature1Name = 'Alerts';
+    relatedFeature1Desc = 'Instant competitor move and pricing triggers.';
+    
+    relatedFeature2Url = `${levelPrefix}features/competitor-offer-feed.html`;
+    relatedFeature2Name = 'Offer Feed';
+    relatedFeature2Desc = 'Continuous structured promotional campaigns feed.';
+  } else if (category === 'cortex') {
+    relatedFeature1Url = `${levelPrefix}features/competitor-ai-insights.html`;
+    relatedFeature1Name = 'AI Insights';
+    relatedFeature1Desc = 'Predict competitor marketing surges via ML models.';
+    
+    relatedFeature2Url = `${levelPrefix}features/brand-recommendations.html`;
+    relatedFeature2Name = 'Recommendations';
+    relatedFeature2Desc = 'Prioritized development roadmaps for revenue yield.';
+  }
+
+  let relatedSolution1Url = `${levelPrefix}solutions/user-experience-benchmarking.html`;
+  let relatedSolution1Name = 'UX Benchmarking';
+  let relatedSolution1Desc = 'Heuristic scores side-by-side with regional rivals.';
+
+  let relatedSolution2Url = `${levelPrefix}solutions/competition-offers.html`;
+  let relatedSolution2Name = 'Competitor Intel';
+  let relatedSolution2Desc = 'Continuous surveillance of competitor welcome offers.';
+
+  if (category === 'competitor') {
+    relatedSolution1Url = `${levelPrefix}solutions/competition-pricing.html`;
+    relatedSolution1Name = 'Pricing Calibration';
+    relatedSolution1Desc = 'Re-calibrate player acquisition margins dynamically.';
+    
+    relatedSolution2Url = `${levelPrefix}solutions/competition-postitioning.html`;
+    relatedSolution2Name = 'Positioning Strategy';
+    relatedSolution2Desc = 'Discover copywriting claims and value gaps.';
+  } else if (category === 'cortex') {
+    relatedSolution1Url = `${levelPrefix}solutions/marketing-roi-attribution.html`;
+    relatedSolution1Name = 'Marketing ROI';
+    relatedSolution1Desc = 'Correlate marketing yield with competitor moves.';
+    
+    relatedSolution2Url = `${levelPrefix}solutions/marketing-mix-modeling-attribution.html`;
+    relatedSolution2Name = 'MMM Attribution';
+    relatedSolution2Desc = 'Stream modeling data straight to local warehouses.';
+  }
+
+  let persona1Url = `${levelPrefix}use-cases/roles/cco.html`;
+  let persona1Name = 'Chief Commercial Officer';
+  let persona1Desc = 'Margin defense and yield planning.';
+
+  let persona2Url = `${levelPrefix}use-cases/roles/cmo.html`;
+  let persona2Name = 'Chief Marketing Officer';
+  let persona2Desc = 'Growth strategy and campaign ROAS optimization.';
+
+  if (category === 'brand') {
+    persona1Url = `${levelPrefix}use-cases/roles/coo.html`;
+    persona1Name = 'Chief Operating Officer';
+    persona1Desc = 'Conversion stability and latency defense.';
+  }
+
+  // 7. Define Category-specific Outcomes
+  let outcomeHTML = '';
+  if (category === 'competitor') {
+    outcomeHTML = `
+      <div class="feature-outcome-card">
+        <span class="feature-outcome-num">+15.4%</span>
+        <h3>Hold Rate Calibrations</h3>
+        <p>Calibrate deposit multiples against rival welcome flows to stabilize hold performance.</p>
+      </div>
+      <div class="feature-outcome-card">
+        <span class="feature-outcome-num">20+</span>
+        <h3>Weekly Campaign Spikes Blocked</h3>
+        <p>Detect aggressive holiday promotional campaigns the moment they launch to protect GGR.</p>
+      </div>
+      <div class="feature-outcome-card">
+        <span class="feature-outcome-num">$1.2M</span>
+        <h3>Margin Leakage Saved</h3>
+        <p>Prevent blind copies of competitor pricing structures, keeping CRM re-investment yield high.</p>
+      </div>
+    `;
+  } else if (category === 'brand') {
+    outcomeHTML = `
+      <div class="feature-outcome-card">
+        <span class="feature-outcome-num">+35%</span>
+        <h3>Player Conversion Jump</h3>
+        <p>Optimize verification checkpoints and fields count to maximize registration conversion yields.</p>
+      </div>
+      <div class="feature-outcome-card">
+        <span class="feature-outcome-num">-40%</span>
+        <h3>KYC Funnel Drop-off</h3>
+        <p>Eliminate complex terms screens and latency drop-offs during high-security player onboardings.</p>
+      </div>
+      <div class="feature-outcome-card">
+        <span class="feature-outcome-num">Zero</span>
+        <h3>Subjective Roadmap Debates</h3>
+        <p>Align designers, product teams, and engineering priorities around verified revenue bottlenecks.</p>
+      </div>
+    `;
+  } else {
+    // cortex
+    outcomeHTML = `
+      <div class="feature-outcome-card">
+        <span class="feature-outcome-num">40x</span>
+        <h3>Attribution Investment Return</h3>
+        <p>Establish exact causal contribution of paid media channels compared to organic sweeps.</p>
+      </div>
+      <div class="feature-outcome-card">
+        <span class="feature-outcome-num">$4.85M</span>
+        <h3>Inefficient Budget Reallocated</h3>
+        <p>Identify programmatic, search, and affiliate channels that are merely copying competitor value.</p>
+      </div>
+      <div class="feature-outcome-card">
+        <span class="feature-outcome-num">85%</span>
+        <h3>Strategic Budget Confidence</h3>
+        <p>Anticipate player lifetime value and hold performance before launching campaign strategies.</p>
+      </div>
+    `;
+  }
+
+  // 8. Define Category-specific Final CTA text
+  let finalCTATitle = 'Model Causal Commercial Decisions';
+  let finalCTADesc = 'Stop relying on backward-looking last-click reports. Model competitive campaign fluctuations and internal onboarding friction systematically with Cortex today.';
+  if (category === 'competitor') {
+    finalCTATitle = 'Detect Competitive Moves Instantly';
+    finalCTADesc = 'Anticipate rival welcome bonuses, track loyalty rewards generosity, and protect operator Net Gaming Revenue before competitive pushes impact your active base.';
+  } else if (category === 'brand') {
+    finalCTATitle = 'Benchmark Your Experience Benchmarks';
+    finalCTADesc = 'Turn experience speculation into prioritized engineering roadmap checklists. Eliminate registration friction and outpace regional platform layouts.';
   }
 
   return `<!doctype html>
@@ -645,7 +1071,7 @@ function getPageHTML(metaTitle, metaDesc, kicker, title, lede, manifesto, capabi
   <link rel="stylesheet" href="${levelPrefix}assets/site.css">
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
-<body>
+<body class="feature-page">
 
   <!-- Navigation (Populated by script) -->
   <nav class="nav">
@@ -660,16 +1086,25 @@ function getPageHTML(metaTitle, metaDesc, kicker, title, lede, manifesto, capabi
   </nav>
 
   <main>
-    <!-- Premium Landing Page Hero -->
-    <section class="feature-hero" style="background: linear-gradient(180deg, var(--jurnii-50) 0%, transparent 100%); padding: 100px 0 80px;">
-      <div class="container feature-hero-grid" style="max-width: 1100px;">
+    <!-- Premium Category-Specific Hero -->
+    <section class="feature-hero-premium">
+      <div class="container">
         <div class="feature-hero-copy">
-          <p class="feature-hero-kicker" style="color: var(--jurnii-600); font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; margin: 0 0 12px 0;">${kicker}</p>
-          <h1 class="h1-page" style="font-size: 48px; font-weight: 800; letter-spacing: -0.03em; margin: 0 0 20px 0; color: var(--foreground);">${title}</h1>
-          <p class="page-hero-lede" style="font-size: 19px; color: var(--muted-foreground); line-height: 1.6; max-width: 720px; margin: 0;">${lede}</p>
-          <div class="cta-row" style="margin-top: 36px;">
-            <a href="#" class="btn primary">View Live Demo</a>
+          <a href="${parentProductUrl}" class="product-badge" data-product="${productBadgeAttr}">
+            <i data-lucide="shield" style="width: 12px; height: 12px;"></i> ${productBadgeText}
+          </a>
+          <p style="color: var(--jurnii-600); font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; margin: 0 0 12px 0;">${kicker}</p>
+          <h1 class="h1-page" style="font-size: clamp(32px, 4.5vw, 52px); font-weight: 800; letter-spacing: -0.03em; margin: 0 0 20px 0; color: var(--foreground); line-height: 1.1;">${title}</h1>
+          <p class="page-hero-lede" style="font-size: 18px; color: var(--muted-foreground); line-height: 1.6; max-width: 680px; margin: 0 0 32px 0;">${lede}</p>
+          <div class="cta-row" style="display: flex; gap: 16px;">
+            <a href="${primaryCTA}" class="btn primary">${primaryCTALabel}</a>
+            <a href="${parentProductUrl}" class="btn secondary">Explore ${parentProductName}</a>
           </div>
+        </div>
+        
+        <!-- Interactive Mockup Panel -->
+        <div class="feature-hero-visual" data-category="${category}">
+          ${heroVisualHTML}
         </div>
       </div>
     </section>
@@ -683,41 +1118,42 @@ function getPageHTML(metaTitle, metaDesc, kicker, title, lede, manifesto, capabi
       </div>
     </div>
 
-    <!-- Manifesto & Context -->
-    <section class="feature-manifesto" id="details" style="padding: 60px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--card);">
-      <div class="container" style="max-width: 900px; text-align: center;">
-        <p style="font-size: 20px; font-weight: 500; line-height: 1.7; color: var(--foreground); margin: 0; font-family: var(--font-sans);">${manifesto}</p>
+    <!-- Manifesto Block -->
+    <section class="feature-manifesto" id="details" style="padding: 80px 0; border-bottom: 1px solid var(--border); background: var(--card);">
+      <div class="container" style="max-width: 960px; text-align: center;">
+        <p style="font-size: clamp(18px, 2.2vw, 22px); font-weight: 500; line-height: 1.7; color: var(--foreground); margin: 0; font-family: var(--font-sans); letter-spacing: -0.01em;">${manifesto}</p>
       </div>
     </section>
 
-    <!-- The iGaming Commercial Challenge Section -->
+    <!-- The iGaming Commercial Challenge Section (Specific Failure Mode) -->
     <section class="challenge-section" style="padding: 100px 0; background: var(--background);">
       <div class="container" style="max-width: 1100px;">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;">
           <div>
-            <span style="color: var(--jurnii-600); font-family: var(--font-mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 12px;">The iGaming Challenge</span>
-            <h2 style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 20px 0; color: var(--foreground); line-height: 1.2;">Operating Blind in a Saturated Market</h2>
+            <span style="color: var(--jurnii-600); font-family: var(--font-mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 12px;">Operational Vulnerability</span>
+            <h2 style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 20px 0; color: var(--foreground); line-height: 1.2;">The Cost of Operating Blind</h2>
             <p style="font-size: 15.5px; color: var(--muted-foreground); line-height: 1.6; margin-bottom: 16px;">
               ${challenge}
             </p>
             <p style="font-size: 15.5px; color: var(--muted-foreground); line-height: 1.6;">
-              When betting portals share the same suppliers and identical platform configurations, customer experience is the only durable barrier to player defection. Failing to benchmark your flow speed and copywriting clarity against competitor movements leaves your team fighting fires reactively, eroding margins over time.
+              When operator stacks converge on identical platforms and third-party software structures, customer acquisition efficiency and margin retention are the only durable barriers protecting Net Gaming Revenue (NGR). Running campaigns without automated competitor alerts or continuous user-flow speed benchmarking causes permanent player defection to regional rivals.
             </p>
           </div>
-          <div style="background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+          
+          <div style="background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.025);">
             <div style="width: 40px; height: 40px; border-radius: 8px; background: rgba(148,255,150,0.12); color: var(--jurnii-700); display: flex; align-items: center; justify-content: center; margin-bottom: 24px;">
               <i data-lucide="shield-alert" style="width: 20px; height: 20px;"></i>
             </div>
-            <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 12px 0;">How Jurnii Solves This</h3>
-            <p style="font-size: 14.5px; color: var(--muted-foreground); line-height: 1.5; margin: 0 0 24px 0;">
+            <h3 style="font-size: 18px; font-weight: 700; margin: 0 0 12px 0;">How Jurnii Resolves This</h3>
+            <p style="font-size: 14.5px; color: var(--muted-foreground); line-height: 1.55; margin: 0 0 24px 0;">
               ${mechanics}
             </p>
             <div class="implication-callout">
               <div class="implication-callout-header">
-                <i data-lucide="trending-up" style="width: 14px; height: 14px;"></i> Commercial Implication
+                <i data-lucide="trending-up" style="width: 14px; height: 14px;"></i> Commercial Impact
               </div>
               <p class="implication-callout-body">
-                Friction in onboarding and mismatched promotion structures dilutes Net Gaming Revenue (<b>NGR</b>) and increases Customer Acquisition Cost (<b>CAC</b>) by up to <b>35%</b>.
+                Friction in player verification checkpoints and mismatched welcome bonus generous multiples dilutes operator hold rates and increases acquisition CPA by up to <b>35%</b>.
               </p>
             </div>
             <div style="border-top: 1px solid var(--border); padding-top: 20px; margin-top: 20px; font-size: 13px; font-style: italic; color: var(--jurnii-700); font-weight: 600;">
@@ -728,16 +1164,29 @@ function getPageHTML(metaTitle, metaDesc, kicker, title, lede, manifesto, capabi
       </div>
     </section>
 
-    <!-- Capability Cards Section -->
-    <section class="feature-capability-section theme-dark" style="padding: 100px 0; background: #252c1e; color: #fff;">
+    <!-- Dynamic Category-Specific Workflow Section -->
+    <section class="feature-workflow-section">
+      <div class="container" style="max-width: 1100px;">
+        <div class="section-head" style="text-align: center; margin-bottom: 48px;">
+          <span style="color: var(--jurnii-600); font-family: var(--font-mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 12px;">Operational Flow</span>
+          <h2 style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin: 0;">How Jurnii Executes</h2>
+        </div>
+        <div class="feature-workflow-grid">
+          ${workflowHTML}
+        </div>
+      </div>
+    </section>
+
+    <!-- Capabilities Cards Section (Stripped theme-dark grid padding in layout) -->
+    <section class="feature-capability-section" style="padding: 100px 0; background: #252c1e; color: #fff;" data-theme="dark">
       <div class="container" style="max-width: 1100px;">
         <div class="section-head" style="margin-bottom: 56px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 24px;">
-          <h2 class="h2-section" style="font-size: 32px; font-weight: 800; color: #fff; letter-spacing: -0.02em; margin: 0 0 12px 0;">${sectionHead}</h2>
-          <p style="font-size: 16px; color: rgba(255,255,255,0.7); max-width: 600px; margin: 0;">Objective tools designed to replace subjective opinion with verified digital and commercial facts.</p>
+          <h2 class="h2-section" style="font-size: 32px; font-weight: 800; color: #fff; letter-spacing: -0.02em; margin: 0 0 12px 0;">${typeLabel} Capabilities</h2>
+          <p style="font-size: 16px; color: rgba(255,255,255,0.7); max-width: 600px; margin: 0;">Automated, continuous intelligence tools to outpace competitive regional movements.</p>
         </div>
         <div class="feature-capability-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;">
           ${capabilities.map(c => `
-          <div class="feature-capability-card" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 32px; transition: transform 180ms ease;">
+          <div class="feature-capability-card" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 32px;">
             <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(148,255,150,0.15); color: var(--jurnii-400); display: flex; align-items: center; justify-content: center; margin-bottom: 24px;">
               <i data-lucide="${c.icon}" style="width: 22px; height: 22px;"></i>
             </div>
@@ -749,13 +1198,49 @@ function getPageHTML(metaTitle, metaDesc, kicker, title, lede, manifesto, capabi
       </div>
     </section>
 
-    <!-- Competitor Benchmark Table Section -->
+    <!-- High-Fidelity Custom Category Evidence Section -->
+    <section class="feature-evidence-section">
+      <div class="container" style="max-width: 1100px;">
+        <div class="feature-evidence-grid">
+          <div>
+            <span class="eyebrow">Platform Evidence Output</span>
+            <h2 style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em; color: var(--foreground); line-height: 1.2;">What Jurnii Produces</h2>
+            <p style="font-size: 15.5px; color: var(--muted-foreground); line-height: 1.6; margin-bottom: 24px;">
+              Our algorithms constantly parse on-site variables and process structural flows. Explore the typical data dashboard models, recommendations feed, and scenario outputs populated in real-time.
+            </p>
+            <p style="font-size: 15.5px; color: var(--muted-foreground); line-height: 1.6; margin-bottom: 0;">
+              Streamline reporting pipelines, export board-ready attribution data, and keep technical and commercial desks synchronized around a single source of truth.
+            </p>
+          </div>
+          
+          <!-- Large High-Fidelity UI Evidence Panel -->
+          <div class="feature-evidence-card" data-style="${category}">
+            ${evidenceVisualHTML}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Category Commercial Outcomes -->
+    <section class="feature-outcome-section">
+      <div class="container" style="max-width: 1100px;">
+        <div style="text-align: center; margin-bottom: 48px;">
+          <span style="color: var(--jurnii-400); font-family: var(--font-mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 12px;">EBITDA & Hold Metrics</span>
+          <h2 style="font-size: 32px; font-weight: 800; color: #fff; letter-spacing: -0.02em; margin: 0;">Protected Outcomes</h2>
+        </div>
+        <div class="feature-outcome-grid">
+          ${outcomeHTML}
+        </div>
+      </div>
+    </section>
+
+    <!-- Heuristic Operator Benchmark Table (Retained but restyled for premium design) -->
     <section class="benchmark-section">
       <div class="container" style="max-width: 1100px;">
         <div class="section-head centered">
           <span class="eyebrow"><span class="dot"></span>Performance Matrix</span>
           <h2 class="h2-section">How Jurnii Outpaces the Market</h2>
-          <p class="section-lede" style="margin-left: auto; margin-right: auto;">A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.</p>
+          <p class="section-lede" style="margin-left: auto; margin-right: auto;">A comparison of Jurnii's continuous real-time intelligence against traditional manual audits.</p>
         </div>
         <div class="benchmark-table-card">
           <table class="benchmark-table">
@@ -804,175 +1289,86 @@ function getPageHTML(metaTitle, metaDesc, kicker, title, lede, manifesto, capabi
       </div>
     </section>
 
-    <!-- Cortex Integration & Proof Points Section -->
-    <section class="cortex-section" style="padding: 100px 0; background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <!-- Dynamic Enterprise Personas (Replacing raw bullet points) -->
+    <section class="feature-use-case-section">
       <div class="container" style="max-width: 1100px;">
-        <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 64px; align-items: center;">
-          <div>
-            <span style="color: var(--jurnii-600); font-family: var(--font-mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 12px;">Cortex Attribution & NGR Impact</span>
-            <h2 style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 20px 0; color: var(--foreground); line-height: 1.2;">Causal ROI Optimization</h2>
-            <p style="font-size: 15.5px; color: var(--muted-foreground); line-height: 1.6; margin-bottom: 16px;">
-              All data harvested by Jurnii UX and Jurnii 360 is normalized and streamed directly into Cortex, our causal modeling and marketing mix attribution engine. Cortex eliminates last-click errors to attribute campaign success with statistical accuracy.
-            </p>
-            <p style="font-size: 15.5px; color: var(--muted-foreground); line-height: 1.6;">
-              By cataloging competitor promotions, pricing richness, and interface friction, Jurnii enables your data scientists to export MMM-ready datasets. Model the defensive strength of programmatic and search channels in real-time.
-            </p>
+        <div class="section-head" style="text-align: center; margin-bottom: 48px;">
+          <span style="color: var(--jurnii-600); font-family: var(--font-mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 12px;">Enterprise Personas</span>
+          <h2 style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin: 0;">Who Uses This ${typeLabel}</h2>
+        </div>
+        <div class="feature-use-case-grid">
+          <div class="feature-use-case-card">
+            <div class="use-case-icon">
+              <i data-lucide="user" style="width: 20px; height: 20px;"></i>
+            </div>
+            <div class="use-case-details">
+              <h3>${persona1Name}</h3>
+              <p>${persona1Desc} By cataloging terms and comparing user journeys, leadership maintains market parity and optimizes campaign holds.</p>
+            </div>
           </div>
-          
-          <!-- Dashboard Mock Panel -->
-          <div class="dashboard-mockup-wrapper">
-            <div class="dashboard-mockup-header">
-              <span class="dashboard-mockup-title">
-                <span class="dashboard-mockup-dot"></span> Jurnii Cortex Live Benchmarks
-              </span>
-              <span style="color: var(--jurnii-400); font-family: var(--font-mono); font-size: 11px; font-weight: 700;">Active Feed</span>
+          <div class="feature-use-case-card">
+            <div class="use-case-icon">
+              <i data-lucide="users" style="width: 20px; height: 20px;"></i>
             </div>
-            <div class="dashboard-mockup-grid">
-              <!-- Column 1: Promo Richness Index Card -->
-              <div class="dashboard-card-inner">
-                <div class="promo-index-header">
-                  <h4 class="promo-index-title">Promo Richness Index</h4>
-                  <span class="promo-index-value">84</span>
-                </div>
-                <div style="margin-bottom: 12px;">
-                  <span class="promo-index-comparison">+4.2% vs Market Avg</span>
-                </div>
-                <div class="dashboard-mini-chart">
-                  <div class="mini-chart-bar" style="height: 35%;"></div>
-                  <div class="mini-chart-bar" style="height: 48%;"></div>
-                  <div class="mini-chart-bar" style="height: 60%;"></div>
-                  <div class="mini-chart-bar active" style="height: 84%;"></div>
-                  <div class="mini-chart-bar" style="height: 72%;"></div>
-                  <div class="mini-chart-bar" style="height: 68%;"></div>
-                  <div class="mini-chart-bar active" style="height: 80%;"></div>
-                </div>
-              </div>
-              
-              <!-- Column 2: Onboarding Funnel Progress -->
-              <div class="dashboard-card-inner">
-                <h4 class="onboarding-funnel-header">Player Onboarding Funnel</h4>
-                <div class="funnel-step">
-                  <div class="funnel-step-meta">
-                    <span class="funnel-step-name">Registration</span>
-                    <span>98%</span>
-                  </div>
-                  <div class="funnel-step-bar-bg">
-                    <div class="funnel-step-bar-fill jurnii-fill" style="width: 98%;"></div>
-                  </div>
-                </div>
-                <div class="funnel-step">
-                  <div class="funnel-step-meta">
-                    <span class="funnel-step-name">KYC Checkpoint</span>
-                    <span style="color: #ff6b6b; font-weight: 600;">82% (Friction Leak)</span>
-                  </div>
-                  <div class="funnel-step-bar-bg">
-                    <div class="funnel-step-bar-fill leak-fill" style="width: 82%;"></div>
-                  </div>
-                </div>
-                <div class="funnel-step">
-                  <div class="funnel-step-meta">
-                    <span class="funnel-step-name">First Deposit</span>
-                    <span>64%</span>
-                  </div>
-                  <div class="funnel-step-bar-bg">
-                    <div class="funnel-step-bar-fill jurnii-fill" style="width: 64%;"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div style="border-top: 1px solid rgba(255,255,255,0.08); margin-top: 24px; padding-top: 20px; font-size: 13.5px; color: rgba(255,255,255,0.6); line-height: 1.5;">
-              <span style="color: var(--jurnii-300); font-weight: 700; display: block; margin-bottom: 4px;">Cortex Attribution Yield Result: +46% ROAS Lift</span>
-              ${proofText}
+            <div class="use-case-details">
+              <h3>${persona2Name}</h3>
+              <p>${persona2Desc} Analyze rival copywriting propositions and value claims to deploy differentiatedPaid Media counter-campaigns.</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Editorial Testimonial Section -->
-    <section style="padding: 60px 0 100px; background: var(--background);">
-      <div class="container" style="max-width: 900px;">
-        <div class="editorial-testimonial-card">
-          <blockquote class="editorial-quote">
-            <em>"Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely."</em>
-          </blockquote>
-          <div class="editorial-author-meta">
-            <div class="editorial-author-avatar">GM</div>
-            <div class="editorial-author-details">
-              <cite class="editorial-author-name">General Manager, Europe iGaming Conglomerate</cite>
-              <span class="editorial-author-title">Integrated Portfolio Operations</span>
-            </div>
-          </div>
+    <!-- Unified Ecosystem Connections (Resolved URLs, NO placeholder '#' links) -->
+    <section class="feature-related-section">
+      <div class="container" style="max-width: 1100px;">
+        <div class="section-head" style="margin-bottom: 48px;">
+          <h2 style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px 0;">Ecosystem Integrations</h2>
+          <p style="font-size: 16px; color: var(--muted-foreground); margin: 0;">Explore how this ${typeLabel.toLowerCase()} coordinates with products and adjacent pathways.</p>
+        </div>
+        <div class="feature-related-grid">
+          <a href="${relatedProduct1Url}" class="related-card">
+            <span class="related-type">Related Product</span>
+            <h3>${relatedProduct1Name}</h3>
+            <p>${relatedProduct1Desc}</p>
+          </a>
+          <a href="${relatedProduct2Url}" class="related-card">
+            <span class="related-type">Related Product</span>
+            <h3>${relatedProduct2Name}</h3>
+            <p>${relatedProduct2Desc}</p>
+          </a>
+          <a href="${relatedFeature1Url}" class="related-card">
+            <span class="related-type">Related Feature</span>
+            <h3>${relatedFeature1Name}</h3>
+            <p>${relatedFeature1Desc}</p>
+          </a>
+          <a href="${relatedFeature2Url}" class="related-card">
+            <span class="related-type">Related Feature</span>
+            <h3>${relatedFeature2Name}</h3>
+            <p>${relatedFeature2Desc}</p>
+          </a>
+          <a href="${relatedSolution1Url}" class="related-card">
+            <span class="related-type">Related Solution</span>
+            <h3>${relatedSolution1Name}</h3>
+            <p>${relatedSolution1Desc}</p>
+          </a>
+          <a href="${relatedSolution2Url}" class="related-card">
+            <span class="related-type">Related Solution</span>
+            <h3>${relatedSolution2Name}</h3>
+            <p>${relatedSolution2Desc}</p>
+          </a>
         </div>
       </div>
     </section>
 
-    <!-- Unified Ecosystem Connections -->
-    <section class="ecosystem-section" style="padding: 100px 0; background: var(--background);">
-      <div class="container" style="max-width: 1100px;">
-        <div class="ecosystem-header" style="margin-bottom: 56px;">
-          <h2 class="h2-section" style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px 0;">Intelligence Integrations</h2>
-          <p style="font-size: 16px; color: var(--muted-foreground); margin: 0;">Jurnii operates as a single unified system, feeding data seamlessly across your tech stacks.</p>
-        </div>
-        <div class="ecosystem-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;">
-          
-          <div class="ecosystem-column">
-            <h3 class="col-label" style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--jurnii-600); border-bottom: 1px solid var(--border); padding-bottom: 8px; margin: 0 0 16px 0;">Related Products</h3>
-            <div class="feature-link-grid" style="display:flex; flex-direction:column; gap:12px;">
-              <a href="${levelPrefix}products/jurnii-ux.html" class="feature-link-card product" style="display:block; text-decoration:none; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px;">
-                <h4 style="font-size: 14.5px; font-weight: 700; color: var(--foreground); margin:0 0 8px 0;">Jurnii UX</h4>
-                <p style="font-size: 12px; color: var(--muted-foreground); line-height:1.4; margin:0;">Automated usability and visual scoring.</p>
-              </a>
-              <a href="${levelPrefix}products/cortex.html" class="feature-link-card product" style="display:block; text-decoration:none; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px;">
-                <h4 style="font-size: 14.5px; font-weight: 700; color: var(--foreground); margin:0 0 8px 0;">Cortex</h4>
-                <p style="font-size: 12px; color: var(--muted-foreground); line-height:1.4; margin:0;">Causal attribution and planning mix.</p>
-              </a>
-            </div>
-          </div>
-
-          <div class="ecosystem-column">
-            <h3 class="col-label" style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--jurnii-600); border-bottom: 1px solid var(--border); padding-bottom: 8px; margin: 0 0 16px 0;">Core Features</h3>
-            <div class="feature-link-grid" style="display:flex; flex-direction:column; gap:12px;">
-              <a href="${levelPrefix}features/competitor-promotions.html" class="feature-link-card related" style="display:block; text-decoration:none; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px;">
-                <h4 style="font-size: 14.5px; font-weight: 700; color: var(--foreground); margin:0 0 8px 0;">Promotions</h4>
-                <p style="font-size: 12px; color: var(--muted-foreground); line-height:1.4; margin:0;">Automated promotional campaign tracking.</p>
-              </a>
-              <a href="${levelPrefix}features/brand-usability.html" class="feature-link-card related" style="display:block; text-decoration:none; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px;">
-                <h4 style="font-size: 14.5px; font-weight: 700; color: var(--foreground); margin:0 0 8px 0;">Usability</h4>
-                <p style="font-size: 12px; color: var(--muted-foreground); line-height:1.4; margin:0;">Standardized heuristic usability auditing.</p>
-              </a>
-            </div>
-          </div>
-
-          <div class="ecosystem-column">
-            <h3 class="col-label" style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--jurnii-600); border-bottom: 1px solid var(--border); padding-bottom: 8px; margin: 0 0 16px 0;">Outcomes</h3>
-            <div class="feature-link-grid" style="display:flex; flex-direction:column; gap:12px;">
-              <a href="${levelPrefix}solutions/user-experience-benchmarking.html" class="feature-link-card solution" style="display:block; text-decoration:none; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px;">
-                <h4 style="font-size: 14.5px; font-weight: 700; color: var(--foreground); margin:0 0 8px 0;">UX Benchmarking</h4>
-                <p style="font-size: 12px; color: var(--muted-foreground); line-height:1.4; margin:0;">Heuristics-based experience index scores.</p>
-              </a>
-              <a href="${levelPrefix}solutions/competition-offers.html" class="feature-link-card solution" style="display:block; text-decoration:none; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px;">
-                <h4 style="font-size: 14.5px; font-weight: 700; color: var(--foreground); margin:0 0 8px 0;">Competitor Intel</h4>
-                <p style="font-size: 12px; color: var(--muted-foreground); line-height:1.4; margin:0;">Continuous surveillance of competitor campaigns.</p>
-              </a>
-            </div>
-          </div>
-
-          <div class="ecosystem-column">
-            <h3 class="col-label" style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--jurnii-600); border-bottom: 1px solid var(--border); padding-bottom: 8px; margin: 0 0 16px 0;">Built For</h3>
-            <div class="feature-link-grid" style="display:flex; flex-direction:column; gap:12px;">
-              <a href="${levelPrefix}use-cases/roles/cmo.html" class="feature-link-card persona" style="display:block; text-decoration:none; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px;">
-                <h4 style="font-size: 14.5px; font-weight: 700; color: var(--foreground); margin:0 0 8px 0;">CMO</h4>
-                <p style="font-size: 12px; color: var(--muted-foreground); line-height:1.4; margin:0;">Growth strategy and campaigns ROI.</p>
-              </a>
-              <a href="${levelPrefix}use-cases/roles/cco.html" class="feature-link-card persona" style="display:block; text-decoration:none; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px;">
-                <h4 style="font-size: 14.5px; font-weight: 700; color: var(--foreground); margin:0 0 8px 0;">CCO</h4>
-                <p style="font-size: 12px; color: var(--muted-foreground); line-height:1.4; margin:0;">Margin defense and LTV protection.</p>
-              </a>
-            </div>
-          </div>
-
+    <!-- Bespoke Final CTA Section -->
+    <section class="feature-final-cta">
+      <div class="feature-final-cta-card">
+        <h2>${finalCTATitle}</h2>
+        <p>${finalCTADesc}</p>
+        <div class="cta-row" style="display: flex; gap: 16px; justify-content: center;">
+          <a href="${primaryCTA}" class="btn primary">${primaryCTALabel}</a>
+          <a href="${parentProductUrl}" class="btn secondary">Explore ${parentProductName}</a>
         </div>
       </div>
     </section>
