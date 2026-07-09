@@ -774,3 +774,19 @@
     bottom: 16px;
   }
 }
+
+/* Explicit overrides for back button ghost styles to guarantee dark-bg text contrast */
+.jurnii-booking-container .btn.ghost-on-dark,
+.jurnii-booking-container .btn.ghost {
+  color: var(--concrete-100) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  background: transparent !important;
+}
+
+.jurnii-booking-container .btn.ghost-on-dark:hover,
+.jurnii-booking-container .btn.ghost:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: var(--concrete-50) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+

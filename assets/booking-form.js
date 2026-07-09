@@ -448,7 +448,7 @@
             </div>
           </div>
           <div class="jurnii-form-actions split">
-            <button type="button" class="btn ghost sm" id="jurnii-back-2">&larr; Back</button>
+            <button type="button" class="btn ghost-on-dark sm" id="jurnii-back-2">&larr; Back</button>
             <button type="button" class="btn accent lg" id="jurnii-next-2">Next: Book Demo briefing &rarr;</button>
           </div>
         </div>
@@ -485,7 +485,7 @@
           </div>
 
           <div class="jurnii-form-actions split">
-            <button type="button" class="btn ghost sm" id="jurnii-back-3">&larr; Back</button>
+            <button type="button" class="btn ghost-on-dark sm" id="jurnii-back-3">&larr; Back</button>
             <button type="button" class="btn accent lg" id="jurnii-confirm-booking">Confirm Demo briefing</button>
           </div>
         </div>
