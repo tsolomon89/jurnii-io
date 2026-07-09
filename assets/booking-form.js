@@ -612,6 +612,32 @@
           state.status = 'confirmed';
           updateDebugPanel();
 
+          /* =========================================================================
+             FUTURE INTEGRATION NOTE FOR DEVELOPERS:
+             When connecting this form to the Jurnii backend, perform a fetch post:
+             
+             fetch('/api/register-briefing', {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json' },
+               body: JSON.stringify(state)
+             })
+             .then(res => res.json())
+             .then(data => {
+               // Handle backend response:
+               // 1. Backend creates a prospect record in Neon database.
+               // 2. Backend schedules the meeting in Google Calendar via Service Account API.
+               // 3. Backend creates/updates Lead & Contact records in Zoho CRM.
+               //
+               // IMPORTANT:
+               // Since the Jurnii Zoho account is in the EU region, you must route all 
+               // Zoho CRM API requests through the EU API base URL:
+               // https://www.zohoapis.eu/crm/v6/ (or latest version)
+               // All Client Credentials and OAuth registrations must be created in the 
+               // Zoho EU Developer Console.
+             });
+             ========================================================================= */
+
+
           // Populate confirmation panel variables
           const confirmTime = container.querySelector('#jurnii-confirm-time');
           const confirmRegId = container.querySelector('#jurnii-confirm-reg-id');
