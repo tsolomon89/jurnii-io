@@ -1,4 +1,6 @@
 @import url('colors_and_type.css');
+@import url('booking-form.css');
+
 
 /* ============================================================
    Jurnii.io — Marketing site shared styles
@@ -6613,4 +6615,65 @@ th.jurnii-bench-col {
     grid-template-columns: 1fr;
   }
 }
+
+/* =========================================================================
+   Reusable Jurnii CTA Section Styles
+   ========================================================================= */
+.reusable-cta-section {
+  padding: 100px 0;
+  background: #252c1e; /* Dark Brand background */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.reusable-cta-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(148, 255, 150, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.reusable-cta-card {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.reusable-cta-card .eyebrow {
+  color: var(--jurnii-300);
+}
+
+.reusable-cta-card h2 {
+  font-size: clamp(28px, 3.6vw, 42px);
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin: 8px 0 0;
+  color: var(--concrete-50);
+}
+
+.reusable-cta-card p {
+  font-size: 17px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 58ch;
+  margin: 0 0 24px 0;
+}
+
+.reusable-cta-card .cta-row {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 

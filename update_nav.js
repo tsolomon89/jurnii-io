@@ -305,8 +305,9 @@ function buildNav(levelPrefix) {
   html += renderUseCasesDropdown(levelPrefix) + '\n';
   
   html += '      </div>\n';
-  html += '      <div class="nav-cta"><a href="#" class="btn accent">Book Demo</a></div>\n';
+  html += '      <div class="nav-cta"><a href="' + levelPrefix + 'book.html" class="btn accent open-booking-modal-btn">Book Demo</a></div>\n';
   html += '    </div>\n';
+
   
   // Interactive navigation dropdown scripts to make it work DRYly on every page
   html += '    <script>\n';
