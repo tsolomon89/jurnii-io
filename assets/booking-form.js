@@ -51,9 +51,12 @@
   };
 
   let currentStep = 1;
-  let calendarDate = new Date(2026, 6, 9); // Initialized to July 9, 2026 (matching system current local time)
+  let calendarDate = new Date();
   let selectedDateStr = null; // "YYYY-MM-DD"
-  let selectedTimeStr = null; // "HH:MM CET"
+  let selectedTimeStr = null; // "HH:MM"
+  let continuationToken = null;
+  let availableSlots = [];
+  let isLoadingSlots = false;
 
   // --- Helper: Generate Registration ID ---
   function generateRegistrationId() {
@@ -183,6 +186,7 @@
   }
 
   // --- Generate Booking Calendar Markup ---
+  // --- Generate Booking Calendar Markup ---
   function renderCalendar() {
     const year = calendarDate.getFullYear();
     const month = calendarDate.getMonth();
@@ -202,16 +206,11 @@
     if (!grid) return;
     grid.innerHTML = '';
 
-    // Prev month disabled check (don't navigate before July 2026)
+    // Prev month disabled check
     const prevBtn = document.getElementById('jurnii-calendar-prev');
+    const now = new Date();
     if (prevBtn) {
-      prevBtn.disabled = (year === 2026 && month === 6);
-    }
-
-    // Next month disabled check (don't navigate past Dec 2026 for dummy briefing)
-    const nextBtn = document.getElementById('jurnii-calendar-next');
-    if (nextBtn) {
-      nextBtn.disabled = (year === 2026 && month === 11);
+      prevBtn.disabled = (year === now.getFullYear() && month === now.getMonth());
     }
 
     const firstDayIndex = new Date(year, month, 1).getDay();
@@ -225,7 +224,9 @@
     }
 
     // Render active days
-    const today = new Date(2026, 6, 9); // Fixed relative "today" matching system date
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const todayStr = today.toISOString().split('T')[0];
 
     for (let day = 1; day <= totalDays; day++) {
       const cellDate = new Date(year, month, day);
@@ -236,37 +237,45 @@
       const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
       const dayOfWeek = cellDate.getDay();
 
-      if (cellDate < today) {
+      if (dateString < todayStr) {
         // Past days
         cell.className = 'jurnii-calendar-day past';
+        cell.disabled = true;
       } else if (dayOfWeek === 0 || dayOfWeek === 6) {
         // Weekends
         cell.className = 'jurnii-calendar-day weekend';
+        cell.disabled = true;
       } else {
-        // Available Weekday
-        cell.className = 'jurnii-calendar-day available';
-        if (selectedDateStr === dateString) {
-          cell.classList.add('selected');
-        }
+        // Check if this date has any available slots
+        const hasSlots = availableSlots.some(slot => slot.start.startsWith(dateString));
+        if (hasSlots) {
+          cell.className = 'jurnii-calendar-day available';
+          if (selectedDateStr === dateString) {
+            cell.classList.add('selected');
+          }
 
-        cell.addEventListener('click', (e) => {
-          e.preventDefault();
-          
-          // Toggle selection
-          document.querySelectorAll('.jurnii-calendar-day.selected').forEach(el => {
-            el.classList.remove('selected');
+          cell.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            document.querySelectorAll('.jurnii-calendar-day.selected').forEach(el => {
+              el.classList.remove('selected');
+            });
+            cell.classList.add('selected');
+            selectedDateStr = dateString;
+            
+            // Reset time slot selection
+            selectedTimeStr = null;
+            state.selected_demo_datetime = null;
+            
+            // Re-render time slots
+            renderTimeSlots(dateString);
+            updateDebugPanel();
           });
-          cell.classList.add('selected');
-          selectedDateStr = dateString;
-          
-          // Reset time slot selection
-          selectedTimeStr = null;
-          state.selected_demo_datetime = null;
-          
-          // Re-render time slots
-          renderTimeSlots(dateString);
-          updateDebugPanel();
-        });
+        } else {
+          // No slots left for this day
+          cell.className = 'jurnii-calendar-day past';
+          cell.disabled = true;
+        }
       }
 
       grid.appendChild(cell);
@@ -283,36 +292,41 @@
       return;
     }
 
-    // Dummy available slots
-    const dummySlots = [
-      '09:30 CET',
-      '11:00 CET',
-      '14:00 CET',
-      '15:30 CET',
-      '17:00 CET'
-    ];
+    const slotsForDate = availableSlots.filter(slot => slot.start.startsWith(dateStr));
 
     container.innerHTML = '';
     
     const title = document.createElement('h4');
     title.className = 'jurnii-slots-title';
     
-    // Format title date
     const dObj = new Date(dateStr);
     const dateFormatted = dObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
     title.textContent = `Available slots for ${dateFormatted}:`;
     container.appendChild(title);
 
+    if (slotsForDate.length === 0) {
+      const noSlots = document.createElement('div');
+      noSlots.className = 'jurnii-slots-empty';
+      noSlots.textContent = 'No slots available for this day.';
+      container.appendChild(noSlots);
+      return;
+    }
+
     const grid = document.createElement('div');
     grid.className = 'jurnii-slots-grid';
 
-    dummySlots.forEach(slot => {
+    slotsForDate.forEach(slot => {
+      const dateObj = new Date(slot.start);
+      const timeFormatted = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+      const tzName = dateObj.toLocaleDateString([], { timeZoneName: 'short' }).split(', ')[1] || 'Local';
+      const slotLabel = `${timeFormatted} (${tzName})`;
+
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'jurnii-time-slot-btn';
-      btn.textContent = slot;
+      btn.textContent = slotLabel;
 
-      if (selectedTimeStr === slot) {
+      if (state.selected_demo_datetime === slot.start) {
         btn.classList.add('selected');
       }
 
@@ -323,17 +337,8 @@
           el.classList.remove('selected');
         });
         btn.classList.add('selected');
-        selectedTimeStr = slot;
-
-        // Save selected slot in ISO format
-        const [time, timezone] = slot.split(' ');
-        const [hours, minutes] = time.split(':');
-        const finalDate = new Date(dateStr);
-        finalDate.setHours(parseInt(hours) - 1); // rough conversion from CET (GMT+1) to UTC/GMT
-        finalDate.setMinutes(parseInt(minutes));
-        
-        state.selected_demo_datetime = finalDate.toISOString();
-        
+        selectedTimeStr = timeFormatted;
+        state.selected_demo_datetime = slot.start;
         updateDebugPanel();
       });
 
@@ -347,6 +352,7 @@
   function createFormMarkup(isModal) {
     let markup = `
       <div class="jurnii-booking-container">
+        <div id="jurnii-form-error" style="display:none; color: #ff5252; background: rgba(255,82,82,0.1); padding: 12px; border-radius: 6px; margin-bottom: 16px; font-size: 14px; text-align: center; border: 1px solid rgba(255,82,82,0.2);"></div>
         ${isModal ? `<button class="jurnii-close-btn" id="jurnii-modal-close" aria-label="Close modal"><i data-lucide="x" style="width:18px;height:18px;"></i></button>` : ''}
         
         <!-- Progress Steps -->
@@ -496,8 +502,8 @@
             <div class="jurnii-confirm-icon">
               <i data-lucide="check" style="width:32px;height:32px;stroke-width:3;"></i>
             </div>
-            <h3>Demo Briefing Requested</h3>
-            <p>Demo request captured. In production, this flow will connect to Jurnii’s backend, then sync the relevant booking and CRM data.</p>
+            <h3>Demo Briefing Confirmed</h3>
+            <p>Your product demonstration has been scheduled. Calendar invitation and Google Meet details have been sent to your email.</p>
             
             <div class="jurnii-confirm-meta">
               <div>
@@ -505,12 +511,16 @@
                 <span class="val" id="jurnii-confirm-time">July 15, 2026 at 2:00 PM CET</span>
               </div>
               <div>
-                <span class="label">Registration ID:</span>
+                <span class="label">Booking Reference:</span>
                 <span class="val val-mono" id="jurnii-confirm-reg-id">REG_XXXXXXXXX</span>
+              </div>
+              <div id="jurnii-confirm-meet-container" style="margin-top: 10px;">
+                <span class="label">Google Meet:</span>
+                <span class="val" id="jurnii-confirm-meet">Generating link...</span>
               </div>
               <div>
                 <span class="label">Status:</span>
-                <span class="val" style="color: var(--jurnii-300);">Confirmed (Simulation)</span>
+                <span class="val" style="color: var(--jurnii-300);">Confirmed</span>
               </div>
             </div>
 
@@ -524,7 +534,6 @@
 
   // --- Bind Form Events & Synchronize Fields ---
   function bindFormEvents(container) {
-    // Helper to capture inline fields
     const fName = container.querySelector('#jurnii-first-name');
     const lName = container.querySelector('#jurnii-last-name');
     const email = container.querySelector('#jurnii-email');
@@ -534,6 +543,48 @@
     const phoneCode = container.querySelector('#jurnii-phone-code');
     const phone = container.querySelector('#jurnii-phone');
     const interest = container.querySelector('#jurnii-interest');
+
+    // Helper to manage loading state on buttons
+    function setLoadingState(btn, loading) {
+      if (loading) {
+        btn.disabled = true;
+        btn.dataset.originalText = btn.textContent;
+        btn.textContent = 'Processing...';
+      } else {
+        btn.disabled = false;
+        btn.textContent = btn.dataset.originalText || btn.textContent;
+      }
+    }
+
+    function showGlobalError(msg) {
+      const errEl = container.querySelector('#jurnii-form-error');
+      if (errEl) {
+        errEl.textContent = msg;
+        errEl.style.display = 'block';
+        errEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    function clearGlobalError() {
+      const errEl = container.querySelector('#jurnii-form-error');
+      if (errEl) {
+        errEl.style.display = 'none';
+        errEl.textContent = '';
+      }
+    }
+
+    async function fetchAvailability() {
+      isLoadingSlots = true;
+      try {
+        const res = await fetch('/api/v1/availability');
+        const data = await res.json();
+        availableSlots = data.slots || [];
+      } catch (err) {
+        console.error('Failed to fetch availability:', err);
+      } finally {
+        isLoadingSlots = false;
+      }
+    }
 
     // Attach real-time synchronization listeners to update state
     if (fName) fName.addEventListener('input', (e) => { state.first_name = e.target.value.trim(); updateDebugPanel(); });
@@ -559,15 +610,34 @@
     // Step 1 Next Actions
     const next1 = container.querySelector('#jurnii-next-1');
     if (next1) {
-      next1.addEventListener('click', (e) => {
+      next1.addEventListener('click', async (e) => {
         e.preventDefault();
         if (validateStep(1)) {
-          // Lazy-generate Registration ID
-          if (!state.registration_id) {
-            state.registration_id = generateRegistrationId();
+          clearGlobalError();
+          setLoadingState(next1, true);
+          try {
+            const res = await fetch('/api/v1/submissions/start', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                firstName: state.first_name,
+                lastName: state.last_name,
+                email: state.email,
+                consent: state.marketing_consent
+              })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Failed to initialize submission');
+
+            continuationToken = data.token;
+            state.submission_id = data.submissionId;
+            updateDebugPanel();
+            goToStep(2);
+          } catch (err) {
+            showGlobalError(err.message);
+          } finally {
+            setLoadingState(next1, false);
           }
-          updateDebugPanel();
-          goToStep(2);
         }
       });
     }
@@ -575,12 +645,40 @@
     // Step 2 Actions
     const next2 = container.querySelector('#jurnii-next-2');
     if (next2) {
-      next2.addEventListener('click', (e) => {
+      next2.addEventListener('click', async (e) => {
         e.preventDefault();
         if (validateStep(2)) {
-          // Initialize calendar scheduler on Step 3 load
-          renderCalendar();
-          goToStep(3);
+          clearGlobalError();
+          setLoadingState(next2, true);
+          try {
+            const res = await fetch(`/api/v1/submissions/${state.submission_id}`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${continuationToken}`
+              },
+              body: JSON.stringify({
+                company: state.company,
+                jobTitle: state.job_title,
+                phone: state.phone_country_code + state.phone_number,
+                country: state.inferred_country,
+                productInterest: state.optional_product_interest
+              })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Failed to save company details');
+
+            continuationToken = data.token;
+            
+            // Load dynamic availability
+            await fetchAvailability();
+            renderCalendar();
+            goToStep(3);
+          } catch (err) {
+            showGlobalError(err.message);
+          } finally {
+            setLoadingState(next2, false);
+          }
         }
       });
     }
@@ -604,58 +702,59 @@
 
     const confirmBtn = container.querySelector('#jurnii-confirm-booking');
     if (confirmBtn) {
-      confirmBtn.addEventListener('click', (e) => {
+      confirmBtn.addEventListener('click', async (e) => {
         e.preventDefault();
         if (validateStep(3)) {
-          // Finalize state
-          state.submitted_at = new Date().toISOString();
-          state.status = 'confirmed';
-          updateDebugPanel();
+          clearGlobalError();
+          setLoadingState(confirmBtn, true);
+          try {
+            const res = await fetch('/api/v1/bookings', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${continuationToken}`
+              },
+              body: JSON.stringify({
+                slotStart: state.selected_demo_datetime
+              })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || data.error || 'Failed to complete booking');
 
-          /* =========================================================================
-             FUTURE INTEGRATION NOTE FOR DEVELOPERS:
-             When connecting this form to the Jurnii backend, perform a fetch post:
-             
-             fetch('/api/register-briefing', {
-               method: 'POST',
-               headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify(state)
-             })
-             .then(res => res.json())
-             .then(data => {
-               // Handle backend response:
-               // 1. Backend creates a prospect record in Neon database.
-               // 2. Backend schedules the meeting in Google Calendar via Service Account API.
-               // 3. Backend creates/updates Lead & Contact records in Zoho CRM.
-               //
-               // IMPORTANT:
-               // Since the Jurnii Zoho account is in the EU region, you must route all 
-               // Zoho CRM API requests through the EU API base URL:
-               // https://www.zohoapis.eu/crm/v6/ (or latest version)
-               // All Client Credentials and OAuth registrations must be created in the 
-               // Zoho EU Developer Console.
-             });
-             ========================================================================= */
+            state.submitted_at = new Date().toISOString();
+            state.status = 'confirmed';
+            state.registration_id = data.bookingId;
+            updateDebugPanel();
 
+            // Populate confirmation panel variables
+            const confirmTime = container.querySelector('#jurnii-confirm-time');
+            const confirmRegId = container.querySelector('#jurnii-confirm-reg-id');
+            const confirmMeet = container.querySelector('#jurnii-confirm-meet');
+            
+            if (confirmTime && state.selected_demo_datetime) {
+              const dateObj = new Date(state.selected_demo_datetime);
+              confirmTime.textContent = dateObj.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              }) + ' at ' + selectedTimeStr;
+            }
+            if (confirmRegId) {
+              confirmRegId.textContent = state.registration_id;
+            }
+            if (confirmMeet && data.meetLink) {
+              confirmMeet.innerHTML = `<a href="${data.meetLink}" target="_blank" style="color: var(--jurnii-300); text-decoration: underline; font-weight: 500;">Join Google Meet</a>`;
+            } else if (confirmMeet) {
+              confirmMeet.textContent = 'Invitation sent via email';
+            }
 
-          // Populate confirmation panel variables
-          const confirmTime = container.querySelector('#jurnii-confirm-time');
-          const confirmRegId = container.querySelector('#jurnii-confirm-reg-id');
-          
-          if (confirmTime && state.selected_demo_datetime) {
-            const dateObj = new Date(state.selected_demo_datetime);
-            confirmTime.textContent = dateObj.toLocaleDateString('en-US', {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            }) + ' at ' + selectedTimeStr;
+            goToStep(4);
+          } catch (err) {
+            showGlobalError(err.message);
+          } finally {
+            setLoadingState(confirmBtn, false);
           }
-          if (confirmRegId) {
-            confirmRegId.textContent = state.registration_id;
-          }
-
-          goToStep(4);
         }
       });
     }
@@ -752,6 +851,10 @@
 
   // --- Initialize JSON Debug Logging Console ---
   function initDebugPanel() {
+    // Gate to development environments only
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    if (!isLocalhost) return;
+
     let debugToggle = document.getElementById('jurnii-debug-toggle');
     if (debugToggle) return;
 
@@ -759,7 +862,7 @@
     debugToggle = document.createElement('button');
     debugToggle.id = 'jurnii-debug-toggle';
     debugToggle.className = 'jurnii-debug-toggle';
-    debugToggle.innerHTML = '<span class="badge"></span> Simulation Logs';
+    debugToggle.innerHTML = '<span class="badge"></span> Debug Logs';
     document.body.appendChild(debugToggle);
 
     // Floating logger panel
