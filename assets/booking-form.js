@@ -5,7 +5,7 @@
    ========================================================================= */
 
 (function () {
-  // --- Country Code Mapping ---
+  // --- Country Code Mapping (must mirror the #jurnii-phone-code <select> options) ---
   const countryMapping = {
     '+44': 'United Kingdom',
     '+1': 'United States',
@@ -16,16 +16,98 @@
     '+34': 'Spain',
     '+353': 'Ireland',
     '+61': 'Australia',
-    '+33': 'France',
-    '+39': 'Italy',
-    '+31': 'Netherlands',
     '+599': 'Curaçao',
-    '+506': 'Costa Rica',
-    '+357': 'Cyprus',
-    '+41': 'Switzerland',
-    '+64': 'New Zealand',
-    '+90': 'Turkey'
+    '+506': 'Costa Rica'
   };
+
+  // --- Progressive continuation persistence (resume after refresh) ---
+  const PROGRESS_KEY = 'jurnii_booking_progress';
+
+  function saveProgress() {
+    try {
+      const snapshot = {
+        step: currentStep,
+        submission_id: state.submission_id || null,
+        token: continuationToken || null,
+        first_name: state.first_name,
+        last_name: state.last_name,
+        email: state.email,
+        marketing_consent: state.marketing_consent,
+        company: state.company,
+        job_title: state.job_title,
+        phone_country_code: state.phone_country_code,
+        phone_number: state.phone_number,
+        inferred_country: state.inferred_country,
+        optional_product_interest: state.optional_product_interest,
+        saved_at: Date.now()
+      };
+      localStorage.setItem(PROGRESS_KEY, JSON.stringify(snapshot));
+    } catch (_) { /* storage unavailable — non-fatal */ }
+  }
+
+  function loadProgress() {
+    try {
+      const raw = localStorage.getItem(PROGRESS_KEY);
+      if (!raw) return null;
+      const snap = JSON.parse(raw);
+      // Continuation tokens expire after 2h; drop anything older.
+      if (!snap.saved_at || (Date.now() - snap.saved_at) > 2 * 60 * 60 * 1000) {
+        clearProgress();
+        return null;
+      }
+      return snap;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function clearProgress() {
+    try { localStorage.removeItem(PROGRESS_KEY); } catch (_) { /* non-fatal */ }
+  }
+
+  // Restore a saved partial registration into a freshly-rendered form so a
+  // refresh (or return visit within the token's 2h life) resumes in place.
+  async function restoreProgress(container) {
+    const snap = loadProgress();
+    if (!snap || !snap.token || !snap.submission_id || !snap.step || snap.step < 2) return false;
+
+    continuationToken = snap.token;
+    Object.assign(state, {
+      submission_id: snap.submission_id,
+      first_name: snap.first_name || '',
+      last_name: snap.last_name || '',
+      email: snap.email || '',
+      marketing_consent: !!snap.marketing_consent,
+      company: snap.company || '',
+      job_title: snap.job_title || '',
+      phone_country_code: snap.phone_country_code || '+44',
+      phone_number: snap.phone_number || '',
+      inferred_country: snap.inferred_country || 'United Kingdom',
+      optional_product_interest: snap.optional_product_interest || ''
+    });
+
+    const setVal = (sel, val) => { const el = container.querySelector(sel); if (el && val != null) el.value = val; };
+    const setChk = (sel, val) => { const el = container.querySelector(sel); if (el) el.checked = !!val; };
+    setVal('#jurnii-first-name', state.first_name);
+    setVal('#jurnii-last-name', state.last_name);
+    setVal('#jurnii-email', state.email);
+    setChk('#jurnii-consent', state.marketing_consent);
+    setVal('#jurnii-company', state.company);
+    setVal('#jurnii-job-title', state.job_title);
+    setVal('#jurnii-phone-code', state.phone_country_code);
+    setVal('#jurnii-phone', state.phone_number);
+    setVal('#jurnii-interest', state.optional_product_interest);
+    updateDebugPanel();
+
+    if (snap.step >= 3 && currentFetchAvailability) {
+      await currentFetchAvailability();
+      renderCalendar();
+      goToStep(3);
+    } else {
+      goToStep(2);
+    }
+    return true;
+  }
 
   // --- Initial Registration Object State ---
   let state = {
@@ -56,17 +138,8 @@
   let selectedTimeStr = null; // "HH:MM"
   let continuationToken = null;
   let availableSlots = [];
-  let isLoadingSlots = false;
-
-  // --- Helper: Generate Registration ID ---
-  function generateRegistrationId() {
-    const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    let result = 'REG_';
-    for (let i = 0; i < 9; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return result;
-  }
+  // Set by bindFormEvents so resume-after-refresh can reload the calendar.
+  let currentFetchAvailability = null;
 
   // --- Helper: Parse UTM parameters ---
   function captureUTMParameters() {
@@ -395,7 +468,7 @@
             <div class="jurnii-form-group full-width" style="margin-top: 10px;">
               <label class="jurnii-consent-checkbox">
                 <div class="jurnii-checkbox-wrapper">
-                  <input type="checkbox" id="jurnii-consent" checked>
+                  <input type="checkbox" id="jurnii-consent">
                   <span class="jurnii-checkbox-checkmark"></span>
                 </div>
                 <span class="jurnii-consent-text">I consent to receive Jurnii's regular market intelligence reports and marketing updates. You can unsubscribe at any time.</span>
@@ -448,7 +521,7 @@
                 <option value="" disabled selected>Select an option...</option>
                 <option value="Jurnii UX">Jurnii UX — User Experience Benchmarking</option>
                 <option value="Jurnii 360">Jurnii 360 — Competitor Surveillance Radar</option>
-                <option value="Cortex / Growth">Cortex / Growth — Attribution & Scenarios</option>
+                <option value="Jurnii Cortex">Cortex / Growth — Attribution & Scenarios</option>
                 <option value="Not sure yet">Not sure yet</option>
               </select>
             </div>
@@ -570,21 +643,35 @@
       if (errEl) {
         errEl.style.display = 'none';
         errEl.textContent = '';
+        errEl.style.color = '';
+        errEl.style.background = '';
+        errEl.style.border = '';
+      }
+    }
+
+    // Neutral (non-error) notice, e.g. "our team will follow up" for Manual Review.
+    function showGlobalInfo(msg) {
+      const errEl = container.querySelector('#jurnii-form-error');
+      if (errEl) {
+        errEl.textContent = msg;
+        errEl.style.color = '#0b6b3a';
+        errEl.style.background = 'rgba(16,185,129,0.10)';
+        errEl.style.border = '1px solid rgba(16,185,129,0.25)';
+        errEl.style.display = 'block';
+        errEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
     }
 
     async function fetchAvailability() {
-      isLoadingSlots = true;
       try {
         const res = await fetch('/api/v1/availability');
         const data = await res.json();
         availableSlots = data.slots || [];
       } catch (err) {
         console.error('Failed to fetch availability:', err);
-      } finally {
-        isLoadingSlots = false;
       }
     }
+    currentFetchAvailability = fetchAvailability;
 
     // Attach real-time synchronization listeners to update state
     if (fName) fName.addEventListener('input', (e) => { state.first_name = e.target.value.trim(); updateDebugPanel(); });
@@ -623,15 +710,24 @@
                 firstName: state.first_name,
                 lastName: state.last_name,
                 email: state.email,
-                consent: state.marketing_consent
+                consent: state.marketing_consent,
+                sourcePage: state.source_page,
+                utmSource: state.utm_source,
+                utmMedium: state.utm_medium,
+                utmCampaign: state.utm_campaign
               })
             });
             const data = await res.json();
+            if (res.status === 409 && data.code === 'MANUAL_REVIEW') {
+              showGlobalInfo(data.error || "We already have a record for this email — our team will be in touch.");
+              return;
+            }
             if (!res.ok) throw new Error(data.error || 'Failed to initialize submission');
 
             continuationToken = data.token;
             state.submission_id = data.submissionId;
             updateDebugPanel();
+            saveProgress();
             goToStep(2);
           } catch (err) {
             showGlobalError(err.message);
@@ -666,10 +762,18 @@
               })
             });
             const data = await res.json();
+            if (res.status === 409 && data.code === 'MANUAL_REVIEW') {
+              // Converted, but no single bookable product (e.g. "Not sure yet"
+              // or ambiguous). The visitor is captured; a human will follow up.
+              clearProgress();
+              showGlobalInfo(data.error || "Thanks — your details are in. Our team will reach out to arrange the right session.");
+              return;
+            }
             if (!res.ok) throw new Error(data.error || 'Failed to save company details');
 
             continuationToken = data.token;
-            
+            saveProgress();
+
             // Load dynamic availability
             await fetchAvailability();
             renderCalendar();
@@ -719,8 +823,25 @@
               })
             });
             const data = await res.json();
-            if (!res.ok) throw new Error(data.message || data.error || 'Failed to complete booking');
+            if (res.status === 409 && data.code === 'SLOT_TAKEN') {
+              showGlobalError(data.error || 'That slot was just taken. Please pick another.');
+              state.selected_demo_datetime = null;
+              selectedTimeStr = null;
+              await fetchAvailability();
+              renderCalendar();
+              renderTimeSlots(selectedDateStr);
+              return;
+            }
+            if (res.status === 409 && data.code === 'NO_SINGLE_DEAL') {
+              clearProgress();
+              showGlobalInfo(data.error || "Your registration is complete — our team will confirm the right session with you.");
+              return;
+            }
+            if (!res.ok || data.status !== 'confirmed') {
+              throw new Error(data.error || data.message || 'Failed to complete booking');
+            }
 
+            clearProgress();
             state.submitted_at = new Date().toISOString();
             state.status = 'confirmed';
             state.registration_id = data.bookingId;
@@ -799,8 +920,7 @@
 
     document.body.appendChild(overlay);
 
-    // Modal close hooks
-    const closeBtn = overlay.querySelector('.jurnii-modal-overlay');
+    // Modal close hook: click on the backdrop closes the modal.
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay) {
         closeModal();
@@ -961,6 +1081,8 @@
       inlineContainer.innerHTML = createFormMarkup(false);
       bindFormEvents(inlineContainer);
       goToStep(1);
+      // Resume a partial registration if one was saved (refresh / return visit).
+      restoreProgress(inlineContainer);
     }
 
     // Intercept `.open-booking-modal-btn` and booking triggers

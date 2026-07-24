@@ -1,150 +1,151 @@
 const jwt = require('jsonwebtoken');
-const { checkFreeBusy, createGoogleEvent } = require('../_utils/google');
+const {
+  checkFreeBusy,
+  listEventBySubmissionId,
+  createGoogleEvent,
+  extractMeetLink
+} = require('../../_utils/google');
 const {
   createZohoEvent,
   searchEventByExternalId,
   updateSubmissionRecord
-} = require('../_utils/zoho');
-const { google } = require('googleapis');
+} = require('../../_utils/zoho');
 
 const JWT_SECRET = process.env.JWT_SECRET;
+const SLOT_MINUTES = 30;
+const BUFFER_MS = 15 * 60 * 1000;
+
+function fail(res, status, code, message) {
+  return res.status(status).json({ error: message || code, code });
+}
+
+/** Best-effort submission write for fields that may not exist live (event ids, Meet URL). */
+async function bestEffortSubmissionUpdate(submissionId, data) {
+  try {
+    await updateSubmissionRecord(submissionId, data);
+  } catch (e) {
+    console.warn(`[bookings] best-effort submission update skipped (${e.code || e.message})`);
+  }
+}
 
 module.exports = async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+  if (req.method !== 'POST') return fail(res, 405, 'method_not_allowed', 'Method not allowed');
 
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Unauthorized: Missing or invalid token' });
+    return fail(res, 401, 'auth_required', 'Unauthorized');
   }
 
-  const token = authHeader.split(' ')[1];
   let decoded;
   try {
-    decoded = jwt.verify(token, JWT_SECRET);
+    decoded = jwt.verify(authHeader.split(' ')[1], JWT_SECRET);
   } catch (err) {
-    return res.status(401).json({ error: 'Unauthorized: Invalid token', message: err.message });
+    return fail(res, 401, 'auth_invalid', 'Unauthorized');
   }
 
-  const { slotStart } = req.body;
-  if (!slotStart) {
-    return res.status(400).json({ error: 'Missing required field: slotStart' });
-  }
+  // Page 3 requires a converted Contact AND exactly one resolved Product Deal
+  // (both are stamped into the token by the page-2 endpoint). No Lead fallback,
+  // no Contact-only meeting.
+  if (!decoded.step || decoded.step < 2) return fail(res, 409, 'not_ready', 'Complete the previous step first.');
+  if (!decoded.contactId) return fail(res, 409, 'contact_unresolved', 'Your details are still being processed.');
+  if (!decoded.dealId) return fail(res, 409, 'NO_SINGLE_DEAL', 'No single product could be resolved for this booking; our team will follow up.');
+
+  const { slotStart } = req.body || {};
+  if (!slotStart) return fail(res, 400, 'validation', 'Missing required field: slotStart');
 
   const submissionId = decoded.submissionId;
   const start = new Date(slotStart);
-  const end = new Date(start.getTime() + 30 * 60 * 1000); // 30 minutes duration
+  const end = new Date(start.getTime() + SLOT_MINUTES * 60 * 1000);
   const visitorEmail = decoded.email;
 
   try {
-    // 1. RE-VERIFY AVAILABILITY (Google FreeBusy query)
-    const busyPeriods = await checkFreeBusy(start.toISOString(), end.toISOString());
-    const isBusy = busyPeriods.some(busy => {
-      const busyStart = new Date(busy.start).getTime();
-      const busyEnd = new Date(busy.end).getTime();
-      const bufferMs = 15 * 60 * 1000;
-      return Math.max(start.getTime() - bufferMs, busyStart) < Math.min(end.getTime() + bufferMs, busyEnd);
-    });
-
-    if (isBusy) {
-      return res.status(409).json({ error: 'Conflict', message: 'The selected slot is no longer available. Please select another slot.' });
-    }
-
-    // 2. GOOGLE CALENDAR EVENT (Idempotent check first)
-    const googleAuth = new google.auth.OAuth2(
-      process.env.GOOGLE_CLIENT_ID,
-      process.env.GOOGLE_CLIENT_SECRET
+    // 1. Re-verify availability over the buffered window (matches slot-offer rules).
+    const busyPeriods = await checkFreeBusy(
+      new Date(start.getTime() - BUFFER_MS).toISOString(),
+      new Date(end.getTime() + BUFFER_MS).toISOString()
     );
-    googleAuth.setCredentials({ refresh_token: process.env.GOOGLE_REFRESH_TOKEN });
-    const calendar = google.calendar({ version: 'v3', auth: googleAuth });
-    const calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
-
-    let googleEvent = null;
-    const existingEventsRes = await calendar.events.list({
-      calendarId,
-      privateExtendedProperty: `submissionId=${submissionId}`
+    const conflict = busyPeriods.some(b => {
+      const bs = new Date(b.start).getTime();
+      const be = new Date(b.end).getTime();
+      return Math.max(start.getTime() - BUFFER_MS, bs) < Math.min(end.getTime() + BUFFER_MS, be);
     });
+    if (conflict) return fail(res, 409, 'SLOT_TAKEN', 'The selected slot is no longer available. Please select another.');
 
-    if (existingEventsRes.data.items && existingEventsRes.data.items.length > 0) {
-      googleEvent = existingEventsRes.data.items[0];
-      console.log(`Reusing existing Google Calendar Event: ${googleEvent.id}`);
+    // 2. Google Calendar event — reuse by submissionId, else create (idempotent).
+    let googleEvent = await listEventBySubmissionId(submissionId);
+    if (googleEvent) {
+      console.log(`[bookings] reusing Google event ${googleEvent.id} for submission ${submissionId}`);
     } else {
       googleEvent = await createGoogleEvent({
         summary: 'Jurnii Product Demo Meeting',
-        description: 'Product Demonstration and technical overview of Jurnii.',
+        description: 'Product demonstration and technical overview of Jurnii.',
         start: start.toISOString(),
         end: end.toISOString(),
         attendees: [{ email: visitorEmail }],
         submissionId
       });
-      console.log(`Created new Google Calendar Event: ${googleEvent.id}`);
+      console.log(`[bookings] created Google event ${googleEvent.id} for submission ${submissionId}`);
     }
+    const meetLink = extractMeetLink(googleEvent);
 
-    const meetLink = googleEvent.conferenceData?.entryPoints?.[0]?.uri || googleEvent.hangoutLink || '';
+    // Persist the Google event id before the Zoho step so a lost response is
+    // reconcilable (best-effort; recovery also works via the extended-property reuse above).
+    await bestEffortSubmissionUpdate(submissionId, {
+      Integration_Status: 'Pending',
+      Google_Event_ID: googleEvent.id,
+      Meet_URL: meetLink
+    });
 
-    // 3. ZOHO CRM EVENT (Idempotent check first)
-    let zohoEventId = null;
+    // 3. Zoho Event — reuse by Ext_Calendar_Booking_ID, else create (idempotent).
+    // Link to the converted Contact (Who_Id) and the exact Product Deal
+    // (What_Id + $se_module='Deals') so WF007 handleMeetingEvent can advance the pipeline.
+    let zohoEventId;
     const existingZohoEvent = await searchEventByExternalId(submissionId);
-
     if (existingZohoEvent) {
       zohoEventId = existingZohoEvent.id;
-      console.log(`Reusing existing Zoho CRM Event: ${zohoEventId}`);
+      console.log(`[bookings] reusing Zoho event ${zohoEventId} for submission ${submissionId}`);
     } else {
-      // Map lookups: Who_Id is Contact (preferred) or Lead. What_Id is Deal.
-      const whoId = decoded.contactId || decoded.leadId;
-      const whoType = decoded.contactId ? 'Contacts' : 'Leads';
-
       const eventData = {
         Event_Title: 'Jurnii Product Demo Meeting',
         Start_DateTime: start.toISOString(),
         End_DateTime: end.toISOString(),
         Ext_Calendar_Booking_ID: submissionId,
-        Meeting_Task_Stage: 'Demo Confirmation',
-        Description: `Google Meet Link: ${meetLink}\nSubmission Reference: ${submissionId}`
+        Meeting_Task_Stage: 'Demo Booking',
+        Description: `Google Meet Link: ${meetLink}\nSubmission Reference: ${submissionId}`,
+        Who_Id: { id: decoded.contactId },
+        What_Id: { id: decoded.dealId },
+        $se_module: 'Deals'
       };
-
-      if (whoId) {
-        eventData.Who_Id = {
-          id: whoId,
-          name: whoType
-        };
-      }
-      if (decoded.dealId) {
-        eventData.What_Id = {
-          id: decoded.dealId,
-          name: 'Deals'
-        };
-      }
+      const meetField = process.env.ZOHO_EVENT_MEET_FIELD;
+      if (meetField && meetLink) eventData[meetField] = meetLink;
 
       zohoEventId = await createZohoEvent(eventData);
-      console.log(`Created new Zoho CRM Event: ${zohoEventId}`);
+      console.log(`[bookings] created Zoho event ${zohoEventId} for submission ${submissionId}`);
     }
 
-    // 4. UPDATE WEBSITE SUBMISSION status to Confirmed
+    // 4. Mark the submission Confirmed (required, safe fields only) + best-effort ids.
     await updateSubmissionRecord(submissionId, {
       Integration_Status: 'Confirmed',
       Submission_Step: 'Booking Completed'
     });
+    await bestEffortSubmissionUpdate(submissionId, { Zoho_Event_ID: zohoEventId });
 
     return res.status(200).json({
       success: true,
+      status: 'confirmed',
       bookingId: submissionId,
       meetLink,
       googleEventId: googleEvent.id,
       zohoEventId
     });
   } catch (error) {
-    console.error('Bookings Error:', error);
-    // Mark Website Submission as Failed if it failed
-    try {
-      await updateSubmissionRecord(submissionId, {
-        Integration_Status: 'Failed',
-        Error_Message: error.message
-      });
-    } catch (e) {
-      console.error('Failed to update submission error state:', e);
-    }
-    return res.status(500).json({ error: 'Failed to complete booking', message: error.message });
+    console.error('[bookings] error:', error.code || error.message);
+    // Recoverable: the Google event (if created) carries submissionId and is
+    // reused on retry; we only record a failed status, never orphan silently.
+    await bestEffortSubmissionUpdate(submissionId, {
+      Integration_Status: 'Failed',
+      Error_Message: error.code || 'booking_failed'
+    });
+    return fail(res, 502, error.code || 'booking_failed', 'We could not complete the booking. Please try again.');
   }
 };

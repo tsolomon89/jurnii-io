@@ -1,89 +1,69 @@
-const { checkFreeBusy, updateGoogleEvent } = require('../../_utils/google');
+const jwt = require('jsonwebtoken');
+const { checkFreeBusy, listEventBySubmissionId, updateGoogleEvent } = require('../../../_utils/google');
 const {
   searchEventByExternalId,
   updateZohoEvent,
   updateSubmissionRecord
-} = require('../../_utils/zoho');
-const { google } = require('googleapis');
+} = require('../../../_utils/zoho');
+
+const JWT_SECRET = process.env.JWT_SECRET;
+const SLOT_MINUTES = 30;
+const BUFFER_MS = 15 * 60 * 1000;
+
+function fail(res, status, code, message) {
+  return res.status(status).json({ error: message || code, code });
+}
 
 module.exports = async function handler(req, res) {
-  if (req.method !== 'PATCH') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  if (req.method !== 'PATCH') return fail(res, 405, 'method_not_allowed', 'Method not allowed');
+
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) return fail(res, 401, 'auth_required', 'Unauthorized');
+
+  let decoded;
+  try {
+    decoded = jwt.verify(authHeader.split(' ')[1], JWT_SECRET);
+  } catch (err) {
+    return fail(res, 401, 'auth_invalid', 'Unauthorized');
   }
 
-  const { id } = req.query; // This is the submissionId / booking reference
-  const { slotStart } = req.body;
-
-  if (!id || !slotStart) {
-    return res.status(400).json({ error: 'Missing required fields: id, slotStart' });
-  }
+  const { id } = req.query;
+  const { slotStart } = req.body || {};
+  if (!id || !slotStart) return fail(res, 400, 'validation', 'Missing required fields: id, slotStart');
+  if (decoded.submissionId !== id) return fail(res, 403, 'forbidden', 'Token does not match this booking.');
 
   const start = new Date(slotStart);
-  const end = new Date(start.getTime() + 30 * 60 * 1000); // 30 minutes duration
+  const end = new Date(start.getTime() + SLOT_MINUTES * 60 * 1000);
 
   try {
-    // 1. RE-VERIFY AVAILABILITY FOR NEW SLOT
-    const busyPeriods = await checkFreeBusy(start.toISOString(), end.toISOString());
-    const isBusy = busyPeriods.some(busy => {
-      const busyStart = new Date(busy.start).getTime();
-      const busyEnd = new Date(busy.end).getTime();
-      const bufferMs = 15 * 60 * 1000;
-      return Math.max(start.getTime() - bufferMs, busyStart) < Math.min(end.getTime() + bufferMs, busyEnd);
-    });
-
-    if (isBusy) {
-      return res.status(409).json({ error: 'Conflict', message: 'The selected slot is no longer available.' });
-    }
-
-    // 2. FIND AND UPDATE GOOGLE EVENT
-    const googleAuth = new google.auth.OAuth2(
-      process.env.GOOGLE_CLIENT_ID,
-      process.env.GOOGLE_CLIENT_SECRET
+    // Re-verify availability over the buffered window.
+    const busyPeriods = await checkFreeBusy(
+      new Date(start.getTime() - BUFFER_MS).toISOString(),
+      new Date(end.getTime() + BUFFER_MS).toISOString()
     );
-    googleAuth.setCredentials({ refresh_token: process.env.GOOGLE_REFRESH_TOKEN });
-    const calendar = google.calendar({ version: 'v3', auth: googleAuth });
-    const calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
-
-    const googleEventsRes = await calendar.events.list({
-      calendarId,
-      privateExtendedProperty: `submissionId=${id}`
+    const conflict = busyPeriods.some(b => {
+      const bs = new Date(b.start).getTime();
+      const be = new Date(b.end).getTime();
+      return Math.max(start.getTime() - BUFFER_MS, bs) < Math.min(end.getTime() + BUFFER_MS, be);
     });
+    if (conflict) return fail(res, 409, 'SLOT_TAKEN', 'The selected slot is no longer available.');
 
-    const googleEvent = googleEventsRes.data.items?.[0];
-    if (!googleEvent) {
-      return res.status(404).json({ error: 'Not Found', message: 'Google Calendar event not found for this booking.' });
-    }
+    const googleEvent = await listEventBySubmissionId(id);
+    if (!googleEvent) return fail(res, 404, 'not_found', 'Calendar event not found for this booking.');
+    await updateGoogleEvent(googleEvent.id, { start: start.toISOString(), end: end.toISOString() });
 
-    await updateGoogleEvent(googleEvent.id, {
-      start: start.toISOString(),
-      end: end.toISOString()
-    });
-    console.log(`Updated Google Event: ${googleEvent.id}`);
-
-    // 3. FIND AND UPDATE ZOHO EVENT
     const zohoEvent = await searchEventByExternalId(id);
-    if (!zohoEvent) {
-      return res.status(404).json({ error: 'Not Found', message: 'Zoho CRM event not found for this booking.' });
-    }
-
+    if (!zohoEvent) return fail(res, 404, 'not_found', 'Meeting record not found for this booking.');
     await updateZohoEvent(zohoEvent.id, {
       Start_DateTime: start.toISOString(),
       End_DateTime: end.toISOString()
     });
-    console.log(`Updated Zoho Event: ${zohoEvent.id}`);
 
-    // 4. UPDATE WEBSITE SUBMISSION
-    await updateSubmissionRecord(id, {
-      Submission_Step: 'Booking Rescheduled'
-    });
+    await updateSubmissionRecord(id, { Submission_Step: 'Booking Rescheduled' });
 
-    return res.status(200).json({
-      success: true,
-      bookingId: id,
-      newStart: start.toISOString()
-    });
+    return res.status(200).json({ success: true, bookingId: id, newStart: start.toISOString() });
   } catch (error) {
-    console.error('Reschedule Error:', error);
-    return res.status(500).json({ error: 'Failed to reschedule booking', message: error.message });
+    console.error('[reschedule] error:', error.code || error.message);
+    return fail(res, 502, error.code || 'reschedule_failed', 'We could not reschedule the booking. Please try again.');
   }
 };

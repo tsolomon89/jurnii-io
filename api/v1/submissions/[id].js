@@ -1,104 +1,146 @@
 const jwt = require('jsonwebtoken');
 const {
-  requestZoho,
+  getLead,
   updateLead,
-  updateContact,
+  readConversion,
+  resolveProductDeal,
   updateSubmissionRecord
 } = require('../../_utils/zoho');
+const { canonicalProduct } = require('../../_utils/products');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
+// Bounded backoff (ms). Serverless-safe; the retry-resume path makes a timeout
+// harmless (a later PATCH sees the already-converted Lead and resumes).
+const CONVERSION_BACKOFF = [1000, 2000, 3000, 4000, 5000];
+const DEAL_BACKOFF = [800, 1500, 2500];
+
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+function fail(res, status, code, message, extra) {
+  return res.status(status).json(Object.assign({ error: message || code, code }, extra || {}));
+}
+
+async function safeSubmissionUpdate(id, data) {
+  try {
+    await updateSubmissionRecord(id, data);
+  } catch (e) {
+    console.warn(`[submissions] submission mirror update skipped (${e.code || e.message})`);
+  }
+}
+
 module.exports = async function handler(req, res) {
-  if (req.method !== 'PATCH') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+  if (req.method !== 'PATCH') return fail(res, 405, 'method_not_allowed', 'Method not allowed');
 
-  const { id } = req.query; // This is the submission record ID in Zoho
+  const { id } = req.query;
   const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) return fail(res, 401, 'auth_required', 'Unauthorized');
 
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Unauthorized: Missing or invalid token' });
-  }
-
-  const token = authHeader.split(' ')[1];
   let decoded;
   try {
-    decoded = jwt.verify(token, JWT_SECRET);
+    decoded = jwt.verify(authHeader.split(' ')[1], JWT_SECRET);
   } catch (err) {
-    return res.status(401).json({ error: 'Unauthorized: Invalid token', message: err.message });
+    return fail(res, 401, 'auth_invalid', 'Unauthorized');
   }
 
-  // Ensure submissionId in path matches token to prevent tampering
-  if (decoded.submissionId !== id) {
-    return res.status(400).json({ error: 'Token mismatch with submission ID' });
-  }
+  if (decoded.submissionId !== id) return fail(res, 403, 'forbidden', 'Token does not match this submission.');
+  if (decoded.step !== 1) return fail(res, 409, 'wrong_step', 'This step has already been completed.');
 
-  const { company, jobTitle, phone, country, productInterest } = req.body;
+  const { company, jobTitle, phone, country, productInterest } = req.body || {};
+  if (!company || !jobTitle) return fail(res, 400, 'validation', 'Missing required fields: company, jobTitle');
+
+  const leadId = decoded.leadId;
+  const product = canonicalProduct(productInterest);
+  const productArray = product ? [product] : [];
 
   try {
-    let leadId = decoded.leadId;
-    let contactId = decoded.contactId;
-    let dealId = null;
+    // 0. Read the Lead. REST GET returns converted leads too.
+    let lead = await getLead(leadId);
+    if (!lead) return fail(res, 502, 'lead_not_found', 'Your registration could not be found. Please restart.');
 
-    // 1. Update the related Lead or Contact in Zoho CRM
-    if (contactId) {
-      await updateContact(contactId, {
-        Company_Name__s: company, // Standard API name for Contact's company in some versions
-        Title: jobTitle,
-        Phone: phone,
-        Mailing_Country: country,
-        Product_Interest: productInterest ? [productInterest] : []
-      });
-    } else if (leadId) {
-      await updateLead(leadId, {
+    let conv = readConversion(lead);
+
+    // 1. If NOT yet converted, perform ONE enrichment update (triggers enabled)
+    //    which fires process Lead. If already converted (retry), skip the update
+    //    entirely and resume resolution.
+    if (!conv.converted) {
+      const enrichment = {
         Company: company,
-        Title: jobTitle,
+        Job_Title: jobTitle,
         Phone: phone,
         Country: country,
-        Product_Interest: productInterest ? [productInterest] : []
-      });
-
-      // 2. Poll Lead record to check if Zoho Workflow automatically converted it
-      // Bounded polling: 5 attempts with 1-second delay
-      let isConverted = false;
-      for (let attempt = 1; attempt <= 5; attempt++) {
-        const leadRes = await requestZoho('GET', `/crm/v6/Leads/${leadId}`);
-        if (leadRes.data && leadRes.data.length > 0) {
-          const lead = leadRes.data[0];
-          if (lead.Is_Converted || lead.$converted) {
-            contactId = lead.Converted_Contact ? lead.Converted_Contact.id : null;
-            dealId = lead.Converted_Deal ? lead.Converted_Deal.id : null;
-            isConverted = true;
-            break;
-          }
-        }
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        Product_Interest: productArray
+      };
+      try {
+        await updateLead(leadId, enrichment); // triggers ENABLED (no trigger override)
+      } catch (e) {
+        // Retry once without the picklist-risky fields so conversion still fires.
+        console.warn(`[submissions] enrichment failed (${e.code || e.message}); retrying without picklist fields`);
+        await updateLead(leadId, { Company: company, Phone: phone, Product_Interest: productArray });
       }
-      
-      console.log(`Lead conversion status for ${leadId}: converted=${isConverted}, contact=${contactId}, deal=${dealId}`);
+
+      // 2. Bounded backoff poll for conversion.
+      for (const delay of CONVERSION_BACKOFF) {
+        await sleep(delay);
+        lead = await getLead(leadId);
+        conv = readConversion(lead);
+        if (conv.converted && conv.contactId) break;
+      }
     }
 
-    // 3. Update the progressive state in the Website Submission record
-    const updateData = {
+    // Mirror enrichment onto the submission (best-effort; the CRM graph is authoritative).
+    await safeSubmissionUpdate(id, {
       Submission_Step: 'Step 2',
       Company: company,
       Job_Title: jobTitle,
       Phone: phone,
       Country: country,
-      Product_Interest: productInterest
-    };
-    if (contactId) updateData.Contact_Lookup = contactId;
-    if (dealId) updateData.Deal_Lookup = dealId;
+      Product_Interest: product || productInterest || ''
+    });
 
-    await updateSubmissionRecord(id, updateData);
+    // 3. Conversion must have produced a Contact (+ Account). Otherwise → Manual Review.
+    if (!conv.converted || !conv.contactId || !conv.accountId) {
+      console.warn(`[submissions] conversion unresolved for lead ${leadId} (converted=${conv.converted} contact=${conv.contactId} account=${conv.accountId})`);
+      await safeSubmissionUpdate(id, { Error_Message: 'MANUAL_REVIEW: conversion_unresolved' });
+      return fail(res, 409, 'MANUAL_REVIEW', 'Your details are being processed; our team will follow up shortly.', { reason: 'conversion_unresolved' });
+    }
 
-    // 4. Generate new signed JWT token for Step 3
+    // 4. Resolve the exact single Product Deal from the converted graph.
+    if (!product) {
+      await safeSubmissionUpdate(id, { Contact_Lookup: conv.contactId, Error_Message: 'MANUAL_REVIEW: no_product_selected' });
+      return fail(res, 409, 'MANUAL_REVIEW', "We'll tailor the right session for you — our team will reach out to schedule.", { reason: 'no_product_selected' });
+    }
+
+    let dealResult = await resolveProductDeal(conv.accountId, product);
+    for (const delay of DEAL_BACKOFF) {
+      if (dealResult.status === 'one') break;
+      await sleep(delay);
+      dealResult = await resolveProductDeal(conv.accountId, product);
+    }
+
+    if (dealResult.status !== 'one') {
+      const reason = dealResult.status === 'many' ? 'deal_ambiguous' : 'deal_unresolved';
+      console.warn(`[submissions] product deal ${reason} for account ${conv.accountId} product ${product}`);
+      await safeSubmissionUpdate(id, { Contact_Lookup: conv.contactId, Error_Message: `MANUAL_REVIEW: ${reason}` });
+      return fail(res, 409, 'MANUAL_REVIEW', 'Your registration is complete; our team will confirm the right session.', { reason });
+    }
+
+    const dealId = dealResult.deal.id;
+
+    // 5. Persist resolved refs (best-effort mirror) and issue the step-2 token.
+    await safeSubmissionUpdate(id, {
+      Integration_Status: 'Pending',
+      Contact_Lookup: conv.contactId,
+      Deal_Lookup: dealId
+    });
+
     const nextToken = jwt.sign(
       {
         submissionId: id,
         email: decoded.email,
         leadId,
-        contactId,
+        contactId: conv.contactId,
+        accountId: conv.accountId,
         dealId,
         step: 2
       },
@@ -106,13 +148,9 @@ module.exports = async function handler(req, res) {
       { expiresIn: '2h' }
     );
 
-    return res.status(200).json({
-      token: nextToken,
-      contactId,
-      dealId
-    });
+    return res.status(200).json({ token: nextToken, step: 2, contactId: conv.contactId, dealId });
   } catch (error) {
-    console.error('Submissions Update Error:', error);
-    return res.status(500).json({ error: 'Failed to update submission', message: error.message });
+    console.error('[submissions] error:', error.code || error.message);
+    return fail(res, 502, error.code || 'submission_update_failed', 'Could not process your details. Please try again.');
   }
 };
