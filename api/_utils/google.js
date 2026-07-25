@@ -1,12 +1,18 @@
 const { google } = require('googleapis');
 
-// Least-privilege scope for this integration: freebusy.query + events
-// insert/patch/list/delete only. The refresh token must have been consented
-// with (at most) this scope — declaring it here documents the requirement and
-// is used if an interactive auth/callback flow is ever added.
-const SCOPES = ['https://www.googleapis.com/auth/calendar.events'];
+// Least-privilege scopes for this integration. events.insert/patch/get/list and
+// conference creation need `calendar.events`; `freebusy.query` additionally
+// needs `calendar.events.freebusy`. These document the required grant; with a
+// refresh token the effective scope is whatever was consented at token issuance
+// (verify/re-authorize only if the existing token lacks a FreeBusy grant — a
+// live FreeBusy call or token-scope inspection determines this).
+const SCOPES = [
+  'https://www.googleapis.com/auth/calendar.events',
+  'https://www.googleapis.com/auth/calendar.events.freebusy'
+];
 
 const HOST_TIMEZONE = process.env.HOST_TIMEZONE || 'Europe/London';
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
 function calendarId() {
   return process.env.GOOGLE_CALENDAR_ID || 'primary';
@@ -99,14 +105,45 @@ async function createGoogleEvent(eventDetails) {
   return response.data;
 }
 
-/** Extracts the Meet URL from an event resource. */
+/**
+ * Extracts the Meet URL from an event resource, preferring the `video` entry
+ * point (never assuming entryPoints[0], which may be phone/SIP). Falls back to
+ * hangoutLink, else ''.
+ */
 function extractMeetLink(event) {
   if (!event) return '';
-  const uri = event.conferenceData &&
-    event.conferenceData.entryPoints &&
-    event.conferenceData.entryPoints[0] &&
-    event.conferenceData.entryPoints[0].uri;
-  return uri || event.hangoutLink || '';
+  const eps = (event.conferenceData && event.conferenceData.entryPoints) || [];
+  const video = eps.find(e => e && e.entryPointType === 'video' && e.uri);
+  if (video) return video.uri;
+  return event.hangoutLink || '';
+}
+
+/** GET a single event by id. */
+async function getEvent(eventId) {
+  const res = await getCalendar().events.get({ calendarId: calendarId(), eventId });
+  return res.data;
+}
+
+/**
+ * Resolves the Meet URL, re-reading the event with bounded backoff while the
+ * conference is still being created (createRequest.status.statusCode === 'pending').
+ * Returns '' only if the conference cannot be resolved (caller should treat that
+ * as recoverable and NOT confirm the booking).
+ */
+async function awaitMeetLink(event, backoff = [700, 1200, 2000]) {
+  let link = extractMeetLink(event);
+  if (link) return link;
+  let current = event;
+  for (const delay of backoff) {
+    const cr = current && current.conferenceData && current.conferenceData.createRequest;
+    const code = cr && cr.status && cr.status.statusCode;
+    if (code === 'failure') break; // conference will never be created
+    await sleep(delay);
+    try { current = await getEvent(event.id); } catch (_) { break; }
+    link = extractMeetLink(current);
+    if (link) return link;
+  }
+  return link || '';
 }
 
 /** Patches start/end of an event (reschedule); preserves Meet + attendees. */
@@ -146,6 +183,8 @@ module.exports = {
   listEventBySubmissionId,
   createGoogleEvent,
   extractMeetLink,
+  getEvent,
+  awaitMeetLink,
   updateGoogleEvent,
   cancelGoogleEvent
 };

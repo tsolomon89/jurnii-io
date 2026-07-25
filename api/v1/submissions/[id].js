@@ -6,7 +6,7 @@ const {
   resolveProductDeal,
   updateSubmissionRecord
 } = require('../../_utils/zoho');
-const { canonicalProduct } = require('../../_utils/products');
+const { canonicalProduct, buildLeadEnrichment } = require('../../_utils/products');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -51,7 +51,6 @@ module.exports = async function handler(req, res) {
 
   const leadId = decoded.leadId;
   const product = canonicalProduct(productInterest);
-  const productArray = product ? [product] : [];
 
   try {
     // 0. Read the Lead. REST GET returns converted leads too.
@@ -64,19 +63,18 @@ module.exports = async function handler(req, res) {
     //    which fires process Lead. If already converted (retry), skip the update
     //    entirely and resume resolution.
     if (!conv.converted) {
-      const enrichment = {
-        Company: company,
-        Job_Title: jobTitle,
-        Phone: phone,
-        Country: country,
-        Product_Interest: productArray
-      };
+      // Validate picklist fields BEFORE the single, complete, conversion-triggering
+      // update. No reduced second write: a rejected payload leaves the Lead
+      // unconverted and returns Manual Review.
+      const allowedTitles = (process.env.ZOHO_LEAD_JOBTITLE_ALLOWED || '')
+        .split(',').map(s => s.trim()).filter(Boolean);
+      const enrichment = buildLeadEnrichment({ company, jobTitle, phone, country, product, allowedTitles });
       try {
-        await updateLead(leadId, enrichment); // triggers ENABLED (no trigger override)
+        await updateLead(leadId, enrichment); // ONE update, triggers ENABLED (no trigger override)
       } catch (e) {
-        // Retry once without the picklist-risky fields so conversion still fires.
-        console.warn(`[submissions] enrichment failed (${e.code || e.message}); retrying without picklist fields`);
-        await updateLead(leadId, { Company: company, Phone: phone, Product_Interest: productArray });
+        console.warn(`[submissions] enrichment rejected for lead ${leadId} (${e.code || e.message}); Lead preserved unconverted`);
+        await safeSubmissionUpdate(id, { Error_Message: 'MANUAL_REVIEW: enrichment_rejected' });
+        return fail(res, 409, 'MANUAL_REVIEW', 'We could not process some of your details; our team will follow up.', { reason: 'enrichment_rejected' });
       }
 
       // 2. Bounded backoff poll for conversion.

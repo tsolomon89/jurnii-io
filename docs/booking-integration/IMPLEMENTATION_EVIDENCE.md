@@ -29,11 +29,24 @@ configuration was altered** — those are approval-gated (see §4).
 **No changes.** The website reuses `processLead`/`processContact`/`processAccount`/`processDeal`/
 `handleMeetingEvent` as-is.
 
+## 1b. Code-review corrections applied (post-first-commit)
+
+| # | Sev | Fix |
+| --- | --- | --- |
+| 1 | P0 | **Booking retry self-conflict:** the handler now looks up the submission-owned Google event **before** the FreeBusy check and reuses it without treating it as a conflict; FreeBusy runs only when creating a new event. |
+| 2 | P1 | **Meet resolution:** `awaitMeetLink` handles a pending conference with bounded re-reads and selects the `video` entry point (not `entryPoints[0]`); a booking is never confirmed with an empty Meet URL (returns recoverable `502 MEET_PENDING`). |
+| 3 | P1 | **No reduced conversion update:** picklist fields are validated by `buildLeadEnrichment` before the single terminal update; a rejected payload leaves the Lead unconverted and returns `409 MANUAL_REVIEW` (no second reduced write). |
+| 4 | P1 | **Google scope docs:** `SCOPES` now declares `calendar.events` + `calendar.events.freebusy`; `.env.example` documents that re-auth is needed only if the token lacks a FreeBusy grant. |
+| 5 | P1 | **Idempotency-Key claim removed:** the header is no longer read/claimed; idempotency is via email-dedupe + record reuse (and event reuse on booking). |
+| 6 | P1 | **No PII in logs:** Page-1 logs an email fingerprint + which attribution keys are present, not the email or attribution values. |
+
 ## 2. Offline verification (run in this environment — all green)
 
-- **Module load (BLOCKER fix):** all 6 handlers + 2 utils `require()` without `MODULE_NOT_FOUND`.
+- **Module load (BLOCKER fix):** all handlers + utils `require()` without `MODULE_NOT_FOUND`.
 - **Frontend syntax:** `node --check assets/booking-form.js` → OK.
-- **Unit tests:** `npm test` → **8/8 pass** — canonical product mapping (incl. `Cortex / Growth`→`Jurnii Cortex`, `Not sure yet`→null), `normalizeProductKey`, `pickProductDeal` (one/none/many, Lost excluded), `writePayload` trigger-suppression contract, `readConversion` shapes, and the handler-load test.
+- **Tests:** `npm test` → **16/16 pass**.
+  - *Unit:* canonical product mapping (incl. `Cortex / Growth`→`Jurnii Cortex`, `Not sure yet`→null), `normalizeProductKey`, `pickProductDeal` (one/none/many, Lost excluded), `writePayload` trigger-suppression contract, `readConversion` shapes, `extractMeetLink` video-selection + fallback, `buildLeadEnrichment` picklist validation, handler-load.
+  - *Integration (`tests/bookings.integration.test.js`, mock-injected):* retry reuses the Google event with **no FreeBusy self-conflict**; busy slot → `SLOT_TAKEN`; **Google-ok/Zoho-fail recovers on retry** with no duplicate; **pending Meet does not confirm and does not create the Zoho event**; missing Deal → `NO_SINGLE_DEAL` before any Google/Zoho call.
 
 ## 3. API request/response examples
 
@@ -84,6 +97,8 @@ initial outreach / redundant prospecting Call** (inspect `logAutomationEvent`). 
 yet`, ambiguous duplicate, slow conversion, double-click booking, and Google-ok/Zoho-fail retry.
 
 ## 5. Remaining limitations / notes
+- **Google Meet pending:** if the conference is still pending after bounded re-reads, the booking returns `502 MEET_PENDING` (recoverable — a retry reuses the same event and reads the now-ready conference). A conference that reports `statusCode:'failure'` will keep returning 502 and should surface to ops for that account.
+- **Google FreeBusy scope:** `freebusy.query` needs the refresh token to carry `calendar.events.freebusy` (or a broader Calendar/FreeBusy grant). Verify the existing token's scope; re-authorize only if missing (§4).
 - Conversion resolution is a bounded in-request poll (≤~20s; `vercel.json` sets `maxDuration`). If the live workflow is consistently slower, the retry-resume path still recovers; if it is *systematically* too slow, that is the documented trigger to request approval for a Deluge stamp-back (per plan §0.3).
 - `maxDuration:60` requires a Vercel Pro plan; on Hobby, reduce the polling budget in `submissions/[id].js`.
 - Attribution and event-id persistence to CRM are inert until the corresponding fields exist and are configured (§4) — by design, to avoid breaking record writes with unverified field names.

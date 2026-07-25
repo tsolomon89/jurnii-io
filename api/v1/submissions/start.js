@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const {
   searchContactsByEmail,
   searchLeadsByEmail,
@@ -47,9 +48,12 @@ module.exports = async function handler(req, res) {
   }
 
   const normalizedEmail = email.trim().toLowerCase();
-  const idempotencyKey = req.headers['idempotency-key'] || null;
   const attribution = { sourcePage, utmSource, utmMedium, utmCampaign };
-  console.log(`[start] intake email=${normalizedEmail} idem=${idempotencyKey || 'none'} attribution=${JSON.stringify(attribution)}`);
+  // No PII in logs: log a non-reversible email fingerprint and which attribution
+  // keys are present (not their values).
+  const emailFp = crypto.createHash('sha256').update(normalizedEmail).digest('hex').slice(0, 12);
+  const attributionKeys = Object.keys(attribution).filter(k => attribution[k]).join(',') || 'none';
+  console.log(`[start] intake email_fp=${emailFp} attribution_keys=${attributionKeys}`);
 
   try {
     // Resolve the intake target. An existing Contact is a MERGE TARGET for

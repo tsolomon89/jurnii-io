@@ -46,4 +46,37 @@ function pickProductDeal(deals, canonicalProductName) {
   return { status: 'many', deal: null, count: matches.length };
 }
 
-module.exports = { normalizeProductKey, canonicalProduct, pickProductDeal, PRODUCT_CANONICAL };
+// Countries the form can produce (from the phone dial-code dropdown). Only these
+// deterministic values are written to the Lead's Country picklist.
+const KNOWN_COUNTRIES = new Set([
+  'United Kingdom', 'United States', 'Malta', 'Gibraltar', 'Sweden', 'Germany',
+  'Spain', 'Ireland', 'Australia', 'Curaçao', 'Costa Rica'
+]);
+
+/**
+ * Builds the ONE page-2 Lead enrichment payload. Picklist fields are validated
+ * BEFORE the terminal (conversion-triggering) update — there is no reduced second
+ * write. `Job_Title` is written only if it exactly matches an approved allowlist
+ * (env-provided, no fuzzy matching); otherwise it is left blank and processLead's
+ * title dictionaries drive Contact_Role1. `Country` is written only if it is a
+ * known deterministic value. `Product_Interest` carries the canonical product.
+ */
+function buildLeadEnrichment({ company, jobTitle, phone, country, product, allowedTitles }) {
+  const rec = { Company: company };
+  if (phone) rec.Phone = phone;
+  if (product) rec.Product_Interest = [product];
+  if (country && KNOWN_COUNTRIES.has(country)) rec.Country = country;
+  if (jobTitle && Array.isArray(allowedTitles) && allowedTitles.includes(jobTitle)) {
+    rec.Job_Title = jobTitle;
+  }
+  return rec;
+}
+
+module.exports = {
+  normalizeProductKey,
+  canonicalProduct,
+  pickProductDeal,
+  buildLeadEnrichment,
+  KNOWN_COUNTRIES,
+  PRODUCT_CANONICAL
+};

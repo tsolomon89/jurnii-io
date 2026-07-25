@@ -4,6 +4,7 @@ const path = require('node:path');
 
 const products = require('../api/_utils/products');
 const zoho = require('../api/_utils/zoho');
+const google = require('../api/_utils/google');
 
 test('canonicalProduct maps form values to canonical Zoho product names', () => {
   assert.strictEqual(products.canonicalProduct('Jurnii UX'), 'Jurnii UX');
@@ -83,6 +84,48 @@ test('readConversion handles lookup and $converted_detail shapes', () => {
   const notConverted = zoho.readConversion({ $converted: false });
   assert.strictEqual(notConverted.converted, false);
   assert.strictEqual(notConverted.contactId, null);
+});
+
+test('extractMeetLink prefers the video entry point, not entryPoints[0]', () => {
+  const event = {
+    conferenceData: {
+      entryPoints: [
+        { entryPointType: 'phone', uri: 'tel:+441234' },
+        { entryPointType: 'video', uri: 'https://meet.google.com/abc-defg-hij' }
+      ]
+    }
+  };
+  assert.strictEqual(google.extractMeetLink(event), 'https://meet.google.com/abc-defg-hij');
+});
+
+test('extractMeetLink falls back to hangoutLink and returns empty when no conference', () => {
+  assert.strictEqual(
+    google.extractMeetLink({ hangoutLink: 'https://meet.google.com/xyz', conferenceData: { entryPoints: [{ entryPointType: 'phone', uri: 'tel:1' }] } }),
+    'https://meet.google.com/xyz'
+  );
+  assert.strictEqual(google.extractMeetLink({}), '');
+  assert.strictEqual(google.extractMeetLink(null), '');
+});
+
+test('buildLeadEnrichment writes only validated picklist fields (no reduced retry)', () => {
+  // Title omitted unless it exactly matches the allowlist; country only from known set.
+  const noAllow = products.buildLeadEnrichment({
+    company: 'Acme', jobTitle: 'Head of Product', phone: '+447', country: 'United Kingdom',
+    product: 'Jurnii 360', allowedTitles: []
+  });
+  assert.strictEqual(noAllow.Company, 'Acme');
+  assert.strictEqual(noAllow.Phone, '+447');
+  assert.deepStrictEqual(noAllow.Product_Interest, ['Jurnii 360']);
+  assert.strictEqual(noAllow.Country, 'United Kingdom');
+  assert.strictEqual('Job_Title' in noAllow, false); // not allowlisted -> omitted, never fuzzy
+
+  const withAllow = products.buildLeadEnrichment({
+    company: 'Acme', jobTitle: 'Head of Product', country: 'Atlantis',
+    product: null, allowedTitles: ['Head of Product']
+  });
+  assert.strictEqual(withAllow.Job_Title, 'Head of Product'); // exact match -> written
+  assert.strictEqual('Country' in withAllow, false);          // unknown country -> omitted
+  assert.strictEqual('Product_Interest' in withAllow, false); // no product -> omitted (never fabricated)
 });
 
 test('all serverless handler modules load without MODULE_NOT_FOUND', () => {

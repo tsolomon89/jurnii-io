@@ -114,8 +114,9 @@ the converted Lead or creates a second Lead.
 - Zoho/Google credentials stay server-side (env). The browser never supplies CRM record ids —
   all ids come from the server-signed JWT. Cancel/reschedule now require the Bearer JWT and
   bind `token.submissionId` to the path id. Page-2 enforces `step==1` (replay guard). Error
-  responses are sanitized (`{error, code}`) and never include raw Zoho/Google payloads. Least-
-  privilege Google scope is `calendar.events`.
+  responses are sanitized (`{error, code}`) and never include raw Zoho/Google payloads. No PII in
+  logs (email is logged as a fingerprint). Least-privilege Google scopes are `calendar.events`
+  **and** `calendar.events.freebusy` (FreeBusy needs the latter).
 
 ## API contracts
 

@@ -3,7 +3,7 @@ const {
   checkFreeBusy,
   listEventBySubmissionId,
   createGoogleEvent,
-  extractMeetLink
+  awaitMeetLink
 } = require('../../_utils/google');
 const {
   createZohoEvent,
@@ -59,23 +59,25 @@ module.exports = async function handler(req, res) {
   const visitorEmail = decoded.email;
 
   try {
-    // 1. Re-verify availability over the buffered window (matches slot-offer rules).
-    const busyPeriods = await checkFreeBusy(
-      new Date(start.getTime() - BUFFER_MS).toISOString(),
-      new Date(end.getTime() + BUFFER_MS).toISOString()
-    );
-    const conflict = busyPeriods.some(b => {
-      const bs = new Date(b.start).getTime();
-      const be = new Date(b.end).getTime();
-      return Math.max(start.getTime() - BUFFER_MS, bs) < Math.min(end.getTime() + BUFFER_MS, be);
-    });
-    if (conflict) return fail(res, 409, 'SLOT_TAKEN', 'The selected slot is no longer available. Please select another.');
-
-    // 2. Google Calendar event — reuse by submissionId, else create (idempotent).
+    // 1. Reuse an existing Google event for THIS submission first (retry recovery).
+    //    A submission-owned event must not be treated as a scheduling conflict —
+    //    so the availability re-check runs only when we are about to create anew.
     let googleEvent = await listEventBySubmissionId(submissionId);
     if (googleEvent) {
       console.log(`[bookings] reusing Google event ${googleEvent.id} for submission ${submissionId}`);
     } else {
+      // 2. No existing event → re-verify availability over the buffered window, then create.
+      const busyPeriods = await checkFreeBusy(
+        new Date(start.getTime() - BUFFER_MS).toISOString(),
+        new Date(end.getTime() + BUFFER_MS).toISOString()
+      );
+      const conflict = busyPeriods.some(b => {
+        const bs = new Date(b.start).getTime();
+        const be = new Date(b.end).getTime();
+        return Math.max(start.getTime() - BUFFER_MS, bs) < Math.min(end.getTime() + BUFFER_MS, be);
+      });
+      if (conflict) return fail(res, 409, 'SLOT_TAKEN', 'The selected slot is no longer available. Please select another.');
+
       googleEvent = await createGoogleEvent({
         summary: 'Jurnii Product Demo Meeting',
         description: 'Product demonstration and technical overview of Jurnii.',
@@ -86,15 +88,22 @@ module.exports = async function handler(req, res) {
       });
       console.log(`[bookings] created Google event ${googleEvent.id} for submission ${submissionId}`);
     }
-    const meetLink = extractMeetLink(googleEvent);
 
-    // Persist the Google event id before the Zoho step so a lost response is
-    // reconcilable (best-effort; recovery also works via the extended-property reuse above).
+    // 3. Resolve the Meet link, awaiting a pending conference. Persist the Google
+    //    event id first (best-effort) so a lost response is reconcilable.
+    const meetLink = await awaitMeetLink(googleEvent);
     await bestEffortSubmissionUpdate(submissionId, {
       Integration_Status: 'Pending',
       Google_Event_ID: googleEvent.id,
       Meet_URL: meetLink
     });
+    if (!meetLink) {
+      // Recoverable: the event exists and is reused on retry, by which time the
+      // conference is typically ready. Never confirm a booking without a Meet URL.
+      const e = new Error('meet_link_unavailable');
+      e.code = 'MEET_PENDING';
+      throw e;
+    }
 
     // 3. Zoho Event — reuse by Ext_Calendar_Booking_ID, else create (idempotent).
     // Link to the converted Contact (Who_Id) and the exact Product Deal
