@@ -35,7 +35,7 @@ configuration was altered** — those are approval-gated (see §4).
 | --- | --- | --- |
 | 1 | P0 | **Booking retry self-conflict:** the handler now looks up the submission-owned Google event **before** the FreeBusy check and reuses it without treating it as a conflict; FreeBusy runs only when creating a new event. |
 | 2 | P1 | **Meet resolution:** `awaitMeetLink` handles a pending conference with bounded re-reads and selects the `video` entry point (not `entryPoints[0]`); a booking is never confirmed with an empty Meet URL (returns recoverable `502 MEET_PENDING`). |
-| 3 | P1 | **No reduced conversion update:** picklist fields are validated by `buildLeadEnrichment` before the single terminal update; a rejected payload leaves the Lead unconverted and returns `409 MANUAL_REVIEW` (no second reduced write). |
+| 3 | P1 | **No reduced conversion update + no silent field drop:** `validateLeadEnrichment` returns an explicit result checked **before** `updateLead`. `Job_Title` mode `text` (default) passes the submitted title through; mode `picklist` requires an exact allowlist match or fails; an unrecognized `Country` fails. On failure the handler does not call `updateLead`, leaves the Lead unconverted, and returns `409 MANUAL_REVIEW`. (Second-round fix: the earlier `buildLeadEnrichment` silently omitted invalid fields and still converted — corrected.) |
 | 4 | P1 | **Google scope docs:** `SCOPES` now declares `calendar.events` + `calendar.events.freebusy`; `.env.example` documents that re-auth is needed only if the token lacks a FreeBusy grant. |
 | 5 | P1 | **Idempotency-Key claim removed:** the header is no longer read/claimed; idempotency is via email-dedupe + record reuse (and event reuse on booking). |
 | 6 | P1 | **No PII in logs:** Page-1 logs an email fingerprint + which attribution keys are present, not the email or attribution values. |
@@ -44,9 +44,10 @@ configuration was altered** — those are approval-gated (see §4).
 
 - **Module load (BLOCKER fix):** all handlers + utils `require()` without `MODULE_NOT_FOUND`.
 - **Frontend syntax:** `node --check assets/booking-form.js` → OK.
-- **Tests:** `npm test` → **16/16 pass**.
-  - *Unit:* canonical product mapping (incl. `Cortex / Growth`→`Jurnii Cortex`, `Not sure yet`→null), `normalizeProductKey`, `pickProductDeal` (one/none/many, Lost excluded), `writePayload` trigger-suppression contract, `readConversion` shapes, `extractMeetLink` video-selection + fallback, `buildLeadEnrichment` picklist validation, handler-load.
-  - *Integration (`tests/bookings.integration.test.js`, mock-injected):* retry reuses the Google event with **no FreeBusy self-conflict**; busy slot → `SLOT_TAKEN`; **Google-ok/Zoho-fail recovers on retry** with no duplicate; **pending Meet does not confirm and does not create the Zoho event**; missing Deal → `NO_SINGLE_DEAL` before any Google/Zoho call.
+- **Tests:** `npm test` → **22/22 pass**.
+  - *Unit:* canonical product mapping (incl. `Cortex / Growth`→`Jurnii Cortex`, `Not sure yet`→null), `normalizeProductKey`, `pickProductDeal` (one/none/many, Lost excluded), `writePayload` trigger-suppression contract, `readConversion` shapes, `extractMeetLink` video-selection + fallback, `validateLeadEnrichment` (text-mode passthrough, picklist failure, unknown-country failure), handler-load.
+  - *Booking integration (`tests/bookings.integration.test.js`):* retry reuses the Google event with **no FreeBusy self-conflict**; busy slot → `SLOT_TAKEN`; **Google-ok/Zoho-fail recovers on retry** with no duplicate; **pending Meet does not confirm and does not create the Zoho event**; missing Deal → `NO_SINGLE_DEAL` before any Google/Zoho call.
+  - *Page-2 integration (`tests/submissions.integration.test.js`):* an invalid picklist title, a missing allowlist in picklist mode, and an unrecognized country each **prevent `updateLead` from being called** (Lead unconverted → `MANUAL_REVIEW`); a valid title (text mode) is **included in the single terminal update** and the Lead converts.
 
 ## 3. API request/response examples
 

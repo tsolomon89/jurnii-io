@@ -107,25 +107,48 @@ test('extractMeetLink falls back to hangoutLink and returns empty when no confer
   assert.strictEqual(google.extractMeetLink(null), '');
 });
 
-test('buildLeadEnrichment writes only validated picklist fields (no reduced retry)', () => {
-  // Title omitted unless it exactly matches the allowlist; country only from known set.
-  const noAllow = products.buildLeadEnrichment({
+test('validateLeadEnrichment (text mode, default) passes the job title through — never silently dropped', () => {
+  const r = products.validateLeadEnrichment({
     company: 'Acme', jobTitle: 'Head of Product', phone: '+447', country: 'United Kingdom',
-    product: 'Jurnii 360', allowedTitles: []
+    product: 'Jurnii 360' // no mode / no allowlist
   });
-  assert.strictEqual(noAllow.Company, 'Acme');
-  assert.strictEqual(noAllow.Phone, '+447');
-  assert.deepStrictEqual(noAllow.Product_Interest, ['Jurnii 360']);
-  assert.strictEqual(noAllow.Country, 'United Kingdom');
-  assert.strictEqual('Job_Title' in noAllow, false); // not allowlisted -> omitted, never fuzzy
+  assert.strictEqual(r.ok, true);
+  assert.strictEqual(r.record.Company, 'Acme');
+  assert.strictEqual(r.record.Phone, '+447');
+  assert.deepStrictEqual(r.record.Product_Interest, ['Jurnii 360']);
+  assert.strictEqual(r.record.Country, 'United Kingdom');
+  assert.strictEqual(r.record.Job_Title, 'Head of Product'); // carried into the terminal update
+});
 
-  const withAllow = products.buildLeadEnrichment({
-    company: 'Acme', jobTitle: 'Head of Product', country: 'Atlantis',
-    product: null, allowedTitles: ['Head of Product']
+test('validateLeadEnrichment (picklist mode) fails an unlisted title instead of dropping it', () => {
+  const bad = products.validateLeadEnrichment({
+    company: 'Acme', jobTitle: 'Wizard', jobTitleMode: 'picklist', allowedTitles: ['Head of Product']
   });
-  assert.strictEqual(withAllow.Job_Title, 'Head of Product'); // exact match -> written
-  assert.strictEqual('Country' in withAllow, false);          // unknown country -> omitted
-  assert.strictEqual('Product_Interest' in withAllow, false); // no product -> omitted (never fabricated)
+  assert.strictEqual(bad.ok, false);
+  assert.strictEqual(bad.reason, 'job_title_not_allowed');
+
+  // Missing allowlist in picklist mode also fails loudly (never a silent drop).
+  const noAllow = products.validateLeadEnrichment({
+    company: 'Acme', jobTitle: 'Head of Product', jobTitleMode: 'picklist', allowedTitles: []
+  });
+  assert.strictEqual(noAllow.ok, false);
+
+  const good = products.validateLeadEnrichment({
+    company: 'Acme', jobTitle: 'Head of Product', jobTitleMode: 'picklist', allowedTitles: ['Head of Product']
+  });
+  assert.strictEqual(good.ok, true);
+  assert.strictEqual(good.record.Job_Title, 'Head of Product');
+});
+
+test('validateLeadEnrichment fails an unrecognized country rather than omitting it', () => {
+  const bad = products.validateLeadEnrichment({ company: 'Acme', country: 'Atlantis' });
+  assert.strictEqual(bad.ok, false);
+  assert.strictEqual(bad.reason, 'country_not_recognized');
+
+  const ok = products.validateLeadEnrichment({ company: 'Acme', country: 'Germany', product: null });
+  assert.strictEqual(ok.ok, true);
+  assert.strictEqual(ok.record.Country, 'Germany');
+  assert.strictEqual('Product_Interest' in ok.record, false); // no product -> never fabricated
 });
 
 test('all serverless handler modules load without MODULE_NOT_FOUND', () => {

@@ -6,7 +6,7 @@ const {
   resolveProductDeal,
   updateSubmissionRecord
 } = require('../../_utils/zoho');
-const { canonicalProduct, buildLeadEnrichment } = require('../../_utils/products');
+const { canonicalProduct, validateLeadEnrichment } = require('../../_utils/products');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -63,16 +63,24 @@ module.exports = async function handler(req, res) {
     //    which fires process Lead. If already converted (retry), skip the update
     //    entirely and resume resolution.
     if (!conv.converted) {
-      // Validate picklist fields BEFORE the single, complete, conversion-triggering
-      // update. No reduced second write: a rejected payload leaves the Lead
-      // unconverted and returns Manual Review.
+      // Validate enrichment BEFORE the single conversion-triggering update. A
+      // validation failure does NOT update or convert the Lead — it returns
+      // Manual Review. Never a silent field drop, never a reduced second write.
+      const jobTitleMode = process.env.ZOHO_LEAD_JOBTITLE_MODE === 'picklist' ? 'picklist' : 'text';
       const allowedTitles = (process.env.ZOHO_LEAD_JOBTITLE_ALLOWED || '')
         .split(',').map(s => s.trim()).filter(Boolean);
-      const enrichment = buildLeadEnrichment({ company, jobTitle, phone, country, product, allowedTitles });
+      const validation = validateLeadEnrichment({ company, jobTitle, phone, country, product, jobTitleMode, allowedTitles });
+      if (!validation.ok) {
+        console.warn(`[submissions] enrichment validation failed for lead ${leadId} (${validation.reason}); Lead left unconverted`);
+        await safeSubmissionUpdate(id, { Error_Message: `MANUAL_REVIEW: ${validation.reason}` });
+        return fail(res, 409, 'MANUAL_REVIEW', 'Some of your details need review; our team will follow up.', { reason: validation.reason });
+      }
+
       try {
-        await updateLead(leadId, enrichment); // ONE update, triggers ENABLED (no trigger override)
+        await updateLead(leadId, validation.record); // ONE update, triggers ENABLED (no trigger override)
       } catch (e) {
-        console.warn(`[submissions] enrichment rejected for lead ${leadId} (${e.code || e.message}); Lead preserved unconverted`);
+        // Live picklist rejected an otherwise-valid value: Lead stays unconverted.
+        console.warn(`[submissions] enrichment rejected by Zoho for lead ${leadId} (${e.code || e.message}); Lead preserved unconverted`);
         await safeSubmissionUpdate(id, { Error_Message: 'MANUAL_REVIEW: enrichment_rejected' });
         return fail(res, 409, 'MANUAL_REVIEW', 'We could not process some of your details; our team will follow up.', { reason: 'enrichment_rejected' });
       }

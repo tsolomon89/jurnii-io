@@ -54,29 +54,57 @@ const KNOWN_COUNTRIES = new Set([
 ]);
 
 /**
- * Builds the ONE page-2 Lead enrichment payload. Picklist fields are validated
- * BEFORE the terminal (conversion-triggering) update — there is no reduced second
- * write. `Job_Title` is written only if it exactly matches an approved allowlist
- * (env-provided, no fuzzy matching); otherwise it is left blank and processLead's
- * title dictionaries drive Contact_Role1. `Country` is written only if it is a
- * known deterministic value. `Product_Interest` carries the canonical product.
+ * Validates + builds the ONE page-2 Lead enrichment payload. Returns an EXPLICIT
+ * result — it never silently drops a submitted value and then lets the terminal
+ * update convert the Lead. The page-2 handler must check `.ok` BEFORE `updateLead`.
+ *
+ *   { ok: true, record }                          -> send this exact record (one update)
+ *   { ok: false, field, reason }                  -> do NOT update; Manual Review; Lead unconverted
+ *
+ * `Job_Title`:
+ *   - mode 'text' (default): the submitted value is passed through to the Lead
+ *     (the business requirement — page two carries the job title). If the live
+ *     field turns out to be a restricted picklist that rejects it, the single
+ *     `updateLead` fails and the handler returns Manual Review (Lead unconverted).
+ *   - mode 'picklist': the value MUST be an exact member of `allowedTitles`,
+ *     otherwise validation fails (Manual Review) — never a silent drop, and the
+ *     allowlist is not optional in this mode.
+ * `Country`: must be an exact known value; an unrecognized non-empty country
+ *   fails validation rather than being omitted. Blank country is allowed (omitted).
  */
-function buildLeadEnrichment({ company, jobTitle, phone, country, product, allowedTitles }) {
-  const rec = { Company: company };
-  if (phone) rec.Phone = phone;
-  if (product) rec.Product_Interest = [product];
-  if (country && KNOWN_COUNTRIES.has(country)) rec.Country = country;
-  if (jobTitle && Array.isArray(allowedTitles) && allowedTitles.includes(jobTitle)) {
-    rec.Job_Title = jobTitle;
+function validateLeadEnrichment({ company, jobTitle, phone, country, product, jobTitleMode, allowedTitles, knownCountries } = {}) {
+  const mode = jobTitleMode === 'picklist' ? 'picklist' : 'text';
+  const titles = Array.isArray(allowedTitles) ? allowedTitles : [];
+  const countries = knownCountries || KNOWN_COUNTRIES;
+
+  const record = { Company: company };
+  if (phone) record.Phone = phone;
+  if (product) record.Product_Interest = [product];
+
+  const jt = jobTitle ? String(jobTitle).trim() : '';
+  if (jt) {
+    if (mode === 'picklist' && !titles.includes(jt)) {
+      return { ok: false, field: 'jobTitle', reason: 'job_title_not_allowed' };
+    }
+    record.Job_Title = jt; // free-text default, or an allowlisted picklist value
   }
-  return rec;
+
+  const co = country ? String(country).trim() : '';
+  if (co) {
+    if (!countries.has(co)) {
+      return { ok: false, field: 'country', reason: 'country_not_recognized' };
+    }
+    record.Country = co;
+  }
+
+  return { ok: true, record };
 }
 
 module.exports = {
   normalizeProductKey,
   canonicalProduct,
   pickProductDeal,
-  buildLeadEnrichment,
+  validateLeadEnrichment,
   KNOWN_COUNTRIES,
   PRODUCT_CANONICAL
 };
