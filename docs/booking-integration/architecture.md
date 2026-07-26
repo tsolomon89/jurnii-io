@@ -37,19 +37,19 @@ sequenceDiagram
     API->>Zoho: update Contact / update-or-create Lead (trigger:[] — workflows SUPPRESSED)
     API-->>Frontend: { token(journeyId,recordType,recordId), journeyId, step:1 }
 
-    %% Page 2 — enrichment + reconciliation
+    %% Page 2 — enrichment
     Visitor->>Frontend: Company, title, product, phone, country
     Frontend->>API: PATCH /api/v1/submissions/{journeyId} (Bearer)
     alt recordType = Lead
         Note over API: ONE Lead update, triggers ENABLED → processLead converts
         API->>Zoho: update Lead
         Zoho->>WF: processLead → Account/Contact/Deal/Quote/Roles
+        Note over API: bounded backoff → resolve the exact Product Deal
     else recordType = Contact
-        Note over API: resolve Account (reuse/create/ManualReview) → update Contact (trigger:[])<br/>→ invoke processContact(contact_id)
-        API->>Zoho: update Contact + execute processContact
-        Zoho->>WF: processContact → Account/Deal/Quote/Roles
+        Note over API: update Contact (trigger:[]) → read existing Account + exact Deal (ONE lookup)
+        API->>Zoho: update Contact
+        Note over API: Deal missing/ambiguous → raise Contact-only Manual Review Task
     end
-    Note over API: bounded backoff → resolve the exact single Product Deal
     API-->>Frontend: { token, step:2, contactId, dealId }  (or 409 MANUAL_REVIEW)
 
     %% Page 3 — booking
@@ -78,38 +78,41 @@ After canonical email normalization (`normalizeEmail`, work-email-only gate):
 fields using `trigger:[]` (workflows suppressed) — consent on a Contact (never clobbering the name),
 all Page-1 fields on a reused/created Lead.
 
-## Reconciliation control
+## Page-2 behaviour (KISS)
 
 - **Lead path:** Page 2 performs exactly **one** Lead update **with triggers enabled**. That edit is
-  the conversion trigger — `processLead` converts and builds/reuses the graph. Retry-safe: a replay
-  after conversion resumes resolution without a second update.
-- **Contact path:** the Contact is updated with `trigger:[]` (suppressed), then `processContact` is
-  invoked **imperatively** via the Zoho Functions REST API (`reconcileContact` → function
-  `processcontact`, arg `contact_id`). This is deterministic — it does not depend on which fields
-  changed — and reuses the exact automation `processLead` calls inline. `processContact` is
-  idempotent/self-healing.
-
-## Account resolution (Contact path)
-
-Contacts carry company only via the `Account_Name` lookup (no `Company` field), so the website
-resolves/links the canonical Account **before** reconciliation — otherwise `processContact` would name
-a new Account after the person. Mirrors `processLead`'s precedence and adds a Manual-Review guard:
-
-- Existing `Account_Name` is authoritative — **reused**, never replaced. If the submitted
-  company/business-domain **materially conflicts** → `409 MANUAL_REVIEW (account_conflict)` (Contact not
-  moved, no Deal created).
-- No Account → resolve unique canonical by `Account_Key`(domain) → `Website`(domain) → `Account_Name`
-  (company). `>1` distinct candidate → `account_ambiguous`. None → create an Account named after the
-  **company** (never the person) and link it.
+  the conversion trigger — `processLead` converts and builds/reuses the full graph (Account/Contact/Deal;
+  it calls `processContact` internally after conversion). Retry-safe: a replay after conversion resumes
+  resolution without a second update. The Deal is resolved with **bounded backoff** (conversion is async).
+- **Contact path:** the Contact is updated in place with `trigger:[]` (persisting the enrichment,
+  additive `Product_Interest`). The website then reads the Contact's **existing** `Account_Name` and
+  resolves the **exact** Product Deal in **one** lookup (no backoff — no automation is invoked). It does
+  **not** create/link an Account and **never** invokes `processContact`. If the exact open Deal exists →
+  the booking proceeds; otherwise → Manual Review (below).
+- **Trade-off:** an existing Contact books immediately only when the exact Product Deal already exists.
+  Selecting a product with no Deal yet records the interest and raises a Manual-Review Task for a human
+  to create/reconcile the Deal — the website never repairs the CRM graph.
 
 ## Product / Deal rules
 
 - Form Product Interest maps to a canonical Zoho product (`Jurnii UX` / `Jurnii 360` / `Jurnii Cortex`
-  / `Partnership`; `Cortex / Growth` → `Jurnii Cortex`). `Product_Interest` is written **additively**
-  (deduplicated union with existing values), never a bare replace.
+  / `Partnership`; `Cortex / Growth` → `Jurnii Cortex`). On the Contact path `Product_Interest` is
+  written **additively** (deduplicated union with existing values), never a bare replace.
 - **Exactly one** resolved Product Deal is required before Page 3 books. `Not sure yet`, blank,
-  unresolved, or ambiguous → **Manual Review** (a standard Task via the existing automation); no Zoho
-  Event is created. Products/Deals are never fabricated by the website.
+  unresolved (`deal_unresolved`), or ambiguous (`deal_ambiguous`) → **Manual Review**; no Zoho Event is
+  created. Products/Deals are never fabricated by the website.
+
+## Manual Review → Contact-only standard Task
+
+A Deal-resolution Manual Review with a resolved Contact (`no_product_selected` / `deal_unresolved` /
+`deal_ambiguous`) raises (best-effort) a **Contact-scoped** standard Task before returning `409`,
+mirroring `createManualReview.deluge` exactly so it composes with the org's activity automation:
+`Who_Id`=Contact, **no `What_Id`**, `$se_module='Contacts'`, `Task_Type='Manual Review'`,
+`Blocks_Sequence='Yes'`, `Task_State='Open'`, `Task_Status='Working'`, `Status='In Progress'`,
+created with `trigger:[]`. The Description leads with the canonical `[<reason>]` token and carries the
+journeyId / submitted product / reason. Idempotent per journey via the Contact's **Open Tasks** related
+list (`GET /crm/v6/Contacts/{id}/Tasks` — existing module scope, **not** the Search API). Because the
+Task has no Deal, the sequence completion handler deliberately ignores it (`skip_no_related_deal`).
 
 ## Journey UUID, JWT & continuation
 
@@ -156,7 +159,7 @@ a new Account after the person. Mirrors `processLead`'s precedence and adds a Ma
 | Endpoint | Auth | Body | Success | Notable non-2xx |
 | --- | --- | --- | --- | --- |
 | `POST /api/v1/submissions/start` | — | `{journeyId,firstName,lastName,email,consent,sourcePage,utm*}` | `200 {token,journeyId,step:1}` | `400 validation` (bad/absent journeyId), `400 EMAIL_NOT_BUSINESS`, `409 MANUAL_REVIEW (identity_ambiguous)` |
-| `PATCH /api/v1/submissions/{journeyId}` | Bearer | `{company,jobTitle,productInterest,phone,country}` | `200 {token,step:2,contactId,dealId}` | `409 MANUAL_REVIEW` (`account_conflict`/`account_ambiguous`/`conversion_unresolved`/`no_product_selected`/`deal_ambiguous`/`deal_unresolved`), `409 wrong_step` |
+| `PATCH /api/v1/submissions/{journeyId}` | Bearer | `{company,jobTitle,productInterest,phone,country}` | `200 {token,step:2,contactId,dealId}` | `409 MANUAL_REVIEW` (`no_product_selected`/`deal_unresolved`/`deal_ambiguous`/`conversion_unresolved` — the first three raise a Contact-only Task), `409 wrong_step` |
 | `GET /api/v1/availability` | — | — | `200 {slots:[{start,end}]}` | — |
 | `POST /api/v1/bookings` | Bearer | `{slotStart}` | `200 {status:'confirmed',bookingId,meetLink,manageUrl,googleEventId,zohoEventId}` | `409 SLOT_TAKEN`, `409 NO_SINGLE_DEAL`, `409 correlation_conflict`, `409 MEET_PENDING`, `502` |
 | `DELETE /api/v1/bookings/{journeyId}` | Bearer (booking or 30-day manage token) | — | `200 {success}` | `403 forbidden`, `409 correlation_conflict` |
@@ -173,14 +176,13 @@ a new Account after the person. Mirrors `processLead`'s precedence and adds a Ma
 ## Environment
 
 See [`.env.example`](../../.env.example). Notable: `ZOHO_ACCOUNTS_HOST`, `HOST_TIMEZONE`,
-`PUBLIC_BASE_URL`, `ZOHO_PROCESS_CONTACT_URL` (exact Production REST URL for the Contact-path
-reconciliation; OAuth2 + `functions.execute.CREATE`; fails closed if unset),
-optional `ZOHO_LEAD_FIELD_*` attribution, optional `ZOHO_EVENT_MEET_FIELD`. There is **no**
-`ZOHO_SUBMISSION_MODULE`. `vercel.json` sets extended `maxDuration` for the conversion-polling and
-booking endpoints.
+`PUBLIC_BASE_URL`, optional `ZOHO_LEAD_FIELD_*` attribution, optional `ZOHO_EVENT_MEET_FIELD`. There is
+**no** `ZOHO_SUBMISSION_MODULE` and **no** Contact-path reconciliation URL/scope (the KISS Contact path
+invokes no function). `vercel.json` sets extended `maxDuration` for the conversion-polling and booking
+endpoints.
 
 ## Live verification & approval-gated items
 
-See [`IMPLEMENTATION_EVIDENCE.md`](./IMPLEMENTATION_EVIDENCE.md) for the verification checklist and the
-configuration changes that must be approved before deploy (chiefly: publishing `processContact` for
-REST execution + the OAuth functions-execute scope, or the fallback deterministic trigger field).
+See [`IMPLEMENTATION_EVIDENCE.md`](./IMPLEMENTATION_EVIDENCE.md) for the verification checklist. The
+Contact path needs **no** Deluge, OAuth, or custom-field change; the only pre-deploy items are the
+standard Google/Vercel credentials + production E2E.

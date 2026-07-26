@@ -3,7 +3,6 @@ const assert = require('node:assert');
 const path = require('node:path');
 
 const products = require('../api/_utils/products');
-const account = require('../api/_utils/account');
 const zoho = require('../api/_utils/zoho');
 const google = require('../api/_utils/google');
 const { isBusinessEmail } = require('../api/_utils/email');
@@ -153,54 +152,6 @@ test('mergeMultiSelect dedups and preserves order (existing first)', () => {
   assert.deepStrictEqual(products.mergeMultiSelect(['a', 'b'], 'b'), ['a', 'b']);
   assert.deepStrictEqual(products.mergeMultiSelect(undefined, 'x'), ['x']);
   assert.deepStrictEqual(products.mergeMultiSelect(['a'], ['a', 'c']), ['a', 'c']);
-});
-
-test('resolveAccountForContact reuses an established Account that agrees with the domain', async () => {
-  const deps = { getAccount: async () => ({ Account_Key: 'acme.com' }) };
-  const r = await account.resolveAccountForContact({ contactAccountId: 'A1', email: 'x@acme.com', company: 'Acme' }, deps);
-  assert.deepStrictEqual(r, { status: 'reuse', accountId: 'A1' });
-});
-
-test('resolveAccountForContact flags a materially conflicting established Account', async () => {
-  const deps = { getAccount: async () => ({ Account_Key: 'other.com', Website: 'https://other.com', Account_Name: 'Other' }) };
-  const r = await account.resolveAccountForContact({ contactAccountId: 'A1', email: 'x@acme.com', company: 'Acme' }, deps);
-  assert.strictEqual(r.status, 'conflict');
-});
-
-test('resolveAccountForContact creates an Account named after the COMPANY when none exists', async () => {
-  let created = null;
-  const deps = {
-    searchAccountsByKey: async () => [],
-    searchAccountsByWebsite: async () => [],
-    searchAccountsByName: async () => [],
-    createAccount: async (d) => { created = d; return 'Anew'; }
-  };
-  const r = await account.resolveAccountForContact({ contactAccountId: null, email: 'x@acme.com', company: 'Acme' }, deps);
-  assert.deepStrictEqual(r, { status: 'created', accountId: 'Anew' });
-  assert.strictEqual(created.Account_Name, 'Acme');   // never the person's name
-  assert.strictEqual(created.Account_Key, 'acme.com');
-});
-
-test('resolveAccountForContact returns ambiguous on >1 distinct fallback candidate', async () => {
-  const deps = {
-    searchAccountsByKey: async () => [],
-    searchAccountsByWebsite: async () => [{ id: 'A1' }],
-    searchAccountsByName: async () => [{ id: 'A2' }]
-  };
-  const r = await account.resolveAccountForContact({ contactAccountId: null, email: 'x@acme.com', company: 'Acme' }, deps);
-  assert.strictEqual(r.status, 'ambiguous');
-});
-
-test('resolveAccountForContact reuses a unique Account_Key match', async () => {
-  const deps = { searchAccountsByKey: async () => [{ id: 'A9' }] };
-  const r = await account.resolveAccountForContact({ contactAccountId: null, email: 'x@acme.com', company: 'Acme' }, deps);
-  assert.deepStrictEqual(r, { status: 'reuse', accountId: 'A9' });
-});
-
-test('reconcileContact fails closed when ZOHO_PROCESS_CONTACT_URL is unset', async () => {
-  // Loaded with the env unset (default in tests) → must reject before any network call.
-  assert.strictEqual(process.env.ZOHO_PROCESS_CONTACT_URL, undefined);
-  await assert.rejects(() => zoho.reconcileContact('C1'), /reconcile_not_configured/);
 });
 
 test('isBusinessEmail accepts work domains (incl. subdomains) and rejects free/personal/disposable', () => {

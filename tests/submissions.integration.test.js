@@ -3,12 +3,11 @@ const assert = require('node:assert');
 const jwt = require('jsonwebtoken');
 
 // Integration tests for the page-2 handler (both the Lead and Contact paths).
-// zoho is mock-injected; products (validation) + account (resolution) are real.
+// zoho is mock-injected; products (validation) is the real module.
 // The path id is the journeyId; CRM identity travels as recordType/recordId.
 process.env.JWT_SECRET = 'test-secret';
 
 const ZPATH = require.resolve('../api/_utils/zoho.js');
-const APATH = require.resolve('../api/_utils/account.js');
 const HPATH = require.resolve('../api/v1/submissions/[id].js');
 
 function defaultReadConversion(lead) {
@@ -26,7 +25,6 @@ function defaultReadConversion(lead) {
 
 function loadHandler(zohoMock) {
   require.cache[ZPATH] = { id: ZPATH, filename: ZPATH, loaded: true, exports: zohoMock };
-  delete require.cache[APATH]; // re-require so account.js binds the mocked zoho
   delete require.cache[HPATH];
   return require(HPATH);
 }
@@ -113,99 +111,116 @@ test('Lead path: retry after conversion resumes (no second update) and returns t
 });
 
 // ---------------------------------------------------------------------------
-// Contact path
+// Contact path (KISS): update the Contact, read its existing Account + exact Deal.
+// No Account create, no reconciliation. Missing/ambiguous Deal → Contact-only
+// Manual Review Task + 409.
 // ---------------------------------------------------------------------------
 function contactZoho(overrides = {}) {
   return Object.assign({
     getContact: async () => ({ id: 'C1', Account_Name: { id: 'A1' }, Product_Interest: ['Jurnii UX'] }),
-    getAccount: async () => ({ Account_Key: 'acme.com', Account_Name: 'Acme', Website: '' }),
-    searchAccountsByKey: async () => [],
-    searchAccountsByWebsite: async () => [],
-    searchAccountsByName: async () => [],
-    createAccount: async () => 'Anew',
     updateContact: async () => 'C1',
-    reconcileContact: async () => ({}),
+    getTasksForContact: async () => [],
+    createTask: async () => 't1',
     resolveProductDeal: async () => ({ status: 'one', deal: { id: 'd1' } })
   }, overrides);
 }
 
-test('Contact path: reuses the existing Account, merges Product_Interest, fires processContact', async () => {
-  let updatePayload = null, updateOpts = null, reconciledId = null;
+test('Contact path: existing Account + exact Deal → 200 (single lookup, additive Product_Interest, no create/reconcile)', async () => {
+  let updatePayload = null, updateOpts = null, dealCalls = 0, taskCreated = false;
   const handler = loadHandler(contactZoho({
     updateContact: async (id, rec, opts) => { updatePayload = rec; updateOpts = opts; return id; },
-    reconcileContact: async (id) => { reconciledId = id; return {}; }
+    resolveProductDeal: async () => { dealCalls++; return { status: 'one', deal: { id: 'd1' } }; },
+    createTask: async () => { taskCreated = true; return 't1'; }
   }));
   const res = makeRes();
   await handler(makeReq({ company: 'Acme', jobTitle: 'Head of Growth', productInterest: 'Jurnii 360', country: 'United Kingdom' }, 'Contact', 'C1'), res);
 
   assert.strictEqual(res.statusCode, 200);
-  assert.ok(updatePayload, 'the Contact is updated');
   assert.strictEqual('Company' in updatePayload, false, 'Contacts have no Company field');
   assert.strictEqual(updatePayload.Job_Title_Raw, 'Head of Growth');
   assert.deepStrictEqual(updatePayload.Product_Interest, ['Jurnii UX', 'Jurnii 360'], 'additive union, not replace');
-  assert.strictEqual('Account_Name' in updatePayload, false, 'existing Account reused — not relinked');
+  assert.strictEqual('Account_Name' in updatePayload, false, 'never relinks the Account');
   assert.deepStrictEqual(updateOpts, { trigger: [] }, 'enrichment write is workflow-suppressed');
-  assert.strictEqual(reconciledId, 'C1', 'processContact invoked with the contact id');
+  assert.strictEqual(dealCalls, 1, 'exactly one Deal lookup — no backoff on the Contact path');
+  assert.strictEqual(taskCreated, false, 'no Task when the booking proceeds');
   assert.strictEqual(res.body.contactId, 'C1');
   assert.strictEqual(res.body.dealId, 'd1');
 });
 
-test('Contact path: no Account on the Contact → creates one named after the COMPANY and links it', async () => {
-  let createdData = null, updatePayload = null;
+test('Contact path: no matching Deal → 409 deal_unresolved + Contact-only Manual Review Task', async () => {
+  let taskData = null;
   const handler = loadHandler(contactZoho({
-    getContact: async () => ({ id: 'C1', Account_Name: null, Product_Interest: [] }),
-    searchAccountsByKey: async () => [],
-    searchAccountsByWebsite: async () => [],
-    searchAccountsByName: async () => [],
-    createAccount: async (data) => { createdData = data; return 'Anew'; },
-    updateContact: async (id, rec) => { updatePayload = rec; return id; }
+    resolveProductDeal: async () => ({ status: 'none', deal: null, count: 0 }),
+    getTasksForContact: async () => [],
+    createTask: async (data, opts) => { taskData = { data, opts }; return 't1'; }
   }));
   const res = makeRes();
-  await handler(makeReq({ company: 'Acme', jobTitle: 'Head of Growth', productInterest: 'Jurnii 360', country: 'United Kingdom' }, 'Contact', 'C1'), res);
-
-  assert.strictEqual(res.statusCode, 200);
-  assert.ok(createdData, 'a new Account is created');
-  assert.strictEqual(createdData.Account_Name, 'Acme', 'named after the company, never the person');
-  assert.strictEqual(createdData.Account_Key, 'acme.com');
-  assert.deepStrictEqual(updatePayload.Account_Name, { id: 'Anew' }, 'the new Account is linked onto the Contact');
-});
-
-test('Contact path: established Account conflicting with submitted company/domain → 409 account_conflict', async () => {
-  let updateCalled = false, reconcileCalled = false;
-  const handler = loadHandler(contactZoho({
-    getContact: async () => ({ id: 'C1', Account_Name: { id: 'A1' }, Product_Interest: [] }),
-    getAccount: async () => ({ Account_Key: 'other.com', Account_Name: 'Other Inc', Website: 'https://other.com' }),
-    updateContact: async () => { updateCalled = true; return 'C1'; },
-    reconcileContact: async () => { reconcileCalled = true; return {}; }
-  }));
-  const res = makeRes();
-  await handler(makeReq({ company: 'Acme', jobTitle: 'Head of Growth', productInterest: 'Jurnii 360', country: 'United Kingdom' }, 'Contact', 'C1'), res);
+  await handler(makeReq({ company: 'Acme', jobTitle: 'Head', productInterest: 'Jurnii 360', country: 'United Kingdom' }, 'Contact', 'C1'), res);
 
   assert.strictEqual(res.statusCode, 409);
-  assert.strictEqual(res.body.reason, 'account_conflict');
-  assert.strictEqual(updateCalled, false, 'no Contact write on conflict');
-  assert.strictEqual(reconcileCalled, false, 'no reconciliation on conflict');
+  assert.strictEqual(res.body.reason, 'deal_unresolved');
+  assert.ok(taskData, 'a Manual Review Task is created');
+  assert.deepStrictEqual(taskData.data.Who_Id, { id: 'C1' });
+  assert.strictEqual('What_Id' in taskData.data, false, 'Contact-only — no What_Id');
+  assert.strictEqual(taskData.data.$se_module, 'Contacts');
+  assert.strictEqual(taskData.data.Task_Type, 'Manual Review');
+  assert.strictEqual(taskData.data.Blocks_Sequence, 'Yes');
+  assert.ok(taskData.data.Subject.includes('J1'), 'subject carries the journeyId');
+  assert.ok(taskData.data.Description.startsWith('[deal_unresolved]'), 'description leads with the reason token');
+  assert.deepStrictEqual(taskData.opts, { trigger: [] });
 });
 
-test('Contact path: reconciliation failure fails closed (409 reconcile_failed, no booking)', async () => {
+test('Contact path: retry reuses the open Manual Review Task (no duplicate create)', async () => {
+  let createCalls = 0;
+  const subject = 'Jurnii website manual review [J1]';
   const handler = loadHandler(contactZoho({
-    reconcileContact: async () => { throw Object.assign(new Error('x'), { code: 'reconcile_not_configured' }); }
+    resolveProductDeal: async () => ({ status: 'none', deal: null, count: 0 }),
+    getTasksForContact: async () => [{ id: 't1', Subject: subject, Status: 'In Progress', Task_Type: 'Manual Review', Description: '[deal_unresolved]' }],
+    createTask: async () => { createCalls++; return 't2'; }
   }));
   const res = makeRes();
   await handler(makeReq({ company: 'Acme', jobTitle: 'Head', productInterest: 'Jurnii 360', country: 'United Kingdom' }, 'Contact', 'C1'), res);
   assert.strictEqual(res.statusCode, 409);
-  assert.strictEqual(res.body.reason, 'reconcile_failed');
+  assert.strictEqual(createCalls, 0, 'existing open Task reused, not duplicated');
 });
 
-test('Contact path: >1 candidate Account on the fallback tiers → 409 account_ambiguous', async () => {
+test('Contact path: Contact with no Account → 409 deal_unresolved + Contact-only Task', async () => {
+  let taskData = null;
   const handler = loadHandler(contactZoho({
     getContact: async () => ({ id: 'C1', Account_Name: null, Product_Interest: [] }),
-    searchAccountsByKey: async () => [],
-    searchAccountsByWebsite: async () => [{ id: 'A1' }],
-    searchAccountsByName: async () => [{ id: 'A2' }]
+    resolveProductDeal: async () => ({ status: 'none', deal: null, count: 0 }),
+    createTask: async (data) => { taskData = data; return 't1'; }
   }));
   const res = makeRes();
-  await handler(makeReq({ company: 'Acme', jobTitle: 'Head of Growth', productInterest: 'Jurnii 360', country: 'United Kingdom' }, 'Contact', 'C1'), res);
+  await handler(makeReq({ company: 'Acme', jobTitle: 'Head', productInterest: 'Jurnii 360', country: 'United Kingdom' }, 'Contact', 'C1'), res);
   assert.strictEqual(res.statusCode, 409);
-  assert.strictEqual(res.body.reason, 'account_ambiguous');
+  assert.strictEqual(res.body.reason, 'deal_unresolved');
+  assert.ok(taskData, 'a Contact-only Task is created even with no Account');
+  assert.strictEqual('What_Id' in taskData, false);
+});
+
+test('Contact path: multiple matching Deals → 409 deal_ambiguous + Task', async () => {
+  let taskData = null;
+  const handler = loadHandler(contactZoho({
+    resolveProductDeal: async () => ({ status: 'many', deal: null, count: 2 }),
+    createTask: async (data) => { taskData = data; return 't1'; }
+  }));
+  const res = makeRes();
+  await handler(makeReq({ company: 'Acme', jobTitle: 'Head', productInterest: 'Jurnii 360', country: 'United Kingdom' }, 'Contact', 'C1'), res);
+  assert.strictEqual(res.statusCode, 409);
+  assert.strictEqual(res.body.reason, 'deal_ambiguous');
+  assert.ok(taskData.Description.startsWith('[deal_ambiguous]'));
+});
+
+test('Contact path: no bookable product selected → 409 no_product_selected + Task', async () => {
+  let taskData = null;
+  const handler = loadHandler(contactZoho({
+    createTask: async (data) => { taskData = data; return 't1'; }
+  }));
+  const res = makeRes();
+  await handler(makeReq({ company: 'Acme', jobTitle: 'Head', productInterest: 'Not sure yet', country: 'United Kingdom' }, 'Contact', 'C1'), res);
+  assert.strictEqual(res.statusCode, 409);
+  assert.strictEqual(res.body.reason, 'no_product_selected');
+  assert.ok(taskData.Description.startsWith('[no_product_selected]'));
+  assert.ok(taskData.Description.includes('Product: Not sure yet'), 'records the submitted product text');
 });

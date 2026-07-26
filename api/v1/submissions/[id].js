@@ -5,20 +5,20 @@ const {
   readConversion,
   getContact,
   updateContact,
-  reconcileContact,
+  getTasksForContact,
+  createTask,
   resolveProductDeal
 } = require('../../_utils/zoho');
 const { canonicalProduct, validateLeadEnrichment } = require('../../_utils/products');
-const { resolveAccountForContact } = require('../../_utils/account');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 // Raw job title -> this text field (default Job_Title_Raw). Never the Job_Title picklist.
 const JOBTITLE_RAW_FIELD = process.env.ZOHO_LEAD_JOBTITLE_RAW_FIELD || 'Job_Title_Raw';
 
-// Bounded backoff (ms). Serverless-safe; the retry-resume path makes a timeout
-// harmless (a later PATCH resumes from the already-reconciled record).
-const CONVERSION_BACKOFF = [1000, 2000, 3000, 4000, 5000];
+// Bounded backoff (ms) for the LEAD path only — Lead conversion is asynchronous.
+// The Contact path invokes no automation, so its Deal either exists now or not.
 const DEAL_BACKOFF = [800, 1500, 2500];
+const CONVERSION_BACKOFF = [1000, 2000, 3000, 4000, 5000];
 
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
@@ -26,8 +26,12 @@ function fail(res, status, code, message, extra) {
   return res.status(status).json(Object.assign({ error: message || code, code }, extra || {}));
 }
 
-// Resolves the exact single Product Deal for an Account with bounded backoff.
-// Returns { dealId } or a fail() sentinel { error, reason }.
+function normalizeDeal(result) {
+  if (result.status === 'one') return { dealId: result.deal.id };
+  return { error: true, reason: result.status === 'many' ? 'deal_ambiguous' : 'deal_unresolved' };
+}
+
+// Lead path: the converted graph's Deal may appear a beat after conversion.
 async function resolveDealWithBackoff(accountId, product) {
   let result = await resolveProductDeal(accountId, product);
   for (const delay of DEAL_BACKOFF) {
@@ -35,8 +39,69 @@ async function resolveDealWithBackoff(accountId, product) {
     await sleep(delay);
     result = await resolveProductDeal(accountId, product);
   }
-  if (result.status === 'one') return { dealId: result.deal.id };
-  return { error: true, reason: result.status === 'many' ? 'deal_ambiguous' : 'deal_unresolved' };
+  return normalizeDeal(result);
+}
+
+// Contact path: a single exact lookup — no automation is invoked, so no backoff.
+async function resolveDealOnce(accountId, product) {
+  return normalizeDeal(await resolveProductDeal(accountId, product));
+}
+
+// --- Contact-only Manual Review Task (mirrors createManualReview.deluge) --------
+const REASON_TEXT = {
+  deal_unresolved: "No matching open Product Deal exists for the Contact's current Account.",
+  deal_ambiguous: 'Multiple open Product Deals match the selected product; the correct one is ambiguous.',
+  no_product_selected: 'The visitor did not select a bookable product.'
+};
+const reviewSubject = (journeyId) => `Jurnii website manual review [${journeyId}]`;
+
+/**
+ * Creates or reuses a Contact-scoped Manual Review Task so the case is actionable
+ * in CRM. Idempotent per journey via the Contact's OPEN Tasks (related-records
+ * read — no Search API). No What_Id (Contact-only), so the sequence completion
+ * handler deliberately ignores it. Created with trigger:[] (informational).
+ */
+async function ensureManualReviewTask({ journeyId, contactId, product, reason }) {
+  const subject = reviewSubject(journeyId);
+  const openTasks = await getTasksForContact(contactId);
+  const existing = openTasks.find(t =>
+    t && t.Task_Type === 'Manual Review'
+    && (t.Status === 'Not Started' || t.Status === 'In Progress')
+    && t.Subject === subject
+  );
+  if (existing) return existing.id;
+
+  const description = [
+    `[${reason}]`,
+    '',
+    `Journey: ${journeyId}`,
+    `Product: ${product || 'Not selected'}`,
+    `Reason: ${REASON_TEXT[reason] || reason}`,
+    '',
+    'No Deal is linked. Completing this task does not automatically advance a sequence.'
+  ].join('\n');
+
+  return createTask({
+    Subject: subject,
+    Status: 'In Progress',
+    Who_Id: { id: contactId },
+    $se_module: 'Contacts',
+    Task_Type: 'Manual Review',
+    Blocks_Sequence: 'Yes',
+    Task_Status: 'Working',
+    Task_State: 'Open',
+    Description: description
+  }, { trigger: [] });
+}
+
+// A Manual Review that has a resolved Contact: raise (best-effort) the Task, then 409.
+async function manualReview(res, { journeyId, contactId, product, reason, message }) {
+  try {
+    await ensureManualReviewTask({ journeyId, contactId, product, reason });
+  } catch (e) {
+    console.warn(`[submissions] manual-review task not created for journey ${journeyId} (${e.code || e.message})`);
+  }
+  return fail(res, 409, 'MANUAL_REVIEW', message, { reason });
 }
 
 // The path id is the journeyId (a client-generated correlation key). CRM identity
@@ -68,7 +133,7 @@ module.exports = async function handler(req, res) {
     let contactId, accountId;
 
     if (recordType === 'Contact') {
-      const outcome = await runContactPath({ recordId, email: decoded.email, company, jobTitle, phone, country, product });
+      const outcome = await runContactPath({ recordId, company, jobTitle, phone, country, product });
       if (outcome.fail) return fail(res, outcome.status, outcome.code, outcome.message, outcome.extra);
       ({ contactId, accountId } = outcome);
     } else if (recordType === 'Lead') {
@@ -79,15 +144,17 @@ module.exports = async function handler(req, res) {
       return fail(res, 400, 'validation', 'Unknown record type on token.');
     }
 
-    // Resolve the exact single Product Deal (both paths converge here).
+    // Resolve the exact single Product Deal (backoff only on the Lead path).
     if (!product) {
       console.warn(`[submissions] no product selected (contact ${contactId})`);
-      return fail(res, 409, 'MANUAL_REVIEW', "We'll tailor the right session for you — our team will reach out to schedule.", { reason: 'no_product_selected' });
+      return manualReview(res, { journeyId: id, contactId, product: productInterest, reason: 'no_product_selected', message: "We'll tailor the right session for you — our team will reach out to schedule." });
     }
-    const deal = await resolveDealWithBackoff(accountId, product);
+    const deal = (recordType === 'Lead')
+      ? await resolveDealWithBackoff(accountId, product)
+      : await resolveDealOnce(accountId, product);
     if (deal.error) {
       console.warn(`[submissions] product deal ${deal.reason} for account ${accountId} product ${product} (contact ${contactId})`);
-      return fail(res, 409, 'MANUAL_REVIEW', 'Your registration is complete; our team will confirm the right session.', { reason: deal.reason });
+      return manualReview(res, { journeyId: id, contactId, product: productInterest, reason: deal.reason, message: 'Your registration is complete; our team will confirm the right session.' });
     }
 
     // Issue the step-2 token carrying the resolved graph ids.
@@ -157,29 +224,15 @@ async function runLeadPath({ recordId, company, jobTitle, phone, country, produc
 }
 
 // ---------------------------------------------------------------------------
-// Contact path: resolve the Account, persist enrichment (suppressed), then fire
-// processContact explicitly so the existing Deluge automation builds the Deal.
-// No throwaway Lead; the website never reimplements commercial logic.
+// Contact path (KISS): update the existing Contact and read its existing Account
+// + exact Product Deal. No Account create, no reconciliation, no processContact.
+// The additive Product_Interest is persisted even when the Deal is missing so the
+// Manual Review Task carries the evidence a rep needs.
 // ---------------------------------------------------------------------------
-async function runContactPath({ recordId, email, company, jobTitle, phone, country, product }) {
+async function runContactPath({ recordId, company, jobTitle, phone, country, product }) {
   const contact = await getContact(recordId);
   if (!contact) return { fail: true, status: 502, code: 'contact_not_found', message: 'Your registration could not be found. Please restart.' };
 
-  const contactAccountId = (contact.Account_Name && contact.Account_Name.id) ? contact.Account_Name.id : null;
-
-  // Resolve the canonical Account BEFORE reconciliation (never name one after the person).
-  const acct = await resolveAccountForContact({ contactId: recordId, contactAccountId, email, company });
-  if (acct.status === 'conflict') {
-    console.warn(`[submissions] account_conflict for contact ${recordId}`);
-    return { fail: true, status: 409, code: 'MANUAL_REVIEW', message: 'Your company details need review; our team will follow up.', extra: { reason: 'account_conflict' } };
-  }
-  if (acct.status === 'ambiguous') {
-    console.warn(`[submissions] account_ambiguous for contact ${recordId}`);
-    return { fail: true, status: 409, code: 'MANUAL_REVIEW', message: 'Your company details need review; our team will follow up.', extra: { reason: 'account_ambiguous' } };
-  }
-  const accountId = acct.accountId;
-
-  // Build the Contact enrichment payload (NO Company field; additive Product_Interest).
   const validation = validateLeadEnrichment({
     company, jobTitle, phone, country, product,
     rawTitleField: JOBTITLE_RAW_FIELD,
@@ -190,25 +243,14 @@ async function runContactPath({ recordId, email, company, jobTitle, phone, count
     console.warn(`[submissions] enrichment validation failed for contact ${recordId} (${validation.reason})`);
     return { fail: true, status: 409, code: 'MANUAL_REVIEW', message: 'Some of your details need review; our team will follow up.', extra: { reason: validation.reason } };
   }
-  const record = validation.record;
-  // Link the resolved Account onto the Contact if it had none.
-  if (!contactAccountId) record.Account_Name = { id: accountId };
-
   try {
-    await updateContact(recordId, record, { trigger: [] }); // suppressed — reconcile explicitly
+    await updateContact(recordId, validation.record, { trigger: [] }); // persist enrichment; no reconcile
   } catch (e) {
     console.warn(`[submissions] enrichment rejected by Zoho for contact ${recordId} (${e.code || e.message})`);
     return { fail: true, status: 409, code: 'MANUAL_REVIEW', message: 'We could not process some of your details; our team will follow up.', extra: { reason: 'enrichment_rejected' } };
   }
 
-  // Fire the existing processContact automation (deterministic; builds the Deal).
-  // FAIL CLOSED: if the invocation errors we do NOT proceed to book.
-  try {
-    await reconcileContact(recordId);
-  } catch (e) {
-    console.warn(`[submissions] processContact invocation failed for contact ${recordId} (${e.code || e.message})`);
-    return { fail: true, status: 409, code: 'MANUAL_REVIEW', message: 'Your details are being processed; our team will follow up shortly.', extra: { reason: 'reconcile_failed' } };
-  }
-
+  // Use the Contact's EXISTING Account only — never created/linked by the website.
+  const accountId = (contact.Account_Name && contact.Account_Name.id) ? contact.Account_Name.id : null;
   return { contactId: recordId, accountId };
 }

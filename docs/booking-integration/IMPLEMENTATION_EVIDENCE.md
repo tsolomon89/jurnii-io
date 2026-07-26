@@ -1,54 +1,56 @@
 # Booking integration — implementation evidence & handoff
 
 Implements the **CRM record-resolution correction** (Contact-first identity + an independent journey
-UUID), replacing the earlier "Lead id is the universal correlation key" model. Scope: **`jurnii-io`
-code only**. **No Deluge was changed and no live Zoho configuration was altered** — the Contact-path
-reconciliation enablement is approval-gated (§4).
+UUID) with the **KISS Contact path**: an existing Contact is updated in place and books only against an
+**existing** exact Product Deal; the website never creates an Account/Deal and never invokes
+`processContact`. Scope: **`jurnii-io` code only**. **No `zoho-functions`, Deluge, custom-field, or OAuth
+change.**
 
 See [architecture.md](./architecture.md) for the full design.
 
-## 1. What changed (the correction)
+## 1. What the integration does
 
-- **Contact-first, strictly sequential identity resolution** (`api/v1/submissions/start.js`): one
-  matching Contact is reused and **Leads are not searched at all**; else one unconverted Lead; else a
-  Lead is created. No throwaway Lead is ever created when a Contact exists. Page-1 fields are persisted
-  to the resolved record with `trigger:[]` (mandatory).
-- **Journey UUID (`journeyId`)** replaces the Lead id as the correlation/idempotency key. It is
-  **client-generated + persisted before the first request** (deterministic retries), UUID-validated and
-  JWT-bound server-side, and stored in the standard `Events.Ext_Calendar_Booking_ID` + Google private
-  metadata. The JWT carries `recordType`/`recordId` (`Contact`|`Lead`). **No custom module.**
-- **Contact path** (`api/v1/submissions/[id].js`): resolves the Account (reuse-authoritative /
-  create-named-after-company / `account_conflict` / `account_ambiguous` Manual Review), updates the
-  Contact with `trigger:[]`, then invokes the existing `processContact` automation imperatively; the
-  Deal is then resolved from the graph. `Product_Interest` is written additively.
-- **Meeting ownership verification**: reused Google/Zoho events must match the token's
-  `contactId`/`dealId` → else `409 correlation_conflict` (booking, cancel, reschedule).
-- **New/updated utils**: `api/_utils/account.js` (Account resolver), `email.js`
-  (`normalizeEmail`/`businessDomain`), `zoho.js` (`getContact`/`updateContact`/`getAccount`, Account
-  search+create, `invokeFunction`/`reconcileContact`, unconverted-Lead filter), `products.js`
-  (`includeCompany`, `mergeMultiSelect`), `google.js` (journeyId + `readEventPrivate`).
-- **Frontend** (`assets/booking-form.js`): generates/persists `journeyId`, sends it in the start body,
-  TTL + cleanup, opaque manage flow.
+- **Page 1 — Contact-first identity** (`api/v1/submissions/start.js`): one matching Contact → reuse
+  (**Leads are not searched**); else one unconverted Lead → reuse; else create a Lead (`trigger:[]`).
+  Page-1 fields are persisted to the resolved record with `trigger:[]` (mandatory).
+- **journeyId** — a client-generated, UUID-validated, JWT-bound opaque correlation key. Stored only in
+  `Events.Ext_Calendar_Booking_ID` + Google private metadata. **No custom module.**
+- **Page 2 — Lead path** (`[id].js` `runLeadPath`): one triggered Lead update → `processLead` converts
+  and builds the graph; the Deal is resolved with **bounded backoff** (conversion is async).
+- **Page 2 — Contact path** (`runContactPath`): update the Contact with `trigger:[]` (additive
+  `Product_Interest`, no `Company`), read the Contact's **existing** `Account_Name`, resolve the exact
+  Product Deal in **one** lookup (no backoff). Exact Deal exists → proceed; else → Manual Review Task.
+- **Manual Review → Contact-only Task**: `no_product_selected` / `deal_unresolved` / `deal_ambiguous`
+  raise (best-effort) a Contact-scoped Task mirroring `createManualReview.deluge` (`Who_Id`=Contact, **no
+  `What_Id`**, `$se_module='Contacts'`, `Task_Type='Manual Review'`, `Blocks_Sequence='Yes'`,
+  `Task_State='Open'`, `Task_Status='Working'`, `Status='In Progress'`, `trigger:[]`; Description leads
+  with `[<reason>]`). Idempotent per journey via the Contact's **Open Tasks** related list
+  (`GET /crm/v6/Contacts/{id}/Tasks` — module scope, no Search API).
+- **Page 3 — Meeting** (`bookings/index.js`): Event `Who_Id`=Contact, `What_Id`=exact Deal,
+  `$se_module='Deals'`, `Ext_Calendar_Booking_ID=journeyId`; reuse is **ownership-verified** (mismatch →
+  `409 correlation_conflict`).
 
 ## 2. Offline verification (run in this environment — all green)
 
 - **Module load:** all handlers + utils `require()` without `MODULE_NOT_FOUND`.
 - **Frontend syntax:** `node --check assets/booking-form.js` → OK.
-- **Tests:** `npm test` → **48/48 pass**, including:
-  - *Page-1 (`tests/start.integration.test.js`):* existing Contact → recordType Contact, **no Lead
-    search, no Lead created**; reuse unconverted Lead; create Lead (`trigger:[]`); duplicate
-    Contacts/Leads → Manual Review; malformed `journeyId` → 400; free email → `EMAIL_NOT_BUSINESS`.
-  - *Page-2 (`tests/submissions.integration.test.js`):* Lead path (converts / out-of-list title never
-    blocks / unknown country blocks / retry-resume); Contact path (reuse Account + **additive
-    Product_Interest** + `processContact` invoked; create Account **named after the company**;
-    `account_conflict`; `account_ambiguous`).
-  - *Booking (`tests/bookings.integration.test.js`):* retry reuse with no FreeBusy self-conflict;
-    **ownership mismatch → `correlation_conflict`** (Google and Zoho); `SLOT_TAKEN`; Google-ok/Zoho-fail
-    recovery; pending-Meet does not confirm; durable `manageUrl` (`id=<journeyId>`); cancel/reschedule
-    accept the manage token; `NO_SINGLE_DEAL`.
-  - *Unit (`tests/booking.test.js`):* canonical product mapping, `mergeMultiSelect`, `validateLeadEnrichment`
-    (Lead + Contact `includeCompany:false`), Account resolver (reuse/conflict/create/ambiguous/key),
-    `writePayload` trigger contract, `readConversion`, `extractMeetLink`, work-email gate.
+- **Tests:** `npm test` → **45/45 pass**, including:
+  - *Page-1 (`start.integration.test.js`):* existing Contact → recordType Contact, **no Lead search, no
+    Lead created**; reuse Lead; create Lead; duplicate Contacts/Leads → Manual Review; malformed
+    `journeyId` → 400; free email → `EMAIL_NOT_BUSINESS`.
+  - *Page-2 (`submissions.integration.test.js`):* Lead path (converts / out-of-list title never blocks /
+    unknown country blocks / retry-resume); **Contact path KISS** — existing Account + exact Deal → 200
+    (**single lookup**, additive `Product_Interest`, no create/reconcile); no matching Deal →
+    `409 deal_unresolved` **+ Contact-only Task**; **retry reuses the open Task** (no duplicate); no
+    Account → `deal_unresolved` + Task; multiple Deals → `deal_ambiguous`; `Not sure yet` →
+    `no_product_selected` + Task.
+  - *Booking (`bookings.integration.test.js`):* retry reuse (no FreeBusy self-conflict); ownership
+    mismatch → `correlation_conflict` (Google + Zoho); `SLOT_TAKEN`; Google-ok/Zoho-fail recovery;
+    pending-Meet does not confirm; durable `manageUrl` (`id=<journeyId>`); cancel/reschedule accept the
+    manage token; `NO_SINGLE_DEAL`.
+  - *Unit (`booking.test.js`):* canonical product mapping, `mergeMultiSelect`, `validateLeadEnrichment`
+    (Lead + Contact `includeCompany:false`), `writePayload` trigger contract, `readConversion`,
+    `extractMeetLink`, work-email gate.
 
 ## 3. Request/response example
 
@@ -60,40 +62,25 @@ POST /api/v1/submissions/start
 PATCH /api/v1/submissions/<journeyId>     Authorization: Bearer <jwt step:1>
 { "company":"Acme","jobTitle":"Head of Product","productInterest":"Jurnii 360","phone":"+447…","country":"United Kingdom" }
 → 200 { "token":"<jwt step:2>", "step":2, "contactId":"<id>", "dealId":"<id>" }
+# Contact path with no exact Deal → 409 { code:"MANUAL_REVIEW", reason:"deal_unresolved" } + a Contact-only Task.
 
 POST /api/v1/bookings                     Authorization: Bearer <jwt step:2>
 { "slotStart":"2026-08-04T13:00:00.000Z" }
 → 200 { "status":"confirmed","bookingId":"<journeyId>","meetLink":"…","manageUrl":"…","googleEventId":"…","zohoEventId":"…" }
 ```
 
-## 4. Approval-gated items (REQUIRED before production use)
+## 4. Pre-deploy items (standing — no Contact-path config needed)
 
-Not applied in code that alters live config; these need sign-off. Run against a sandbox first.
+The Contact path needs **no** Deluge, OAuth, or custom-field change. Remaining items are the usual ones:
+- Google OAuth "In production" with `calendar.events` **+** `calendar.events.freebusy`; `GOOGLE_CALENDAR_ID` set.
+- All Vercel env vars set (no `ZOHO_SUBMISSION_MODULE`, no reconciliation URL); confirm **Pro** for `maxDuration:60`.
+- **Live confirm (read-only):** the Contacts→Tasks "Open Tasks" related list is `GET /crm/v6/Contacts/{id}/Tasks`
+  (verified), and the standard `Tasks` module accepts the Contact-only payload above (a disposable
+  create+delete reconfirms `Task_Type`/`Blocks_Sequence`/`Task_State`/`Task_Status`/`$se_module`).
 
-**Contact-path reconciliation (Option 1, approved):** invoke `processContact` via the Zoho Functions
-REST API. Enablement:
-- Verify whether the existing `processcontact` can be exposed directly for REST; if not, publish a thin
-  **standalone wrapper** accepting `contact_id` that calls it (no logic duplicated).
-- Enable **OAuth2 execution only — no API key**.
-- Because the call is POST, the refresh token needs `ZohoCRM.functions.execute.CREATE` (**not** `.READ`)
-  alongside the existing scopes; **re-authorize** to mint a replacement refresh token.
-- Set `ZOHO_PROCESS_CONTACT_URL` to the **exact Production URL Zoho generates** (do not assume the CRM
-  API version). Node appends `contact_id`.
-- The Contact path **fails closed** (Manual Review) if the URL is unset or the call errors, and also if
-  the exact Product Deal cannot subsequently be resolved.
-
-**Verify (read-only) pre-flight:** WF001b0's live trigger field set; that `processcontact` can be
-REST-executed and the exact scope; `Product_Interest` options on Contacts; that `getContact` returns
-`Account_Name`; Accounts `Account_Key`/`Website` searchability.
-
-**Credentials / platform:** Google OAuth "In production" with `calendar.events` + `calendar.events.freebusy`;
-all Vercel env vars set (no `ZOHO_SUBMISSION_MODULE`); confirm Vercel **Pro** for `maxDuration:60`.
-
-**Live E2E (post-approval):** new person (Lead path); returning Contact (reuse-Account **and**
-new-Account); duplicate Contact/Lead → Manual Review; cancel + reschedule. **Required later-stage-Contact
-regression guard:** an existing Contact with an Account, a Product Deal, and an active sequence/Activation
-Task must reconcile via direct `processContact` **without regressing `Stage`, overwriting `Contact_Role1`,
-or creating duplicate Activation Tasks/Calls/emails**. Clean up all test records.
+**Live E2E:** new person (Lead path converts + books); existing Contact **with** an exact open Deal →
+books; existing Contact **without** the Deal → Manual-Review Task appears in CRM (idempotent on retry);
+cancel + reschedule. Clean up test records.
 
 ## 5. Out of scope (tracked separately)
 - Wiring `Job_Title_Raw` into the Deluge role mapping (approval-gated Deluge change).

@@ -90,9 +90,7 @@ async function getAccessToken() {
 async function requestZoho(method, path, body = null) {
   const token = await getAccessToken();
   const domain = process.env.ZOHO_API_DOMAIN || 'https://www.zohoapis.eu';
-  // `path` may be an absolute URL (e.g. the exact Production function-execute URL
-  // Zoho generates — its API version must NOT be assumed) or a domain-relative path.
-  const parsedUrl = /^https?:\/\//i.test(path) ? new URL(path) : new URL(`${domain}${path}`);
+  const parsedUrl = new URL(`${domain}${path}`);
   const options = {
     hostname: parsedUrl.hostname,
     path: parsedUrl.pathname + parsedUrl.search,
@@ -238,72 +236,27 @@ async function updateContact(contactId, data, { trigger } = {}) {
 }
 
 // ---------------------------------------------------------------------------
-// Account resolution (Contact path). The website resolves/links the canonical
-// Account BEFORE reconciliation so processContact never names one after the
-// person. Deluge remains the sole owner of Deals/Quotes/rollup.
+// Manual-Review Task (Contact-only). Mirrors the createManualReview.deluge
+// convention: dedupe on the Contact's OPEN Tasks via a related-records read
+// (existing module scope — NOT the Search API), and create a Contact-scoped
+// review Task with no What_Id, so the sequence completion handler deliberately
+// ignores it (skip_no_related_deal).
 // ---------------------------------------------------------------------------
-/** GET a single Account by id (returns the record object, or null if absent). */
-async function getAccount(accountId) {
-  const res = await requestZoho('GET', `/crm/v6/Accounts/${accountId}`);
-  return (res && Array.isArray(res.data) && res.data.length > 0) ? res.data[0] : null;
-}
-
-async function searchAccountsByCriteria(criteria) {
-  const res = await requestZoho('GET', `/crm/v6/Accounts/search?criteria=${criteria}`);
+/**
+ * The Contact's OPEN Tasks (the "Open Tasks" related list, api_name `Tasks`),
+ * via the related-records endpoint — the existing module-read scope, no Search
+ * API (whose `contains` operator is unsupported and which lags on indexing).
+ * Returns [] when the Contact has no open Tasks.
+ */
+async function getTasksForContact(contactId, fields = 'id,Subject,Status,Task_Type,Description') {
+  const res = await requestZoho('GET', `/crm/v6/Contacts/${contactId}/Tasks?fields=${encodeURIComponent(fields)}`);
   return (res && Array.isArray(res.data)) ? res.data : [];
 }
 
-/** Account_Key is UNIQUE, so this returns 0 or 1. */
-async function searchAccountsByKey(accountKey) {
-  return searchAccountsByCriteria(`(Account_Key:equals:${encodeURIComponent(accountKey)})`);
-}
-
-async function searchAccountsByWebsite(domain) {
-  return searchAccountsByCriteria(`(Website:equals:${encodeURIComponent(domain)})`);
-}
-
-async function searchAccountsByName(name) {
-  return searchAccountsByCriteria(`(Account_Name:equals:${encodeURIComponent(name)})`);
-}
-
-/**
- * Creates an Account (triggers enabled by default so WF001c processAccount can
- * normalize/roll up the new record). A DUPLICATE_DATA race on the unique
- * Account_Key/Account_Name reuses the existing id. Returns the Account id.
- */
-async function createAccount(data, { trigger } = {}) {
-  const res = await requestZoho('POST', '/crm/v6/Accounts', writePayload(data, trigger));
-  const row = res && res.data && res.data[0];
-  if (row && row.status === 'success') return row.details.id;
-  if (row && row.code === 'DUPLICATE_DATA' && row.details && row.details.id) return row.details.id;
-  throw new ZohoError('account_create_failed', res);
-}
-
-// ---------------------------------------------------------------------------
-// Reconciliation seam (approved Option 1). The Contact path fires the existing
-// `processContact` automation imperatively via the Zoho Functions REST API —
-// deterministic (independent of which fields changed), reusing the exact function
-// processLead.deluge calls inline. The website never reimplements commercial logic.
-//
-//   - OAuth2 execution ONLY (no API key).
-//   - POST → the scope on the refresh token must be `ZohoCRM.functions.execute.CREATE`.
-//   - ZOHO_PROCESS_CONTACT_URL is the EXACT Production URL Zoho generates for the
-//     REST-exposed function (or a thin standalone wrapper accepting `contact_id`).
-//     The CRM API version is NOT assumed — the whole URL comes from Zoho.
-//   - FAIL CLOSED: if the URL is unconfigured, or the call errors, the caller must
-//     NOT proceed to book (it routes to Manual Review).
-// ---------------------------------------------------------------------------
-const PROCESS_CONTACT_URL = process.env.ZOHO_PROCESS_CONTACT_URL || '';
-
-/** Fires processContact (via its exact Production REST URL) to reconcile the graph. */
-async function reconcileContact(contactId) {
-  if (!PROCESS_CONTACT_URL) {
-    // Fail closed — never silently skip reconciliation.
-    throw new ZohoError('reconcile_not_configured', 'ZOHO_PROCESS_CONTACT_URL is unset');
-  }
-  const sep = PROCESS_CONTACT_URL.includes('?') ? '&' : '?';
-  const url = `${PROCESS_CONTACT_URL}${sep}contact_id=${encodeURIComponent(contactId)}`;
-  return requestZoho('POST', url, {});
+/** Creates a Task. Pass { trigger: [] } to suppress Task workflows. Returns the id. */
+async function createTask(data, { trigger } = {}) {
+  const res = await requestZoho('POST', '/crm/v6/Tasks', writePayload(data, trigger));
+  return firstDetailId(res, 'task_create_failed');
 }
 
 // ---------------------------------------------------------------------------
@@ -362,12 +315,8 @@ module.exports = {
   readConversion,
   getContact,
   updateContact,
-  getAccount,
-  searchAccountsByKey,
-  searchAccountsByWebsite,
-  searchAccountsByName,
-  createAccount,
-  reconcileContact,
+  getTasksForContact,
+  createTask,
   resolveProductDeal,
   normalizeProductKey,
   createZohoEvent,
