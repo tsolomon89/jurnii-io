@@ -1,9 +1,8 @@
 const jwt = require('jsonwebtoken');
-const { checkFreeBusy, listEventBySubmissionId, updateGoogleEvent } = require('../../../_utils/google');
+const { checkFreeBusy, listEventByJourneyId, readEventPrivate, updateGoogleEvent } = require('../../../_utils/google');
 const {
   searchEventByExternalId,
-  updateZohoEvent,
-  updateSubmissionRecord
+  updateZohoEvent
 } = require('../../../_utils/zoho');
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -12,6 +11,17 @@ const BUFFER_MS = 15 * 60 * 1000;
 
 function fail(res, status, code, message) {
   return res.status(status).json({ error: message || code, code });
+}
+
+// A reused event must belong to the same Contact + Deal as the token.
+function googleEventOwned(event, decoded) {
+  const p = readEventPrivate(event);
+  return p.contactId === decoded.contactId && p.dealId === decoded.dealId;
+}
+function zohoEventOwned(event, decoded) {
+  const who = (event.Who_Id && event.Who_Id.id) || '';
+  const what = (event.What_Id && event.What_Id.id) || '';
+  return who === decoded.contactId && what === decoded.dealId;
 }
 
 module.exports = async function handler(req, res) {
@@ -30,7 +40,7 @@ module.exports = async function handler(req, res) {
   const { id } = req.query;
   const { slotStart } = req.body || {};
   if (!id || !slotStart) return fail(res, 400, 'validation', 'Missing required fields: id, slotStart');
-  if (decoded.submissionId !== id) return fail(res, 403, 'forbidden', 'Token does not match this booking.');
+  if (decoded.journeyId !== id) return fail(res, 403, 'forbidden', 'Token does not match this booking.');
 
   const start = new Date(slotStart);
   const end = new Date(start.getTime() + SLOT_MINUTES * 60 * 1000);
@@ -48,19 +58,24 @@ module.exports = async function handler(req, res) {
     });
     if (conflict) return fail(res, 409, 'SLOT_TAKEN', 'The selected slot is no longer available.');
 
-    const googleEvent = await listEventBySubmissionId(id);
+    const googleEvent = await listEventByJourneyId(id);
     if (!googleEvent) return fail(res, 404, 'not_found', 'Calendar event not found for this booking.');
+    if (!googleEventOwned(googleEvent, decoded)) {
+      return fail(res, 409, 'correlation_conflict', 'This booking reference is associated with different details.');
+    }
     await updateGoogleEvent(googleEvent.id, { start: start.toISOString(), end: end.toISOString() });
 
     const zohoEvent = await searchEventByExternalId(id);
     if (!zohoEvent) return fail(res, 404, 'not_found', 'Meeting record not found for this booking.');
+    if (!zohoEventOwned(zohoEvent, decoded)) {
+      return fail(res, 409, 'correlation_conflict', 'This booking reference is associated with different details.');
+    }
     await updateZohoEvent(zohoEvent.id, {
       Start_DateTime: start.toISOString(),
       End_DateTime: end.toISOString()
     });
 
-    await updateSubmissionRecord(id, { Submission_Step: 'Booking Rescheduled' });
-
+    console.log(`[reschedule] moved booking for journey ${id} to ${start.toISOString()}`);
     return res.status(200).json({ success: true, bookingId: id, newStart: start.toISOString() });
   } catch (error) {
     console.error('[reschedule] error:', error.code || error.message);

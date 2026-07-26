@@ -1,15 +1,26 @@
 const jwt = require('jsonwebtoken');
-const { listEventBySubmissionId, cancelGoogleEvent } = require('../../../_utils/google');
+const { listEventByJourneyId, readEventPrivate, cancelGoogleEvent } = require('../../../_utils/google');
 const {
   searchEventByExternalId,
-  updateZohoEvent,
-  updateSubmissionRecord
+  updateZohoEvent
 } = require('../../../_utils/zoho');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
 function fail(res, status, code, message) {
   return res.status(status).json({ error: message || code, code });
+}
+
+// A reused event must belong to the same Contact + Deal as the token (a journeyId
+// is client-controlled, so a lookup match alone is insufficient).
+function googleEventOwned(event, decoded) {
+  const p = readEventPrivate(event);
+  return p.contactId === decoded.contactId && p.dealId === decoded.dealId;
+}
+function zohoEventOwned(event, decoded) {
+  const who = (event.Who_Id && event.Who_Id.id) || '';
+  const what = (event.What_Id && event.What_Id.id) || '';
+  return who === decoded.contactId && what === decoded.dealId;
 }
 
 module.exports = async function handler(req, res) {
@@ -27,36 +38,38 @@ module.exports = async function handler(req, res) {
 
   const { id } = req.query;
   if (!id) return fail(res, 400, 'validation', 'Missing required field: id');
-  if (decoded.submissionId !== id) return fail(res, 403, 'forbidden', 'Token does not match this booking.');
+  if (decoded.journeyId !== id) return fail(res, 403, 'forbidden', 'Token does not match this booking.');
 
   try {
-    // Soft-cancel the Google event (notifies attendees).
-    const googleEvent = await listEventBySubmissionId(id);
+    // Soft-cancel the Google event (notifies attendees) — ownership-verified.
+    const googleEvent = await listEventByJourneyId(id);
     if (googleEvent) {
+      if (!googleEventOwned(googleEvent, decoded)) {
+        return fail(res, 409, 'correlation_conflict', 'This booking reference is associated with different details.');
+      }
       await cancelGoogleEvent(googleEvent.id);
       console.log(`[cancel] cancelled Google event ${googleEvent.id}`);
     } else {
-      console.warn(`[cancel] no Google event for submission ${id}`);
+      console.warn(`[cancel] no Google event for journey ${id}`);
     }
 
     // Mark the Zoho event cancelled (title/description marker only — avoids
-    // writing an unverified picklist value).
+    // writing an unverified picklist value) — ownership-verified.
     const zohoEvent = await searchEventByExternalId(id);
     if (zohoEvent) {
+      if (!zohoEventOwned(zohoEvent, decoded)) {
+        return fail(res, 409, 'correlation_conflict', 'This booking reference is associated with different details.');
+      }
       await updateZohoEvent(zohoEvent.id, {
         Event_Title: `[CANCELLED] ${zohoEvent.Event_Title || 'Jurnii Product Demo Meeting'}`,
         Description: `[CANCELLED]\n${zohoEvent.Description || ''}`
       });
       console.log(`[cancel] marked Zoho event ${zohoEvent.id} cancelled`);
     } else {
-      console.warn(`[cancel] no Zoho event for submission ${id}`);
+      console.warn(`[cancel] no Zoho event for journey ${id}`);
     }
 
-    await updateSubmissionRecord(id, {
-      Integration_Status: 'Cancelled',
-      Submission_Step: 'Booking Cancelled'
-    });
-
+    console.log(`[cancel] cancelled booking for journey ${id}`);
     return res.status(200).json({ success: true, bookingId: id, message: 'Booking cancelled.' });
   } catch (error) {
     console.error('[cancel] error:', error.code || error.message);

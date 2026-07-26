@@ -53,14 +53,16 @@ async function checkFreeBusy(timeMin, timeMax) {
 
 /**
  * Finds the single Calendar event carrying our private extended property
- * `submissionId`. Centralizes the dedupe lookup so handlers don't each rebuild
- * an OAuth client. Returns the event resource or null.
+ * `journeyId`. Centralizes the dedupe lookup so handlers don't each rebuild an
+ * OAuth client. Returns the event resource or null. Callers MUST additionally
+ * ownership-verify the result (see readEventPrivate) — a journeyId is
+ * client-controlled, so a match is necessary but not sufficient.
  */
-async function listEventBySubmissionId(submissionId) {
+async function listEventByJourneyId(journeyId) {
   const calendar = getCalendar();
   const res = await calendar.events.list({
     calendarId: calendarId(),
-    privateExtendedProperty: `submissionId=${submissionId}`,
+    privateExtendedProperty: `journeyId=${journeyId}`,
     showDeleted: false,
     maxResults: 1
   });
@@ -68,10 +70,17 @@ async function listEventBySubmissionId(submissionId) {
   return items.length > 0 ? items[0] : null;
 }
 
+/** Reads our private extended properties ({ journeyId, contactId, dealId }). */
+function readEventPrivate(event) {
+  const p = (event && event.extendedProperties && event.extendedProperties.private) || {};
+  return { journeyId: p.journeyId || '', contactId: p.contactId || '', dealId: p.dealId || '' };
+}
+
 /**
  * Creates a Calendar event with a Google Meet conference and emails the invitee
- * (sendUpdates:'all'). The private extended property `submissionId` is the
- * cross-run dedupe key.
+ * (sendUpdates:'all'). The private extended property `journeyId` is the cross-run
+ * dedupe key; `contactId`/`dealId` are stamped alongside so a reuse can be
+ * ownership-verified against the signed token.
  */
 async function createGoogleEvent(eventDetails) {
   const calendar = getCalendar();
@@ -85,14 +94,18 @@ async function createGoogleEvent(eventDetails) {
     attendees: eventDetails.attendees,
     conferenceData: {
       createRequest: {
-        // Stable-per-submission requestId so a retried insert (if the dedupe
-        // list race is ever lost) does not mint a second distinct conference.
-        requestId: `meet-${eventDetails.submissionId}`,
+        // Stable-per-journey requestId so a retried insert (if the dedupe list
+        // race is ever lost) does not mint a second distinct conference.
+        requestId: `meet-${eventDetails.journeyId}`,
         conferenceSolutionKey: { type: 'hangoutsMeet' }
       }
     },
     extendedProperties: {
-      private: { submissionId: eventDetails.submissionId }
+      private: {
+        journeyId: eventDetails.journeyId,
+        contactId: eventDetails.contactId,
+        dealId: eventDetails.dealId
+      }
     }
   };
 
@@ -180,7 +193,8 @@ module.exports = {
   SCOPES,
   HOST_TIMEZONE,
   checkFreeBusy,
-  listEventBySubmissionId,
+  listEventByJourneyId,
+  readEventPrivate,
   createGoogleEvent,
   extractMeetLink,
   getEvent,

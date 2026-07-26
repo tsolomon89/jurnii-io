@@ -3,8 +3,10 @@ const assert = require('node:assert');
 const path = require('node:path');
 
 const products = require('../api/_utils/products');
+const account = require('../api/_utils/account');
 const zoho = require('../api/_utils/zoho');
 const google = require('../api/_utils/google');
+const { isBusinessEmail } = require('../api/_utils/email');
 
 test('canonicalProduct maps form values to canonical Zoho product names', () => {
   assert.strictEqual(products.canonicalProduct('Jurnii UX'), 'Jurnii UX');
@@ -107,37 +109,21 @@ test('extractMeetLink falls back to hangoutLink and returns empty when no confer
   assert.strictEqual(google.extractMeetLink(null), '');
 });
 
-test('validateLeadEnrichment (text mode, default) passes the job title through — never silently dropped', () => {
+test('validateLeadEnrichment writes the raw title to Job_Title_Raw (never the governed picklist) and never blocks on it', () => {
   const r = products.validateLeadEnrichment({
-    company: 'Acme', jobTitle: 'Head of Product', phone: '+447', country: 'United Kingdom',
-    product: 'Jurnii 360' // no mode / no allowlist
+    company: 'Acme', jobTitle: 'Supreme Overlord of Growth', phone: '+447', country: 'United Kingdom',
+    product: 'Jurnii 360'
   });
   assert.strictEqual(r.ok, true);
   assert.strictEqual(r.record.Company, 'Acme');
   assert.strictEqual(r.record.Phone, '+447');
   assert.deepStrictEqual(r.record.Product_Interest, ['Jurnii 360']);
   assert.strictEqual(r.record.Country, 'United Kingdom');
-  assert.strictEqual(r.record.Job_Title, 'Head of Product'); // carried into the terminal update
-});
+  assert.strictEqual(r.record.Job_Title_Raw, 'Supreme Overlord of Growth'); // raw text, no picklist pollution
+  assert.strictEqual('Job_Title' in r.record, false);                        // governed picklist untouched
 
-test('validateLeadEnrichment (picklist mode) fails an unlisted title instead of dropping it', () => {
-  const bad = products.validateLeadEnrichment({
-    company: 'Acme', jobTitle: 'Wizard', jobTitleMode: 'picklist', allowedTitles: ['Head of Product']
-  });
-  assert.strictEqual(bad.ok, false);
-  assert.strictEqual(bad.reason, 'job_title_not_allowed');
-
-  // Missing allowlist in picklist mode also fails loudly (never a silent drop).
-  const noAllow = products.validateLeadEnrichment({
-    company: 'Acme', jobTitle: 'Head of Product', jobTitleMode: 'picklist', allowedTitles: []
-  });
-  assert.strictEqual(noAllow.ok, false);
-
-  const good = products.validateLeadEnrichment({
-    company: 'Acme', jobTitle: 'Head of Product', jobTitleMode: 'picklist', allowedTitles: ['Head of Product']
-  });
-  assert.strictEqual(good.ok, true);
-  assert.strictEqual(good.record.Job_Title, 'Head of Product');
+  const custom = products.validateLeadEnrichment({ company: 'Acme', jobTitle: 'X', rawTitleField: 'My_Raw_Field' });
+  assert.strictEqual(custom.record.My_Raw_Field, 'X');
 });
 
 test('validateLeadEnrichment fails an unrecognized country rather than omitting it', () => {
@@ -149,6 +135,89 @@ test('validateLeadEnrichment fails an unrecognized country rather than omitting 
   assert.strictEqual(ok.ok, true);
   assert.strictEqual(ok.record.Country, 'Germany');
   assert.strictEqual('Product_Interest' in ok.record, false); // no product -> never fabricated
+});
+
+test('validateLeadEnrichment omits Company on the Contact path (includeCompany:false)', () => {
+  const r = products.validateLeadEnrichment({ company: 'Acme', jobTitle: 'Head', includeCompany: false });
+  assert.strictEqual(r.ok, true);
+  assert.strictEqual('Company' in r.record, false);       // Contacts have no Company field
+  assert.strictEqual(r.record.Job_Title_Raw, 'Head');
+});
+
+test('validateLeadEnrichment merges Product_Interest additively (never a bare replace)', () => {
+  const r = products.validateLeadEnrichment({ company: 'Acme', jobTitle: 'H', product: 'Jurnii 360', existingProducts: ['Jurnii UX'] });
+  assert.deepStrictEqual(r.record.Product_Interest, ['Jurnii UX', 'Jurnii 360']);
+});
+
+test('mergeMultiSelect dedups and preserves order (existing first)', () => {
+  assert.deepStrictEqual(products.mergeMultiSelect(['a', 'b'], 'b'), ['a', 'b']);
+  assert.deepStrictEqual(products.mergeMultiSelect(undefined, 'x'), ['x']);
+  assert.deepStrictEqual(products.mergeMultiSelect(['a'], ['a', 'c']), ['a', 'c']);
+});
+
+test('resolveAccountForContact reuses an established Account that agrees with the domain', async () => {
+  const deps = { getAccount: async () => ({ Account_Key: 'acme.com' }) };
+  const r = await account.resolveAccountForContact({ contactAccountId: 'A1', email: 'x@acme.com', company: 'Acme' }, deps);
+  assert.deepStrictEqual(r, { status: 'reuse', accountId: 'A1' });
+});
+
+test('resolveAccountForContact flags a materially conflicting established Account', async () => {
+  const deps = { getAccount: async () => ({ Account_Key: 'other.com', Website: 'https://other.com', Account_Name: 'Other' }) };
+  const r = await account.resolveAccountForContact({ contactAccountId: 'A1', email: 'x@acme.com', company: 'Acme' }, deps);
+  assert.strictEqual(r.status, 'conflict');
+});
+
+test('resolveAccountForContact creates an Account named after the COMPANY when none exists', async () => {
+  let created = null;
+  const deps = {
+    searchAccountsByKey: async () => [],
+    searchAccountsByWebsite: async () => [],
+    searchAccountsByName: async () => [],
+    createAccount: async (d) => { created = d; return 'Anew'; }
+  };
+  const r = await account.resolveAccountForContact({ contactAccountId: null, email: 'x@acme.com', company: 'Acme' }, deps);
+  assert.deepStrictEqual(r, { status: 'created', accountId: 'Anew' });
+  assert.strictEqual(created.Account_Name, 'Acme');   // never the person's name
+  assert.strictEqual(created.Account_Key, 'acme.com');
+});
+
+test('resolveAccountForContact returns ambiguous on >1 distinct fallback candidate', async () => {
+  const deps = {
+    searchAccountsByKey: async () => [],
+    searchAccountsByWebsite: async () => [{ id: 'A1' }],
+    searchAccountsByName: async () => [{ id: 'A2' }]
+  };
+  const r = await account.resolveAccountForContact({ contactAccountId: null, email: 'x@acme.com', company: 'Acme' }, deps);
+  assert.strictEqual(r.status, 'ambiguous');
+});
+
+test('resolveAccountForContact reuses a unique Account_Key match', async () => {
+  const deps = { searchAccountsByKey: async () => [{ id: 'A9' }] };
+  const r = await account.resolveAccountForContact({ contactAccountId: null, email: 'x@acme.com', company: 'Acme' }, deps);
+  assert.deepStrictEqual(r, { status: 'reuse', accountId: 'A9' });
+});
+
+test('isBusinessEmail accepts work domains (incl. subdomains) and rejects free/personal/disposable', () => {
+  assert.strictEqual(isBusinessEmail('alex@acme.com'), true);
+  assert.strictEqual(isBusinessEmail('alex@mail.acme.co.uk'), true); // work subdomain
+  for (const bad of ['x@gmail.com', 'x@hotmail.com', 'x@yahoo.co.uk', 'x@outlook.com', 'x@icloud.com', 'x@aol.com', 'x@mailinator.com']) {
+    assert.strictEqual(isBusinessEmail(bad), false, `${bad} should be rejected`);
+  }
+  // Case / whitespace normalization and malformed input.
+  assert.strictEqual(isBusinessEmail('X@GMAIL.COM '), false);
+  assert.strictEqual(isBusinessEmail('no-at-sign'), false);
+  assert.strictEqual(isBusinessEmail(''), false);
+});
+
+test('BLOCKED_EMAIL_DOMAINS env extends the blocklist at runtime', () => {
+  assert.strictEqual(isBusinessEmail('x@partner.com'), true);
+  process.env.BLOCKED_EMAIL_DOMAINS = 'partner.com, foo.com';
+  try {
+    assert.strictEqual(isBusinessEmail('x@partner.com'), false);
+    assert.strictEqual(isBusinessEmail('x@foo.com'), false);
+  } finally {
+    delete process.env.BLOCKED_EMAIL_DOMAINS;
+  }
 });
 
 test('all serverless handler modules load without MODULE_NOT_FOUND', () => {

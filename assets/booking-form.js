@@ -20,6 +20,20 @@
     '+506': 'Costa Rica'
   };
 
+  // --- Work-email-only gate (client UX; server is authoritative) ---
+  const CLIENT_FREE_EMAIL_DOMAINS = new Set([
+    'gmail.com', 'googlemail.com', 'yahoo.com', 'yahoo.co.uk', 'hotmail.com', 'hotmail.co.uk',
+    'outlook.com', 'live.com', 'msn.com', 'aol.com', 'icloud.com', 'me.com', 'mac.com',
+    'protonmail.com', 'proton.me', 'gmx.com', 'mail.com', 'yandex.com', 'ymail.com', 'zoho.com'
+  ]);
+  function isWorkEmail(email) {
+    const at = (email || '').lastIndexOf('@');
+    if (at < 0) return false;
+    const domain = email.slice(at + 1).trim().toLowerCase();
+    if (!domain || domain.indexOf('.') < 0) return false;
+    return !CLIENT_FREE_EMAIL_DOMAINS.has(domain);
+  }
+
   // --- Progressive continuation persistence (resume after refresh) ---
   const PROGRESS_KEY = 'jurnii_booking_progress';
 
@@ -27,7 +41,8 @@
     try {
       const snapshot = {
         step: currentStep,
-        submission_id: state.submission_id || null,
+        journey_id: state.journey_id || null,
+        journey_email: state.journey_email || null,
         token: continuationToken || null,
         first_name: state.first_name,
         last_name: state.last_name,
@@ -65,15 +80,47 @@
     try { localStorage.removeItem(PROGRESS_KEY); } catch (_) { /* non-fatal */ }
   }
 
+  // --- Client-generated journey id (deterministic idempotency) ---
+  // The journeyId is minted + persisted BEFORE the first Page-1 request and reused
+  // on every retry/concurrent submit, so the server always sees the same opaque
+  // correlation key. A new/unrelated journey (different email) mints a fresh one;
+  // it is cleared on booking completion.
+  function genUUID() {
+    try {
+      if (window.crypto && typeof crypto.randomUUID === 'function') return crypto.randomUUID();
+    } catch (_) { /* fall through */ }
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      const rnd = (window.crypto && crypto.getRandomValues)
+        ? crypto.getRandomValues(new Uint8Array(1))[0] % 16
+        : Math.floor(Math.random() * 16);
+      const v = c === 'x' ? rnd : (rnd & 0x3) | 0x8;
+      return v.toString(16);
+    });
+  }
+
+  function ensureJourneyId(email) {
+    // Unrelated journey (different email) → discard and start fresh.
+    if (state.journey_id && state.journey_email && state.journey_email !== email) {
+      state.journey_id = null;
+    }
+    if (!state.journey_id) {
+      state.journey_id = genUUID();
+      state.journey_email = email;
+      saveProgress();
+    }
+    return state.journey_id;
+  }
+
   // Restore a saved partial registration into a freshly-rendered form so a
   // refresh (or return visit within the token's 2h life) resumes in place.
   async function restoreProgress(container) {
     const snap = loadProgress();
-    if (!snap || !snap.token || !snap.submission_id || !snap.step || snap.step < 2) return false;
+    if (!snap || !snap.token || !snap.journey_id || !snap.step || snap.step < 2) return false;
 
     continuationToken = snap.token;
     Object.assign(state, {
-      submission_id: snap.submission_id,
+      journey_id: snap.journey_id,
+      journey_email: snap.journey_email || null,
       first_name: snap.first_name || '',
       last_name: snap.last_name || '',
       email: snap.email || '',
@@ -112,6 +159,8 @@
   // --- Initial Registration Object State ---
   let state = {
     registration_id: null,
+    journey_id: null,
+    journey_email: null,
     submitted_at: null,
     updated_at: new Date().toISOString(),
     status: 'partial',
@@ -597,6 +646,10 @@
               </div>
             </div>
 
+            <div id="jurnii-confirm-manage-container" style="margin: 4px 0 18px; text-align: center;">
+              <a id="jurnii-confirm-manage" href="#" style="color: var(--jurnii-300); text-decoration: underline; font-size: 14px;">Reschedule or cancel this booking</a>
+            </div>
+
             ${isModal ? `<button type="button" class="btn primary lg" id="jurnii-confirm-close">Finish & Close</button>` : `<a href="index.html" class="btn primary lg">Back to Home</a>`}
           </div>
         </div>
@@ -700,13 +753,21 @@
       next1.addEventListener('click', async (e) => {
         e.preventDefault();
         if (validateStep(1)) {
+          if (!isWorkEmail(state.email)) {
+            showError('jurnii-email');
+            showGlobalError('Please use your work email address to book a demo.');
+            return;
+          }
           clearGlobalError();
           setLoadingState(next1, true);
           try {
+            // Mint + persist the journeyId BEFORE the request so retries reuse it.
+            const journeyId = ensureJourneyId(state.email);
             const res = await fetch('/api/v1/submissions/start', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
+                journeyId,
                 firstName: state.first_name,
                 lastName: state.last_name,
                 email: state.email,
@@ -725,7 +786,7 @@
             if (!res.ok) throw new Error(data.error || 'Failed to initialize submission');
 
             continuationToken = data.token;
-            state.submission_id = data.submissionId;
+            state.journey_id = data.journeyId || journeyId;
             updateDebugPanel();
             saveProgress();
             goToStep(2);
@@ -747,7 +808,7 @@
           clearGlobalError();
           setLoadingState(next2, true);
           try {
-            const res = await fetch(`/api/v1/submissions/${state.submission_id}`, {
+            const res = await fetch(`/api/v1/submissions/${state.journey_id}`, {
               method: 'PATCH',
               headers: {
                 'Content-Type': 'application/json',
@@ -842,6 +903,9 @@
             }
 
             clearProgress();
+            // Journey complete — drop the id so any later booking starts a fresh journey.
+            state.journey_id = null;
+            state.journey_email = null;
             state.submitted_at = new Date().toISOString();
             state.status = 'confirmed';
             state.registration_id = data.bookingId;
@@ -868,6 +932,13 @@
               confirmMeet.innerHTML = `<a href="${data.meetLink}" target="_blank" style="color: var(--jurnii-300); text-decoration: underline; font-weight: 500;">Join Google Meet</a>`;
             } else if (confirmMeet) {
               confirmMeet.textContent = 'Invitation sent via email';
+            }
+
+            const confirmManage = container.querySelector('#jurnii-confirm-manage');
+            if (confirmManage && data.manageUrl) {
+              confirmManage.href = data.manageUrl;
+            } else if (confirmManage) {
+              confirmManage.parentElement.style.display = 'none';
             }
 
             goToStep(4);
@@ -967,6 +1038,186 @@
         if (wrapper) wrapper.innerHTML = '';
       }, 300);
     }
+  }
+
+  // --- Self-service manage (cancel / reschedule) on manage.html ---
+  async function fetchAvailabilityGlobal() {
+    try {
+      const res = await fetch('/api/v1/availability');
+      const data = await res.json();
+      availableSlots = data.slots || [];
+    } catch (err) {
+      console.error('Failed to fetch availability:', err);
+    }
+  }
+
+  function createManageMarkup() {
+    return `
+      <div class="jurnii-booking-container">
+        <div id="jurnii-form-error" style="display:none; color:#ff5252; background:rgba(255,82,82,0.1); padding:12px; border-radius:6px; margin-bottom:16px; font-size:14px; text-align:center; border:1px solid rgba(255,82,82,0.2);"></div>
+
+        <div class="jurnii-form-step active" id="jurnii-manage-home">
+          <div class="jurnii-form-header">
+            <h3>Manage your demo booking</h3>
+            <p>Reschedule to a new time or cancel your Jurnii product demonstration.</p>
+          </div>
+          <div class="jurnii-form-actions split">
+            <button type="button" class="btn ghost-on-dark sm" id="jurnii-manage-cancel">Cancel booking</button>
+            <button type="button" class="btn accent lg" id="jurnii-manage-reschedule">Reschedule &rarr;</button>
+          </div>
+        </div>
+
+        <div class="jurnii-form-step" id="jurnii-manage-reschedule-step">
+          <div class="jurnii-form-header">
+            <h3>Pick a new time</h3>
+            <p>Select an available briefing slot below.</p>
+          </div>
+          <div class="jurnii-scheduler-container">
+            <div class="jurnii-calendar-wrapper">
+              <div class="jurnii-calendar-header">
+                <span id="jurnii-month-title">—</span>
+                <div class="jurnii-calendar-nav">
+                  <button type="button" class="jurnii-calendar-nav-btn" id="jurnii-calendar-prev" aria-label="Previous Month"><i data-lucide="chevron-left" style="width:14px;height:14px;"></i></button>
+                  <button type="button" class="jurnii-calendar-nav-btn" id="jurnii-calendar-next" aria-label="Next Month"><i data-lucide="chevron-right" style="width:14px;height:14px;"></i></button>
+                </div>
+              </div>
+              <div class="jurnii-calendar-weekdays">
+                <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+              </div>
+              <div class="jurnii-calendar-grid" id="jurnii-calendar-days"></div>
+            </div>
+            <div class="jurnii-slots-wrapper" id="jurnii-slots-list">
+              <div class="jurnii-slots-empty">Select a date to view available time slots.</div>
+            </div>
+          </div>
+          <div class="jurnii-form-actions split">
+            <button type="button" class="btn ghost-on-dark sm" id="jurnii-manage-back">&larr; Back</button>
+            <button type="button" class="btn accent lg" id="jurnii-manage-confirm">Confirm new time</button>
+          </div>
+        </div>
+
+        <div class="jurnii-form-step" id="jurnii-manage-result">
+          <div class="jurnii-confirm-state">
+            <div class="jurnii-confirm-icon"><i data-lucide="check" style="width:32px;height:32px;stroke-width:3;"></i></div>
+            <h3 id="jurnii-manage-result-title">Done</h3>
+            <p id="jurnii-manage-result-msg"></p>
+            <a href="index.html" class="btn primary lg">Back to Home</a>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function showManageStep(container, id) {
+    ['jurnii-manage-home', 'jurnii-manage-reschedule-step', 'jurnii-manage-result'].forEach(s => {
+      const el = container.querySelector('#' + s);
+      if (el) el.classList.toggle('active', s === id);
+    });
+  }
+
+  function bindManageEvents(container, token, journeyId) {
+    const errEl = container.querySelector('#jurnii-form-error');
+    const showErr = (m) => { if (errEl) { errEl.textContent = m; errEl.style.display = 'block'; } };
+    const clearErr = () => { if (errEl) { errEl.style.display = 'none'; errEl.textContent = ''; } };
+    const setLoading = (btn, on) => {
+      if (!btn) return;
+      if (on) { btn.disabled = true; btn.dataset.orig = btn.textContent; btn.textContent = 'Processing...'; }
+      else { btn.disabled = false; btn.textContent = btn.dataset.orig || btn.textContent; }
+    };
+    const result = (title, msg) => {
+      const t = container.querySelector('#jurnii-manage-result-title');
+      const m = container.querySelector('#jurnii-manage-result-msg');
+      if (t) t.textContent = title;
+      if (m) m.textContent = msg;
+      showManageStep(container, 'jurnii-manage-result');
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    };
+
+    const reBtn = container.querySelector('#jurnii-manage-reschedule');
+    if (reBtn) reBtn.addEventListener('click', async () => {
+      clearErr();
+      showManageStep(container, 'jurnii-manage-reschedule-step');
+      await fetchAvailabilityGlobal();
+      renderCalendar();
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    });
+
+    const backBtn = container.querySelector('#jurnii-manage-back');
+    if (backBtn) backBtn.addEventListener('click', () => { clearErr(); showManageStep(container, 'jurnii-manage-home'); });
+
+    const confirmBtn = container.querySelector('#jurnii-manage-confirm');
+    if (confirmBtn) confirmBtn.addEventListener('click', async () => {
+      clearErr();
+      if (!state.selected_demo_datetime) { showErr('Please select a date and time slot.'); return; }
+      setLoading(confirmBtn, true);
+      try {
+        const res = await fetch(`/api/v1/bookings/${encodeURIComponent(journeyId)}/reschedule`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ slotStart: state.selected_demo_datetime })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.status === 409 && data.code === 'SLOT_TAKEN') {
+          showErr('That slot was just taken. Please pick another.');
+          state.selected_demo_datetime = null;
+          await fetchAvailabilityGlobal();
+          renderCalendar();
+          renderTimeSlots(selectedDateStr);
+          return;
+        }
+        if (!res.ok) throw new Error(data.error || 'Could not reschedule the booking.');
+        result('Booking rescheduled', 'Your demo has been moved. An updated calendar invitation has been sent to your email.');
+      } catch (err) {
+        showErr(err.message);
+      } finally {
+        setLoading(confirmBtn, false);
+      }
+    });
+
+    const cancelBtn = container.querySelector('#jurnii-manage-cancel');
+    if (cancelBtn) cancelBtn.addEventListener('click', async () => {
+      clearErr();
+      if (!window.confirm('Cancel your demo booking? This cannot be undone.')) return;
+      setLoading(cancelBtn, true);
+      try {
+        const res = await fetch(`/api/v1/bookings/${encodeURIComponent(journeyId)}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Could not cancel the booking.');
+        result('Booking cancelled', 'Your demo has been cancelled. You can book again any time.');
+      } catch (err) {
+        showErr(err.message);
+      } finally {
+        setLoading(cancelBtn, false);
+      }
+    });
+
+    const prev = container.querySelector('#jurnii-calendar-prev');
+    if (prev) prev.addEventListener('click', () => { calendarDate.setMonth(calendarDate.getMonth() - 1); renderCalendar(); });
+    const next = container.querySelector('#jurnii-calendar-next');
+    if (next) next.addEventListener('click', () => { calendarDate.setMonth(calendarDate.getMonth() + 1); renderCalendar(); });
+  }
+
+  function initManage(container) {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+    const id = params.get('id');
+    container.innerHTML = createManageMarkup();
+
+    if (!token || !id) {
+      const err = container.querySelector('#jurnii-form-error');
+      if (err) { err.textContent = 'This management link is invalid or has expired. Please use the link from your booking confirmation email.'; err.style.display = 'block'; }
+      const actions = container.querySelector('#jurnii-manage-home .jurnii-form-actions');
+      if (actions) actions.remove();
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+      return;
+    }
+
+    bindManageEvents(container, token, id);
+    showManageStep(container, 'jurnii-manage-home');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
   }
 
   // --- Initialize JSON Debug Logging Console ---
@@ -1073,6 +1324,13 @@
     captureUTMParameters();
     initDebugPanel();
     updateDebugPanel();
+
+    // Dedicated booking-management page (manage.html)?
+    const manageContainer = document.getElementById('jurnii-manage-inline');
+    if (manageContainer) {
+      initManage(manageContainer);
+      return;
+    }
 
     // Check if the page is the dedicated booking landing page
     const inlineContainer = document.getElementById('jurnii-booking-form-inline');

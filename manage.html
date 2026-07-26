@@ -1,0 +1,36 @@
+<!doctype html>
+<html data-theme="light" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manage your demo booking | Jurnii</title>
+  <meta name="description" content="Reschedule or cancel your Jurnii product demonstration.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="assets/jurnii-icon-light.svg">
+  <link rel="stylesheet" href="assets/site.css">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+  <main>
+    <section class="section" style="padding: 80px 0; background: radial-gradient(circle at top, rgba(148, 255, 150, 0.03) 0%, transparent 60%);">
+      <div class="container-narrow">
+        <div class="section-head centered" style="margin-bottom: 40px;">
+          <a href="index.html" aria-label="home" style="display:inline-flex; margin-bottom: 16px;">
+            <img src="assets/jurnii-icon-light.svg" alt="Jurnii" width="40" height="40">
+          </a>
+          <span class="eyebrow"><span class="dot"></span>Booking Management</span>
+          <h1 class="page-title" style="margin-top: 12px;">Manage your demo</h1>
+          <p class="lede" style="margin-left: auto; margin-right: auto;">Reschedule to a new time or cancel your Jurnii product demonstration.</p>
+        </div>
+
+        <!-- Manage container: rendered by booking-form.js when ?token= & id= are present -->
+        <div id="jurnii-manage-inline">
+          <!-- JS renders the manage UI here -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/booking-form.js"></script>
+</body>
+</html>

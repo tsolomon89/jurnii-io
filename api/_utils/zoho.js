@@ -161,7 +161,10 @@ async function searchContactsByEmail(email) {
 }
 
 async function searchLeadsByEmail(email) {
-  return searchRecordsByEmail('Leads', email);
+  const leads = await searchRecordsByEmail('Leads', email);
+  // Exclude converted leads so a Contact's originating converted Lead is never
+  // treated as a reuse target on the Lead path.
+  return leads.filter(l => l && l.Converted__s !== true && l.$converted !== true);
 }
 
 // ---------------------------------------------------------------------------
@@ -214,6 +217,95 @@ function readConversion(lead) {
 }
 
 // ---------------------------------------------------------------------------
+// Contact lifecycle (Contact-first path: an existing Contact is updated in
+// place; no throwaway Lead is created).
+// ---------------------------------------------------------------------------
+/** GET a single Contact by id (returns the record object, or null if absent). */
+async function getContact(contactId) {
+  const res = await requestZoho('GET', `/crm/v6/Contacts/${contactId}`);
+  return (res && Array.isArray(res.data) && res.data.length > 0) ? res.data[0] : null;
+}
+
+/**
+ * Updates a Contact. Pass { trigger: [] } to suppress workflows (the Contact
+ * path suppresses the write and invokes reconciliation explicitly). Returns id.
+ */
+async function updateContact(contactId, data, { trigger } = {}) {
+  const res = await requestZoho('PUT', `/crm/v6/Contacts/${contactId}`, writePayload(data, trigger));
+  return firstDetailId(res, 'contact_update_failed');
+}
+
+// ---------------------------------------------------------------------------
+// Account resolution (Contact path). The website resolves/links the canonical
+// Account BEFORE reconciliation so processContact never names one after the
+// person. Deluge remains the sole owner of Deals/Quotes/rollup.
+// ---------------------------------------------------------------------------
+/** GET a single Account by id (returns the record object, or null if absent). */
+async function getAccount(accountId) {
+  const res = await requestZoho('GET', `/crm/v6/Accounts/${accountId}`);
+  return (res && Array.isArray(res.data) && res.data.length > 0) ? res.data[0] : null;
+}
+
+async function searchAccountsByCriteria(criteria) {
+  const res = await requestZoho('GET', `/crm/v6/Accounts/search?criteria=${criteria}`);
+  return (res && Array.isArray(res.data)) ? res.data : [];
+}
+
+/** Account_Key is UNIQUE, so this returns 0 or 1. */
+async function searchAccountsByKey(accountKey) {
+  return searchAccountsByCriteria(`(Account_Key:equals:${encodeURIComponent(accountKey)})`);
+}
+
+async function searchAccountsByWebsite(domain) {
+  return searchAccountsByCriteria(`(Website:equals:${encodeURIComponent(domain)})`);
+}
+
+async function searchAccountsByName(name) {
+  return searchAccountsByCriteria(`(Account_Name:equals:${encodeURIComponent(name)})`);
+}
+
+/**
+ * Creates an Account (triggers enabled by default so WF001c processAccount can
+ * normalize/roll up the new record). A DUPLICATE_DATA race on the unique
+ * Account_Key/Account_Name reuses the existing id. Returns the Account id.
+ */
+async function createAccount(data, { trigger } = {}) {
+  const res = await requestZoho('POST', '/crm/v6/Accounts', writePayload(data, trigger));
+  const row = res && res.data && res.data[0];
+  if (row && row.status === 'success') return row.details.id;
+  if (row && row.code === 'DUPLICATE_DATA' && row.details && row.details.id) return row.details.id;
+  throw new ZohoError('account_create_failed', res);
+}
+
+// ---------------------------------------------------------------------------
+// Reconciliation seam. The Contact path fires the existing `processContact`
+// automation imperatively (deterministic — independent of which fields changed),
+// exactly as processLead.deluge does inline. This is the single swap-point if
+// the reconciliation mechanism changes (§6 Option 1 REST-invoke ↔ Option 2
+// trigger field). The website never reimplements commercial logic.
+// ---------------------------------------------------------------------------
+const PROCESS_CONTACT_FN = process.env.ZOHO_PROCESS_CONTACT_FN || 'processcontact';
+
+/**
+ * Executes a REST-enabled Zoho CRM function by api_name with named arguments
+ * (passed as query params, per the v6 function-execute contract). Requires the
+ * function to be published for REST execution and the refresh token to carry the
+ * functions-execute scope — both approval-gated (§6).
+ */
+async function invokeFunction(apiName, args = {}) {
+  const qs = Object.keys(args)
+    .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(args[k])}`)
+    .join('&');
+  const path = `/crm/v6/functions/${encodeURIComponent(apiName)}/actions/execute?auth_type=oauth${qs ? `&${qs}` : ''}`;
+  return requestZoho('POST', path, {});
+}
+
+/** Fires processContact so the existing Deluge automation reconciles the graph. */
+async function reconcileContact(contactId) {
+  return invokeFunction(PROCESS_CONTACT_FN, { contact_id: contactId });
+}
+
+// ---------------------------------------------------------------------------
 // Product-Deal resolution (reads the graph the Deluge automation produced;
 // does NOT create Deals or duplicate commercial logic).
 // ---------------------------------------------------------------------------
@@ -234,24 +326,6 @@ async function resolveProductDeal(accountId, canonicalProductName) {
   if (!accountId || !canonicalProductName) return { status: 'none', deal: null, count: 0 };
   const deals = await getDealsForAccount(accountId);
   return pickProductDeal(deals, canonicalProductName);
-}
-
-// ---------------------------------------------------------------------------
-// Website_Submissions progressive-state record. No silent mock fallback:
-// a missing/misconfigured module now fails loudly.
-// ---------------------------------------------------------------------------
-function submissionModule() {
-  return process.env.ZOHO_SUBMISSION_MODULE || 'Website_Submissions';
-}
-
-async function createSubmissionRecord(submissionData) {
-  const res = await requestZoho('POST', `/crm/v6/${submissionModule()}`, writePayload(submissionData));
-  return firstDetailId(res, 'submission_create_failed');
-}
-
-async function updateSubmissionRecord(recordId, submissionData) {
-  const res = await requestZoho('PUT', `/crm/v6/${submissionModule()}/${recordId}`, writePayload(submissionData));
-  return firstDetailId(res, 'submission_update_failed');
 }
 
 // ---------------------------------------------------------------------------
@@ -285,10 +359,17 @@ module.exports = {
   updateLead,
   getLead,
   readConversion,
+  getContact,
+  updateContact,
+  getAccount,
+  searchAccountsByKey,
+  searchAccountsByWebsite,
+  searchAccountsByName,
+  createAccount,
+  invokeFunction,
+  reconcileContact,
   resolveProductDeal,
   normalizeProductKey,
-  createSubmissionRecord,
-  updateSubmissionRecord,
   createZohoEvent,
   searchEventByExternalId,
   updateZohoEvent

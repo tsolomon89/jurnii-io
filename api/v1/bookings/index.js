@@ -1,14 +1,14 @@
 const jwt = require('jsonwebtoken');
 const {
   checkFreeBusy,
-  listEventBySubmissionId,
+  listEventByJourneyId,
+  readEventPrivate,
   createGoogleEvent,
   awaitMeetLink
 } = require('../../_utils/google');
 const {
   createZohoEvent,
-  searchEventByExternalId,
-  updateSubmissionRecord
+  searchEventByExternalId
 } = require('../../_utils/zoho');
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -19,13 +19,16 @@ function fail(res, status, code, message) {
   return res.status(status).json({ error: message || code, code });
 }
 
-/** Best-effort submission write for fields that may not exist live (event ids, Meet URL). */
-async function bestEffortSubmissionUpdate(submissionId, data) {
-  try {
-    await updateSubmissionRecord(submissionId, data);
-  } catch (e) {
-    console.warn(`[bookings] best-effort submission update skipped (${e.code || e.message})`);
-  }
+// A journeyId is client-controlled, so a lookup match is necessary but not
+// sufficient: a reused event must belong to the same Contact + Deal as the token.
+function googleEventOwned(event, decoded) {
+  const p = readEventPrivate(event);
+  return p.contactId === decoded.contactId && p.dealId === decoded.dealId;
+}
+function zohoEventOwned(event, decoded) {
+  const who = (event.Who_Id && event.Who_Id.id) || '';
+  const what = (event.What_Id && event.What_Id.id) || '';
+  return who === decoded.contactId && what === decoded.dealId;
 }
 
 module.exports = async function handler(req, res) {
@@ -44,8 +47,7 @@ module.exports = async function handler(req, res) {
   }
 
   // Page 3 requires a converted Contact AND exactly one resolved Product Deal
-  // (both are stamped into the token by the page-2 endpoint). No Lead fallback,
-  // no Contact-only meeting.
+  // (both stamped into the token by page 2). No Lead fallback, no Contact-only meeting.
   if (!decoded.step || decoded.step < 2) return fail(res, 409, 'not_ready', 'Complete the previous step first.');
   if (!decoded.contactId) return fail(res, 409, 'contact_unresolved', 'Your details are still being processed.');
   if (!decoded.dealId) return fail(res, 409, 'NO_SINGLE_DEAL', 'No single product could be resolved for this booking; our team will follow up.');
@@ -53,18 +55,30 @@ module.exports = async function handler(req, res) {
   const { slotStart } = req.body || {};
   if (!slotStart) return fail(res, 400, 'validation', 'Missing required field: slotStart');
 
-  const submissionId = decoded.submissionId;
+  const journeyId = decoded.journeyId;
   const start = new Date(slotStart);
   const end = new Date(start.getTime() + SLOT_MINUTES * 60 * 1000);
   const visitorEmail = decoded.email;
 
+  // Durable self-service management link (survives the short-lived booking token).
+  const baseUrl = process.env.PUBLIC_BASE_URL || (req.headers.host ? `https://${req.headers.host}` : 'https://jurnii.io');
+  const manageToken = jwt.sign(
+    { purpose: 'manage', journeyId, contactId: decoded.contactId, dealId: decoded.dealId },
+    JWT_SECRET,
+    { expiresIn: '30d' }
+  );
+  const manageUrl = `${baseUrl}/manage.html?token=${encodeURIComponent(manageToken)}&id=${encodeURIComponent(journeyId)}`;
+
   try {
-    // 1. Reuse an existing Google event for THIS submission first (retry recovery).
-    //    A submission-owned event must not be treated as a scheduling conflict —
-    //    so the availability re-check runs only when we are about to create anew.
-    let googleEvent = await listEventBySubmissionId(submissionId);
+    // 1. Reuse an existing Google event for THIS journey first (retry recovery).
+    //    A journey-owned event must not be treated as a scheduling conflict — so
+    //    the availability re-check runs only when we are about to create anew.
+    let googleEvent = await listEventByJourneyId(journeyId);
     if (googleEvent) {
-      console.log(`[bookings] reusing Google event ${googleEvent.id} for submission ${submissionId}`);
+      if (!googleEventOwned(googleEvent, decoded)) {
+        return fail(res, 409, 'correlation_conflict', 'This booking reference is already associated with different details.');
+      }
+      console.log(`[bookings] reusing Google event ${googleEvent.id} for journey ${journeyId}`);
     } else {
       // 2. No existing event → re-verify availability over the buffered window, then create.
       const busyPeriods = await checkFreeBusy(
@@ -80,23 +94,19 @@ module.exports = async function handler(req, res) {
 
       googleEvent = await createGoogleEvent({
         summary: 'Jurnii Product Demo Meeting',
-        description: 'Product demonstration and technical overview of Jurnii.',
+        description: `Product demonstration and technical overview of Jurnii.\n\nManage or cancel this meeting: ${manageUrl}`,
         start: start.toISOString(),
         end: end.toISOString(),
         attendees: [{ email: visitorEmail }],
-        submissionId
+        journeyId,
+        contactId: decoded.contactId,
+        dealId: decoded.dealId
       });
-      console.log(`[bookings] created Google event ${googleEvent.id} for submission ${submissionId}`);
+      console.log(`[bookings] created Google event ${googleEvent.id} for journey ${journeyId}`);
     }
 
-    // 3. Resolve the Meet link, awaiting a pending conference. Persist the Google
-    //    event id first (best-effort) so a lost response is reconcilable.
+    // 3. Resolve the Meet link, awaiting a pending conference.
     const meetLink = await awaitMeetLink(googleEvent);
-    await bestEffortSubmissionUpdate(submissionId, {
-      Integration_Status: 'Pending',
-      Google_Event_ID: googleEvent.id,
-      Meet_URL: meetLink
-    });
     if (!meetLink) {
       // Recoverable: the event exists and is reused on retry, by which time the
       // conference is typically ready. Never confirm a booking without a Meet URL.
@@ -105,22 +115,25 @@ module.exports = async function handler(req, res) {
       throw e;
     }
 
-    // 3. Zoho Event — reuse by Ext_Calendar_Booking_ID, else create (idempotent).
-    // Link to the converted Contact (Who_Id) and the exact Product Deal
-    // (What_Id + $se_module='Deals') so WF007 handleMeetingEvent can advance the pipeline.
+    // 4. Zoho Event — reuse by Ext_Calendar_Booking_ID (ownership-verified), else create.
+    //    Links to the converted Contact (Who_Id) and the exact Product Deal
+    //    (What_Id + $se_module='Deals') so WF007 handleMeetingEvent can advance the pipeline.
     let zohoEventId;
-    const existingZohoEvent = await searchEventByExternalId(submissionId);
+    const existingZohoEvent = await searchEventByExternalId(journeyId);
     if (existingZohoEvent) {
+      if (!zohoEventOwned(existingZohoEvent, decoded)) {
+        return fail(res, 409, 'correlation_conflict', 'This booking reference is already associated with different details.');
+      }
       zohoEventId = existingZohoEvent.id;
-      console.log(`[bookings] reusing Zoho event ${zohoEventId} for submission ${submissionId}`);
+      console.log(`[bookings] reusing Zoho event ${zohoEventId} for journey ${journeyId}`);
     } else {
       const eventData = {
         Event_Title: 'Jurnii Product Demo Meeting',
         Start_DateTime: start.toISOString(),
         End_DateTime: end.toISOString(),
-        Ext_Calendar_Booking_ID: submissionId,
+        Ext_Calendar_Booking_ID: journeyId,
         Meeting_Task_Stage: 'Demo Booking',
-        Description: `Google Meet Link: ${meetLink}\nSubmission Reference: ${submissionId}`,
+        Description: `Google Meet Link: ${meetLink}\nBooking Reference: ${journeyId}\nManage link: ${manageUrl}`,
         Who_Id: { id: decoded.contactId },
         What_Id: { id: decoded.dealId },
         $se_module: 'Deals'
@@ -129,32 +142,23 @@ module.exports = async function handler(req, res) {
       if (meetField && meetLink) eventData[meetField] = meetLink;
 
       zohoEventId = await createZohoEvent(eventData);
-      console.log(`[bookings] created Zoho event ${zohoEventId} for submission ${submissionId}`);
+      console.log(`[bookings] created Zoho event ${zohoEventId} for journey ${journeyId}`);
     }
 
-    // 4. Mark the submission Confirmed (required, safe fields only) + best-effort ids.
-    await updateSubmissionRecord(submissionId, {
-      Integration_Status: 'Confirmed',
-      Submission_Step: 'Booking Completed'
-    });
-    await bestEffortSubmissionUpdate(submissionId, { Zoho_Event_ID: zohoEventId });
-
+    console.log(`[bookings] confirmed booking for journey ${journeyId} (google=${googleEvent.id} zoho=${zohoEventId})`);
     return res.status(200).json({
       success: true,
       status: 'confirmed',
-      bookingId: submissionId,
+      bookingId: journeyId,
       meetLink,
+      manageUrl,
       googleEventId: googleEvent.id,
       zohoEventId
     });
   } catch (error) {
-    console.error('[bookings] error:', error.code || error.message);
-    // Recoverable: the Google event (if created) carries submissionId and is
-    // reused on retry; we only record a failed status, never orphan silently.
-    await bestEffortSubmissionUpdate(submissionId, {
-      Integration_Status: 'Failed',
-      Error_Message: error.code || 'booking_failed'
-    });
+    console.error(`[bookings] error for journey ${journeyId}:`, error.code || error.message);
+    // Recoverable: the Google event (if created) carries the correlation id and is
+    // reused on retry, so nothing is silently orphaned.
     return fail(res, 502, error.code || 'booking_failed', 'We could not complete the booking. Please try again.');
   }
 };

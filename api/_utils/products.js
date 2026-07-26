@@ -29,6 +29,25 @@ function canonicalProduct(v) {
   return PRODUCT_CANONICAL[key] || null;
 }
 
+/**
+ * Deduplicated union of an existing multi-select value with additional value(s),
+ * preserving order (existing first). Accepts arrays or scalars; ignores blanks.
+ */
+function mergeMultiSelect(existing, add) {
+  const out = [];
+  const seen = new Set();
+  const push = (v) => {
+    if (v == null) return;
+    const s = String(v).trim();
+    if (!s || seen.has(s)) return;
+    seen.add(s);
+    out.push(s);
+  };
+  (Array.isArray(existing) ? existing : (existing ? [existing] : [])).forEach(push);
+  (Array.isArray(add) ? add : (add ? [add] : [])).forEach(push);
+  return out;
+}
+
 // Given a list of Deal records for an Account and a canonical product name,
 // pick the single open Deal for that product. Pure — the network fetch lives in
 // zoho.resolveProductDeal. Returns { status: 'one'|'none'|'many', deal, count }.
@@ -55,39 +74,37 @@ const KNOWN_COUNTRIES = new Set([
 
 /**
  * Validates + builds the ONE page-2 Lead enrichment payload. Returns an EXPLICIT
- * result — it never silently drops a submitted value and then lets the terminal
- * update convert the Lead. The page-2 handler must check `.ok` BEFORE `updateLead`.
+ * result — never a silent drop. The page-2 handler checks `.ok` BEFORE `updateLead`.
  *
- *   { ok: true, record }                          -> send this exact record (one update)
- *   { ok: false, field, reason }                  -> do NOT update; Manual Review; Lead unconverted
+ *   { ok: true, record }           -> send this exact record (one update)
+ *   { ok: false, field, reason }   -> do NOT update; Manual Review; Lead unconverted
  *
- * `Job_Title`:
- *   - mode 'text' (default): the submitted value is passed through to the Lead
- *     (the business requirement — page two carries the job title). If the live
- *     field turns out to be a restricted picklist that rejects it, the single
- *     `updateLead` fails and the handler returns Manual Review (Lead unconverted).
- *   - mode 'picklist': the value MUST be an exact member of `allowedTitles`,
- *     otherwise validation fails (Manual Review) — never a silent drop, and the
- *     allowlist is not optional in this mode.
- * `Country`: must be an exact known value; an unrecognized non-empty country
- *   fails validation rather than being omitted. Blank country is allowed (omitted).
+ * `Job_Title`: the visitor's raw free-text title is written to a dedicated text
+ *   field (`rawTitleField`, default `Job_Title_Raw`) — NOT the `Job_Title`
+ *   picklist (which would pollute the governed 155-value list). A governed
+ *   Deluge mapping populates the canonical `Job_Title` picklist + Contact role
+ *   from `Job_Title_Raw`. An unknown title therefore never blocks conversion.
+ * `Country`: only a recognized value is written; an unrecognized non-empty
+ *   country fails validation rather than being silently omitted (every value the
+ *   form can produce is recognized).
  */
-function validateLeadEnrichment({ company, jobTitle, phone, country, product, jobTitleMode, allowedTitles, knownCountries } = {}) {
-  const mode = jobTitleMode === 'picklist' ? 'picklist' : 'text';
-  const titles = Array.isArray(allowedTitles) ? allowedTitles : [];
+function validateLeadEnrichment({ company, jobTitle, phone, country, product, rawTitleField, knownCountries, includeCompany, existingProducts } = {}) {
   const countries = knownCountries || KNOWN_COUNTRIES;
+  const rawField = rawTitleField || 'Job_Title_Raw';
+  const withCompany = includeCompany !== false; // default true (Lead path); false on the Contact path
 
-  const record = { Company: company };
+  const record = {};
+  // `Company` is a Lead-module text field; Contacts carry company via the
+  // Account_Name lookup (resolved separately), so the Contact path omits it.
+  if (withCompany) record.Company = company;
   if (phone) record.Phone = phone;
-  if (product) record.Product_Interest = [product];
+  // Product_Interest is multi-select and REPLACED by default on update — build a
+  // deduplicated union with any existing values so a returning record's other
+  // product interests are never dropped.
+  if (product) record.Product_Interest = mergeMultiSelect(existingProducts, product);
 
   const jt = jobTitle ? String(jobTitle).trim() : '';
-  if (jt) {
-    if (mode === 'picklist' && !titles.includes(jt)) {
-      return { ok: false, field: 'jobTitle', reason: 'job_title_not_allowed' };
-    }
-    record.Job_Title = jt; // free-text default, or an allowlisted picklist value
-  }
+  if (jt && rawField) record[rawField] = jt; // raw text -> Job_Title_Raw, never the picklist
 
   const co = country ? String(country).trim() : '';
   if (co) {
@@ -103,6 +120,7 @@ function validateLeadEnrichment({ company, jobTitle, phone, country, product, jo
 module.exports = {
   normalizeProductKey,
   canonicalProduct,
+  mergeMultiSelect,
   pickProductDeal,
   validateLeadEnrichment,
   KNOWN_COUNTRIES,
