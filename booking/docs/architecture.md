@@ -175,7 +175,7 @@ Task has no Deal, the sequence completion handler deliberately ignores it (`skip
 
 ## Environment
 
-See [`.env.example`](../../.env.example). Notable: `ZOHO_ACCOUNTS_HOST`, `HOST_TIMEZONE`,
+See [`.env.example`](../.env.example). Notable: `ZOHO_ACCOUNTS_HOST`, `HOST_TIMEZONE`,
 `PUBLIC_BASE_URL`, optional `ZOHO_LEAD_FIELD_*` attribution, optional `ZOHO_EVENT_MEET_FIELD`. There is
 **no** `ZOHO_SUBMISSION_MODULE` and **no** Contact-path reconciliation URL/scope (the KISS Contact path
 invokes no function). `vercel.json` sets extended `maxDuration` for the conversion-polling and booking

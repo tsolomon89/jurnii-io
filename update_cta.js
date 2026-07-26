@@ -78,15 +78,16 @@ files.forEach(file => {
     console.log('Processed CTA for:', relPath);
   }
 
-  // 2. Inject booking-form.js script reference if not present
-  const scriptTag = `<script src="${levelPrefix}assets/booking-form.js"></script>`;
-  if (!content.includes('assets/booking-form.js')) {
+  // 2. Inject booking-form.js script reference if not present.
+  // The widget lives in the isolated booking/ module (booking/assets/booking-form.js).
+  const scriptTag = `<script src="${levelPrefix}booking/assets/booking-form.js"></script>`;
+  if (!content.includes('booking/assets/booking-form.js')) {
     // Insert script tag right before </body>
     content = content.replace(/<\/body>/, `  ${scriptTag}\n</body>`);
     console.log('Injected booking-form.js script tag into:', relPath);
   } else {
     // If present, make sure it is updated with the correct levelPrefix path
-    const genericScriptRegex = /<script src="[^"]*assets\/booking-form\.js"><\/script>/;
+    const genericScriptRegex = /<script src="[^"]*booking\/assets\/booking-form\.js"><\/script>/;
     content = content.replace(genericScriptRegex, scriptTag);
   }
 
