@@ -1,3 +1,8 @@
 .vercel
 .env
 node_modules
+
+# Secrets / ephemeral tokens from test harnesses — never commit (belt-and-braces even outside .env)
+**/.zoho_token.json
+scratch/update_vercel_env.js
+booking/scratch/
