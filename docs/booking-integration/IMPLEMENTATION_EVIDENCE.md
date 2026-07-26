@@ -70,13 +70,17 @@ POST /api/v1/bookings                     Authorization: Bearer <jwt step:2>
 
 Not applied in code that alters live config; these need sign-off. Run against a sandbox first.
 
-**Contact-path reconciliation (choose one; §6 of the plan):**
-- **Preferred:** publish the existing `processContact` function for **OAuth REST execution** and add the
-  `ZohoCRM.functions.execute.READ` scope to the refresh token. Node then invokes
-  `POST /crm/v6/functions/processcontact/actions/execute?contact_id=…` (`ZOHO_PROCESS_CONTACT_FN`).
-- **Fallback:** add a Contacts **field** `Website_Reconcile_At` (datetime) + a workflow rule (extend
-  WF001b0 or a new rule) so an always-changing write fires `processContact`. Do **not** rely on
-  `Product_Interest` changing.
+**Contact-path reconciliation (Option 1, approved):** invoke `processContact` via the Zoho Functions
+REST API. Enablement:
+- Verify whether the existing `processcontact` can be exposed directly for REST; if not, publish a thin
+  **standalone wrapper** accepting `contact_id` that calls it (no logic duplicated).
+- Enable **OAuth2 execution only — no API key**.
+- Because the call is POST, the refresh token needs `ZohoCRM.functions.execute.CREATE` (**not** `.READ`)
+  alongside the existing scopes; **re-authorize** to mint a replacement refresh token.
+- Set `ZOHO_PROCESS_CONTACT_URL` to the **exact Production URL Zoho generates** (do not assume the CRM
+  API version). Node appends `contact_id`.
+- The Contact path **fails closed** (Manual Review) if the URL is unset or the call errors, and also if
+  the exact Product Deal cannot subsequently be resolved.
 
 **Verify (read-only) pre-flight:** WF001b0's live trigger field set; that `processcontact` can be
 REST-executed and the exact scope; `Product_Interest` options on Contacts; that `getContact` returns

@@ -90,7 +90,9 @@ async function getAccessToken() {
 async function requestZoho(method, path, body = null) {
   const token = await getAccessToken();
   const domain = process.env.ZOHO_API_DOMAIN || 'https://www.zohoapis.eu';
-  const parsedUrl = new URL(`${domain}${path}`);
+  // `path` may be an absolute URL (e.g. the exact Production function-execute URL
+  // Zoho generates — its API version must NOT be assumed) or a domain-relative path.
+  const parsedUrl = /^https?:\/\//i.test(path) ? new URL(path) : new URL(`${domain}${path}`);
   const options = {
     hostname: parsedUrl.hostname,
     path: parsedUrl.pathname + parsedUrl.search,
@@ -278,31 +280,30 @@ async function createAccount(data, { trigger } = {}) {
 }
 
 // ---------------------------------------------------------------------------
-// Reconciliation seam. The Contact path fires the existing `processContact`
-// automation imperatively (deterministic — independent of which fields changed),
-// exactly as processLead.deluge does inline. This is the single swap-point if
-// the reconciliation mechanism changes (§6 Option 1 REST-invoke ↔ Option 2
-// trigger field). The website never reimplements commercial logic.
+// Reconciliation seam (approved Option 1). The Contact path fires the existing
+// `processContact` automation imperatively via the Zoho Functions REST API —
+// deterministic (independent of which fields changed), reusing the exact function
+// processLead.deluge calls inline. The website never reimplements commercial logic.
+//
+//   - OAuth2 execution ONLY (no API key).
+//   - POST → the scope on the refresh token must be `ZohoCRM.functions.execute.CREATE`.
+//   - ZOHO_PROCESS_CONTACT_URL is the EXACT Production URL Zoho generates for the
+//     REST-exposed function (or a thin standalone wrapper accepting `contact_id`).
+//     The CRM API version is NOT assumed — the whole URL comes from Zoho.
+//   - FAIL CLOSED: if the URL is unconfigured, or the call errors, the caller must
+//     NOT proceed to book (it routes to Manual Review).
 // ---------------------------------------------------------------------------
-const PROCESS_CONTACT_FN = process.env.ZOHO_PROCESS_CONTACT_FN || 'processcontact';
+const PROCESS_CONTACT_URL = process.env.ZOHO_PROCESS_CONTACT_URL || '';
 
-/**
- * Executes a REST-enabled Zoho CRM function by api_name with named arguments
- * (passed as query params, per the v6 function-execute contract). Requires the
- * function to be published for REST execution and the refresh token to carry the
- * functions-execute scope — both approval-gated (§6).
- */
-async function invokeFunction(apiName, args = {}) {
-  const qs = Object.keys(args)
-    .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(args[k])}`)
-    .join('&');
-  const path = `/crm/v6/functions/${encodeURIComponent(apiName)}/actions/execute?auth_type=oauth${qs ? `&${qs}` : ''}`;
-  return requestZoho('POST', path, {});
-}
-
-/** Fires processContact so the existing Deluge automation reconciles the graph. */
+/** Fires processContact (via its exact Production REST URL) to reconcile the graph. */
 async function reconcileContact(contactId) {
-  return invokeFunction(PROCESS_CONTACT_FN, { contact_id: contactId });
+  if (!PROCESS_CONTACT_URL) {
+    // Fail closed — never silently skip reconciliation.
+    throw new ZohoError('reconcile_not_configured', 'ZOHO_PROCESS_CONTACT_URL is unset');
+  }
+  const sep = PROCESS_CONTACT_URL.includes('?') ? '&' : '?';
+  const url = `${PROCESS_CONTACT_URL}${sep}contact_id=${encodeURIComponent(contactId)}`;
+  return requestZoho('POST', url, {});
 }
 
 // ---------------------------------------------------------------------------
@@ -366,7 +367,6 @@ module.exports = {
   searchAccountsByWebsite,
   searchAccountsByName,
   createAccount,
-  invokeFunction,
   reconcileContact,
   resolveProductDeal,
   normalizeProductKey,

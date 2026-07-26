@@ -187,6 +187,16 @@ test('Contact path: established Account conflicting with submitted company/domai
   assert.strictEqual(reconcileCalled, false, 'no reconciliation on conflict');
 });
 
+test('Contact path: reconciliation failure fails closed (409 reconcile_failed, no booking)', async () => {
+  const handler = loadHandler(contactZoho({
+    reconcileContact: async () => { throw Object.assign(new Error('x'), { code: 'reconcile_not_configured' }); }
+  }));
+  const res = makeRes();
+  await handler(makeReq({ company: 'Acme', jobTitle: 'Head', productInterest: 'Jurnii 360', country: 'United Kingdom' }, 'Contact', 'C1'), res);
+  assert.strictEqual(res.statusCode, 409);
+  assert.strictEqual(res.body.reason, 'reconcile_failed');
+});
+
 test('Contact path: >1 candidate Account on the fallback tiers → 409 account_ambiguous', async () => {
   const handler = loadHandler(contactZoho({
     getContact: async () => ({ id: 'C1', Account_Name: null, Product_Interest: [] }),

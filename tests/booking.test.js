@@ -197,6 +197,12 @@ test('resolveAccountForContact reuses a unique Account_Key match', async () => {
   assert.deepStrictEqual(r, { status: 'reuse', accountId: 'A9' });
 });
 
+test('reconcileContact fails closed when ZOHO_PROCESS_CONTACT_URL is unset', async () => {
+  // Loaded with the env unset (default in tests) → must reject before any network call.
+  assert.strictEqual(process.env.ZOHO_PROCESS_CONTACT_URL, undefined);
+  await assert.rejects(() => zoho.reconcileContact('C1'), /reconcile_not_configured/);
+});
+
 test('isBusinessEmail accepts work domains (incl. subdomains) and rejects free/personal/disposable', () => {
   assert.strictEqual(isBusinessEmail('alex@acme.com'), true);
   assert.strictEqual(isBusinessEmail('alex@mail.acme.co.uk'), true); // work subdomain

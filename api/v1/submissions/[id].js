@@ -202,12 +202,12 @@ async function runContactPath({ recordId, email, company, jobTitle, phone, count
   }
 
   // Fire the existing processContact automation (deterministic; builds the Deal).
+  // FAIL CLOSED: if the invocation errors we do NOT proceed to book.
   try {
     await reconcileContact(recordId);
   } catch (e) {
-    // Non-fatal: the deal-resolution backoff below still recovers if the graph
-    // is (or becomes) present; otherwise it surfaces as Manual Review.
     console.warn(`[submissions] processContact invocation failed for contact ${recordId} (${e.code || e.message})`);
+    return { fail: true, status: 409, code: 'MANUAL_REVIEW', message: 'Your details are being processed; our team will follow up shortly.', extra: { reason: 'reconcile_failed' } };
   }
 
   return { contactId: recordId, accountId };

@@ -173,7 +173,8 @@ a new Account after the person. Mirrors `processLead`'s precedence and adds a Ma
 ## Environment
 
 See [`.env.example`](../../.env.example). Notable: `ZOHO_ACCOUNTS_HOST`, `HOST_TIMEZONE`,
-`PUBLIC_BASE_URL`, `ZOHO_PROCESS_CONTACT_FN` (Contact-path reconciliation function, approval-gated),
+`PUBLIC_BASE_URL`, `ZOHO_PROCESS_CONTACT_URL` (exact Production REST URL for the Contact-path
+reconciliation; OAuth2 + `functions.execute.CREATE`; fails closed if unset),
 optional `ZOHO_LEAD_FIELD_*` attribution, optional `ZOHO_EVENT_MEET_FIELD`. There is **no**
 `ZOHO_SUBMISSION_MODULE`. `vercel.json` sets extended `maxDuration` for the conversion-polling and
 booking endpoints.
