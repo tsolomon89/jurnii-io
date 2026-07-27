@@ -4,6 +4,7 @@ const {
   searchEventByExternalId,
   updateZohoEvent
 } = require('../../../_utils/zoho');
+const { normalizeEmail } = require('../../../_utils/email');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const SLOT_MINUTES = 30;
@@ -13,15 +14,17 @@ function fail(res, status, code, message) {
   return res.status(status).json({ error: message || code, code });
 }
 
-// A reused event must belong to the same Contact + Deal as the token.
+// Ownership is bound to the signed journeyId (+ normalized email for Google).
+// Contact/Deal ids are mutable relationships, never ownership keys.
 function googleEventOwned(event, decoded) {
   const p = readEventPrivate(event);
-  return p.contactId === decoded.contactId && p.dealId === decoded.dealId;
+  if (p.journeyId && p.journeyId !== decoded.journeyId) return false;
+  if (p.email) return normalizeEmail(p.email) === normalizeEmail(decoded.email || '');
+  return true;
 }
 function zohoEventOwned(event, decoded) {
-  const who = (event.Who_Id && event.Who_Id.id) || '';
-  const what = (event.What_Id && event.What_Id.id) || '';
-  return who === decoded.contactId && what === decoded.dealId;
+  const ext = event && event.Ext_Calendar_Booking_ID;
+  return !ext || ext === decoded.journeyId;
 }
 
 module.exports = async function handler(req, res) {
@@ -36,6 +39,8 @@ module.exports = async function handler(req, res) {
   } catch (err) {
     return fail(res, 401, 'auth_invalid', 'Unauthorized');
   }
+
+  if (decoded.purpose !== 'manage') return fail(res, 403, 'forbidden', 'This token cannot manage a booking.');
 
   const { id } = req.query;
   const { slotStart } = req.body || {};

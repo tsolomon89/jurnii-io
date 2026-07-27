@@ -70,17 +70,18 @@ async function listEventByJourneyId(journeyId) {
   return items.length > 0 ? items[0] : null;
 }
 
-/** Reads our private extended properties ({ journeyId, contactId, dealId }). */
+/** Reads our private extended properties ({ journeyId, email }). */
 function readEventPrivate(event) {
   const p = (event && event.extendedProperties && event.extendedProperties.private) || {};
-  return { journeyId: p.journeyId || '', contactId: p.contactId || '', dealId: p.dealId || '' };
+  return { journeyId: p.journeyId || '', email: p.email || '' };
 }
 
 /**
  * Creates a Calendar event with a Google Meet conference and emails the invitee
- * (sendUpdates:'all'). The private extended property `journeyId` is the cross-run
- * dedupe key; `contactId`/`dealId` are stamped alongside so a reuse can be
- * ownership-verified against the signed token.
+ * (sendUpdates:'all'). The private extended properties `journeyId` + `email` are
+ * the cross-run dedupe key and the stable ownership second factor — a reuse is
+ * verified against the signed token's journeyId + normalized email (never mutable
+ * Contact/Deal ids).
  */
 async function createGoogleEvent(eventDetails) {
   const calendar = getCalendar();
@@ -103,8 +104,7 @@ async function createGoogleEvent(eventDetails) {
     extendedProperties: {
       private: {
         journeyId: eventDetails.journeyId,
-        contactId: eventDetails.contactId,
-        dealId: eventDetails.dealId
+        email: eventDetails.email || ''
       }
     }
   };

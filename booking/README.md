@@ -17,7 +17,7 @@ booking/
     v1/bookings/{index.js,[id]/{index.js,reschedule.js}}
     _utils/{email,google,products,zoho}.js
   assets/booking-form.{js,css}   the frontend widget (self-rendering)
-  tests/*.test.js          offline test suite (node:test) — 45 tests
+  tests/*.test.js          offline test suite (node:test) — 49 tests
   examples/{book.html,manage.html}  minimal host pages
   docs/                    architecture + evidence
   .env.example             every env var (names only)
@@ -30,17 +30,19 @@ booking/
 The frontend (`assets/booking-form.js`) renders a 3-step form into `#jurnii-booking-form-inline`,
 generates a client **journeyId** (opaque correlation key), and calls the backend under `/api/v1`. Page 1
 resolves identity **Contact-first** (existing Contact → reuse; else unconverted Lead → reuse; else create
-a Lead). Page 2 enriches: the **Lead path** lets `processLead` convert + build the graph; the **Contact
-path** updates the Contact and books only against an **existing** exact Product Deal (else it raises a
-standard Contact-only Manual-Review Task). Page 3 books Google Calendar + Meet and a Zoho Meeting
-(`Events`) linked to the Contact + exact Deal. The website never duplicates CRM business logic.
+a Lead). Page 2 performs **one required Zoho save** and advances to the calendar immediately — it never
+waits for conversion, `processLead`, or a Deal (the Lead update just *starts* `processLead`; a failed
+save stays an error). Page 3 books Google Calendar + Meet, then takes **one** CRM snapshot: the Zoho
+Meeting (`Events`) links to the resolved person (Contact, else Lead) and to the exact Product Deal **only
+if it already exists** (else person-linked — the booking still confirms). The website never duplicates
+CRM business logic, creates a Deal, or writes a Quote.
 
 ## Endpoints (served under `/api/v1`)
 
 | Method | Path | Purpose |
 |---|---|---|
 | `POST` | `/api/v1/submissions/start` | Page 1 — resolve identity, mint the flow token |
-| `PATCH` | `/api/v1/submissions/{journeyId}` | Page 2 — enrich + resolve the Product Deal |
+| `PATCH` | `/api/v1/submissions/{journeyId}` | Page 2 — one required Zoho save, then advance |
 | `GET` | `/api/v1/availability` | Slots (Google FreeBusy) |
 | `POST` | `/api/v1/bookings` | Page 3 — create Google + Zoho meeting |
 | `DELETE` | `/api/v1/bookings/{journeyId}` | Cancel (Bearer / 30-day manage token) |
@@ -71,8 +73,8 @@ the widget from `booking/assets/booking-form.js`, and `assets/site.css` `@import
 5. **Env:** copy `.env.example` → set `JWT_SECRET`, `ZOHO_*`, `GOOGLE_*`, `HOST_TIMEZONE`,
    `PUBLIC_BASE_URL` (no submission-module or reconciliation URL is needed).
 6. **Dependencies:** add `googleapis` + `jsonwebtoken` to the host `package.json` (`npm install`).
-7. **Vercel config:** merge `vercel.snippet.json` (extended `maxDuration` for the conversion/booking
-   functions + `/api/*` security headers) into the host `vercel.json`.
+7. **Vercel config:** merge `vercel.snippet.json` (60s `maxDuration` headroom for Zoho token refresh on
+   the submissions/booking functions + `/api/*` security headers) into the host `vercel.json`.
 
 ## Test
 
@@ -86,8 +88,8 @@ cd booking && npm test
 
 - Uses only **standard** modules: Leads, Contacts, Accounts, Deals, Products, Quotes, Tasks, Meetings
   (`Events`). No custom module.
-- Manual Review = a Contact-only standard **Task** (mirrors `createManualReview.deluge`): `Who_Id`=Contact,
-  no `What_Id`, `$se_module='Contacts'`, `Task_Type='Manual Review'`, idempotent per journey via the
-  Contact's Open Tasks related list.
+- A booking is **never blocked** on the CRM graph. If a selected product has no visible Deal at booking
+  time, the Zoho Meeting is created **person-linked** (Contact or Lead, no `What_Id`) and confirms; it is
+  not retro-linked (see the Known limitation in `docs/architecture.md`). The website raises no Task.
 - The one custom **field** the flow writes is `Job_Title_Raw` (on Leads + Contacts). Reconciliation is
-  the standard Deluge automation (`processLead` on Lead conversion); the Contact path invokes none.
+  the standard Deluge automation (`processLead` on Lead conversion); the website invokes none.

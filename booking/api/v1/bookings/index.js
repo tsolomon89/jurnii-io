@@ -8,8 +8,14 @@ const {
 } = require('../../_utils/google');
 const {
   createZohoEvent,
-  searchEventByExternalId
+  searchEventByExternalId,
+  getContact,
+  getLead,
+  readConversion,
+  searchContactsByEmail,
+  resolveProductDeal
 } = require('../../_utils/zoho');
+const { normalizeEmail } = require('../../_utils/email');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const SLOT_MINUTES = 30;
@@ -19,16 +25,85 @@ function fail(res, status, code, message) {
   return res.status(status).json({ error: message || code, code });
 }
 
-// A journeyId is client-controlled, so a lookup match is necessary but not
-// sufficient: a reused event must belong to the same Contact + Deal as the token.
+// Ownership is bound to the SIGNED journeyId (a lookup match alone is insufficient
+// because the journeyId travels in the URL). Google carries a normalized-email
+// second factor in its private props; Zoho carries the journeyId as
+// Ext_Calendar_Booking_ID. Contact/Deal ids are mutable relationships and are
+// NEVER used as ownership keys (a Lead-linked event may later move to its Contact).
 function googleEventOwned(event, decoded) {
   const p = readEventPrivate(event);
-  return p.contactId === decoded.contactId && p.dealId === decoded.dealId;
+  if (p.journeyId && p.journeyId !== decoded.journeyId) return false;
+  if (p.email) return normalizeEmail(p.email) === normalizeEmail(decoded.email || '');
+  return true; // legacy event without a stored email — trust the journeyId lookup
 }
 function zohoEventOwned(event, decoded) {
-  const who = (event.Who_Id && event.Who_Id.id) || '';
-  const what = (event.What_Id && event.What_Id.id) || '';
-  return who === decoded.contactId && what === decoded.dealId;
+  const ext = event && event.Ext_Calendar_Booking_ID;
+  return !ext || ext === decoded.journeyId;
+}
+
+/**
+ * ONE bounded snapshot of the current CRM graph (no polling). Resolves the person
+ * to link (Who_Id) and, only if it already exists, the exact Product Deal.
+ *   - Contact token: read the Contact once; use its Account.
+ *   - Lead token: read the Lead once; if readConversion supplies a Contact+Account
+ *     use them; if the Lead is CONFIRMED unconverted, the Lead itself is the person;
+ *     if the Lead is ABSENT, one Contact-by-email recovery lookup.
+ * A thrown Zoho error (network/auth) propagates to the caller as a retryable 502 —
+ * it does NOT prove the Lead still exists, so we never blindly fall back to it.
+ * Returns { whoId, dealId } or { fail, status, code, message }.
+ */
+async function resolveCrmSnapshot(decoded, product) {
+  const email = decoded.email;
+  let whoId = null;
+  let accountId = null;
+
+  if (decoded.recordType === 'Contact') {
+    const contact = await getContact(decoded.recordId);
+    if (contact) {
+      whoId = contact.id || decoded.recordId;
+      accountId = (contact.Account_Name && contact.Account_Name.id) || null;
+    } else {
+      const found = await recoverContactByEmail(email);
+      if (!found) return { fail: true, status: 502, code: 'contact_unresolved', message: 'Your details are still being set up. Please try again.' };
+      whoId = found.id; accountId = found.accountId;
+    }
+  } else {
+    const lead = await getLead(decoded.recordId);
+    if (lead) {
+      const conv = readConversion(lead);
+      if (conv.converted && conv.contactId) {
+        whoId = conv.contactId;
+        accountId = conv.accountId || null;
+      } else {
+        whoId = lead.id || decoded.recordId; // confirmed present + unconverted
+        accountId = null;
+      }
+    } else {
+      const found = await recoverContactByEmail(email);
+      if (!found) return { fail: true, status: 502, code: 'person_unresolved', message: 'Your details are still being set up. Please try again.' };
+      whoId = found.id; accountId = found.accountId;
+    }
+  }
+
+  // Attach the Product Deal ONLY when a product was chosen and its Deal already
+  // exists (one match). No product, no Account, or a not-yet-visible Deal ->
+  // person-linked meeting (see the Known Limitation in the module docs).
+  let dealId = null;
+  if (product && accountId) {
+    const result = await resolveProductDeal(accountId, product);
+    if (result && result.status === 'one' && result.deal) dealId = result.deal.id;
+  }
+
+  return { whoId, dealId };
+}
+
+async function recoverContactByEmail(email) {
+  if (!email) return null;
+  const contacts = await searchContactsByEmail(email);
+  if (contacts.length === 1 && contacts[0].id) {
+    return { id: contacts[0].id, accountId: (contacts[0].Account_Name && contacts[0].Account_Name.id) || null };
+  }
+  return null;
 }
 
 module.exports = async function handler(req, res) {
@@ -46,11 +121,10 @@ module.exports = async function handler(req, res) {
     return fail(res, 401, 'auth_invalid', 'Unauthorized');
   }
 
-  // Page 3 requires a converted Contact AND exactly one resolved Product Deal
-  // (both stamped into the token by page 2). No Lead fallback, no Contact-only meeting.
+  // Booking requires a FLOW token that has cleared page 2. A resolved Contact/Deal
+  // is NOT required — the calendar must never be gated on CRM graph consistency.
+  if (decoded.purpose !== 'flow') return fail(res, 403, 'forbidden', 'This token cannot be used to book.');
   if (!decoded.step || decoded.step < 2) return fail(res, 409, 'not_ready', 'Complete the previous step first.');
-  if (!decoded.contactId) return fail(res, 409, 'contact_unresolved', 'Your details are still being processed.');
-  if (!decoded.dealId) return fail(res, 409, 'NO_SINGLE_DEAL', 'No single product could be resolved for this booking; our team will follow up.');
 
   const { slotStart } = req.body || {};
   if (!slotStart) return fail(res, 400, 'validation', 'Missing required field: slotStart');
@@ -59,20 +133,22 @@ module.exports = async function handler(req, res) {
   const start = new Date(slotStart);
   const end = new Date(start.getTime() + SLOT_MINUTES * 60 * 1000);
   const visitorEmail = decoded.email;
+  const product = decoded.product || null;
 
   // Durable self-service management link (survives the short-lived booking token).
+  // Bound to the stable identity only — management verifies journeyId + email.
   const baseUrl = process.env.PUBLIC_BASE_URL || (req.headers.host ? `https://${req.headers.host}` : 'https://jurnii.io');
   const manageToken = jwt.sign(
-    { purpose: 'manage', journeyId, contactId: decoded.contactId, dealId: decoded.dealId },
+    { purpose: 'manage', journeyId, recordType: decoded.recordType, recordId: decoded.recordId, email: visitorEmail },
     JWT_SECRET,
     { expiresIn: '30d' }
   );
   const manageUrl = `${baseUrl}/manage.html?token=${encodeURIComponent(manageToken)}&id=${encodeURIComponent(journeyId)}`;
 
   try {
-    // 1. Reuse an existing Google event for THIS journey first (retry recovery).
-    //    A journey-owned event must not be treated as a scheduling conflict — so
-    //    the availability re-check runs only when we are about to create anew.
+    // 1. Google event FIRST (the visitor's actual goal, independent of CRM state).
+    //    Reuse a journey-owned event before creating; only re-check availability
+    //    when about to create anew (a journey-owned event is not a self-conflict).
     let googleEvent = await listEventByJourneyId(journeyId);
     if (googleEvent) {
       if (!googleEventOwned(googleEvent, decoded)) {
@@ -80,7 +156,6 @@ module.exports = async function handler(req, res) {
       }
       console.log(`[bookings] reusing Google event ${googleEvent.id} for journey ${journeyId}`);
     } else {
-      // 2. No existing event → re-verify availability over the buffered window, then create.
       const busyPeriods = await checkFreeBusy(
         new Date(start.getTime() - BUFFER_MS).toISOString(),
         new Date(end.getTime() + BUFFER_MS).toISOString()
@@ -99,25 +174,31 @@ module.exports = async function handler(req, res) {
         end: end.toISOString(),
         attendees: [{ email: visitorEmail }],
         journeyId,
-        contactId: decoded.contactId,
-        dealId: decoded.dealId
+        email: visitorEmail
       });
       console.log(`[bookings] created Google event ${googleEvent.id} for journey ${journeyId}`);
     }
 
-    // 3. Resolve the Meet link, awaiting a pending conference.
+    // 2. Resolve the Meet link, awaiting a pending conference. Never confirm a
+    //    booking without a Meet URL (recoverable: the event is reused on retry).
     const meetLink = await awaitMeetLink(googleEvent);
     if (!meetLink) {
-      // Recoverable: the event exists and is reused on retry, by which time the
-      // conference is typically ready. Never confirm a booking without a Meet URL.
       const e = new Error('meet_link_unavailable');
       e.code = 'MEET_PENDING';
       throw e;
     }
 
-    // 4. Zoho Event — reuse by Ext_Calendar_Booking_ID (ownership-verified), else create.
-    //    Links to the converted Contact (Who_Id) and the exact Product Deal
-    //    (What_Id + $se_module='Deals') so WF007 handleMeetingEvent can advance the pipeline.
+    // 3. ONE bounded CRM snapshot (no polling). A Zoho read error throws here and
+    //    is caught below as a retryable 502 — the Google event persists and is
+    //    reused on retry, so nothing is orphaned.
+    const snap = await resolveCrmSnapshot(decoded, product);
+    if (snap.fail) return fail(res, snap.status, snap.code, snap.message);
+    const { whoId, dealId } = snap;
+
+    // 4. Zoho Event — reuse by Ext_Calendar_Booking_ID (journey-owned) else create.
+    //    Always linked to the verified person (Who_Id). The Product Deal is attached
+    //    (What_Id + $se_module='Deals', so WF007 handleMeetingEvent can advance the
+    //    pipeline) ONLY when it already exists; otherwise the meeting is person-linked.
     let zohoEventId;
     const existingZohoEvent = await searchEventByExternalId(journeyId);
     if (existingZohoEvent) {
@@ -133,16 +214,18 @@ module.exports = async function handler(req, res) {
         End_DateTime: end.toISOString(),
         Ext_Calendar_Booking_ID: journeyId,
         Meeting_Task_Stage: 'Demo Booking',
-        Description: `Google Meet Link: ${meetLink}\nBooking Reference: ${journeyId}\nManage link: ${manageUrl}`,
-        Who_Id: { id: decoded.contactId },
-        What_Id: { id: decoded.dealId },
-        $se_module: 'Deals'
+        Description: `Google Meet Link: ${meetLink}\nBooking Reference: ${journeyId}\nVisitor: ${visitorEmail}\nProduct: ${product || 'Not specified'}\nManage link: ${manageUrl}`
       };
+      if (whoId) eventData.Who_Id = { id: whoId };
+      if (dealId) {
+        eventData.What_Id = { id: dealId };
+        eventData.$se_module = 'Deals';
+      }
       const meetField = process.env.ZOHO_EVENT_MEET_FIELD;
       if (meetField && meetLink) eventData[meetField] = meetLink;
 
       zohoEventId = await createZohoEvent(eventData);
-      console.log(`[bookings] created Zoho event ${zohoEventId} for journey ${journeyId}`);
+      console.log(`[bookings] created Zoho event ${zohoEventId} for journey ${journeyId} (who=${whoId || 'none'} deal=${dealId || 'none'})`);
     }
 
     console.log(`[bookings] confirmed booking for journey ${journeyId} (google=${googleEvent.id} zoho=${zohoEventId})`);
@@ -157,7 +240,7 @@ module.exports = async function handler(req, res) {
     });
   } catch (error) {
     console.error(`[bookings] error for journey ${journeyId}:`, error.code || error.message);
-    // Recoverable: the Google event (if created) carries the correlation id and is
+    // Recoverable: the Google event (if created) carries the journeyId and is
     // reused on retry, so nothing is silently orphaned.
     return fail(res, 502, error.code || 'booking_failed', 'We could not complete the booking. Please try again.');
   }

@@ -807,6 +807,10 @@
         if (validateStep(2)) {
           clearGlobalError();
           setLoadingState(next2, true);
+          // Availability is Zoho-independent — prefetch it concurrently with the
+          // save. Pre-attach a catch so a rejected prefetch can never surface as an
+          // unhandled rejection if the save fails first.
+          const availabilityReady = fetchAvailability().catch(() => {});
           try {
             const res = await fetch(`/api/v1/submissions/${state.journey_id}`, {
               method: 'PATCH',
@@ -823,19 +827,13 @@
               })
             });
             const data = await res.json();
-            if (res.status === 409 && data.code === 'MANUAL_REVIEW') {
-              // Converted, but no single bookable product (e.g. "Not sure yet"
-              // or ambiguous). The visitor is captured; a human will follow up.
-              clearProgress();
-              showGlobalInfo(data.error || "Thanks — your details are in. Our team will reach out to arrange the right session.");
-              return;
-            }
+            // A failed save must NOT advance — the calendar never opens on unsaved data.
             if (!res.ok) throw new Error(data.error || 'Failed to save company details');
 
             continuationToken = data.token;
 
-            // Load dynamic availability
-            await fetchAvailability();
+            // Save succeeded → reveal the calendar as soon as availability is ready.
+            await availabilityReady;
             renderCalendar();
             goToStep(3);
             saveProgress();
@@ -892,11 +890,6 @@
               await fetchAvailability();
               renderCalendar();
               renderTimeSlots(selectedDateStr);
-              return;
-            }
-            if (res.status === 409 && data.code === 'NO_SINGLE_DEAL') {
-              clearProgress();
-              showGlobalInfo(data.error || "Your registration is complete — our team will confirm the right session with you.");
               return;
             }
             if (!res.ok || data.status !== 'confirmed') {
