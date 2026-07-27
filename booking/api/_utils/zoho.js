@@ -1,5 +1,7 @@
 const https = require('https');
 const querystring = require('querystring');
+const fs = require('fs');
+const path = require('path');
 const { pickProductDeal, normalizeProductKey } = require('./products');
 
 // In-memory access-token cache (per serverless instance).
@@ -26,11 +28,39 @@ class ZohoError extends Error {
   }
 }
 
+const TOKEN_CACHE_PATH = path.join(__dirname, '../../scratch/.zoho_token.json');
+
+function readDiskToken() {
+  try {
+    if (fs.existsSync(TOKEN_CACHE_PATH)) {
+      const data = JSON.parse(fs.readFileSync(TOKEN_CACHE_PATH, 'utf8'));
+      if (data.access_token && data.expires_at && Date.now() < data.expires_at - 60000) {
+        return data;
+      }
+    }
+  } catch (_) {}
+  return null;
+}
+
+function writeDiskToken(token, expiresAt) {
+  try {
+    const dir = path.dirname(TOKEN_CACHE_PATH);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(TOKEN_CACHE_PATH, JSON.stringify({ access_token: token, expires_at: expiresAt }), 'utf8');
+  } catch (_) {}
+}
+
 const ACCOUNTS_HOST = process.env.ZOHO_ACCOUNTS_HOST || 'accounts.zoho.eu';
 
-async function getAccessToken() {
+async function getAccessToken(retryCount = 0) {
   const now = Date.now();
   if (cachedToken && now < tokenExpiresAt - 60000) {
+    return cachedToken;
+  }
+  const disk = readDiskToken();
+  if (disk) {
+    cachedToken = disk.access_token;
+    tokenExpiresAt = disk.expires_at;
     return cachedToken;
   }
 
@@ -55,30 +85,41 @@ async function getAccessToken() {
     }
   };
 
-  return new Promise((resolve, reject) => {
-    const req = https.request(options, (res) => {
-      let body = '';
-      res.on('data', chunk => body += chunk);
-      res.on('end', () => {
-        let data;
-        try {
-          data = JSON.parse(body);
-        } catch (e) {
-          return reject(new ZohoError('zoho_token_parse_failed', body));
-        }
-        if (data.access_token) {
-          cachedToken = data.access_token;
-          tokenExpiresAt = Date.now() + (data.expires_in * 1000);
-          resolve(cachedToken);
-        } else {
-          reject(new ZohoError('zoho_token_refresh_failed', body));
-        }
+  try {
+    return await new Promise((resolve, reject) => {
+      const req = https.request(options, (res) => {
+        let body = '';
+        res.on('data', chunk => body += chunk);
+        res.on('end', () => {
+          let data;
+          try {
+            data = JSON.parse(body);
+          } catch (e) {
+            return reject(new ZohoError('zoho_token_parse_failed', body));
+          }
+          if (data.access_token) {
+            cachedToken = data.access_token;
+            tokenExpiresAt = Date.now() + (data.expires_in * 1000);
+            writeDiskToken(cachedToken, tokenExpiresAt);
+            resolve(cachedToken);
+          } else {
+            reject(new ZohoError('zoho_token_refresh_failed', body));
+          }
+        });
       });
+      req.on('error', (e) => reject(new ZohoError('zoho_token_network_error', e.message)));
+      req.write(params);
+      req.end();
     });
-    req.on('error', (e) => reject(new ZohoError('zoho_token_network_error', e.message)));
-    req.write(params);
-    req.end();
-  });
+  } catch (err) {
+    if (retryCount < 4 && err.code === 'zoho_token_refresh_failed') {
+      const waitMs = (retryCount + 1) * 2000;
+      console.warn(`[zoho] token refresh rate limited; retrying in ${waitMs}ms (attempt ${retryCount + 1})...`);
+      await new Promise(r => setTimeout(r, waitMs));
+      return getAccessToken(retryCount + 1);
+    }
+    throw err;
+  }
 }
 
 /**
@@ -282,11 +323,16 @@ async function resolveProductDeal(accountId, canonicalProductName) {
   return pickProductDeal(deals, canonicalProductName);
 }
 
-// ---------------------------------------------------------------------------
-// Zoho Event (meeting). Triggers ENABLED so WF007 handleMeetingEvent fires.
-// ---------------------------------------------------------------------------
+function formatZohoDateTime(isoStr) {
+  if (!isoStr) return isoStr;
+  return String(isoStr).replace(/\.\d{3}Z$/, 'Z');
+}
+
 async function createZohoEvent(eventData) {
-  const res = await requestZoho('POST', '/crm/v6/Events', writePayload(eventData));
+  const payload = Object.assign({}, eventData);
+  if (payload.Start_DateTime) payload.Start_DateTime = formatZohoDateTime(payload.Start_DateTime);
+  if (payload.End_DateTime) payload.End_DateTime = formatZohoDateTime(payload.End_DateTime);
+  const res = await requestZoho('POST', '/crm/v6/Events', writePayload(payload));
   return firstDetailId(res, 'event_create_failed');
 }
 
@@ -298,7 +344,10 @@ async function searchEventByExternalId(externalId) {
 }
 
 async function updateZohoEvent(eventId, eventData) {
-  const res = await requestZoho('PUT', `/crm/v6/Events/${eventId}`, writePayload(eventData));
+  const payload = Object.assign({}, eventData);
+  if (payload.Start_DateTime) payload.Start_DateTime = formatZohoDateTime(payload.Start_DateTime);
+  if (payload.End_DateTime) payload.End_DateTime = formatZohoDateTime(payload.End_DateTime);
+  const res = await requestZoho('PUT', `/crm/v6/Events/${eventId}`, writePayload(payload));
   return firstDetailId(res, 'event_update_failed');
 }
 

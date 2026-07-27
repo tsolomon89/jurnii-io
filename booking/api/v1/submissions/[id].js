@@ -7,7 +7,8 @@ const {
   updateContact,
   getTasksForContact,
   createTask,
-  resolveProductDeal
+  resolveProductDeal,
+  searchContactsByEmail
 } = require('../../_utils/zoho');
 const { canonicalProduct, validateLeadEnrichment } = require('../../_utils/products');
 
@@ -17,8 +18,8 @@ const JOBTITLE_RAW_FIELD = process.env.ZOHO_LEAD_JOBTITLE_RAW_FIELD || 'Job_Titl
 
 // Bounded backoff (ms) for the LEAD path only — Lead conversion is asynchronous.
 // The Contact path invokes no automation, so its Deal either exists now or not.
-const DEAL_BACKOFF = [800, 1500, 2500];
-const CONVERSION_BACKOFF = [1000, 2000, 3000, 4000, 5000];
+const DEAL_BACKOFF = [1000, 2000, 3000, 4000];
+const CONVERSION_BACKOFF = [1000, 2000, 3000, 4000, 5000, 6000, 8000, 10000, 10000];
 
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
@@ -137,7 +138,7 @@ module.exports = async function handler(req, res) {
       if (outcome.fail) return fail(res, outcome.status, outcome.code, outcome.message, outcome.extra);
       ({ contactId, accountId } = outcome);
     } else if (recordType === 'Lead') {
-      const outcome = await runLeadPath({ recordId, company, jobTitle, phone, country, product });
+      const outcome = await runLeadPath({ recordId, company, jobTitle, phone, country, product, email: decoded.email });
       if (outcome.fail) return fail(res, outcome.status, outcome.code, outcome.message, outcome.extra);
       ({ contactId, accountId } = outcome);
     } else {
@@ -185,9 +186,19 @@ module.exports = async function handler(req, res) {
 // Lead path: ONE enrichment update (triggers enabled) fires WF001a Process Lead
 // which converts and builds the graph. Retry-safe (already-converted → resume).
 // ---------------------------------------------------------------------------
-async function runLeadPath({ recordId, company, jobTitle, phone, country, product }) {
+async function runLeadPath({ recordId, company, jobTitle, phone, country, product, email }) {
   let lead = await getLead(recordId);
-  if (!lead) return { fail: true, status: 502, code: 'lead_not_found', message: 'Your registration could not be found. Please restart.' };
+  if (!lead) {
+    if (email) {
+      const contacts = await searchContactsByEmail(email);
+      if (contacts.length === 1 && contacts[0].id) {
+        const contact = contacts[0];
+        const accountId = (contact.Account_Name && contact.Account_Name.id) ? contact.Account_Name.id : null;
+        return { contactId: contact.id, accountId };
+      }
+    }
+    return { fail: true, status: 502, code: 'lead_not_found', message: 'Your registration could not be found. Please restart.' };
+  }
 
   let conv = readConversion(lead);
 
@@ -213,6 +224,17 @@ async function runLeadPath({ recordId, company, jobTitle, phone, country, produc
       lead = await getLead(recordId);
       conv = readConversion(lead);
       if (conv.converted && conv.contactId) break;
+      if ((!lead || !conv.contactId) && email) {
+        const contacts = await searchContactsByEmail(email);
+        if (contacts.length === 1 && contacts[0].id) {
+          conv = {
+            converted: true,
+            contactId: contacts[0].id,
+            accountId: (contacts[0].Account_Name && contacts[0].Account_Name.id) ? contacts[0].Account_Name.id : null
+          };
+          break;
+        }
+      }
     }
   }
 

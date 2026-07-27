@@ -6,3 +6,5 @@ node_modules
 **/.zoho_token.json
 scratch/update_vercel_env.js
 booking/scratch/
+scratch/screenshots/
+

@@ -787,9 +787,9 @@
 
             continuationToken = data.token;
             state.journey_id = data.journeyId || journeyId;
-            updateDebugPanel();
-            saveProgress();
             goToStep(2);
+            saveProgress();
+            updateDebugPanel();
           } catch (err) {
             showGlobalError(err.message);
           } finally {
@@ -833,12 +833,13 @@
             if (!res.ok) throw new Error(data.error || 'Failed to save company details');
 
             continuationToken = data.token;
-            saveProgress();
 
             // Load dynamic availability
             await fetchAvailability();
             renderCalendar();
             goToStep(3);
+            saveProgress();
+            updateDebugPanel();
           } catch (err) {
             showGlobalError(err.message);
           } finally {
