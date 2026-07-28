@@ -35,6 +35,14 @@ const ALIAS_MAP: Record<string, string> = {
   'resource': 'library',
 };
 
+const PageChromeWrapper: React.FC<{ active?: string; children: React.ReactNode }> = ({ active = 'home', children }) => {
+  const PageChrome = (window as any).PageChrome;
+  if (typeof PageChrome === 'function') {
+    return <PageChrome active={active}>{children}</PageChrome>;
+  }
+  return <div className="site-wrapper min-h-screen bg-[#030712] text-slate-100">{children}</div>;
+};
+
 export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath }) => {
   const [loading, setLoading] = useState(true);
   const [renderState, setRenderState] = useState<{
@@ -133,7 +141,7 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
           },
         });
       } else {
-        // Entity detail view (last segment handles nested routes like /use-cases/company-sizes/enterprise)
+        // Entity detail view
         const targetSlug = parts[parts.length - 1];
         const item = getByPath(['www', section, targetSlug]);
         if (item) {
@@ -175,70 +183,85 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
     );
   }
 
-  switch (renderState.type) {
-    case 'entity':
-      return <EntityPageTemplate data={renderState.data} />;
-
-    case 'directory':
-      return (
-        <EntityDirectoryTemplate
-          title={renderState.data.title}
-          description={renderState.data.description}
-          items={renderState.data.items}
-          sectionPath={renderState.data.sectionPath}
-        />
-      );
-
-    case 'article':
-      return <ArticleTemplate data={renderState.data.model} />;
-
-    case 'paper':
-      return <PaperTemplate data={renderState.data.model} />;
-
-    case 'page':
-      return <GeneralPageTemplate data={renderState.data} />;
-
-    case 'library-index':
-      return (
-        <SharedSubdomainLayout libraryItems={renderState.data.items}>
-          <div className="space-y-6">
-            <header className="border-b border-white/10 pb-6">
-              <h1 className="text-3xl font-bold text-slate-100">Library Publications & Research</h1>
-              <p className="text-slate-400 text-sm mt-1">
-                Monographs, formal proofs, and technical essays.
-              </p>
-            </header>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {renderState.data.items.map((item: ContentItem) => (
-                <a
-                  key={item.slug}
-                  href={`/library/${item.slug}`}
-                  className="block p-6 bg-slate-900/50 hover:bg-slate-800/80 border border-white/10 rounded-xl transition space-y-2"
-                >
-                  <span className="text-xs uppercase font-mono text-sky-400">
-                    {item.meta.medium || 'Article'}
-                  </span>
-                  <h3 className="text-xl font-bold text-slate-100">{item.meta.title}</h3>
-                  <p className="text-sm text-slate-400 line-clamp-3">
-                    {item.meta.excerpt || item.meta.description || ''}
-                  </p>
-                </a>
-              ))}
-            </div>
-          </div>
-        </SharedSubdomainLayout>
-      );
-
-    case 'not-found':
-    default:
-      return (
-        <div className="min-h-screen bg-[#030712] text-slate-300 flex flex-col items-center justify-center space-y-4">
-          <h1 className="text-4xl font-bold text-slate-100">404 — Page Not Found</h1>
-          <p className="text-sm text-slate-400">The requested content route does not exist.</p>
-          <a href="/" className="px-4 py-2 bg-sky-500 text-slate-950 font-bold rounded-lg text-sm">
-            Return Home
-          </a>
-        </div>
-      );
+  let activeNav = 'home';
+  if (renderState.type === 'entity' || renderState.type === 'directory') {
+    activeNav = renderState.data.section || renderState.data.sectionPath || 'products';
+  } else if (renderState.type === 'article' || renderState.type === 'paper' || renderState.type === 'library-index') {
+    activeNav = 'resources';
   }
+
+  const renderInnerContent = () => {
+    switch (renderState.type) {
+      case 'entity':
+        return <EntityPageTemplate data={renderState.data} />;
+
+      case 'directory':
+        return (
+          <EntityDirectoryTemplate
+            title={renderState.data.title}
+            description={renderState.data.description}
+            items={renderState.data.items}
+            sectionPath={renderState.data.sectionPath}
+          />
+        );
+
+      case 'article':
+        return <ArticleTemplate data={renderState.data.model} />;
+
+      case 'paper':
+        return <PaperTemplate data={renderState.data.model} />;
+
+      case 'page':
+        return <GeneralPageTemplate data={renderState.data} />;
+
+      case 'library-index':
+        return (
+          <SharedSubdomainLayout libraryItems={renderState.data.items}>
+            <div className="space-y-6">
+              <header className="border-b border-white/10 pb-6">
+                <h1 className="text-3xl font-bold text-slate-100">Library Publications & Research</h1>
+                <p className="text-slate-400 text-sm mt-1">
+                  Monographs, formal proofs, and technical essays.
+                </p>
+              </header>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {renderState.data.items.map((item: ContentItem) => (
+                  <a
+                    key={item.slug}
+                    href={`/library/${item.slug}`}
+                    className="block p-6 bg-slate-900/50 hover:bg-slate-800/80 border border-white/10 rounded-xl transition space-y-2"
+                  >
+                    <span className="text-xs uppercase font-mono text-emerald-400">
+                      {item.meta.medium || 'Article'}
+                    </span>
+                    <h3 className="text-xl font-bold text-slate-100">{item.meta.title}</h3>
+                    <p className="text-sm text-slate-400 line-clamp-3">
+                      {item.meta.excerpt || item.meta.description || ''}
+                    </p>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </SharedSubdomainLayout>
+        );
+
+      case 'not-found':
+      default:
+        return (
+          <div className="min-h-screen bg-[#030712] text-slate-300 flex flex-col items-center justify-center space-y-4">
+            <h1 className="text-4xl font-bold text-slate-100">404 — Page Not Found</h1>
+            <p className="text-sm text-slate-400">The requested content route does not exist.</p>
+            <a href="/" className="px-4 py-2 bg-emerald-500 text-slate-950 font-bold rounded-lg text-sm">
+              Return Home
+            </a>
+          </div>
+        );
+    }
+  };
+
+  return (
+    <PageChromeWrapper active={activeNav}>
+      {renderInnerContent()}
+    </PageChromeWrapper>
+  );
 };
