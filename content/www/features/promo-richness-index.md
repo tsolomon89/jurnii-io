@@ -55,3 +55,60 @@ Simulate Net Gaming Revenue lift, GGR holds, and player acquisition yields under
 
 ### Step 04: Recommend
 Generate board-ready marketing mix reallocation strategies to optimize acquisition spend yield.
+
+## Platform Metrics
+
+- **+46%** — True Marketing ROI Lift
+- **$4.85M** — Inefficient Spend Reallocated
+- **3x** — Attribution Analysis Speed
+- **40x** — ROI on Cortex Investment
+
+## Feature Capabilities
+
+Automated, continuous intelligence tools to outpace competitive regional movements.
+
+### Wagering Normalizers
+
+Convert complex deposit matches and play-through terms into standardized mathematical operator generosity metrics.
+
+### Generosity Shift Triggers
+
+Detect when rival welcome offers suddenly become more generous, threatening regional player acquisition.
+
+### Hold Yield Modelers
+
+Model operator hold yields against different wagering targets to optimize promotional re-investment rates.
+
+## Commercial Outcomes
+
+### 40x — Attribution Investment Return
+
+Establish exact causal contribution of paid media channels compared to organic sweeps.
+
+### $4.85M — Inefficient Budget Reallocated
+
+Identify programmatic, search, and affiliate channels that are merely copying competitor value.
+
+### 85% — Strategic Budget Confidence
+
+Anticipate player lifetime value and hold performance before launching campaign strategies.
+
+## How Jurnii Outpaces the Market
+
+| Capability | Jurnii Intelligence | Legacy Analytics | Manual Agencies |
+|---|---|---|---|
+| Audit Frequency | Continuous Real-Time | Ad-Hoc / Event Triggered | Monthly / Retrospective |
+| Attribution Logic | Cortex Causal Models | First-Click / Last-Click Errors | Subjective / Gut Feel |
+| Data Structure | Normalized Promo Richness | Raw Text Snippets | Scattered Spreadsheets |
+| UX Recommendations | 70+ Ranked Heuristics | Simple Funnel Dropout Counts | High-Level Consultant Slideware |
+| Jurisdictional Coverage | 35 Simultaneous Markets | Single Market / Restricted | Local Only |
+
+## Who Uses This Feature
+
+### Chief Commercial Officer
+
+Margin defense and yield planning. By cataloging terms and comparing user journeys, leadership maintains market parity and optimizes campaign holds.
+
+### Chief Marketing Officer
+
+Growth strategy and campaign ROAS optimization. Analyze rival copywriting propositions and value claims to deploy differentiatedPaid Media counter-campaigns.

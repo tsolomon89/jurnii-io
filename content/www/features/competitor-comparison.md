@@ -55,3 +55,60 @@ Run terms through the Promo Richness Index to calculate true player acquisition 
 
 ### Step 04: Alert
 Push critical pricing and generosity surges straight to Slack webhooks and trading desks for instant calibrations.
+
+## Platform Metrics
+
+- **1,000+** — Offers Scanned Weekly
+- **35** — Regulated States & Jurisdictions
+- **21** — Competitor Feature Vectors
+- **30+** — Hours Saved Weekly vs Manual
+
+## Feature Capabilities
+
+Automated, continuous intelligence tools to outpace competitive regional movements.
+
+### Side-by-Side Scoring
+
+Evaluate registration, verification (KYC), and payment pipelines against three chosen rivals simultaneously under real-world mobile network conditions.
+
+### Bonus Calibration Matrix
+
+Compare wagering multipliers and free spin richness across target categories to determine competitive generosity and prevent CRM margin dilution.
+
+### Friction Auditing
+
+Compare click counts, form requirements, and page load delays across competitor checkout pathways to identify strategic interface vulnerabilities.
+
+## Commercial Outcomes
+
+### +15.4% — Hold Rate Calibrations
+
+Calibrate deposit multiples against rival welcome flows to stabilize hold performance.
+
+### 20+ — Weekly Campaign Spikes Blocked
+
+Detect aggressive holiday promotional campaigns the moment they launch to protect GGR.
+
+### $1.2M — Margin Leakage Saved
+
+Prevent blind copies of competitor pricing structures, keeping CRM re-investment yield high.
+
+## How Jurnii Outpaces the Market
+
+| Capability | Jurnii Intelligence | Legacy Analytics | Manual Agencies |
+|---|---|---|---|
+| Audit Frequency | Continuous Real-Time | Ad-Hoc / Event Triggered | Monthly / Retrospective |
+| Attribution Logic | Cortex Causal Models | First-Click / Last-Click Errors | Subjective / Gut Feel |
+| Data Structure | Normalized Promo Richness | Raw Text Snippets | Scattered Spreadsheets |
+| UX Recommendations | 70+ Ranked Heuristics | Simple Funnel Dropout Counts | High-Level Consultant Slideware |
+| Jurisdictional Coverage | 35 Simultaneous Markets | Single Market / Restricted | Local Only |
+
+## Who Uses This Feature
+
+### Chief Commercial Officer
+
+Margin defense and yield planning. By cataloging terms and comparing user journeys, leadership maintains market parity and optimizes campaign holds.
+
+### Chief Marketing Officer
+
+Growth strategy and campaign ROAS optimization. Analyze rival copywriting propositions and value claims to deploy differentiatedPaid Media counter-campaigns.
