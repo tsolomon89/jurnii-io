@@ -1,1 +1,2 @@
-# website
+# websJurnii Platform
+<!-- Last build: 2026-07-28 -->
