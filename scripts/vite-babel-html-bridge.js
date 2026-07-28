@@ -129,7 +129,7 @@ reportWebVitals();
 (function(){
   function load(){
     var s=document.createElement('script');
-    s.src='assets/headline-split.js';
+    s.src='/assets/headline-split.js';
     document.body.appendChild(s);
   }
   if('requestIdleCallback' in window) requestIdleCallback(load,{timeout:2000});
