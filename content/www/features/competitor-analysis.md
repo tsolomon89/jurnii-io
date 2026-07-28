@@ -33,6 +33,59 @@ solutionRefs:
 useCaseValueRefs:
   - commercial
   - igaming
+sections:
+  - type: metrics
+    data:
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '35'
+        label: Regulated Markets Monitored
+      - num: '21'
+        label: Feature Areas Scanned
+      - num: 30+
+        label: Hours Saved per Week
+  - type: manifesto
+    data: >-
+      Uncover competitor playbooks systematically. Synthesize months of
+      competitive campaign data to identify launch frequencies, product
+      milestones, and strategic market timing across multiple regulated markets.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Siloed data prevents executive alignment. Product, marketing, and
+        commercial teams operate on separate gut-feels rather than shared market
+        truths, leading to bad budget allocations during peak sporting seasons.
+  - type: solution
+    data:
+      para: >-
+        Jurnii compiles continuous market tracking into executive-ready
+        dashboards and longitudinal reports, enabling strategic planning at 85%
+        confidence rather than reactive 50% guesses.
+      foot: >-
+        Chief Executive Officers utilize Jurnii summaries to align board
+        presentations and streamline M&A competitive due diligence.
+  - type: capabilities
+    data:
+      - icon: calendar
+        title: Historical Sequencing
+        body: >-
+          Chart competitor campaign durations over seasons to anticipate product
+          updates, mobile updates, and aggressive marketing spend pushes.
+      - icon: trending-up
+        title: Margin Calibration Sprints
+        body: >-
+          Evaluate average competitor bonus payout metrics to benchmark your net
+          yield efficiency and hold rates against regional peers.
+      - icon: file-text
+        title: Executive Summaries
+        body: >-
+          Generate board-ready competitor profiles, market generics, and
+          compliance histories in a single click for fast corporate planning.
+  - type: benchmark
+  - type: renderFlag
+    data: hasFeatureQuote
 ---
 ## Executive Summary
 

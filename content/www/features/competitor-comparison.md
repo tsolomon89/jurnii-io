@@ -29,6 +29,64 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '35'
+        label: Regulated Markets Monitored
+      - num: '21'
+        label: Feature Areas Scanned
+      - num: 30+
+        label: Hours Saved per Week
+  - type: manifesto
+    data: >-
+      Run detailed mathematical comparisons of competitive player flows.
+      Calibrate your operator margins by evaluating wagering rules and bonus
+      depth directly against major regional operators on a single canvas.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        With 70-80% of players holding accounts with 3-5 operators
+        simultaneously, loyalty is fragile. If your signup requires two more
+        clicks or has slower KYC checks than a rival, players abandon the funnel
+        permanently.
+  - type: solution
+    data:
+      para: >-
+        Jurnii Normalizes competitive flows into standardized user journey
+        sequences. It maps steps, inputs, KYC checks, and payment integrations
+        side-by-side with global best practices to pinpoint conversion rate
+        leaks.
+      foot: >-
+        Heads of UX utilize Jurnii comparisons to justify interface updates and
+        outpace regional platform benchmarks.
+  - type: capabilities
+    data:
+      - icon: git-compare
+        title: Side-by-Side Scoring
+        body: >-
+          Evaluate registration, verification (KYC), and payment pipelines
+          against three chosen rivals simultaneously under real-world mobile
+          network conditions.
+      - icon: gift
+        title: Bonus Calibration Matrix
+        body: >-
+          Compare wagering multipliers and free spin richness across target
+          categories to determine competitive generosity and prevent CRM margin
+          dilution.
+      - icon: filter
+        title: Friction Auditing
+        body: >-
+          Compare click counts, form requirements, and page load delays across
+          competitor checkout pathways to identify strategic interface
+          vulnerabilities.
+  - type: benchmark
+  - type: renderFlag
+    data: hasFeatureQuote
 ---
 ## Executive Summary
 

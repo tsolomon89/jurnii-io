@@ -29,6 +29,58 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '35'
+        label: Regulated Markets Monitored
+      - num: '21'
+        label: Feature Areas Scanned
+      - num: 30+
+        label: Hours Saved per Week
+  - type: manifesto
+    data: >-
+      Receive immediate development blueprints. Access step-by-step UI
+      adjustments to resolve identified friction leaks and outpace adjacent
+      operator competitors.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Product and engineering teams struggle to prioritize bugs based on
+        revenue, wasting development cycles on low-impact layout changes.
+  - type: solution
+    data:
+      para: >-
+        Jurnii ranks all audit findings by severity and commercial weight,
+        providing a development checklist mapped directly to revenue
+        consequences.
+      foot: >-
+        Chief Product Officers use Jurnii recommendations to build bulletproof
+        roadmap sprints.
+  - type: capabilities
+    data:
+      - icon: clipboard-list
+        title: Actionable Sprints
+        body: >-
+          Obtain clean development task checklists to address identified user
+          onboarding leaks with zero guesswork.
+      - icon: image
+        title: Visual Reference Cards
+        body: >-
+          Match recommended UI corrections to verified industry-leading
+          interface layouts for fast developer implementation.
+      - icon: dollar-sign
+        title: Yield Impact Mapping
+        body: >-
+          Prioritize design updates based on estimated player conversion,
+          acquisition impact, and NGR recovery potential.
+  - type: benchmark
+  - type: renderFlag
+    data: hasFeatureQuote
 ---
 ## Executive Summary
 

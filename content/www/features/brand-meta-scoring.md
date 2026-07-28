@@ -29,6 +29,59 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '35'
+        label: Regulated Markets Monitored
+      - num: '21'
+        label: Feature Areas Scanned
+      - num: 30+
+        label: Hours Saved per Week
+  - type: manifesto
+    data: >-
+      Establish a single metric for design and conversion quality. Aggregate
+      visual, usability, speed, and onboarding indicators to score your brand
+      portfolios side-by-side with global peers.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Design discussions are plagued by subjectivity. Executive teams debate
+        colors and fonts instead of focusing on verified conversion friction
+        that drains acquisition efficiency.
+  - type: solution
+    data:
+      para: >-
+        Jurnii UX normalizes hundreds of design, compliance, and performance
+        metrics into a single, authoritative, commercially weighted Meta Score
+        for board reporting.
+      foot: >-
+        Chief Product Officers leverage Meta Scores to establish clear design
+        standards across their entire operator portfolio.
+  - type: capabilities
+    data:
+      - icon: sparkles
+        title: Unified Visual Index
+        body: >-
+          Combine multiple UX vectors, technical vitals, and accessibility
+          factors into a single, board-ready brand grade.
+      - icon: layers
+        title: Portfolio Scoring
+        body: >-
+          Score and compare internal sister brands and regional domains under
+          one standard metric system to track performance.
+      - icon: bar-chart
+        title: Executive Benchmark Dashboards
+        body: >-
+          Present high-fidelity design metrics directly to product, marketing,
+          and compliance leadership with absolute clarity.
+  - type: benchmark
+  - type: renderFlag
+    data: hasFeatureQuote
 ---
 ## Executive Summary
 

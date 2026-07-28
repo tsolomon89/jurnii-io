@@ -29,6 +29,59 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '35'
+        label: Regulated Markets Monitored
+      - num: '21'
+        label: Feature Areas Scanned
+      - num: 30+
+        label: Hours Saved per Week
+  - type: manifesto
+    data: >-
+      Transform promotions into machine-readable data. Feed structured
+      competitor promotion files directly into local modeling systems, pricing
+      algorithms, or internal dashboards for always-on visibility.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Scraping competitor campaigns by hand is slow, error-prone, and cannot
+        scale across 400+ weekly offers and 5,000+ monthly sports boosts. This
+        leaves data science teams starved of timely modeling datasets.
+  - type: solution
+    data:
+      para: >-
+        Jurnii delivers direct API endpoints and webhook channels that stream
+        normalized, structured campaign data into your database, CRM, or
+        Marketing Mix Model (MMM) for rapid processing.
+      foot: >-
+        Cortex models are enriched with always-on Jurnii 360 offer feeds to
+        attribute campaign success with causal accuracy.
+  - type: capabilities
+    data:
+      - icon: database
+        title: Structured API Access
+        body: >-
+          Feed clean competitor offer JSON data directly into your CRM or player
+          platforms for dynamic margin pricing and acquisition calibration.
+      - icon: archive
+        title: Historical Archive
+        body: >-
+          Access comprehensive records of expired competitor promos to research
+          holiday trends and winter seasonal playbooks across jurisdictions.
+      - icon: code
+        title: Wagering Decoders
+        body: >-
+          Automatically translate complex bonus terms and conditions into clean
+          data rows, including deposit matches, rollovers, and spin values.
+  - type: benchmark
+  - type: renderFlag
+    data: hasFeatureQuote
 ---
 ## Executive Summary
 

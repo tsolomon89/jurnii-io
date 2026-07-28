@@ -32,6 +32,59 @@ solutionRefs:
 useCaseValueRefs:
   - commercial
   - igaming
+sections:
+  - type: metrics
+    data:
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '35'
+        label: Regulated Markets Monitored
+      - num: '21'
+        label: Feature Areas Scanned
+      - num: 30+
+        label: Hours Saved per Week
+  - type: manifesto
+    data: >-
+      React instantly to market events. Receive direct alerts the exact moment a
+      competitor adjusts their registration, deposit, or retention bonuses to
+      maintain absolute parity.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Missing a rival’s major campaign shift means playing catch-up for weeks
+        while high-value players (who drive 80% of revenue) defect to more
+        generous platforms.
+  - type: solution
+    data:
+      para: >-
+        Configure threshold triggers based on bonus value, wagering multiples,
+        or visual shifts, sending push updates to your commercial team channels
+        via Slack or webhooks.
+      foot: >-
+        Chief Commercial Officers set up alerts for local competitor moves,
+        ensuring their brand remains a market leader.
+  - type: capabilities
+    data:
+      - icon: bell
+        title: Multi-channel Alerts
+        body: >-
+          Configure custom push alerts via Slack, Microsoft Teams, email, or
+          direct webhook integrations into trading platforms.
+      - icon: sliders
+        title: Bonus Shift Detection
+        body: >-
+          Trigger notifications only when wagering terms, deposit percentages,
+          or free spin values shift beyond predefined thresholds.
+      - icon: percent
+        title: Custom Thresholds
+        body: >-
+          Define triggers based on maximum bonus values or promotional payout
+          richness indices to avoid alert fatigue.
+  - type: benchmark
+  - type: renderFlag
+    data: hasFeatureQuote
 ---
 ## Executive Summary
 

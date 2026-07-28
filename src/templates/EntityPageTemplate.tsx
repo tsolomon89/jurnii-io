@@ -1,16 +1,24 @@
 import React, { useEffect } from 'react';
 import { EntityPageModel } from '../content-engine/types';
 import { Prose } from '../components/Prose';
-import { OutcomeStrip } from '../components/legacy-blocks/OutcomeStrip';
-import { Methodology } from '../components/legacy-blocks/Methodology';
-import { Testimonials } from '../components/legacy-blocks/Testimonials';
-import { PersonaList } from '../components/legacy-blocks/PersonaList';
-import { CTABand } from '../components/legacy-blocks/CTABand';
-import { PriceBoostTeaser } from '../components/legacy-blocks/PriceBoostTeaser';
-import { PromotionsByVertical } from '../components/legacy-blocks/PromotionsByVertical';
-import { UXScorecard } from '../components/legacy-blocks/UXScorecard';
-import { UXTelemetry } from '../components/legacy-blocks/UXTelemetry';
-import { CanvasComments } from '../components/legacy-blocks/CanvasComments';
+
+// Page Sections (formerly Legacy Blocks)
+import { OutcomeStrip } from '../components/page-sections/OutcomeStrip';
+import { Methodology } from '../components/page-sections/Methodology';
+import { Testimonials } from '../components/page-sections/Testimonials';
+import { PersonaList } from '../components/page-sections/PersonaList';
+import { CTABand } from '../components/page-sections/CTABand';
+import { PriceBoostTeaser } from '../components/page-sections/PriceBoostTeaser';
+import { PromotionsByVertical } from '../components/page-sections/PromotionsByVertical';
+import { UXScorecard } from '../components/page-sections/UXScorecard';
+import { UXTelemetry } from '../components/page-sections/UXTelemetry';
+import { CanvasComments } from '../components/page-sections/CanvasComments';
+import { FeatureMetrics } from '../components/page-sections/FeatureMetrics';
+import { FeatureManifesto } from '../components/page-sections/FeatureManifesto';
+import { FeatureChallenge } from '../components/page-sections/FeatureChallenge';
+import { FeatureSolution } from '../components/page-sections/FeatureSolution';
+import { FeatureCapabilities } from '../components/page-sections/FeatureCapabilities';
+import { FeatureBenchmark } from '../components/page-sections/FeatureBenchmark';
 
 interface EntityPageTemplateProps {
   data: EntityPageModel;
@@ -44,20 +52,6 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
           </div>
         </div>
       </section>
-
-      {/* Legacy Data: Outcomes */}
-      {data.outcomes && (
-        <OutcomeStrip 
-          heading={data.outcomes.heading} 
-          sub={data.outcomes.sub} 
-          kpis={data.outcomes.kpis} 
-        />
-      )}
-
-      {/* Render Flags: Complex Visual Blocks */}
-      {data.renderFlags?.hasPriceBoostTeaser && <PriceBoostTeaser />}
-      {data.renderFlags?.hasUXScorecard && <UXScorecard />}
-      {data.renderFlags?.hasUXTelemetry && <UXTelemetry />}
 
       {/* 2. Key Operational Capabilities */}
       {data.heroFeatures && data.heroFeatures.length > 0 && (
@@ -98,18 +92,6 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
         </section>
       )}
 
-      {/* Legacy Data: Methodology */}
-      {data.method && (
-        <Methodology 
-          heading={data.method.heading} 
-          sub={data.method.sub} 
-          steps={data.method.steps} 
-        />
-      )}
-
-      {/* Render Flags: PromotionsByVertical */}
-      {data.renderFlags?.hasPromotionsByVertical && <PromotionsByVertical />}
-
       {/* 4. Deep Operational Capabilities */}
       {data.deepWorkFeatures && data.deepWorkFeatures.length > 0 && (
         <section className="section">
@@ -133,6 +115,43 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
         </section>
       )}
 
+      {/* Polymorphic Sections */}
+      {data.sections && data.sections.map((section, index) => {
+        switch (section.type) {
+          case 'metrics':
+            return <FeatureMetrics key={index} metrics={section.data} />;
+          case 'manifesto':
+            return <FeatureManifesto key={index} text={section.data} />;
+          case 'challenge':
+            return <FeatureChallenge key={index} {...section.data} />;
+          case 'solution':
+            return <FeatureSolution key={index} {...section.data} />;
+          case 'capabilities':
+            return <FeatureCapabilities key={index} capabilities={section.data} />;
+          case 'outcomes':
+            return <OutcomeStrip key={index} {...section.data} />;
+          case 'method':
+            return <Methodology key={index} {...section.data} />;
+          case 'testimonials':
+            return <Testimonials key={index} {...section.data} />;
+          case 'personas':
+            return <PersonaList key={index} personas={section.data.list} heading={section.data.heading} sub={section.data.sub} />;
+          case 'cta':
+            return <CTABand key={index} {...section.data} />;
+          case 'benchmark':
+            return <FeatureBenchmark key={index} />;
+          case 'renderFlag':
+            if (section.data === 'hasPriceBoostTeaser') return <PriceBoostTeaser key={index} />;
+            if (section.data === 'hasUXScorecard') return <UXScorecard key={index} />;
+            if (section.data === 'hasUXTelemetry') return <UXTelemetry key={index} />;
+            if (section.data === 'hasCanvasComments') return <CanvasComments key={index} />;
+            if (section.data === 'hasPromotionsByVertical') return <PromotionsByVertical key={index} />;
+            return null;
+          default:
+            return null;
+        }
+      })}
+
       {/* 5. Mandatory Markdown Body Prose */}
       {data.bodyHtml && data.bodyHtml.trim().length > 0 && (
         <section id="overview" className="section">
@@ -146,27 +165,6 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
             </div>
           </div>
         </section>
-      )}
-
-      {/* Render Flags: Canvas Comments */}
-      {data.renderFlags?.hasCanvasComments && <CanvasComments />}
-      
-      {/* Legacy Data: Personas */}
-      {data.personas && (
-        <PersonaList 
-          heading={data.personas.heading} 
-          sub={data.personas.sub} 
-          personas={data.personas.list} 
-        />
-      )}
-
-      {/* Legacy Data: Testimonials */}
-      {data.testimonials && (
-        <Testimonials 
-          eyebrow={data.testimonials.eyebrow}
-          heading={data.testimonials.heading} 
-          items={data.testimonials.items} 
-        />
       )}
 
       {/* 6. Related Platform Capabilities */}
@@ -208,16 +206,6 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
             </div>
           </div>
         </section>
-      )}
-
-      {/* Legacy Data: CTABand */}
-      {data.cta && (
-        <CTABand 
-          heading={data.cta.heading} 
-          sub={data.cta.sub} 
-          primary={data.cta.primary}
-          secondary={data.cta.secondary}
-        />
       )}
     </article>
   );

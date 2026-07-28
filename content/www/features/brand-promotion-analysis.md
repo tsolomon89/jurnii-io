@@ -29,6 +29,59 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '35'
+        label: Regulated Markets Monitored
+      - num: '21'
+        label: Feature Areas Scanned
+      - num: 30+
+        label: Hours Saved per Week
+  - type: manifesto
+    data: >-
+      Optimize landing page conversion. Correlate promotional bonus richness
+      directly with structural design, banner sizes, and copywriting placement
+      to maximize player registration yields.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Operators offer rich sign-up incentives but fail to convert players
+        because the promotional design is cluttered, slow, or visually hard to
+        read, diluting marketing spend.
+  - type: solution
+    data:
+      para: >-
+        Jurnii maps promotional banner real estate and layout formats to active
+        bonus richness, indicating which visual formats drive optimal signup
+        yield and lower acquisition CPA.
+      foot: >-
+        Chief Marketing Officers use these insights to balance creative design
+        with promotional yield expectations.
+  - type: capabilities
+    data:
+      - icon: edit-3
+        title: Copywriting Optimization
+        body: >-
+          Correlate player conversion yields against headline text lengths, CTA
+          button positions, and terms visibility.
+      - icon: layout
+        title: Banner Size Audits
+        body: >-
+          Measure how visual real estate allocation on homepages and affiliate
+          landing zones influences player registration success.
+      - icon: activity
+        title: Creative Performance Logs
+        body: >-
+          Map historical competitor banner deployments against promotional
+          click-through indicators to model layout efficiency.
+  - type: benchmark
+  - type: renderFlag
+    data: hasFeatureQuote
 ---
 ## Executive Summary
 

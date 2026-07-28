@@ -41,6 +41,142 @@ useCaseValueRefs:
   - enterprise
   - commercial
   - igaming
+sections:
+  - type: outcomes
+    data:
+      heading: What changes for your team.
+      sub: >-
+        Numbers from current Tier 1 and Tier 2 deployments. Specific results
+        vary by market and starting maturity.
+      kpis:
+        - num: 23%
+          label: Promo waste reduced
+          desc: >-
+            Average reduction in low-ROI bonus spend after first quarter, by
+            identifying offers competitors abandoned.
+        - num: 4.2×
+          label: Faster reaction time
+          desc: >-
+            From "competitor changed something" to "we have a response brief" —
+            measured against manual workflows.
+        - num: 850+
+          label: Promotions tracked
+          desc: >-
+            Captured across our most recent seasonal report (Cheltenham 2026),
+            across 20+ operators.
+        - num: 6 days
+          label: Average go-live
+          desc: >-
+            From contract signed to first live intelligence dashboard, including
+            calibration period.
+  - type: method
+    data:
+      heading: How Jurnii 360 actually works.
+      sub: 'No black box. Here''s the pipeline, end to end.'
+      steps:
+        - title: Scope the competitor set
+          body: >-
+            Together we agree the brands, markets, and verticals that matter.
+            Typical scope: 5–20 brands across 1–4 jurisdictions.
+        - title: 'Capture, daily'
+          body: >-
+            Public-facing pages, promo pages, and structured offer pages are
+            captured at agreed frequency. Standard is daily; up to 4× daily for
+            enterprise.
+        - title: Structure & enrich
+          body: >-
+            Every offer is parsed into a structured schema — value, mechanic,
+            wagering, qualifying odds, eligible games, segment, channel, and
+            more.
+        - title: Score & benchmark
+          body: >-
+            The promotion richness index normalises across mechanics so a £50
+            free bet can be compared to a £20 bonus + £10 free spins.
+        - title: Surface & alert
+          body: >-
+            Insights land in a dashboard, in your Slack, in your email, or
+            directly in your warehouse — whatever your team actually uses.
+        - title: Calibrate weekly
+          body: >-
+            Your account team reviews accuracy with you weekly for the first
+            month, then monthly, with a quarterly strategy review.
+  - type: testimonials
+    data:
+      eyebrow: Testimonials
+      heading: Trusted on the<br/>commercial floor.
+      items:
+        - quote: >-
+            The first quarter alone paid for the platform twice over. We pulled
+            three reload offers that no major competitor had run for nine months
+            — and saw zero churn impact.
+          author: Marcus Hale
+          role: Head of CRM · Tier 1 European operator
+          initials: MH
+          color: green
+        - quote: >-
+            We used to find out about a competitor’s price-boost campaign from
+            Twitter. Now it’s a Slack alert before they’ve even finished rolling
+            it out.
+          author: Priya Nadar
+          role: Head of Trading · Multi-market sportsbook
+          initials: PN
+          color: blue
+        - quote: >-
+            It settled an argument we’d been having for two years. The market
+            data was right there on the screen — no more “I think” in the Monday
+            meeting.
+          author: Daniel Okafor
+          role: Group Marketing Director · Tier 1 operator
+          initials: DO
+          color: orange
+        - quote: >-
+            The historical database alone is worth it. We replayed a
+            competitor’s entire seasonal playbook in an afternoon and built our
+            counter off it.
+          author: Elena Rossi
+          role: Head of Casino · Tier 2 European operator
+          initials: ER
+          color: purple
+  - type: personas
+    data:
+      heading: Who 360 is built for.
+      sub: >-
+        It's a horizontal tool, but it answers different questions for different
+        roles.
+      list:
+        - role: CRM & Promotions
+          question: Are we overpaying on reload offers?
+          answer: >-
+            Compare your full offer ladder against the live market. See which
+            competitors have abandoned mechanics you're still funding.
+        - role: Trading & Sportsbook
+          question: Who blinks first on price boosts?
+          answer: >-
+            Track price-boost frequency, depth, and concentration around major
+            events — and time your own boosts off it.
+        - role: Product & Casino
+          question: What new game launch tactics work?
+          answer: >-
+            See which providers are getting hero placement at competitors, with
+            what mechanic, and for how long.
+        - role: Head of Marketing
+          question: Where is the market actually going?
+          answer: >-
+            Quarterly trend reports surface where mechanics are heating up vs
+            cooling — strategy-grade, not anecdotal.
+  - type: cta
+    data:
+      heading: Ready to proceed?
+      primary:
+        label: Book a 45-min demo
+        href: contact.html
+      secondary:
+        label: See sample report
+        href: resources.html?cat=report
+  - type: renderFlag
+    data: hasPromotionsByVertical
+  - type: renderFlag
+    data: hasPriceBoostTeaser
 ---
 
 # Jurnii 360

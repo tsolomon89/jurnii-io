@@ -109,5 +109,6 @@ export function resolveRichPageData(
     tableOfContents: toc,
     relatedItems,
     reverseEditorialItems,
+    sections: meta.sections,
   };
 }

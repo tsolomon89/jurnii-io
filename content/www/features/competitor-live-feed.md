@@ -29,6 +29,59 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '35'
+        label: Regulated Markets Monitored
+      - num: '21'
+        label: Feature Areas Scanned
+      - num: 30+
+        label: Hours Saved per Week
+  - type: manifesto
+    data: >-
+      Stay continuously connected to rival movements. Monitor live landing page
+      visual edits and copywriting adjustments as they happen across multi-brand
+      operators to preserve your competitive edge.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Competitors launch aggressive welcome campaigns during major sporting
+        events, catching your commercial team off-guard and eroding active
+        market share in a matter of hours.
+  - type: solution
+    data:
+      para: >-
+        Our scraper network crawls operator domains multiple times daily,
+        tracking DOM shifts, image updates, CSS adjustments, and CTA copywriting
+        edits under simulated user flows.
+      foot: >-
+        Heads of CRM use the Live Feed to monitor retention bonuses, adjusting
+        internal rewards to prevent player churn.
+  - type: capabilities
+    data:
+      - icon: eye
+        title: Visual Shift Tracking
+        body: >-
+          Detect visual interface alterations, branding shifts, and structural
+          design adjustments on competitive pages the moment they go live.
+      - icon: refresh-cw
+        title: Real-time Monitors
+        body: >-
+          Run continuous server-side monitors to detect active page changes,
+          pricing models, payment portals, and affiliate links.
+      - icon: clipboard
+        title: Changelog Reporting
+        body: >-
+          Compile daily logs detailing rival feature introductions, navigation
+          shifts, digital wallet integrations, and verification alterations.
+  - type: benchmark
+  - type: renderFlag
+    data: hasFeatureQuote
 ---
 ## Executive Summary
 

@@ -30,6 +30,64 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '35'
+        label: Regulated Markets Monitored
+      - num: '21'
+        label: Feature Areas Scanned
+      - num: 30+
+        label: Hours Saved per Week
+  - type: manifesto
+    data: >-
+      Identify how competitors differentiate themselves in saturated markets.
+      Jurnii continuously maps promotional angles and copywriting claims to
+      highlight underserved positioning opportunities in sports and casino
+      markets, driving acquisition yield higher.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Operators copy-paste generic slogans like 'fast payouts' or 'widest
+        markets' without visual or textual distinction. This lack of
+        differentiation drives customer acquisition costs (CAC) higher as
+        bidding wars intensify on identical copy hooks.
+  - type: solution
+    data:
+      para: >-
+        Jurnii parses all on-site copy and homepage banner states, cataloging
+        active value claims and layout structures. It maps the visual dominance
+        of competitive claims to identify untapped promotional angles and
+        copywriting vulnerabilities.
+      foot: >-
+        Chief Marketing Officers deploy Jurnii positioning maps to defend brand
+        share and optimize digital spend.
+  - type: capabilities
+    data:
+      - icon: award
+        title: Value Claim Analysis
+        body: >-
+          Extract and index all digital copywriting claims, tracking the exact
+          focus of competitor messaging across key player landing zones and
+          signup funnels.
+      - icon: compass
+        title: Differentiated Angles
+        body: >-
+          Spot messaging voids in rival advertising matrices to launch highly
+          unique counter-campaigns that stand out in saturated market segments.
+      - icon: layers
+        title: Competitive Matrix Maps
+        body: >-
+          Visualize brand placements based on pricing structures, visual premium
+          qualities, and overall ease-of-use indicators relative to regulatory
+          frameworks.
+  - type: benchmark
+  - type: renderFlag
+    data: hasFeatureQuote
 ---
 ## Executive Summary
 

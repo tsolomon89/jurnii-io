@@ -44,6 +44,7 @@ export interface ContentMeta {
   noindex?: boolean;
   contentKind?: ContentKind;
   format?: 'article' | 'paper' | 'page';
+  sections?: any[];
   [key: string]: any;
 }
 
@@ -81,6 +82,7 @@ export interface EntityPageModel {
   tableOfContents: TocItem[];
   relatedItems: { title: string; description: string; href: string; icon?: string }[];
   reverseEditorialItems: { title: string; date: string; excerpt: string; href: string }[];
+  sections?: any[];
 }
 
 export interface EditorialPageModel {

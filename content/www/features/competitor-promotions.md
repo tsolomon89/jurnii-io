@@ -30,6 +30,67 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '35'
+        label: Regulated Markets Monitored
+      - num: '21'
+        label: Feature Areas Scanned
+      - num: 30+
+        label: Hours Saved per Week
+  - type: manifesto
+    data: >-
+      Never let a competitor promotion go unnoticed. Jurnii monitors active
+      sign-up offers across key regulated jurisdictions, helping operators
+      calibrate margins, protect Net Gaming Revenue (NGR), and acquire players
+      dynamically in high-volatility environments.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        In highly commoditised gaming jurisdictions where B2B platform stacks
+        converge, operators waste millions copying rival promo terms blind.
+        Manual compilation of wagering requirements and bonus values takes
+        weeks, leaving CRM and trading teams two steps behind the market and
+        causing severe margin dilution.
+  - type: solution
+    data:
+      para: >-
+        Using Jurnii 360's continuous tracking engine, Jurnii maps competitive
+        bonus terms, welcome incentives, and CRM triggers across 35 regulated
+        markets simultaneously. Our platform normalizes and scores offer
+        generosity through the proprietary Promo Richness Index to deliver
+        instant strategic clarity.
+      foot: >-
+        Chief Commercial Officers utilize this feature to safeguard operator
+        margins and maintain active market parity.
+  - type: capabilities
+    data:
+      - icon: tag
+        title: Wagering Hurdles Tracking
+        body: >-
+          Compare deposit wagering requirements, play-through multipliers, and
+          spin constraints side-by-side to understand true player acquisition
+          effort and protect operator hold rates.
+      - icon: globe
+        title: Geo-Targeted Audits
+        body: >-
+          Isolate regional campaign variations deployed by rival conglomerates
+          in specific states, provinces, or countries to exploit promotional
+          voids and optimize local customer acquisition cost.
+      - icon: activity
+        title: Active Signup Scanning
+        body: >-
+          Detect and log newly introduced welcome offers within minutes of
+          launching to empower trading, CRM, and customer marketing response
+          teams instantly.
+  - type: benchmark
+  - type: renderFlag
+    data: hasFeatureQuote
 ---
 ## Executive Summary
 

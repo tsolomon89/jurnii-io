@@ -29,6 +29,59 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '35'
+        label: Regulated Markets Monitored
+      - num: '21'
+        label: Feature Areas Scanned
+      - num: 30+
+        label: Hours Saved per Week
+  - type: manifesto
+    data: >-
+      Adopt modern UX trends ahead of the competition. Track the evolution of
+      gaming interfaces, dark mode styles, and betslip integrations across
+      global markets to ensure design relevance.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Product roadmaps are built in silos. Operators miss significant market
+        shifts like digital wallets or instant KYC integrations until they have
+        already lost strategic market share.
+  - type: solution
+    data:
+      para: >-
+        Jurnii constantly indexes visual and functional elements of leading
+        operators, reporting on adoption speeds of new designs and UI patterns
+        to guide product priorities.
+      foot: >-
+        Heads of UX deploy trend reports to keep interfaces modern and aligned
+        with evolving player expectations.
+  - type: capabilities
+    data:
+      - icon: palette
+        title: Design System Mapping
+        body: >-
+          Identify color palettes, border styling, and layout spacing systems
+          gaining regional traction across key demographics.
+      - icon: check-square
+        title: Feature Adoption Rates
+        body: >-
+          Measure how fast rival operators deploy new digital wallet or
+          quick-bet features to guide product prioritization decisions.
+      - icon: globe
+        title: Global Shift Analysis
+        body: >-
+          Review visual design trends in pioneering markets like Sweden, the UK,
+          and Ontario to anticipate local structural shifts.
+  - type: benchmark
+  - type: renderFlag
+    data: hasFeatureQuote
 ---
 ## Executive Summary
 

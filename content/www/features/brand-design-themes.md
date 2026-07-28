@@ -29,6 +29,59 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '35'
+        label: Regulated Markets Monitored
+      - num: '21'
+        label: Feature Areas Scanned
+      - num: 30+
+        label: Hours Saved per Week
+  - type: manifesto
+    data: >-
+      Standardize aesthetic measurements across competitors. Automatically
+      catalog font families, button border-radius systems, and visual padding to
+      understand contemporary iGaming design standards.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Aesthetic consistency is hard to enforce across multiple regional
+        brands, resulting in visual drift, technical debt, and a compromised
+        premium brand feel.
+  - type: solution
+    data:
+      para: >-
+        Jurnii's CSS scraper normalizes styling properties, documenting
+        typographic scales, font family combinations, spacing utilities, and
+        visual variables automatically.
+      foot: >-
+        Design Systems Architects use Theme Auditing to establish strict tokens
+        and prevent internal style drift.
+  - type: capabilities
+    data:
+      - icon: code
+        title: Style Sheet Scraping
+        body: >-
+          Scrape and log CSS variables, layout spacing, and visual styling
+          properties across competitor domains to benchmark technical execution.
+      - icon: type
+        title: Typography Analysis
+        body: >-
+          Audit visual reading levels, typography hierarchy, and reading ease
+          across player registration flows to prevent cognitive fatigue.
+      - icon: columns
+        title: Theme Comparison Matrix
+        body: >-
+          Map brands across minimalist layouts, hyper-promotional patterns, or
+          high-density gaming UIs to locate styling voids.
+  - type: benchmark
+  - type: renderFlag
+    data: hasFeatureQuote
 ---
 ## Executive Summary
 

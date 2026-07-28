@@ -28,64 +28,86 @@ export const BaseEntitySchema = z.object({
   pullQuote: z.string().optional(),
   pullQuoteAttribution: z.string().optional(),
   
-  // Legacy Jurnii Product Data Extensions
-  outcomes: z.object({
-    heading: z.string(),
-    sub: z.string().optional(),
-    kpis: z.array(z.object({
-      num: z.string(),
-      label: z.string(),
-      desc: z.string()
-    }))
-  }).optional(),
-  
-  method: z.object({
-    heading: z.string(),
-    sub: z.string().optional(),
-    steps: z.array(z.object({
-      title: z.string(),
-      body: z.string()
-    }))
-  }).optional(),
-  
-  testimonials: z.object({
-    eyebrow: z.string().optional(),
-    heading: z.string(),
-    items: z.array(z.object({
-      quote: z.string(),
-      author: z.string(),
-      role: z.string(),
-      initials: z.string().optional(),
-      color: z.string().optional(),
-      avatar: z.string().optional()
-    }))
-  }).optional(),
-  
-  personas: z.object({
-    heading: z.string(),
-    sub: z.string().optional(),
-    list: z.array(z.object({
-      role: z.string(),
-      question: z.string(),
-      answer: z.string()
-    }))
-  }).optional(),
-  
-  cta: z.object({
-    heading: z.string(),
-    sub: z.string().optional(),
-    primary: z.object({ label: z.string(), href: z.string() }).optional(),
-    secondary: z.object({ label: z.string(), href: z.string() }).optional()
-  }).optional(),
-  
-  renderFlags: z.object({
-    hasPriceBoostTeaser: z.boolean().optional(),
-    hasPromotionsByVertical: z.boolean().optional(),
-    hasUXScorecard: z.boolean().optional(),
-    hasUXTelemetry: z.boolean().optional(),
-    hasCanvasComments: z.boolean().optional(),
-    hasMMMTeaser: z.boolean().optional()
-  }).optional(),
+  sections: z.array(
+    z.discriminatedUnion('type', [
+      z.object({
+        type: z.literal('metrics'),
+        data: z.array(z.object({ num: z.string(), label: z.string() }))
+      }),
+      z.object({
+        type: z.literal('manifesto'),
+        data: z.string()
+      }),
+      z.object({
+        type: z.literal('challenge'),
+        data: z.object({ eyebrow: z.string(), title: z.string(), para: z.string() })
+      }),
+      z.object({
+        type: z.literal('solution'),
+        data: z.object({ para: z.string(), foot: z.string().optional() })
+      }),
+      z.object({
+        type: z.literal('capabilities'),
+        data: z.array(z.object({ icon: z.string(), title: z.string(), body: z.string() }))
+      }),
+      z.object({
+        type: z.literal('outcomes'),
+        data: z.object({
+          heading: z.string(),
+          sub: z.string().optional(),
+          kpis: z.array(z.object({ num: z.string(), label: z.string(), desc: z.string() }))
+        })
+      }),
+      z.object({
+        type: z.literal('method'),
+        data: z.object({
+          heading: z.string(),
+          sub: z.string().optional(),
+          steps: z.array(z.object({ title: z.string(), body: z.string() }))
+        })
+      }),
+      z.object({
+        type: z.literal('testimonials'),
+        data: z.object({
+          eyebrow: z.string().optional(),
+          heading: z.string(),
+          items: z.array(z.object({
+            quote: z.string(),
+            author: z.string(),
+            role: z.string(),
+            initials: z.string().optional(),
+            color: z.string().optional(),
+            avatar: z.string().optional()
+          }))
+        })
+      }),
+      z.object({
+        type: z.literal('personas'),
+        data: z.object({
+          heading: z.string(),
+          sub: z.string().optional(),
+          list: z.array(z.object({ role: z.string(), question: z.string(), answer: z.string() }))
+        })
+      }),
+      z.object({
+        type: z.literal('cta'),
+        data: z.object({
+          heading: z.string(),
+          sub: z.string().optional(),
+          primary: z.object({ label: z.string(), href: z.string() }).optional(),
+          secondary: z.object({ label: z.string(), href: z.string() }).optional()
+        })
+      }),
+      z.object({
+        type: z.literal('benchmark'),
+        data: z.any().optional()
+      }),
+      z.object({
+        type: z.literal('renderFlag'),
+        data: z.string()
+      })
+    ])
+  ).optional(),
 });
 
 export const ProductEntitySchema = BaseEntitySchema.extend({

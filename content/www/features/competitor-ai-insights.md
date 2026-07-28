@@ -29,6 +29,59 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '35'
+        label: Regulated Markets Monitored
+      - num: '21'
+        label: Feature Areas Scanned
+      - num: 30+
+        label: Hours Saved per Week
+  - type: manifesto
+    data: >-
+      Gain predictive foresight in competitive markets. Leverage specialized
+      neural nets to summarize massive campaign databases and predict rival
+      product timing and advertising strategies.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Raw competitor data is overwhelming. Sorting through thousands of sports
+        boosts, casino offers, and copy variations manually prevents analysts
+        from identifying real strategic patterns.
+  - type: solution
+    data:
+      para: >-
+        Jurnii utilizes proprietary domain-specific ML models to digest
+        competitive databases, classifying campaigns, detecting trends, and
+        predicting launch windows with 85% confidence.
+      foot: >-
+        Chief Marketing Officers use AI Insights to allocate advertising budget
+        toward highly defensive channels.
+  - type: capabilities
+    data:
+      - icon: brain
+        title: Timing Prediction
+        body: >-
+          Anticipate rival marketing deployments and product launches using deep
+          temporal predictive models trained on historical operator behaviors.
+      - icon: message-square
+        title: Ad Copy Summaries
+        body: >-
+          Utilize natural language processing to isolate winning competitor
+          copywriting hooks and visual messaging angles across landing zones.
+      - icon: alert-circle
+        title: Anomaly Spotting
+        body: >-
+          Flag unusual competitor acquisition spikes, non-standard bonus
+          structures, or regulatory compliance failures instantly.
+  - type: benchmark
+  - type: renderFlag
+    data: hasFeatureQuote
 ---
 ## Executive Summary
 

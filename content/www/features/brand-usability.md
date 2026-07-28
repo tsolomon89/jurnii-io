@@ -28,6 +28,58 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: 300+
+        label: Brands Analysed
+      - num: 70+
+        label: Recommendations per Audit
+      - num: '4'
+        label: Key UX Dimensions
+      - num: Mins
+        label: Time to Full Audit
+  - type: manifesto
+    data: >-
+      Evaluate ease-of-use with mathematical objectivity. Identify friction
+      points in sports betting checkout, payment selection, and document upload
+      stages.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Usability evaluations are slow, expensive, and highly subjective when
+        conducted by traditional design agencies, delaying sprint cycles by
+        weeks.
+  - type: solution
+    data:
+      para: >-
+        Jurnii UX runs automated heuristic audits mapped across four dimensions,
+        providing ranked recommendations to clear player onboarding pathways.
+      foot: >-
+        Chief Product Officers leverage usability scoring to prioritize features
+        and accelerate development roadmaps.
+  - type: capabilities
+    data:
+      - icon: check-circle
+        title: Heuristic Frameworks
+        body: >-
+          Evaluate experience against 12 core onboarding design criteria
+          systematically to replace opinions with facts.
+      - icon: activity
+        title: Cognitive Load Evaluation
+        body: >-
+          Spot redundant form fields, confusing terms layouts, and interactive
+          elements causing checkout and registration leakage.
+      - icon: alert-triangle
+        title: Error Recovery Audits
+        body: >-
+          Analyze validation prompts, instruction clarity, and error feedback
+          systems across player signup flows.
+  - type: benchmark
+  - type: renderFlag
+    data: hasFeatureQuote
 ---
 ## Executive Summary
 
