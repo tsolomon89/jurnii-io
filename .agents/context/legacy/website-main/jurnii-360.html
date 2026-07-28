@@ -1,0 +1,113 @@
+<!doctype html>
+<html data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jurnii 360 · Competitor proposition intelligence for iGaming</title>
+<meta name="description" content="See every competitor move, the day it happens. Daily promotion capture, change alerts, and a structured intelligence layer for trading, CRM, and product teams.">
+<link rel="icon" href="assets/jurnii-icon-light.svg">
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="preload" href="assets/fonts/Geist-VariableFont_wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/global.css">
+<link rel="stylesheet" href="assets/fonts-mono.css" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="assets/fonts-mono.css"></noscript>
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/lucide@1.25.0/dist/umd/lucide.min.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="assets/site.jsx"></script>
+<script type="text/babel" src="assets/blocks.jsx"></script>
+<script type="text/babel" src="assets/product-data.jsx"></script>
+<script type="text/babel" src="assets/page-sections.jsx"></script>
+<script type="text/babel" src="assets/price-boost-table.jsx"></script>
+<script type="text/babel" src="assets/cl-promotions.jsx"></script>
+<script type="text/babel">
+function App() {
+  const d = window.PRODUCT_DATA['360'];
+  return (
+    <PageChrome active="product">
+      <PageHero kicker={d.kicker} eyebrow={d.eyebrow} title={d.title} lede={d.lede} primaryCta={d.primary} secondaryCta={d.secondary} accentClass={d.accent}/>
+      <LazySection minHeight={420} className="lazy-ph-feature">
+        <FeatureGrid heading={d.features.heading} sub={d.features.sub} items={d.features.items}/>
+      </LazySection>
+      <LazySection minHeight={480} className="lazy-ph-promos">
+        <PriceBoostTeaser/>
+      </LazySection>
+      <LazySection minHeight={280} className="lazy-ph-outcome">
+        <OutcomeStrip heading={d.outcomes.heading} sub={d.outcomes.sub} kpis={d.outcomes.kpis}/>
+      </LazySection>
+      <LazySection minHeight={480} className="lazy-ph-promos" stylesheets={['assets/pv-panel.css']}>
+        <section className="section reveal">
+          <div className="container">
+            <div className="section-head">
+              <p className="eyebrow"><span className="dot" />Live view</p>
+              <h2 className="h2-section">Every competitor promotion, structured by vertical.</h2>
+              <p className="section-lede">See how promotional intensity breaks down across sports and casino — with live offer capture and per-competitor activity, refreshed daily. This is the same panel your trading and CRM teams work from.</p>
+            </div>
+            <PromotionsByVertical/>
+          </div>
+        </section>
+      </LazySection>
+      <LazySection minHeight={360} className="lazy-ph-section">
+        <Methodology heading={d.method.heading} sub={d.method.sub} steps={d.method.steps}/>
+      </LazySection>
+      <LazySection minHeight={360} className="lazy-ph-section">
+        <Testimonials {...d.testimonials} accentClass={d.accent}/>
+      </LazySection>
+      <LazySection minHeight={360} className="lazy-ph-section">
+        <PersonaList heading={d.personas.heading} sub={d.personas.sub} personas={d.personas.list}/>
+      </LazySection>
+      <LazySection minHeight={240} className="lazy-ph-section">
+        <CTABand heading="See your competitor set, live." sub="A 45-minute demo, with sample data from your actual market." primary={{label:'Book a demo', href:'contact.html'}} secondary={{label:'Read sample report', href:'resources.html?cat=report'}}/>
+      </LazySection>
+    </PageChrome>
+  );
+}
+function mount360() {
+  var needed = ['PageChrome','PageHero','LazySection','FeatureGrid','PriceBoostTeaser','OutcomeStrip','PromotionsByVertical','Methodology','Testimonials','PersonaList','CTABand'];
+  if (needed.some(function(n){ return typeof window[n] === 'undefined'; })) { return setTimeout(mount360, 30); }
+  if (!window.PRODUCT_DATA) { return setTimeout(mount360, 30); }
+  ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+}
+mount360();
+</script>
+<script>
+(function(){
+  function load(){
+    var s=document.createElement('script');
+    s.src='assets/headline-split.js';
+    document.body.appendChild(s);
+  }
+  if('requestIdleCallback' in window) requestIdleCallback(load,{timeout:2000});
+  else setTimeout(load,1);
+})();
+</script>
+<script>
+(function(){
+  function load(){
+    var s=document.createElement('script');
+    s.src='assets/headline-split.js';
+    document.body.appendChild(s);
+  }
+  if('requestIdleCallback' in window) requestIdleCallback(load,{timeout:2000});
+  else setTimeout(load,1);
+})();
+</script>
+<script>
+(function(){
+  function load(){
+    var s=document.createElement('script');
+    s.src='assets/headline-split.js';
+    document.body.appendChild(s);
+  }
+  if('requestIdleCallback' in window) requestIdleCallback(load,{timeout:2000});
+  else setTimeout(load,1);
+})();
+</script>
+</body>
+</html>

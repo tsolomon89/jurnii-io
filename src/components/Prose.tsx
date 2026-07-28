@@ -8,7 +8,7 @@ interface ProseProps {
 export const Prose: React.FC<ProseProps> = ({ html, className = '' }) => {
   return (
     <div
-      className={`prose prose-invert max-w-none text-slate-300 leading-relaxed space-y-4 ${className}`}
+      className={`article-prose ${className}`}
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );

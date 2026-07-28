@@ -1,0 +1,201 @@
+{
+  "unique": {
+    "textSizesNeeded": {
+      "16px": "--text-base",
+      "14px": "--text-sm",
+      "12px": "--text-xs",
+      "18px": "--text-lg",
+      "24px": "--text-2xl",
+      "20px": "--text-xl",
+      "96px": "--text-8xl",
+      "30px": "--text-3xl",
+      "15px": "--text-sm-plus",
+      "17px": "--text-md",
+      "13px": "--text-xs-plus",
+      "10px": "--text-2xs",
+      "11px": "--text-2xs-plus",
+      "22px": "--text-xl-plus",
+      "26px": "--text-2xl-plus",
+      "52px": "--text-5xl-plus",
+      "23px": "--text-xl-lg",
+      "19px": "--text-lg-plus",
+      "28px": "--text-2_5xl",
+      "9px": "--text-3xs",
+      "42px": "--text-4xl-plus",
+      "27px": "--text-2xl-lg",
+      "46px": "--text-4_5xl",
+      "21px": "--text-xl-sm"
+    },
+    "colorReplacements": {
+      "#00B113": "--jurnii-600",
+      "#FFFFFF": "--card",
+      "#FCA5A5": "--destructive",
+      "#F2F9F9": "--blue-dianne-50",
+      "#94FF96": "--jurnii-200",
+      "#DC2626": "--destructive",
+      "#F87171": "--destructive",
+      "#57FF60": "--jurnii-300",
+      "#34F741": "--jurnii-400",
+      "#C084FC": "--performance",
+      "#FACC15": "--average",
+      "#FB923C": "--poor",
+      "#FB7185": "--perception"
+    },
+    "fwReplacements": {
+      "400": "--fw-normal",
+      "500": "--fw-medium",
+      "600": "--fw-semibold",
+      "ff:Georgia, serif": "--font-serif"
+    },
+    "spacingReplacements": {
+      "4": "--spacing-1",
+      "8": "--spacing-2",
+      "12": "--spacing-3",
+      "16": "--spacing-4",
+      "20": "--spacing-5",
+      "24": "--spacing-6",
+      "32": "--spacing-8",
+      "40": "--spacing-10",
+      "48": "--spacing-12",
+      "64": "--spacing-16",
+      "80": "--spacing-20",
+      "96": "--spacing-24"
+    },
+    "radiusReplacements": {
+      "9999px": "--radius-full",
+      "8px": "--radius-md",
+      "12px": "--radius-lg",
+      "16px": "--radius-xl",
+      "20px": "--radius-2xl",
+      "2px": "--radius-xxs",
+      "4px": "--radius-xs",
+      "999px": "--radius-full",
+      "6px": "--radius-sm"
+    },
+    "halfPx": {
+      "13.5px": {
+        "rounded": "14px",
+        "token": "--text-sm"
+      },
+      "14.5px": {
+        "rounded": "15px",
+        "token": "--text-sm-plus"
+      },
+      "16.5px": {
+        "rounded": "17px",
+        "token": "--text-md"
+      },
+      "15.5px": {
+        "rounded": "16px",
+        "token": "--text-base"
+      },
+      "12.5px": {
+        "rounded": "13px",
+        "token": "--text-xs-plus"
+      },
+      "9.5px": {
+        "rounded": "10px",
+        "token": "--text-2xs"
+      },
+      "11.5px": {
+        "rounded": "12px",
+        "token": "--text-xs"
+      },
+      "10.5px": {
+        "rounded": "11px",
+        "token": "--text-2xs-plus"
+      }
+    }
+  },
+  "NEW_TEXT_TOKENS": {
+    "9": {
+      "name": "--text-3xs",
+      "rem": "0.5625rem"
+    },
+    "10": {
+      "name": "--text-2xs",
+      "rem": "0.625rem"
+    },
+    "11": {
+      "name": "--text-2xs-plus",
+      "rem": "0.6875rem"
+    },
+    "13": {
+      "name": "--text-xs-plus",
+      "rem": "0.8125rem"
+    },
+    "15": {
+      "name": "--text-sm-plus",
+      "rem": "0.9375rem"
+    },
+    "17": {
+      "name": "--text-md",
+      "rem": "1.0625rem"
+    },
+    "19": {
+      "name": "--text-lg-plus",
+      "rem": "1.1875rem"
+    },
+    "21": {
+      "name": "--text-xl-sm",
+      "rem": "1.3125rem"
+    },
+    "22": {
+      "name": "--text-xl-plus",
+      "rem": "1.375rem"
+    },
+    "23": {
+      "name": "--text-xl-lg",
+      "rem": "1.4375rem"
+    },
+    "26": {
+      "name": "--text-2xl-plus",
+      "rem": "1.625rem"
+    },
+    "27": {
+      "name": "--text-2xl-lg",
+      "rem": "1.6875rem"
+    },
+    "28": {
+      "name": "--text-2_5xl",
+      "rem": "1.75rem"
+    },
+    "42": {
+      "name": "--text-4xl-plus",
+      "rem": "2.625rem"
+    },
+    "46": {
+      "name": "--text-4_5xl",
+      "rem": "2.875rem"
+    },
+    "52": {
+      "name": "--text-5xl-plus",
+      "rem": "3.25rem"
+    }
+  },
+  "TEXT_TOKENS_PX": {
+    "12": "--text-xs",
+    "14": "--text-sm",
+    "16": "--text-base",
+    "18": "--text-lg",
+    "20": "--text-xl",
+    "24": "--text-2xl",
+    "30": "--text-3xl",
+    "36": "--text-4xl",
+    "48": "--text-5xl",
+    "60": "--text-6xl",
+    "72": "--text-7xl",
+    "96": "--text-8xl",
+    "128": "--text-9xl"
+  },
+  "HALF_PX_ROUND": {
+    "9.5": 10,
+    "10.5": 11,
+    "11.5": 12,
+    "12.5": 13,
+    "13.5": 14,
+    "14.5": 15,
+    "15.5": 16,
+    "16.5": 17
+  }
+}

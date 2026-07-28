@@ -28,26 +28,25 @@ export const SharedSubdomainLayout: React.FC<SharedSubdomainLayoutProps> = ({
     return isLibrarySubdomain ? '/' : '/library';
   };
 
-  // Collect unique categories across library items
   const categories = Array.from(
     new Set(libraryItems.map((item) => item.meta.category).filter(Boolean) as string[])
   );
 
   return (
-    <div className="min-h-screen bg-[#030712] text-slate-100 flex flex-col md:flex-row font-sans">
+    <div className="library-layout">
       {/* Mobile top bar */}
-      <div className="md:hidden flex items-center justify-between p-4 bg-slate-950 border-b border-white/10">
-        <a href={getHomeHref()} className="flex items-center space-x-2">
-          <span className="text-sky-400 font-mono font-bold text-lg">Jurnii</span>
-          <span className="text-xs uppercase tracking-wider text-slate-300 bg-sky-950 px-2 py-0.5 rounded border border-sky-800/40 font-mono">
+      <div className="library-mobile-bar">
+        <a href={getHomeHref()} style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
+          <span style={{ color: 'var(--jurnii-400)', fontFamily: 'var(--font-mono)', fontWeight: 'bold', fontSize: '18px' }}>Jurnii</span>
+          <span className="pill" style={{ background: 'var(--concrete-950)', color: 'var(--concrete-300)', borderColor: 'var(--white-a-10)' }}>
             Library
           </span>
         </a>
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="p-2 text-slate-400 hover:text-white focus:outline-none"
+          style={{ background: 'transparent', border: 'none', color: 'var(--concrete-300)', cursor: 'pointer', padding: '8px' }}
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             {mobileOpen ? (
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             ) : (
@@ -58,37 +57,28 @@ export const SharedSubdomainLayout: React.FC<SharedSubdomainLayoutProps> = ({
       </div>
 
       {/* Sidebar navigation */}
-      <aside
-        className={`${
-          mobileOpen ? 'block' : 'hidden'
-        } md:block w-full md:w-80 bg-slate-950 border-r border-white/10 p-6 flex-shrink-0 space-y-8`}
-      >
-        <div className="space-y-2">
-          <a href={getHomeHref()} className="text-2xl font-bold text-slate-100 flex items-center space-x-2.5">
-            <span className="text-sky-400 font-mono">Jurnii</span>
-            <span className="text-xs uppercase tracking-widest text-sky-300 bg-sky-950/80 px-2.5 py-1 rounded border border-sky-800/40 font-mono font-semibold">
+      <aside className={`library-sidebar ${mobileOpen ? '' : 'mobile-hidden'}`}>
+        <div style={{ marginBottom: '32px' }}>
+          <a href={getHomeHref()} style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', marginBottom: '8px' }}>
+            <span style={{ color: 'var(--jurnii-400)', fontFamily: 'var(--font-mono)', fontWeight: 'bold', fontSize: '24px' }}>Jurnii</span>
+            <span className="pill" style={{ background: 'var(--concrete-950)', color: 'var(--jurnii-200)', borderColor: 'var(--white-a-10)' }}>
               Library
             </span>
           </a>
-          <p className="text-xs text-slate-400 leading-relaxed">
+          <p style={{ fontSize: 'var(--text-xs)', color: 'var(--muted-foreground)', lineHeight: 1.6, margin: 0 }}>
             Monographs, benchmarking frameworks, and research papers for iGaming operators.
           </p>
         </div>
 
         {/* Category Filter Pills */}
         {categories.length > 0 && (
-          <div className="space-y-3">
-            <div className="text-xs font-mono uppercase tracking-widest text-slate-500 font-semibold">
-              Research Domains
-            </div>
-            <div className="flex flex-wrap gap-2">
+          <div style={{ marginBottom: '32px' }}>
+            <div className="eyebrow" style={{ marginBottom: '12px' }}>Research Domains</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
               <button
                 onClick={() => onSelectCategory && onSelectCategory(undefined)}
-                className={`text-xs px-3 py-1 rounded-full border transition ${
-                  !activeCategory
-                    ? 'bg-sky-500/20 text-sky-300 border-sky-500/40 font-medium'
-                    : 'bg-slate-900 text-slate-400 border-white/10 hover:text-slate-200'
-                }`}
+                className={`pill ${!activeCategory ? 'solid' : ''}`}
+                style={{ cursor: 'pointer', background: !activeCategory ? 'rgba(var(--jurnii-300-rgb), 0.1)' : 'transparent', color: !activeCategory ? 'var(--jurnii-300)' : 'var(--muted-foreground)' }}
               >
                 All
               </button>
@@ -96,11 +86,8 @@ export const SharedSubdomainLayout: React.FC<SharedSubdomainLayoutProps> = ({
                 <button
                   key={cat}
                   onClick={() => onSelectCategory && onSelectCategory(cat)}
-                  className={`text-xs px-3 py-1 rounded-full border transition ${
-                    activeCategory === cat
-                      ? 'bg-sky-500/20 text-sky-300 border-sky-500/40 font-medium'
-                      : 'bg-slate-900 text-slate-400 border-white/10 hover:text-slate-200'
-                  }`}
+                  className={`pill ${activeCategory === cat ? 'solid' : ''}`}
+                  style={{ cursor: 'pointer', background: activeCategory === cat ? 'rgba(var(--jurnii-300-rgb), 0.1)' : 'transparent', color: activeCategory === cat ? 'var(--jurnii-300)' : 'var(--muted-foreground)' }}
                 >
                   {cat}
                 </button>
@@ -110,36 +97,38 @@ export const SharedSubdomainLayout: React.FC<SharedSubdomainLayoutProps> = ({
         )}
 
         {/* Publications Archive */}
-        <nav className="space-y-3">
-          <div className="text-xs font-mono uppercase tracking-widest text-slate-500 font-semibold flex items-center justify-between">
+        <nav>
+          <div className="eyebrow" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', width: '100%' }}>
             <span>Publications</span>
-            <span className="text-[10px] bg-slate-900 text-slate-400 px-2 py-0.5 rounded-full font-mono">
-              {libraryItems.length}
-            </span>
+            <span style={{ background: 'var(--white-a-6)', padding: '2px 8px', borderRadius: '99px', fontSize: '10px' }}>{libraryItems.length}</span>
           </div>
-          <ul className="space-y-2 text-sm">
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {libraryItems.map((item) => {
               const isActive = item.slug === currentSlug;
               return (
                 <li key={item.slug}>
                   <a
                     href={getItemHref(item.slug)}
-                    className={`block py-2.5 px-3.5 rounded-xl transition ${
-                      isActive
-                        ? 'bg-sky-500/20 text-sky-200 font-semibold border border-sky-500/30 shadow-sm'
-                        : 'text-slate-300 hover:bg-slate-900 hover:text-slate-100 border border-transparent'
-                    }`}
+                    style={{
+                      display: 'block', padding: '10px 14px', borderRadius: '12px', textDecoration: 'none', transition: 'all 150ms ease',
+                      background: isActive ? 'rgba(var(--jurnii-300-rgb), 0.1)' : 'transparent',
+                      border: isActive ? '1px solid rgba(var(--jurnii-300-rgb), 0.2)' : '1px solid transparent',
+                    }}
+                    onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.background = 'var(--white-a-6)'; }}
+                    onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
                   >
-                    <div className="flex items-center justify-between space-x-2">
-                      <span className="truncate font-medium">{item.meta.title}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+                      <span style={{ fontWeight: isActive ? '600' : '500', color: isActive ? 'var(--jurnii-200)' : 'var(--foreground)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {item.meta.title}
+                      </span>
                       {item.meta.medium && (
-                        <span className="text-[9px] text-sky-400 uppercase font-mono bg-sky-950/60 px-1.5 py-0.5 rounded border border-sky-800/30 flex-shrink-0">
+                        <span style={{ fontSize: '9px', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', background: 'var(--white-a-6)', padding: '2px 6px', borderRadius: '4px', color: 'var(--jurnii-400)', flexShrink: 0 }}>
                           {item.meta.medium}
                         </span>
                       )}
                     </div>
                     {item.meta.date && (
-                      <div className="text-[11px] text-slate-400 mt-1 font-mono">{item.meta.date}</div>
+                      <div style={{ fontSize: '11px', color: 'var(--muted-foreground)', marginTop: '4px', fontFamily: 'var(--font-mono)' }}>{item.meta.date}</div>
                     )}
                   </a>
                 </li>
@@ -150,7 +139,10 @@ export const SharedSubdomainLayout: React.FC<SharedSubdomainLayoutProps> = ({
       </aside>
 
       {/* Main content area */}
-      <main className="flex-1 p-6 sm:p-8 lg:p-12 max-w-6xl">{children}</main>
+      <main className="library-main">
+        {children}
+      </main>
     </div>
   );
 };
+

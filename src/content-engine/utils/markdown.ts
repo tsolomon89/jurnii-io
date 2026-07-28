@@ -30,23 +30,23 @@ export function inferKindFromSection(section: string): ContentKind {
 export function validateContentSchema(filePath: string, meta: ContentMeta): void {
   const kind = meta.contentKind;
   let result;
-  if (kind === 'product') {
+  if (kind === 'product' || kind === 'products') {
     result = ProductEntitySchema.safeParse(meta);
-  } else if (kind === 'feature') {
+  } else if (kind === 'feature' || kind === 'features') {
     result = FeatureEntitySchema.safeParse(meta);
-  } else if (kind === 'solution') {
+  } else if (kind === 'solution' || kind === 'solutions') {
     result = SolutionEntitySchema.safeParse(meta);
-  } else if (kind === 'use-case') {
+  } else if (kind === 'use-case' || kind === 'use-cases') {
     result = UseCaseEntitySchema.safeParse(meta);
-  } else if (kind === 'article' || kind === 'paper') {
+  } else if (kind === 'article' || kind === 'paper' || kind === 'library') {
     result = PostSchema.safeParse(meta);
-  } else if (kind === 'page') {
+  } else if (kind === 'page' || kind === 'pages') {
     result = PageSchema.safeParse(meta);
   }
 
   if (result && !result.success) {
-    const errorMsg = `[Content Validation Error] File "${filePath}" failed ${kind} schema validation: ${JSON.stringify(result.error.format())}`;
-    console.warn(errorMsg);
+    const errorMsg = `[Content Validation Error] File "${filePath}" failed ${kind} schema validation:\n${JSON.stringify(result.error.format(), null, 2)}`;
+    throw new Error(errorMsg);
   }
 }
 

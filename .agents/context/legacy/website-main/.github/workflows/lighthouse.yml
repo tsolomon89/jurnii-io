@@ -1,0 +1,29 @@
+name: Lighthouse CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Preview built site
+        run: npx vite preview --host 127.0.0.1 --port 4173 &
+      - name: Wait for preview
+        run: |
+          for i in $(seq 1 30); do
+            if curl -sf http://127.0.0.1:4173/jurnii-ux.html >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          exit 1
+      - name: Lighthouse (fail on CLS > 0.1)
+        run: npm run lighthouse:ci -- --url http://127.0.0.1:4173

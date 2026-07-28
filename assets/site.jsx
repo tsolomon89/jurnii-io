@@ -282,11 +282,11 @@ const NAV_PRODUCTS = [
 { href: 'jurnii-mmm.html', title: 'Jurnii Cortex', desc: 'Marketing mix modelling for iGaming', icon: 'line-chart' }];
 
 const NAV_RESOURCES = [
-{ href: 'resources.html?cat=comparison', title: 'Jurnii vs X', desc: 'Honest comparisons against competitors', icon: 'git-compare' },
-{ href: 'resources.html?cat=guide', title: 'How-to guides', desc: 'Practical playbooks for operators', icon: 'book-open' },
-{ href: 'resources.html?cat=report', title: 'Market reports', desc: 'Annual & seasonal intelligence', icon: 'file-text' },
-{ href: 'resources.html?cat=thought', title: 'Thought leadership', desc: 'Where the market is going', icon: 'lightbulb' },
-{ href: 'resources.html?cat=casestudy', title: 'Case studies', desc: 'Real outcomes, named operators', icon: 'briefcase' },
+{ href: '/library?cat=Competitive%20Analysis', title: 'Jurnii vs X', desc: 'Honest comparisons against competitors', icon: 'git-compare' },
+{ href: '/library?cat=Playbook', title: 'How-to guides', desc: 'Practical playbooks for operators', icon: 'book-open' },
+{ href: '/library?cat=Market%20Intelligence', title: 'Market reports', desc: 'Annual & seasonal intelligence', icon: 'file-text' },
+{ href: '/library?cat=Commercial%20Strategy', title: 'Thought leadership', desc: 'Where the market is going', icon: 'lightbulb' },
+{ href: '/library?cat=Case%20Study', title: 'Case studies', desc: 'Real outcomes, named operators', icon: 'briefcase' },
 { href: 'https://jurnii.featurebase.app/help', title: 'Help & support', desc: 'Docs, FAQs, and product help center', icon: 'life-buoy', external: true }];
 
 
@@ -559,7 +559,7 @@ const DemoCTA = ({ heading, sub }) =>
       <p>{sub || 'A 45-minute demo, with sample intelligence for your real competitor set. No boilerplate deck, no sales pressure.'}</p>
       <div className="actions">
         <a className="btn accent lg" href="contact-us.html">Book a demo <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" /></a>
-        <a className="btn ghost-on-dark lg" href="resources.html">Read the research</a>
+        <a className="btn ghost-on-dark lg" href="/library">Read the research</a>
       </div>
       <div className="demo-cta-sub">
         <div><b>45 min</b> Zoom or in-person</div>
@@ -614,10 +614,10 @@ const Footer = () =>
           </div>
           <div>
             <div className="footer-head">Resources</div>
-            <a href="resources.html?cat=guide">Guides</a>
-            <a href="resources.html?cat=report">Reports</a>
-            <a href="resources.html?cat=thought">Thought leadership</a>
-            <a href="resources.html?cat=casestudy">Case studies</a>
+            <a href="/library?cat=Playbook">Guides</a>
+            <a href="/library?cat=Market%20Intelligence">Reports</a>
+            <a href="/library?cat=Commercial%20Strategy">Thought leadership</a>
+            <a href="/library?cat=Case%20Study">Case studies</a>
           </div>
           <div>
             <div className="footer-head">Company</div>

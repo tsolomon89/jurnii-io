@@ -3,6 +3,7 @@ import path from 'node:path';
 import matter from 'gray-matter';
 import { marked } from 'marked';
 import markedKatex from 'marked-katex-extension';
+import { validateContentSchema } from '../src/content-engine/utils/markdown';
 
 marked.use(
   { gfm: true, breaks: true },
@@ -17,7 +18,7 @@ const contentRoot = path.join(cwd, 'content');
 
 console.log('Compiling content manifest for browser bundle...');
 
-function processDirectory(dirPath, categoryKey) {
+function processDirectory(dirPath: string, categoryKey: string): any[] {
   const absDir = path.join(contentRoot, dirPath);
   if (!fs.existsSync(absDir)) return [];
 
@@ -46,35 +47,39 @@ function processDirectory(dirPath, categoryKey) {
       else if (normPath.includes('/content/www/pages/')) section = 'pages';
       else if (normPath.includes('/content/library/')) section = 'library';
 
+      const meta = {
+        title: parsed.data.title || slug,
+        date: parsed.data.date || parsed.data.publishedAt || '2026-01-01',
+        medium: parsed.data.medium || (section === 'library' ? 'Article' : 'Page'),
+        excerpt: parsed.data.excerpt || parsed.data.description || '',
+        description: parsed.data.description || '',
+        author: parsed.data.author || 'Jurnii Research',
+        category: parsed.data.category,
+        tags: Array.isArray(parsed.data.tags) ? parsed.data.tags : [],
+        subtitle: parsed.data.subtitle,
+        coverImage: parsed.data.coverImage || parsed.data.cover_image,
+        icon: parsed.data.icon,
+        order: typeof parsed.data.order === 'number' ? parsed.data.order : 99,
+        heroFeatures: parsed.data.heroFeatures,
+        deepWorkFeatures: parsed.data.deepWorkFeatures,
+        pullQuote: parsed.data.pullQuote,
+        pullQuoteAttribution: parsed.data.pullQuoteAttribution,
+        productRefs: Array.isArray(parsed.data.productRefs) ? parsed.data.productRefs : [],
+        featureRefs: Array.isArray(parsed.data.featureRefs) ? parsed.data.featureRefs : [],
+        solutionRefs: Array.isArray(parsed.data.solutionRefs) ? parsed.data.solutionRefs : [],
+        useCaseValueRefs: Array.isArray(parsed.data.useCaseValueRefs) ? parsed.data.useCaseValueRefs : [],
+        useCaseFieldRefs: Array.isArray(parsed.data.useCaseFieldRefs) ? parsed.data.useCaseFieldRefs : [],
+        isIndexable: parsed.data.isIndexable !== false,
+        contentKind: parsed.data.contentKind || section,
+      };
+
+      validateContentSchema(fullPath, meta as any);
+
       results.push({
         path: normPath,
         slug,
         section,
-        meta: {
-          title: parsed.data.title || slug,
-          date: parsed.data.date || parsed.data.publishedAt || '2026-01-01',
-          medium: parsed.data.medium || (section === 'library' ? 'Article' : 'Page'),
-          excerpt: parsed.data.excerpt || parsed.data.description || '',
-          description: parsed.data.description || '',
-          author: parsed.data.author || 'Timothy Solomon',
-          category: parsed.data.category,
-          tags: Array.isArray(parsed.data.tags) ? parsed.data.tags : [],
-          subtitle: parsed.data.subtitle,
-          coverImage: parsed.data.coverImage || parsed.data.cover_image,
-          icon: parsed.data.icon,
-          order: typeof parsed.data.order === 'number' ? parsed.data.order : 99,
-          heroFeatures: parsed.data.heroFeatures,
-          deepWorkFeatures: parsed.data.deepWorkFeatures,
-          pullQuote: parsed.data.pullQuote,
-          pullQuoteAttribution: parsed.data.pullQuoteAttribution,
-          productRefs: Array.isArray(parsed.data.productRefs) ? parsed.data.productRefs : [],
-          featureRefs: Array.isArray(parsed.data.featureRefs) ? parsed.data.featureRefs : [],
-          solutionRefs: Array.isArray(parsed.data.solutionRefs) ? parsed.data.solutionRefs : [],
-          useCaseValueRefs: Array.isArray(parsed.data.useCaseValueRefs) ? parsed.data.useCaseValueRefs : [],
-          useCaseFieldRefs: Array.isArray(parsed.data.useCaseFieldRefs) ? parsed.data.useCaseFieldRefs : [],
-          isIndexable: parsed.data.isIndexable !== false,
-          contentKind: parsed.data.contentKind || section,
-        },
+        meta,
         bodyHtml,
         rawContent: parsed.content,
       });

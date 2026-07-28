@@ -1,0 +1,54 @@
+---
+description: Jurnii design system rules for building website pages and components
+globs: **/*.{html,jsx,css}
+alwaysApply: false
+---
+
+# Jurnii Design System
+
+Before building or editing UI:
+
+1. Read [docs/website-design-system.md](../../docs/website-design-system.md) first (architecture, components, voice, checklist).
+2. Consult [docs/design-system.md](../../docs/design-system.md) for token lookups (palettes, semantic chains, themes).
+3. Prefer live patterns in [component-library.html](../../component-library.html) and existing JSX over inventing new CSS.
+
+## Tokens
+
+- Use semantic CSS variables from [assets/global.css](../../assets/global.css) — never primitive palette hex values directly.
+- Examples: `var(--background)`, `var(--foreground)`, `var(--primary)`, `var(--muted-foreground)`, `var(--accent-green)`, `var(--border)`.
+- Themes: `data-theme="light"` (default), `"dark"`, `"jurnii-v1"`.
+- On light surfaces use `--accent-green` (not `jurnii-200`) for solid green fills.
+
+## Typography & layout
+
+- Font: Geist (`--font-sans`), Geist Mono (`--font-mono`).
+- Marketing headings: `.h1-page`, `.h2-section`, `h1.display` — see website design system.
+- Helpers: `.eyebrow`, `.lede`, `.section-lede`, `.body-md`.
+- Layout: `.container`, `.section`, `.section-tight`; spacing/radius via `--spacing-*` / `--radius-*`.
+
+## Components (reuse first)
+
+- Shell: `PageChrome` from [assets/site.jsx](../../assets/site.jsx).
+- Blocks: `PageHero`, `FeatureGrid`, `OutcomeStrip`, `Methodology`, `Testimonials`, `PersonaList`, `CTABand` from [assets/blocks.jsx](../../assets/blocks.jsx).
+- Buttons: `.btn.primary`, `.btn.ghost`, `.btn.accent` with optional `.lg`.
+- Icons: Lucide via `<i data-lucide="name" />` — call `lucide.createIcons()` after render.
+
+## Babel / React conventions
+
+- Export shared components: `window.MyComponent = MyComponent`.
+- Never name a style object `styles` — use scoped names (`heroStyles`) or inline styles.
+- Poll for required globals before `ReactDOM.createRoot(...).render(...)`.
+- Keep "Book a demo" → `contact-us.html` so the demo modal fires.
+
+## Motion & voice
+
+- Add `.reveal` to sections; register new card grids / stats in `FX_STAGGER_GROUPS` / `FX_COUNT_TARGETS` in `site.jsx`.
+- Respect `prefers-reduced-motion`.
+- No emoji. Sharp, evidence-led copy for iGaming operators.
+
+## Do not
+
+- Hardcode colours, fonts, or spacing that exist as CSS variables.
+- Create one-off components when an existing block or `component-library.html` pattern covers it.
+- Reference primitive tokens (`--concrete-*`, `--jurnii-*`) in component CSS — use semantic aliases.
+- Duplicate token tables across docs — brand doc owns tokens; website doc owns implementation.

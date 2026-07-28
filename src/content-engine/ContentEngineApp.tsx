@@ -58,6 +58,15 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
 
   useEffect(() => {
     const rawPath = initialPath || window.location.pathname;
+    
+    // Parse query params for category filter
+    if (typeof window !== 'undefined') {
+      const searchParams = new URLSearchParams(window.location.search);
+      if (searchParams.has('cat')) {
+        setSelectedCategory(searchParams.get('cat')!);
+      }
+    }
+    
     const cleanPath = rawPath.replace(/^\//, '').replace(/\/$/, '').replace(/\.html$/, '');
     const lastSeg = cleanPath.split('/').pop() || '';
     const resolvedPath = ALIAS_MAP[cleanPath] || ALIAS_MAP[lastSeg] || cleanPath;
@@ -123,7 +132,7 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
             format: pres.format as 'article' | 'paper',
             title: item.meta.title,
             date: item.meta.date,
-            author: item.meta.author || 'Timothy Solomon',
+            author: item.meta.author || 'Jurnii Research',
             category: item.meta.category,
             tags: item.meta.tags || [],
             excerpt: item.meta.excerpt,
@@ -166,7 +175,7 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#030712] text-slate-400 flex items-center justify-center font-mono text-sm">
+      <div style={{ minHeight: '100vh', background: 'var(--background)', color: 'var(--muted-foreground)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: 'var(--text-sm)' }}>
         Loading Jurnii Content...
       </div>
     );
@@ -233,50 +242,50 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
             activeCategory={selectedCategory}
             onSelectCategory={setSelectedCategory}
           >
-            <div className="space-y-8">
-              <header className="border-b border-white/10 pb-6">
-                <div className="flex items-center space-x-3 text-xs font-mono uppercase tracking-widest text-sky-400">
+            <div>
+              <header className="library-header">
+                <div className="library-header-meta">
                   <span>Jurnii Intelligence Infrastructure</span>
                   <span>•</span>
                   <span>Research & Publications</span>
                 </div>
-                <h1 className="text-3xl sm:text-4xl font-bold text-slate-100 mt-3">
+                <h1>
                   Library & Monograph Archive
                 </h1>
-                <p className="text-slate-400 mt-2 max-w-2xl text-base leading-relaxed">
+                <p>
                   Peer-reviewed whitepapers, quantitative benchmarking frameworks, and analytical essays on iGaming commercial performance.
                 </p>
               </header>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="library-card-grid">
                 {filteredItems.map((item: ContentItem) => {
                   const href = isLibrarySubdomain ? `/${item.slug}` : `/library/${item.slug}`;
                   return (
                     <a
                       key={item.slug}
                       href={href}
-                      className="p-6 bg-slate-900/50 hover:bg-slate-800/80 border border-white/10 hover:border-sky-500/40 rounded-2xl block space-y-4 transition group"
+                      className="library-card"
                     >
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-mono uppercase font-semibold text-sky-400 bg-sky-950/60 px-2.5 py-1 rounded-full border border-sky-800/30">
+                      <div className="library-card-meta">
+                        <span className="pill solid">
                           {item.meta.category || 'Paper'}
                         </span>
                         {item.meta.medium && (
-                          <span className="text-[10px] font-mono uppercase text-slate-400 tracking-wider">
+                          <span style={{ fontSize: '10px', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', color: 'var(--muted-foreground)', letterSpacing: '0.05em' }}>
                             {item.meta.medium}
                           </span>
                         )}
                       </div>
-                      <h2 className="text-xl font-bold text-slate-100 group-hover:text-sky-300 transition">
+                      <h2>
                         {item.meta.title}
                       </h2>
-                      <p className="text-sm text-slate-400 line-clamp-2 leading-relaxed">
+                      <p>
                         {item.meta.description || item.meta.excerpt}
                       </p>
                       {item.meta.date && (
-                        <div className="text-xs text-slate-400 font-mono pt-2 border-t border-white/5 flex items-center justify-between">
+                        <div className="library-card-footer">
                           <span>Published {item.meta.date}</span>
-                          <span className="text-sky-400 font-sans font-medium group-hover:translate-x-1 transition-transform inline-flex items-center">
+                          <span>
                             Read Monograph &rarr;
                           </span>
                         </div>
@@ -293,10 +302,10 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
       case 'not-found':
       default:
         return (
-          <div className="min-h-screen bg-[#030712] text-slate-100 flex flex-col items-center justify-center p-6 space-y-4">
-            <h1 className="text-4xl font-bold text-slate-100">404 - Page Not Found</h1>
-            <p className="text-slate-400">The requested intelligence resource could not be found.</p>
-            <a href="/" className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-medium rounded-lg transition">
+          <div style={{ minHeight: '100vh', background: 'var(--background)', color: 'var(--foreground)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 'var(--spacing-6)', gap: 'var(--spacing-4)' }}>
+            <h1 style={{ fontSize: 'var(--text-4xl)', fontWeight: 'bold', margin: 0 }}>404 - Page Not Found</h1>
+            <p style={{ color: 'var(--muted-foreground)', margin: 0 }}>The requested intelligence resource could not be found.</p>
+            <a href="/" className="btn primary lg" style={{ marginTop: 'var(--spacing-4)' }}>
               Return to Platform Overview
             </a>
           </div>

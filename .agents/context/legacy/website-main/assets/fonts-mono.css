@@ -1,0 +1,9 @@
+/* Geist Mono — loaded async (non-render-blocking) so it stays off the critical CSS chain.
+   font-display: optional → no late swap / no CLS if the font is not ready in time. */
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: optional;
+  src: url('fonts/GeistMono-VariableFont_wght.woff2') format('woff2');
+}
