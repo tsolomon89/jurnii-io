@@ -1,29 +1,58 @@
 ---
-title: Causal Attribution & Commercial Planning
+title: Jurnii Cortex
 description: >-
-  Causal Attribution & Commercial Planning commercial intelligence module for
-  iGaming operators.
-category: Product
-order: 10
-icon: 'lucide:Zap'
+  MMM that actually understands iGaming. Cortex is built from the ground up for
+  operators — incorporating bonus mechanics, sporting calendars, regulatory
+  shocks, and competitor pressure as first-class inputs.
+category: iGaming-Native Media Mix Modelling
+order: 3
+icon: sparkles
+heroFeatures:
+  - title: Bonus mechanics as inputs
+    description: >-
+      Free bet value, wagering requirements, and reload cadence are first-class
+      model inputs — not lumped into "promotional spend."
+  - title: Sporting calendar awareness
+    description: >-
+      Cheltenham, the Grand National, the World Cup, NFL season — the model
+      knows the calendar and decomposes uplift accordingly.
+  - title: Regulatory shock handling
+    description: >-
+      Stake limits, ad bans, affordability checks — modelled as exogenous
+      shocks, not noise.
+  - title: Competitor pressure variable
+    description: >-
+      Direct integration with Jurnii 360 means competitor promo intensity is in
+      the model, not assumed away.
+pullQuote: >-
+  Every MMM we'd looked at before came from a consultancy that had clearly never
+  run an iGaming P&L. Jurnii's model had the bonus structure right inside the
+  regression. That was the difference.
+pullQuoteAttribution: 'Lukas Brandt, Group Head of Performance'
 productRefs:
   - jurnii-360
   - jurnii-ux
-featureRefs: []
-solutionRefs: []
-useCaseValueRefs: []
+featureRefs:
+  - causal-impact-mmm-attribution
+  - mmm-ready-data-export
+solutionRefs:
+  - attribution
+  - marketing-mix-modelling
+useCaseValueRefs:
+  - enterprise
+  - commercial
 ---
 
-# Causal Attribution & Commercial Planning
+# Jurnii Cortex
 
-Causal Attribution & Commercial Planning commercial intelligence module for iGaming operators.
+MMM that actually understands iGaming. Cortex is built from the ground up for operators — incorporating bonus mechanics, sporting calendars, regulatory shocks, and competitor pressure as first-class inputs.
 
 ## Platform Metrics
 
-- **+46%** — True Marketing ROI Lift
-- **$4.85M** — Budget Reallocated
-- **3x** — Attribution Speed
-- **40x** — ROI on Platform Investment
+- **11%** — Avg NGR Uplift in Year One
+- **24 months** — Minimum Clean Data Window
+- **6** — Channels Modelled (Standard)
+- **4–6 weeks** — Time to First Model
 
 ## The Commercial Challenge
 
@@ -53,22 +82,124 @@ Cortex models isolate natural conversion baselines and measure the true incremen
 - ✅ Defensible, board-ready spend reports validated by finance standards.
 - ✅ Live scenario simulations optimize portfolio spend in minutes.
 
-## Who Uses This Product
+## Designed for Operators, Not Adapted from FMCG
 
-### Chief Marketing Officer
+Every modelling choice we made started from "what actually drives an iGaming P&L?"
 
-**Primary Goal**: Spend Efficiency
+### Bonus mechanics as inputs
 
-CMOs use Cortex to prove the true incremental value of campaigns and defend budget requests before the board with empirical evidence.
+Free bet value, wagering requirements, and reload cadence are first-class model inputs — not lumped into "promotional spend."
 
-### Chief Financial Officer
+### Sporting calendar awareness
 
-**Primary Goal**: Reconciliation
+Cheltenham, the Grand National, the World Cup, NFL season — the model knows the calendar and decomposes uplift accordingly.
 
-CFOs rely on Cortex to reconcile marketing investment against bottom-line outcomes, ensuring zero overspending on saturated channels.
+### Regulatory shock handling
 
-### Chief Commercial Officer
+Stake limits, ad bans, affordability checks — modelled as exogenous shocks, not noise.
 
-**Primary Goal**: Portfolio ROI
+### Competitor pressure variable
 
-CCOs analyze multi-channel conversion curves to optimize the commercial portfolio and model ROI shifts under aggressive promotions.
+Direct integration with Jurnii 360 means competitor promo intensity is in the model, not assumed away.
+
+### FTD vs reactivation split
+
+New player acquisition and lapsed player reactivation are modelled separately — they don't respond to the same channels.
+
+### Decision-grade outputs
+
+Channel-level ROI, saturation curves, and an optimiser that respects real budget and contractual constraints.
+
+## Decisions, Not Dashboards
+
+Outcomes from current Cortex deployments.
+
+### 11% — Avg NGR Uplift
+
+Net incremental NGR from optimised channel mix in year one (range: 7%–18% across deployments).
+
+### 24 Months — Min Data Window
+
+24 months of clean spend + KPI history is the working minimum. We assess this in the scoping call.
+
+### 6 — Channels Modelled
+
+Standard model: paid search, paid social, display, affiliates, TV, sponsorship — extensible per operator.
+
+### 4–6 Weeks — Time to First Model
+
+From data handoff to delivered first model. Faster than typical FMCG-MMM timelines.
+
+## A Scoping-First Approach
+
+Most MMM projects fail at data readiness. We surface that risk before contracts.
+
+### Step 1: Data-readiness assessment
+
+A 12-point checklist on your spend granularity, KPI cleanliness, and channel taxonomy. Most operators fail 2–3 — we tell you which, before signing.
+
+### Step 2: Ingestion & taxonomy
+
+We unify spend, KPI, and exogenous data (calendar, regulatory, competitor) into a single modelling-ready dataset.
+
+### Step 3: Model build
+
+Bayesian time-series structure, calibrated with your team's priors on what each channel "should" do. Transparent, not black-box.
+
+### Step 4: Validation workshop
+
+A half-day session where your commercial leadership stress-tests every coefficient. We don't deliver outputs you don't believe.
+
+### Step 5: Optimisation & roll-out
+
+Channel-level recommendations with confidence bands, plus an optimiser respecting your real-world budget and contractual constraints.
+
+### Step 6: Quarterly refresh
+
+New data in, model re-trained, deltas reported. Saturation curves and ROIs evolve as the market does.
+
+## What Our Clients Say
+
+> "Every MMM we'd looked at before came from a consultancy that had clearly never run an iGaming P&L. Jurnii's model had the bonus structure right inside the regression. That was the difference."
+>
+> — **Lukas Brandt**, Group Head of Performance · Multi-jurisdiction operator
+
+> "For once the marketing line in the board pack came with confidence bands, not a story. Our CFO actually signed off the increase."
+>
+> — **Rachel Donovan**, VP Finance · Tier 1 European operator
+
+> "The saturation curves told us paid search was tapped out two quarters before we'd have felt it. We moved the budget and kept the growth."
+>
+> — **Nikhil Rao**, Head of Performance · Multi-market operator
+
+> "It's the only model I've seen that treats a free-bet campaign and a TV burst in the same framework. That's how we actually spend."
+>
+> — **Hannah Vogel**, Chief Marketing Officer · Tier 2 operator
+
+## Who Cortex is Built For
+
+Commercial leadership wanting model-driven channel decisions, not channel-team self-reporting.
+
+### CMO / Group Head of Marketing
+
+**Question**: Where is the next pound best spent?
+
+Channel-level ROI with saturation curves and confidence intervals — and an optimiser that respects your real constraints.
+
+### Head of Performance
+
+**Question**: Is paid search saturated?
+
+Per-channel saturation curves show when the next pound stops earning — and which channel should pick it up.
+
+### CFO / Finance
+
+**Question**: Is the marketing line defensible?
+
+A model that ties spend to NGR with confidence bands. Defensible in a board meeting.
+
+### Head of CRM
+
+**Question**: How do bonuses really compare to media?
+
+Bonus mechanics are first-class inputs. CRM and acquisition spend are modelled in the same framework.

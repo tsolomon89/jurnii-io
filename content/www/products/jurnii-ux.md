@@ -76,22 +76,92 @@ Instantly scan player pathways, map conversion roadblocks, and weight every flaw
 - ✅ Instant recommendations prioritised by commercial risk levels.
 - ✅ Direct conversion fixes protect engineering capacity.
 
-## Who Uses This Product
+## What Evidence-Based UX Looks Like in Practice
 
-### Product Leadership
+Outcomes from operators currently scoring quarterly with Jurnii UX.
 
-**Primary Goal**: Roadmap ROI
+### 60+ — Criteria per Journey
 
-Product teams align design sprints with revenue targets, defending engineering capacity against arbitrary aesthetic requests.
+Every journey decomposed into structured, scoreable criteria — not a single 1–10 vibe-check.
 
-### Conversion Optimisation
+### 5 — Peer Operators
 
-**Primary Goal**: Funnel Lift
+Standard scope: your operator + 5 peers, scored side-by-side, every quarter.
 
-CRO specialists identify exact funnel bottlenecks on desktop and mobile, ensuring smooth player onboarding curves.
+### 12 Days — Average Audit Time
 
-### Engineering & QA
+From scoping call to delivered first audit, including peer-set calibration.
 
-**Primary Goal**: Layout Integrity
+### +8.4pp — Avg Conversion Lift
 
-Engineering teams track specific layout shifts and validation errors flagged by automated diagnostics without scanning manually.
+Average sign-up→FTD lift after addressing top-3 friction points (over 6 audits).
+
+## How a Jurnii UX Audit Runs
+
+A predictable, repeatable process — designed to fit a quarterly product cadence.
+
+### Step 1: Define scope
+
+Agree the journeys (typically 5–7), the peer set (typically 5 operators), and the platforms (iOS, Android, mobile web, desktop web).
+
+### Step 2: Capture & score
+
+Our analysts plus our scoring layer walk every journey on every platform. Each step is scored, screenshotted, and timestamped.
+
+### Step 3: Calibrate findings
+
+Findings are calibrated against your internal product team in a half-day workshop — no surprises in the final report.
+
+### Step 4: Deliver the audit
+
+A structured report (executive summary, journey-level scoring, prioritised findings) plus a working dashboard you can re-open any time.
+
+### Step 5: Re-score quarterly
+
+Each quarter we re-walk the same journeys. You see the impact of what shipped — and where competitors caught up or pulled away.
+
+## What Our Clients Say
+
+> "For the first time, our roadmap arguments stopped being 'Spotify does it this way' and started being 'we lose 4.2 points to the market on this exact step.' That changed the whole conversation."
+>
+> — **Sofia Lindqvist**, Director of Product · Top 5 European sportsbook
+
+> "Every finding came with a screenshot and a score. My designers stopped defending taste and started fixing measured problems."
+>
+> — **Tom Wheeler**, Director of Design · Tier 1 operator
+
+> "Step-level scoring pointed straight at one screen in our deposit flow. We fixed it in a single sprint and conversion moved the next week."
+>
+> — **Aisha Mansour**, Conversion Lead · Multi-brand casino
+
+> "It's the first UX report I've been able to take into a board meeting without translating it first. The commercial weight is already in the numbers."
+>
+> — **James Okonkwo**, Chief Product Officer · Tier 2 operator
+
+## Who Jurnii UX is Built For
+
+A product-and-design tool with commercial weight behind every finding.
+
+### Head of Product
+
+**Question**: Where is our experience leaking NGR?
+
+A prioritised list of friction points, ranked by NGR-weighted impact — ready for the next planning cycle.
+
+### Director of Design
+
+**Question**: Are we shipping enough, fast enough?
+
+Quarterly re-scoring shows whether design throughput is moving the metrics that matter — or just shipping new screens.
+
+### Conversion / CRO Lead
+
+**Question**: Which step is the bottleneck?
+
+Step-level scoring isolates the single most impactful change for the next sprint.
+
+### CCO / CMO
+
+**Question**: Is product keeping up with marketing?
+
+A clear, executive-level view of whether the experience justifies the acquisition spend.

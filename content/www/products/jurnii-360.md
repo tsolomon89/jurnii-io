@@ -89,22 +89,96 @@ Get structured competitor intelligence feeds direct to your slack or commercial 
 - **Competitor Monitoring**: Auto-scraped offer databases.
 - **Strategic Response**: Map competitor activity directly into defensive campaigns.
 
-## Who Uses This Product
+## What Changes for Your Team
 
-### Commercial & Trading
+Numbers from current Tier 1 and Tier 2 deployments. Specific results vary by market and starting maturity.
 
-**Primary Goal**: Margin Security
+### 23% — Promo Waste Reduced
 
-Trading divisions monitor odds boosts and match generosity dynamically to prevent player cohorts from migrating during major tournaments.
+Average reduction in low-ROI bonus spend after first quarter, by identifying offers competitors abandoned.
 
-### Marketing Operations
+### 4.2× — Faster Reaction Time
 
-**Primary Goal**: Explain CPA Shift
+From "competitor changed something" to "we have a response brief" — measured against manual workflows.
 
-Marketing explains sudden swings in customer acquisition costs by matching acquisition drops with competitor generosity spikes.
+### 850+ — Promotions Tracked
 
-### Product Planning
+Captured across our most recent seasonal report (Cheltenham 2026), across 20+ operators.
 
-**Primary Goal**: Funnel Benchmarks
+### 6 Days — Average Go-Live
 
-Product managers map competitor homepage layout updates and features launches to benchmark real estate performance.
+From contract signed to first live intelligence dashboard, including calibration period.
+
+## How Jurnii 360 Actually Works
+
+No black box. Here's the pipeline, end to end.
+
+### Step 1: Scope the competitor set
+
+Together we agree the brands, markets, and verticals that matter. Typical scope: 5–20 brands across 1–4 jurisdictions.
+
+### Step 2: Capture, daily
+
+Public-facing pages, promo pages, and structured offer pages are captured at agreed frequency. Standard is daily; up to 4× daily for enterprise.
+
+### Step 3: Structure & enrich
+
+Every offer is parsed into a structured schema — value, mechanic, wagering, qualifying odds, eligible games, segment, channel, and more.
+
+### Step 4: Score & benchmark
+
+The promotion richness index normalises across mechanics so a £50 free bet can be compared to a £20 bonus + £10 free spins.
+
+### Step 5: Surface & alert
+
+Insights land in a dashboard, in your Slack, in your email, or directly in your warehouse — whatever your team actually uses.
+
+### Step 6: Calibrate weekly
+
+Your account team reviews accuracy with you weekly for the first month, then monthly, with a quarterly strategy review.
+
+## What Our Clients Say
+
+> "The first quarter alone paid for the platform twice over. We pulled three reload offers that no major competitor had run for nine months — and saw zero churn impact."
+>
+> — **Marcus Hale**, Head of CRM · Tier 1 European operator
+
+> "We used to find out about a competitor's price-boost campaign from Twitter. Now it's a Slack alert before they've even finished rolling it out."
+>
+> — **Priya Nadar**, Head of Trading · Multi-market sportsbook
+
+> "It settled an argument we'd been having for two years. The market data was right there on the screen — no more 'I think' in the Monday meeting."
+>
+> — **Daniel Okafor**, Group Marketing Director · Tier 1 operator
+
+> "The historical database alone is worth it. We replayed a competitor's entire seasonal playbook in an afternoon and built our counter off it."
+>
+> — **Elena Rossi**, Head of Casino · Tier 2 European operator
+
+## Who 360 is Built For
+
+It's a horizontal tool, but it answers different questions for different roles.
+
+### CRM & Promotions
+
+**Question**: Are we overpaying on reload offers?
+
+Compare your full offer ladder against the live market. See which competitors have abandoned mechanics you're still funding.
+
+### Trading & Sportsbook
+
+**Question**: Who blinks first on price boosts?
+
+Track price-boost frequency, depth, and concentration around major events — and time your own boosts off it.
+
+### Product & Casino
+
+**Question**: What new game launch tactics work?
+
+See which providers are getting hero placement at competitors, with what mechanic, and for how long.
+
+### Head of Marketing
+
+**Question**: Where is the market actually going?
+
+Quarterly trend reports surface where mechanics are heating up vs cooling — strategy-grade, not anecdotal.
