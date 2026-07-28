@@ -3,15 +3,14 @@ import ReactDOM from 'react-dom/client';
 import { ContentEngineApp } from './content-engine/ContentEngineApp';
 
 function isRootPath(): boolean {
-  const p = window.location.pathname.replace(/\/$/, '');
-  return p === '' || p === '/index.html';
+  const p = window.location.pathname.replace(/\/$/, '').replace(/\.html$/, '');
+  return p === '' || p === '/index';
 }
 
 function MainApp() {
   const isRoot = isRootPath();
 
   if (isRoot) {
-    // Legacy home components mounted if available
     const HomeApp = (window as any).HomeApp;
     if (typeof HomeApp === 'function') {
       return <HomeApp />;
@@ -21,13 +20,21 @@ function MainApp() {
   return <ContentEngineApp />;
 }
 
+let rootInstance: any = null;
+
 export function mountApp() {
   const rootEl = document.getElementById('root');
   if (rootEl) {
-    ReactDOM.createRoot(rootEl).render(<MainApp />);
+    if (!rootInstance) {
+      rootInstance = ReactDOM.createRoot(rootEl);
+    }
+    rootInstance.render(<MainApp />);
   }
 }
 
 if (typeof window !== 'undefined') {
   (window as any).mountContentEngineApp = mountApp;
+  if (!isRootPath()) {
+    mountApp();
+  }
 }
