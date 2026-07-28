@@ -27,6 +27,65 @@ export const BaseEntitySchema = z.object({
     .optional(),
   pullQuote: z.string().optional(),
   pullQuoteAttribution: z.string().optional(),
+  
+  // Legacy Jurnii Product Data Extensions
+  outcomes: z.object({
+    heading: z.string(),
+    sub: z.string().optional(),
+    kpis: z.array(z.object({
+      num: z.string(),
+      label: z.string(),
+      desc: z.string()
+    }))
+  }).optional(),
+  
+  method: z.object({
+    heading: z.string(),
+    sub: z.string().optional(),
+    steps: z.array(z.object({
+      title: z.string(),
+      body: z.string()
+    }))
+  }).optional(),
+  
+  testimonials: z.object({
+    eyebrow: z.string().optional(),
+    heading: z.string(),
+    items: z.array(z.object({
+      quote: z.string(),
+      author: z.string(),
+      role: z.string(),
+      initials: z.string().optional(),
+      color: z.string().optional(),
+      avatar: z.string().optional()
+    }))
+  }).optional(),
+  
+  personas: z.object({
+    heading: z.string(),
+    sub: z.string().optional(),
+    list: z.array(z.object({
+      role: z.string(),
+      question: z.string(),
+      answer: z.string()
+    }))
+  }).optional(),
+  
+  cta: z.object({
+    heading: z.string(),
+    sub: z.string().optional(),
+    primary: z.object({ label: z.string(), href: z.string() }).optional(),
+    secondary: z.object({ label: z.string(), href: z.string() }).optional()
+  }).optional(),
+  
+  renderFlags: z.object({
+    hasPriceBoostTeaser: z.boolean().optional(),
+    hasPromotionsByVertical: z.boolean().optional(),
+    hasUXScorecard: z.boolean().optional(),
+    hasUXTelemetry: z.boolean().optional(),
+    hasCanvasComments: z.boolean().optional(),
+    hasMMMTeaser: z.boolean().optional()
+  }).optional(),
 });
 
 export const ProductEntitySchema = BaseEntitySchema.extend({

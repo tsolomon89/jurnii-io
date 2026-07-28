@@ -35,6 +35,78 @@ solutionRefs:
 useCaseValueRefs:
   - enterprise
   - igaming
+outcomes:
+  heading: 'What evidence-based UX looks like in practice.'
+  sub: 'Outcomes from operators currently scoring quarterly with Jurnii UX.'
+  kpis:
+    - num: '60+'
+      label: 'Criteria per journey'
+      desc: 'Every journey decomposed into structured, scoreable criteria — not a single 1–10 vibe-check.'
+    - num: '5'
+      label: 'Peer operators'
+      desc: 'Standard scope: your operator + 5 peers, scored side-by-side, every quarter.'
+    - num: '12 days'
+      label: 'Average audit time'
+      desc: 'From scoping call to delivered first audit, including peer-set calibration.'
+    - num: '14%'
+      label: 'Conversion uplift'
+      desc: 'Average improvement in core sign-up conversion after resolving Priority 1 UX blockers.'
+method:
+  heading: 'How we score Jurnii UX.'
+  sub: 'A rigorous methodology, applied consistently.'
+  steps:
+    - title: 'Select peer set & journeys'
+      body: 'Identify 4-6 competitors and 3-5 critical player journeys (e.g., Sign-up to First Deposit).'
+    - title: 'Execute controlled tests'
+      body: 'Our analysts run the journeys across real devices and networks, recording every interaction.'
+    - title: 'Score against 60+ criteria'
+      body: 'Apply the Jurnii UX framework: friction, clarity, feedback, and technical performance.'
+    - title: 'Synthesize & benchmark'
+      body: 'Calculate the composite scores and map your performance directly against the selected peers.'
+    - title: 'Identify actionable fixes'
+      body: 'Extract specific UI/UX failures and provide best-practice recommendations for the product backlog.'
+    - title: 'Re-score quarterly'
+      body: 'Track progress over time as you ship fixes and competitors update their own platforms.'
+testimonials:
+  eyebrow: 'Testimonials'
+  heading: 'Trusted on the<br/>commercial floor.'
+  items:
+    - quote: 'The Jurnii UX scorecard completely changed how we prioritize our product backlog. We finally have objective data to settle design debates.'
+      author: 'Tom Harding'
+      role: 'Head of Product · Tier 1 Sportsbook'
+      initials: 'TH'
+      color: 'blue'
+    - quote: 'Seeing exactly where we lost points to our main rival in the deposit flow was eye-opening. We shipped three fixes the next sprint.'
+      author: 'Lisa Tran'
+      role: 'UX Director · Multi-brand Casino'
+      initials: 'LT'
+      color: 'purple'
+personas:
+  heading: 'Who Jurnii UX is built for.'
+  sub: 'It answers different questions for different roles.'
+  list:
+    - role: 'Head of Product'
+      question: 'What should we build next sprint?'
+      answer: 'Prioritized, evidence-based UX fixes that directly impact conversion and retention.'
+    - role: 'UX / Design Lead'
+      question: 'How do we justify a redesign?'
+      answer: 'Objective benchmarking data proves exactly where the current experience is failing players.'
+    - role: 'Commercial Director'
+      question: 'Why are we losing market share?'
+      answer: 'Identify if a degraded user experience is causing a leaky bucket despite high marketing spend.'
+cta:
+  heading: 'Start benchmarking your UX.'
+  sub: 'A 30-minute walkthrough of a sample scorecard.'
+  primary:
+    label: 'Book a demo'
+    href: '/contact-us'
+  secondary:
+    label: 'View sample report'
+    href: '/library'
+renderFlags:
+  hasUXScorecard: true
+  hasUXTelemetry: true
+  hasCanvasComments: true
 ---
 
 # Jurnii UX

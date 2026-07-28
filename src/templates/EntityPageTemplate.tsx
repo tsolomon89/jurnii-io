@@ -1,6 +1,16 @@
 import React, { useEffect } from 'react';
 import { EntityPageModel } from '../content-engine/types';
 import { Prose } from '../components/Prose';
+import { OutcomeStrip } from '../components/legacy-blocks/OutcomeStrip';
+import { Methodology } from '../components/legacy-blocks/Methodology';
+import { Testimonials } from '../components/legacy-blocks/Testimonials';
+import { PersonaList } from '../components/legacy-blocks/PersonaList';
+import { CTABand } from '../components/legacy-blocks/CTABand';
+import { PriceBoostTeaser } from '../components/legacy-blocks/PriceBoostTeaser';
+import { PromotionsByVertical } from '../components/legacy-blocks/PromotionsByVertical';
+import { UXScorecard } from '../components/legacy-blocks/UXScorecard';
+import { UXTelemetry } from '../components/legacy-blocks/UXTelemetry';
+import { CanvasComments } from '../components/legacy-blocks/CanvasComments';
 
 interface EntityPageTemplateProps {
   data: EntityPageModel;
@@ -34,6 +44,20 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
           </div>
         </div>
       </section>
+
+      {/* Legacy Data: Outcomes */}
+      {data.outcomes && (
+        <OutcomeStrip 
+          heading={data.outcomes.heading} 
+          sub={data.outcomes.sub} 
+          kpis={data.outcomes.kpis} 
+        />
+      )}
+
+      {/* Render Flags: Complex Visual Blocks */}
+      {data.renderFlags?.hasPriceBoostTeaser && <PriceBoostTeaser />}
+      {data.renderFlags?.hasUXScorecard && <UXScorecard />}
+      {data.renderFlags?.hasUXTelemetry && <UXTelemetry />}
 
       {/* 2. Key Operational Capabilities */}
       {data.heroFeatures && data.heroFeatures.length > 0 && (
@@ -74,6 +98,18 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
         </section>
       )}
 
+      {/* Legacy Data: Methodology */}
+      {data.method && (
+        <Methodology 
+          heading={data.method.heading} 
+          sub={data.method.sub} 
+          steps={data.method.steps} 
+        />
+      )}
+
+      {/* Render Flags: PromotionsByVertical */}
+      {data.renderFlags?.hasPromotionsByVertical && <PromotionsByVertical />}
+
       {/* 4. Deep Operational Capabilities */}
       {data.deepWorkFeatures && data.deepWorkFeatures.length > 0 && (
         <section className="section">
@@ -110,6 +146,27 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
             </div>
           </div>
         </section>
+      )}
+
+      {/* Render Flags: Canvas Comments */}
+      {data.renderFlags?.hasCanvasComments && <CanvasComments />}
+      
+      {/* Legacy Data: Personas */}
+      {data.personas && (
+        <PersonaList 
+          heading={data.personas.heading} 
+          sub={data.personas.sub} 
+          personas={data.personas.list} 
+        />
+      )}
+
+      {/* Legacy Data: Testimonials */}
+      {data.testimonials && (
+        <Testimonials 
+          eyebrow={data.testimonials.eyebrow}
+          heading={data.testimonials.heading} 
+          items={data.testimonials.items} 
+        />
       )}
 
       {/* 6. Related Platform Capabilities */}
@@ -151,6 +208,16 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
             </div>
           </div>
         </section>
+      )}
+
+      {/* Legacy Data: CTABand */}
+      {data.cta && (
+        <CTABand 
+          heading={data.cta.heading} 
+          sub={data.cta.sub} 
+          primary={data.cta.primary}
+          secondary={data.cta.secondary}
+        />
       )}
     </article>
   );
