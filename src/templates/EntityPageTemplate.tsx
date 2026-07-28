@@ -14,152 +14,144 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
   }, [data]);
 
   return (
-    <article className="min-h-screen bg-[#030712] text-slate-100 py-12 px-4 sm:px-6 lg:px-8 selection:bg-emerald-500 selection:text-slate-950">
-      <div className="max-w-6xl mx-auto space-y-16">
-        
-        {/* 1. Hero Region */}
-        <header className="relative p-8 sm:p-12 rounded-3xl bg-slate-900/40 backdrop-blur-xl border border-white/10 overflow-hidden shadow-2xl space-y-6">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-emerald-500/10 via-sky-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
-          
-          <div className="flex items-center space-x-3">
-            {data.category && (
-              <span className="inline-flex items-center px-3 py-1 text-xs font-semibold uppercase tracking-wider text-emerald-400 bg-emerald-950/60 rounded-full border border-emerald-500/30">
-                {data.category}
-              </span>
-            )}
-            <span className="text-xs uppercase font-mono tracking-widest text-slate-400">
-              {data.section}
-            </span>
-          </div>
-
-          <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-tight">
-            {data.title}
-          </h1>
-
-          <p className="text-lg sm:text-xl text-slate-300 max-w-3xl leading-relaxed">
-            {data.description}
+    <article className="entity-page">
+      {/* 1. Jurnii Page Hero */}
+      <section className="page-hero">
+        <div className="container">
+          <p className="eyebrow">
+            <span className="dot" />
+            {data.category || data.section}
           </p>
-        </header>
+          <h1 className="h1-page">{data.title}</h1>
+          <p className="page-hero-lede">{data.description}</p>
+          <div className="hero-cta-row">
+            <a href="/contact-us" className="btn primary lg">
+              Book a demo <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" />
+            </a>
+            <a href="#overview" className="btn ghost lg">
+              Explore specifications
+            </a>
+          </div>
+        </div>
+      </section>
 
-        {/* 2. Optional Hero Features Highlights */}
-        {data.heroFeatures && data.heroFeatures.length > 0 && (
-          <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {data.heroFeatures.map((feat, idx) => (
-              <div
-                key={idx}
-                className="p-6 rounded-2xl bg-slate-900/50 backdrop-blur-md border border-white/10 hover:border-emerald-500/40 transition duration-200 space-y-3"
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-                    <i data-lucide={feat.icon || 'zap'} className="w-4 h-4" />
+      {/* 2. Key Operational Capabilities */}
+      {data.heroFeatures && data.heroFeatures.length > 0 && (
+        <section className="section">
+          <div className="container">
+            <div className="section-head">
+              <p className="eyebrow"><span className="dot" />Capabilities</p>
+              <h2 className="h2-section">Key Operational Capabilities</h2>
+            </div>
+            <div className="feature-grid">
+              {data.heroFeatures.map((feat, idx) => (
+                <div key={idx} className="feature-cell">
+                  <div className="feature-icon">
+                    <i data-lucide={feat.icon || 'zap'} style={{ width: 18, height: 18 }} />
                   </div>
-                  <h3 className="text-lg font-bold text-white">{feat.title}</h3>
+                  <h3>{feat.title}</h3>
+                  <p>{feat.description}</p>
                 </div>
-                <p className="text-sm text-slate-300 leading-relaxed">{feat.description}</p>
-              </div>
-            ))}
-          </section>
-        )}
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
-        {/* 3. Pull Quote Banner */}
-        {data.pullQuote && (
-          <blockquote className="relative p-8 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-slate-900/60 to-slate-900/40 border-l-4 border-emerald-500 border-y border-r border-white/10 space-y-4">
-            <p className="text-lg sm:text-xl font-medium italic text-slate-100 leading-relaxed">
-              "{data.pullQuote}"
-            </p>
-            {data.pullQuoteAttribution && (
-              <cite className="block text-sm font-semibold not-italic text-emerald-400">
-                — {data.pullQuoteAttribution}
-              </cite>
-            )}
-          </blockquote>
-        )}
+      {/* 3. Pull Quote */}
+      {data.pullQuote && (
+        <section className="section section-tight">
+          <div className="container">
+            <figure className="pull-quote">
+              <blockquote>"{data.pullQuote}"</blockquote>
+              {data.pullQuoteAttribution && (
+                <figcaption>
+                  <b>{data.pullQuoteAttribution}</b>
+                </figcaption>
+              )}
+            </figure>
+          </div>
+        </section>
+      )}
 
-        {/* 4. Deep Work Features Grid */}
-        {data.deepWorkFeatures && data.deepWorkFeatures.length > 0 && (
-          <section className="space-y-6">
-            <h2 className="text-2xl font-bold text-white flex items-center space-x-3">
-              <span className="w-2 h-6 bg-emerald-500 rounded-full inline-block" />
-              <span>Deep Operational Capabilities</span>
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* 4. Deep Operational Capabilities */}
+      {data.deepWorkFeatures && data.deepWorkFeatures.length > 0 && (
+        <section className="section">
+          <div className="container">
+            <div className="section-head">
+              <p className="eyebrow"><span className="dot" />Deep Work</p>
+              <h2 className="h2-section">Operational Architecture</h2>
+            </div>
+            <ol className="method-list">
               {data.deepWorkFeatures.map((dw, idx) => (
-                <div
-                  key={idx}
-                  className="p-6 rounded-2xl bg-slate-900/40 border border-white/5 hover:bg-slate-900/70 transition space-y-3"
-                >
-                  <h4 className="font-bold text-white text-base">{dw.title}</h4>
-                  <p className="text-xs text-slate-400 leading-relaxed">{dw.description}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* 5. Mandatory Markdown Body Prose */}
-        {data.bodyHtml && data.bodyHtml.trim().length > 0 && (
-          <section className="p-8 sm:p-12 rounded-3xl bg-slate-900/40 backdrop-blur-md border border-white/10 space-y-8 shadow-xl">
-            <h2 className="text-2xl font-bold text-white border-b border-white/10 pb-4 flex items-center space-x-3">
-              <span className="w-2 h-6 bg-sky-500 rounded-full inline-block" />
-              <span>Overview & Technical Specifications</span>
-            </h2>
-            <Prose html={data.bodyHtml} />
-          </section>
-        )}
-
-        {/* 6. Direct Relationships Region */}
-        {data.relatedItems && data.relatedItems.length > 0 && (
-          <section className="space-y-6 pt-6 border-t border-white/10">
-            <h2 className="text-2xl font-bold text-white">Related Platform Capabilities</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {data.relatedItems.map((item, idx) => (
-                <a
-                  key={idx}
-                  href={item.href}
-                  className="group p-6 rounded-2xl bg-slate-900/50 hover:bg-slate-800/80 border border-white/10 hover:border-sky-500/40 transition duration-200 space-y-2 block"
-                >
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-bold text-white group-hover:text-sky-400 transition">
-                      {item.title}
-                    </h3>
-                    <span className="text-xs font-mono text-slate-500 group-hover:text-sky-400">
-                      Explore →
-                    </span>
+                <li key={idx}>
+                  <span className="method-num">{String(idx + 1).padStart(2, '0')}</span>
+                  <div>
+                    <h3>{dw.title}</h3>
+                    <p>{dw.description}</p>
                   </div>
-                  <p className="text-sm text-slate-400 line-clamp-2 leading-relaxed">
-                    {item.description}
-                  </p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+      )}
+
+      {/* 5. Mandatory Markdown Body Prose */}
+      {data.bodyHtml && data.bodyHtml.trim().length > 0 && (
+        <section id="overview" className="section">
+          <div className="container container-narrow">
+            <div className="section-head">
+              <p className="eyebrow"><span className="dot" />Overview & Specifications</p>
+              <h2 className="h2-section">Detailed Intelligence</h2>
+            </div>
+            <div className="article-body">
+              <Prose html={data.bodyHtml} />
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 6. Related Platform Capabilities */}
+      {data.relatedItems && data.relatedItems.length > 0 && (
+        <section className="section">
+          <div className="container">
+            <div className="section-head">
+              <p className="eyebrow"><span className="dot" />Cross-Functional</p>
+              <h2 className="h2-section">Related Platform Capabilities</h2>
+            </div>
+            <div className="feature-grid">
+              {data.relatedItems.map((item, idx) => (
+                <a key={idx} href={item.href} className="feature-cell" style={{ textDecoration: 'none' }}>
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
                 </a>
               ))}
             </div>
-          </section>
-        )}
+          </div>
+        </section>
+      )}
 
-        {/* 7. Reverse Editorial Content Region */}
-        {data.reverseEditorialItems && data.reverseEditorialItems.length > 0 && (
-          <section className="space-y-6 pt-6 border-t border-white/10">
-            <h2 className="text-2xl font-bold text-white">Featured Publications & Research</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      {/* 7. Featured Publications */}
+      {data.reverseEditorialItems && data.reverseEditorialItems.length > 0 && (
+        <section className="section section-tight">
+          <div className="container">
+            <div className="section-head">
+              <p className="eyebrow"><span className="dot" />Research & Evidence</p>
+              <h2 className="h2-section">Featured Publications & Research</h2>
+            </div>
+            <div className="feature-grid">
               {data.reverseEditorialItems.map((ed, idx) => (
-                <a
-                  key={idx}
-                  href={ed.href}
-                  className="p-6 rounded-2xl bg-slate-900/40 hover:bg-slate-800/60 border border-white/5 hover:border-emerald-500/40 transition duration-200 space-y-2 block"
-                >
-                  <span className="text-xs font-mono text-emerald-400 uppercase tracking-wider">
-                    {ed.date}
-                  </span>
-                  <h4 className="text-lg font-bold text-white">{ed.title}</h4>
-                  <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
-                    {ed.excerpt}
-                  </p>
+                <a key={idx} href={ed.href} className="feature-cell" style={{ textDecoration: 'none' }}>
+                  <span className="eyebrow">{ed.date}</span>
+                  <h3>{ed.title}</h3>
+                  <p>{ed.excerpt}</p>
                 </a>
               ))}
             </div>
-          </section>
-        )}
-
-      </div>
+          </div>
+        </section>
+      )}
     </article>
   );
 };
