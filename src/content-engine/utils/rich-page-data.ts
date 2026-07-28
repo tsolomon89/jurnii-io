@@ -52,8 +52,7 @@ export const ENTITY_LABEL_MAP: Record<string, string> = {
 
 export function resolveRichPageData(
   item: ContentItem,
-  section: EntityType,
-  cwd: string = process.cwd()
+  section: EntityType
 ): EntityPageModel {
   const meta = item.meta;
   const { html: bodyHtml, toc } = processHeadings(item.bodyHtml || '');

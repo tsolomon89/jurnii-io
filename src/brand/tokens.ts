@@ -11,7 +11,7 @@ export interface BrandTokens {
 /**
  * Loads brand/tokens.json from project root and converts to CSS custom properties map.
  */
-export function getTokens(cwd: string = process.cwd()): Record<string, string> {
+export function getTokens(cwd: string = ''): Record<string, string> {
   try {
     const tokenPath = path.join(cwd, 'brand', 'tokens.json');
     if (!fs.existsSync(tokenPath)) {

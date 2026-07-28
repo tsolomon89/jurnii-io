@@ -22,13 +22,12 @@ export function resolveLastModified(filePath: string, dateStr?: string): string 
 }
 
 export function getDynamicSitemapEntries(
-  baseUrl: string = 'https://jurnii.io',
-  cwd: string = process.cwd()
+  baseUrl: string = 'https://jurnii.io'
 ): SitemapEntry[] {
   const entries: SitemapEntry[] = [];
 
   // WWW surface content
-  const wwwItems = getAllContent('www', cwd);
+  const wwwItems = getAllContent('www');
   for (const item of wwwItems) {
     if (item.meta.isIndexable === false || item.meta.noindex === true) {
       continue;
@@ -57,7 +56,7 @@ export function getDynamicSitemapEntries(
   }
 
   // Library surface content
-  const libraryItems = getAllContent('library', cwd);
+  const libraryItems = getAllContent('library');
   for (const item of libraryItems) {
     if (item.meta.isIndexable === false || item.meta.noindex === true) {
       continue;
