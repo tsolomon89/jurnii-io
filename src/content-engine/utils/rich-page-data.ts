@@ -70,7 +70,7 @@ export function resolveRichPageData(
   for (const { refs, sec } of refSources) {
     for (const refSlug of refs) {
       if (refSlug === item.slug) continue;
-      const targetItem = getByPath(['www', sec, refSlug], cwd);
+      const targetItem = getByPath(['www', sec, refSlug]);
       if (targetItem) {
         relatedItems.push({
           title: targetItem.meta.title,
@@ -84,7 +84,7 @@ export function resolveRichPageData(
 
   // 2. Reverse editorial lookup
   const refField = ENTITY_REF_MAP[section];
-  const rawEditorial = refField ? getContentByRef(refField, item.slug, ['library'], cwd) : [];
+  const rawEditorial = refField ? getContentByRef(refField, item.slug, ['library']) : [];
 
   const reverseEditorialItems = rawEditorial.map((ed) => ({
     title: ed.meta.title,
