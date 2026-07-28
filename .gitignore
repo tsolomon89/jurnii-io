@@ -1,10 +1,11 @@
-.vercel
+node_modules/
+dist/
+src/generated/
+.DS_Store
+*.log
+scripts/perf-baselines/*-mobile.json
+!scripts/perf-baselines/BASELINE.md
+.vercel/
 .env
-node_modules
-
-# Secrets / ephemeral tokens from test harnesses — never commit (belt-and-braces even outside .env)
-**/.zoho_token.json
-scratch/update_vercel_env.js
-booking/scratch/
-scratch/screenshots/
+.env*.local
 

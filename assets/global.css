@@ -1,0 +1,495 @@
+/* =========================================================================
+   Jurnii Design System — Colors & Typography
+   Source: Jurnii Design System (Figma variables, April 2026)
+   ========================================================================= */
+
+/* ---------- Fonts ---------- */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('fonts/Geist-VariableFont_wght.woff2') format('woff2');
+}
+
+/* Geist Mono @font-face lives in fonts-mono.css (async-loaded from HTML).
+   Keep --font-mono below so fallbacks work before the webfont arrives. */
+
+/* ============================================================
+   PRIMITIVES  —  Never reference these directly in components.
+   Use the semantic tokens below.
+   ============================================================ */
+:root {
+  /* Concrete — warm neutral scale */
+  --concrete-50:  #F8F8F7;
+  --concrete-100: #F2F2F1;
+  --concrete-200: #E3E3E3;
+  --concrete-300: #BFBFBA;
+  --concrete-400: #9C9C94;
+  --concrete-500: #807F77;
+  --concrete-600: #686761;
+  --concrete-700: #55554F;
+  --concrete-800: #484744;
+  --concrete-900: #3F3E3B;
+  --concrete-950: #2A2A27;
+
+  /* Jurnii Green — brand scale */
+  --jurnii-50:  #E6FFE5;
+  --jurnii-100: #C7FFC6;
+  --jurnii-200: #94FF96;   /* primary in dark/v1 */
+  --jurnii-300: #57FF60;   /* logo arrow */
+  --jurnii-400: #34F741;
+  --jurnii-500: #05DD17;
+  --jurnii-600: #00B113;
+  --jurnii-700: #058615;
+  --jurnii-800: #0B6917;
+  --jurnii-900: #0E591A;
+  --jurnii-950: #01320A;   /* sidebar primary light */
+
+  /* Blue Dianne — v1 teal scale */
+  --blue-dianne-50:  #F2F9F9;
+  --blue-dianne-100: #DFEEED;
+  --blue-dianne-200: #C2DFDD;
+  --blue-dianne-300: #98C8C6;
+  --blue-dianne-400: #66AAA8;
+  --blue-dianne-500: #4B8F8E;
+  --blue-dianne-600: #417779;
+  --blue-dianne-700: #3A6264;
+  --blue-dianne-800: #355255;
+  --blue-dianne-900: #31484B;
+  --blue-dianne-950: #1C2D30;
+
+  /* RGB channels — enable token-driven alpha (glows, tints, rings) */
+  --jurnii-200-rgb: 148, 255, 150;
+  --jurnii-300-rgb:  87, 255,  96;
+
+  /* Fixed surfaces — theme-invariant pure white/black (not semantic --card) */
+  --white: #FFFFFF;
+  --black: #000000;
+}
+
+/* ============================================================
+   SEMANTIC TOKENS  —  Light (default)
+   ============================================================ */
+:root,
+[data-theme="light"] {
+  /* Core */
+  --background:           #F8F8F7;
+  --foreground:           #2A2A27;
+  --card:                 #FFFFFF;
+  --card-foreground:      #2A2A27;
+  --popover:              #FFFFFF;
+  --popover-foreground:   #2A2A27;
+  --primary:              #2A2A27;
+  --primary-foreground:   #F8F8F7;
+  --secondary:            #E3E3E3;
+  --secondary-foreground: #3F3E3B;
+  --muted:                #E3E3E3;
+  --muted-foreground:     #807F77;
+  --accent:               #F2F2F1;
+  --accent-foreground:    #3F3E3B;
+  --border:               #E3E3E3;
+  --input:                #E3E3E3;
+  --ring:                 #9C9C94;
+  --ring-offset:          #FFFFFF;
+
+  /* Brand glow — radial accents, focus rings, brand dots (rgb channels) */
+  --brand-glow:           var(--jurnii-300-rgb);
+
+  /* Green accent — solid fills on light surfaces (buttons, tags). jurnii-200 is too
+     low-contrast on white in light mode, so light uses the deeper jurnii-500. */
+  --accent-green:         var(--jurnii-500);
+  --accent-green-hover:   var(--jurnii-600);
+
+  /* Partial / in-between status (compare tables) */
+  --partial:              #B97309;
+
+  /* Product accents — constant across themes */
+  --accent-ux:      #5299FF;  --accent-ux-rgb:  82, 153, 255;  --accent-ux-ink:  #2B6FD1;
+  --accent-mmm:     #FFA852;  --accent-mmm-rgb: 255, 168, 82;  --accent-mmm-ink: #B46915;
+
+  /* Tag / category palette — light tint + readable ink */
+  --tag-pink-bg:   #FCE7F3;  --tag-pink-ink:   #BE185D;
+  --tag-blue-bg:   #DBEAFE;  --tag-blue-ink:   #1E40AF;
+  --tag-green-bg:  #DCFCE7;  --tag-green-ink:  #166534;
+  --tag-purple-bg: #F3E8FF;  --tag-purple-ink: #6B21A8;
+  --tag-orange-bg: #FFEDD5;  --tag-orange-ink: #9A3412;
+  --tag-amber-bg:  #FEF3C7;  --tag-amber-ink:  #92400E;
+
+  /* Decorative avatar gradients */
+  --avatar-blue-from:   #C7D9F7;  --avatar-blue-to:   #94B4F0;  --avatar-blue-ink:   #1E3A8A;
+  --avatar-orange-from: #FCD4B8;  --avatar-orange-to: #FB923C;  --avatar-orange-ink: #7C2D12;
+  --avatar-purple-from: #DDD6FE;  --avatar-purple-to: #A78BFA;  --avatar-purple-ink: #4C1D95;
+
+  /* Status */
+  --destructive:            #DC2626;
+  --destructive-foreground: #FEF2F2;
+  --positive:               #16A34A;
+  --positive-foreground:    #F0FDF4;
+  --warning:                #EA580C;
+  --warning-foreground:     #FFF7ED;
+  --information:            #60A5FA;
+  --information-foreground: #172554;
+
+  /* Score / Rating */
+  --excellent: #8B5CF6;
+  --good:      #22C55E;
+  --average:   #FACC15;
+  --poor:      #FB923C;
+  --very-poor: #EF4444;
+
+  /* Jurnii 360 category */
+  --performance: #C084FC;
+  --journey:     #4ADE80;
+  --usability:   #FACC15;
+  --perception:  #FB7185;
+
+  /* Sidebar */
+  --sidebar-background:         #F8F8F7;
+  --sidebar-foreground:         #2A2A27;
+  --sidebar-primary:            #01320A;
+  --sidebar-primary-foreground: #94FF96;
+  --sidebar-accent:             #E3E3E3;
+  --sidebar-accent-foreground:  #3F3E3B;
+  --sidebar-border:             #E3E3E3;
+  --sidebar-ring:               #9C9C94;
+
+  /* Charts (light — warm→cool) */
+  --chart-1:  #FCA5A5;
+  --chart-2:  #EF4444;
+  --chart-3:  #FDBA74;
+  --chart-4:  #F97316;
+  --chart-5:  #FCD34D;
+  --chart-6:  #EAB308;
+  --chart-7:  #BEF264;
+  --chart-8:  #84CC16;
+  --chart-9:  #6EE7B7;
+  --chart-10: #10B981;
+
+
+  /* Alpha overlays — theme-aware (design system alpha/5…90) */
+  --alpha-5:  #FFFFFFF2;
+  --alpha-10: #FFFFFFE5;
+  --alpha-20: #FFFFFFCC;
+  --alpha-30: #FFFFFFB2;
+  --alpha-40: #FFFFFF99;
+  --alpha-50: #FFFFFF80;
+  --alpha-60: #FFFFFF66;
+  --alpha-70: #FFFFFF4D;
+  --alpha-80: #FFFFFF33;
+  --alpha-90: #FFFFFF1A;
+
+  /* White overlays (fixed — for dark surfaces regardless of theme) */
+  --white-a-3:  rgba(255, 255, 255, 0.03);
+  --white-a-4:  rgba(255, 255, 255, 0.04);
+  --white-a-6:  rgba(255, 255, 255, 0.06);
+  --white-a-8:  rgba(255, 255, 255, 0.08);
+  --white-a-10: rgba(255, 255, 255, 0.10);
+  --white-a-12: rgba(255, 255, 255, 0.12);
+  --white-a-15: rgba(255, 255, 255, 0.15);
+  --white-a-18: rgba(255, 255, 255, 0.18);
+  --white-a-20: rgba(255, 255, 255, 0.20);
+  --white-a-22: rgba(255, 255, 255, 0.22);
+  --white-a-60: rgba(255, 255, 255, 0.60);
+  --white-a-64: rgba(255, 255, 255, 0.64);
+  --white-a-66: rgba(255, 255, 255, 0.66);
+  --white-a-70: rgba(255, 255, 255, 0.70);
+  --white-a-80: rgba(255, 255, 255, 0.80);
+
+  /* Black overlays (shadows / scrims) */
+  --black-a-4:  rgba(0, 0, 0, 0.04);
+  --black-a-12: rgba(0, 0, 0, 0.12);
+  --black-a-16: rgba(0, 0, 0, 0.16);
+  --black-a-20: rgba(0, 0, 0, 0.20);
+  --black-a-22: rgba(0, 0, 0, 0.22);
+  --black-a-25: rgba(0, 0, 0, 0.25);
+  --black-a-28: rgba(0, 0, 0, 0.28);
+  --black-a-30: rgba(0, 0, 0, 0.30);
+  --black-a-45: rgba(0, 0, 0, 0.45);
+  --black-a-50: rgba(0, 0, 0, 0.50);
+
+  /* Nav glass — theme surface @ ~84–88% */
+  --nav-bg: color-mix(in srgb, var(--concrete-50) 84%, transparent);
+
+  /* Typography */
+  --font-sans:  'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: ui-serif, Georgia, 'Times New Roman', serif;
+  --font-mono:  'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Type scale (rem — 1rem = 16px). Canonical set only. */
+  --text-2xs:  0.625rem;  /* 10px — min caption */
+  --text-xs:   0.75rem;   /* 12px */
+  --text-sm:   0.875rem;  /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg:   1.125rem;  /* 18px */
+  --text-xl:   1.25rem;   /* 20px */
+  --text-2xl:  1.5rem;    /* 24px */  --lh-2xl: 2rem;      /* 32px */
+  --text-3xl:  1.75rem;   /* 28px */  --lh-3xl: 2.25rem;  /* 36px */
+  --text-4xl:  2rem;      /* 32px */  --lh-4xl: 2.5rem;   /* 40px */
+  --text-5xl:  2.25rem;   /* 36px */  --lh-5xl: 2.5rem;   /* 40px */
+  --text-6xl:  2.5rem;    /* 40px */
+  --text-7xl:  2.75rem;   /* 44px */
+  --text-8xl:  3rem;      /* 48px */
+  --text-9xl:  3.25rem;   /* 52px */
+  --text-10xl: 3.5rem;    /* 56px */
+  --text-11xl: 4rem;      /* 64px */
+
+  /* Font weights */
+  --fw-thin: 100;  --fw-extralight: 200;  --fw-light: 300;
+  --fw-normal: 400; --fw-medium: 500;     --fw-semibold: 600;
+  --fw-bold: 600;   --fw-extrabold: 800;  --fw-black: 900;
+
+  /* Radii */
+  --radius-none: 0px;
+  --radius-xxs:  2px;
+  --radius-xs:   4px;
+  --radius-sm:   6px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-2xl:  20px;
+  --radius-3xl:  24px;
+  --radius-4xl:  32px;
+  --radius-full: 9999px;
+  --card-radius: var(--radius-lg);
+
+  /* Spacing (4px grid) */
+  --spacing-1:  4px;   --spacing-2:  8px;   --spacing-3:  12px;
+  --spacing-4:  16px;  --spacing-5:  20px;  --spacing-6:  24px;
+  --spacing-8:  32px;  --spacing-10: 40px;  --spacing-12: 48px;
+  --spacing-16: 64px;  --spacing-20: 80px;  --spacing-24: 96px;
+
+  /* Container & section */
+  --container-padding-x: var(--spacing-6);
+  --section-padding-y:       var(--spacing-24); /* 96px — standard content sections */
+  --section-padding-y-tight: var(--spacing-16); /* 64px — denser bands */
+  --section-title-gap:       var(--spacing-5);  /* 20px — eyebrow → headline (gap-lg) */
+  --page-hero-padding-top:   var(--spacing-20); /* 80px */
+  --page-hero-padding-bottom: var(--spacing-12); /* 48px */
+
+  /* Breakpoints (reference only) */
+  --bp-sm: 640px;  --bp-md: 768px;  --bp-lg: 1024px;
+  --bp-xl: 1280px; --bp-2xl: 1536px;
+}
+
+/* ============================================================
+   SEMANTIC TOKENS  —  Dark
+   ============================================================ */
+[data-theme="dark"] {
+  --background:           #2A2A27;
+  --foreground:           #F8F8F7;
+  --card:                 #3F3E3B;
+  --card-foreground:      #F8F8F7;
+  --popover:              #484744;
+  --popover-foreground:   #F8F8F7;
+  --primary:              #94FF96;
+  --primary-foreground:   #2A2A27;
+  --secondary:            #484744;
+  --secondary-foreground: #F8F8F7;
+  --muted:                #484744;
+  --muted-foreground:     #BFBFBA;
+  --accent:               #484744;
+  --accent-foreground:    #F8F8F7;
+  --border:               var(--white-a-10);
+  --input:                var(--white-a-15);
+  --ring:                 #807F77;
+  --brand-glow:           var(--jurnii-300-rgb);
+  --partial:              #F5B66C;
+  --accent-green:         var(--jurnii-200);
+  --accent-green-hover:   var(--jurnii-300);
+  --destructive:            #F87171;
+  --destructive-foreground: #FEF2F2;
+  --positive:               #4ADE80;
+  --positive-foreground:    #052E16;
+  --warning:                #FB923C;
+  --warning-foreground:     #431407;
+
+  --sidebar-background:         #3F3E3B;
+  --sidebar-foreground:         #F8F8F7;
+  --sidebar-primary:            #94FF96;
+  --sidebar-primary-foreground: #2A2A27;
+  --sidebar-accent:             #484744;
+  --sidebar-accent-foreground:  #F8F8F7;
+  --sidebar-border:             rgba(255,255,255,0.10);
+  --sidebar-ring:               #686761;
+
+  /* Charts (dark — deeper cool progression) */
+  --chart-1:  #EF4444;
+  --chart-2:  #F97316;
+  --chart-3:  #EAB308;
+  --chart-4:  #84CC16;
+  --chart-5:  #10B981;
+  --chart-6:  #06B6D4;
+  --chart-7:  #3B82F6;
+  --chart-8:  #A855F7;
+  --chart-9:  #EC4899;
+  --chart-10: #F43F5E;
+
+  --alpha-5:  #0A0A0AF2;
+  --alpha-10: #0A0A0AE5;
+  --alpha-20: #0A0A0ACC;
+  --alpha-30: #0A0A0AB2;
+  --alpha-40: #0A0A0A99;
+  --alpha-50: #0A0A0A80;
+  --alpha-60: #0A0A0A66;
+  --alpha-70: #0A0A0A4D;
+  --alpha-80: #0A0A0A33;
+  --alpha-90: #0A0A0A1A;
+  --nav-bg: color-mix(in srgb, var(--concrete-950) 84%, transparent);
+}
+
+/* ============================================================
+   SEMANTIC TOKENS  —  Jurnii v1  (Blue Dianne teal brand theme)
+   ============================================================ */
+[data-theme="jurnii-v1"] {
+  --background:           #31484B;
+  --foreground:           #F2F9F9;
+  --card:                 #355255;
+  --card-foreground:      #F2F9F9;
+  --popover:              #355255;
+  --popover-foreground:   #F2F9F9;
+  --primary:              #94FF96;
+  --primary-foreground:   #1C2D30;
+  --secondary:            #3A6264;
+  --secondary-foreground: #F2F9F9;
+  --muted:                #3A6264;
+  --muted-foreground:     #98C8C6;
+  --accent:               #3A6264;
+  --accent-foreground:    #F2F9F9;
+  --border:               var(--white-a-10);
+  --input:                var(--white-a-15);
+  --ring:                 #4B8F8E;
+  --brand-glow:           var(--jurnii-200-rgb);
+  --partial:              #F5B66C;
+  --accent-green:         var(--jurnii-200);
+  --accent-green-hover:   var(--jurnii-300);
+
+  --destructive:            #FCA5A5;
+  --destructive-foreground: #450A0A;
+  --positive:               #4ADE80;
+  --positive-foreground:    #052E16;
+  --warning:                #FB923C;
+  --warning-foreground:     #431407;
+
+  --sidebar-background:         #31484B;
+  --sidebar-foreground:         #F2F9F9;
+  --sidebar-primary:            #94FF96;
+  --sidebar-primary-foreground: #1C2D30;
+  --sidebar-accent:             #3A6264;
+  --sidebar-accent-foreground:  #F2F9F9;
+  --sidebar-border:             rgba(255,255,255,0.10);
+  --sidebar-ring:               #417779;
+
+  --alpha-5:  #1C2D30F2;
+  --alpha-10: #1C2D30E5;
+  --alpha-20: #1C2D30CC;
+  --alpha-30: #1C2D30B2;
+  --alpha-40: #1C2D3099;
+  --alpha-50: #1C2D3080;
+  --alpha-60: #1C2D3066;
+  --alpha-70: #1C2D304D;
+  --alpha-80: #1C2D3033;
+  --alpha-90: #1C2D301A;
+  --nav-bg: color-mix(in srgb, var(--blue-dianne-900) 88%, transparent);
+}
+
+/* ============================================================
+   SEMANTIC TYPE CLASSES
+   ============================================================ */
+html, body {
+  font-family: var(--font-sans);
+  color: var(--foreground);
+  background: var(--background);
+  font-size: var(--text-base);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Form placeholders follow the active theme's muted text token. */
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted-foreground);
+  opacity: 1;
+}
+
+/* Headline second-line styling (see headline-split.js).
+   Every visual line after the first in an H1/H2 renders in the muted token,
+   which is tuned per-theme to keep AA-large contrast. .hl-w is the per-word
+   wrapper; .hl-2 marks words that fall on line 2 or below. */
+.hl-w { color: inherit; }
+.hl-2 { color: var(--muted-foreground); }
+
+.heading-xl, h1.display {
+  font-family: var(--font-sans);
+  font-size: var(--text-8xl);
+  line-height: 1;
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+}
+.heading-lg, h1 {
+  font-family: var(--font-sans);
+  font-size: var(--text-5xl);
+  line-height: var(--lh-5xl);
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+}
+.heading-md, h2 {
+  font-family: var(--font-sans);
+  font-size: var(--text-3xl);
+  line-height: var(--lh-3xl);
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.015em;
+  color: var(--foreground);
+}
+.heading-sm, h3 {
+  font-family: var(--font-sans);
+  font-size: var(--text-2xl);
+  line-height: var(--lh-2xl);
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.01em;
+  color: var(--foreground);
+}
+h4 {
+  font-size: var(--text-xl);
+  font-weight: var(--fw-semibold);
+  line-height: 1.4;
+  color: var(--foreground);
+}
+b, strong {
+  font-weight: var(--fw-semibold);
+}
+p, .body {
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--foreground);
+}
+.body-sm, small {
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--muted-foreground);
+}
+.eyebrow {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+code, kbd, pre, .mono {
+  font-family: var(--font-mono);
+  font-size: 0.95em;
+}
+
+@media (max-width: 768px) {
+  .heading-xl, .heading-lg, .heading-md { font-size: var(--text-3xl); line-height: var(--lh-3xl); }
+  :root {
+    --section-padding-y:        var(--spacing-16);
+    --section-padding-y-tight:  var(--spacing-16);
+    --section-title-gap:        var(--spacing-4); /* gap-lg → 16px on mobile */
+    --page-hero-padding-top:    var(--spacing-12);
+    --page-hero-padding-bottom: var(--spacing-10);
+  }
+}

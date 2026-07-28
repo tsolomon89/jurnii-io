@@ -1,0 +1,229 @@
+<!doctype html>
+<html data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jurnii UX · Automated UX benchmarking for iGaming operators</title>
+<meta name="description" content="Replace UX opinion with structured benchmarking. Score every step of every critical journey across your operator and your peer set.">
+<link rel="icon" href="assets/jurnii-icon-light.svg">
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="preload" href="assets/fonts/Geist-VariableFont_wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/global.css">
+<link rel="stylesheet" href="assets/fonts-mono.css" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="assets/fonts-mono.css"></noscript>
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  .pull-quote blockquote { letter-spacing: 0px; }
+  .collab-canvas-outer { padding: 96px 0; }
+  .collab-canvas-wrap { height: 560px; border-radius: 18px; overflow: hidden; position: relative; }
+  .collab-canvas-wrap .cc-canvas { border-radius: 18px; }
+
+  /* Score-trend chart (ported from component library) */
+  .ch-card {
+    --ch-brand: #00A312; --ch-c1: #2563EB; --ch-c2: #E8590C; --ch-c3: #7C3AED; --ch-c4: #DB2777;
+    --ch-grid: var(--border);
+    --ch-axis: var(--muted-foreground);
+    background: var(--card); color: var(--card-foreground);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border);
+    padding: 24px 24px 20px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 14px 40px -20px rgba(0,0,0,0.20);
+    width: 100%;
+  }
+  [data-theme="dark"] .ch-card, [data-theme="jurnii-v1"] .ch-card {
+    --ch-brand: #57FF60; --ch-c1: #60A5FA; --ch-c2: #FB923C; --ch-c3: #C084FC; --ch-c4: #FB7185;
+    --ch-grid: rgba(255,255,255,0.10);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.12), 0 18px 48px -16px rgba(0,0,0,0.45);
+  }
+  .ch-head { margin-bottom: 18px; }
+  .ch-title { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; }
+  .ch-desc { font-size: 14px; color: var(--muted-foreground); margin-top: 3px; }
+  .ch-plot { position: relative; width: 100%; }
+  .ch-svg { width: 100%; height: auto; aspect-ratio: 720 / 300; display: block; overflow: visible; }
+  .ch-grid { stroke: var(--ch-grid); stroke-width: 1; }
+  .ch-axis-text { fill: var(--ch-axis); font-family: var(--font-mono); font-size: 12px; }
+  .ch-cursor { stroke: var(--ch-axis); stroke-width: 1; stroke-dasharray: 4 4; opacity: 0.55; }
+  .ch-dot { vector-effect: non-scaling-stroke; }
+  .ch-tip {
+    position: absolute; z-index: 5; pointer-events: none;
+    background: var(--popover); color: var(--popover-foreground);
+    border: 1px solid var(--border); border-radius: var(--radius-md);
+    padding: 10px 12px; min-width: 168px;
+    box-shadow: 0 8px 28px -8px rgba(0,0,0,0.35);
+  }
+  .ch-tip-month { font-size: 12px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .ch-tip-row { display: flex; align-items: center; gap: 8px; font-size: 13px; line-height: 1.7; }
+  .ch-tip-dot { width: 9px; height: 9px; border-radius: 3px; flex: none; }
+  .ch-tip-label { color: var(--muted-foreground); }
+  .ch-tip-val { margin-left: auto; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .ch-legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 14px; }
+  .ch-leg-item { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: var(--muted-foreground); }
+  .ch-leg-item.is-brand { color: var(--card-foreground); font-weight: 600; }
+  .ch-leg-swatch { width: 11px; height: 11px; border-radius: 3px; flex: none; }
+  .ch-foot { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .ch-foot-main { display: flex; align-items: center; gap: 7px; font-size: 14px; font-weight: 600; letter-spacing: -0.01em; }
+  .ch-foot-sub { font-size: 13px; color: var(--muted-foreground); margin-top: 5px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/lucide@1.25.0/dist/umd/lucide.min.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="assets/site.jsx"></script>
+<script type="text/babel" src="assets/blocks.jsx"></script>
+<script type="text/babel" src="assets/product-data.jsx"></script>
+<script type="text/babel" src="assets/page-sections.jsx"></script>
+<script type="text/babel" src="assets/ux-telemetry.jsx"></script>
+<script type="text/babel" src="assets/cl-linechart.jsx"></script>
+<script type="text/babel" src="assets/tweaks-panel.jsx"></script>
+<script type="text/babel" src="assets/canvas-comments-embed.jsx"></script>
+<script type="text/babel" src="assets/rec-modal.jsx"></script>
+<script type="text/babel">
+
+const CollaborationSection = () =>
+<section className="section reveal collab-canvas-outer">
+    <div className="container">
+      <div className="section-head">
+        <p className="eyebrow"><span className="dot" />Collaboration</p>
+        <h2 className="h2-section">Your whole team, on the same page.</h2>
+        <p className="section-lede">Comment on any finding, up-vote or down-vote recommendations, and drop threaded conversations anywhere on the report — so decisions happen in context, not in email chains.</p>
+      </div>
+      <div className="collab-canvas-wrap cc-root">
+        <CanvasComments />
+      </div>
+    </div>
+  </section>;
+
+const TAKEAWAY_CATS = [
+{ icon: 'map', title: 'Roadmap items', body: 'Severity-ranked fixes, ready to slot straight into your delivery roadmap with the commercial impact attached.' },
+{ icon: 'flask-conical', title: 'Experimentation hypotheses', body: 'Framed as testable hypotheses with an expected lift, so they drop into your A/B backlog as-is.' },
+{ icon: 'wrench', title: 'Technical improvements', body: 'Performance and implementation gaps your engineers can scope, ticket, and resolve directly.' }];
+
+const TakeawaysSection = () => {
+  React.useEffect(() => {window.lucide && window.lucide.createIcons();}, []);
+  return (
+    <section className="section reveal">
+      <div className="container">
+        <div className="section-head">
+          <p className="eyebrow"><span className="dot" />Actionable take-aways</p>
+          <h2 className="h2-section">Every finding becomes a decision your team can act on.</h2>
+          <p className="section-lede">Recommendations are categorised so they move straight into your workflow — roadmap items, experimentation hypotheses, and technical improvements. Each one is a living thread: comment, up-vote, down-vote, and push to Jira without losing the commercial context.</p>
+        </div>
+        <div className="takeaways-cats">
+          {TAKEAWAY_CATS.map((c, i) =>
+          <div key={i} className="takeaways-cat">
+              <div className="takeaways-cat-ico"><i data-lucide={c.icon} style={{ width: 18, height: 18 }} /></div>
+              <div className="takeaways-cat-body">
+                <h3>{c.title}</h3>
+                <p>{c.body}</p>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="takeaways-demo">
+          <p className="takeaways-demo-cap"><span className="dot" />Live recommendation · Registration journey</p>
+          <RecommendationModal />
+        </div>
+      </div>
+    </section>);
+
+};
+
+const NeverMissABeat = () => {
+  React.useEffect(() => {window.lucide && window.lucide.createIcons();}, []);
+  return (
+    <section className="section reveal">
+      <div className="container">
+        <div className="section-head">
+          <p className="eyebrow"><span className="dot" />Never miss a beat</p>
+          <h2 className="h2-section">Re-scored every cycle — you and your whole peer set.</h2>
+          <p className="section-lede">A Jurnii UX audit isn't a one-off snapshot. We re-run the full benchmark on a recurring cadence, so you watch every journey category move month over month — not just for your own brand, but across each competitor you track. When a rival closes a gap or you pull ahead, you see it the cycle it happens.</p>
+        </div>
+        <JurniiLineChart />
+      </div>
+    </section>);
+
+};
+
+function App() {
+  const d = window.PRODUCT_DATA.ux;
+  return (
+    <PageChrome active="product">
+      <PageHero eyebrow={d.eyebrow} title={d.title} lede={d.lede} primaryCta={d.primary} secondaryCta={d.secondary} accentClass={d.accent} />
+      <UXTelemetry />
+      <LazySection minHeight={560} className="lazy-ph-canvas" stylesheets={['assets/canvas-comments.css']}>
+        <CollaborationSection />
+      </LazySection>
+      <LazySection minHeight={420} className="lazy-ph-feature">
+        <FeatureGrid heading={d.features.heading} sub={d.features.sub} items={d.features.items} />
+      </LazySection>
+      <LazySection minHeight={640} className="lazy-ph-takeaways" stylesheets={['assets/rec-modal.css']}>
+        <TakeawaysSection />
+      </LazySection>
+      <LazySection minHeight={320} className="lazy-ph-chart">
+        <NeverMissABeat />
+      </LazySection>
+      <LazySection minHeight={280} className="lazy-ph-outcome">
+        <OutcomeStrip heading={d.outcomes.heading} sub={d.outcomes.sub} kpis={d.outcomes.kpis} />
+      </LazySection>
+      <LazySection minHeight={360} className="lazy-ph-section">
+        <Methodology heading={d.method.heading} sub={d.method.sub} steps={d.method.steps} />
+      </LazySection>
+      <LazySection minHeight={360} className="lazy-ph-section">
+        <Testimonials {...d.testimonials} accentClass={d.accent} />
+      </LazySection>
+      <LazySection minHeight={360} className="lazy-ph-section">
+        <PersonaList heading={d.personas.heading} sub={d.personas.sub} personas={d.personas.list} />
+      </LazySection>
+      <LazySection minHeight={240} className="lazy-ph-section">
+        <CTABand heading="See where your experience leaks NGR." sub="A scoping call shows the journey set, peer set, and timeline that fits your team." primary={{ label: 'Book a scoping call', href: 'contact-us.html' }} />
+      </LazySection>
+    </PageChrome>);
+
+}
+function mountUx() {
+  var needed = ['PageChrome','PageHero','LazySection','UXTelemetry','FeatureGrid','OutcomeStrip','Methodology','Testimonials','PersonaList','CTABand','RecommendationModal','JurniiLineChart','CanvasComments'];
+  if (needed.some(function(n){ return typeof window[n] === 'undefined'; })) { return setTimeout(mountUx, 30); }
+  if (!window.PRODUCT_DATA) { return setTimeout(mountUx, 30); }
+  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+}
+mountUx();
+</script>
+<script>
+(function(){
+  function load(){
+    var s=document.createElement('script');
+    s.src='assets/headline-split.js';
+    document.body.appendChild(s);
+  }
+  if('requestIdleCallback' in window) requestIdleCallback(load,{timeout:2000});
+  else setTimeout(load,1);
+})();
+</script>
+<script>
+(function(){
+  function load(){
+    var s=document.createElement('script');
+    s.src='assets/headline-split.js';
+    document.body.appendChild(s);
+  }
+  if('requestIdleCallback' in window) requestIdleCallback(load,{timeout:2000});
+  else setTimeout(load,1);
+})();
+</script>
+<script>
+(function(){
+  function load(){
+    var s=document.createElement('script');
+    s.src='assets/headline-split.js';
+    document.body.appendChild(s);
+  }
+  if('requestIdleCallback' in window) requestIdleCallback(load,{timeout:2000});
+  else setTimeout(load,1);
+})();
+</script>
+</body>
+</html>
