@@ -22,6 +22,19 @@ interface ContentEngineAppProps {
   initialPath?: string;
 }
 
+const ALIAS_MAP: Record<string, string> = {
+  '360': 'products/jurnii-360',
+  'jurnii-360': 'products/jurnii-360',
+  'ux': 'products/jurnii-ux',
+  'jurnii-ux': 'products/jurnii-ux',
+  'mmm': 'products/jurnii-mmm',
+  'jurnii-mmm': 'products/jurnii-mmm',
+  'contact': 'contact-us',
+  'book': 'contact-us',
+  'resources': 'library',
+  'resource': 'library',
+};
+
 export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath }) => {
   const [loading, setLoading] = useState(true);
   const [renderState, setRenderState] = useState<{
@@ -31,17 +44,16 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
 
   useEffect(() => {
     const rawPath = initialPath || window.location.pathname;
-    const cleanPath = rawPath.replace(/^\//, '').replace(/\/$/, '');
-    const parts = cleanPath.split('/').filter(Boolean);
+    const cleanPath = rawPath.replace(/^\//, '').replace(/\/$/, '').replace(/\.html$/, '');
+    const resolvedPath = ALIAS_MAP[cleanPath] || cleanPath;
+    const parts = resolvedPath.split('/').filter(Boolean);
 
     // 1. Root / homepage or default
     if (parts.length === 0) {
-      // Library subdomain check
       if (window.location.hostname.startsWith('library.')) {
         const libraryItems = getAllContent('library');
         setRenderState({ type: 'library-index', data: { items: libraryItems } });
       } else {
-        // Fallback to www main page or content page
         const item = getByPath(['www', 'pages', 'about']);
         if (item) {
           const genModel: GeneralPageModel = {
@@ -61,10 +73,10 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
 
     // 2. Library surface / /library/[slug]
     if (parts[0] === 'library') {
-      const slug = parts[1];
+      const slug = parts[parts.length - 1];
       const libraryItems = getAllContent('library');
 
-      if (!slug) {
+      if (parts.length === 1 || slug === 'library') {
         setRenderState({ type: 'library-index', data: { items: libraryItems } });
         setLoading(false);
         return;
@@ -105,9 +117,9 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
     const entitySections = ['products', 'features', 'solutions', 'use-cases'];
     if (entitySections.includes(parts[0])) {
       const section = parts[0] as EntityType;
-      const slug = parts[1];
+      const isDirectory = parts.length === 1;
 
-      if (!slug) {
+      if (isDirectory) {
         // Directory collection view
         const dirItem = getByPath(['www', section]);
         const items = dirItem && dirItem.children ? dirItem.children : [];
@@ -121,8 +133,9 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
           },
         });
       } else {
-        // Entity detail view
-        const item = getByPath(['www', section, slug]);
+        // Entity detail view (last segment handles nested routes like /use-cases/company-sizes/enterprise)
+        const targetSlug = parts[parts.length - 1];
+        const item = getByPath(['www', section, targetSlug]);
         if (item) {
           const richData: EntityPageModel = resolveRichPageData(item, section);
           setRenderState({ type: 'entity', data: richData });
@@ -135,7 +148,8 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
     }
 
     // 4. General pages (/about, /privacy, /terms, /contact-us, /compare)
-    const pageItem = getByPath(['www', 'pages', parts[0]]) || getByPath(['www', parts[0]]);
+    const pageSlug = parts[parts.length - 1];
+    const pageItem = getByPath(['www', 'pages', pageSlug]) || getByPath(['www', pageSlug]);
     if (pageItem) {
       const genModel: GeneralPageModel = {
         slug: pageItem.slug,
