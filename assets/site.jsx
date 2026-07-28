@@ -306,9 +306,9 @@ const NAV_FEATURES = [
   { href: 'features/brand-market-trends.html', title: 'Market Trends', icon: 'trending-up' },
   { href: 'features/brand-design-themes.html', title: 'Design Themes', icon: 'palette' },
   { href: 'features/brand-promotion-analysis.html', title: 'Promotion Analysis', icon: 'bar-chart-3' },
-  { href: 'features/brand-perfomance.html', title: 'Performance', icon: 'zap' },
+  { href: 'features/brand-performance.html', title: 'Performance', icon: 'zap' },
   { href: 'features/brand-usability.html', title: 'Usability', icon: 'mouse-pointer-click' },
-  { href: 'features/brand-preception.html', title: 'Perception', icon: 'eye' },
+  { href: 'features/brand-perception.html', title: 'Perception', icon: 'eye' },
   { href: 'features/brand-recommendations.html', title: 'Recommendations', icon: 'lightbulb' }]
 }];
 
@@ -318,7 +318,7 @@ const NAV_SOLUTIONS = [
   { href: 'solutions/competition-discovery.html', title: 'Discovery', icon: 'search' },
   { href: 'solutions/competition-offers.html', title: 'Offers', icon: 'gift' },
   { href: 'solutions/competition-pricing.html', title: 'Pricing', icon: 'tag' },
-  { href: 'solutions/competition-postitioning.html', title: 'Positioning', icon: 'target' }]
+  { href: 'solutions/competition-positioning.html', title: 'Positioning', icon: 'target' }]
 },
 { group: 'Benchmarking', items: [
   { href: 'solutions/user-interface-benchmarking.html', title: 'User Interface', icon: 'layout-panel-left' },
@@ -336,8 +336,9 @@ const NAV_SOLUTIONS = [
   { href: 'solutions/conversion-rate-optimization.html', title: 'Conversion Rate', icon: 'zap' },
   { href: 'solutions/life-time-value-optimization.html', title: 'Lifetime Value', icon: 'gem' },
   { href: 'solutions/churn-rate-optimization.html', title: 'Churn Rate', icon: 'trending-down' },
-  { href: 'solutions/customer-aquistion-cost-optimization.html', title: 'Acquisition Cost', icon: 'user-plus' }]
+  { href: 'solutions/customer-acquisition-cost-optimization.html', title: 'Acquisition Cost', icon: 'user-plus' }]
 }];
+
 
 
 const NAV_USE_CASES = [

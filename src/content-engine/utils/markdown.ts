@@ -51,7 +51,7 @@ export function validateContentSchema(filePath: string, meta: ContentMeta): void
 }
 
 export function getPdfUrl(slug: string): string | null {
-  if (slug === 'marketing-mix-modeling-paper') {
+  if (slug === 'marketing-mix-modeling-paper' || slug.endsWith('-paper')) {
     return `/papers/${slug}.pdf`;
   }
   return null;
@@ -60,8 +60,12 @@ export function getPdfUrl(slug: string): string | null {
 export function getByPath(segments: string[]): ContentItem | null {
   if (segments.length === 0) return null;
 
-  // Handle www prefix
-  const normSegments = segments[0] === 'www' ? segments.slice(1) : segments;
+  // Handle surface prefixes
+  let normSegments = segments[0] === 'www' ? segments.slice(1) : segments;
+  const isLibraryPrefix = normSegments[0] === 'library';
+  if (isLibraryPrefix) {
+    normSegments = normSegments.slice(1);
+  }
   if (normSegments.length === 0) return null;
 
   // 1. Directory collection lookup (/products, /features, /solutions, /use-cases)
@@ -69,7 +73,7 @@ export function getByPath(segments: string[]): ContentItem | null {
     const section = normSegments[0];
     const children = CONTENT_MANIFEST.filter((item) => {
       const p = item.path.replace(/\\/g, '/');
-      return p.includes(`/content/www/${section}/`);
+      return isLibraryPrefix ? p.includes(`/content/library/`) : p.includes(`/content/www/${section}/`);
     });
 
     children.sort((a, b) => {
@@ -81,7 +85,7 @@ export function getByPath(segments: string[]): ContentItem | null {
 
     return {
       type: 'folder',
-      path: `/content/www/${section}`,
+      path: isLibraryPrefix ? `/content/library` : `/content/www/${section}`,
       slug: section,
       meta: {
         title: section.toUpperCase(),
@@ -95,17 +99,25 @@ export function getByPath(segments: string[]): ContentItem | null {
   const targetSlug = normSegments[normSegments.length - 1].replace(/\.html$/, '');
 
   // 2. Section-specific matching if a known section exists in the URL segments
-  // Searches backwards to prefer later section matches (e.g. /products/use-cases/... matches use-cases)
   const matchedSection = [...normSegments].reverse().find((seg) => ENTITY_SECTIONS.includes(seg));
   if (matchedSection) {
     const match = CONTENT_MANIFEST.find((item) => {
       const p = item.path.replace(/\\/g, '/');
-      return p.includes(`/content/www/${matchedSection}/`) && item.slug === targetSlug;
+      return (p.includes(`/content/www/${matchedSection}/`) || p.includes(`/content/library/`)) && item.slug === targetSlug;
     });
     if (match) return match;
   }
 
-  // 3. Global fallback lookup by slug across all CONTENT_MANIFEST items
+  // 3. Prefer library match if path requested library
+  if (isLibraryPrefix) {
+    const libraryMatch = CONTENT_MANIFEST.find((item) => {
+      const p = item.path.replace(/\\/g, '/');
+      return p.includes('/content/library/') && item.slug === targetSlug;
+    });
+    if (libraryMatch) return libraryMatch;
+  }
+
+  // 4. Global fallback lookup by slug across all CONTENT_MANIFEST items
   const globalMatch = CONTENT_MANIFEST.find((item) => item.slug === targetSlug);
   if (globalMatch) return globalMatch;
 
@@ -128,7 +140,13 @@ export function getAllContent(rootFolder: string = 'www'): ContentItem[] {
 
 export function getContentBySlug(slug: string, searchFolders: string[] = ['www', 'library']): ContentItem | null {
   const cleanSlug = slug.replace(/\.html$/, '');
-  return CONTENT_MANIFEST.find((item) => item.slug === cleanSlug) || null;
+  return (
+    CONTENT_MANIFEST.find((item) => {
+      const p = item.path.replace(/\\/g, '/');
+      const matchesFolder = searchFolders.some((f) => p.includes(`/content/${f}/`));
+      return matchesFolder && item.slug === cleanSlug;
+    }) || null
+  );
 }
 
 export function getContentByRef(
@@ -138,10 +156,14 @@ export function getContentByRef(
 ): ContentItem[] {
   const cleanVal = refValue.replace(/\.html$/, '');
   return CONTENT_MANIFEST.filter((item) => {
+    const p = item.path.replace(/\\/g, '/');
+    const inFolder = searchFolders.some((f) => p.includes(`/content/${f}/`));
+    if (!inFolder) return false;
     const arr = item.meta[refField];
     return Array.isArray(arr) && arr.includes(cleanVal);
   });
 }
+
 
 export function resolveUseCaseValueRefs(refs: string[]): string[] {
   return refs.map((ref) => {

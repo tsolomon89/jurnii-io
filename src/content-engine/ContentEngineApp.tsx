@@ -18,6 +18,9 @@ import { PaperTemplate } from '../templates/PaperTemplate';
 import { GeneralPageTemplate } from '../templates/GeneralPageTemplate';
 import { SharedSubdomainLayout } from '../templates/SharedSubdomainLayout';
 
+import { processHeadings } from './utils/rich-page-data';
+import { resolveSurface } from '../routing/surface-utils';
+
 interface ContentEngineAppProps {
   initialPath?: string;
 }
@@ -32,8 +35,10 @@ const ALIAS_MAP: Record<string, string> = {
   'contact': 'contact-us',
   'book': 'contact-us',
   'resources': 'library',
+  'resources.html': 'library',
   'resource': 'library',
 };
+
 
 const PageChromeWrapper: React.FC<{ active?: string; children: React.ReactNode }> = ({ active = 'home', children }) => {
   const PageChrome = (window as any).PageChrome;
@@ -45,6 +50,7 @@ const PageChromeWrapper: React.FC<{ active?: string; children: React.ReactNode }
 
 export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath }) => {
   const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
   const [renderState, setRenderState] = useState<{
     type: 'entity' | 'directory' | 'article' | 'paper' | 'page' | 'library-index' | 'not-found';
     data?: any;
@@ -56,10 +62,12 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
     const lastSeg = cleanPath.split('/').pop() || '';
     const resolvedPath = ALIAS_MAP[cleanPath] || ALIAS_MAP[lastSeg] || cleanPath;
     const parts = resolvedPath.split('/').filter(Boolean);
+    const hostSurface = resolveSurface(typeof window !== 'undefined' ? window.location.hostname : '');
+    const isLibrarySubdomain = hostSurface.role === 'library';
 
     // 1. Root / homepage
     if (parts.length === 0) {
-      if (window.location.hostname.startsWith('library.')) {
+      if (isLibrarySubdomain) {
         const libraryItems = getAllContent('library');
         setRenderState({ type: 'library-index', data: { items: libraryItems } });
       } else {
@@ -80,7 +88,7 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
       return;
     }
 
-    // 2. Library index surface
+    // 2. Library index surface (/library)
     if (parts.length === 1 && parts[0] === 'library') {
       const libraryItems = getAllContent('library');
       setRenderState({ type: 'library-index', data: { items: libraryItems } });
@@ -89,7 +97,9 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
     }
 
     // 3. Resolve item or directory using getByPath
-    const item = getByPath(parts);
+    const searchParts = isLibrarySubdomain && parts[0] !== 'library' ? ['library', ...parts] : parts;
+    const item = getByPath(searchParts) || getByPath(parts);
+
     if (item) {
       if (item.type === 'folder') {
         const items = item.children || [];
@@ -107,6 +117,7 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
         if (p.includes('/content/library/')) {
           const libraryItems = getAllContent('library');
           const pres = resolveMediumPresentation(item.meta);
+          const { html: processedHtml, toc } = processHeadings(item.bodyHtml || '');
           const edModel: EditorialPageModel = {
             slug: item.slug,
             format: pres.format as 'article' | 'paper',
@@ -119,8 +130,8 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
             description: item.meta.description,
             subtitle: item.meta.subtitle,
             coverImage: item.meta.coverImage,
-            bodyHtml: item.bodyHtml || '',
-            tableOfContents: item.toc || [],
+            bodyHtml: processedHtml,
+            tableOfContents: toc,
             readingTimeMinutes: estimateReadTime(item.bodyHtml || ''),
             pdfUrl: getPdfUrl(item.slug),
           };
@@ -184,40 +195,100 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
         );
 
       case 'article':
-        return <ArticleTemplate data={renderState.data.model} />;
+        return (
+          <SharedSubdomainLayout
+            libraryItems={renderState.data.libraryItems}
+            currentSlug={renderState.data.model.slug}
+            activeCategory={selectedCategory}
+            onSelectCategory={setSelectedCategory}
+          >
+            <ArticleTemplate data={renderState.data.model} />
+          </SharedSubdomainLayout>
+        );
 
       case 'paper':
-        return <PaperTemplate data={renderState.data.model} />;
+        return (
+          <SharedSubdomainLayout
+            libraryItems={renderState.data.libraryItems}
+            currentSlug={renderState.data.model.slug}
+            activeCategory={selectedCategory}
+            onSelectCategory={setSelectedCategory}
+          >
+            <PaperTemplate data={renderState.data.model} />
+          </SharedSubdomainLayout>
+        );
 
       case 'page':
         return <GeneralPageTemplate data={renderState.data} />;
 
-      case 'library-index':
+      case 'library-index': {
+        const filteredItems = selectedCategory
+          ? renderState.data.items.filter((item: ContentItem) => item.meta.category === selectedCategory)
+          : renderState.data.items;
+        const isLibrarySubdomain = typeof window !== 'undefined' && resolveSurface(window.location.hostname).role === 'library';
+
         return (
-          <SharedSubdomainLayout libraryItems={renderState.data.items}>
-            <div className="space-y-6">
+          <SharedSubdomainLayout
+            libraryItems={renderState.data.items}
+            activeCategory={selectedCategory}
+            onSelectCategory={setSelectedCategory}
+          >
+            <div className="space-y-8">
               <header className="border-b border-white/10 pb-6">
-                <h1 className="text-3xl font-bold text-slate-100">Library & Research</h1>
-                <p className="text-slate-400 mt-2">
-                  Whitepapers, benchmarking frameworks, and research papers from Jurnii.
+                <div className="flex items-center space-x-3 text-xs font-mono uppercase tracking-widest text-sky-400">
+                  <span>Jurnii Intelligence Infrastructure</span>
+                  <span>•</span>
+                  <span>Research & Publications</span>
+                </div>
+                <h1 className="text-3xl sm:text-4xl font-bold text-slate-100 mt-3">
+                  Library & Monograph Archive
+                </h1>
+                <p className="text-slate-400 mt-2 max-w-2xl text-base leading-relaxed">
+                  Peer-reviewed whitepapers, quantitative benchmarking frameworks, and analytical essays on iGaming commercial performance.
                 </p>
               </header>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {renderState.data.items.map((item: ContentItem) => (
-                  <a
-                    key={item.slug}
-                    href={`/library/${item.slug}`}
-                    className="p-6 bg-slate-900/50 hover:bg-slate-800/80 border border-white/10 rounded-xl block space-y-3"
-                  >
-                    <span className="text-xs font-mono uppercase text-emerald-400">{item.meta.category || 'Paper'}</span>
-                    <h2 className="text-xl font-bold text-slate-100">{item.meta.title}</h2>
-                    <p className="text-sm text-slate-400">{item.meta.description || item.meta.excerpt}</p>
-                  </a>
-                ))}
+                {filteredItems.map((item: ContentItem) => {
+                  const href = isLibrarySubdomain ? `/${item.slug}` : `/library/${item.slug}`;
+                  return (
+                    <a
+                      key={item.slug}
+                      href={href}
+                      className="p-6 bg-slate-900/50 hover:bg-slate-800/80 border border-white/10 hover:border-sky-500/40 rounded-2xl block space-y-4 transition group"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-mono uppercase font-semibold text-sky-400 bg-sky-950/60 px-2.5 py-1 rounded-full border border-sky-800/30">
+                          {item.meta.category || 'Paper'}
+                        </span>
+                        {item.meta.medium && (
+                          <span className="text-[10px] font-mono uppercase text-slate-400 tracking-wider">
+                            {item.meta.medium}
+                          </span>
+                        )}
+                      </div>
+                      <h2 className="text-xl font-bold text-slate-100 group-hover:text-sky-300 transition">
+                        {item.meta.title}
+                      </h2>
+                      <p className="text-sm text-slate-400 line-clamp-2 leading-relaxed">
+                        {item.meta.description || item.meta.excerpt}
+                      </p>
+                      {item.meta.date && (
+                        <div className="text-xs text-slate-400 font-mono pt-2 border-t border-white/5 flex items-center justify-between">
+                          <span>Published {item.meta.date}</span>
+                          <span className="text-sky-400 font-sans font-medium group-hover:translate-x-1 transition-transform inline-flex items-center">
+                            Read Monograph &rarr;
+                          </span>
+                        </div>
+                      )}
+                    </a>
+                  );
+                })}
               </div>
             </div>
           </SharedSubdomainLayout>
         );
+      }
 
       case 'not-found':
       default:
@@ -235,3 +306,4 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
 
   return <PageChromeWrapper active={activeNav}>{renderInnerContent()}</PageChromeWrapper>;
 };
+

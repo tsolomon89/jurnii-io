@@ -1,39 +1,41 @@
 ---
 title: Jurnii UX
-description: Replace UX opinion with structured benchmarking. Jurnii UX scores every step of every critical journey across your operator and your peer set.
+description: >-
+  Replace UX opinion with structured benchmarking. Jurnii UX scores every step
+  of every critical journey across your operator and your peer set.
 category: Automated UX Benchmarking
-icon: route
 order: 2
-featureRefs: [brand-analysis, brand-performance]
-solutionRefs: [benchmarking, conversion-rate-optimization]
-useCaseValueRefs: [enterprise, igaming]
+icon: route
 heroFeatures:
   - title: Journey mapping
-    description: Sign-up, deposit, first bet, casino-to-sport crossover, withdrawal — each scored against 60+ structured criteria.
+    description: >-
+      Sign-up, deposit, first bet, casino-to-sport crossover, withdrawal — each
+      scored against 60+ structured criteria.
   - title: Performance analysis
-    description: Understand if your product is more or less performant than your competition.
+    description: >-
+      Understand if your product is more or less performant than your
+      competition.
   - title: Mobile & Desktop
-    description: iOS, Android, mobile web, desktop web — scored separately, then synthesised into a unified score.
+    description: >-
+      iOS, Android, mobile web, desktop web — scored separately, then
+      synthesised into a unified score.
   - title: Peer benchmarking
     description: See exactly where you sit vs your competitors on every criterion.
-pullQuote: For the first time, our roadmap arguments stopped being "Spotify does it this way" and started being "we lose 4.2 points to the market on this exact step."
-pullQuoteAttribution: Sofia Lindqvist, Director of Product
-deepWorkFeatures:
-  - icon: list-checks
-    title: Prioritised recommendations
-    description: Categorised recommendations that allow you to build roadmaps and optimization experiments.
-  - icon: refresh-cw
-    title: Recurring assessments
-    description: See how your releases are affecting your score month-on-month while closing the gap on competition.
+pullQuote: >-
+  For the first time, our roadmap arguments stopped being "Spotify does it this
+  way" and started being "we lose 4.2 points to the market on this exact step."
+pullQuoteAttribution: 'Sofia Lindqvist, Director of Product'
+productRefs: []
+featureRefs:
+  - brand-analysis
+  - brand-performance
+solutionRefs:
+  - benchmarking
+  - conversion-rate-optimization
+useCaseValueRefs:
+  - enterprise
+  - igaming
 ---
+# Jurnii UX
 
-## Overview
-
-Jurnii UX delivers evidence-based UX benchmarking for iGaming products. We decompose every player journey into structured scoreable criteria, replacing subjective opinions with quantifiable metrics.
-
-### How a Jurnii UX Audit Runs
-
-- **Define Scope**: Agree on 5-7 core player journeys across target mobile and desktop platforms.
-- **Capture & Score**: Walk every journey step-by-step, recording screenshots, latency, and interaction friction.
-- **Calibrate Findings**: Review insights with your internal product team to align on priority fixes.
-- **Deliver Audit & Re-score**: Deliver actionable roadmap items and track progress quarterly.
+Replace UX opinion with structured benchmarking. Jurnii UX scores every step of every critical journey across your operator and your peer set.

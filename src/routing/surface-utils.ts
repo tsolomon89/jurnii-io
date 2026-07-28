@@ -26,8 +26,13 @@ export const SURFACES: Record<string, SurfaceConfig> = {
 };
 
 export function resolveSurface(hostname: string = ''): SurfaceConfig {
-  const host = hostname.toLowerCase();
-  if (host.startsWith('library.') || host.includes('library')) {
+  const host = hostname.toLowerCase().trim();
+  if (
+    host.startsWith('library.') ||
+    host === 'library.jurnii.io' ||
+    host.includes('library.localhost') ||
+    (typeof window !== 'undefined' && window.location.search.includes('surface=library'))
+  ) {
     return SURFACES.library;
   }
   return SURFACES.www;
@@ -35,8 +40,23 @@ export function resolveSurface(hostname: string = ''): SurfaceConfig {
 
 export function getCanonicalUrl(pathName: string, hostname: string = ''): string {
   const surface = resolveSurface(hostname);
-  const base = surface.subdomain ? `https://${surface.domain}` : `https://${SURFACES.www.domain}`;
-  const cleanPath = pathName.startsWith('/') ? pathName : `/${pathName}`;
+  let cleanPath = pathName.startsWith('/') ? pathName : `/${pathName}`;
+
+  if (surface.role === 'library') {
+    const base = `https://${SURFACES.library.domain}`;
+    if (cleanPath.startsWith('/library/')) {
+      cleanPath = cleanPath.replace(/^\/library/, '');
+    } else if (cleanPath === '/library') {
+      cleanPath = '/';
+    }
+    return `${base}${cleanPath || '/'}`;
+  }
+
+  const base = `https://${SURFACES.www.domain}`;
+  if (!cleanPath.startsWith('/library/') && pathName.includes('/content/library/')) {
+    const slug = pathName.split('/').pop()?.replace(/\.md$/, '') || '';
+    cleanPath = `/library/${slug}`;
+  }
   return `${base}${cleanPath}`;
 }
 
@@ -48,3 +68,4 @@ export function resolveSurfaceHeaders(hostname: string): Record<string, string> 
     'x-tenant-domain': surface.domain,
   };
 }
+

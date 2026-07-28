@@ -1,13 +1,18 @@
 ---
 title: Churn Rate Optimization
-description: Identify lapsed player triggers and competitor counter-offers to prevent player churn.
+description: >-
+  Identify lapsed player triggers and competitor counter-offers to prevent
+  player churn.
 category: Retention Strategy
-icon: refresh-cw
 order: 4
-productRefs: [jurnii-360]
-featureRefs: [competitor-analysis]
+icon: refresh-cw
+productRefs:
+  - jurnii-360
+featureRefs:
+  - competitor-analysis
+solutionRefs: []
+useCaseValueRefs: []
 ---
+# Churn Rate Optimization
 
-## Overview
-
-Prevent player churn by tracking competitor retention incentives and tailoring re-engagement flows based on real-time market data.
+Identify lapsed player triggers and competitor counter-offers to prevent player churn.
