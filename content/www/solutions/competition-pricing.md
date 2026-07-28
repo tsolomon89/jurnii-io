@@ -11,6 +11,53 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '35'
+        label: Regulated Markets Monitored
+      - num: '21'
+        label: Feature Areas Scanned
+      - num: '30+'
+        label: Hours Saved per Week
+  - type: manifesto
+    data: >-
+      Protect operator margin while remaining highly competitive. Align welcome offers and player rewards with continuous, structured regional metrics.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Over-generous sign-up bonuses erode operator margins, while overly restrictive wagering rules kill player acquisition and drive players to rivals.
+  - type: solution
+    data:
+      para: >-
+        We model payout curves and margin impact across different spin multipliers and wagering requirements to find the commercial sweet spot.
+      foot: >-
+        Chief Commercial Officers use pricing calibration to defend yield thresholds across target markets.
+  - type: capabilities
+    data:
+      - icon: dollar-sign
+        title: Margin Defense Tools
+        body: >-
+          Prevent margin erosion by tracking minimum deposit and payout limits across competitors in real-time.
+      - icon: sliders
+        title: Wagering Calibrators
+        body: >-
+          Model payout curves across different spin multipliers and sports wagering terms to optimize yields.
+      - icon: activity
+        title: ROI Auditing Engine
+        body: >-
+          Audit rival affiliate rewards and player acquisition pipelines automatically to detect pricing shifts.
+  - type: cta
+    data:
+      heading: See this in action.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 ## Executive Summary

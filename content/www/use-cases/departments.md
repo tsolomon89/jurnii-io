@@ -1,6 +1,24 @@
 ---
 title: "Departments Hub"
 description: "Align product, trading, and marketing teams around objective competitive indicators."
+sections:
+  - type: metrics
+    data:
+      - num: '3'
+        label: Core Departments
+      - num: '35'
+        label: Markets Monitored
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '300+'
+        label: Brands Analysed
+  - type: cta
+    data:
+      heading: See how Jurnii works for your department.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 Functional Teams

@@ -11,6 +11,53 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '300+'
+        label: Brands Analysed
+      - num: '70+'
+        label: Recommendations per Audit
+      - num: '4'
+        label: Key UX Dimensions
+      - num: 'Mins'
+        label: Time to Full Audit
+  - type: manifesto
+    data: >-
+      Calibrate player friction objectively. Replace sluggish, manual usability audits with automated heuristic evaluation of your key transactional pathways.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Manual UX audits are slow, retrospective, and fail to scale across multi-brand and multi-market operator portfolios.
+  - type: solution
+    data:
+      para: >-
+        Jurnii UX runs automated usability scans across key player journeys, grading each against 12 core onboarding heuristics.
+      foot: >-
+        Chief Product Officers leverage UX benchmarking to prioritize development sprints and vindicate roadmaps.
+  - type: capabilities
+    data:
+      - icon: smile
+        title: Heuristic Benchmarks
+        body: >-
+          Benchmark player flows against 12 core onboarding design principles to replace opinion with facts.
+      - icon: zap
+        title: Cognitive Fatigue Audits
+        body: >-
+          Isolate interaction points and redundant inputs causing player dropoffs during signup.
+      - icon: route
+        title: Onboarding Flow Scores
+        body: >-
+          Grade transaction flow paths against leading global sportsbooks to guide sprint updates.
+  - type: cta
+    data:
+      heading: See this in action.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 ## Executive Summary

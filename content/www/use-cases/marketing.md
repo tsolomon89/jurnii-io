@@ -4,6 +4,86 @@ description: Campaign performance tracking, channel attribution, and promotional
 category: Departments
 order: 10
 productRefs: [jurnii-360, jurnii-ux, jurnii-mmm]
+sections:
+  - type: metrics
+    data:
+      - num: '+46%'
+        label: True Marketing ROI Lift
+      - num: '$4.85M'
+        label: Budget Reallocated
+      - num: '3x'
+        label: Attribution Speed
+      - num: '40x'
+        label: ROI on Platform Investment
+  - type: manifesto
+    data: >-
+      Eliminate subjectivity from marketing investments. Jurnii delivers the database, tracking, and attribution tools to optimize campaigns based on real-time competitor actions.
+  - type: challenge
+    data:
+      eyebrow: The Commercial Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Marketing managers operate under blind CPA metrics. Last-click attribution fails to account for competitor sports boosts or casino wagering shifts.
+  - type: solution
+    data:
+      para: >-
+        Jurnii 360 parses competitor banner creative, copy claims, and promo structures. This data feeds into Cortex for causal modeling and marketing mix attribution.
+      foot: >-
+        Acquisition Heads and Media Buyers use Jurnii campaign timelines to optimize ad spends and improve paid media ROAS.
+  - type: capabilities
+    data:
+      - icon: radar
+        title: Campaign Scraping
+        body: >-
+          Track all competitor welcome offers, deposit matches, and free spins dynamically as soon as they go live.
+      - icon: image
+        title: Ad Creative Intel
+        body: >-
+          Review competitor homepage banner placements, promotional sliders, and creative hooks across your competitive set.
+      - icon: clock
+        title: Timing Optimization
+        body: >-
+          Map historical competitor deployment patterns to schedule campaigns during peak commercial ROI windows.
+  - type: beforeAfter
+    data:
+      heading: Operational Transformation
+      before:
+        - >-
+          Marketing managers operate under blind CPA metrics.
+        - >-
+          Creative ad copywriting shifts go unnoticed.
+        - >-
+          Saturated channels make traditional marketing inefficient.
+      after:
+        - >-
+          Real-time competitor banner and copy tracking across all markets.
+        - >-
+          Causal models isolate true incremental campaign lift.
+        - >-
+          Campaign timing optimized against historical competitor patterns.
+  - type: decisionMap
+    data:
+      heading: Strategic Decision Map
+      rows:
+        - decision: >-
+            Which channels deliver true incrementality?
+          signal: >-
+            Cross-channel competitor promo footprint data
+          output: >-
+            Channel-level ROAS attribution report
+        - decision: >-
+            When to launch campaigns?
+          signal: >-
+            Historical competitor deployment timelines
+          output: >-
+            Optimal timing recommendation
+  - type: cta
+    data:
+      heading: See how Jurnii works for your role.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 # Marketing Teams

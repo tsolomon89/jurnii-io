@@ -11,6 +11,53 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '35'
+        label: Regulated Markets Monitored
+      - num: '21'
+        label: Feature Areas Scanned
+      - num: '30+'
+        label: Hours Saved per Week
+  - type: manifesto
+    data: >-
+      Eliminate promotional speculation. Systematize tracking of deposit bonus percentages, spin counts, and sports betting boosts across your competitors.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        CRM and trading teams duplicate competitor promotions reactively without knowing if those mechanics actually drive incrementality, causing margin dilution.
+  - type: solution
+    data:
+      para: >-
+        Jurnii normalizes competitor sports and casino offers, scoring their generosity using the proprietary Promo Richness Index.
+      foot: >-
+        Chief Commercial Officers deploy offers intelligence to align CRM strategy with real-world market context.
+  - type: capabilities
+    data:
+      - icon: gift
+        title: Bonus Richness Index
+        body: >-
+          Standardize bonus yield calculations based on active wagering hurdles and rollover requirements.
+      - icon: tag
+        title: Ad Campaign Parsing
+        body: >-
+          Extract competitor banner messaging, creative headers, and copywriting hooks dynamically across landing zones.
+      - icon: calendar
+        title: Holiday Trend Logs
+        body: >-
+          Review competitor Christmas, World Cup, and Super Bowl promotional timelines to anticipate spend.
+  - type: cta
+    data:
+      heading: See this in action.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 ## Executive Summary

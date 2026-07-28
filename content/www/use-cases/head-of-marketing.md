@@ -4,6 +4,24 @@ description: "Calibrate paid search bids against live competitor welcome matches
 category: Roles
 order: 10
 productRefs: [jurnii-360, jurnii-ux, jurnii-mmm]
+sections:
+  - type: metrics
+    data:
+      - num: '+46%'
+        label: True Marketing ROI Lift
+      - num: '$4.85M'
+        label: Budget Reallocated
+      - num: '3x'
+        label: Attribution Speed
+      - num: '40x'
+        label: ROI on Platform Investment
+  - type: cta
+    data:
+      heading: See how Jurnii works for your role.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 ## Key Metrics

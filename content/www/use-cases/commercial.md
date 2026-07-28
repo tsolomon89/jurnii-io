@@ -6,6 +6,86 @@ icon: users
 order: 2
 productRefs: [jurnii-360, jurnii-mmm]
 featureRefs: [competitor-analysis, market-trends]
+sections:
+  - type: metrics
+    data:
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '35'
+        label: Regulated Markets Monitored
+      - num: '21'
+        label: Feature Areas Scanned
+      - num: '30+'
+        label: Hours Saved per Week
+  - type: manifesto
+    data: >-
+      Commercial departments run on margins. Jurnii bridges the gap between player acquisition costs and gaming yields, supplying clear indices to evaluate pricing richness.
+  - type: challenge
+    data:
+      eyebrow: The Commercial Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Commercial teams struggle to balance player bonus incentives with net yield hold rates. Copying rival wagering thresholds by hand is slow, error-prone, and leads to margin erosion.
+  - type: solution
+    data:
+      para: >-
+        Jurnii models competitor payout curves across sports and casino verticals. Jurnii 360's Promo Richness Index standardizes wagering rules and deposit incentives.
+      foot: >-
+        Commercial Analysts and CRM Directors leverage Jurnii margin calibrators to deploy high-yield loyalty rewards.
+  - type: capabilities
+    data:
+      - icon: layers
+        title: Promo Richness Index
+        body: >-
+          Standardize the mathematical cost and yield margin impact of competitor deposit matches and retention bonuses.
+      - icon: user-minus
+        title: Churn Analytics
+        body: >-
+          Trace rival product changes and promotions causing high player leakage and multi-homing defection.
+      - icon: search-check
+        title: Revenue Auditing
+        body: >-
+          Identify conversion leaks in affiliate reward structures, deposit funnels, and registration pathways.
+  - type: beforeAfter
+    data:
+      heading: Operational Transformation
+      before:
+        - >-
+          Copying rival wagering thresholds by hand is slow and error-prone.
+        - >-
+          Squeezed by player multi-homing rates of 70–80%.
+        - >-
+          CRM teams duplicate rival promos reactively, causing margin dilution.
+      after:
+        - >-
+          Promo Richness Index quantifies competitive positioning instantly.
+        - >-
+          Payout curves modeled across sports and casino verticals.
+        - >-
+          Margin calibrators deploy high-yield loyalty rewards automatically.
+  - type: decisionMap
+    data:
+      heading: Strategic Decision Map
+      rows:
+        - decision: >-
+            Is CRM spending sustainable?
+          signal: >-
+            Promo Richness Index + rival retention activity
+          output: >-
+            Margin-preserving CRM strategy
+        - decision: >-
+            Where is churn originating?
+          signal: >-
+            Competitor product change + player leakage data
+          output: >-
+            Targeted retention campaign
+  - type: cta
+    data:
+      heading: See how Jurnii works for your role.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 ## Overview

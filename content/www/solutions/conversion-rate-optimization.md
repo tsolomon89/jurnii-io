@@ -12,6 +12,53 @@ featureRefs:
   - brand-analysis
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '300+'
+        label: Brands Analysed
+      - num: '70+'
+        label: Recommendations per Audit
+      - num: '4'
+        label: Key UX Dimensions
+      - num: 'Mins'
+        label: Time to Full Audit
+  - type: manifesto
+    data: >-
+      Maximize player signup yields. Calibrate checkout fields, security badges, and layout aesthetics to minimize abandonment and accelerate active conversions.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Minor UX details in registration and KYC checkpoints cause silent abandonment, draining marketing budgets and driving up CPA.
+  - type: solution
+    data:
+      para: >-
+        Jurnii UX identifies exact usability issues, ranking them by severity so development teams can clear funnels immediately.
+      foot: >-
+        Heads of UX use conversion optimization to optimize mobile flows and outpace competitors.
+  - type: capabilities
+    data:
+      - icon: percent
+        title: Friction Minimization
+        body: >-
+          Isolate and remove fields causing player dropoffs during verification, KYC, and first deposit.
+      - icon: layout
+        title: Checkout Redesigns
+        body: >-
+          Adopt verified, high-converting checkout grids and deposit button configurations to clear paths.
+      - icon: check-circle
+        title: A/B Benchmark Sprints
+        body: >-
+          Validate interface revisions directly against leading sportsbook portals under real user conditions.
+  - type: cta
+    data:
+      heading: See this in action.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 ## Executive Summary

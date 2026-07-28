@@ -12,6 +12,53 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '35'
+        label: Regulated Markets Monitored
+      - num: '21'
+        label: Feature Areas Scanned
+      - num: '30+'
+        label: Hours Saved per Week
+  - type: manifesto
+    data: >-
+      Achieve acquisition efficiency. Lower overall customer acquisition cost by securing registration pathways and optimizing welcome offer layouts using data-backed designs.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        High customer acquisition costs (CAC) drain marketing budgets, eroding operator NGR and GGR in highly competitive regions.
+  - type: solution
+    data:
+      para: >-
+        Jurnii UX and Jurnii 360 optimize landing pages and signup paths, ensuring every marketing click translates to a successful active player conversion.
+      foot: >-
+        Chief Marketing Officers use CAC optimization to optimize digital campaigns and improve media ROAS.
+  - type: capabilities
+    data:
+      - icon: shopping-bag
+        title: CPA Reduction Engine
+        body: >-
+          Correlate resolved player journey friction directly with reduced marketing CPA and higher yields.
+      - icon: layout
+        title: Welcome Page Optimization
+        body: >-
+          Refine landing zone layouts, button spacing, typographic clarity, and trust badges systematically.
+      - icon: sliders
+        title: Promo Calibrators
+        body: >-
+          Deploy ideal signup bonuses and wagering rules calculated to lower customer CAC while protecting margins.
+  - type: cta
+    data:
+      heading: See this in action.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 ## Executive Summary

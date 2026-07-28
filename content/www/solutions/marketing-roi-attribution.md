@@ -13,6 +13,53 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '+46%'
+        label: True Marketing ROI Lift
+      - num: '$4.85M'
+        label: Budget Reallocated
+      - num: '3x'
+        label: Attribution Speed
+      - num: '40x'
+        label: ROI on Platform Investment
+  - type: manifesto
+    data: >-
+      Isolate true campaign impact. Determine how competitor deposit boosts and copywriting pivots influence your regional acquisition yield and CPA rates.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Marketing attribution is broken, relying on last-click attribution that ignores competitor promotions and regional UX quality, causing massive budget waste.
+  - type: solution
+    data:
+      para: >-
+        Cortex correlates competitor promotional richness and internal UX scores with campaign yield to reveal true marketing contribution.
+      foot: >-
+        Chief Marketing Officers use Cortex to justify marketing mix updates and defend acquisition budgets.
+  - type: capabilities
+    data:
+      - icon: pie-chart
+        title: CPA Correlation Engine
+        body: >-
+          Correlate customer acquisition cost fluctuations against competitor campaign shifts and bonus variables.
+      - icon: gift
+        title: Promo Richness Modeling
+        body: >-
+          Measure player acquisition yields against rival bonus and wagering conditions using proprietary Cortex models.
+      - icon: shield
+        title: Yield Protection Planning
+        body: >-
+          Refine campaign budgets when competitor promo richness spikes to protect overall marketing ROAS.
+  - type: cta
+    data:
+      heading: See this in action.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 ## Executive Summary

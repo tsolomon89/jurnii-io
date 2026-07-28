@@ -11,6 +11,53 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '300+'
+        label: Brands Analysed
+      - num: '70+'
+        label: Recommendations per Audit
+      - num: '4'
+        label: Key UX Dimensions
+      - num: 'Mins'
+        label: Time to Full Audit
+  - type: manifesto
+    data: >-
+      Optimize the path to first bet. Map complete player progression pathways from landing page to successful deposit to repair leakage funnels.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Players abandon transactions at secure verification and wallet selection steps, but analytics logs fail to show the visual cause.
+  - type: solution
+    data:
+      para: >-
+        Jurnii models the visual flow of transactions, documenting friction thresholds and identifying design bottlenecks.
+      foot: >-
+        Heads of UX deploy journey benchmarking to repair leaky pipelines and secure player loyalty.
+  - type: capabilities
+    data:
+      - icon: milestone
+        title: Transition State Maps
+        body: >-
+          Model user progress through verification (KYC), wallet selection, and checkouts systematically.
+      - icon: alert-triangle
+        title: Friction Point Logs
+        body: >-
+          Flag redundant form entries, laggy inputs, and validation obstacles across multi-brand setups.
+      - icon: filter
+        title: Dropoff Analytics
+        body: >-
+          Track where high-value customers abandon onboarding steps to target UX updates.
+  - type: cta
+    data:
+      heading: See this in action.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 ## Executive Summary

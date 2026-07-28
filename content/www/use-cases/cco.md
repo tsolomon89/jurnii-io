@@ -4,6 +4,86 @@ description: NGR growth, bonus spend efficiency, and competitive margin protecti
 category: Roles
 order: 10
 productRefs: [jurnii-360, jurnii-ux, jurnii-mmm]
+sections:
+  - type: metrics
+    data:
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '35'
+        label: Regulated Markets Monitored
+      - num: '21'
+        label: Feature Areas Scanned
+      - num: '30+'
+        label: Hours Saved per Week
+  - type: manifesto
+    data: >-
+      Commercial directors leverage Jurnii to protect yields, optimizing promotional richness and bonus wagering conditions based on continuous, automated market visibility.
+  - type: challenge
+    data:
+      eyebrow: The Commercial Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        CCOs are responsible for Net Gaming Revenue (NGR) and Gross Gaming Revenue (GGR), but player multi-homing rates of 70–80% make customer loyalty highly fragile.
+  - type: solution
+    data:
+      para: >-
+        Jurnii 360's Promo Richness Index standardizes wagering rules and deposit incentives, enabling CCOs to calibrate margin thresholds and defend player lifetime value.
+      foot: >-
+        Chief Commercial Officers leverage Jurnii promotions surveillance to balance customer acquisition generosity with strict yield safety.
+  - type: capabilities
+    data:
+      - icon: trending-up
+        title: Yield Optimisation
+        body: >-
+          Calibrate deposit matches and pricing richness against competitor bonus structures using the Promo Richness Index.
+      - icon: heart
+        title: LTV Protection
+        body: >-
+          Prevent player churn before it starts by monitoring rival retention plays in real-time.
+      - icon: filter
+        title: Leak Remediation
+        body: >-
+          Track and repair player progression leaks through high-value conversion funnels and withdrawal workflows.
+  - type: beforeAfter
+    data:
+      heading: Operational Transformation
+      before:
+        - >-
+          CRM teams reactively deploy over-generous player bonuses.
+        - >-
+          Commercial analysts spend hours compiling competitor welcome offers.
+        - >-
+          The operator is blind to the Promo Richness Index of the market.
+      after:
+        - >-
+          Promo Richness Index standardizes wagering rules across competitors.
+        - >-
+          Margin thresholds are calibrated automatically using competitor data.
+        - >-
+          Player lifetime value is defended with real-time competitive visibility.
+  - type: decisionMap
+    data:
+      heading: Strategic Decision Map
+      rows:
+        - decision: >-
+            Are bonus levels competitive?
+          signal: >-
+            Promo Richness Index across competitor set
+          output: >-
+            Margin-calibrated bonus recommendation
+        - decision: >-
+            Where is LTV leaking?
+          signal: >-
+            Competitor retention campaign + churn correlation
+          output: >-
+            Defensive pricing brief
+  - type: cta
+    data:
+      heading: See how Jurnii works for your role.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 # Chief Commercial Officer (CCO)

@@ -1,6 +1,24 @@
 ---
 title: "Sectors Hub"
 description: "Deep, industry-specific heuristic scoring tailored to exact transactional conversion loops."
+sections:
+  - type: metrics
+    data:
+      - num: '3'
+        label: Core Sectors
+      - num: '35'
+        label: Markets Monitored
+      - num: '300+'
+        label: Brands Analysed
+      - num: 'Mins'
+        label: Time to Full Audit
+  - type: cta
+    data:
+      heading: See how Jurnii works in your sector.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 Target Verticals

@@ -100,7 +100,51 @@ export const BaseEntitySchema = z.object({
       }),
       z.object({
         type: z.literal('benchmark'),
-        data: z.any().optional()
+        data: z.object({
+          heading: z.string(),
+          lede: z.string().optional(),
+          cols: z.array(z.string()),
+          rows: z.array(z.object({
+            feat: z.string(),
+            jurnii: z.string(),
+            legacy: z.string(),
+            manual: z.string()
+          }))
+        })
+      }),
+      z.object({
+        type: z.literal('ecosystem'),
+        data: z.object({
+          heading: z.string(),
+          lede: z.string().optional(),
+          columns: z.array(z.object({
+            label: z.string(),
+            items: z.array(z.object({
+              href: z.string(),
+              title: z.string(),
+              desc: z.string()
+            }))
+          }))
+        })
+      }),
+      z.object({
+        type: z.literal('beforeAfter'),
+        data: z.object({
+          heading: z.string().optional(),
+          before: z.array(z.string()),
+          after: z.array(z.string())
+        })
+      }),
+      z.object({
+        type: z.literal('decisionMap'),
+        data: z.object({
+          heading: z.string().optional(),
+          rows: z.array(z.object({
+            decision: z.string(),
+            signal: z.string(),
+            output: z.string()
+          }))
+        })
       }),
       z.object({
         type: z.literal('renderFlag'),

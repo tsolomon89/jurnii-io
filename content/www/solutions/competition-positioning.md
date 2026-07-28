@@ -12,6 +12,53 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '35'
+        label: Regulated Markets Monitored
+      - num: '21'
+        label: Feature Areas Scanned
+      - num: '30+'
+        label: Hours Saved per Week
+  - type: manifesto
+    data: >-
+      Differentiate with absolute precision. Isolate positioning angles left open by competitor marketing layouts to establish highly defensive, low-CPA campaigns.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Acquisition campaigns collapse when operators fail to stand out, forcing them to rely on price generosity and bonus size alone.
+  - type: solution
+    data:
+      para: >-
+        Jurnii maps the copywriting and messaging space, signaling where competitors have left visual or conceptual voids.
+      foot: >-
+        Chief Marketing Officers deploy positioning strategy to optimize ROAS across paid media channels.
+  - type: capabilities
+    data:
+      - icon: compass
+        title: Value Claim Maps
+        body: >-
+          Graph active brands based on core value propositions, speed, safety, or bonus size.
+      - icon: file-text
+        title: Copywriting Auditing
+        body: >-
+          Parse competitor landing page copy to identify dominant positioning themes and messaging voids.
+      - icon: crosshair
+        title: Segment Expansion
+        body: >-
+          Target high-value player personas ignored by slow-moving regional operators with custom copy.
+  - type: cta
+    data:
+      heading: See this in action.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 ## Executive Summary

@@ -4,6 +4,86 @@ description: Onboarding journey audits, KYC friction scoring, and app UX optimiz
 category: Sectors
 order: 10
 productRefs: [jurnii-360, jurnii-ux, jurnii-mmm]
+sections:
+  - type: metrics
+    data:
+      - num: '300+'
+        label: Brands Analysed
+      - num: '70+'
+        label: Recommendations per Audit
+      - num: '4'
+        label: Key UX Dimensions
+      - num: 'Mins'
+        label: Time to Full Audit
+  - type: manifesto
+    data: >-
+      FinTech platforms leverage Jurnii to secure high-security customer registration, audit KYC and AML processing delays, and design conversion-optimized banking interfaces.
+  - type: challenge
+    data:
+      eyebrow: The Sector Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        FinTech applications face extreme signup drop-offs during high-security AML, KYC, and document verification steps. Players lose trust when secure interfaces look generic or confusing.
+  - type: solution
+    data:
+      para: >-
+        Jurnii audits security styling, compliance signals, and input validation messages across FinTech registration funnels, comparing with industry best practices.
+      foot: >-
+        VP of Risk and Product Leads at FinTech platforms deploy perception scores to secure compliance conversions.
+  - type: capabilities
+    data:
+      - icon: shield-check
+        title: Onboarding Friction Audits
+        body: >-
+          Optimize and accelerate high-security AML, KYC, and document upload pipelines.
+      - icon: badge-check
+        title: Trust Elements Evaluation
+        body: >-
+          Measure visual security indicators, compliance badges, and customer trust perception levels.
+      - icon: smartphone
+        title: Mobile Performance Scoring
+        body: >-
+          Ensure instant financial application loading and response speeds across mobile networks.
+  - type: beforeAfter
+    data:
+      heading: Operational Transformation
+      before:
+        - >-
+          Extreme signup drop-offs during high-security verification steps.
+        - >-
+          Generic interfaces erode user trust and credibility.
+        - >-
+          Standard analytics cannot measure visual trust signal impact.
+      after:
+        - >-
+          Security styling and compliance signals audited automatically.
+        - >-
+          Onboarding paths project maximum credibility and safety.
+        - >-
+          Perception scores guide interface trust improvements.
+  - type: decisionMap
+    data:
+      heading: Strategic Decision Map
+      rows:
+        - decision: >-
+            Where are signups dropping off?
+          signal: >-
+            KYC/AML friction point analysis + trust perception scores
+          output: >-
+            Trust-optimized onboarding redesign
+        - decision: >-
+            Do interfaces project credibility?
+          signal: >-
+            Security badge and compliance signal audit
+          output: >-
+            Visual trust improvement brief
+  - type: cta
+    data:
+      heading: See how Jurnii works for your role.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 # FinTech Applications

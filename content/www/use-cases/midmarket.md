@@ -4,6 +4,86 @@ description: Scale acquisition efficiency and defend market share against Tier 1
 category: Company Size
 order: 10
 productRefs: [jurnii-360, jurnii-ux, jurnii-mmm]
+sections:
+  - type: metrics
+    data:
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '35'
+        label: Regulated Markets Monitored
+      - num: '21'
+        label: Feature Areas Scanned
+      - num: '30+'
+        label: Hours Saved per Week
+  - type: manifesto
+    data: >-
+      Mid-market operators utilize Jurnii to transition from regional player to national leader through systematized competitive tracking and standardized indicators.
+  - type: challenge
+    data:
+      eyebrow: The Commercial Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Scaling operators face high operational friction when entering new regulated markets. Launching new brands creates immense UX drift and exposes player onboarding funnels to massive drop-offs.
+  - type: solution
+    data:
+      para: >-
+        Jurnii automates competitor journey indexing and promotion scraping in target jurisdictions, supplying structured UX scores and promo tracking data to guide expansion.
+      foot: >-
+        VP of Growth and Commercial Directors utilize regional maps to secure expansion margins and validate brand launches.
+  - type: capabilities
+    data:
+      - icon: globe
+        title: Jurisdictional Expansion
+        body: >-
+          Map player conversion loops, compliance terms, and local UX expectations across 35 markets simultaneously.
+      - icon: users
+        title: Organizational Alignment
+        body: >-
+          Establish a single-source-of-truth usability database across growing marketing, commercial, and product departments.
+      - icon: bar-chart-3
+        title: Attribution Scaling
+        body: >-
+          Model campaign causal impacts and ROAS lift as marketing spend scales across diverse channels.
+  - type: beforeAfter
+    data:
+      heading: Operational Transformation
+      before:
+        - >-
+          Teams become siloed when entering new markets.
+        - >-
+          Product managers ship features blindly without competitive context.
+        - >-
+          CRM teams copy rival promotions reactively across jurisdictions.
+      after:
+        - >-
+          Structured UX scores and promo data guide every expansion decision.
+        - >-
+          All departments share a single-source-of-truth usability database.
+        - >-
+          Campaign causal impacts modeled across all target jurisdictions.
+  - type: decisionMap
+    data:
+      heading: Strategic Decision Map
+      rows:
+        - decision: >-
+            Is this jurisdiction ready for launch?
+          signal: >-
+            Regional UX scores + competitor saturation analysis
+          output: >-
+            Expansion readiness scorecard
+        - decision: >-
+            Are scaling teams aligned?
+          signal: >-
+            Cross-department usability data consistency
+          output: >-
+            Organizational alignment audit
+  - type: cta
+    data:
+      heading: See how Jurnii works for your role.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 # Mid-Market Operators

@@ -12,6 +12,53 @@ featureRefs:
   - competitor-analysis
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '35'
+        label: Regulated Markets Monitored
+      - num: '21'
+        label: Feature Areas Scanned
+      - num: '30+'
+        label: Hours Saved per Week
+  - type: manifesto
+    data: >-
+      Combat player churn proactively. Track competitor retention campaigns and usability enhancements that are pulling players away from your platform.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Traditional retention strategies are reactive, attempting to recover players with expensive bonus cash only after they have already defected.
+  - type: solution
+    data:
+      para: >-
+        Jurnii 360 warns CRM teams when competitors deploy highly generous retention offers, enabling timely defensive pricing and margin calibration.
+      foot: >-
+        Chief Commercial Officers deploy churn alerts to protect active margins in aggressive markets.
+  - type: capabilities
+    data:
+      - icon: user-minus
+        title: Competitor Move Warnings
+        body: >-
+          Receive alerts when rivals introduce high-richness loyalty promos or sports boosts in your region.
+      - icon: plus-circle
+        title: Product Gap Analysis
+        body: >-
+          Isolate product features rivals are deploying to secure active customer retention and prevent churn.
+      - icon: sliders
+        title: Margin Calibration Sprints
+        body: >-
+          Re-calibrate payout metrics to protect yields and NGR when competitor churn triggers spike.
+  - type: cta
+    data:
+      heading: See this in action.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 ## Executive Summary

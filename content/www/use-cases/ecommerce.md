@@ -4,6 +4,86 @@ description: Benchmarking checkout flows, payment friction, and conversion funne
 category: Sectors
 order: 10
 productRefs: [jurnii-360, jurnii-ux, jurnii-mmm]
+sections:
+  - type: metrics
+    data:
+      - num: '300+'
+        label: Brands Analysed
+      - num: '70+'
+        label: Recommendations per Audit
+      - num: '4'
+        label: Key UX Dimensions
+      - num: 'Mins'
+        label: Time to Full Audit
+  - type: manifesto
+    data: >-
+      High-volume digital brands utilize Jurnii to map purchase journeys, identify cart abandonment causes, and benchmark promotional campaign effectiveness.
+  - type: challenge
+    data:
+      eyebrow: The Sector Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        eCommerce platforms suffer from severe cart abandonment at checkouts. Traditional analytics show where players drop off but fail to explain the visual layout errors causing cognitive fatigue.
+  - type: solution
+    data:
+      para: >-
+        Jurnii maps checkout grids, button placement, and copywriting clarity, benchmarking transaction states against leading high-converting digital portals.
+      foot: >-
+        Heads of eCommerce and Digital Merchandising utilize journey mapping to streamline multi-step checkouts and increase LTV.
+  - type: capabilities
+    data:
+      - icon: shopping-cart
+        title: Checkout Optimization
+        body: >-
+          Pinpoint interaction and UI friction causing cart abandonment in high-value purchase and checkout flows.
+      - icon: tag
+        title: Price Benchmarking
+        body: >-
+          Track competitor pricing, coupon codes, and loyalty perks in real-time across 35 markets.
+      - icon: route
+        title: User Flow Mapping
+        body: >-
+          Model cart additions, payment gateway selections, and multi-step checkouts objectively.
+  - type: beforeAfter
+    data:
+      heading: Operational Transformation
+      before:
+        - >-
+          Cart abandonment causes unknown at the design level.
+        - >-
+          Teams debate design updates without objective data.
+        - >-
+          Competitors adjust pricing and promo codes dynamically.
+      after:
+        - >-
+          Checkout grids and button placement benchmarked against leading portals.
+        - >-
+          Commercially weighted recommendations streamline checkout flows.
+        - >-
+          Transaction yields increase through data-backed design improvements.
+  - type: decisionMap
+    data:
+      heading: Strategic Decision Map
+      rows:
+        - decision: >-
+            Why are carts being abandoned?
+          signal: >-
+            Checkout UX friction scores + payment gateway analysis
+          output: >-
+            Prioritized checkout optimization brief
+        - decision: >-
+            How do we compare to competitors?
+          signal: >-
+            Promotional and pricing benchmark data
+          output: >-
+            Competitive positioning scorecard
+  - type: cta
+    data:
+      heading: See how Jurnii works for your role.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 # eCommerce Platforms

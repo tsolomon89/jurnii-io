@@ -11,6 +11,53 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '35'
+        label: Regulated Markets Monitored
+      - num: '21'
+        label: Feature Areas Scanned
+      - num: '30+'
+        label: Hours Saved per Week
+  - type: manifesto
+    data: >-
+      Maintain total market awareness. Jurnii continuously maps regional operators, tracking fresh multi-brand conglomerates and boutique platforms before they claim market share.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Boutique operators enter regulated markets quietly, bidding up player acquisition keywords and eroding your regional market share before you notice.
+  - type: solution
+    data:
+      para: >-
+        Jurnii scans regional licensing databases and ad registries, notifying you the moment a new brand launches welcome offers in your jurisdiction.
+      foot: >-
+        Chief Executive Officers use discovery solutions to maintain strategic market leadership.
+  - type: capabilities
+    data:
+      - icon: map
+        title: Operator Mapping
+        body: >-
+          Map active gaming and casino sites inside regulated regional boundaries automatically to preserve market share.
+      - icon: alert-circle
+        title: New Entrant Alerts
+        body: >-
+          Receive immediate notifications the moment a new brand launches welcome offers or CRM campaigns in your region.
+      - icon: globe
+        title: Jurisdictional Audits
+        body: >-
+          Audit regional operator saturation across Ontario, Sweden, UK, and emerging states to identify market voids.
+  - type: cta
+    data:
+      heading: See this in action.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 ## Executive Summary

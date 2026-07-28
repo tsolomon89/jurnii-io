@@ -11,6 +11,53 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '300+'
+        label: Brands Analysed
+      - num: '70+'
+        label: Recommendations per Audit
+      - num: '4'
+        label: Key UX Dimensions
+      - num: 'Mins'
+        label: Time to Full Audit
+  - type: manifesto
+    data: >-
+      Secure regional market share. Map your portfolio's visual UX grade and bonus structures against target competitors to identify strategic regional growth zones.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Entering a new jurisdiction is high-risk when operators are blind to the exact design expectations and promotional rules of the local market.
+  - type: solution
+    data:
+      para: >-
+        We analyze local competitors, mapping their visual scores and Promo Richness Index positions to outline regional growth blueprints.
+      foot: >-
+        Chief Executive Officers deploy market benchmarking to guide international expansion budgets.
+  - type: capabilities
+    data:
+      - icon: globe
+        title: Regional Strategy Matrix
+        body: >-
+          Map competitor strength and design grades across target states and countries dynamically.
+      - icon: plus-circle
+        title: Market Gaps Detection
+        body: >-
+          Spot underserved visual preferences or promotional voids in target regions to launch counter-campaigns.
+      - icon: shield
+        title: Competitor Strength Index
+        body: >-
+          Identify highly entrenched operators to refine acquisition spend strategies and protect margins.
+  - type: cta
+    data:
+      heading: See this in action.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 ## Executive Summary

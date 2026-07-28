@@ -4,6 +4,86 @@ description: Evidenced-based UX scorecards, friction elimination, and journey be
 category: Departments
 order: 10
 productRefs: [jurnii-360, jurnii-ux, jurnii-mmm]
+sections:
+  - type: metrics
+    data:
+      - num: '300+'
+        label: Brands Analysed
+      - num: '70+'
+        label: Recommendations per Audit
+      - num: '4'
+        label: Key UX Dimensions
+      - num: 'Mins'
+        label: Time to Full Audit
+  - type: manifesto
+    data: >-
+      Product managers utilize Jurnii to validate interface roadmaps and base development sprints on objective heuristic rankings rather than ad-hoc specifications.
+  - type: challenge
+    data:
+      eyebrow: The Commercial Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Product roadmaps are plagued by internal opinions. Usability reviews are slow and expensive, while B2B vendor platform constraints force product managers to ship features blindly.
+  - type: solution
+    data:
+      para: >-
+        Jurnii UX delivers automated usability heuristics scoring across 4 key UX dimensions with 70+ commercially weighted recommendations per audit.
+      foot: >-
+        Chief Product Officers and Heads of UX deploy Jurnii heuristic scores to prioritize development cycles.
+  - type: capabilities
+    data:
+      - icon: gauge
+        title: Heuristic UX Scoring
+        body: >-
+          Automate user interface audits across core registration, verification, and deposit pipelines.
+      - icon: route
+        title: Journey Mapping
+        body: >-
+          Visualize player navigation pathways, visual UX scores, and friction points objectively.
+      - icon: git-compare
+        title: Benchmark Auditing
+        body: >-
+          Compare player journey speed and aesthetics side-by-side with 300+ global industry peers.
+  - type: beforeAfter
+    data:
+      heading: Operational Transformation
+      before:
+        - >-
+          Product roadmaps driven by internal opinions and debates.
+        - >-
+          Usability reviews are slow, expensive, and fail to scale.
+        - >-
+          B2B vendor platform constraints force blind feature shipping.
+      after:
+        - >-
+          Automated heuristic scoring across 4 key UX dimensions.
+        - >-
+          70+ commercially weighted recommendations per audit.
+        - >-
+          Sprint priorities ranked by conversion yield impact.
+  - type: decisionMap
+    data:
+      heading: Strategic Decision Map
+      rows:
+        - decision: >-
+            Which UX issues block conversion?
+          signal: >-
+            Heuristic severity scores + funnel dropout rates
+          output: >-
+            Revenue-ranked issue backlog
+        - decision: >-
+            How does our UX compare?
+          signal: >-
+            Side-by-side audit vs 300+ global peers
+          output: >-
+            Competitive benchmark scorecard
+  - type: cta
+    data:
+      heading: See how Jurnii works for your role.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 # Product & Design Teams

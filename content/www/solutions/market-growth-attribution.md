@@ -11,6 +11,53 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '+46%'
+        label: True Marketing ROI Lift
+      - num: '$4.85M'
+        label: Budget Reallocated
+      - num: '3x'
+        label: Attribution Speed
+      - num: '40x'
+        label: ROI on Platform Investment
+  - type: manifesto
+    data: >-
+      Prove design return on investment. Quantify how resolved player journey friction directly translates into market share gains and user onboarding yields.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Design and product teams struggle to prove the direct revenue contribution of usability improvements to the board, stalling investment.
+  - type: solution
+    data:
+      para: >-
+        Cortex models player signup yield fluctuations against resolved Jurnii UX audit findings, proving design ROI.
+      foot: >-
+        Chief Product Officers deploy UX ROI models to secure investment for core product infrastructure.
+  - type: capabilities
+    data:
+      - icon: trending-up
+        title: UX ROI Attribution
+        body: >-
+          Correlate design system improvements directly with customer onboarding rates and registration yields.
+      - icon: globe
+        title: Regional Growth Logs
+        body: >-
+          Audit market share growth following targeted usability and visual refinement sprints in specific states.
+      - icon: award
+        title: Executive Yield Summaries
+        body: >-
+          Present structured design and commercial conversion correlations directly to product and finance leadership.
+  - type: cta
+    data:
+      heading: See this in action.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 ## Executive Summary

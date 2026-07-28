@@ -13,6 +13,53 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '35'
+        label: Regulated Markets Monitored
+      - num: '21'
+        label: Feature Areas Scanned
+      - num: '30+'
+        label: Hours Saved per Week
+  - type: manifesto
+    data: >-
+      Protect customer lifetime value. Audit post-login betting boards, loyalty perks UI, and deposit ease to build deep visual trust and engagement.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        iGaming players hold multiple accounts, and will immediately defect if their post-login betting experience is slow, laggy, or confusing.
+  - type: solution
+    data:
+      para: >-
+        Jurnii UX benchmarks post-login dashboards and reward pages, highlighting layout upgrades that secure player loyalty.
+      foot: >-
+        Heads of CRM use usability audits to build high-converting reward pages and VIP dashboards.
+  - type: capabilities
+    data:
+      - icon: heart
+        title: Retention Audits
+        body: >-
+          Isolate usability friction points causing player churn post-registration during daily active bet cycles.
+      - icon: award
+        title: Loyalty UI Evaluation
+        body: >-
+          Optimize presentation of player clubs, loyalty milestones, and reward claims to maximize engagement.
+      - icon: activity
+        title: Engagement Logs
+        body: >-
+          Monitor betslip usability, payout speed parameters, and deposit pathways systematically.
+  - type: cta
+    data:
+      heading: See this in action.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 ## Executive Summary

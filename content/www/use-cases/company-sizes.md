@@ -1,6 +1,24 @@
 ---
 title: "Company Size Hub"
 description: "Modular intelligence pipelines sized perfectly for emerging brands up to multi-brand conglomerates."
+sections:
+  - type: metrics
+    data:
+      - num: '3'
+        label: Operator Tiers
+      - num: '35'
+        label: Markets Monitored
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '300+'
+        label: Brands Analysed
+  - type: cta
+    data:
+      heading: See how Jurnii scales with your organization.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 Scaling Levels

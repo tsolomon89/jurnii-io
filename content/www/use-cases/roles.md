@@ -1,6 +1,24 @@
 ---
 title: "Roles Hub"
 description: "Align critical commercial, operational, and marketing leaders around single-source market facts."
+sections:
+  - type: metrics
+    data:
+      - num: '6'
+        label: Executive Personas
+      - num: '35'
+        label: Markets Monitored
+      - num: '70+'
+        label: Recommendations per Audit
+      - num: '4'
+        label: Intelligence Products
+  - type: cta
+    data:
+      heading: See how Jurnii works for your role.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 Executive Personas

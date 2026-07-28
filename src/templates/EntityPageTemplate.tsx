@@ -19,6 +19,9 @@ import { FeatureChallenge } from '../components/page-sections/FeatureChallenge';
 import { FeatureSolution } from '../components/page-sections/FeatureSolution';
 import { FeatureCapabilities } from '../components/page-sections/FeatureCapabilities';
 import { FeatureBenchmark } from '../components/page-sections/FeatureBenchmark';
+import { EcosystemGrid } from '../components/page-sections/EcosystemGrid';
+import { BeforeAfter } from '../components/page-sections/BeforeAfter';
+import { DecisionMap } from '../components/page-sections/DecisionMap';
 
 interface EntityPageTemplateProps {
   data: EntityPageModel;
@@ -139,7 +142,13 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
           case 'cta':
             return <CTABand key={index} {...section.data} />;
           case 'benchmark':
-            return <FeatureBenchmark key={index} />;
+            return <FeatureBenchmark key={index} {...(section.data || {})} />;
+          case 'ecosystem':
+            return <EcosystemGrid key={index} {...section.data} />;
+          case 'beforeAfter':
+            return <BeforeAfter key={index} {...section.data} />;
+          case 'decisionMap':
+            return <DecisionMap key={index} {...section.data} />;
           case 'renderFlag':
             if (section.data === 'hasPriceBoostTeaser') return <PriceBoostTeaser key={index} />;
             if (section.data === 'hasUXScorecard') return <UXScorecard key={index} />;

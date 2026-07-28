@@ -11,6 +11,53 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '+46%'
+        label: True Marketing ROI Lift
+      - num: '$4.85M'
+        label: Budget Reallocated
+      - num: '3x'
+        label: Attribution Speed
+      - num: '40x'
+        label: ROI on Platform Investment
+  - type: manifesto
+    data: >-
+      Build automated, data-driven marketing models. Streamline competitor promotional tracking data to feed custom predictive models and yield optimization boards.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Data scientists waste 80% of their time scraping and normalizing competitor data instead of modeling budget allocation and incrementality.
+  - type: solution
+    data:
+      para: >-
+        Jurnii streams clean competitor data straight into local data warehouses, ready for direct MMM processing.
+      foot: >-
+        Chief Marketing Officers use Cortex MMM pipes to provide board-ready marketing yield models.
+  - type: capabilities
+    data:
+      - icon: database
+        title: Structured Data Pipes
+        body: >-
+          Export competitor campaign histories via automated JSON or CSV feeds into local datastores.
+      - icon: bar-chart-3
+        title: Predictive Spend Engines
+        body: >-
+          Model acquisition yields based on historical regional competitor promo patterns and media footprints.
+      - icon: network
+        title: Cortex API Integration
+        body: >-
+          Synchronize local player analytics databases with comprehensive competitor datasets for causal modeling.
+  - type: cta
+    data:
+      heading: See this in action.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 ## Executive Summary

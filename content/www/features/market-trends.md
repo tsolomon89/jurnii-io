@@ -7,6 +7,24 @@ order: 3
 productRefs: [jurnii-mmm]
 solutionRefs: [attribution, optimization]
 useCaseValueRefs: [enterprise, commercial]
+sections:
+  - type: metrics
+    data:
+      - num: '1,000+'
+        label: Offers Tracked Weekly
+      - num: '35'
+        label: Regulated Markets Monitored
+      - num: '21'
+        label: Feature Areas Scanned
+      - num: '30+'
+        label: Hours Saved per Week
+  - type: cta
+    data:
+      heading: See market trends intelligence in action.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 ## Overview

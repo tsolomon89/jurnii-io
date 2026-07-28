@@ -4,6 +4,86 @@ description: Agile market intelligence to outmaneuver legacy incumbents.
 category: Company Size
 order: 10
 productRefs: [jurnii-360, jurnii-ux, jurnii-mmm]
+sections:
+  - type: metrics
+    data:
+      - num: '+46%'
+        label: True Marketing ROI Lift
+      - num: '$4.85M'
+        label: Budget Reallocated
+      - num: '3x'
+        label: Attribution Speed
+      - num: '40x'
+        label: ROI on Platform Investment
+  - type: manifesto
+    data: >-
+      Jurnii delivers rapid intelligence for emerging brands, allowing fast-scaling challenger operators to compete directly with global conglomerates by acting on precise, localized market facts.
+  - type: challenge
+    data:
+      eyebrow: The Commercial Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Squeezed by massive operator conglomerates, fast-growing challengers spend limited budgets copying market generics without clear competitive context.
+  - type: solution
+    data:
+      para: >-
+        Jurnii provides immediate, low-overhead competitor surveillance by tracking competitor welcome offers and usability states across target jurisdictions.
+      foot: >-
+        Scaling Founders and C-Suite leaders at SMB operators use out-of-the-box dashboards to maintain parity without enterprise-level overheads.
+  - type: capabilities
+    data:
+      - icon: crosshair
+        title: Agile Positioning
+        body: >-
+          Exploit local market gaps and welcome offer voids left open by slower competitor conglomerates.
+      - icon: wallet
+        title: Budget Efficiency
+        body: >-
+          Maximize limited marketing budgets by analyzing and refining winning regional promotional frameworks.
+      - icon: zap
+        title: Fast Implementation
+        body: >-
+          Access fully compiled competitor insights from day one, with zero complex database integrations.
+  - type: beforeAfter
+    data:
+      heading: Operational Transformation
+      before:
+        - >-
+          Limited budgets wasted copying market generics blind.
+        - >-
+          Micro-campaign opportunities missed due to lack of competitive context.
+        - >-
+          Manual auditing is impossible at SMB scale.
+      after:
+        - >-
+          Out-of-the-box dashboards provide immediate competitive visibility.
+        - >-
+          Agile counter-campaigns launched on precise market intelligence.
+        - >-
+          Every marketing dollar maximized through data-backed decisions.
+  - type: decisionMap
+    data:
+      heading: Strategic Decision Map
+      rows:
+        - decision: >-
+            Which markets are viable?
+          signal: >-
+            Regional competitor density + welcome offer gaps
+          output: >-
+            Market entry recommendation
+        - decision: >-
+            How to compete with conglomerates?
+          signal: >-
+            Positioning void analysis + creative messaging gaps
+          output: >-
+            Agile campaign brief
+  - type: cta
+    data:
+      heading: See how Jurnii works for your role.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 # Challenger & SMB Operators

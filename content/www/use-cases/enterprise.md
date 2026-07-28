@@ -6,6 +6,86 @@ icon: building
 order: 1
 productRefs: [jurnii-360, jurnii-ux, jurnii-mmm]
 featureRefs: [competitor-analysis, market-trends]
+sections:
+  - type: metrics
+    data:
+      - num: '+46%'
+        label: True Marketing ROI Lift
+      - num: '$4.85M'
+        label: Budget Reallocated
+      - num: '3x'
+        label: Attribution Speed
+      - num: '40x'
+        label: ROI on Platform Investment
+  - type: manifesto
+    data: >-
+      For top-tier multi-brand operators, Jurnii serves as the central intelligence layer. We harmonize UX scoring and competitor campaign scraping across complex, highly-regulated international markets.
+  - type: challenge
+    data:
+      eyebrow: The Commercial Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Multi-brand, multi-jurisdiction conglomerates operate in data siloes where boards are flooded with subjective design feedback and manual reporting.
+  - type: solution
+    data:
+      para: >-
+        Jurnii streams structured, continuous competitor data directly into enterprise data warehouses. Cortex causal engines process multi-million dollar budgets to isolate campaign incrementality and true ROAS.
+      foot: >-
+        Enterprise Chief Executive Officers and Boards leverage Jurnii Meta Scores to manage brand portfolios and defend global EBITDA.
+  - type: capabilities
+    data:
+      - icon: layout-grid
+        title: Multi-Brand Benchmarking
+        body: >-
+          Evaluate, rank, and grade your entire portfolio of brands side-by-side under a unified metric system.
+      - icon: shield-check
+        title: Regulatory Compliance
+        body: >-
+          Maintain automated audit trails of competitor promotional terms and creative copy changes.
+      - icon: database
+        title: Enterprise Data Pipes
+        body: >-
+          Feed structured, continuous competitor promo and UX data directly into local MMM and analytics warehouses.
+  - type: beforeAfter
+    data:
+      heading: Operational Transformation
+      before:
+        - >-
+          Boards are presented with contradictory, subjective departmental slides.
+        - >-
+          Multi-brand conglomerates suffer from severe local jurisdiction blind spots.
+        - >-
+          CFOs allocate media budgets using models that ignore active competitor welcome sweeps.
+      after:
+        - >-
+          API data pipelines stream normalized promotions directly into corporate datastores.
+        - >-
+          CEOs track and grade experience scorecards globally on a single console.
+        - >-
+          Cortex causal models validate incrementality on million-dollar media spends.
+  - type: decisionMap
+    data:
+      heading: Strategic Decision Map
+      rows:
+        - decision: >-
+            How is global media mix performing?
+          signal: >-
+            Cortex API causal models + multi-channel spends
+          output: >-
+            Boardroom-ready budget incrementality forecasts
+        - decision: >-
+            Are regional brands underperforming?
+          signal: >-
+            Experience scoring index comparisons across all domains
+          output: >-
+            Standardized technical experience directives
+  - type: cta
+    data:
+      heading: See how Jurnii works for your role.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 ## Overview

@@ -4,6 +4,86 @@ description: Defensible marketing ROI, media mix optimization, and competitor aw
 category: Roles
 order: 10
 productRefs: [jurnii-360, jurnii-ux, jurnii-mmm]
+sections:
+  - type: metrics
+    data:
+      - num: '+46%'
+        label: True Marketing ROI Lift
+      - num: '$4.85M'
+        label: Budget Reallocated
+      - num: '3x'
+        label: Attribution Speed
+      - num: '40x'
+        label: ROI on Platform Investment
+  - type: manifesto
+    data: >-
+      Jurnii ingests competitor promotions and ad copy in real-time, giving Chief Marketing Officers the objective intelligence needed to maximize acquisition efficiency, defend market share, and justify marketing investment strategies to the board.
+  - type: challenge
+    data:
+      eyebrow: The Commercial Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        CMOs must defend market share and allocate budgets in highly competitive jurisdictions where player multi-homing rates reach 70–80%. Saturated paid search and programmatic channels lead to astronomical CPAs that erode campaign ROI.
+  - type: solution
+    data:
+      para: >-
+        Jurnii 360 tracks 100% of competitor moves automatically, cataloging over 1,000 active campaigns weekly. Cortex ingests competitor promotions data across 21 feature areas and integrates them into causal models.
+      foot: >-
+        Chief Marketing Officers deploy Jurnii positioning maps and Cortex modeling to optimize media mix budgets.
+  - type: capabilities
+    data:
+      - icon: git-merge
+        title: Attribution Modelling
+        body: >-
+          Isolate true incremental campaign yield and eliminate last-click attribution leaks by feeding competitor promotional data into causal Media Mix Modeling.
+      - icon: palette
+        title: Creative Analytics
+        body: >-
+          Monitor competitor banner messaging, active creative hooks, and positioning shifts instantly across 35 markets.
+      - icon: layers
+        title: Promo Benchmarking
+        body: >-
+          Analyze rival welcome bonus structures, sports odds boosts, and wagering hurdles using the Promo Richness Index.
+  - type: beforeAfter
+    data:
+      heading: Operational Transformation
+      before:
+        - >-
+          Marketers spend hours scraping competitor landing pages manually.
+        - >-
+          Budgets are allocated blindly using outdated last-click attribution sheets.
+        - >-
+          Media spends leak during competitor welcome offer spikes.
+      after:
+        - >-
+          Always-on trackers collect 100% of competitor promotion terms.
+        - >-
+          Cortex causal engines isolate real organic campaign incrementality.
+        - >-
+          CPA efficiency is protected by shifting bids away from competitor surges.
+  - type: decisionMap
+    data:
+      heading: Strategic Decision Map
+      rows:
+        - decision: >-
+            Where should budget move next?
+          signal: >-
+            Competitor promo pressure + causal incrementality
+          output: >-
+            Dynamic scenario model + board-ready ROI view
+        - decision: >-
+            Is Paid Search spending incremental?
+          signal: >-
+            Search CPA spikes vs rival welcome generosity
+          output: >-
+            Causal search re-allocation recommendation
+  - type: cta
+    data:
+      heading: See how Jurnii works for your role.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 # Chief Marketing Officer (CMO)

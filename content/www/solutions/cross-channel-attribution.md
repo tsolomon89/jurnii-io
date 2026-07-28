@@ -11,6 +11,53 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '+46%'
+        label: True Marketing ROI Lift
+      - num: '$4.85M'
+        label: Budget Reallocated
+      - num: '3x'
+        label: Attribution Speed
+      - num: '40x'
+        label: ROI on Platform Investment
+  - type: manifesto
+    data: >-
+      Gain complete cross-channel foresight. Map competitor campaign footprints to understand where acquisition spend is most defensive and high-yielding.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Programmatic, affiliate, and search budgets operate in siloes, leaving operators blind to the combined impact of competitive moves across channels.
+  - type: solution
+    data:
+      para: >-
+        Cortex integrates competitor promotion streams with cross-channel spend data to model the defensive strength of each channel.
+      foot: >-
+        Heads of Acquisition use Jurnii cross-channel data to balance programmatic bids with CRM retention campaigns.
+  - type: capabilities
+    data:
+      - icon: split
+        title: Channel Footprint Analysis
+        body: >-
+          Map competitor campaign footprints across programmatic, search, and social dynamically.
+      - icon: dollar-sign
+        title: Spend Efficiency Audits
+        body: >-
+          Identify channels where rival promo richness is driving customer acquisition spikes to re-allocate funds.
+      - icon: sliders
+        title: Defensive Budgeting
+        body: >-
+          Calibrate cross-channel spend strategies based on real-time competitor campaign shifts to defend market share.
+  - type: cta
+    data:
+      heading: See this in action.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 ## Executive Summary

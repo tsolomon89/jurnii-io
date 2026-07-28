@@ -13,6 +13,53 @@ productRefs:
 featureRefs: []
 solutionRefs: []
 useCaseValueRefs: []
+sections:
+  - type: metrics
+    data:
+      - num: '300+'
+        label: Brands Analysed
+      - num: '70+'
+        label: Recommendations per Audit
+      - num: '4'
+        label: Key UX Dimensions
+      - num: 'Mins'
+        label: Time to Full Audit
+  - type: manifesto
+    data: >-
+      Establish visual excellence without subjective debates. Benchmark stylesheet setups, typographic layouts, and visual real estate side-by-side with global peers.
+  - type: challenge
+    data:
+      eyebrow: The iGaming Challenge
+      title: Operating Blind in a Saturated Market
+      para: >-
+        Subjective design reviews delay product releases by weeks and often fail to fix the layout errors that actually block players and kill conversion.
+  - type: solution
+    data:
+      para: >-
+        We run automated visual audits, scoring layout spacing, color contrast accessibility, and grid balance against industry best practice.
+      foot: >-
+        Design Systems Architects use UI Benchmarking to enforce brand guidelines and visual consistency.
+  - type: capabilities
+    data:
+      - icon: layout
+        title: Aesthetic Scoring
+        body: >-
+          Grade interface quality, layout spacing, and grid balance using automated structural analysis.
+      - icon: palette
+        title: Design System Logs
+        body: >-
+          Scrape and archive rival typographic scales, border systems, and color systems for fast engineering reuse.
+      - icon: eye
+        title: Contrast Integrity Checks
+        body: >-
+          Assert readability and styling accessibility requirements across player flows to satisfy compliance.
+  - type: cta
+    data:
+      heading: See this in action.
+      sub: Book a live walkthrough with our commercial intelligence team.
+      primary:
+        label: Book a Demo
+        href: /contact-us
 ---
 
 ## Executive Summary
