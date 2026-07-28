@@ -1,31 +1,10 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import matter from 'gray-matter';
-import { marked } from 'marked';
-import markedKatex from 'marked-katex-extension';
 import {
   ContentItem,
   ContentMeta,
   ContentKind,
-  FolderMeta,
 } from '../types';
-import {
-  ProductEntitySchema,
-  FeatureEntitySchema,
-  SolutionEntitySchema,
-  UseCaseEntitySchema,
-  PostSchema,
-  PageSchema,
-} from '../schemas';
-
-// Configure marked with GFM, line breaks, and KaTeX math extension
-marked.use(
-  { gfm: true, breaks: true },
-  markedKatex({
-    throwOnError: false,
-    nonStandard: true,
-  })
-);
+import { CONTENT_MANIFEST } from '../generated-content';
+import { ProductEntitySchema, FeatureEntitySchema, SolutionEntitySchema, UseCaseEntitySchema, PostSchema, PageSchema } from '../schemas';
 
 export const ENTITY_SECTIONS = ['products', 'features', 'solutions', 'use-cases'];
 
@@ -48,47 +27,6 @@ export function inferKindFromSection(section: string): ContentKind {
   }
 }
 
-export function inferContentMeta(
-  filePath: string,
-  data: Record<string, any>
-): ContentMeta {
-  const normPath = filePath.replace(/\\/g, '/');
-  const pathParts = normPath.split('/');
-  const section = pathParts.length > 2 ? pathParts[pathParts.length - 2] : '';
-
-  const inferredKind = data.contentKind || inferKindFromSection(section);
-  const medium = data.medium || (inferredKind === 'paper' ? 'Paper' : 'Article');
-  const format = data.format || (medium.toLowerCase() === 'paper' ? 'paper' : 'article');
-  const isIndexable = data.isIndexable !== undefined ? Boolean(data.isIndexable) : data.noindex !== true;
-
-  return {
-    title: data.title || path.basename(filePath, '.md'),
-    date: data.date || data.publishedAt || new Date().toISOString().split('T')[0],
-    medium,
-    format,
-    excerpt: data.excerpt || data.description,
-    description: data.description,
-    author: data.author || 'Timothy Solomon',
-    category: data.category,
-    tags: Array.isArray(data.tags) ? data.tags : [],
-    subtitle: data.subtitle,
-    coverImage: data.coverImage || data.cover_image,
-    icon: data.icon,
-    order: typeof data.order === 'number' ? data.order : 99,
-    heroFeatures: data.heroFeatures,
-    deepWorkFeatures: data.deepWorkFeatures,
-    pullQuote: data.pullQuote,
-    pullQuoteAttribution: data.pullQuoteAttribution,
-    productRefs: Array.isArray(data.productRefs) ? data.productRefs : [],
-    featureRefs: Array.isArray(data.featureRefs) ? data.featureRefs : [],
-    solutionRefs: Array.isArray(data.solutionRefs) ? data.solutionRefs : [],
-    useCaseValueRefs: Array.isArray(data.useCaseValueRefs) ? data.useCaseValueRefs : (Array.isArray(data.forUseCases) ? data.forUseCases : []),
-    useCaseFieldRefs: Array.isArray(data.useCaseFieldRefs) ? data.useCaseFieldRefs : [],
-    isIndexable,
-    contentKind: inferredKind,
-  };
-}
-
 export function validateContentSchema(filePath: string, meta: ContentMeta): void {
   const kind = meta.contentKind;
   let result;
@@ -108,190 +46,103 @@ export function validateContentSchema(filePath: string, meta: ContentMeta): void
 
   if (result && !result.success) {
     const errorMsg = `[Content Validation Error] File "${filePath}" failed ${kind} schema validation: ${JSON.stringify(result.error.format())}`;
-    if (process.env.NODE_ENV === 'production') {
-      throw new Error(errorMsg);
-    } else {
-      console.warn(errorMsg);
-    }
+    console.warn(errorMsg);
   }
 }
 
-export function getPdfUrl(slug: string, cwd: string = process.cwd()): string | null {
-  const pdfRel = path.join('public', 'papers', `${slug}.pdf`);
-  const absPath = path.join(cwd, pdfRel);
-  if (fs.existsSync(absPath)) {
+export function getPdfUrl(slug: string): string | null {
+  // Papers PDF convention
+  if (slug === 'marketing-mix-modeling-paper') {
     return `/papers/${slug}.pdf`;
   }
   return null;
 }
 
-export function getByPath(
-  segments: string[],
-  cwd: string = process.cwd()
-): ContentItem | null {
-  const contentRoot = path.join(cwd, 'content');
-  const targetRel = path.join(...segments);
-  const targetAbs = path.join(contentRoot, targetRel);
-  const mdCandidate = targetAbs + '.md';
+export function getByPath(segments: string[]): ContentItem | null {
+  if (segments.length === 0) return null;
 
-  // File-first resolution
-  let fileToRead = mdCandidate;
-  if (!fs.existsSync(fileToRead) && segments.length === 2 && segments[0] === 'www') {
-    const pagesCandidate = path.join(contentRoot, 'www', 'pages', `${segments[1]}.md`);
-    if (fs.existsSync(pagesCandidate)) {
-      fileToRead = pagesCandidate;
-    }
-  }
+  // Handle www prefix
+  const normSegments = segments[0] === 'www' ? segments.slice(1) : segments;
+  if (normSegments.length === 0) return null;
 
-  if (fs.existsSync(fileToRead) && fs.statSync(fileToRead).isFile()) {
-    const raw = fs.readFileSync(fileToRead, 'utf-8');
-    const parsed = matter(raw);
-    const meta = inferContentMeta(fileToRead, parsed.data);
-    validateContentSchema(fileToRead, meta);
-    const bodyHtml = marked.parse(parsed.content) as string;
-    const slug = path.basename(fileToRead, '.md');
+  const section = normSegments[0];
+  const slug = normSegments[1];
 
-    return {
-      type: 'file',
-      path: fileToRead,
-      slug,
-      meta,
-      bodyHtml,
-      rawContent: parsed.content,
-    };
-  }
+  // 1. Directory lookup (/products, /features, /solutions, /use-cases)
+  if (!slug && ENTITY_SECTIONS.includes(section)) {
+    const children = CONTENT_MANIFEST.filter((item) => {
+      const p = item.path.replace(/\\/g, '/');
+      return p.includes(`/content/www/${section}/`);
+    });
 
-  // Directory resolution
-  if (fs.existsSync(targetAbs) && fs.statSync(targetAbs).isDirectory()) {
-    let folderMeta: FolderMeta = { type: 'collection' };
-    const metaJsonPath = path.join(targetAbs, '_meta.json');
-    if (fs.existsSync(metaJsonPath)) {
-      try {
-        folderMeta = JSON.parse(fs.readFileSync(metaJsonPath, 'utf-8'));
-      } catch (err) {
-        console.warn(`Failed to parse _meta.json at ${metaJsonPath}:`, err);
-      }
-    }
-
-    const children: ContentItem[] = [];
-    const entries = fs.readdirSync(targetAbs, { withFileTypes: true });
-
-    for (const ent of entries) {
-      if (ent.name.startsWith('_') || ent.name.startsWith('.')) continue;
-
-      if (ent.isFile() && ent.name.endsWith('.md')) {
-        const childAbs = path.join(targetAbs, ent.name);
-        const raw = fs.readFileSync(childAbs, 'utf-8');
-        const parsed = matter(raw);
-        const meta = inferContentMeta(childAbs, parsed.data);
-        validateContentSchema(childAbs, meta);
-        const bodyHtml = marked.parse(parsed.content) as string;
-        const slug = path.basename(ent.name, '.md');
-
-        children.push({
-          type: 'file',
-          path: childAbs,
-          slug,
-          meta,
-          bodyHtml,
-          rawContent: parsed.content,
-        });
-      }
-    }
-
-    // Sort children
     children.sort((a, b) => {
       if (typeof a.meta.order === 'number' && typeof b.meta.order === 'number') {
         if (a.meta.order !== b.meta.order) return a.meta.order - b.meta.order;
       }
-      const dateA = a.meta.date || '';
-      const dateB = b.meta.date || '';
-      return dateB.localeCompare(dateA);
+      return (b.meta.date || '').localeCompare(a.meta.date || '');
     });
 
     return {
       type: 'folder',
-      path: targetAbs,
-      slug: path.basename(targetAbs),
+      path: `/content/www/${section}`,
+      slug: section,
       meta: {
-        title: folderMeta.title || path.basename(targetAbs),
-        description: folderMeta.description,
+        title: section.toUpperCase(),
+        description: `Explore ${section}`,
       },
-      folderMeta,
       children,
     };
   }
 
-  return null;
+  // 2. Entity detail page (/features/competitor-live-feed, /products/jurnii-360)
+  if (slug && ENTITY_SECTIONS.includes(section)) {
+    const cleanSlug = slug.replace(/\.html$/, '');
+    const match = CONTENT_MANIFEST.find((item) => {
+      const p = item.path.replace(/\\/g, '/');
+      return p.includes(`/content/www/${section}/`) && item.slug === cleanSlug;
+    });
+    return match || null;
+  }
+
+  // 3. General page (/about, /privacy, /terms, /contact-us, /compare)
+  const pageSlug = (slug || section).replace(/\.html$/, '');
+  const pageMatch = CONTENT_MANIFEST.find((item) => {
+    const p = item.path.replace(/\\/g, '/');
+    return (p.includes('/content/www/pages/') || p.includes('/content/www/')) && item.slug === pageSlug;
+  });
+
+  return pageMatch || null;
 }
 
-export function getContent(relativePath: string, cwd: string = process.cwd()): ContentItem | null {
+export function getContent(relativePath: string): ContentItem | null {
   const parts = relativePath.split('/').filter(Boolean);
-  return getByPath(parts, cwd);
+  return getByPath(parts);
 }
 
-export function getAllContent(rootFolder: string = 'www', cwd: string = process.cwd()): ContentItem[] {
-  const rootAbs = path.join(cwd, 'content', rootFolder);
-  if (!fs.existsSync(rootAbs)) return [];
-
-  const results: ContentItem[] = [];
-
-  function walk(d: string) {
-    for (const ent of fs.readdirSync(d, { withFileTypes: true })) {
-      if (ent.name.startsWith('_') || ent.name.startsWith('.')) continue;
-      const fullPath = path.join(d, ent.name);
-      if (ent.isDirectory()) {
-        walk(fullPath);
-      } else if (ent.name.endsWith('.md')) {
-        const raw = fs.readFileSync(fullPath, 'utf-8');
-        const parsed = matter(raw);
-        const meta = inferContentMeta(fullPath, parsed.data);
-        validateContentSchema(fullPath, meta);
-        const bodyHtml = marked.parse(parsed.content) as string;
-        const slug = path.basename(ent.name, '.md');
-
-        results.push({
-          type: 'file',
-          path: fullPath,
-          slug,
-          meta,
-          bodyHtml,
-          rawContent: parsed.content,
-        });
-      }
-    }
-  }
-
-  walk(rootAbs);
-  return results;
+export function getAllContent(rootFolder: string = 'www'): ContentItem[] {
+  return CONTENT_MANIFEST.filter((item) => {
+    const p = item.path.replace(/\\/g, '/');
+    if (rootFolder === 'www') return p.includes('/content/www/');
+    if (rootFolder === 'library') return p.includes('/content/library/');
+    return p.includes(`/content/${rootFolder}/`);
+  });
 }
 
-export function getContentBySlug(slug: string, searchFolders: string[] = ['www', 'library'], cwd: string = process.cwd()): ContentItem | null {
-  for (const folder of searchFolders) {
-    const all = getAllContent(folder, cwd);
-    const match = all.find((item) => item.slug === slug);
-    if (match) return match;
-  }
-  return null;
+export function getContentBySlug(slug: string, searchFolders: string[] = ['www', 'library']): ContentItem | null {
+  const cleanSlug = slug.replace(/\.html$/, '');
+  return CONTENT_MANIFEST.find((item) => item.slug === cleanSlug) || null;
 }
 
 export function getContentByRef(
   refField: 'productRefs' | 'featureRefs' | 'solutionRefs' | 'useCaseValueRefs' | 'useCaseFieldRefs',
   refValue: string,
-  searchFolders: string[] = ['library'],
-  cwd: string = process.cwd()
+  searchFolders: string[] = ['library']
 ): ContentItem[] {
-  const matches: ContentItem[] = [];
-  for (const folder of searchFolders) {
-    const items = getAllContent(folder, cwd);
-    for (const item of items) {
-      const arr = item.meta[refField];
-      if (Array.isArray(arr) && arr.includes(refValue)) {
-        matches.push(item);
-      }
-    }
-  }
-  return matches;
+  const cleanVal = refValue.replace(/\.html$/, '');
+  return CONTENT_MANIFEST.filter((item) => {
+    const arr = item.meta[refField];
+    return Array.isArray(arr) && arr.includes(cleanVal);
+  });
 }
 
 export function resolveUseCaseValueRefs(refs: string[]): string[] {

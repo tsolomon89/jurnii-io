@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "node scripts/compile-content-manifest.mjs && vite build",
     "preview": "vite preview",
     "patch:html": "node scripts/patch-cwv-html.mjs",
     "lighthouse:ci": "node scripts/lighthouse-ci.mjs",

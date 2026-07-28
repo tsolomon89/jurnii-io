@@ -27,8 +27,9 @@
 <script type="text/babel" src="assets/price-boost-card.jsx"></script>
 <script type="text/babel" src="assets/home-sections.jsx"></script>
 <script type="text/babel" src="assets/page-sections.jsx"></script>
+<script type="module" src="/src/app.tsx"></script>
 <script type="text/babel">
-function App() {
+function HomeApp() {
   return (
     <PageChrome active="home">
       <HomeHero/>
@@ -60,12 +61,23 @@ function App() {
     </PageChrome>
   );
 }
-function mountHome() {
+window.HomeApp = HomeApp;
+
+function mountRoot() {
   var needed = ['PageChrome','HomeHero','HomeLogoBar','HomeProductTabs','HomeProblem','HomeHowItWorks','HomeProof','HomeCompare','ResourcesHub','HomePressBar','FAQSection','LazySection'];
-  if (needed.some(function(n){ return typeof window[n] === 'undefined'; })) { return setTimeout(mountHome, 30); }
-  ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+  var rawPath = window.location.pathname.replace(/\/$/, '').replace(/\.html$/, '');
+  var isHome = rawPath === '' || rawPath === '/index';
+
+  if (isHome) {
+    if (needed.some(function(n){ return typeof window[n] === 'undefined'; })) { return setTimeout(mountRoot, 30); }
+    ReactDOM.createRoot(document.getElementById('root')).render(<HomeApp/>);
+  } else if (typeof window.mountContentEngineApp === 'function') {
+    window.mountContentEngineApp();
+  } else {
+    setTimeout(mountRoot, 30);
+  }
 }
-mountHome();
+mountRoot();
 </script>
 <script>
 (function(){

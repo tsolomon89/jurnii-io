@@ -10,29 +10,12 @@
           "value": "public, max-age=31536000, immutable"
         }
       ]
-    },
-    {
-      "source": "/assets/fonts/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
-    },
-    {
-      "source": "/(.*)\\.html",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
-        }
-      ]
     }
   ],
   "rewrites": [
-    { "source": "/360", "destination": "/jurnii-360.html" },
-    { "source": "/ux", "destination": "/jurnii-ux.html" },
-    { "source": "/mmm", "destination": "/jurnii-mmm.html" }
+    {
+      "source": "/((?!assets/|.*\\.(?:css|js|woff2|woff|ttf|png|jpg|jpeg|svg|ico|pdf|json)).*)",
+      "destination": "/index.html"
+    }
   ]
 }
