@@ -51,7 +51,6 @@ export function validateContentSchema(filePath: string, meta: ContentMeta): void
 }
 
 export function getPdfUrl(slug: string): string | null {
-  // Papers PDF convention
   if (slug === 'marketing-mix-modeling-paper') {
     return `/papers/${slug}.pdf`;
   }
@@ -65,11 +64,9 @@ export function getByPath(segments: string[]): ContentItem | null {
   const normSegments = segments[0] === 'www' ? segments.slice(1) : segments;
   if (normSegments.length === 0) return null;
 
-  const section = normSegments[0];
-  const slug = normSegments[1];
-
-  // 1. Directory lookup (/products, /features, /solutions, /use-cases)
-  if (!slug && ENTITY_SECTIONS.includes(section)) {
+  // 1. Directory collection lookup (/products, /features, /solutions, /use-cases)
+  if (normSegments.length === 1 && ENTITY_SECTIONS.includes(normSegments[0])) {
+    const section = normSegments[0];
     const children = CONTENT_MANIFEST.filter((item) => {
       const p = item.path.replace(/\\/g, '/');
       return p.includes(`/content/www/${section}/`);
@@ -94,24 +91,25 @@ export function getByPath(segments: string[]): ContentItem | null {
     };
   }
 
-  // 2. Entity detail page (/features/competitor-live-feed, /products/jurnii-360)
-  if (slug && ENTITY_SECTIONS.includes(section)) {
-    const cleanSlug = slug.replace(/\.html$/, '');
+  // Extract clean target slug (last segment)
+  const targetSlug = normSegments[normSegments.length - 1].replace(/\.html$/, '');
+
+  // 2. Section-specific matching if a known section exists in the URL segments
+  // Searches backwards to prefer later section matches (e.g. /products/use-cases/... matches use-cases)
+  const matchedSection = [...normSegments].reverse().find((seg) => ENTITY_SECTIONS.includes(seg));
+  if (matchedSection) {
     const match = CONTENT_MANIFEST.find((item) => {
       const p = item.path.replace(/\\/g, '/');
-      return p.includes(`/content/www/${section}/`) && item.slug === cleanSlug;
+      return p.includes(`/content/www/${matchedSection}/`) && item.slug === targetSlug;
     });
-    return match || null;
+    if (match) return match;
   }
 
-  // 3. General page (/about, /privacy, /terms, /contact-us, /compare)
-  const pageSlug = (slug || section).replace(/\.html$/, '');
-  const pageMatch = CONTENT_MANIFEST.find((item) => {
-    const p = item.path.replace(/\\/g, '/');
-    return (p.includes('/content/www/pages/') || p.includes('/content/www/')) && item.slug === pageSlug;
-  });
+  // 3. Global fallback lookup by slug across all CONTENT_MANIFEST items
+  const globalMatch = CONTENT_MANIFEST.find((item) => item.slug === targetSlug);
+  if (globalMatch) return globalMatch;
 
-  return pageMatch || null;
+  return null;
 }
 
 export function getContent(relativePath: string): ContentItem | null {

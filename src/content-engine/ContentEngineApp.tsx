@@ -53,10 +53,11 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
   useEffect(() => {
     const rawPath = initialPath || window.location.pathname;
     const cleanPath = rawPath.replace(/^\//, '').replace(/\/$/, '').replace(/\.html$/, '');
-    const resolvedPath = ALIAS_MAP[cleanPath] || cleanPath;
+    const lastSeg = cleanPath.split('/').pop() || '';
+    const resolvedPath = ALIAS_MAP[cleanPath] || ALIAS_MAP[lastSeg] || cleanPath;
     const parts = resolvedPath.split('/').filter(Boolean);
 
-    // 1. Root / homepage or default
+    // 1. Root / homepage
     if (parts.length === 0) {
       if (window.location.hostname.startsWith('library.')) {
         const libraryItems = getAllContent('library');
@@ -79,99 +80,76 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
       return;
     }
 
-    // 2. Library surface / /library/[slug]
-    if (parts[0] === 'library') {
-      const slug = parts[parts.length - 1];
+    // 2. Library index surface
+    if (parts.length === 1 && parts[0] === 'library') {
       const libraryItems = getAllContent('library');
-
-      if (parts.length === 1 || slug === 'library') {
-        setRenderState({ type: 'library-index', data: { items: libraryItems } });
-        setLoading(false);
-        return;
-      }
-
-      const item = getContentBySlug(slug, ['library']);
-      if (item) {
-        const pres = resolveMediumPresentation(item.meta);
-        const edModel: EditorialPageModel = {
-          slug: item.slug,
-          format: pres.format as 'article' | 'paper',
-          title: item.meta.title,
-          date: item.meta.date,
-          author: item.meta.author || 'Timothy Solomon',
-          category: item.meta.category,
-          tags: item.meta.tags || [],
-          excerpt: item.meta.excerpt,
-          description: item.meta.description,
-          subtitle: item.meta.subtitle,
-          coverImage: item.meta.coverImage,
-          bodyHtml: item.bodyHtml || '',
-          tableOfContents: item.toc || [],
-          readingTimeMinutes: estimateReadTime(item.bodyHtml || ''),
-          pdfUrl: getPdfUrl(item.slug),
-        };
-        setRenderState({
-          type: pres.format === 'paper' ? 'paper' : 'article',
-          data: { model: edModel, libraryItems },
-        });
-      } else {
-        setRenderState({ type: 'not-found' });
-      }
+      setRenderState({ type: 'library-index', data: { items: libraryItems } });
       setLoading(false);
       return;
     }
 
-    // 3. Entity family routes (/products, /features, /solutions, /use-cases)
-    const entitySections = ['products', 'features', 'solutions', 'use-cases'];
-    if (entitySections.includes(parts[0])) {
-      const section = parts[0] as EntityType;
-      const isDirectory = parts.length === 1;
-
-      if (isDirectory) {
-        // Directory collection view
-        const dirItem = getByPath(['www', section]);
-        const items = dirItem && dirItem.children ? dirItem.children : [];
+    // 3. Resolve item or directory using getByPath
+    const item = getByPath(parts);
+    if (item) {
+      if (item.type === 'folder') {
+        const items = item.children || [];
         setRenderState({
           type: 'directory',
           data: {
-            title: dirItem?.meta.title || section.toUpperCase(),
-            description: dirItem?.meta.description,
+            title: item.meta.title || item.slug.toUpperCase(),
+            description: item.meta.description,
             items,
-            sectionPath: section,
+            sectionPath: item.slug,
           },
         });
       } else {
-        // Entity detail view
-        const targetSlug = parts[parts.length - 1];
-        const item = getByPath(['www', section, targetSlug]);
-        if (item) {
-          const richData: EntityPageModel = resolveRichPageData(item, section);
-          setRenderState({ type: 'entity', data: richData });
+        const p = item.path.replace(/\\/g, '/');
+        if (p.includes('/content/library/')) {
+          const libraryItems = getAllContent('library');
+          const pres = resolveMediumPresentation(item.meta);
+          const edModel: EditorialPageModel = {
+            slug: item.slug,
+            format: pres.format as 'article' | 'paper',
+            title: item.meta.title,
+            date: item.meta.date,
+            author: item.meta.author || 'Timothy Solomon',
+            category: item.meta.category,
+            tags: item.meta.tags || [],
+            excerpt: item.meta.excerpt,
+            description: item.meta.description,
+            subtitle: item.meta.subtitle,
+            coverImage: item.meta.coverImage,
+            bodyHtml: item.bodyHtml || '',
+            tableOfContents: item.toc || [],
+            readingTimeMinutes: estimateReadTime(item.bodyHtml || ''),
+            pdfUrl: getPdfUrl(item.slug),
+          };
+          setRenderState({
+            type: pres.format === 'paper' ? 'paper' : 'article',
+            data: { model: edModel, libraryItems },
+          });
+        } else if (p.includes('/content/www/pages/')) {
+          const genModel: GeneralPageModel = {
+            slug: item.slug,
+            title: item.meta.title,
+            description: item.meta.description,
+            excerpt: item.meta.excerpt,
+            category: item.meta.category,
+            bodyHtml: item.bodyHtml || '',
+          };
+          setRenderState({ type: 'page', data: genModel });
         } else {
-          setRenderState({ type: 'not-found' });
+          // Entity page (product, feature, solution, use-case)
+          const matchedSection = (item.section || [...parts].reverse().find((seg) => ['products', 'features', 'solutions', 'use-cases'].includes(seg)) || 'features') as EntityType;
+          const richData: EntityPageModel = resolveRichPageData(item, matchedSection);
+          setRenderState({ type: 'entity', data: richData });
         }
       }
       setLoading(false);
       return;
     }
 
-    // 4. General pages (/about, /privacy, /terms, /contact-us, /compare)
-    const pageSlug = parts[parts.length - 1];
-    const pageItem = getByPath(['www', 'pages', pageSlug]) || getByPath(['www', pageSlug]);
-    if (pageItem) {
-      const genModel: GeneralPageModel = {
-        slug: pageItem.slug,
-        title: pageItem.meta.title,
-        description: pageItem.meta.description,
-        excerpt: pageItem.meta.excerpt,
-        category: pageItem.meta.category,
-        bodyHtml: pageItem.bodyHtml || '',
-      };
-      setRenderState({ type: 'page', data: genModel });
-    } else {
-      setRenderState({ type: 'not-found' });
-    }
-
+    setRenderState({ type: 'not-found' });
     setLoading(false);
   }, [initialPath]);
 
@@ -219,9 +197,9 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
           <SharedSubdomainLayout libraryItems={renderState.data.items}>
             <div className="space-y-6">
               <header className="border-b border-white/10 pb-6">
-                <h1 className="text-3xl font-bold text-slate-100">Library Publications & Research</h1>
-                <p className="text-slate-400 text-sm mt-1">
-                  Monographs, formal proofs, and technical essays.
+                <h1 className="text-3xl font-bold text-slate-100">Library & Research</h1>
+                <p className="text-slate-400 mt-2">
+                  Whitepapers, benchmarking frameworks, and research papers from Jurnii.
                 </p>
               </header>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -229,15 +207,11 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
                   <a
                     key={item.slug}
                     href={`/library/${item.slug}`}
-                    className="block p-6 bg-slate-900/50 hover:bg-slate-800/80 border border-white/10 rounded-xl transition space-y-2"
+                    className="p-6 bg-slate-900/50 hover:bg-slate-800/80 border border-white/10 rounded-xl block space-y-3"
                   >
-                    <span className="text-xs uppercase font-mono text-emerald-400">
-                      {item.meta.medium || 'Article'}
-                    </span>
-                    <h3 className="text-xl font-bold text-slate-100">{item.meta.title}</h3>
-                    <p className="text-sm text-slate-400 line-clamp-3">
-                      {item.meta.excerpt || item.meta.description || ''}
-                    </p>
+                    <span className="text-xs font-mono uppercase text-emerald-400">{item.meta.category || 'Paper'}</span>
+                    <h2 className="text-xl font-bold text-slate-100">{item.meta.title}</h2>
+                    <p className="text-sm text-slate-400">{item.meta.description || item.meta.excerpt}</p>
                   </a>
                 ))}
               </div>
@@ -248,20 +222,16 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
       case 'not-found':
       default:
         return (
-          <div className="min-h-screen bg-[#030712] text-slate-300 flex flex-col items-center justify-center space-y-4">
-            <h1 className="text-4xl font-bold text-slate-100">404 — Page Not Found</h1>
-            <p className="text-sm text-slate-400">The requested content route does not exist.</p>
-            <a href="/" className="px-4 py-2 bg-emerald-500 text-slate-950 font-bold rounded-lg text-sm">
-              Return Home
+          <div className="min-h-screen bg-[#030712] text-slate-100 flex flex-col items-center justify-center p-6 space-y-4">
+            <h1 className="text-4xl font-bold text-slate-100">404 - Page Not Found</h1>
+            <p className="text-slate-400">The requested intelligence resource could not be found.</p>
+            <a href="/" className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-medium rounded-lg transition">
+              Return to Platform Overview
             </a>
           </div>
         );
     }
   };
 
-  return (
-    <PageChromeWrapper active={activeNav}>
-      {renderInnerContent()}
-    </PageChromeWrapper>
-  );
+  return <PageChromeWrapper active={activeNav}>{renderInnerContent()}</PageChromeWrapper>;
 };
