@@ -24,29 +24,11 @@ function legacyJsxGlobals() {
   };
 }
 
-/** Multi-page inputs: root + features/solutions/use-cases HTML (excludes uploads). */
+/** Primary HTML input: index.html governed by content engine router. */
 function htmlInputs() {
-  const inputs = {};
-  const add = (rel) => {
-    const abs = path.join(root, rel);
-    if (fs.existsSync(abs)) inputs[rel.replace(/\.html$/, '').replace(/[\\/]/g, '_')] = abs;
+  return {
+    index: path.join(root, 'index.html'),
   };
-  for (const f of fs.readdirSync(root)) {
-    if (f.endsWith('.html')) add(f);
-  }
-  for (const dir of ['features', 'solutions', 'use-cases']) {
-    const abs = path.join(root, dir);
-    if (!fs.existsSync(abs)) continue;
-    const walk = (d, prefix) => {
-      for (const ent of fs.readdirSync(d, { withFileTypes: true })) {
-        const p = path.join(d, ent.name);
-        if (ent.isDirectory()) walk(p, `${prefix}/${ent.name}`);
-        else if (ent.name.endsWith('.html')) add(`${prefix}/${ent.name}`);
-      }
-    };
-    walk(abs, dir);
-  }
-  return inputs;
 }
 
 function copyRuntimeAssets() {
