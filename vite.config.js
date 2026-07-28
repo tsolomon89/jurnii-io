@@ -13,11 +13,11 @@ function legacyJsxGlobals() {
     name: 'legacy-jsx-globals',
     enforce: 'pre',
     transform(code, id) {
-      const norm = id.replace(/\?.*$/, '');
-      if (!norm.includes(`${path.sep}assets${path.sep}`) || !norm.endsWith('.jsx')) return null;
+      const norm = id.replace(/\\/g, '/').replace(/\?.*$/, '');
+      if (!norm.includes('/assets/') || !norm.endsWith('.jsx')) return null;
       if (code.includes("from 'react'") || code.includes('from "react"')) return null;
       return {
-        code: `import React from 'react';\nimport ReactDOM from 'react-dom/client';\n${code}`,
+        code: `import React from 'react';\nimport ReactDOM from 'react-dom/client';\nif (typeof window !== 'undefined') { window.React = React; window.ReactDOM = ReactDOM; }\n${code}`,
         map: null,
       };
     },

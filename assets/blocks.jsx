@@ -113,6 +113,8 @@ const TmAvatar = ({ author, initials, avatar, color }) =>
 <div className={`tm-avatar tm-av-${color}`} aria-hidden={avatar ? undefined : true}>
     {avatar ? <img src={avatar} alt={author} /> : <span>{initials}</span>}
   </div>;
+window.TmAvatar = TmAvatar;
+
 
 const Testimonials = ({ eyebrow = 'Testimonials', heading, items = [], accentClass = '' }) => {
   const trackRef = React.useRef(null);

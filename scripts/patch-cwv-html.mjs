@@ -148,6 +148,8 @@ function patchFile(filePath) {
 
   // Remove existing headline-split (we'll re-add deferred at end)
   html = html.replace(/\n?<script src="[^"]*headline-split\.js"><\/script>/g, '');
+  html = html.replace(/\n?<script>\s*\(function\(\)\{\s*function load\(\)\{[\s\S]*?headline-split\.js[\s\S]*?\}\)\(\);\s*<\/script>/g, '');
+
 
   html = ensureHeadLinks(html, assets);
 

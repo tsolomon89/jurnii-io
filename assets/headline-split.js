@@ -113,9 +113,14 @@
     for (var j = 0; j < out.length; j++) parent.appendChild(out[j]);
   }
 
-  function splitOne(h) {
+  var isMutating = false;
+
+  function splitOne(h, isResizePass) {
     if (!h || h.getAttribute('data-no-split') === '1') return;
     if (!h.textContent || !h.textContent.trim()) return;
+
+    var currentText = h.textContent;
+    if (h.getAttribute('data-hl-split') === currentText && !isResizePass) return;
 
     // store pristine markup the first time we touch this heading; on every
     // later pass restore it first so re-measuring always starts from
@@ -150,28 +155,36 @@
     // second-line-and-below words needs a span; everything else collapses
     // to plain text.
     collapseRuns(h);
+    h.setAttribute('data-hl-split', currentText);
   }
 
-  function processAll() {
+  function processAll(isResizePass) {
+    if (isMutating) return;
+    isMutating = true;
     if (observer) observer.disconnect();
-    var heads = document.querySelectorAll(SELECTOR);
-    for (var i = 0; i < heads.length; i++) splitOne(heads[i]);
-    connect();
+    try {
+      var heads = document.querySelectorAll(SELECTOR);
+      for (var i = 0; i < heads.length; i++) splitOne(heads[i], isResizePass);
+    } finally {
+      isMutating = false;
+      connect();
+    }
   }
 
   // On resize, re-split (splitOne restores pristine markup before re-wrapping).
   var rzTimer = null;
   function onResize() {
     clearTimeout(rzTimer);
-    rzTimer = setTimeout(processAll, 150);
+    rzTimer = setTimeout(function () { processAll(true); }, 150);
   }
 
   var moTimer = null;
   function connect() {
     if (!observer) {
       observer = new MutationObserver(function () {
+        if (isMutating) return;
         clearTimeout(moTimer);
-        moTimer = setTimeout(processAll, 80);
+        moTimer = setTimeout(function () { processAll(false); }, 80);
       });
     }
     if (document.body) {
@@ -180,10 +193,10 @@
   }
 
   function boot() {
-    processAll();
+    processAll(false);
     // catch late React mounts / async content
-    setTimeout(processAll, 300);
-    setTimeout(processAll, 1200);
+    setTimeout(function () { processAll(false); }, 300);
+    setTimeout(function () { processAll(false); }, 1200);
     window.addEventListener('resize', onResize);
   }
 
