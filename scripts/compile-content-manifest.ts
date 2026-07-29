@@ -71,6 +71,7 @@ function processDirectory(dirPath: string, categoryKey: string): any[] {
         useCaseFieldRefs: Array.isArray(parsed.data.useCaseFieldRefs) ? parsed.data.useCaseFieldRefs : [],
         isIndexable: parsed.data.isIndexable !== false,
         contentKind: parsed.data.contentKind || section,
+        sections: Array.isArray(parsed.data.sections) ? parsed.data.sections : [],
       };
 
       validateContentSchema(fullPath, meta as any);

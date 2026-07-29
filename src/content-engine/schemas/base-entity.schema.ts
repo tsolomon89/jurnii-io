@@ -32,7 +32,7 @@ export const BaseEntitySchema = z.object({
     z.discriminatedUnion('type', [
       z.object({
         type: z.literal('metrics'),
-        data: z.array(z.object({ num: z.string(), label: z.string() }))
+        data: z.array(z.object({ num: z.coerce.string(), label: z.string() }))
       }),
       z.object({
         type: z.literal('manifesto'),
