@@ -3,6 +3,194 @@ import { ContentItem } from './types';
 
 export const CONTENT_MANIFEST: ContentItem[] = [
   {
+    "path": "C:/Development/Projects/jurnii/content/www/products/cortex.md",
+    "slug": "cortex",
+    "section": "products",
+    "meta": {
+      "title": "Causal Attribution & Commercial Planning",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Cortex delivers causal attribution and commercial planning intelligence — replacing last-click errors with statistically validated incrementality models for iGaming operators.",
+      "description": "Cortex delivers causal attribution and commercial planning intelligence — replacing last-click errors with statistically validated incrementality models for iGaming operators.",
+      "author": "Jurnii Research",
+      "category": "Marketing Attribution",
+      "tags": [],
+      "icon": "shield",
+      "order": 3,
+      "heroFeatures": [
+        {
+          "icon": "brain",
+          "title": "Causal Attribution",
+          "description": "Replace last-click errors with statistically validated incrementality models."
+        },
+        {
+          "icon": "bar-chart-3",
+          "title": "Media Mix Modelling",
+          "description": "Decompose channel-level ROI with Bayesian MMM calibrated to iGaming dynamics."
+        },
+        {
+          "icon": "target",
+          "title": "Scenario Planning",
+          "description": "Simulate budget reallocations and predict NGR impact before committing spend."
+        },
+        {
+          "icon": "users",
+          "title": "Retention Modelling",
+          "description": "Model churn triggers and CRM effectiveness to protect player lifetime value."
+        }
+      ],
+      "deepWorkFeatures": [
+        {
+          "icon": "git-merge",
+          "title": "Causal Decomposition",
+          "description": "Isolate true incremental lift from organic noise, brand halo, and competitor-driven cannibalization across channels."
+        },
+        {
+          "icon": "sliders",
+          "title": "What-If Scenario Engine",
+          "description": "Simulate budget shifts, new channel experiments, and regulatory shocks before committing real spend."
+        }
+      ],
+      "pullQuote": "Cortex gave us the first causal view of our marketing spend. We stopped guessing and started optimising within six weeks.",
+      "pullQuoteAttribution": "Director of Commercial Strategy, Tier-1 Operator",
+      "productRefs": [],
+      "featureRefs": [
+        "competitor-ai-insights",
+        "brand-market-trends"
+      ],
+      "solutionRefs": [
+        "attribution",
+        "optimization"
+      ],
+      "useCaseValueRefs": [
+        "enterprise",
+        "commercial"
+      ],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "products",
+      "sections": [
+        {
+          "type": "outcomes",
+          "data": {
+            "heading": "Decisions, not dashboards.",
+            "sub": "Outcomes from current Cortex deployments.",
+            "kpis": [
+              {
+                "num": "+46%",
+                "label": "True Marketing ROI Lift",
+                "desc": "Net incremental ROI measured via causal models, not last-click attribution."
+              },
+              {
+                "num": "$4.85M",
+                "label": "Inefficient Spend Reallocated",
+                "desc": "Budget shifted from saturated channels to high-incrementality opportunities."
+              },
+              {
+                "num": "3x",
+                "label": "Attribution Analysis Speed",
+                "desc": "From weeks of manual analysis to automated daily model updates with confidence bands."
+              },
+              {
+                "num": "40x",
+                "label": "ROI on Cortex Investment",
+                "desc": "Platform cost recovered within first quarter through optimised channel allocation."
+              }
+            ]
+          }
+        },
+        {
+          "type": "method",
+          "data": {
+            "heading": "A scoping-first approach.",
+            "sub": "Most attribution projects fail at data readiness. We surface that risk before contracts.",
+            "steps": [
+              {
+                "title": "Ingest",
+                "body": "Connect marketing spend, CRM events, and Jurnii competitive intelligence feeds into a unified data model."
+              },
+              {
+                "title": "Model",
+                "body": "Bayesian MMM decomposes channel-level incremental lift with competitor context and regulatory shock handling."
+              },
+              {
+                "title": "Simulate",
+                "body": "What-if scenario planning lets you preview NGR impact before reallocating budget across channels."
+              },
+              {
+                "title": "Optimise",
+                "body": "Continuous model recalibration adapts to market shifts, competitor movements, and seasonal dynamics."
+              }
+            ]
+          }
+        },
+        {
+          "type": "testimonials",
+          "data": {
+            "eyebrow": "Testimonials",
+            "heading": "A model commercial teams believe.",
+            "items": [
+              {
+                "quote": "Cortex replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+                "author": "Director of Commercial Strategy",
+                "role": "Tier-1 European iGaming Operator",
+                "initials": "DS",
+                "color": "green"
+              },
+              {
+                "quote": "For once the marketing line in the board pack came with confidence bands, not a story. Our CFO actually signed off the increase.",
+                "author": "VP Finance",
+                "role": "Multi-jurisdiction iGaming Operator",
+                "initials": "VP",
+                "color": "blue"
+              }
+            ]
+          }
+        },
+        {
+          "type": "personas",
+          "data": {
+            "heading": "Who Cortex is built for.",
+            "sub": "Commercial leadership wanting causal attribution, not channel-team self-reporting.",
+            "list": [
+              {
+                "role": "CMO / Head of Marketing",
+                "question": "Where is the next pound best spent?",
+                "answer": "Channel-level ROI with saturation curves and confidence intervals — and an optimiser that respects your real constraints."
+              },
+              {
+                "role": "CFO / Finance",
+                "question": "Is the marketing line defensible?",
+                "answer": "A model that ties spend to NGR with confidence bands. Defensible in a board meeting."
+              },
+              {
+                "role": "Head of CRM",
+                "question": "How do bonuses really compare to media?",
+                "answer": "Bonus mechanics are first-class inputs. CRM and acquisition spend are modelled in the same framework."
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "Ready to see causal attribution in action?",
+            "primary": {
+              "label": "Book a scoping call",
+              "href": "/contact-us"
+            },
+            "secondary": {
+              "label": "Explore Jurnii MMM",
+              "href": "/products/jurnii-mmm"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "<h2>Overview</h2>\n<p>Cortex is Jurnii&#39;s causal attribution and commercial planning engine. Unlike traditional last-click analytics, Cortex decomposes marketing ROI using Bayesian models calibrated to iGaming dynamics — incorporating bonus mechanics, sporting calendars, regulatory shocks, and competitor pressure as first-class variables.</p>\n<h3>Key Differentiators</h3>\n<ol>\n<li><strong>Causal Models</strong>: Statistically validated incrementality replaces subjective reporting.</li>\n<li><strong>Competitor Context</strong>: Jurnii 360 competitive intelligence feeds directly into attribution models.</li>\n<li><strong>Scenario Planning</strong>: Simulate budget shifts and predict NGR impact before committing spend.</li>\n<li><strong>Continuous Refresh</strong>: Models recalibrate quarterly as market dynamics evolve.</li>\n</ol>\n",
+    "rawContent": "\n## Overview\n\nCortex is Jurnii's causal attribution and commercial planning engine. Unlike traditional last-click analytics, Cortex decomposes marketing ROI using Bayesian models calibrated to iGaming dynamics — incorporating bonus mechanics, sporting calendars, regulatory shocks, and competitor pressure as first-class variables.\n\n### Key Differentiators\n\n1. **Causal Models**: Statistically validated incrementality replaces subjective reporting.\n2. **Competitor Context**: Jurnii 360 competitive intelligence feeds directly into attribution models.\n3. **Scenario Planning**: Simulate budget shifts and predict NGR impact before committing spend.\n4. **Continuous Refresh**: Models recalibrate quarterly as market dynamics evolve.\n"
+  },
+  {
     "path": "C:/Development/Projects/jurnii/content/www/products/jurnii-360.md",
     "slug": "jurnii-360",
     "section": "products",
@@ -629,6 +817,630 @@ export const CONTENT_MANIFEST: ContentItem[] = [
     },
     "bodyHtml": "<h1>Jurnii UX</h1>\n<p>Replace UX opinion with structured benchmarking. Jurnii UX scores every step of every critical journey across your operator and your peer set.</p>\n<h2>Platform Metrics</h2>\n<ul>\n<li><strong>300+</strong> — Global Brands Scanned</li>\n<li><strong>70+</strong> — Recommendations per Audit</li>\n<li><strong>4</strong> — Core UX Dimensions Analysed</li>\n<li><strong>Mins</strong> — Time to Full Automated Report</li>\n</ul>\n<h2>The Commercial Challenge</h2>\n<p>iGaming operators waste months debating visual tweaks and relying on outdated agency heuristics while players drop off due to silent, unmeasured usability friction.</p>\n<h3>Opinion-Based Roadmaps</h3>\n<p>Product decisions are often dominated by internal design debates rather than quantitative customer journey friction, causing critical deposit leaks to remain unresolved for months.</p>\n<h3>Revenue-Mapped Prioritisation</h3>\n<p>Instantly scan player pathways, map conversion roadblocks, and weight every flaw by revenue consequence, helping product teams deploy high-impact conversion fixes first.</p>\n<h2>Operational Transformation</h2>\n<h3>Subjective Design Debates</h3>\n<ul>\n<li>❌ Roadmaps are dominated by internal speculation and loudest-voice opinions.</li>\n<li>❌ Technical layout flaws like shift layout latency remain unmeasured.</li>\n<li>❌ UX agency audits take weeks to compile and fail to map revenue impact.</li>\n<li>❌ Registration drop-offs are blamed on marketing channel quality.</li>\n</ul>\n<h3>Commercially Prioritised Roadmaps</h3>\n<ul>\n<li>✅ Automated radial scorecards map usability variables in minutes.</li>\n<li>✅ Direct layout shift parsing flags structural deposit leaks.</li>\n<li>✅ Instant recommendations prioritised by commercial risk levels.</li>\n<li>✅ Direct conversion fixes protect engineering capacity.</li>\n</ul>\n<h2>What Evidence-Based UX Looks Like in Practice</h2>\n<p>Outcomes from operators currently scoring quarterly with Jurnii UX.</p>\n<h3>60+ — Criteria per Journey</h3>\n<p>Every journey decomposed into structured, scoreable criteria — not a single 1–10 vibe-check.</p>\n<h3>5 — Peer Operators</h3>\n<p>Standard scope: your operator + 5 peers, scored side-by-side, every quarter.</p>\n<h3>12 Days — Average Audit Time</h3>\n<p>From scoping call to delivered first audit, including peer-set calibration.</p>\n<h3>+8.4pp — Avg Conversion Lift</h3>\n<p>Average sign-up→FTD lift after addressing top-3 friction points (over 6 audits).</p>\n<h2>How a Jurnii UX Audit Runs</h2>\n<p>A predictable, repeatable process — designed to fit a quarterly product cadence.</p>\n<h3>Step 1: Define scope</h3>\n<p>Agree the journeys (typically 5–7), the peer set (typically 5 operators), and the platforms (iOS, Android, mobile web, desktop web).</p>\n<h3>Step 2: Capture &amp; score</h3>\n<p>Our analysts plus our scoring layer walk every journey on every platform. Each step is scored, screenshotted, and timestamped.</p>\n<h3>Step 3: Calibrate findings</h3>\n<p>Findings are calibrated against your internal product team in a half-day workshop — no surprises in the final report.</p>\n<h3>Step 4: Deliver the audit</h3>\n<p>A structured report (executive summary, journey-level scoring, prioritised findings) plus a working dashboard you can re-open any time.</p>\n<h3>Step 5: Re-score quarterly</h3>\n<p>Each quarter we re-walk the same journeys. You see the impact of what shipped — and where competitors caught up or pulled away.</p>\n<h2>What Our Clients Say</h2>\n<blockquote>\n<p>&quot;For the first time, our roadmap arguments stopped being &#39;Spotify does it this way&#39; and started being &#39;we lose 4.2 points to the market on this exact step.&#39; That changed the whole conversation.&quot;</p>\n<p>— <strong>Sofia Lindqvist</strong>, Director of Product · Top 5 European sportsbook</p>\n</blockquote>\n<blockquote>\n<p>&quot;Every finding came with a screenshot and a score. My designers stopped defending taste and started fixing measured problems.&quot;</p>\n<p>— <strong>Tom Wheeler</strong>, Director of Design · Tier 1 operator</p>\n</blockquote>\n<blockquote>\n<p>&quot;Step-level scoring pointed straight at one screen in our deposit flow. We fixed it in a single sprint and conversion moved the next week.&quot;</p>\n<p>— <strong>Aisha Mansour</strong>, Conversion Lead · Multi-brand casino</p>\n</blockquote>\n<blockquote>\n<p>&quot;It&#39;s the first UX report I&#39;ve been able to take into a board meeting without translating it first. The commercial weight is already in the numbers.&quot;</p>\n<p>— <strong>James Okonkwo</strong>, Chief Product Officer · Tier 2 operator</p>\n</blockquote>\n<h2>Who Jurnii UX is Built For</h2>\n<p>A product-and-design tool with commercial weight behind every finding.</p>\n<h3>Head of Product</h3>\n<p><strong>Question</strong>: Where is our experience leaking NGR?</p>\n<p>A prioritised list of friction points, ranked by NGR-weighted impact — ready for the next planning cycle.</p>\n<h3>Director of Design</h3>\n<p><strong>Question</strong>: Are we shipping enough, fast enough?</p>\n<p>Quarterly re-scoring shows whether design throughput is moving the metrics that matter — or just shipping new screens.</p>\n<h3>Conversion / CRO Lead</h3>\n<p><strong>Question</strong>: Which step is the bottleneck?</p>\n<p>Step-level scoring isolates the single most impactful change for the next sprint.</p>\n<h3>CCO / CMO</h3>\n<p><strong>Question</strong>: Is product keeping up with marketing?</p>\n<p>A clear, executive-level view of whether the experience justifies the acquisition spend.</p>\n",
     "rawContent": "\r\n# Jurnii UX\r\n\r\nReplace UX opinion with structured benchmarking. Jurnii UX scores every step of every critical journey across your operator and your peer set.\r\n\r\n## Platform Metrics\r\n\r\n- **300+** — Global Brands Scanned\r\n- **70+** — Recommendations per Audit\r\n- **4** — Core UX Dimensions Analysed\r\n- **Mins** — Time to Full Automated Report\r\n\r\n## The Commercial Challenge\r\n\r\niGaming operators waste months debating visual tweaks and relying on outdated agency heuristics while players drop off due to silent, unmeasured usability friction.\r\n\r\n### Opinion-Based Roadmaps\r\n\r\nProduct decisions are often dominated by internal design debates rather than quantitative customer journey friction, causing critical deposit leaks to remain unresolved for months.\r\n\r\n### Revenue-Mapped Prioritisation\r\n\r\nInstantly scan player pathways, map conversion roadblocks, and weight every flaw by revenue consequence, helping product teams deploy high-impact conversion fixes first.\r\n\r\n## Operational Transformation\r\n\r\n### Subjective Design Debates\r\n\r\n- ❌ Roadmaps are dominated by internal speculation and loudest-voice opinions.\r\n- ❌ Technical layout flaws like shift layout latency remain unmeasured.\r\n- ❌ UX agency audits take weeks to compile and fail to map revenue impact.\r\n- ❌ Registration drop-offs are blamed on marketing channel quality.\r\n\r\n### Commercially Prioritised Roadmaps\r\n\r\n- ✅ Automated radial scorecards map usability variables in minutes.\r\n- ✅ Direct layout shift parsing flags structural deposit leaks.\r\n- ✅ Instant recommendations prioritised by commercial risk levels.\r\n- ✅ Direct conversion fixes protect engineering capacity.\r\n\r\n## What Evidence-Based UX Looks Like in Practice\r\n\r\nOutcomes from operators currently scoring quarterly with Jurnii UX.\r\n\r\n### 60+ — Criteria per Journey\r\n\r\nEvery journey decomposed into structured, scoreable criteria — not a single 1–10 vibe-check.\r\n\r\n### 5 — Peer Operators\r\n\r\nStandard scope: your operator + 5 peers, scored side-by-side, every quarter.\r\n\r\n### 12 Days — Average Audit Time\r\n\r\nFrom scoping call to delivered first audit, including peer-set calibration.\r\n\r\n### +8.4pp — Avg Conversion Lift\r\n\r\nAverage sign-up→FTD lift after addressing top-3 friction points (over 6 audits).\r\n\r\n## How a Jurnii UX Audit Runs\r\n\r\nA predictable, repeatable process — designed to fit a quarterly product cadence.\r\n\r\n### Step 1: Define scope\r\n\r\nAgree the journeys (typically 5–7), the peer set (typically 5 operators), and the platforms (iOS, Android, mobile web, desktop web).\r\n\r\n### Step 2: Capture & score\r\n\r\nOur analysts plus our scoring layer walk every journey on every platform. Each step is scored, screenshotted, and timestamped.\r\n\r\n### Step 3: Calibrate findings\r\n\r\nFindings are calibrated against your internal product team in a half-day workshop — no surprises in the final report.\r\n\r\n### Step 4: Deliver the audit\r\n\r\nA structured report (executive summary, journey-level scoring, prioritised findings) plus a working dashboard you can re-open any time.\r\n\r\n### Step 5: Re-score quarterly\r\n\r\nEach quarter we re-walk the same journeys. You see the impact of what shipped — and where competitors caught up or pulled away.\r\n\r\n## What Our Clients Say\r\n\r\n> \"For the first time, our roadmap arguments stopped being 'Spotify does it this way' and started being 'we lose 4.2 points to the market on this exact step.' That changed the whole conversation.\"\r\n>\r\n> — **Sofia Lindqvist**, Director of Product · Top 5 European sportsbook\r\n\r\n> \"Every finding came with a screenshot and a score. My designers stopped defending taste and started fixing measured problems.\"\r\n>\r\n> — **Tom Wheeler**, Director of Design · Tier 1 operator\r\n\r\n> \"Step-level scoring pointed straight at one screen in our deposit flow. We fixed it in a single sprint and conversion moved the next week.\"\r\n>\r\n> — **Aisha Mansour**, Conversion Lead · Multi-brand casino\r\n\r\n> \"It's the first UX report I've been able to take into a board meeting without translating it first. The commercial weight is already in the numbers.\"\r\n>\r\n> — **James Okonkwo**, Chief Product Officer · Tier 2 operator\r\n\r\n## Who Jurnii UX is Built For\r\n\r\nA product-and-design tool with commercial weight behind every finding.\r\n\r\n### Head of Product\r\n\r\n**Question**: Where is our experience leaking NGR?\r\n\r\nA prioritised list of friction points, ranked by NGR-weighted impact — ready for the next planning cycle.\r\n\r\n### Director of Design\r\n\r\n**Question**: Are we shipping enough, fast enough?\r\n\r\nQuarterly re-scoring shows whether design throughput is moving the metrics that matter — or just shipping new screens.\r\n\r\n### Conversion / CRO Lead\r\n\r\n**Question**: Which step is the bottleneck?\r\n\r\nStep-level scoring isolates the single most impactful change for the next sprint.\r\n\r\n### CCO / CMO\r\n\r\n**Question**: Is product keeping up with marketing?\r\n\r\nA clear, executive-level view of whether the experience justifies the acquisition spend.\r\n"
+  },
+  {
+    "path": "C:/Development/Projects/jurnii/content/www/features/ai-analytics-assistant.md",
+    "slug": "ai-analytics-assistant",
+    "section": "features",
+    "meta": {
+      "title": "Cortex AI Analytics Assistant",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Query massive competitor campaign databases and internal attribution tables via natural language.",
+      "description": "Query massive competitor campaign databases and internal attribution tables via natural language.",
+      "author": "Jurnii Research",
+      "category": "Cortex Core",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "features",
+      "sections": [
+        {
+          "type": "metrics",
+          "data": [
+            {
+              "num": "+46%",
+              "label": "True Marketing ROI Lift"
+            },
+            {
+              "num": "$4.85M",
+              "label": "Inefficient Spend Reallocated"
+            },
+            {
+              "num": "3x",
+              "label": "Attribution Analysis Speed"
+            },
+            {
+              "num": "40x",
+              "label": "ROI on Cortex Investment"
+            }
+          ]
+        },
+        {
+          "type": "manifesto",
+          "data": "Get instant strategic answers. Our specialized, domain-trained AI parses market data to produce board-ready summaries and margin recommendations."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Vulnerability",
+            "title": "The Cost of Operating Blind",
+            "para": "Extracting clean competitor metrics or campaign attribution statistics requires weeks of manual database parsing and analyst coordination."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "We utilize advanced domain-specific NLP models trained on historical iGaming metrics to translate complex data queries into clean reports.",
+            "foot": "Heads of CRM use the AI Assistant to model retention rules and prevent customer churn.",
+            "implication": "Friction in player verification checkpoints and mismatched welcome bonus generous multiples dilutes operator hold rates and increases acquisition CPA by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "message-square",
+              "title": "Natural Language Querying",
+              "body": "Query active competitive offers, regional speed metrics, and attribution models in plain conversational English."
+            },
+            {
+              "icon": "file-text",
+              "title": "Automated Report Builders",
+              "body": "Compile high-fidelity, board-ready competitor summaries and marketing attribution sheets in a single click."
+            },
+            {
+              "icon": "brain",
+              "title": "Predictive Alerts Feed",
+              "body": "Receive automated notifications on predicted competitor promotions and budget opportunities generated by ML."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See Cortex AI Analytics Assistant in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
+  },
+  {
+    "path": "C:/Development/Projects/jurnii/content/www/features/ai-snapshot-reports.md",
+    "slug": "ai-snapshot-reports",
+    "section": "features",
+    "meta": {
+      "title": "AI Snapshot Competitor Reports",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Generate board-ready competitor campaign intelligence summaries with a single click.",
+      "description": "Generate board-ready competitor campaign intelligence summaries with a single click.",
+      "author": "Jurnii Research",
+      "category": "Cortex Core",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "features",
+      "sections": [
+        {
+          "type": "metrics",
+          "data": [
+            {
+              "num": "+46%",
+              "label": "True Marketing ROI Lift"
+            },
+            {
+              "num": "$4.85M",
+              "label": "Inefficient Spend Reallocated"
+            },
+            {
+              "num": "3x",
+              "label": "Attribution Analysis Speed"
+            },
+            {
+              "num": "40x",
+              "label": "ROI on Cortex Investment"
+            }
+          ]
+        },
+        {
+          "type": "manifesto",
+          "data": "Stay aligned across departments. AI Snapshot compiles continuous competitor monitoring into executive-ready reports, summarizing campaign trends."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Vulnerability",
+            "title": "The Cost of Operating Blind",
+            "para": "Commercial analysts waste hours copying metrics into slides before board meetings, delaying strategy and limiting active response times."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "We synthesize complex market tracking files, copywriting changes, and index scores into comprehensive corporate briefings.",
+            "foot": "Chief Executive Officers use AI Snapshot to align board presentations and competitive strategy.",
+            "implication": "Friction in player verification checkpoints and mismatched welcome bonus generous multiples dilutes operator hold rates and increases acquisition CPA by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "file-text",
+              "title": "One-Click Summaries",
+              "body": "Create high-fidelity strategic summaries detailing competitor promotion adjustments and styling pivots."
+            },
+            {
+              "icon": "trending-up",
+              "title": "NGR Volatility Forecasts",
+              "body": "Estimate the EBITDA risk of competitor welcome offer upgrades across key regional jurisdictions."
+            },
+            {
+              "icon": "share-2",
+              "title": "Cross-Team Syncing",
+              "body": "Distribute structured PDF or HTML competitor briefings straight to product, marketing, and trading desks."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See AI Snapshot Competitor Reports in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
+  },
+  {
+    "path": "C:/Development/Projects/jurnii/content/www/features/banner-creative-messaging-intelligence.md",
+    "slug": "banner-creative-messaging-intelligence",
+    "section": "features",
+    "meta": {
+      "title": "Banner Creative & Messaging Intelligence",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Audit visual banner layouts, value proposition claims, and copywriting formats dynamically.",
+      "description": "Audit visual banner layouts, value proposition claims, and copywriting formats dynamically.",
+      "author": "Jurnii Research",
+      "category": "Cortex Core",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "features",
+      "sections": [
+        {
+          "type": "metrics",
+          "data": [
+            {
+              "num": "+46%",
+              "label": "True Marketing ROI Lift"
+            },
+            {
+              "num": "$4.85M",
+              "label": "Inefficient Spend Reallocated"
+            },
+            {
+              "num": "3x",
+              "label": "Attribution Analysis Speed"
+            },
+            {
+              "num": "40x",
+              "label": "ROI on Cortex Investment"
+            }
+          ]
+        },
+        {
+          "type": "manifesto",
+          "data": "Differentiate your brand. Track competitor banner designs, typographic priorities, and advertising claims to optimize marketing conversions."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Vulnerability",
+            "title": "The Cost of Operating Blind",
+            "para": "Creative teams design landing page banners and copywriting hooks in isolation, resulting in layout generics that fail to stand out."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "We crawl competitor registration page states, logging banner sizes, primary copywriting hooks, CTA colors, and terms layout formats.",
+            "foot": "Chief Marketing Officers utilize messaging intelligence to refine copywriting hooks and lower CPA.",
+            "implication": "Friction in player verification checkpoints and mismatched welcome bonus generous multiples dilutes operator hold rates and increases acquisition CPA by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "edit-3",
+              "title": "Copy Claim Tracking",
+              "body": "Index all copywriting claims, tracking the exact focus of competitor advertising hooks across jurisdictions."
+            },
+            {
+              "icon": "layout",
+              "title": "Visual Real Estate Maps",
+              "body": "Audit how rival designers distribute page layout space between bonus terms and imagery."
+            },
+            {
+              "icon": "columns",
+              "title": "Design Grid Auditing",
+              "body": "Benchmark design frameworks, color palettes, and typographic reading levels against industry top-performers."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See Banner Creative & Messaging Intelligence in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
   },
   {
     "path": "C:/Development/Projects/jurnii/content/www/features/brand-design-themes.md",
@@ -2563,6 +3375,214 @@ export const CONTENT_MANIFEST: ContentItem[] = [
     "rawContent": ""
   },
   {
+    "path": "C:/Development/Projects/jurnii/content/www/features/causal-impact-mmm-attribution.md",
+    "slug": "causal-impact-mmm-attribution",
+    "section": "features",
+    "meta": {
+      "title": "Causal Impact & MMM Attribution",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Feed structured competitor promotions variables into local analytics data warehouses.",
+      "description": "Feed structured competitor promotions variables into local analytics data warehouses.",
+      "author": "Jurnii Research",
+      "category": "Cortex Core",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "features",
+      "sections": [
+        {
+          "type": "metrics",
+          "data": [
+            {
+              "num": "+46%",
+              "label": "True Marketing ROI Lift"
+            },
+            {
+              "num": "$4.85M",
+              "label": "Inefficient Spend Reallocated"
+            },
+            {
+              "num": "3x",
+              "label": "Attribution Analysis Speed"
+            },
+            {
+              "num": "40x",
+              "label": "ROI on Cortex Investment"
+            }
+          ]
+        },
+        {
+          "type": "manifesto",
+          "data": "Isolate campaign contribution accurately. Feed clean competitor promotional tracking data directly into Marketing Mix Models (MMM)."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Vulnerability",
+            "title": "The Cost of Operating Blind",
+            "para": "Data science teams spend 80% of their time manual-scraping and cleaning competitor promotions datasets instead of modeling budget attribution."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "Cortex exports machine-readable CSV or JSON datasets of competitor welcome matches, play-throughs, and active spin counts.",
+            "foot": "Chief Marketing Officers utilize causal impact modeling to validate multi-million dollar programmatic channels.",
+            "implication": "Friction in player verification checkpoints and mismatched welcome bonus generous multiples dilutes operator hold rates and increases acquisition CPA by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "database",
+              "title": "Structured Promotions Feed",
+              "body": "Export clean, structured historical competitor campaigns data straight into local predictive data repositories."
+            },
+            {
+              "icon": "bar-chart",
+              "title": "LTV Contribution Modeling",
+              "body": "Model player value fluctuations against rival welcome bonus shifts to optimize promotional allocations."
+            },
+            {
+              "icon": "code",
+              "title": "Causal Modeling Endpoints",
+              "body": "Feed verified pricing and generosity indices into local attribution neural networks via clean APIs."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See Causal Impact & MMM Attribution in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
+  },
+  {
     "path": "C:/Development/Projects/jurnii/content/www/features/competitor-ai-insights.md",
     "slug": "competitor-ai-insights",
     "section": "features",
@@ -4257,6 +5277,214 @@ export const CONTENT_MANIFEST: ContentItem[] = [
     "rawContent": ""
   },
   {
+    "path": "C:/Development/Projects/jurnii/content/www/features/competitor-promotion-tracking.md",
+    "slug": "competitor-promotion-tracking",
+    "section": "features",
+    "meta": {
+      "title": "Competitor Promotion Auditing",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Monitor competitor welcome bonuses, active sign-up targets, and wagering rollovers.",
+      "description": "Monitor competitor welcome bonuses, active sign-up targets, and wagering rollovers.",
+      "author": "Jurnii Research",
+      "category": "Competitor Core",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "features",
+      "sections": [
+        {
+          "type": "metrics",
+          "data": [
+            {
+              "num": "1,000+",
+              "label": "Offers Scanned Weekly"
+            },
+            {
+              "num": "35",
+              "label": "Regulated States & Jurisdictions"
+            },
+            {
+              "num": "21",
+              "label": "Competitor Feature Vectors"
+            },
+            {
+              "num": "30+",
+              "label": "Hours Saved Weekly vs Manual"
+            }
+          ]
+        },
+        {
+          "type": "manifesto",
+          "data": "Never let a competitor move impact your conversions. Jurnii continuously maps sign-up offers across key regional markets to defend your margins."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Vulnerability",
+            "title": "The Cost of Operating Blind",
+            "para": "Operators waste millions copy-pasting rival sign-up terms without knowing their true player value, eroding yields."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "Jurnii captures active sign-up offers, deposit requirements, and spins across operators in 35 regulated markets.",
+            "foot": "Chief Commercial Officers use promotions tracking to safeguard margins and secure holds.",
+            "implication": "Friction in player verification checkpoints and mismatched welcome bonus generous multiples dilutes operator hold rates and increases acquisition CPA by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "tag",
+              "title": "Active Offer Monitoring",
+              "body": "Log competitor sports boosts and welcome match modifications within minutes of deployment."
+            },
+            {
+              "icon": "globe",
+              "title": "Regional Campaign Scans",
+              "body": "Track regional offer tweaks across key regulated states to identify localized promo gaps."
+            },
+            {
+              "icon": "sliders",
+              "title": "Wagering Decoder Engine",
+              "body": "Translate complex promotional terms into structured play-through multipliers and deposit requirements."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See Competitor Promotion Auditing in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
+  },
+  {
     "path": "C:/Development/Projects/jurnii/content/www/features/competitor-promotions.md",
     "slug": "competitor-promotions",
     "section": "features",
@@ -4498,6 +5726,630 @@ export const CONTENT_MANIFEST: ContentItem[] = [
     "rawContent": ""
   },
   {
+    "path": "C:/Development/Projects/jurnii/content/www/features/cross-channel-gantt-planning.md",
+    "slug": "cross-channel-gantt-planning",
+    "section": "features",
+    "meta": {
+      "title": "Cross-Channel Gantt Planning",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Visualize competitor promotional duration and launch frequency on a unified timeline.",
+      "description": "Visualize competitor promotional duration and launch frequency on a unified timeline.",
+      "author": "Jurnii Research",
+      "category": "Cortex Core",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "features",
+      "sections": [
+        {
+          "type": "metrics",
+          "data": [
+            {
+              "num": "+46%",
+              "label": "True Marketing ROI Lift"
+            },
+            {
+              "num": "$4.85M",
+              "label": "Inefficient Spend Reallocated"
+            },
+            {
+              "num": "3x",
+              "label": "Attribution Analysis Speed"
+            },
+            {
+              "num": "40x",
+              "label": "ROI on Cortex Investment"
+            }
+          ]
+        },
+        {
+          "type": "manifesto",
+          "data": "Anticipate competitive marketing sweeps. Map seasonal campaign patterns across rivals to calibrate budget schedules."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Vulnerability",
+            "title": "The Cost of Operating Blind",
+            "para": "Marketing and CRM teams schedule seasonal pushes in silos, leaving them vulnerable to rival promotion sweeps during peak sporting events."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "We organize months of historical competitor marketing deployments into structured interactive chronological timelines.",
+            "foot": "Chief Marketing Officers deploy timeline models to allocate advertising spend with timing confidence.",
+            "implication": "Friction in player verification checkpoints and mismatched welcome bonus generous multiples dilutes operator hold rates and increases acquisition CPA by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "calendar",
+              "title": "Chronological Maps",
+              "body": "Chart rival campaign timelines over seasonal windows to predict mobile updates and advertising pushes."
+            },
+            {
+              "icon": "clock",
+              "title": "Duration Tracking",
+              "body": "Measure average competitor welcome offer lifespans to optimize regional CRM re-investment timing."
+            },
+            {
+              "icon": "sliders",
+              "title": "Defensive Schedulers",
+              "body": "Align your retention and sportsbook boost campaigns to exploit competitive market voids."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See Cross-Channel Gantt Planning in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
+  },
+  {
+    "path": "C:/Development/Projects/jurnii/content/www/features/finance-reconciliation-reporting.md",
+    "slug": "finance-reconciliation-reporting",
+    "section": "features",
+    "meta": {
+      "title": "Finance Reconciliation Reporting",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Attribute fluctuations in player acquisition yields directly to competitor bonus surges.",
+      "description": "Attribute fluctuations in player acquisition yields directly to competitor bonus surges.",
+      "author": "Jurnii Research",
+      "category": "Cortex Core",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "features",
+      "sections": [
+        {
+          "type": "metrics",
+          "data": [
+            {
+              "num": "+46%",
+              "label": "True Marketing ROI Lift"
+            },
+            {
+              "num": "$4.85M",
+              "label": "Inefficient Spend Reallocated"
+            },
+            {
+              "num": "3x",
+              "label": "Attribution Analysis Speed"
+            },
+            {
+              "num": "40x",
+              "label": "ROI on Cortex Investment"
+            }
+          ]
+        },
+        {
+          "type": "manifesto",
+          "data": "Verify marketing cost efficiency. Reconcile player acquisition yields directly against competitor wagering matches."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Vulnerability",
+            "title": "The Cost of Operating Blind",
+            "para": "Finance teams struggle to attribute drops in player conversions, blaming internal product roadmaps when the cause is a competitor promotion surge."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "Cortex correlates player sign-up flows with competitor generosity index surges to prove attribution factors.",
+            "foot": "Chief Commercial Officers utilize finance reports to align budget allocations with the board.",
+            "implication": "Friction in player verification checkpoints and mismatched welcome bonus generous multiples dilutes operator hold rates and increases acquisition CPA by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "shield",
+              "title": "EBITDA Protection Logs",
+              "body": "Isolate campaign cost spikes triggered by defensive promo matches, stabilizing marketing ROI metrics."
+            },
+            {
+              "icon": "trending-up",
+              "title": "Yield Contribution Mapping",
+              "body": "Proportionally allocate conversion changes between internal product quality and competitor activities."
+            },
+            {
+              "icon": "dollar-sign",
+              "title": "Margin Calibration Summaries",
+              "body": "Export board-ready financial reports that vindicate product and promotional budgets."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See Finance Reconciliation Reporting in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
+  },
+  {
+    "path": "C:/Development/Projects/jurnii/content/www/features/historical-database-reporting.md",
+    "slug": "historical-database-reporting",
+    "section": "features",
+    "meta": {
+      "title": "Historical Promotions Database",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Access historical campaign records and design styling properties across global operators.",
+      "description": "Access historical campaign records and design styling properties across global operators.",
+      "author": "Jurnii Research",
+      "category": "Cortex Core",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "features",
+      "sections": [
+        {
+          "type": "metrics",
+          "data": [
+            {
+              "num": "+46%",
+              "label": "True Marketing ROI Lift"
+            },
+            {
+              "num": "$4.85M",
+              "label": "Inefficient Spend Reallocated"
+            },
+            {
+              "num": "3x",
+              "label": "Attribution Analysis Speed"
+            },
+            {
+              "num": "40x",
+              "label": "ROI on Cortex Investment"
+            }
+          ]
+        },
+        {
+          "type": "manifesto",
+          "data": "Research past competitor moves systematically. Access exhaustive archives of competitor promotions, welcome layouts, and pricing histories."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Vulnerability",
+            "title": "The Cost of Operating Blind",
+            "para": "Product and creative teams struggle to find visual references of rival promotions from past seasons, copying ideas blindly."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "We index years of global operator welcome layouts, copywriting claims, and campaign structures in a structured repository.",
+            "foot": "Design Systems Architects deploy historical archives to establish strict brand benchmarks.",
+            "implication": "Friction in player verification checkpoints and mismatched welcome bonus generous multiples dilutes operator hold rates and increases acquisition CPA by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "search",
+              "title": "Longitudinal Campaign Search",
+              "body": "Search historical welcome offers by operator name, state, and wagering requirements."
+            },
+            {
+              "icon": "image",
+              "title": "Visual Styling Archives",
+              "body": "Access stylesheets, typographic setups, and banner design patterns deployed by rivals in past years."
+            },
+            {
+              "icon": "trending-up",
+              "title": "Generosity Index Logs",
+              "body": "Map historical welcome offer generosity shifts to identify long-term structural market margins."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See Historical Promotions Database in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
+  },
+  {
     "path": "C:/Development/Projects/jurnii/content/www/features/index.md",
     "slug": "index",
     "section": "features",
@@ -4567,6 +6419,2918 @@ export const CONTENT_MANIFEST: ContentItem[] = [
     },
     "bodyHtml": "<h2>Executive Summary</h2>\n<p>Drive decisions from objective ratings. Cortex indexes hundreds of usability, technical speed, and campaign generosity variables into standardized benchmarks.</p>\n<h2>The Cost of Operating Blind</h2>\n<p>Executive discussions about digital platforms suffer from subjective design opinions and marketing assumptions, leading to bad budget allocations.</p>\n<p>When operator stacks converge on identical platforms and third-party software structures, customer acquisition efficiency and margin retention are the only durable barriers protecting Net Gaming Revenue (NGR). Running campaigns without automated competitor alerts or continuous user-flow speed benchmarking causes permanent player defection to regional rivals.</p>\n<blockquote>\n<p><strong>Commercial Impact</strong>: Commercial Impact</p>\n</blockquote>\n<h2>Operational Execution Flow</h2>\n<h3>Step 01: Query</h3>\n<p>Input prospective budget shifts, affiliate variables, or competitive positioning strategies.</p>\n<h3>Step 02: Model</h3>\n<p>Analyze massive competitor campaigns and internal signup volumes via Cortex&#39;s causal attribution system.</p>\n<h3>Step 03: Simulate</h3>\n<p>Simulate Net Gaming Revenue lift, GGR holds, and player acquisition yields under high market volatility.</p>\n<h3>Step 04: Recommend</h3>\n<p>Generate board-ready marketing mix reallocation strategies to optimize acquisition spend yield.</p>\n<h2>Platform Metrics</h2>\n<ul>\n<li><strong>+46%</strong> — True Marketing ROI Lift</li>\n<li><strong>$4.85M</strong> — Inefficient Spend Reallocated</li>\n<li><strong>3x</strong> — Attribution Analysis Speed</li>\n<li><strong>40x</strong> — ROI on Cortex Investment</li>\n</ul>\n<h2>Feature Capabilities</h2>\n<p>Automated, continuous intelligence tools to outpace competitive regional movements.</p>\n<h3>Experience Scoring</h3>\n<p>Combine usability, speed, and trust indicators into a board-ready Experience Index to track product growth.</p>\n<h3>Generosity Ratings</h3>\n<p>Score competitor welcome incentives mathematically based on active wagering hurdles and rollover requirements.</p>\n<h3>Market Position Mapping</h3>\n<p>Visualize operator rankings across regional segments to identify strategic promotional and usability voids.</p>\n<h2>Commercial Outcomes</h2>\n<h3>40x — Attribution Investment Return</h3>\n<p>Establish exact causal contribution of paid media channels compared to organic sweeps.</p>\n<h3>$4.85M — Inefficient Budget Reallocated</h3>\n<p>Identify programmatic, search, and affiliate channels that are merely copying competitor value.</p>\n<h3>85% — Strategic Budget Confidence</h3>\n<p>Anticipate player lifetime value and hold performance before launching campaign strategies.</p>\n<h2>How Jurnii Outpaces the Market</h2>\n<table>\n<thead>\n<tr>\n<th>Capability</th>\n<th>Jurnii Intelligence</th>\n<th>Legacy Analytics</th>\n<th>Manual Agencies</th>\n</tr>\n</thead>\n<tbody><tr>\n<td>Audit Frequency</td>\n<td>Continuous Real-Time</td>\n<td>Ad-Hoc / Event Triggered</td>\n<td>Monthly / Retrospective</td>\n</tr>\n<tr>\n<td>Attribution Logic</td>\n<td>Cortex Causal Models</td>\n<td>First-Click / Last-Click Errors</td>\n<td>Subjective / Gut Feel</td>\n</tr>\n<tr>\n<td>Data Structure</td>\n<td>Normalized Promo Richness</td>\n<td>Raw Text Snippets</td>\n<td>Scattered Spreadsheets</td>\n</tr>\n<tr>\n<td>UX Recommendations</td>\n<td>70+ Ranked Heuristics</td>\n<td>Simple Funnel Dropout Counts</td>\n<td>High-Level Consultant Slideware</td>\n</tr>\n<tr>\n<td>Jurisdictional Coverage</td>\n<td>35 Simultaneous Markets</td>\n<td>Single Market / Restricted</td>\n<td>Local Only</td>\n</tr>\n</tbody></table>\n<h2>Who Uses This Feature</h2>\n<h3>Chief Commercial Officer</h3>\n<p>Margin defense and yield planning. By cataloging terms and comparing user journeys, leadership maintains market parity and optimizes campaign holds.</p>\n<h3>Chief Marketing Officer</h3>\n<p>Growth strategy and campaign ROAS optimization. Analyze rival copywriting propositions and value claims to deploy differentiatedPaid Media counter-campaigns.</p>\n",
     "rawContent": "## Executive Summary\n\nDrive decisions from objective ratings. Cortex indexes hundreds of usability, technical speed, and campaign generosity variables into standardized benchmarks.\n\n## The Cost of Operating Blind\n\nExecutive discussions about digital platforms suffer from subjective design opinions and marketing assumptions, leading to bad budget allocations.\n\nWhen operator stacks converge on identical platforms and third-party software structures, customer acquisition efficiency and margin retention are the only durable barriers protecting Net Gaming Revenue (NGR). Running campaigns without automated competitor alerts or continuous user-flow speed benchmarking causes permanent player defection to regional rivals.\n\n> **Commercial Impact**: Commercial Impact\n\n## Operational Execution Flow\n\n### Step 01: Query\nInput prospective budget shifts, affiliate variables, or competitive positioning strategies.\n\n### Step 02: Model\nAnalyze massive competitor campaigns and internal signup volumes via Cortex's causal attribution system.\n\n### Step 03: Simulate\nSimulate Net Gaming Revenue lift, GGR holds, and player acquisition yields under high market volatility.\n\n### Step 04: Recommend\nGenerate board-ready marketing mix reallocation strategies to optimize acquisition spend yield.\n\n## Platform Metrics\n\n- **+46%** — True Marketing ROI Lift\n- **$4.85M** — Inefficient Spend Reallocated\n- **3x** — Attribution Analysis Speed\n- **40x** — ROI on Cortex Investment\n\n## Feature Capabilities\n\nAutomated, continuous intelligence tools to outpace competitive regional movements.\n\n### Experience Scoring\n\nCombine usability, speed, and trust indicators into a board-ready Experience Index to track product growth.\n\n### Generosity Ratings\n\nScore competitor welcome incentives mathematically based on active wagering hurdles and rollover requirements.\n\n### Market Position Mapping\n\nVisualize operator rankings across regional segments to identify strategic promotional and usability voids.\n\n## Commercial Outcomes\n\n### 40x — Attribution Investment Return\n\nEstablish exact causal contribution of paid media channels compared to organic sweeps.\n\n### $4.85M — Inefficient Budget Reallocated\n\nIdentify programmatic, search, and affiliate channels that are merely copying competitor value.\n\n### 85% — Strategic Budget Confidence\n\nAnticipate player lifetime value and hold performance before launching campaign strategies.\n\n## How Jurnii Outpaces the Market\n\n| Capability | Jurnii Intelligence | Legacy Analytics | Manual Agencies |\n|---|---|---|---|\n| Audit Frequency | Continuous Real-Time | Ad-Hoc / Event Triggered | Monthly / Retrospective |\n| Attribution Logic | Cortex Causal Models | First-Click / Last-Click Errors | Subjective / Gut Feel |\n| Data Structure | Normalized Promo Richness | Raw Text Snippets | Scattered Spreadsheets |\n| UX Recommendations | 70+ Ranked Heuristics | Simple Funnel Dropout Counts | High-Level Consultant Slideware |\n| Jurisdictional Coverage | 35 Simultaneous Markets | Single Market / Restricted | Local Only |\n\n## Who Uses This Feature\n\n### Chief Commercial Officer\n\nMargin defense and yield planning. By cataloging terms and comparing user journeys, leadership maintains market parity and optimizes campaign holds.\n\n### Chief Marketing Officer\n\nGrowth strategy and campaign ROAS optimization. Analyze rival copywriting propositions and value claims to deploy differentiatedPaid Media counter-campaigns.\n"
+  },
+  {
+    "path": "C:/Development/Projects/jurnii/content/www/features/journey-effectiveness.md",
+    "slug": "journey-effectiveness",
+    "section": "features",
+    "meta": {
+      "title": "UX Journey Effectiveness Scoring",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Grade player transition momentum and friction levels across core transaction paths.",
+      "description": "Grade player transition momentum and friction levels across core transaction paths.",
+      "author": "Jurnii Research",
+      "category": "UX Intelligence",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "features",
+      "sections": [
+        {
+          "type": "metrics",
+          "data": [
+            {
+              "num": "300+",
+              "label": "Global Brands Monitored"
+            },
+            {
+              "num": "70+",
+              "label": "Recommendations per Audit"
+            },
+            {
+              "num": "12",
+              "label": "Core Heuristic Vectors"
+            },
+            {
+              "num": "Mins",
+              "label": "Continuous Audit Execution"
+            }
+          ]
+        },
+        {
+          "type": "manifesto",
+          "data": "Benchmark player journey efficiency. Quantify ease-of-use, cognitive load levels, and error recovery across multi-brand funnels."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Vulnerability",
+            "title": "The Cost of Operating Blind",
+            "para": "Operators manage multiple brands across jurisdictions with no shared standard for user experience quality, causing high friction."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "Jurnii UX measures steps, input rules, and delays across target sequences to grade journey success.",
+            "foot": "Chief Product Officers use effectiveness scores to prioritize feature sprints.",
+            "implication": "Friction in player verification checkpoints and mismatched welcome bonus generous multiples dilutes operator hold rates and increases acquisition CPA by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "activity",
+              "title": "Conversion Momentum Index",
+              "body": "Grade registration, verification, and deposit ease into a single board-ready experience indicator."
+            },
+            {
+              "icon": "user-minus",
+              "title": "Redundant Field Detection",
+              "body": "Flag form fields, legal panels, or validation checks that trigger cognitive fatigue and abandonment."
+            },
+            {
+              "icon": "git-compare",
+              "title": "Competitor Flow Comparisons",
+              "body": "Compare player transition pathways side-by-side with regional top-performers to guide updates."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See UX Journey Effectiveness Scoring in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
+  },
+  {
+    "path": "C:/Development/Projects/jurnii/content/www/features/journeys.md",
+    "slug": "journeys",
+    "section": "features",
+    "meta": {
+      "title": "Onboarding Player Journeys",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Map entire player conversion sequences from landing zone to verification and first deposit.",
+      "description": "Map entire player conversion sequences from landing zone to verification and first deposit.",
+      "author": "Jurnii Research",
+      "category": "UX Intelligence",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "features",
+      "sections": [
+        {
+          "type": "metrics",
+          "data": [
+            {
+              "num": "300+",
+              "label": "Global Brands Monitored"
+            },
+            {
+              "num": "70+",
+              "label": "Recommendations per Audit"
+            },
+            {
+              "num": "12",
+              "label": "Core Heuristic Vectors"
+            },
+            {
+              "num": "Mins",
+              "label": "Continuous Audit Execution"
+            }
+          ]
+        },
+        {
+          "type": "manifesto",
+          "data": "Understand player behavior across every touchpoint. Visualize transitions, KYC checkpoints, and payment gates as a single, continuous user journey to discover conversion leakage."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Vulnerability",
+            "title": "The Cost of Operating Blind",
+            "para": "Analytics platforms capture disconnected page hits, leaving teams blind to the actual visual states and interaction obstacles that players experience during verification."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "Jurnii UX captures flow pathways, modeling transitions, KYC document upload prompts, and wallet setups into visual user journey maps.",
+            "foot": "Chief Product Officers utilize journey mapping to identify strategic conversion opportunities.",
+            "implication": "Friction in player verification checkpoints and mismatched welcome bonus generous multiples dilutes operator hold rates and increases acquisition CPA by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "milestone",
+              "title": "Transition State Mapping",
+              "body": "Model player progression stages from initial landing, through verification, to successful transactional funding."
+            },
+            {
+              "icon": "filter",
+              "title": "Funnel Leak Auditing",
+              "body": "Isolate exact fields, buttons, or validation rules where registration momentum stalls and drop-off spikes."
+            },
+            {
+              "icon": "git-compare",
+              "title": "Onboarding Path Compare",
+              "body": "Benchmark onboarding flow stages directly against three regional operators to identify competitive friction."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See Onboarding Player Journeys in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
+  },
+  {
+    "path": "C:/Development/Projects/jurnii/content/www/features/market-segmentation-targeting-analysis.md",
+    "slug": "market-segmentation-targeting-analysis",
+    "section": "features",
+    "meta": {
+      "title": "Market Segmentation & Targeting Analysis",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Isolate highly valuable player personas and regional niches through predictive yield modeling.",
+      "description": "Isolate highly valuable player personas and regional niches through predictive yield modeling.",
+      "author": "Jurnii Research",
+      "category": "Cortex Core",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "features",
+      "sections": [
+        {
+          "type": "metrics",
+          "data": [
+            {
+              "num": "+46%",
+              "label": "True Marketing ROI Lift"
+            },
+            {
+              "num": "$4.85M",
+              "label": "Inefficient Spend Reallocated"
+            },
+            {
+              "num": "3x",
+              "label": "Attribution Analysis Speed"
+            },
+            {
+              "num": "40x",
+              "label": "ROI on Cortex Investment"
+            }
+          ]
+        },
+        {
+          "type": "manifesto",
+          "data": "Optimize customer acquisition yields. Segment target markets by player value, visual design tastes, and bonus sensitivity to maximize marketing efficiency."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Vulnerability",
+            "title": "The Cost of Operating Blind",
+            "para": "Operators run uniform campaigns that treat all players identically, resulting in low conversion, high acquisition costs, and wasted marketing spend."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "Cortex groups player behavior, design preferences, and regional competitor promotions data to pinpoint high-converting audience segments.",
+            "foot": "Chief Commercial Officers deploy segment targeting to balance acquisition targets and marketing spend.",
+            "implication": "Friction in player verification checkpoints and mismatched welcome bonus generous multiples dilutes operator hold rates and increases acquisition CPA by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "crosshair",
+              "title": "Yield Modeling Grid",
+              "body": "Map audience segments against estimated lifetime value, promotional responsiveness, and overall acquisition CPA."
+            },
+            {
+              "icon": "palette",
+              "title": "Design Taste Profiles",
+              "body": "Identify visual themes, layout preferences, and usability thresholds that drive conversion within target age groups."
+            },
+            {
+              "icon": "compass",
+              "title": "Niche Opportunities Detector",
+              "body": "Spot regional demographic clusters underserved by competitor welcome offers to deploy high-yield campaigns."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See Market Segmentation & Targeting Analysis in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
+  },
+  {
+    "path": "C:/Development/Projects/jurnii/content/www/features/mmm-ready-data-export.md",
+    "slug": "mmm-ready-data-export",
+    "section": "features",
+    "meta": {
+      "title": "MMM-Ready Data Export Pipes",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Streamline competitor campaign indices directly into internal modeling databases.",
+      "description": "Streamline competitor campaign indices directly into internal modeling databases.",
+      "author": "Jurnii Research",
+      "category": "Cortex Core",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "features",
+      "sections": [
+        {
+          "type": "metrics",
+          "data": [
+            {
+              "num": "+46%",
+              "label": "True Marketing ROI Lift"
+            },
+            {
+              "num": "$4.85M",
+              "label": "Inefficient Spend Reallocated"
+            },
+            {
+              "num": "3x",
+              "label": "Attribution Analysis Speed"
+            },
+            {
+              "num": "40x",
+              "label": "ROI on Cortex Investment"
+            }
+          ]
+        },
+        {
+          "type": "manifesto",
+          "data": "Feed structured market variables straight to data science workflows. Access raw, normalized datasets for advanced modeling."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Vulnerability",
+            "title": "The Cost of Operating Blind",
+            "para": "Scraping and normalizing competitor promo histories manually blocks analytics teams, causing months of delay."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "We deliver direct API webhooks and data exports that stream normalized promotional records into local environments.",
+            "foot": "Chief Marketing Officers deploy data exports to justify marketing reallocations.",
+            "implication": "Friction in player verification checkpoints and mismatched welcome bonus generous multiples dilutes operator hold rates and increases acquisition CPA by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "database",
+              "title": "Normalized JSON / CSV Feeds",
+              "body": "Access structured historical competitor promotions data ready for direct attribution modeling."
+            },
+            {
+              "icon": "refresh-cw",
+              "title": "Always-on API Pipes",
+              "body": "Integrate real-time competitor campaign shifts and index scores directly with local databases."
+            },
+            {
+              "icon": "network",
+              "title": "Attribution Calibration Models",
+              "body": "Calibrate player lifetime values and hold yields with robust external competitive context."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See MMM-Ready Data Export Pipes in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
+  },
+  {
+    "path": "C:/Development/Projects/jurnii/content/www/features/offer-benchmarking.md",
+    "slug": "offer-benchmarking",
+    "section": "features",
+    "meta": {
+      "title": "UX Welcome Offer Benchmarking",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Assess the layout layout styling and visual presentation of welcome promo banners.",
+      "description": "Assess the layout layout styling and visual presentation of welcome promo banners.",
+      "author": "Jurnii Research",
+      "category": "UX Intelligence",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "features",
+      "sections": [
+        {
+          "type": "metrics",
+          "data": [
+            {
+              "num": "300+",
+              "label": "Global Brands Monitored"
+            },
+            {
+              "num": "70+",
+              "label": "Recommendations per Audit"
+            },
+            {
+              "num": "12",
+              "label": "Core Heuristic Vectors"
+            },
+            {
+              "num": "Mins",
+              "label": "Continuous Audit Execution"
+            }
+          ]
+        },
+        {
+          "type": "manifesto",
+          "data": "Optimize welcome banner yield. Correlate promotional matching variables with visual button positions and read levels."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Vulnerability",
+            "title": "The Cost of Operating Blind",
+            "para": "Operators deploy rich sign-up incentives but fail to convert players because the design layout is slow or cluttered."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "We map competitor landing zone banner sizes, copywriting hooks, and checkbox setups to active conversions.",
+            "foot": "Chief Marketing Officers use design auditing to balance visual brand quality and conversion.",
+            "implication": "Friction in player verification checkpoints and mismatched welcome bonus generous multiples dilutes operator hold rates and increases acquisition CPA by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "type",
+              "title": "Copy Readability Audits",
+              "body": "Audit text sizes, typographic contrasts, and legibility on competitor registration landing zones."
+            },
+            {
+              "icon": "layout",
+              "title": "CTA Layout Diagnostics",
+              "body": "Measure how button visual weights, spacing, and page placements affect welcome flow conversion."
+            },
+            {
+              "icon": "sparkles",
+              "title": "Creative Optimization Sprints",
+              "body": "Obtain ranked layout modifications to ensure your sign-up offers stand out from rival platforms."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See UX Welcome Offer Benchmarking in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
+  },
+  {
+    "path": "C:/Development/Projects/jurnii/content/www/features/perception.md",
+    "slug": "perception",
+    "section": "features",
+    "meta": {
+      "title": "UX Trust & Safety Signals Auditing",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Heuristically analyze brand authority, compliance layout, and user trust indicators.",
+      "description": "Heuristically analyze brand authority, compliance layout, and user trust indicators.",
+      "author": "Jurnii Research",
+      "category": "UX Intelligence",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "features",
+      "sections": [
+        {
+          "type": "metrics",
+          "data": [
+            {
+              "num": "300+",
+              "label": "Global Brands Monitored"
+            },
+            {
+              "num": "70+",
+              "label": "Recommendations per Audit"
+            },
+            {
+              "num": "12",
+              "label": "Core Heuristic Vectors"
+            },
+            {
+              "num": "Mins",
+              "label": "Continuous Audit Execution"
+            }
+          ]
+        },
+        {
+          "type": "manifesto",
+          "data": "Build absolute player trust during KYC verification. Optimize licensing logos, legal checkbox styling, and payment visibility."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Vulnerability",
+            "title": "The Cost of Operating Blind",
+            "para": "High-value players abandon verification flows because insecure screens look generic, outdated, or confusing."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "We grade operator security badges, terms readability, and payment pathways to suggest visual confidence upgrades.",
+            "foot": "Chief Product Officers deploy trust auditing to satisfy compliance and secure registration.",
+            "implication": "Friction in player verification checkpoints and mismatched welcome bonus generous multiples dilutes operator hold rates and increases acquisition CPA by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "shield",
+              "title": "Authority Badge Scraping",
+              "body": "Verify the presence and visual placement of licensing seals across player flows."
+            },
+            {
+              "icon": "check-circle",
+              "title": "Compliance Layout Checks",
+              "body": "Assert readability of terms and conditions pages and legal checkboxes on mobile screens."
+            },
+            {
+              "icon": "lock",
+              "title": "Verification Confidence Grades",
+              "body": "Score player trust perceptions across onboarding funnels to optimize KYC document uploads."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See UX Trust & Safety Signals Auditing in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
+  },
+  {
+    "path": "C:/Development/Projects/jurnii/content/www/features/performance.md",
+    "slug": "performance",
+    "section": "features",
+    "meta": {
+      "title": "Core Web Vitals Speed Tracking",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Audit latency, page load speed, and script weight fluctuations under mobile network environments.",
+      "description": "Audit latency, page load speed, and script weight fluctuations under mobile network environments.",
+      "author": "Jurnii Research",
+      "category": "UX Intelligence",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "features",
+      "sections": [
+        {
+          "type": "metrics",
+          "data": [
+            {
+              "num": "300+",
+              "label": "Global Brands Monitored"
+            },
+            {
+              "num": "70+",
+              "label": "Recommendations per Audit"
+            },
+            {
+              "num": "12",
+              "label": "Core Heuristic Vectors"
+            },
+            {
+              "num": "Mins",
+              "label": "Continuous Audit Execution"
+            }
+          ]
+        },
+        {
+          "type": "manifesto",
+          "data": "Speed is a critical commercial buffer. Jurnii monitors technical vitals across transactional pipelines to ensure that slow assets, heavy images, and unoptimized libraries do not compromise player holds."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Vulnerability",
+            "title": "The Cost of Operating Blind",
+            "para": "High-value players are highly sensitive to delay. A 1-second lag in betslip interaction or checkout load causes immediate customer defection to regional competitors, bleeding GGR silently."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "Jurnii simulates real-world mobile network speeds, constantly auditing LCP, FID, and CLS across player landing zones, registration pipelines, and betslip portals.",
+            "foot": "Chief Operating Officers deploy performance tracking to defend transaction speed and prevent revenue leakage.",
+            "implication": "Friction in player verification checkpoints and mismatched welcome bonus generous multiples dilutes operator hold rates and increases acquisition CPA by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "zap",
+              "title": "Core Web Vitals Scans",
+              "body": "Monitor Largest Contentful Paint, First Input Delay, and Cumulative Layout Shift under restricted mobile bandwidth."
+            },
+            {
+              "icon": "hard-drive",
+              "title": "Asset Weight Auditing",
+              "body": "Analyze CSS variables, script sizes, and image weights to locate optimization targets and eliminate engineering bloat."
+            },
+            {
+              "icon": "trending-down",
+              "title": "LCP Attrition Correlator",
+              "body": "Correlate platform latency delays directly with funnel abandonment and player conversion drop-offs."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See Core Web Vitals Speed Tracking in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
+  },
+  {
+    "path": "C:/Development/Projects/jurnii/content/www/features/promo-richness-index.md",
+    "slug": "promo-richness-index",
+    "section": "features",
+    "meta": {
+      "title": "Promo Richness Index Calibrations",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Calculate true promotional generosity mathematically based on wagering hurdles and rules.",
+      "description": "Calculate true promotional generosity mathematically based on wagering hurdles and rules.",
+      "author": "Jurnii Research",
+      "category": "Cortex Core",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "features",
+      "sections": [
+        {
+          "type": "metrics",
+          "data": [
+            {
+              "num": "+46%",
+              "label": "True Marketing ROI Lift"
+            },
+            {
+              "num": "$4.85M",
+              "label": "Inefficient Spend Reallocated"
+            },
+            {
+              "num": "3x",
+              "label": "Attribution Analysis Speed"
+            },
+            {
+              "num": "40x",
+              "label": "ROI on Cortex Investment"
+            }
+          ]
+        },
+        {
+          "type": "manifesto",
+          "data": "Understand competitor generosity with absolute precision. Normalize deposits, wagering rollovers, and spin rules into a single comparable value score."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Vulnerability",
+            "title": "The Cost of Operating Blind",
+            "para": "Evaluating competitor welcome offers manually leads to bad margin pricing because the true promotional cost differs from the nominal bonus."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "Our proprietary index weights bonus amounts, wagering play-through multipliers, and expiration rules to determine actual operator generosity.",
+            "foot": "Chief Commercial Officers use the Richness Index to refine CRM loyalty programs and welcome targets.",
+            "implication": "Friction in player verification checkpoints and mismatched welcome bonus generous multiples dilutes operator hold rates and increases acquisition CPA by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "sliders",
+              "title": "Wagering Normalizers",
+              "body": "Convert complex deposit matches and play-through terms into standardized mathematical operator generosity metrics."
+            },
+            {
+              "icon": "trending-up",
+              "title": "Generosity Shift Triggers",
+              "body": "Detect when rival welcome offers suddenly become more generous, threatening regional player acquisition."
+            },
+            {
+              "icon": "dollar-sign",
+              "title": "Hold Yield Modelers",
+              "body": "Model operator hold yields against different wagering targets to optimize promotional re-investment rates."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See Promo Richness Index Calibrations in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
+  },
+  {
+    "path": "C:/Development/Projects/jurnii/content/www/features/promotions.md",
+    "slug": "promotions",
+    "section": "features",
+    "meta": {
+      "title": "Generic Promotions Tracking Dashboard",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Continuous surveillance of rival welcome offers and wagering multipliers.",
+      "description": "Continuous surveillance of rival welcome offers and wagering multipliers.",
+      "author": "Jurnii Research",
+      "category": "Competitor Core",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "features",
+      "sections": [
+        {
+          "type": "metrics",
+          "data": [
+            {
+              "num": "1,000+",
+              "label": "Offers Scanned Weekly"
+            },
+            {
+              "num": "35",
+              "label": "Regulated States & Jurisdictions"
+            },
+            {
+              "num": "21",
+              "label": "Competitor Feature Vectors"
+            },
+            {
+              "num": "30+",
+              "label": "Hours Saved Weekly vs Manual"
+            }
+          ]
+        },
+        {
+          "type": "manifesto",
+          "data": "Calibrate operator margin while remaining highly competitive. Monitor wagering rules, deposit splits, and bonus depth."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Vulnerability",
+            "title": "The Cost of Operating Blind",
+            "para": "Manual compilation of competitor promotions takes weeks, leaving CRM and commercial teams blind to active market parities."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "Jurnii scraper bots log competitive deposit bonus values, spin count adjustments, and active sports boosts.",
+            "foot": "Chief Commercial Officers deploy promotions dashboards to defend market margins.",
+            "implication": "Friction in player verification checkpoints and mismatched welcome bonus generous multiples dilutes operator hold rates and increases acquisition CPA by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "tag",
+              "title": "Wagering Hurdle Indexes",
+              "body": "Compare Deposit play-through multiples side-by-side to protect operator hold rates."
+            },
+            {
+              "icon": "gift",
+              "title": "Welcome Incentives Surveillance",
+              "body": "Log freshly deployed sign-up offers within minutes of competitor deployment."
+            },
+            {
+              "icon": "globe",
+              "title": "Regional Offer Mapping",
+              "body": "Track promotional variations deployed by competitors in target regulated states."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See Generic Promotions Tracking Dashboard in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
+  },
+  {
+    "path": "C:/Development/Projects/jurnii/content/www/features/real-time-alerts.md",
+    "slug": "real-time-alerts",
+    "section": "features",
+    "meta": {
+      "title": "Real-Time Competitor Alerts Network",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Receive immediate notifications when competitors adjust bonuses, rates, or value claims.",
+      "description": "Receive immediate notifications when competitors adjust bonuses, rates, or value claims.",
+      "author": "Jurnii Research",
+      "category": "Competitor Core",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "features",
+      "sections": [
+        {
+          "type": "metrics",
+          "data": [
+            {
+              "num": "1,000+",
+              "label": "Offers Scanned Weekly"
+            },
+            {
+              "num": "35",
+              "label": "Regulated States & Jurisdictions"
+            },
+            {
+              "num": "21",
+              "label": "Competitor Feature Vectors"
+            },
+            {
+              "num": "30+",
+              "label": "Hours Saved Weekly vs Manual"
+            }
+          ]
+        },
+        {
+          "type": "manifesto",
+          "data": "React instantly to market events. Receive direct push alerts the exact moment a competitor adjusts welcoming terms."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Vulnerability",
+            "title": "The Cost of Operating Blind",
+            "para": "Missing a rival welcome campaign tweak causes player churn to more generous platforms before your CRM can respond."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "Configure custom trigger channels based on maximum bonus values or promotional payout indexes.",
+            "foot": "Chief Commercial Officers set up real-time alerts to defend active regional market share.",
+            "implication": "Friction in player verification checkpoints and mismatched welcome bonus generous multiples dilutes operator hold rates and increases acquisition CPA by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "bell",
+              "title": "Slack & Webhook Integrations",
+              "body": "Push critical competitive moves straight to trading desk channels and email databases."
+            },
+            {
+              "icon": "percent",
+              "title": "Threshold Triggering",
+              "body": "Set triggers based on wagering hurdles or free spin value shifts to avoid alert fatigue."
+            },
+            {
+              "icon": "shield",
+              "title": "Parity Defense Updates",
+              "body": "Protect regional conversions through real-time notifications of regional competitor campaigns."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See Real-Time Competitor Alerts Network in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
+  },
+  {
+    "path": "C:/Development/Projects/jurnii/content/www/features/release-timing-insights.md",
+    "slug": "release-timing-insights",
+    "section": "features",
+    "meta": {
+      "title": "Competitor Product Release Timing",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Anticipate rival product deployments, mobile app changes, and campaign launch windows.",
+      "description": "Anticipate rival product deployments, mobile app changes, and campaign launch windows.",
+      "author": "Jurnii Research",
+      "category": "Cortex Core",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "features",
+      "sections": [
+        {
+          "type": "metrics",
+          "data": [
+            {
+              "num": "+46%",
+              "label": "True Marketing ROI Lift"
+            },
+            {
+              "num": "$4.85M",
+              "label": "Inefficient Spend Reallocated"
+            },
+            {
+              "num": "3x",
+              "label": "Attribution Analysis Speed"
+            },
+            {
+              "num": "40x",
+              "label": "ROI on Cortex Investment"
+            }
+          ]
+        },
+        {
+          "type": "manifesto",
+          "data": "Gain predictive advantage. Track the release intervals, styling modifications, and feature updates deployed by competitors."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Vulnerability",
+            "title": "The Cost of Operating Blind",
+            "para": "Operators launch defensive campaigns reactively, playing catch-up after competitors have already captured peak seasonal traffic."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "Jurnii models historical competitor styling iterations and feature updates to predict upcoming launch windows.",
+            "foot": "Chief Marketing Officers use timing analytics to plan paid search and media schedules.",
+            "implication": "Friction in player verification checkpoints and mismatched welcome bonus generous multiples dilutes operator hold rates and increases acquisition CPA by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "brain",
+              "title": "Product Launch Forecasts",
+              "body": "Anticipate competitor software updates and welcome offer changes using temporal predictive models."
+            },
+            {
+              "icon": "refresh-cw",
+              "title": "Styling Adjustment Alerts",
+              "body": "Track when rivals begin testing styling, new payment options, or quick bet features."
+            },
+            {
+              "icon": "compass",
+              "title": "Market Gap Trackers",
+              "body": "Identify when competitors are undergoing transitions, creating timing opportunities for aggressive acquisitions."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See Competitor Product Release Timing in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
+  },
+  {
+    "path": "C:/Development/Projects/jurnii/content/www/features/scenario-planning.md",
+    "slug": "scenario-planning",
+    "section": "features",
+    "meta": {
+      "title": "Cortex Scenario Planning & Forecasts",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Model the commercial yield effect of prospective budget reallocations and welcome offer shifts.",
+      "description": "Model the commercial yield effect of prospective budget reallocations and welcome offer shifts.",
+      "author": "Jurnii Research",
+      "category": "Cortex Core",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "features",
+      "sections": [
+        {
+          "type": "metrics",
+          "data": [
+            {
+              "num": "+46%",
+              "label": "True Marketing ROI Lift"
+            },
+            {
+              "num": "$4.85M",
+              "label": "Inefficient Spend Reallocated"
+            },
+            {
+              "num": "3x",
+              "label": "Attribution Analysis Speed"
+            },
+            {
+              "num": "40x",
+              "label": "ROI on Cortex Investment"
+            }
+          ]
+        },
+        {
+          "type": "manifesto",
+          "data": "Test strategic decisions before deployment. Cortex simulates Net Gaming Revenue impact, hold rates, and acquisition CPA across multiple market scenarios."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Vulnerability",
+            "title": "The Cost of Operating Blind",
+            "para": "CMOs and CFOs allocate multi-million dollar campaign budgets blindly, relying on historical spreadsheet models that fail to account for active competitor surges."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "Jurnii integrates active competitor promotions data with local player acquisition history to build forward predictive market simulations.",
+            "foot": "Chief Marketing Officers deploy scenario forecasting to secure campaign budgets and protect ROAS.",
+            "implication": "Friction in player verification checkpoints and mismatched welcome bonus generous multiples dilutes operator hold rates and increases acquisition CPA by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "sliders",
+              "title": "Causal Budget Simulators",
+              "body": "Simulate NGR lift, player acquisition counts, and hold yield variations across prospective channel budget updates."
+            },
+            {
+              "icon": "activity",
+              "title": "Generosity Volatility Models",
+              "body": "Model acquisition drop-off rates if regional rivals suddenly spike free spins or drop wagering requirements."
+            },
+            {
+              "icon": "shield",
+              "title": "Defensive Pricing Tools",
+              "body": "Calculate the minimum bonus match and rollover target needed to defend regional market share during peaks."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See Cortex Scenario Planning & Forecasts in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
+  },
+  {
+    "path": "C:/Development/Projects/jurnii/content/www/features/trend-spotting-market-shifts.md",
+    "slug": "trend-spotting-market-shifts",
+    "section": "features",
+    "meta": {
+      "title": "Trend-Spotting & Market Shifts",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Detect emerging industry stylesheet trends, visual color systems, and payment portals.",
+      "description": "Detect emerging industry stylesheet trends, visual color systems, and payment portals.",
+      "author": "Jurnii Research",
+      "category": "Cortex Core",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "features",
+      "sections": [
+        {
+          "type": "metrics",
+          "data": [
+            {
+              "num": "+46%",
+              "label": "True Marketing ROI Lift"
+            },
+            {
+              "num": "$4.85M",
+              "label": "Inefficient Spend Reallocated"
+            },
+            {
+              "num": "3x",
+              "label": "Attribution Analysis Speed"
+            },
+            {
+              "num": "40x",
+              "label": "ROI on Cortex Investment"
+            }
+          ]
+        },
+        {
+          "type": "manifesto",
+          "data": "Adopt winning designs before the market converges. Track global usability themes and checkout frameworks to maintain aesthetic leadership."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Vulnerability",
+            "title": "The Cost of Operating Blind",
+            "para": "Product teams work in silos, missing regional adoptions of digital wallets or instant KYC updates until players start defection."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "We crawl pioneering markets, indexing visual grids, border systems, and typography standards to outline design trends.",
+            "foot": "Design Systems Architects deploy trend audits to maintain a premium visual environment.",
+            "implication": "Friction in player verification checkpoints and mismatched welcome bonus generous multiples dilutes operator hold rates and increases acquisition CPA by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "palette",
+              "title": "Styling Systems Audits",
+              "body": "Identify color palettes, border-radius sets, and card styling gaining traction in major gaming hubs."
+            },
+            {
+              "icon": "check-square",
+              "title": "Feature Adoption Scans",
+              "body": "Measure adoption velocities of new interface components across competitors to guide updates."
+            },
+            {
+              "icon": "globe",
+              "title": "Global Spacing Auditing",
+              "body": "Identify visual styling standards in pioneering jurisdictions to guide local mobile redesigns."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See Trend-Spotting & Market Shifts in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
+  },
+  {
+    "path": "C:/Development/Projects/jurnii/content/www/features/usability.md",
+    "slug": "usability",
+    "section": "features",
+    "meta": {
+      "title": "Onboarding Usability Diagnostics",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Identify and eliminate registration and deposit funnel obstacles through automated heuristic mapping.",
+      "description": "Identify and eliminate registration and deposit funnel obstacles through automated heuristic mapping.",
+      "author": "Jurnii Research",
+      "category": "UX Intelligence",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "features",
+      "sections": [
+        {
+          "type": "metrics",
+          "data": [
+            {
+              "num": "300+",
+              "label": "Global Brands Monitored"
+            },
+            {
+              "num": "70+",
+              "label": "Recommendations per Audit"
+            },
+            {
+              "num": "12",
+              "label": "Core Heuristic Vectors"
+            },
+            {
+              "num": "Mins",
+              "label": "Continuous Audit Execution"
+            }
+          ]
+        },
+        {
+          "type": "manifesto",
+          "data": "Optimize the first-mile experience. Jurnii UX usability audits replace subjective debates with structured, commercially weighted diagnostics that flag cognitive friction and technical blockers in player signup pathways."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Vulnerability",
+            "title": "The Cost of Operating Blind",
+            "para": "Operators lose up to 45% of prospective players during account verification and first deposit. Product teams struggle with vague analytics that indicate dropout locations but fail to reveal the root interface or cognitive causes, leading to misdirected development work."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "Jurnii runs automated heuristic engines across player registration sequences, evaluating form complexity, field constraints, visual guidance, and error recovery states against 12 core design criteria.",
+            "foot": "Heads of UX deploy usability diagnostics to align developer sprints with high-impact registration upgrades.",
+            "implication": "Friction in player verification checkpoints and mismatched welcome bonus generous multiples dilutes operator hold rates and increases acquisition CPA by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "activity",
+              "title": "Cognitive Load Reduction",
+              "body": "Detect excessive text inputs, confusing checkboxes, and redundant steps that fatigue players during registration."
+            },
+            {
+              "icon": "bar-chart",
+              "title": "Friction Point Scoring",
+              "body": "Quantify and rank user flow interface hurdles mathematically based on conversion severity and NGR impact."
+            },
+            {
+              "icon": "check-square",
+              "title": "Validation Guidance Assert",
+              "body": "Ensure inline form field verification instructions are clean, context-sensitive, and error-proof under mobile screens."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See Onboarding Usability Diagnostics in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
   },
   {
     "path": "C:/Development/Projects/jurnii/content/www/solutions/attribution.md",
@@ -5885,6 +10649,380 @@ export const CONTENT_MANIFEST: ContentItem[] = [
     },
     "bodyHtml": "<h1>Competition Intelligence Suite</h1>\n<p>Map rivals, offers, pricing, and positioning across every market.</p>\n<h2>Overview</h2>\n<p>When betting portals share identical platform configurations, user experience and promotional mechanics are the only durable barriers to player defection.</p>\n<h3>Key Operational Capabilities</h3>\n<ul>\n<li><strong>Automated Intelligence</strong>: Continuous surveillance and real-time structured updates.</li>\n<li><strong>Objective Benchmarking</strong>: Replace subjective opinion with verified commercial facts.</li>\n<li><strong>Decision-Grade Insights</strong>: Surface actionable recommendations directly for commercial and product roadmaps.</li>\n</ul>\n",
     "rawContent": "\n# Competition Intelligence Suite\n\nMap rivals, offers, pricing, and positioning across every market.\n\n## Overview\n\nWhen betting portals share identical platform configurations, user experience and promotional mechanics are the only durable barriers to player defection.\n\n### Key Operational Capabilities\n\n- **Automated Intelligence**: Continuous surveillance and real-time structured updates.\n- **Objective Benchmarking**: Replace subjective opinion with verified commercial facts.\n- **Decision-Grade Insights**: Surface actionable recommendations directly for commercial and product roadmaps.\n"
+  },
+  {
+    "path": "C:/Development/Projects/jurnii/content/www/solutions/competitor-intelligence.md",
+    "slug": "competitor-intelligence",
+    "section": "solutions",
+    "meta": {
+      "title": "Competitor Intelligence",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Track competitor promotions, value claims, and active sign-up incentives to defend GGR.",
+      "description": "Track competitor promotions, value claims, and active sign-up incentives to defend GGR.",
+      "author": "Jurnii Research",
+      "category": "Competitor & Market Intelligence",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "solutions",
+      "sections": [
+        {
+          "type": "manifesto",
+          "data": "Gain complete competitive market visibility. Automate the tracking of competitorwelcome matches, sports boosts, and wagering rollovers across jurisdictions."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Failure Mode",
+            "title": "The Cost of Operating Blind",
+            "para": "Operators lose millions copying rival welcome terms blindly. Manual scrapes are slow and fail to catch newly introduced welcome offers in real-time, resulting in severe margin drops.",
+            "sharedPara": "When operator stacks rely on retrospective metrics and siloed data, they remain highly vulnerable to sudden competitive campaigns sweeps and hidden onboarding friction hurdles. Copying rival strategies blindly dilutes margins and erosion acquisition efficiency."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "Jurnii scraper bots log active sign-up offers, deposit rollovers, and CRM incentives across 35 regulated markets.",
+            "implication": "Unresolved conversions leaks and copycat bonus generosity pricing dilutes Net Gaming Revenue yields by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "alert-triangle",
+              "title": "Wasted Marketing Budget",
+              "body": "CMO allocates acquisition search and programmatic display funds blindly, duplicating competitor promo terms with no incrementality metrics."
+            },
+            {
+              "icon": "trending-down",
+              "title": "Margin Hold Dilution",
+              "body": "Trading and CRM desks copy rival pricing match changes reactively, bleeding GGR holds through unoptimized bonus payouts."
+            },
+            {
+              "icon": "eye-off",
+              "title": "Competitive Blind Spots",
+              "body": "Conglomerates modify welcome overlays and registration rules, eroding your local acquisitions before leadership sees the threat."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See Competitor Intelligence in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
+  },
+  {
+    "path": "C:/Development/Projects/jurnii/content/www/solutions/conversion-optimisation.md",
+    "slug": "conversion-optimisation",
+    "section": "solutions",
+    "meta": {
+      "title": "Conversion Optimisation",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Identify and resolve friction bottlenecks across player registration, verification, and checkouts.",
+      "description": "Identify and resolve friction bottlenecks across player registration, verification, and checkouts.",
+      "author": "Jurnii Research",
+      "category": "Marketing Mix & ROI Attribution",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "solutions",
+      "sections": [
+        {
+          "type": "manifesto",
+          "data": "Heal registration funnels objectively. Optimize signup grids, security indicators, and terms readability to lower CPA."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Failure Mode",
+            "title": "The Cost of Operating Blind",
+            "para": "Minor stylesheet errors and form redundancies cause silent player abandonment, diluting media budgets and increasing CPA.",
+            "sharedPara": "When operator stacks rely on retrospective metrics and siloed data, they remain highly vulnerable to sudden competitive campaigns sweeps and hidden onboarding friction hurdles. Copying rival strategies blindly dilutes margins and erosion acquisition efficiency."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "Jurnii UX runs automated usability scans, ranking friction points by severity to guide sprint updates.",
+            "implication": "Unresolved conversions leaks and copycat bonus generosity pricing dilutes Net Gaming Revenue yields by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "alert-triangle",
+              "title": "Flawed Last-Click Modeling",
+              "body": "CFO and CMO make multi-million dollar programmatic display budget decisions using models that ignore competitor promotions shifts."
+            },
+            {
+              "icon": "trending-down",
+              "title": "Marketing & Finance Friction",
+              "body": "Inability to prove actual promotional incrementality drives internal budget arguments and strategic delays."
+            },
+            {
+              "icon": "eye-off",
+              "title": "Inefficient Spend Attribution",
+              "body": "Programmatic bids copy rival generosity boosts blind, causing severe operator hold erosion during peaks."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See Conversion Optimisation in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
   },
   {
     "path": "C:/Development/Projects/jurnii/content/www/solutions/conversion-rate-optimization.md",
@@ -7486,6 +12624,193 @@ export const CONTENT_MANIFEST: ContentItem[] = [
     "rawContent": ""
   },
   {
+    "path": "C:/Development/Projects/jurnii/content/www/solutions/marketing-attribution.md",
+    "slug": "marketing-attribution",
+    "section": "solutions",
+    "meta": {
+      "title": "Marketing Attribution",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Attribute player lifetime value and acquisitions directly to design updates and competitor moves.",
+      "description": "Attribute player lifetime value and acquisitions directly to design updates and competitor moves.",
+      "author": "Jurnii Research",
+      "category": "Marketing Mix & ROI Attribution",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "solutions",
+      "sections": [
+        {
+          "type": "manifesto",
+          "data": "Establish causal campaign attribution. Cortex integrates competitor promotions with organic flows to isolate marketing contribution."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Failure Mode",
+            "title": "The Cost of Operating Blind",
+            "para": "Traditional last-click models misattribute conversions, leaving operators blind to competitor generosity sweeps during sports peaks.",
+            "sharedPara": "When operator stacks rely on retrospective metrics and siloed data, they remain highly vulnerable to sudden competitive campaigns sweeps and hidden onboarding friction hurdles. Copying rival strategies blindly dilutes margins and erosion acquisition efficiency."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "We model marketing contribution curves against external competitor campaigns variables and internal UX scores.",
+            "implication": "Unresolved conversions leaks and copycat bonus generosity pricing dilutes Net Gaming Revenue yields by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "alert-triangle",
+              "title": "Flawed Last-Click Modeling",
+              "body": "CFO and CMO make multi-million dollar programmatic display budget decisions using models that ignore competitor promotions shifts."
+            },
+            {
+              "icon": "trending-down",
+              "title": "Marketing & Finance Friction",
+              "body": "Inability to prove actual promotional incrementality drives internal budget arguments and strategic delays."
+            },
+            {
+              "icon": "eye-off",
+              "title": "Inefficient Spend Attribution",
+              "body": "Programmatic bids copy rival generosity boosts blind, causing severe operator hold erosion during peaks."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See Marketing Attribution in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
+  },
+  {
     "path": "C:/Development/Projects/jurnii/content/www/solutions/marketing-mix-modeling-attribution.md",
     "slug": "marketing-mix-modeling-attribution",
     "section": "solutions",
@@ -7701,6 +13026,193 @@ export const CONTENT_MANIFEST: ContentItem[] = [
             "sub": "Book a personalised walkthrough with our team.",
             "primary": {
               "label": "Book a demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
+  },
+  {
+    "path": "C:/Development/Projects/jurnii/content/www/solutions/marketing-mix-modelling.md",
+    "slug": "marketing-mix-modelling",
+    "section": "solutions",
+    "meta": {
+      "title": "Marketing Mix Modelling",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Streamline competitor promotions datasets directly into local analytics modeling networks.",
+      "description": "Streamline competitor promotions datasets directly into local analytics modeling networks.",
+      "author": "Jurnii Research",
+      "category": "Marketing Mix & ROI Attribution",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "solutions",
+      "sections": [
+        {
+          "type": "manifesto",
+          "data": "Empower analytics workflows. Cortex pipes normalized competitor welcome matches and rollovers history for direct processing."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Failure Mode",
+            "title": "The Cost of Operating Blind",
+            "para": "Analysts waste 80% of their time manual-compiling competitor data instead of modeling media contribution models.",
+            "sharedPara": "When operator stacks rely on retrospective metrics and siloed data, they remain highly vulnerable to sudden competitive campaigns sweeps and hidden onboarding friction hurdles. Copying rival strategies blindly dilutes margins and erosion acquisition efficiency."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "We export clean CSV or JSON datasets of competitor campaign histories ready for Marketing Mix Modeling integration.",
+            "implication": "Unresolved conversions leaks and copycat bonus generosity pricing dilutes Net Gaming Revenue yields by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "alert-triangle",
+              "title": "Flawed Last-Click Modeling",
+              "body": "CFO and CMO make multi-million dollar programmatic display budget decisions using models that ignore competitor promotions shifts."
+            },
+            {
+              "icon": "trending-down",
+              "title": "Marketing & Finance Friction",
+              "body": "Inability to prove actual promotional incrementality drives internal budget arguments and strategic delays."
+            },
+            {
+              "icon": "eye-off",
+              "title": "Inefficient Spend Attribution",
+              "body": "Programmatic bids copy rival generosity boosts blind, causing severe operator hold erosion during peaks."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See Marketing Mix Modelling in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
               "href": "/contact-us"
             }
           }
@@ -7999,6 +13511,193 @@ export const CONTENT_MANIFEST: ContentItem[] = [
     },
     "bodyHtml": "<h2>Overview</h2>\n<p>Bonus &amp; Promotional Optimization enables CRM and commercial teams to recalibrate reload offers and free bet incentives for maximum return on bonus spend.</p>\n",
     "rawContent": "\n## Overview\n\nBonus & Promotional Optimization enables CRM and commercial teams to recalibrate reload offers and free bet incentives for maximum return on bonus spend.\n"
+  },
+  {
+    "path": "C:/Development/Projects/jurnii/content/www/solutions/retention-intelligence.md",
+    "slug": "retention-intelligence",
+    "section": "solutions",
+    "meta": {
+      "title": "Retention Intelligence",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Combat player churn by correlating CRM triggers with competitor promotions pressure.",
+      "description": "Combat player churn by correlating CRM triggers with competitor promotions pressure.",
+      "author": "Jurnii Research",
+      "category": "CRM & Retention Intelligence",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "solutions",
+      "sections": [
+        {
+          "type": "manifesto",
+          "data": "Protect customer lifetime value. Cortex detects when competitor generosity spikes, enabling defensive CRM response loops."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Failure Mode",
+            "title": "The Cost of Operating Blind",
+            "para": "CRM teams operate in isolation, attempting to recover lost players with costly bonuses only after defection has occurred.",
+            "sharedPara": "When operator stacks rely on retrospective metrics and siloed data, they remain highly vulnerable to sudden competitive campaigns sweeps and hidden onboarding friction hurdles. Copying rival strategies blindly dilutes margins and erosion acquisition efficiency."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "We map competitor welcome match generosity to internal player engagement drops, alerting retention desks instantly.",
+            "implication": "Unresolved conversions leaks and copycat bonus generosity pricing dilutes Net Gaming Revenue yields by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "alert-triangle",
+              "title": "Reactive CRM Bonus Spends",
+              "body": "CRM teams attempt to recover high-value player cohorts with costly bonus cash after defection triggers are already pulled."
+            },
+            {
+              "icon": "trending-down",
+              "title": "CRM Loyalty Margin Waste",
+              "body": "Re-investing margins in copycat CRM rewards without understanding true welcome offer parities, diluting holds."
+            },
+            {
+              "icon": "eye-off",
+              "title": "Silent VIP Attrition",
+              "body": "10% of players drive 80% of revenue, and these high-value VIPs defect silently to competitors deploying targeted welcome offers."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See Retention Intelligence in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
   },
   {
     "path": "C:/Development/Projects/jurnii/content/www/solutions/user-experience-benchmarking.md",
@@ -8441,6 +14140,193 @@ export const CONTENT_MANIFEST: ContentItem[] = [
             "sub": "Book a personalised walkthrough with our team.",
             "primary": {
               "label": "Book a demo",
+              "href": "/contact-us"
+            }
+          }
+        }
+      ]
+    },
+    "bodyHtml": "",
+    "rawContent": ""
+  },
+  {
+    "path": "C:/Development/Projects/jurnii/content/www/solutions/ux-benchmarking.md",
+    "slug": "ux-benchmarking",
+    "section": "solutions",
+    "meta": {
+      "title": "UX Benchmarking",
+      "date": "2026-01-01",
+      "medium": "Page",
+      "excerpt": "Benchmark stylesheet grids, user experience checklists, and load delays against rival brands.",
+      "description": "Benchmark stylesheet grids, user experience checklists, and load delays against rival brands.",
+      "author": "Jurnii Research",
+      "category": "UX Benchmarking & Funnel Optimization",
+      "tags": [],
+      "icon": "lucide:Zap",
+      "order": 10,
+      "productRefs": [
+        "jurnii-360",
+        "jurnii-ux"
+      ],
+      "featureRefs": [],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "solutions",
+      "sections": [
+        {
+          "type": "manifesto",
+          "data": "Establish visual excellence objectively. Compare your operator portfolios with global peers on a single, standardized scorecard."
+        },
+        {
+          "type": "challenge",
+          "data": {
+            "eyebrow": "Operational Failure Mode",
+            "title": "The Cost of Operating Blind",
+            "para": "Product teams debate layout updates based on subjective design opinions, stalling development and leaking revenue.",
+            "sharedPara": "When operator stacks rely on retrospective metrics and siloed data, they remain highly vulnerable to sudden competitive campaigns sweeps and hidden onboarding friction hurdles. Copying rival strategies blindly dilutes margins and erosion acquisition efficiency."
+          }
+        },
+        {
+          "type": "solution",
+          "data": {
+            "para": "Jurnii UX runs automated heuristic evaluations, scoring and ranking interfaces against regional competitors.",
+            "implication": "Unresolved conversions leaks and copycat bonus generosity pricing dilutes Net Gaming Revenue yields by up to 35%."
+          }
+        },
+        {
+          "type": "capabilities",
+          "data": [
+            {
+              "icon": "alert-triangle",
+              "title": "Paid Programmatic Leakage",
+              "body": "Acquired traffic is driven straight into registration blocks, KYC obstacles, and document load failures, triggering 45%+ dropout rates."
+            },
+            {
+              "icon": "trending-down",
+              "title": "Subjective Roadmapping",
+              "body": "Creative and product teams debate styling choices and interface changes without commercial proof, wasting engineer capacity."
+            },
+            {
+              "icon": "eye-off",
+              "title": "Mobile Connection Lag",
+              "body": "Unoptimized CSS payloads and heavy assets slow betslip loads under restricted mobile grids, causing player defection."
+            }
+          ]
+        },
+        {
+          "type": "benchmark",
+          "data": {
+            "heading": "How Jurnii Outpaces the Market",
+            "lede": "A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.",
+            "cols": [
+              "Jurnii Intelligence",
+              "Legacy Analytics",
+              "Manual Agencies"
+            ],
+            "rows": [
+              {
+                "feat": "Audit Frequency",
+                "jurnii": "Continuous Real-Time",
+                "legacy": "Ad-Hoc / Event Triggered",
+                "manual": "Monthly / Retrospective"
+              },
+              {
+                "feat": "Attribution Logic",
+                "jurnii": "Cortex Causal Models",
+                "legacy": "First-Click / Last-Click Errors",
+                "manual": "Subjective / Gut Feel"
+              },
+              {
+                "feat": "Data Structure",
+                "jurnii": "Normalized Promo Richness",
+                "legacy": "Raw Text Snippets",
+                "manual": "Scattered Spreadsheets"
+              },
+              {
+                "feat": "UX Recommendations",
+                "jurnii": "70+ Ranked Heuristics",
+                "legacy": "Simple Funnel Dropout Counts",
+                "manual": "High-Level Consultant Slideware"
+              },
+              {
+                "feat": "Jurisdictional Coverage",
+                "jurnii": "35 Simultaneous Markets",
+                "legacy": "Single Market / Restricted",
+                "manual": "Local Only"
+              }
+            ]
+          }
+        },
+        {
+          "type": "cortex",
+          "data": {
+            "eyebrow": "Cortex Attribution Engine",
+            "heading": "Automated Causal Intelligence",
+            "paras": [
+              "Jurnii Cortex replaces manual spreadsheet attribution with automated causal models.",
+              "Every metric is decomposed into verified incremental lift — eliminating guesswork from budget allocation."
+            ],
+            "result": "+34% NGR lift attributed to optimised channel allocation.",
+            "resultNote": "Based on 12-month rolling attribution across 35 regulated markets."
+          }
+        },
+        {
+          "type": "testimonial",
+          "data": {
+            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
+            "name": "Director of Commercial Strategy",
+            "role": "Tier-1 European iGaming Operator",
+            "avatar": "DS"
+          }
+        },
+        {
+          "type": "ecosystem",
+          "data": {
+            "heading": "Connected Intelligence Ecosystem",
+            "lede": "Each capability reinforces the next — structured data flows from benchmarking into attribution models that drive optimisation recommendations.",
+            "columns": [
+              {
+                "label": "Platform",
+                "items": [
+                  {
+                    "href": "/products/jurnii-360",
+                    "title": "Jurnii 360",
+                    "desc": "Competitive intelligence platform."
+                  },
+                  {
+                    "href": "/products/jurnii-ux",
+                    "title": "Jurnii UX",
+                    "desc": "Experience benchmarking engine."
+                  }
+                ]
+              },
+              {
+                "label": "Solutions",
+                "items": [
+                  {
+                    "href": "/solutions/competition",
+                    "title": "Competition",
+                    "desc": "Map rivals across jurisdictions."
+                  },
+                  {
+                    "href": "/solutions/benchmarking",
+                    "title": "Benchmarking",
+                    "desc": "Score interfaces and journeys."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "cta",
+          "data": {
+            "heading": "See UX Benchmarking in action.",
+            "sub": "Book a live walkthrough with our commercial intelligence team.",
+            "primary": {
+              "label": "Book a Demo",
               "href": "/contact-us"
             }
           }
