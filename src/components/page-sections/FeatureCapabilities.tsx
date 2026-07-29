@@ -3,16 +3,17 @@ import React from 'react';
 export const FeatureCapabilities = ({ capabilities }: { capabilities: { icon: string; title: string; body: string }[] }) => {
   if (!capabilities || capabilities.length === 0) return null;
   return (
-    <section className="section">
+    <section className="uc-capabilities reveal">
       <div className="container">
-        <div className="section-head">
-          <h2 className="h2-section">Operational Capabilities</h2>
+        <div className="uc-cap-head">
+          <h2>Strategic Capabilities</h2>
+          <p>Objective tools designed to replace subjective opinion with verified digital and commercial facts.</p>
         </div>
-        <div className="feature-grid">
+        <div className="uc-cap-grid">
           {capabilities.map((cap, i) => (
-            <div key={i} className="feature-cell">
-              <div className="feature-icon">
-                <i data-lucide={cap.icon} style={{ width: 18, height: 18 }} />
+            <div key={i} className="uc-cap-card">
+              <div className="uc-cap-ico">
+                <i data-lucide={cap.icon} style={{ width: 22, height: 22 }} />
               </div>
               <h3>{cap.title}</h3>
               <p>{cap.body}</p>

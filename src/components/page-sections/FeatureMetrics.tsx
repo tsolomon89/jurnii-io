@@ -3,17 +3,17 @@ import React from 'react';
 export const FeatureMetrics = ({ metrics }: { metrics: { num: string; label: string }[] }) => {
   if (!metrics || metrics.length === 0) return null;
   return (
-    <section className="section bg-light">
+    <div className="uc-metrics">
       <div className="container">
-        <div className="metrics-grid">
+        <div className="uc-metrics-grid">
           {metrics.map((m, i) => (
-            <div key={i} className="metric">
-              <div className="metric-num">{m.num}</div>
-              <div className="metric-label">{m.label}</div>
+            <div key={i} className="uc-metric">
+              <span className="uc-metric-num">{m.num}</span>
+              <span className="uc-metric-label">{m.label}</span>
             </div>
           ))}
         </div>
       </div>
-    </section>
+    </div>
   );
 };

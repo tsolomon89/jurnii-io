@@ -28,33 +28,36 @@ export const FeatureBenchmark = ({ heading, lede, cols, rows }: FeatureBenchmark
   const displayRows = rows || DEFAULT_ROWS;
 
   return (
-    <section className="section bg-light">
+    <section className="uc-benchmark section reveal">
       <div className="container">
-        <div className="section-head text-center">
+        <div className="section-head centered">
+          <p className="eyebrow"><span className="dot" />Performance Matrix</p>
           <h2 className="h2-section">{heading || 'How Jurnii Outpaces the Market'}</h2>
-          <p className="mt-4 text-gray-600 max-w-2xl mx-auto" style={{ marginTop: '1rem', color: 'var(--muted-foreground)', maxWidth: '42rem', marginLeft: 'auto', marginRight: 'auto' }}>
+          <p className="section-lede">
             {lede || 'A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.'}
           </p>
         </div>
-        <div className="overflow-x-auto" style={{ overflowX: 'auto', marginTop: '3rem' }}>
-          <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse' }}>
+        <div className="uc-table-card">
+          <table className="uc-table">
             <thead>
-              <tr style={{ borderBottom: '2px solid var(--border, #e5e7eb)' }}>
-                <th style={{ padding: '1rem 1.5rem 1rem 0', fontWeight: 600 }}>Capability</th>
-                {displayCols.map((col, i) => (
-                  <th key={i} style={{ padding: '1rem 1.5rem', fontWeight: 600, color: i === 0 ? 'var(--brand-primary, #10B981)' : 'var(--muted-foreground)' }}>
-                    {col}
-                  </th>
-                ))}
+              <tr>
+                <th>Capabilities Matrix</th>
+                <th className="jcol">{displayCols[0]}</th>
+                <th>{displayCols[1]}</th>
+                <th>{displayCols[2]}</th>
               </tr>
             </thead>
             <tbody>
               {displayRows.map((row, i) => (
-                <tr key={i} style={{ borderBottom: '1px solid var(--border-subtle, #f3f4f6)' }}>
-                  <td style={{ padding: '1rem 1.5rem 1rem 0', fontWeight: 500 }}>{row.feat}</td>
-                  <td style={{ padding: '1rem 1.5rem', fontWeight: 500, color: 'var(--brand-primary, #10B981)' }}>{row.jurnii}</td>
-                  <td style={{ padding: '1rem 1.5rem', color: 'var(--muted-foreground)' }}>{row.legacy}</td>
-                  <td style={{ padding: '1rem 1.5rem', color: 'var(--muted-foreground)' }}>{row.manual}</td>
+                <tr key={i}>
+                  <td className="feat">{row.feat}</td>
+                  <td className="jcol">
+                    <span className="uc-badge">
+                      <i data-lucide="check" style={{ width: 13, height: 13 }} /> {row.jurnii}
+                    </span>
+                  </td>
+                  <td>{row.legacy}</td>
+                  <td>{row.manual}</td>
                 </tr>
               ))}
             </tbody>
