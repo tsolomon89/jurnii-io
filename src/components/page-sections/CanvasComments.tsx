@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect, useCallback } from 'react';
 // ============================================================
 // Jurnii · Canvas Comments — interactive Liveblocks-style threads
 // Chat bubble (pin) + chat window (compose & reply) component.
 // ============================================================
-const { useState, useEffect, useRef, useLayoutEffect, useCallback } = React;
 
 /* ---------- Team / people ---------- */
 const CC_TEAM = {
