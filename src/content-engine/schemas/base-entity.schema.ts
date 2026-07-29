@@ -40,11 +40,11 @@ export const BaseEntitySchema = z.object({
       }),
       z.object({
         type: z.literal('challenge'),
-        data: z.object({ eyebrow: z.string(), title: z.string(), para: z.string() })
+        data: z.object({ eyebrow: z.string(), title: z.string(), para: z.string(), sharedPara: z.string().optional() })
       }),
       z.object({
         type: z.literal('solution'),
-        data: z.object({ para: z.string(), foot: z.string().optional() })
+        data: z.object({ para: z.string(), foot: z.string().optional(), implication: z.string().optional() })
       }),
       z.object({
         type: z.literal('capabilities'),
@@ -144,6 +144,25 @@ export const BaseEntitySchema = z.object({
             signal: z.string(),
             output: z.string()
           }))
+        })
+      }),
+      z.object({
+        type: z.literal('cortex'),
+        data: z.object({
+          eyebrow: z.string(),
+          heading: z.string(),
+          paras: z.array(z.string()),
+          result: z.string(),
+          resultNote: z.string()
+        })
+      }),
+      z.object({
+        type: z.literal('testimonial'),
+        data: z.object({
+          quote: z.string(),
+          avatar: z.string().optional(),
+          name: z.string(),
+          role: z.string()
         })
       }),
       z.object({

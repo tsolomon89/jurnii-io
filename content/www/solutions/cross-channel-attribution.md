@@ -14,112 +14,116 @@ useCaseValueRefs: []
 sections:
   - type: metrics
     data:
-      - num: '+46%'
+      - num: "+46%"
         label: True Marketing ROI Lift
-      - num: '$4.85M'
+      - num: $4.85M
         label: Budget Reallocated
-      - num: '3x'
+      - num: 3×
         label: Attribution Speed
-      - num: '40x'
+      - num: 40×
         label: ROI on Platform Investment
   - type: manifesto
-    data: >-
-      Gain complete cross-channel foresight. Map competitor campaign footprints to understand where acquisition spend is most defensive and high-yielding.
+    data: Decompose cross-channel marketing impact with statistical rigour. Cortex models the interaction effects between channels to reveal how paid search, affiliates, and CRM work together to drive conversion.
   - type: challenge
     data:
       eyebrow: The iGaming Challenge
       title: Operating Blind in a Saturated Market
-      para: >-
-        Programmatic, affiliate, and search budgets operate in siloes, leaving operators blind to the combined impact of competitive moves across channels.
+      para: "Marketing channels don't operate in isolation — a display ad primes awareness, search captures intent, and CRM closes the conversion. Single-channel attribution destroys this signal, causing catastrophic misallocation."
+      sharedPara: When betting portals share the same suppliers and identical platform configurations, customer experience is the only durable barrier to player defection. Failing to benchmark your flow speed and copywriting clarity against competitor movements leaves your team fighting fires reactively, eroding margins over time.
   - type: solution
     data:
-      para: >-
-        Cortex integrates competitor promotion streams with cross-channel spend data to model the defensive strength of each channel.
-      foot: >-
-        Heads of Acquisition use Jurnii cross-channel data to balance programmatic bids with CRM retention campaigns.
+      para: Cortex models channel interaction effects using Bayesian inference, revealing how each touchpoint contributes to the conversion path. We decompose attribution across the full funnel to optimise cross-channel spend.
+      foot: Heads of Marketing use cross-channel models to justify multi-channel investment and eliminate siloed budget decisions.
+      implication: "Friction in onboarding and mismatched promotion structures dilutes Net Gaming Revenue (<b>NGR</b>) and increases Customer Acquisition Cost (<b>CAC</b>) by up to <b>35%</b>."
   - type: capabilities
     data:
-      - icon: split
-        title: Channel Footprint Analysis
-        body: >-
-          Map competitor campaign footprints across programmatic, search, and social dynamically.
-      - icon: dollar-sign
-        title: Spend Efficiency Audits
-        body: >-
-          Identify channels where rival promo richness is driving customer acquisition spikes to re-allocate funds.
-      - icon: sliders
-        title: Defensive Budgeting
-        body: >-
-          Calibrate cross-channel spend strategies based on real-time competitor campaign shifts to defend market share.
+      - icon: git-branch
+        title: Multi-Touch Modeling
+        body: Build probabilistic models that assign fractional credit across every touchpoint in the conversion path based on measured causal contribution.
+      - icon: shuffle
+        title: Channel Interaction Effects
+        body: Quantify how channels amplify or cannibalise each other to prevent double-counting and identify synergistic investment combinations.
+      - icon: target
+        title: Optimal Mix Recommendations
+        body: Generate data-driven recommendations for cross-channel budget allocation that maximise total conversion at target CPA.
+  - type: benchmark
+    data:
+      heading: How Jurnii Outpaces the Market
+      lede: A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.
+      cols:
+        - Jurnii Intelligence
+        - Legacy Analytics
+        - Manual Agencies
+      rows:
+        - feat: Audit Frequency
+          jurnii: Continuous Real-Time
+          legacy: Ad-Hoc / Event Triggered
+          manual: Monthly / Retrospective
+        - feat: Attribution Logic
+          jurnii: Cortex Causal Models
+          legacy: First-Click / Last-Click Errors
+          manual: Subjective / Gut Feel
+        - feat: Data Structure
+          jurnii: Normalized Promo Richness
+          legacy: Raw Text Snippets
+          manual: Scattered Spreadsheets
+        - feat: UX Recommendations
+          jurnii: 70+ Ranked Heuristics
+          legacy: Simple Funnel Dropout Counts
+          manual: High-Level Consultant Slideware
+        - feat: Jurisdictional Coverage
+          jurnii: 35 Simultaneous Markets
+          legacy: Single Market / Restricted
+          manual: Local Only
+  - type: cortex
+    data:
+      eyebrow: "Cortex Attribution & NGR Impact"
+      heading: Causal ROI Optimization
+      paras:
+        - All data harvested by Jurnii UX and Jurnii 360 is normalized and streamed directly into Cortex, our causal modeling and marketing mix attribution engine. Cortex eliminates last-click errors to attribute campaign success with statistical accuracy.
+        - By cataloging competitor promotions, pricing richness, and interface friction, Jurnii enables your data scientists to export MMM-ready datasets. Model the defensive strength of programmatic and search channels in real-time.
+      result: "+46% ROAS Lift"
+      resultNote: Continuous automated scanning prevents competitive blind spots across 35 monitored markets.
+  - type: testimonial
+    data:
+      quote: Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.
+      avatar: GM
+      name: General Manager, Europe iGaming Conglomerate
+      role: Integrated Portfolio Operations
+  - type: ecosystem
+    data:
+      heading: Intelligence Integrations
+      lede: Jurnii operates as a single unified system, feeding data seamlessly across your tech stack.
+      columns:
+        - label: Related Products
+          items:
+            - href: /products/jurnii-ux
+              title: Jurnii UX
+              desc: Automated usability and visual scoring.
+            - href: /products/jurnii-mmm
+              title: Cortex
+              desc: Causal attribution and planning mix.
+        - label: Core Features
+          items:
+            - href: /features/brand-usability
+              title: Usability
+              desc: Standardized heuristic usability auditing.
+            - href: /features/competitor-promotions
+              title: Promotions
+              desc: Automate promotional campaign tracking.
+        - label: Built For
+          items:
+            - href: /use-cases/cmo
+              title: CMO
+              desc: Growth strategy and campaign ROI.
+            - href: /use-cases/cco
+              title: CCO
+              desc: Margin defense and LTV protection.
   - type: cta
     data:
-      heading: See this in action.
-      sub: Book a live walkthrough with our commercial intelligence team.
+      heading: Ready to see the difference?
+      sub: Book a personalised walkthrough with our team.
       primary:
-        label: Book a Demo
+        label: Book a demo
         href: /contact-us
 ---
-
-## Executive Summary
-
-Gain complete cross-channel foresight. Map competitor campaign footprints to understand where acquisition spend is most defensive and high-yielding.
-
-## The Cost of Operating Blind
-
-Programmatic, affiliate, and search budgets operate in siloes, leaving operators blind to the combined impact of competitive moves across channels.
-
-When operator stacks rely on retrospective metrics and siloed data, they remain highly vulnerable to sudden competitive campaigns sweeps and hidden onboarding friction hurdles. Copying rival strategies blindly dilutes margins and erosion acquisition efficiency.
-
-## How Jurnii Resolves This
-
-Cortex integrates competitor promotion streams with cross-channel spend data to model the defensive strength of each channel.
-
-> **Commercial Impact**: Unresolved conversions leaks and copycat bonus generosity pricing dilutes Net Gaming Revenue yields by up to 35%.
-
-## The Cost of Inaction
-
-### Flawed Last-Click Modeling
-
-CFO and CMO make multi-million dollar programmatic display budget decisions using models that ignore competitor promotions shifts.
-
-### Marketing & Finance Friction
-
-Inability to prove actual promotional incrementality drives internal budget arguments and strategic delays.
-
-### Inefficient Spend Attribution
-
-Programmatic bids copy rival generosity boosts blind, causing severe operator hold erosion during peaks.
-
-## Operational Execution Flow
-
-### Step 01: Ingest
-
-Consolidate clean competitor promotions data, welcome indices, and organic campaign databases.
-
-### Step 02: Model
-
-Separate organic contributions from competitor campaigns generosity volatility casual factors.
-
-### Step 03: Simulate
-
-Model Net Gaming Revenue yields, LTV, and conversion hold metrics under multiple budget scenarios.
-
-### Step 04: Report
-
-Generate board-ready marketing mix reallocation maps to defend campaigns ROAS.
-
-## What The Buyer Gets
-
-Our platform supplies decision desks with board-ready competitive profiles, quantitative usability scorecards, and causal spend allocation simulations.
-
-Verify marketing cost efficiencies dynamically, reconcile player acquisition costs against regional welcome shifts, and synchronize product priorities.
-
-## Who Owns This Solution
-
-### Chief Marketing Officer
-
-Justify programmatic media investments to the board using defensible, causal contribution models.
-
-### Chief Financial Officer
-
-Verify acquisition cost efficiency and protect EBITDA margin allocations before seasonal sporting campaigns.

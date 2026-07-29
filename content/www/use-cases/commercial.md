@@ -9,131 +9,116 @@ featureRefs: [competitor-analysis, market-trends]
 sections:
   - type: metrics
     data:
-      - num: '1,000+'
+      - num: 1,000+
         label: Offers Tracked Weekly
-      - num: '35'
+      - num: 35
         label: Regulated Markets Monitored
-      - num: '21'
+      - num: 21
         label: Feature Areas Scanned
-      - num: '30+'
+      - num: 30+
         label: Hours Saved per Week
   - type: manifesto
-    data: >-
-      Commercial departments run on margins. Jurnii bridges the gap between player acquisition costs and gaming yields, supplying clear indices to evaluate pricing richness.
+    data: Commercial departments own pricing, promotional strategy, and margin protection. Jurnii delivers the competitive pricing intelligence and promotional benchmarking that commercial teams need to operate with mathematical precision.
   - type: challenge
     data:
-      eyebrow: The Commercial Challenge
+      eyebrow: The iGaming Challenge
       title: Operating Blind in a Saturated Market
-      para: >-
-        Commercial teams struggle to balance player bonus incentives with net yield hold rates. Copying rival wagering thresholds by hand is slow, error-prone, and leads to margin erosion.
+      para: Commercial teams set pricing and promotional terms without real-time competitive data, causing either margin erosion through over-generous offers or player acquisition failure through under-competitive pricing.
+      sharedPara: When betting portals share the same suppliers, customer experience is the only durable barrier to player defection. Failing to benchmark your flow speed and copywriting clarity against competitor movements leaves your team fighting fires reactively.
   - type: solution
     data:
-      para: >-
-        Jurnii models competitor payout curves across sports and casino verticals. Jurnii 360's Promo Richness Index standardizes wagering rules and deposit incentives.
-      foot: >-
-        Commercial Analysts and CRM Directors leverage Jurnii margin calibrators to deploy high-yield loyalty rewards.
+      para: Jurnii tracks competitor pricing structures, bonus terms, and promotional campaigns across 35 markets. The Promo Richness Index enables instant quantitative comparison to calibrate commercial decisions with precision.
+      foot: Commercial departments deploy Jurnii to protect margins while maintaining competitive parity across all regulated markets.
+      implication: "Friction in onboarding and mismatched promotion structures dilutes Net Gaming Revenue (<b>NGR</b>) and increases Customer Acquisition Cost (<b>CAC</b>) by up to <b>35%</b>."
   - type: capabilities
     data:
-      - icon: layers
-        title: Promo Richness Index
-        body: >-
-          Standardize the mathematical cost and yield margin impact of competitor deposit matches and retention bonuses.
-      - icon: user-minus
-        title: Churn Analytics
-        body: >-
-          Trace rival product changes and promotions causing high player leakage and multi-homing defection.
-      - icon: search-check
-        title: Revenue Auditing
-        body: >-
-          Identify conversion leaks in affiliate reward structures, deposit funnels, and registration pathways.
-  - type: beforeAfter
+      - icon: tag
+        title: Promotional Benchmarking
+        body: Compare your bonus structures, wagering terms, and promotional generosity against competitors using the quantitative Promo Richness Index.
+      - icon: dollar-sign
+        title: Pricing Intelligence
+        body: Monitor competitor deposit thresholds, bonus caps, and pricing architecture to optimise your pricing strategy for acquisition and retention.
+      - icon: shield
+        title: Margin Defense
+        body: Detect competitive pricing shifts that threaten hold rates and trigger proactive commercial responses to protect GGR margins.
+  - type: benchmark
     data:
-      heading: Operational Transformation
-      before:
-        - >-
-          Copying rival wagering thresholds by hand is slow and error-prone.
-        - >-
-          Squeezed by player multi-homing rates of 70–80%.
-        - >-
-          CRM teams duplicate rival promos reactively, causing margin dilution.
-      after:
-        - >-
-          Promo Richness Index quantifies competitive positioning instantly.
-        - >-
-          Payout curves modeled across sports and casino verticals.
-        - >-
-          Margin calibrators deploy high-yield loyalty rewards automatically.
-  - type: decisionMap
-    data:
-      heading: Strategic Decision Map
+      heading: How Jurnii Outpaces the Market
+      lede: A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.
+      cols:
+        - Jurnii Intelligence
+        - Legacy Analytics
+        - Manual Agencies
       rows:
-        - decision: >-
-            Is CRM spending sustainable?
-          signal: >-
-            Promo Richness Index + rival retention activity
-          output: >-
-            Margin-preserving CRM strategy
-        - decision: >-
-            Where is churn originating?
-          signal: >-
-            Competitor product change + player leakage data
-          output: >-
-            Targeted retention campaign
+        - feat: Audit Frequency
+          jurnii: Continuous Real-Time
+          legacy: Ad-Hoc / Event Triggered
+          manual: Monthly / Retrospective
+        - feat: Attribution Logic
+          jurnii: Cortex Causal Models
+          legacy: First-Click / Last-Click Errors
+          manual: Subjective / Gut Feel
+        - feat: Data Structure
+          jurnii: Normalized Promo Richness
+          legacy: Raw Text Snippets
+          manual: Scattered Spreadsheets
+        - feat: UX Recommendations
+          jurnii: 70+ Ranked Heuristics
+          legacy: Simple Funnel Dropout Counts
+          manual: High-Level Consultant Slideware
+        - feat: Jurisdictional Coverage
+          jurnii: 35 Simultaneous Markets
+          legacy: Single Market / Restricted
+          manual: Local Only
+  - type: cortex
+    data:
+      eyebrow: "Cortex Attribution & Yield Impact"
+      heading: Causal ROI Optimization
+      paras:
+        - All data harvested by Jurnii UX and Jurnii 360 is normalized and streamed directly into Cortex, our causal modeling and marketing mix attribution engine. Cortex eliminates last-click errors to attribute campaign success with statistical accuracy.
+        - By cataloging competitor promotions, pricing richness, and interface friction, Jurnii enables your data scientists to export MMM-ready datasets. Model the defensive strength of programmatic and search channels in real-time.
+      result: "+46% ROAS Lift"
+      resultNote: "Jurnii 360 tracks 100% of competitor promotion moves automatically, saving 30+ hours per week across CRM and commercial teams."
+  - type: testimonial
+    data:
+      quote: Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.
+      avatar: GM
+      name: General Manager, Europe iGaming Conglomerate
+      role: Integrated Portfolio Operations
+  - type: ecosystem
+    data:
+      heading: Intelligence Integrations
+      lede: Jurnii operates as a single unified system, feeding data seamlessly across your tech stack.
+      columns:
+        - label: Related Products
+          items:
+            - href: /products/jurnii-ux
+              title: Jurnii UX
+              desc: Automated usability and visual scoring.
+            - href: /products/jurnii-mmm
+              title: Cortex
+              desc: Causal attribution and planning mix.
+        - label: Core Features
+          items:
+            - href: /features/brand-usability
+              title: Usability
+              desc: Standardized heuristic usability auditing.
+            - href: /features/competitor-promotions
+              title: Promotions
+              desc: Automate promotional campaign tracking.
+        - label: Outcomes
+          items:
+            - href: /solutions/user-experience-benchmarking
+              title: UX Benchmarking
+              desc: Heuristics-based experience index scores.
+            - href: /solutions/competition-offers
+              title: Competitor Intel
+              desc: Continuous surveillance of competitor campaigns.
   - type: cta
     data:
-      heading: See how Jurnii works for your role.
-      sub: Book a live walkthrough with our commercial intelligence team.
+      heading: Ready to see the difference?
+      sub: Book a personalised walkthrough with our team.
       primary:
-        label: Book a Demo
+        label: Book a demo
         href: /contact-us
 ---
-
-## Overview
-
-Empower commercial directors with real-time promo monitoring and econometric marketing mix modeling to optimize bonus spend and channel allocation.
-
-## Key Metrics
-
-- **+46%** — True Marketing ROI Lift
-- **$4.85M** — Inefficient Spend Reallocated
-- **3x** — Attribution Analysis Speed
-- **40x** — ROI on Platform Investment
-
-## Operating Context
-
-Commercial departments run on margins. Jurnii bridges the gap between player acquisition costs and gaming yields, supplying clear indices to evaluate pricing richness. By automating competitor offer tracking, commercial teams can optimize loyalty rewards without risking CRM margin dilution.
-
-## The Pressure Under Audit
-
-Commercial teams struggle to balance player bonus incentives with net yield hold rates. Copying rival wagering thresholds by hand is slow, error-prone, and leads to margin erosion or sudden customer churn. Squeezed by player multi-homing rates of 70–80%, CRM teams duplicate rival promos reactively, causing severe margin dilution.
-
-> **Direct Operational Pressures**: Maintain optimal NGR/GGR holds, safeguard commercial margins against copycat bonus wagers, and retain high-value customer portfolios.
-
-> **Information Barrier**: Currently delayed or missing data: Automated, regional promotions surveillance databases and standardized wagers wagers decoders.
-
-## How Jurnii Restores Alignment
-
-Jurnii models competitor payout curves across sports and casino verticals. Jurnii 360's Promo Richness Index standardizes wagering rules and deposit incentives. This enables commercial analysts to calibrate margin thresholds, protect NGR from competitive dilution, and optimize player lifetime value (LTV) across 35 markets monitored simultaneously.
-
-> **EBITDA Yield Implication**: Opinion-driven roadmaps and copycat promotions pricing dilutes Net Gaming wagers hold rates by up to 35% globally.
-
-## Operational Transformation
-
-### Before Jurnii
-
-- ❌ Analysts spend hours manual scraping competitor wagers documents.
-- ❌ CRM desks copy rival bonus richness reactively, diluting hold rate yields.
-- ❌ High-value VIP cohorts defect contextually during rival sports boosts sweeps.
-
-### After Jurnii
-
-- ✅ Jurnii scrapers log 100% of regional competitor promotion terms.
-- ✅ Promo Richness indices calibrate wagers to maximize EBITDA hold.
-- ✅ Automated triggers alert retention player desks proactively.
-
-## Strategic Decision Map
-
-| Critical Decision | Information Signal Needed | Jurnii Output |
-|---|---|---|
-| Are loyalty rewards diluting holds? | Wagering rollovers matches vs competitor CRM pricing | Promo Richness index calibrated margin limits |
-| Where is Net Gaming Revenue leaking? | Onboarding drop-off severities + deposit portal delays | Targeted signup conversion path updates checklist |

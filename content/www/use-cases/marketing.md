@@ -7,141 +7,116 @@ productRefs: [jurnii-360, jurnii-ux, jurnii-mmm]
 sections:
   - type: metrics
     data:
-      - num: '+46%'
+      - num: "+46%"
         label: True Marketing ROI Lift
-      - num: '$4.85M'
+      - num: $4.85M
         label: Budget Reallocated
-      - num: '3x'
+      - num: 3×
         label: Attribution Speed
-      - num: '40x'
+      - num: 40×
         label: ROI on Platform Investment
   - type: manifesto
-    data: >-
-      Eliminate subjectivity from marketing investments. Jurnii delivers the database, tracking, and attribution tools to optimize campaigns based on real-time competitor actions.
+    data: Marketing departments need competitive context for every campaign decision. Jurnii delivers real-time competitive surveillance and causal attribution to make marketing the most accountable function in the organisation.
   - type: challenge
     data:
-      eyebrow: The Commercial Challenge
+      eyebrow: The iGaming Challenge
       title: Operating Blind in a Saturated Market
-      para: >-
-        Marketing managers operate under blind CPA metrics. Last-click attribution fails to account for competitor sports boosts or casino wagering shifts.
+      para: Marketing teams plan campaigns without competitive context, launch into blind competitive environments, and measure results with flawed attribution models. This systematic blindness causes chronic budget misallocation.
+      sharedPara: When betting portals share the same suppliers, customer experience is the only durable barrier to player defection. Failing to benchmark your flow speed and copywriting clarity against competitor movements leaves your team fighting fires reactively.
   - type: solution
     data:
-      para: >-
-        Jurnii 360 parses competitor banner creative, copy claims, and promo structures. This data feeds into Cortex for causal modeling and marketing mix attribution.
-      foot: >-
-        Acquisition Heads and Media Buyers use Jurnii campaign timelines to optimize ad spends and improve paid media ROAS.
+      para: Jurnii provides marketing departments with competitive surveillance for campaign planning, real-time alerts for reactive optimisation, and Cortex causal attribution for rigorous performance measurement.
+      foot: Marketing departments use Jurnii to plan, execute, and measure campaigns with full competitive intelligence.
+      implication: "Friction in onboarding and mismatched promotion structures dilutes Net Gaming Revenue (<b>NGR</b>) and increases Customer Acquisition Cost (<b>CAC</b>) by up to <b>35%</b>."
   - type: capabilities
     data:
       - icon: radar
-        title: Campaign Scraping
-        body: >-
-          Track all competitor welcome offers, deposit matches, and free spins dynamically as soon as they go live.
-      - icon: image
-        title: Ad Creative Intel
-        body: >-
-          Review competitor homepage banner placements, promotional sliders, and creative hooks across your competitive set.
-      - icon: clock
-        title: Timing Optimization
-        body: >-
-          Map historical competitor deployment patterns to schedule campaigns during peak commercial ROI windows.
-  - type: beforeAfter
+        title: Campaign Planning
+        body: Plan acquisition campaigns with full visibility into competitor promotional activity, timing strategies, and channel saturation across target markets.
+      - icon: bell
+        title: Real-Time Alerts
+        body: Receive instant notifications when competitors launch campaigns that require immediate tactical response from your marketing team.
+      - icon: git-merge
+        title: Causal Attribution
+        body: Measure true incremental campaign impact using Cortex causal models to prove marketing ROI and optimise channel allocation.
+  - type: benchmark
     data:
-      heading: Operational Transformation
-      before:
-        - >-
-          Marketing managers operate under blind CPA metrics.
-        - >-
-          Creative ad copywriting shifts go unnoticed.
-        - >-
-          Saturated channels make traditional marketing inefficient.
-      after:
-        - >-
-          Real-time competitor banner and copy tracking across all markets.
-        - >-
-          Causal models isolate true incremental campaign lift.
-        - >-
-          Campaign timing optimized against historical competitor patterns.
-  - type: decisionMap
-    data:
-      heading: Strategic Decision Map
+      heading: How Jurnii Outpaces the Market
+      lede: A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.
+      cols:
+        - Jurnii Intelligence
+        - Legacy Analytics
+        - Manual Agencies
       rows:
-        - decision: >-
-            Which channels deliver true incrementality?
-          signal: >-
-            Cross-channel competitor promo footprint data
-          output: >-
-            Channel-level ROAS attribution report
-        - decision: >-
-            When to launch campaigns?
-          signal: >-
-            Historical competitor deployment timelines
-          output: >-
-            Optimal timing recommendation
+        - feat: Audit Frequency
+          jurnii: Continuous Real-Time
+          legacy: Ad-Hoc / Event Triggered
+          manual: Monthly / Retrospective
+        - feat: Attribution Logic
+          jurnii: Cortex Causal Models
+          legacy: First-Click / Last-Click Errors
+          manual: Subjective / Gut Feel
+        - feat: Data Structure
+          jurnii: Normalized Promo Richness
+          legacy: Raw Text Snippets
+          manual: Scattered Spreadsheets
+        - feat: UX Recommendations
+          jurnii: 70+ Ranked Heuristics
+          legacy: Simple Funnel Dropout Counts
+          manual: High-Level Consultant Slideware
+        - feat: Jurisdictional Coverage
+          jurnii: 35 Simultaneous Markets
+          legacy: Single Market / Restricted
+          manual: Local Only
+  - type: cortex
+    data:
+      eyebrow: "Cortex Attribution & Yield Impact"
+      heading: Causal ROI Optimization
+      paras:
+        - All data harvested by Jurnii UX and Jurnii 360 is normalized and streamed directly into Cortex, our causal modeling and marketing mix attribution engine. Cortex eliminates last-click errors to attribute campaign success with statistical accuracy.
+        - By cataloging competitor promotions, pricing richness, and interface friction, Jurnii enables your data scientists to export MMM-ready datasets. Model the defensive strength of programmatic and search channels in real-time.
+      result: "+46% ROAS Lift"
+      resultNote: "Jurnii 360 tracks 100% of competitor promotion moves automatically, saving 30+ hours per week across CRM and commercial teams."
+  - type: testimonial
+    data:
+      quote: Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.
+      avatar: GM
+      name: General Manager, Europe iGaming Conglomerate
+      role: Integrated Portfolio Operations
+  - type: ecosystem
+    data:
+      heading: Intelligence Integrations
+      lede: Jurnii operates as a single unified system, feeding data seamlessly across your tech stack.
+      columns:
+        - label: Related Products
+          items:
+            - href: /products/jurnii-ux
+              title: Jurnii UX
+              desc: Automated usability and visual scoring.
+            - href: /products/jurnii-mmm
+              title: Cortex
+              desc: Causal attribution and planning mix.
+        - label: Core Features
+          items:
+            - href: /features/brand-usability
+              title: Usability
+              desc: Standardized heuristic usability auditing.
+            - href: /features/competitor-promotions
+              title: Promotions
+              desc: Automate promotional campaign tracking.
+        - label: Outcomes
+          items:
+            - href: /solutions/user-experience-benchmarking
+              title: UX Benchmarking
+              desc: Heuristics-based experience index scores.
+            - href: /solutions/competition-offers
+              title: Competitor Intel
+              desc: Continuous surveillance of competitor campaigns.
   - type: cta
     data:
-      heading: See how Jurnii works for your role.
-      sub: Book a live walkthrough with our commercial intelligence team.
+      heading: Ready to see the difference?
+      sub: Book a personalised walkthrough with our team.
       primary:
-        label: Book a Demo
+        label: Book a demo
         href: /contact-us
 ---
-
-# Marketing Teams
-
-Campaign performance tracking, channel attribution, and promotional benchmarks.
-
-## Overview
-
-When betting portals share identical platform configurations, user experience and promotional mechanics are the only durable barriers to player defection.
-
-### Key Operational Capabilities
-
-- **Automated Intelligence**: Continuous surveillance and real-time structured updates.
-- **Objective Benchmarking**: Replace subjective opinion with verified commercial facts.
-- **Decision-Grade Insights**: Surface actionable recommendations directly for commercial and product roadmaps.
-
-## Key Metrics
-
-- **+46%** — True Marketing ROI Lift
-- **$4.85M** — Inefficient Spend Reallocated
-- **3x** — Attribution Analysis Speed
-- **40x** — ROI on Platform Investment
-
-## Operating Context
-
-Eliminate subjectivity from marketing investments. Jurnii delivers the database, tracking, and attribution tools to optimize campaigns based on real-time competitor actions. By syncing continuous competitor promotional feeds with causal Media Mix Modeling, marketing teams can defend budgets and maximize acquisition efficiency.
-
-## The Pressure Under Audit
-
-Marketing managers operate under blind CPA metrics. Last-click attribution fails to account for competitor sports boosts or casino wagering shifts, leading to bad budget allocations during peak sporting seasons. Saturated channels and player multi-homing rates of 70–80% make traditional marketing inefficient, while creative ad copywriting shifts go unnoticed.
-
-> **Direct Operational Pressures**: Maximize digital customer acquisitions yield, lower paid traffic CPAs, and stand out in hyper-saturated bidding segments.
-
-> **Information Barrier**: Currently delayed or missing data: Live visibility of competitor signup bonuses richness and causal spent attribution modeling datasets.
-
-## How Jurnii Restores Alignment
-
-Jurnii 360 parses and indexes competitor active banner creative, copy claims, and promo rich structures. This data is fed into Cortex to run causal modeling and marketing mix attribution, isolating the true incremental lift of programmatics and search spends against competitor actions and campaigns across 35 markets monitored simultaneously.
-
-> **EBITDA Yield Implication**: Opinion-driven roadmaps and copycat promotions pricing dilutes Net Gaming wagers hold rates by up to 35% globally.
-
-## Operational Transformation
-
-### Before Jurnii
-
-- ❌ Teams copy-paste generic slogans and keywords blind to rival campaigns.
-- ❌ programmatic budgets are allocated using uncausal last-click spreadsheets.
-- ❌ Search CPA rates spike when competitor welcome generosity increases.
-
-### After Jurnii
-
-- ✅ Jurnii scans competitor active overlay copy and signup wagers.
-- ✅ Cortex causal engines isolate incrementality against competitor actions.
-- ✅ Media spent is re-allocated to high-yield channels, lowering CAC.
-
-## Strategic Decision Map
-
-| Critical Decision | Information Signal Needed | Jurnii Output |
-|---|---|---|
-| How can search campaigns ROAS be protected? | Live competitor welcome richness fluctuations in region | Differentiated copywriting claim adjustments |
-| Is programmatic display spending high-yielding? | Cortex causal lift scores vs competitor promo timelines | Incrementality-calibrated bid reallocations |

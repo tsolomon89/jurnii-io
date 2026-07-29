@@ -14,112 +14,116 @@ useCaseValueRefs: []
 sections:
   - type: metrics
     data:
-      - num: '300+'
+      - num: 300+
         label: Brands Analysed
-      - num: '70+'
+      - num: 70+
         label: Recommendations per Audit
-      - num: '4'
+      - num: 4
         label: Key UX Dimensions
-      - num: 'Mins'
+      - num: Mins
         label: Time to Full Audit
   - type: manifesto
-    data: >-
-      Secure regional market share. Map your portfolio's visual UX grade and bonus structures against target competitors to identify strategic regional growth zones.
+    data: Position your brand with data, not instinct. Jurnii maps competitive positioning landscapes across pricing, experience quality, and promotional generosity to identify strategic white space.
   - type: challenge
     data:
       eyebrow: The iGaming Challenge
       title: Operating Blind in a Saturated Market
-      para: >-
-        Entering a new jurisdiction is high-risk when operators are blind to the exact design expectations and promotional rules of the local market.
+      para: Brand positioning decisions rely on subjective competitive assessments and agency opinions rather than structured market data, leading to undifferentiated strategies that waste acquisition budget.
+      sharedPara: When betting portals share the same suppliers and identical platform configurations, customer experience is the only durable barrier to player defection. Failing to benchmark your flow speed and copywriting clarity against competitor movements leaves your team fighting fires reactively, eroding margins over time.
   - type: solution
     data:
-      para: >-
-        We analyze local competitors, mapping their visual scores and Promo Richness Index positions to outline regional growth blueprints.
-      foot: >-
-        Chief Executive Officers deploy market benchmarking to guide international expansion budgets.
+      para: Jurnii builds multi-dimensional positioning maps by cross-referencing UX scores, pricing structures, promotional richness, and brand perception data to reveal strategic differentiation opportunities.
+      foot: Chief Marketing Officers use positioning benchmarks to define brand strategy and allocate budget to defensible competitive advantages.
+      implication: "Friction in onboarding and mismatched promotion structures dilutes Net Gaming Revenue (<b>NGR</b>) and increases Customer Acquisition Cost (<b>CAC</b>) by up to <b>35%</b>."
   - type: capabilities
     data:
-      - icon: globe
-        title: Regional Strategy Matrix
-        body: >-
-          Map competitor strength and design grades across target states and countries dynamically.
-      - icon: plus-circle
-        title: Market Gaps Detection
-        body: >-
-          Spot underserved visual preferences or promotional voids in target regions to launch counter-campaigns.
-      - icon: shield
-        title: Competitor Strength Index
-        body: >-
-          Identify highly entrenched operators to refine acquisition spend strategies and protect margins.
+      - icon: compass
+        title: Positioning Landscape Maps
+        body: Visualise your brand position relative to competitors across multiple dimensions — pricing, experience quality, promotional depth, and trust perception.
+      - icon: target
+        title: White Space Identification
+        body: Detect underserved market positions where no competitor has established dominance, enabling first-mover advantage in specific segments.
+      - icon: bar-chart
+        title: Competitive Quadrants
+        body: Generate strategic quadrant analyses comparing experience investment against commercial outcomes to guide positioning and investment decisions.
+  - type: benchmark
+    data:
+      heading: How Jurnii Outpaces the Market
+      lede: A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.
+      cols:
+        - Jurnii Intelligence
+        - Legacy Analytics
+        - Manual Agencies
+      rows:
+        - feat: Audit Frequency
+          jurnii: Continuous Real-Time
+          legacy: Ad-Hoc / Event Triggered
+          manual: Monthly / Retrospective
+        - feat: Attribution Logic
+          jurnii: Cortex Causal Models
+          legacy: First-Click / Last-Click Errors
+          manual: Subjective / Gut Feel
+        - feat: Data Structure
+          jurnii: Normalized Promo Richness
+          legacy: Raw Text Snippets
+          manual: Scattered Spreadsheets
+        - feat: UX Recommendations
+          jurnii: 70+ Ranked Heuristics
+          legacy: Simple Funnel Dropout Counts
+          manual: High-Level Consultant Slideware
+        - feat: Jurisdictional Coverage
+          jurnii: 35 Simultaneous Markets
+          legacy: Single Market / Restricted
+          manual: Local Only
+  - type: cortex
+    data:
+      eyebrow: "Cortex Attribution & NGR Impact"
+      heading: Causal ROI Optimization
+      paras:
+        - All data harvested by Jurnii UX and Jurnii 360 is normalized and streamed directly into Cortex, our causal modeling and marketing mix attribution engine. Cortex eliminates last-click errors to attribute campaign success with statistical accuracy.
+        - By cataloging competitor promotions, pricing richness, and interface friction, Jurnii enables your data scientists to export MMM-ready datasets. Model the defensive strength of programmatic and search channels in real-time.
+      result: "+46% ROAS Lift"
+      resultNote: Continuous automated scanning prevents competitive blind spots across 35 monitored markets.
+  - type: testimonial
+    data:
+      quote: Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.
+      avatar: GM
+      name: General Manager, Europe iGaming Conglomerate
+      role: Integrated Portfolio Operations
+  - type: ecosystem
+    data:
+      heading: Intelligence Integrations
+      lede: Jurnii operates as a single unified system, feeding data seamlessly across your tech stack.
+      columns:
+        - label: Related Products
+          items:
+            - href: /products/jurnii-ux
+              title: Jurnii UX
+              desc: Automated usability and visual scoring.
+            - href: /products/jurnii-mmm
+              title: Cortex
+              desc: Causal attribution and planning mix.
+        - label: Core Features
+          items:
+            - href: /features/brand-usability
+              title: Usability
+              desc: Standardized heuristic usability auditing.
+            - href: /features/competitor-promotions
+              title: Promotions
+              desc: Automate promotional campaign tracking.
+        - label: Built For
+          items:
+            - href: /use-cases/cmo
+              title: CMO
+              desc: Growth strategy and campaign ROI.
+            - href: /use-cases/cco
+              title: CCO
+              desc: Margin defense and LTV protection.
   - type: cta
     data:
-      heading: See this in action.
-      sub: Book a live walkthrough with our commercial intelligence team.
+      heading: Ready to see the difference?
+      sub: Book a personalised walkthrough with our team.
       primary:
-        label: Book a Demo
+        label: Book a demo
         href: /contact-us
 ---
-
-## Executive Summary
-
-Secure regional market share. Map your portfolio's visual UX grade and bonus structures against target competitors to identify strategic regional growth zones.
-
-## The Cost of Operating Blind
-
-Entering a new jurisdiction is high-risk when operators are blind to the exact design expectations and promotional rules of the local market.
-
-When operator stacks rely on retrospective metrics and siloed data, they remain highly vulnerable to sudden competitive campaigns sweeps and hidden onboarding friction hurdles. Copying rival strategies blindly dilutes margins and erosion acquisition efficiency.
-
-## How Jurnii Resolves This
-
-We analyze local competitors, mapping their visual scores and Promo Richness Index positions to outline regional growth blueprints.
-
-> **Commercial Impact**: Unresolved conversions leaks and copycat bonus generosity pricing dilutes Net Gaming Revenue yields by up to 35%.
-
-## The Cost of Inaction
-
-### Paid Programmatic Leakage
-
-Acquired traffic is driven straight into registration blocks, KYC obstacles, and document load failures, triggering 45%+ dropout rates.
-
-### Subjective Roadmapping
-
-Creative and product teams debate styling choices and interface changes without commercial proof, wasting engineer capacity.
-
-### Mobile Connection Lag
-
-Unoptimized CSS payloads and heavy assets slow betslip loads under restricted mobile grids, causing player defection.
-
-## Operational Execution Flow
-
-### Step 01: Audit
-
-Run automated usability and core vitals diagnostics across player registration and deposit funnels.
-
-### Step 02: Diagnose
-
-Pinpoint exact stylesheet bugs, cognitive barriers, and security trust drop-offs causing funnel leaks.
-
-### Step 03: Prioritize
-
-Rank UX findings mathematically based on player conversion severity and revenue impact variables.
-
-### Step 04: Fix
-
-Provide engineering desks with clear visual checklists and layout templates for rapid corrections.
-
-## What The Buyer Gets
-
-Our platform supplies decision desks with board-ready competitive profiles, quantitative usability scorecards, and causal spend allocation simulations.
-
-Verify marketing cost efficiencies dynamically, reconcile player acquisition costs against regional welcome shifts, and synchronize product priorities.
-
-## Who Owns This Solution
-
-### Chief Product Officer
-
-Prioritize developer updates based on objective yield recovery, accelerating onboarding sprint success cycles.
-
-### Chief Operating Officer
-
-Defend checkout performance and transactions speed under volatile mobile peak wagering loads.

@@ -7,141 +7,116 @@ productRefs: [jurnii-360, jurnii-ux, jurnii-mmm]
 sections:
   - type: metrics
     data:
-      - num: '+46%'
-        label: True Marketing ROI Lift
-      - num: '$4.85M'
-        label: Budget Reallocated
-      - num: '3x'
-        label: Attribution Speed
-      - num: '40x'
-        label: ROI on Platform Investment
+      - num: 1,000+
+        label: Offers Tracked Weekly
+      - num: 35
+        label: Regulated Markets Monitored
+      - num: 21
+        label: Feature Areas Scanned
+      - num: 30+
+        label: Hours Saved per Week
   - type: manifesto
-    data: >-
-      Jurnii delivers rapid intelligence for emerging brands, allowing fast-scaling challenger operators to compete directly with global conglomerates by acting on precise, localized market facts.
+    data: Challenger operators need competitive intelligence that punches above their weight. Jurnii delivers enterprise-grade market surveillance and UX benchmarking at a scale that fits ambitious operators building market share.
   - type: challenge
     data:
-      eyebrow: The Commercial Challenge
+      eyebrow: The iGaming Challenge
       title: Operating Blind in a Saturated Market
-      para: >-
-        Squeezed by massive operator conglomerates, fast-growing challengers spend limited budgets copying market generics without clear competitive context.
+      para: Small operators lack the resources for dedicated competitive intelligence teams. Manual monitoring of competitors is sporadic, reactive, and misses critical market movements.
+      sharedPara: When betting portals share the same suppliers, customer experience is the only durable barrier to player defection. Failing to benchmark your flow speed and copywriting clarity against competitor movements leaves your team fighting fires reactively.
   - type: solution
     data:
-      para: >-
-        Jurnii provides immediate, low-overhead competitor surveillance by tracking competitor welcome offers and usability states across target jurisdictions.
-      foot: >-
-        Scaling Founders and C-Suite leaders at SMB operators use out-of-the-box dashboards to maintain parity without enterprise-level overheads.
+      para: Jurnii automates competitive surveillance, promotional tracking, and UX benchmarking to give challenger operators the same intelligence advantages that enterprise conglomerates take for granted.
+      foot: Challenger operators use Jurnii to compete with enterprise intelligence at a fraction of the cost.
+      implication: "Friction in onboarding and mismatched promotion structures dilutes Net Gaming Revenue (<b>NGR</b>) and increases Customer Acquisition Cost (<b>CAC</b>) by up to <b>35%</b>."
   - type: capabilities
     data:
-      - icon: crosshair
-        title: Agile Positioning
-        body: >-
-          Exploit local market gaps and welcome offer voids left open by slower competitor conglomerates.
-      - icon: wallet
-        title: Budget Efficiency
-        body: >-
-          Maximize limited marketing budgets by analyzing and refining winning regional promotional frameworks.
-      - icon: zap
-        title: Fast Implementation
-        body: >-
-          Access fully compiled competitor insights from day one, with zero complex database integrations.
-  - type: beforeAfter
+      - icon: rocket
+        title: Rapid Intelligence
+        body: Access enterprise-grade competitive surveillance without building an internal intelligence team — Jurnii automates monitoring across your competitive set.
+      - icon: tag
+        title: Offer Tracking
+        body: Monitor competitor promotional activity, welcome bonuses, and wagering terms to calibrate your acquisition offers against market standards.
+      - icon: layout
+        title: UX Benchmarking
+        body: Score your player experience against larger competitors to identify the UX improvements that deliver maximum conversion impact.
+  - type: benchmark
     data:
-      heading: Operational Transformation
-      before:
-        - >-
-          Limited budgets wasted copying market generics blind.
-        - >-
-          Micro-campaign opportunities missed due to lack of competitive context.
-        - >-
-          Manual auditing is impossible at SMB scale.
-      after:
-        - >-
-          Out-of-the-box dashboards provide immediate competitive visibility.
-        - >-
-          Agile counter-campaigns launched on precise market intelligence.
-        - >-
-          Every marketing dollar maximized through data-backed decisions.
-  - type: decisionMap
-    data:
-      heading: Strategic Decision Map
+      heading: How Jurnii Outpaces the Market
+      lede: A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.
+      cols:
+        - Jurnii Intelligence
+        - Legacy Analytics
+        - Manual Agencies
       rows:
-        - decision: >-
-            Which markets are viable?
-          signal: >-
-            Regional competitor density + welcome offer gaps
-          output: >-
-            Market entry recommendation
-        - decision: >-
-            How to compete with conglomerates?
-          signal: >-
-            Positioning void analysis + creative messaging gaps
-          output: >-
-            Agile campaign brief
+        - feat: Audit Frequency
+          jurnii: Continuous Real-Time
+          legacy: Ad-Hoc / Event Triggered
+          manual: Monthly / Retrospective
+        - feat: Attribution Logic
+          jurnii: Cortex Causal Models
+          legacy: First-Click / Last-Click Errors
+          manual: Subjective / Gut Feel
+        - feat: Data Structure
+          jurnii: Normalized Promo Richness
+          legacy: Raw Text Snippets
+          manual: Scattered Spreadsheets
+        - feat: UX Recommendations
+          jurnii: 70+ Ranked Heuristics
+          legacy: Simple Funnel Dropout Counts
+          manual: High-Level Consultant Slideware
+        - feat: Jurisdictional Coverage
+          jurnii: 35 Simultaneous Markets
+          legacy: Single Market / Restricted
+          manual: Local Only
+  - type: cortex
+    data:
+      eyebrow: "Cortex Attribution & Yield Impact"
+      heading: Causal ROI Optimization
+      paras:
+        - All data harvested by Jurnii UX and Jurnii 360 is normalized and streamed directly into Cortex, our causal modeling and marketing mix attribution engine. Cortex eliminates last-click errors to attribute campaign success with statistical accuracy.
+        - By cataloging competitor promotions, pricing richness, and interface friction, Jurnii enables your data scientists to export MMM-ready datasets. Model the defensive strength of programmatic and search channels in real-time.
+      result: "+46% ROAS Lift"
+      resultNote: "Jurnii 360 tracks 100% of competitor promotion moves automatically, saving 30+ hours per week across CRM and commercial teams."
+  - type: testimonial
+    data:
+      quote: Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.
+      avatar: GM
+      name: General Manager, Europe iGaming Conglomerate
+      role: Integrated Portfolio Operations
+  - type: ecosystem
+    data:
+      heading: Intelligence Integrations
+      lede: Jurnii operates as a single unified system, feeding data seamlessly across your tech stack.
+      columns:
+        - label: Related Products
+          items:
+            - href: /products/jurnii-ux
+              title: Jurnii UX
+              desc: Automated usability and visual scoring.
+            - href: /products/jurnii-mmm
+              title: Cortex
+              desc: Causal attribution and planning mix.
+        - label: Core Features
+          items:
+            - href: /features/brand-usability
+              title: Usability
+              desc: Standardized heuristic usability auditing.
+            - href: /features/competitor-promotions
+              title: Promotions
+              desc: Automate promotional campaign tracking.
+        - label: Outcomes
+          items:
+            - href: /solutions/user-experience-benchmarking
+              title: UX Benchmarking
+              desc: Heuristics-based experience index scores.
+            - href: /solutions/competition-offers
+              title: Competitor Intel
+              desc: Continuous surveillance of competitor campaigns.
   - type: cta
     data:
-      heading: See how Jurnii works for your role.
-      sub: Book a live walkthrough with our commercial intelligence team.
+      heading: Ready to see the difference?
+      sub: Book a personalised walkthrough with our team.
       primary:
-        label: Book a Demo
+        label: Book a demo
         href: /contact-us
 ---
-
-# Challenger & SMB Operators
-
-Agile market intelligence to outmaneuver legacy incumbents.
-
-## Overview
-
-When betting portals share identical platform configurations, user experience and promotional mechanics are the only durable barriers to player defection.
-
-### Key Operational Capabilities
-
-- **Automated Intelligence**: Continuous surveillance and real-time structured updates.
-- **Objective Benchmarking**: Replace subjective opinion with verified commercial facts.
-- **Decision-Grade Insights**: Surface actionable recommendations directly for commercial and product roadmaps.
-
-## Key Metrics
-
-- **300+** — Brands Analysed globally
-- **70+** — Recommendations per Audit
-- **4** — Key UX Dimensions Scanned
-- **Mins** — Continuous Audit Execution
-
-## Operating Context
-
-Jurnii delivers rapid, high-impact intelligence tailored for emerging brands, allowing fast-scaling challenger operators to compete directly with global conglomerates by acting on precise, localized market facts. By providing immediate competitive tracking, Jurnii enables boutique operators to capture high-value market voids and lower acquisition CPA.
-
-## The Pressure Under Audit
-
-Squeezed by massive operator conglomerates, fast-growing challengers spend limited budgets copying market generics. Without clear competitive context, they miss micro-campaign opportunities, experience high player leakage, and struggle with high CPAs. Manual competitive auditing is impossible at their scale, while hiring expensive consulting agencies to benchmark their experience takes weeks they cannot afford.
-
-> **Direct Operational Pressures**: Compete with heavily resourced conglomerates, lower customer CAC rates, and optimize signups without dedicated analysts teams.
-
-> **Information Barrier**: Currently delayed or missing data: Out-of-the-box promotions RICHNESS and usability benchmarks without manual database scraping teams.
-
-## How Jurnii Restores Alignment
-
-Jurnii provides immediate, low-overhead competitor surveillance by tracking competitor welcome offers and usability states across target jurisdictions. Operators use Jurnii's global repository of 300+ brands analysed to identify welcome offer gaps, and deploy agile, highly targeted counter-campaigns that maximize every dollar spent on paid channels.
-
-> **EBITDA Yield Implication**: Opinion-driven roadmaps and copycat promotions pricing dilutes Net Gaming wagers hold rates by up to 35% globally.
-
-## Operational Transformation
-
-### Before Jurnii
-
-- ❌ Founders spend hours browsing competitor sites manually.
-- ❌ Acquisition campaigns copy identical, high-CPA bidding hooks.
-- ❌ KYC and signup checkout leaks drop prospective customer traffic.
-
-### After Jurnii
-
-- ✅ Jurnii dashboards compile all local competitor promotions.
-- ✅ Challengers target localized value claim gaps ignored by giants.
-- ✅ Automated heuristics recommend quick-win signup enhancements.
-
-## Strategic Decision Map
-
-| Critical Decision | Information Signal Needed | Jurnii Output |
-|---|---|---|
-| Where is the best marketing gap? | Rival promotions visual maps + regional welcome offers | Targeted localized acquisition campaigns hooks |
-| How can signup checkout leak be stopped? | Audited form validation friction severities | Quick-win layout registration improvements checklist |

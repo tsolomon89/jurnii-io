@@ -15,112 +15,116 @@ useCaseValueRefs: []
 sections:
   - type: metrics
     data:
-      - num: '1,000+'
-        label: Offers Tracked Weekly
-      - num: '35'
-        label: Regulated Markets Monitored
-      - num: '21'
-        label: Feature Areas Scanned
-      - num: '30+'
-        label: Hours Saved per Week
+      - num: "+46%"
+        label: True Marketing ROI Lift
+      - num: $4.85M
+        label: Budget Reallocated
+      - num: 3×
+        label: Attribution Speed
+      - num: 40×
+        label: ROI on Platform Investment
   - type: manifesto
-    data: >-
-      Combat player churn proactively. Track competitor retention campaigns and usability enhancements that are pulling players away from your platform.
+    data: Defend against player churn with competitive intelligence. Jurnii detects rival retention campaigns, re-activation offers, and win-back strategies that directly threaten your active player base.
   - type: challenge
     data:
       eyebrow: The iGaming Challenge
       title: Operating Blind in a Saturated Market
-      para: >-
-        Traditional retention strategies are reactive, attempting to recover players with expensive bonus cash only after they have already defected.
+      para: Competitor win-back campaigns target your dormant players with aggressive bonuses, while your CRM team remains unaware of the competitive threat until monthly reports show unexplained churn spikes.
+      sharedPara: When betting portals share the same suppliers and identical platform configurations, customer experience is the only durable barrier to player defection. Failing to benchmark your flow speed and copywriting clarity against competitor movements leaves your team fighting fires reactively, eroding margins over time.
   - type: solution
     data:
-      para: >-
-        Jurnii 360 warns CRM teams when competitors deploy highly generous retention offers, enabling timely defensive pricing and margin calibration.
-      foot: >-
-        Chief Commercial Officers deploy churn alerts to protect active margins in aggressive markets.
+      para: Jurnii monitors competitor re-activation and win-back campaigns in real-time, alerting your CRM team to competitive retention threats. Cortex models churn risk factors to prioritise proactive retention investment.
+      foot: Heads of CRM use churn intelligence to trigger defensive retention campaigns before competitive threats materialise.
+      implication: "Friction in onboarding and mismatched promotion structures dilutes Net Gaming Revenue (<b>NGR</b>) and increases Customer Acquisition Cost (<b>CAC</b>) by up to <b>35%</b>."
   - type: capabilities
     data:
-      - icon: user-minus
-        title: Competitor Move Warnings
-        body: >-
-          Receive alerts when rivals introduce high-richness loyalty promos or sports boosts in your region.
-      - icon: plus-circle
-        title: Product Gap Analysis
-        body: >-
-          Isolate product features rivals are deploying to secure active customer retention and prevent churn.
-      - icon: sliders
-        title: Margin Calibration Sprints
-        body: >-
-          Re-calibrate payout metrics to protect yields and NGR when competitor churn triggers spike.
+      - icon: alert-triangle
+        title: Competitive Threat Alerts
+        body: Receive instant notifications when competitors launch win-back campaigns, lapsed player bonuses, or aggressive re-activation offers targeting your segments.
+      - icon: shield
+        title: Proactive Retention
+        body: Trigger defensive retention campaigns — personalised bonuses, VIP upgrades, exclusive offers — before competitive threats drive measurable churn.
+      - icon: bar-chart
+        title: Churn Factor Analysis
+        body: Identify the competitive, product, and experience factors that contribute most to player churn using Cortex causal modeling.
+  - type: benchmark
+    data:
+      heading: How Jurnii Outpaces the Market
+      lede: A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.
+      cols:
+        - Jurnii Intelligence
+        - Legacy Analytics
+        - Manual Agencies
+      rows:
+        - feat: Audit Frequency
+          jurnii: Continuous Real-Time
+          legacy: Ad-Hoc / Event Triggered
+          manual: Monthly / Retrospective
+        - feat: Attribution Logic
+          jurnii: Cortex Causal Models
+          legacy: First-Click / Last-Click Errors
+          manual: Subjective / Gut Feel
+        - feat: Data Structure
+          jurnii: Normalized Promo Richness
+          legacy: Raw Text Snippets
+          manual: Scattered Spreadsheets
+        - feat: UX Recommendations
+          jurnii: 70+ Ranked Heuristics
+          legacy: Simple Funnel Dropout Counts
+          manual: High-Level Consultant Slideware
+        - feat: Jurisdictional Coverage
+          jurnii: 35 Simultaneous Markets
+          legacy: Single Market / Restricted
+          manual: Local Only
+  - type: cortex
+    data:
+      eyebrow: "Cortex Attribution & NGR Impact"
+      heading: Causal ROI Optimization
+      paras:
+        - All data harvested by Jurnii UX and Jurnii 360 is normalized and streamed directly into Cortex, our causal modeling and marketing mix attribution engine. Cortex eliminates last-click errors to attribute campaign success with statistical accuracy.
+        - By cataloging competitor promotions, pricing richness, and interface friction, Jurnii enables your data scientists to export MMM-ready datasets. Model the defensive strength of programmatic and search channels in real-time.
+      result: "+46% ROAS Lift"
+      resultNote: Continuous automated scanning prevents competitive blind spots across 35 monitored markets.
+  - type: testimonial
+    data:
+      quote: Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.
+      avatar: GM
+      name: General Manager, Europe iGaming Conglomerate
+      role: Integrated Portfolio Operations
+  - type: ecosystem
+    data:
+      heading: Intelligence Integrations
+      lede: Jurnii operates as a single unified system, feeding data seamlessly across your tech stack.
+      columns:
+        - label: Related Products
+          items:
+            - href: /products/jurnii-ux
+              title: Jurnii UX
+              desc: Automated usability and visual scoring.
+            - href: /products/jurnii-mmm
+              title: Cortex
+              desc: Causal attribution and planning mix.
+        - label: Core Features
+          items:
+            - href: /features/brand-usability
+              title: Usability
+              desc: Standardized heuristic usability auditing.
+            - href: /features/competitor-promotions
+              title: Promotions
+              desc: Automate promotional campaign tracking.
+        - label: Built For
+          items:
+            - href: /use-cases/cmo
+              title: CMO
+              desc: Growth strategy and campaign ROI.
+            - href: /use-cases/cco
+              title: CCO
+              desc: Margin defense and LTV protection.
   - type: cta
     data:
-      heading: See this in action.
-      sub: Book a live walkthrough with our commercial intelligence team.
+      heading: Ready to see the difference?
+      sub: Book a personalised walkthrough with our team.
       primary:
-        label: Book a Demo
+        label: Book a demo
         href: /contact-us
 ---
-
-## Executive Summary
-
-Combat player churn proactively. Track competitor retention campaigns and usability enhancements that are pulling players away from your platform.
-
-## The Cost of Operating Blind
-
-Traditional retention strategies are reactive, attempting to recover players with expensive bonus cash only after they have already defected.
-
-When operator stacks rely on retrospective metrics and siloed data, they remain highly vulnerable to sudden competitive campaigns sweeps and hidden onboarding friction hurdles. Copying rival strategies blindly dilutes margins and erosion acquisition efficiency.
-
-## How Jurnii Resolves This
-
-Jurnii 360 warns CRM teams when competitors deploy highly generous retention offers, enabling timely defensive pricing and margin calibration.
-
-> **Commercial Impact**: Unresolved conversions leaks and copycat bonus generosity pricing dilutes Net Gaming Revenue yields by up to 35%.
-
-## The Cost of Inaction
-
-### Reactive CRM Bonus Spends
-
-CRM teams attempt to recover high-value player cohorts with costly bonus cash after defection triggers are already pulled.
-
-### CRM Loyalty Margin Waste
-
-Re-investing margins in copycat CRM rewards without understanding true welcome offer parities, diluting holds.
-
-### Silent VIP Attrition
-
-10% of players drive 80% of revenue, and these high-value VIPs defect silently to competitors deploying targeted welcome offers.
-
-## Operational Execution Flow
-
-### Step 01: Detect
-
-Monitor competitor VIP welcome promos and CRM target adjustments regional surges.
-
-### Step 02: Segment
-
-Isolate high-value player cohorts most vulnerable to rival promotional generosity spikes.
-
-### Step 03: Calibrate
-
-Calculate the ideal loyalty match and wagering rollover needed to defend active conversions.
-
-### Step 04: Retain
-
-Deploy automated defensive welcome offers before competitors seasonal pushes trigger churn.
-
-## What The Buyer Gets
-
-Our platform supplies decision desks with board-ready competitive profiles, quantitative usability scorecards, and causal spend allocation simulations.
-
-Verify marketing cost efficiencies dynamically, reconcile player acquisition costs against regional welcome shifts, and synchronize product priorities.
-
-## Who Owns This Solution
-
-### Head of CRM
-
-Protect player lifetime values systematically, neutralizing rival campaigns sweeps before attrition triggers.
-
-### Chief Commercial Officer
-
-Optimize CRM loyalty allocations and re-investment yields relative to real competitor actions.

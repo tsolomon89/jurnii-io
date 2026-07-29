@@ -1,12 +1,24 @@
 import React from 'react';
 
-export const FeatureChallenge = ({ eyebrow, title, para }: { eyebrow: string; title: string; para: string }) => {
+interface FeatureChallengeProps {
+  eyebrow: string;
+  title: string;
+  para: string;
+  sharedPara?: string;
+}
+
+export const FeatureChallenge = ({ eyebrow, title, para, sharedPara }: FeatureChallengeProps) => {
   return (
-    <section className="section bg-dark text-white">
-      <div className="container container-narrow">
-        <p className="eyebrow">{eyebrow}</p>
-        <h2 className="h2-section">{title}</h2>
-        <p className="article-body">{para}</p>
+    <section className="uc-challenge section reveal">
+      <div className="container">
+        <div className="uc-challenge-grid">
+          <div>
+            <p className="eyebrow"><span className="dot" />{eyebrow}</p>
+            <h2>{title}</h2>
+            <p>{para}</p>
+            {sharedPara && <p>{sharedPara}</p>}
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -9,129 +9,116 @@ featureRefs: [competitor-analysis, brand-analysis]
 sections:
   - type: metrics
     data:
-      - num: '1,000+'
+      - num: 1,000+
         label: Offers Tracked Weekly
-      - num: '35'
+      - num: 35
         label: Regulated Markets Monitored
-      - num: '21'
+      - num: 21
         label: Feature Areas Scanned
-      - num: '30+'
+      - num: 30+
         label: Hours Saved per Week
   - type: manifesto
-    data: >-
-      Jurnii is native to digital gaming, empowering sportsbooks, casinos, and lotteries with real-time visibility into competitor player UX, deposit bonuses, and marketing attribution.
+    data: iGaming is the native domain for Jurnii intelligence. Purpose-built for the unique competitive dynamics of regulated online betting and casino markets, Jurnii understands the operators, the regulations, and the player economics.
   - type: challenge
     data:
-      eyebrow: The Sector Challenge
+      eyebrow: The iGaming Challenge
       title: Operating Blind in a Saturated Market
-      para: >-
-        iGaming operators face extreme competition where player multi-homing rates reach 70–80%. Commoditized B2B platforms make acquisition highly difficult.
+      para: The iGaming industry faces hyper-competition with commoditised platforms, regulatory complexity across jurisdictions, and player loyalty fragmented across 3-5 active operator accounts per user.
+      sharedPara: When betting portals share the same suppliers, customer experience is the only durable barrier to player defection. Failing to benchmark your flow speed and copywriting clarity against competitor movements leaves your team fighting fires reactively.
   - type: solution
     data:
-      para: >-
-        Jurnii continuously monitors live casino and sportsbook onboarding pathways, tracking wagering hurdles and deposit multipliers dynamically.
-      foot: >-
-        Chief Executive Officers at sportsbooks and casinos deploy Jurnii to secure player conversions and optimize net gaming yield.
+      para: Jurnii was purpose-built for iGaming — tracking competitor promotions, benchmarking player experiences, and modeling marketing attribution within the specific commercial dynamics of regulated online gaming markets.
+      foot: iGaming operators of all sizes use Jurnii as their primary competitive intelligence and commercial optimisation platform.
+      implication: "Friction in onboarding and mismatched promotion structures dilutes Net Gaming Revenue (<b>NGR</b>) and increases Customer Acquisition Cost (<b>CAC</b>) by up to <b>35%</b>."
   - type: capabilities
     data:
-      - icon: dices
-        title: iGaming Heuristics
-        body: >-
-          Track gaming registration, document verification (KYC), deposit, and betslip usability across 300+ brands.
-      - icon: gift
-        title: Bonus Scraping
-        body: >-
-          Parse competitor sports boosts and casino promotions automatically as soon as they go live.
-      - icon: scale
-        title: Compliance Tracking
-        body: >-
-          Keep tabs on competitor promotional terms, active wagering multipliers, and layouts globally.
-  - type: beforeAfter
+      - icon: radar
+        title: Competitive Surveillance
+        body: Monitor competitor promotional activity, pricing structures, and market positioning across 35 regulated gaming jurisdictions simultaneously.
+      - icon: layout
+        title: UX Benchmarking
+        body: Score player onboarding experiences against industry leaders using heuristic frameworks designed specifically for iGaming conversion funnels.
+      - icon: git-merge
+        title: Causal Attribution
+        body: Attribute marketing ROI with causal models that account for competitive dynamics unique to regulated gaming markets.
+  - type: benchmark
     data:
-      heading: Operational Transformation
-      before:
-        - >-
-          Player multi-homing rates reach 70–80% with no visibility.
-        - >-
-          Subtle registration and KYC friction causes silent abandonment.
-        - >-
-          Manual promotional tracking is impossible to scale.
-      after:
-        - >-
-          Continuous monitoring of all competitor onboarding pathways.
-        - >-
-          Promo Richness Index standardizes wagering rules across the market.
-        - >-
-          Cortex attribution explains ROAS lift against competitor movements.
-  - type: decisionMap
-    data:
-      heading: Strategic Decision Map
+      heading: How Jurnii Outpaces the Market
+      lede: A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.
+      cols:
+        - Jurnii Intelligence
+        - Legacy Analytics
+        - Manual Agencies
       rows:
-        - decision: >-
-            Which competitors threaten player retention?
-          signal: >-
-            Competitor promo richness + churn correlation
-          output: >-
-            Threat assessment + defensive pricing brief
-        - decision: >-
-            Where is registration friction highest?
-          signal: >-
-            Cross-brand UX audit scores
-          output: >-
-            Conversion optimization roadmap
+        - feat: Audit Frequency
+          jurnii: Continuous Real-Time
+          legacy: Ad-Hoc / Event Triggered
+          manual: Monthly / Retrospective
+        - feat: Attribution Logic
+          jurnii: Cortex Causal Models
+          legacy: First-Click / Last-Click Errors
+          manual: Subjective / Gut Feel
+        - feat: Data Structure
+          jurnii: Normalized Promo Richness
+          legacy: Raw Text Snippets
+          manual: Scattered Spreadsheets
+        - feat: UX Recommendations
+          jurnii: 70+ Ranked Heuristics
+          legacy: Simple Funnel Dropout Counts
+          manual: High-Level Consultant Slideware
+        - feat: Jurisdictional Coverage
+          jurnii: 35 Simultaneous Markets
+          legacy: Single Market / Restricted
+          manual: Local Only
+  - type: cortex
+    data:
+      eyebrow: "Cortex Attribution & Yield Impact"
+      heading: Causal ROI Optimization
+      paras:
+        - All data harvested by Jurnii UX and Jurnii 360 is normalized and streamed directly into Cortex, our causal modeling and marketing mix attribution engine. Cortex eliminates last-click errors to attribute campaign success with statistical accuracy.
+        - By cataloging competitor promotions, pricing richness, and interface friction, Jurnii enables your data scientists to export MMM-ready datasets. Model the defensive strength of programmatic and search channels in real-time.
+      result: "+46% ROAS Lift"
+      resultNote: "Jurnii 360 tracks 100% of competitor promotion moves automatically, saving 30+ hours per week across CRM and commercial teams."
+  - type: testimonial
+    data:
+      quote: Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.
+      avatar: GM
+      name: General Manager, Europe iGaming Conglomerate
+      role: Integrated Portfolio Operations
+  - type: ecosystem
+    data:
+      heading: Intelligence Integrations
+      lede: Jurnii operates as a single unified system, feeding data seamlessly across your tech stack.
+      columns:
+        - label: Related Products
+          items:
+            - href: /products/jurnii-ux
+              title: Jurnii UX
+              desc: Automated usability and visual scoring.
+            - href: /products/jurnii-mmm
+              title: Cortex
+              desc: Causal attribution and planning mix.
+        - label: Core Features
+          items:
+            - href: /features/brand-usability
+              title: Usability
+              desc: Standardized heuristic usability auditing.
+            - href: /features/competitor-promotions
+              title: Promotions
+              desc: Automate promotional campaign tracking.
+        - label: Outcomes
+          items:
+            - href: /solutions/user-experience-benchmarking
+              title: UX Benchmarking
+              desc: Heuristics-based experience index scores.
+            - href: /solutions/competition-offers
+              title: Competitor Intel
+              desc: Continuous surveillance of competitor campaigns.
   - type: cta
     data:
-      heading: See how Jurnii works for your role.
-      sub: Book a live walkthrough with our commercial intelligence team.
+      heading: Ready to see the difference?
+      sub: Book a personalised walkthrough with our team.
       primary:
-        label: Book a Demo
+        label: Book a demo
         href: /contact-us
 ---
-
-## Overview
-
-Purpose-built for sportsbook and casino teams managing price boosts, event promotions, free spins, and game launch campaigns.
-
-## Key Metrics
-
-- **+46%** — True Marketing ROI Lift
-- **$4.85M** — Inefficient Spend Reallocated
-- **3x** — Attribution Analysis Speed
-- **40x** — ROI on Platform Investment
-
-## Operating Context
-
-Jurnii is native to digital gaming, empowering sportsbooks, casinos, and lotteries with real-time visibility into competitor player UX, deposit bonuses, and marketing attribution. By analyzing competitor promotions and interface friction, Jurnii enables digital gaming operators to optimize net gaming yield and secure player conversions.
-
-## The Pressure Under Audit
-
-iGaming operators face extreme competition where player multi-homing rates reach 70–80% (players holding 3–5 competitor accounts simultaneously). Saturated marketing channels, rising CPAs, tight compliance rules, and commoditized B2B platforms make acquisition highly difficult. Subtle friction during registration, deposit, or KYC verification steps causes immediate abandonment to rivals, while manual promotional tracking is impossible to scale.
-
-> **Direct Operational Pressures**: Defend NGR margins, lower skyrocketing CAC rates under highly regulated compliance, and combat massive player multi-homing rates.
-
-> **Information Barrier**: Currently delayed or missing data: standardized competitor welcome richness indices and live wagers playthrough multipliers scraping.
-
-## How Jurnii Restores Alignment
-
-Jurnii continuously monitors live casino and sportsbook onboarding pathways, tracking wagering hurdles and deposit multipliers dynamically. Jurnii 360's Promo Richness Index standardizes wagering rules across competitors, while Jurnii UX automates usability audits across registration, verification, and deposit funnels. This data feeds into Cortex for causal attribution, explaining ROAS lift against competitor movements.
-
-## Operational Transformation
-
-### Before Jurnii
-
-- ❌ Trading desks duplicate rival wagers rollovers blindly.
-- ❌ High-value VIP cohorts defect to competitor sports boosts sweeps.
-- ❌ Registration wagers are compiled by manual scraping spreadsheets.
-
-### After Jurnii
-
-- ✅ Promo Richness indices calibrate wagers to safeguard holds.
-- ✅ surveillance webhooks push live notifications of competitor VIP wagers.
-- ✅ Cortex causal models evaluate programmatic incrementality.
-
-## Strategic Decision Map
-
-| Critical Decision | Information Signal Needed | Jurnii Output |
-|---|---|---|
-| How can player signup defection be neutralized? | KYC validation checks vs competitor wagers limits | Margin-optimized welcome offer structure |
-| Is rival sports boost eroding our GGR? | Live rival odds surges in monitored states | Contextual alert pushes to CRM desks |

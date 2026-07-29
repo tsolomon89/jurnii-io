@@ -7,141 +7,116 @@ productRefs: [jurnii-360, jurnii-ux, jurnii-mmm]
 sections:
   - type: metrics
     data:
-      - num: '300+'
+      - num: 300+
         label: Brands Analysed
-      - num: '70+'
+      - num: 70+
         label: Recommendations per Audit
-      - num: '4'
+      - num: 4
         label: Key UX Dimensions
-      - num: 'Mins'
+      - num: Mins
         label: Time to Full Audit
   - type: manifesto
-    data: >-
-      FinTech platforms leverage Jurnii to secure high-security customer registration, audit KYC and AML processing delays, and design conversion-optimized banking interfaces.
+    data: FinTech platforms face the same onboarding and trust challenges as iGaming — KYC friction, payment pipeline complexity, and regulatory compliance across jurisdictions. Jurnii benchmarking applies directly to financial technology conversion optimisation.
   - type: challenge
     data:
-      eyebrow: The Sector Challenge
-      title: Operating Blind in a Saturated Market
-      para: >-
-        FinTech applications face extreme signup drop-offs during high-security AML, KYC, and document verification steps. Players lose trust when secure interfaces look generic or confusing.
+      eyebrow: The FinTech Challenge
+      title: Building Trust in a Regulated Digital Environment
+      para: FinTech platforms struggle with KYC completion rates, payment friction, and trust perception — challenges that mirror iGaming but with even higher regulatory scrutiny and customer sensitivity.
+      sharedPara: When betting portals share the same suppliers, customer experience is the only durable barrier to player defection. Failing to benchmark your flow speed and copywriting clarity against competitor movements leaves your team fighting fires reactively.
   - type: solution
     data:
-      para: >-
-        Jurnii audits security styling, compliance signals, and input validation messages across FinTech registration funnels, comparing with industry best practices.
-      foot: >-
-        VP of Risk and Product Leads at FinTech platforms deploy perception scores to secure compliance conversions.
+      para: "Jurnii's automated UX benchmarking and trust perception analysis helps FinTech platforms optimise onboarding flows, reduce KYC abandonment, and build digital trust through competitive experience analysis."
+      foot: FinTech platforms use Jurnii to benchmark onboarding experiences and optimise conversion rates against sector peers.
+      implication: "Friction in onboarding and mismatched promotion structures dilutes Net Gaming Revenue (<b>NGR</b>) and increases Customer Acquisition Cost (<b>CAC</b>) by up to <b>35%</b>."
   - type: capabilities
     data:
-      - icon: shield-check
-        title: Onboarding Friction Audits
-        body: >-
-          Optimize and accelerate high-security AML, KYC, and document upload pipelines.
-      - icon: badge-check
-        title: Trust Elements Evaluation
-        body: >-
-          Measure visual security indicators, compliance badges, and customer trust perception levels.
-      - icon: smartphone
-        title: Mobile Performance Scoring
-        body: >-
-          Ensure instant financial application loading and response speeds across mobile networks.
-  - type: beforeAfter
+      - icon: shield
+        title: Trust Benchmarking
+        body: Evaluate security perception, compliance visibility, and trust signals against FinTech sector leaders to maximise onboarding completion.
+      - icon: filter
+        title: KYC Optimisation
+        body: Benchmark identity verification flows against industry standards to reduce abandonment while maintaining regulatory compliance.
+      - icon: layout
+        title: Onboarding Scoring
+        body: Score your account opening experience across usability, performance, and trust dimensions using frameworks adapted for financial services.
+  - type: benchmark
     data:
-      heading: Operational Transformation
-      before:
-        - >-
-          Extreme signup drop-offs during high-security verification steps.
-        - >-
-          Generic interfaces erode user trust and credibility.
-        - >-
-          Standard analytics cannot measure visual trust signal impact.
-      after:
-        - >-
-          Security styling and compliance signals audited automatically.
-        - >-
-          Onboarding paths project maximum credibility and safety.
-        - >-
-          Perception scores guide interface trust improvements.
-  - type: decisionMap
-    data:
-      heading: Strategic Decision Map
+      heading: How Jurnii Outpaces the Market
+      lede: A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.
+      cols:
+        - Jurnii Intelligence
+        - Legacy Analytics
+        - Manual Agencies
       rows:
-        - decision: >-
-            Where are signups dropping off?
-          signal: >-
-            KYC/AML friction point analysis + trust perception scores
-          output: >-
-            Trust-optimized onboarding redesign
-        - decision: >-
-            Do interfaces project credibility?
-          signal: >-
-            Security badge and compliance signal audit
-          output: >-
-            Visual trust improvement brief
+        - feat: Audit Frequency
+          jurnii: Continuous Real-Time
+          legacy: Ad-Hoc / Event Triggered
+          manual: Monthly / Retrospective
+        - feat: Attribution Logic
+          jurnii: Cortex Causal Models
+          legacy: First-Click / Last-Click Errors
+          manual: Subjective / Gut Feel
+        - feat: Data Structure
+          jurnii: Normalized Promo Richness
+          legacy: Raw Text Snippets
+          manual: Scattered Spreadsheets
+        - feat: UX Recommendations
+          jurnii: 70+ Ranked Heuristics
+          legacy: Simple Funnel Dropout Counts
+          manual: High-Level Consultant Slideware
+        - feat: Jurisdictional Coverage
+          jurnii: 35 Simultaneous Markets
+          legacy: Single Market / Restricted
+          manual: Local Only
+  - type: cortex
+    data:
+      eyebrow: "Cortex Attribution & Yield Impact"
+      heading: Causal ROI Optimization
+      paras:
+        - All data harvested by Jurnii UX and Jurnii 360 is normalized and streamed directly into Cortex, our causal modeling and marketing mix attribution engine. Cortex eliminates last-click errors to attribute campaign success with statistical accuracy.
+        - By cataloging competitor promotions, pricing richness, and interface friction, Jurnii enables your data scientists to export MMM-ready datasets. Model the defensive strength of programmatic and search channels in real-time.
+      result: "+46% ROAS Lift"
+      resultNote: "Jurnii 360 tracks 100% of competitor promotion moves automatically, saving 30+ hours per week across CRM and commercial teams."
+  - type: testimonial
+    data:
+      quote: Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.
+      avatar: GM
+      name: General Manager, Europe iGaming Conglomerate
+      role: Integrated Portfolio Operations
+  - type: ecosystem
+    data:
+      heading: Intelligence Integrations
+      lede: Jurnii operates as a single unified system, feeding data seamlessly across your tech stack.
+      columns:
+        - label: Related Products
+          items:
+            - href: /products/jurnii-ux
+              title: Jurnii UX
+              desc: Automated usability and visual scoring.
+            - href: /products/jurnii-mmm
+              title: Cortex
+              desc: Causal attribution and planning mix.
+        - label: Core Features
+          items:
+            - href: /features/brand-usability
+              title: Usability
+              desc: Standardized heuristic usability auditing.
+            - href: /features/competitor-promotions
+              title: Promotions
+              desc: Automate promotional campaign tracking.
+        - label: Outcomes
+          items:
+            - href: /solutions/user-experience-benchmarking
+              title: UX Benchmarking
+              desc: Heuristics-based experience index scores.
+            - href: /solutions/competition-offers
+              title: Competitor Intel
+              desc: Continuous surveillance of competitor campaigns.
   - type: cta
     data:
-      heading: See how Jurnii works for your role.
-      sub: Book a live walkthrough with our commercial intelligence team.
+      heading: Ready to see the difference?
+      sub: Book a personalised walkthrough with our team.
       primary:
-        label: Book a Demo
+        label: Book a demo
         href: /contact-us
 ---
-
-# FinTech Applications
-
-Onboarding journey audits, KYC friction scoring, and app UX optimization.
-
-## Overview
-
-When betting portals share identical platform configurations, user experience and promotional mechanics are the only durable barriers to player defection.
-
-### Key Operational Capabilities
-
-- **Automated Intelligence**: Continuous surveillance and real-time structured updates.
-- **Objective Benchmarking**: Replace subjective opinion with verified commercial facts.
-- **Decision-Grade Insights**: Surface actionable recommendations directly for commercial and product roadmaps.
-
-## Key Metrics
-
-- **300+** — Brands Analysed globally
-- **70+** — Recommendations per Audit
-- **4** — Key UX Dimensions Scanned
-- **Mins** — Continuous Audit Execution
-
-## Operating Context
-
-FinTech platforms deploy Jurnii to secure high-security customer registration, audit KYC and AML processing delays, and design conversion-optimized banking interfaces. By optimizing trust elements and mobile load speeds, Jurnii prevents registration funnel leakage and stabilizes acquisition costs.
-
-## The Pressure Under Audit
-
-FinTech applications face extreme signup drop-offs during high-security AML, KYC, and document verification steps. Users lose trust when secure interfaces look generic, outdated, or confusing. Standard analytics tools cannot measure how layout security signals and compliance branding affect user confidence, leading to high abandonment rates and lost acquisition spends.
-
-> **Direct Operational Pressures**: Secure customer trust during AML checks, minimize document upload dropout rates, and satisfy strict compliance requirements.
-
-> **Information Barrier**: Currently delayed or missing data: Standardized visual safety scores mapping secure layout elements to signup conversion parities.
-
-## How Jurnii Restores Alignment
-
-Jurnii audits security styling, compliance signals, and input validation messages across FinTech registration funnels. By comparing onboarding flows with industry best practices and 300+ analysed brands, Jurnii UX delivers commercially weighted improvements to ensure onboarding paths project maximum credibility, compliance, and safety.
-
-> **EBITDA Yield Implication**: Opinion-driven roadmaps and copycat promotions pricing dilutes Net Gaming wagers hold rates by up to 35% globally.
-
-## Operational Transformation
-
-### Before Jurnii
-
-- ❌ FinTech secure forms look generic, causing users to lose trust.
-- ❌ onboarding KYC checkpoints leak acquired users due to input friction.
-- ❌ mobile verification steps lag under low-bandwidth networks.
-
-### After Jurnii
-
-- ✅ Jurnii UX indices score layout trust signals under objective metrics.
-- ✅ Heuristics scorecards pinpoint input validation barriers instantly.
-- ✅ onboarding transitions remain optimized for secure mobile devices.
-
-## Strategic Decision Map
-
-| Critical Decision | Information Signal Needed | Jurnii Output |
-|---|---|---|
-| Is secure KYC flow causing dropouts? | KYC document gate friction vs competitor verification speeds | Compliance-optimized signup interface wireframe |
-| Do styling safety signals affect trust? | Compliance badge visibilities + secure SSL alignments | Trust-optimized visual onboarding framework |

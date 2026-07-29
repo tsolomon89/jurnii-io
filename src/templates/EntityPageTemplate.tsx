@@ -22,6 +22,8 @@ import { FeatureBenchmark } from '../components/page-sections/FeatureBenchmark';
 import { EcosystemGrid } from '../components/page-sections/EcosystemGrid';
 import { BeforeAfter } from '../components/page-sections/BeforeAfter';
 import { DecisionMap } from '../components/page-sections/DecisionMap';
+import { CortexDashboard } from '../components/page-sections/CortexDashboard';
+import { TestimonialQuote } from '../components/page-sections/TestimonialQuote';
 
 interface EntityPageTemplateProps {
   data: EntityPageModel;
@@ -125,9 +127,30 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
             return <FeatureMetrics key={index} metrics={section.data} />;
           case 'manifesto':
             return <FeatureManifesto key={index} text={section.data} />;
-          case 'challenge':
-            return <FeatureChallenge key={index} {...section.data} />;
+          case 'challenge': {
+            // Legacy template composed challenge + solution in one uc-challenge-grid.
+            // Look ahead for adjacent 'solution' section to compose them together.
+            const nextSection = data.sections?.[index + 1];
+            const hasSolution = nextSection?.type === 'solution';
+            return (
+              <section key={index} className="uc-challenge section reveal">
+                <div className="container">
+                  <div className="uc-challenge-grid">
+                    <div>
+                      <p className="eyebrow"><span className="dot" />{section.data.eyebrow}</p>
+                      <h2>{section.data.title}</h2>
+                      <p>{section.data.para}</p>
+                      {section.data.sharedPara && <p>{section.data.sharedPara}</p>}
+                    </div>
+                    {hasSolution && <FeatureSolution {...nextSection.data} />}
+                  </div>
+                </div>
+              </section>
+            );
+          }
           case 'solution':
+            // Skip if already rendered by preceding challenge block
+            if (index > 0 && data.sections?.[index - 1]?.type === 'challenge') return null;
             return <FeatureSolution key={index} {...section.data} />;
           case 'capabilities':
             return <FeatureCapabilities key={index} capabilities={section.data} />;
@@ -137,12 +160,16 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
             return <Methodology key={index} {...section.data} />;
           case 'testimonials':
             return <Testimonials key={index} {...section.data} />;
+          case 'testimonial':
+            return <TestimonialQuote key={index} {...section.data} />;
           case 'personas':
             return <PersonaList key={index} personas={section.data.list} heading={section.data.heading} sub={section.data.sub} />;
           case 'cta':
             return <CTABand key={index} {...section.data} />;
           case 'benchmark':
             return <FeatureBenchmark key={index} {...(section.data || {})} />;
+          case 'cortex':
+            return <CortexDashboard key={index} {...section.data} />;
           case 'ecosystem':
             return <EcosystemGrid key={index} {...section.data} />;
           case 'beforeAfter':

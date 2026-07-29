@@ -33,144 +33,116 @@ useCaseValueRefs: []
 sections:
   - type: metrics
     data:
-      - num: '1,000+'
+      - num: 1,000+
         label: Offers Tracked Weekly
-      - num: '35'
+      - num: 35
         label: Regulated Markets Monitored
-      - num: '21'
+      - num: 21
         label: Feature Areas Scanned
       - num: 30+
         label: Hours Saved per Week
   - type: manifesto
-    data: >-
-      Never let a competitor promotion go unnoticed. Jurnii monitors active
-      sign-up offers across key regulated jurisdictions, helping operators
-      calibrate margins, protect Net Gaming Revenue (NGR), and acquire players
-      dynamically in high-volatility environments.
+    data: Never let a competitor promotion go unnoticed. Jurnii monitors active sign-up offers across key regulated jurisdictions, helping operators calibrate margins, protect Net Gaming Revenue (NGR), and acquire players dynamically in high-volatility environments.
   - type: challenge
     data:
       eyebrow: The iGaming Challenge
       title: Operating Blind in a Saturated Market
-      para: >-
-        In highly commoditised gaming jurisdictions where B2B platform stacks
-        converge, operators waste millions copying rival promo terms blind.
-        Manual compilation of wagering requirements and bonus values takes
-        weeks, leaving CRM and trading teams two steps behind the market and
-        causing severe margin dilution.
+      para: In highly commoditised gaming jurisdictions where B2B platform stacks converge, operators waste millions copying rival promo terms blind. Manual compilation of wagering requirements and bonus values takes weeks, leaving CRM and trading teams two steps behind the market and causing severe margin dilution.
+      sharedPara: When betting portals share the same suppliers and identical platform configurations, customer experience is the only durable barrier to player defection. Failing to benchmark your flow speed and copywriting clarity against competitor movements leaves your team fighting fires reactively, eroding margins over time.
   - type: solution
     data:
-      para: >-
-        Using Jurnii 360's continuous tracking engine, Jurnii maps competitive
-        bonus terms, welcome incentives, and CRM triggers across 35 regulated
-        markets simultaneously. Our platform normalizes and scores offer
-        generosity through the proprietary Promo Richness Index to deliver
-        instant strategic clarity.
-      foot: >-
-        Chief Commercial Officers utilize this feature to safeguard operator
-        margins and maintain active market parity.
+      para: "Using Jurnii 360's continuous tracking engine, Jurnii maps competitive bonus terms, welcome incentives, and CRM triggers across 35 regulated markets simultaneously. Our platform normalizes and scores offer generosity through the proprietary Promo Richness Index to deliver instant strategic clarity."
+      foot: Chief Commercial Officers utilize this feature to safeguard operator margins and maintain active market parity.
+      implication: "Friction in onboarding and mismatched promotion structures dilutes Net Gaming Revenue (<b>NGR</b>) and increases Customer Acquisition Cost (<b>CAC</b>) by up to <b>35%</b>."
   - type: capabilities
     data:
       - icon: tag
         title: Wagering Hurdles Tracking
-        body: >-
-          Compare deposit wagering requirements, play-through multipliers, and
-          spin constraints side-by-side to understand true player acquisition
-          effort and protect operator hold rates.
+        body: Compare deposit wagering requirements, play-through multipliers, and spin constraints side-by-side to understand true player acquisition effort and protect operator hold rates.
       - icon: globe
         title: Geo-Targeted Audits
-        body: >-
-          Isolate regional campaign variations deployed by rival conglomerates
-          in specific states, provinces, or countries to exploit promotional
-          voids and optimize local customer acquisition cost.
+        body: Isolate regional campaign variations deployed by rival conglomerates in specific states, provinces, or countries to exploit promotional voids and optimize local customer acquisition cost.
       - icon: activity
         title: Active Signup Scanning
-        body: >-
-          Detect and log newly introduced welcome offers within minutes of
-          launching to empower trading, CRM, and customer marketing response
-          teams instantly.
+        body: Detect and log newly introduced welcome offers within minutes of launching to empower trading, CRM, and customer marketing response teams instantly.
   - type: benchmark
-  - type: renderFlag
-    data: hasFeatureQuote
+    data:
+      heading: How Jurnii Outpaces the Market
+      lede: A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.
+      cols:
+        - Jurnii Intelligence
+        - Legacy Analytics
+        - Manual Agencies
+      rows:
+        - feat: Audit Frequency
+          jurnii: Continuous Real-Time
+          legacy: Ad-Hoc / Event Triggered
+          manual: Monthly / Retrospective
+        - feat: Attribution Logic
+          jurnii: Cortex Causal Models
+          legacy: First-Click / Last-Click Errors
+          manual: Subjective / Gut Feel
+        - feat: Data Structure
+          jurnii: Normalized Promo Richness
+          legacy: Raw Text Snippets
+          manual: Scattered Spreadsheets
+        - feat: UX Recommendations
+          jurnii: 70+ Ranked Heuristics
+          legacy: Simple Funnel Dropout Counts
+          manual: High-Level Consultant Slideware
+        - feat: Jurisdictional Coverage
+          jurnii: 35 Simultaneous Markets
+          legacy: Single Market / Restricted
+          manual: Local Only
+  - type: cortex
+    data:
+      eyebrow: "Cortex Attribution & NGR Impact"
+      heading: Causal ROI Optimization
+      paras:
+        - All data harvested by Jurnii UX and Jurnii 360 is normalized and streamed directly into Cortex, our causal modeling and marketing mix attribution engine. Cortex eliminates last-click errors to attribute campaign success with statistical accuracy.
+        - By cataloging competitor promotions, pricing richness, and interface friction, Jurnii enables your data scientists to export MMM-ready datasets. Model the defensive strength of programmatic and search channels in real-time.
+      result: "+46% ROAS Lift"
+      resultNote: Continuous automated scanning prevents competitive blind spots across 35 monitored markets.
+  - type: testimonial
+    data:
+      quote: Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.
+      avatar: GM
+      name: General Manager, Europe iGaming Conglomerate
+      role: Integrated Portfolio Operations
+  - type: ecosystem
+    data:
+      heading: Intelligence Integrations
+      lede: Jurnii operates as a single unified system, feeding data seamlessly across your tech stack.
+      columns:
+        - label: Related Products
+          items:
+            - href: /products/jurnii-ux
+              title: Jurnii UX
+              desc: Automated usability and visual scoring.
+            - href: /products/jurnii-360
+              title: Jurnii 360
+              desc: Continuous competitor commercial radar.
+        - label: Related Solutions
+          items:
+            - href: /solutions/competition-offers
+              title: Competitor Offers
+              desc: Standardised competitor promotion tracking.
+            - href: /solutions/user-experience-benchmarking
+              title: UX Benchmarking
+              desc: Heuristics-based experience index scores.
+        - label: Built For
+          items:
+            - href: /use-cases/cmo
+              title: CMO
+              desc: Growth strategy and campaign ROI.
+            - href: /use-cases/cco
+              title: CCO
+              desc: Margin defense and LTV protection.
+  - type: cta
+    data:
+      heading: Ready to see the difference?
+      sub: Book a personalised walkthrough with our team.
+      primary:
+        label: Book a demo
+        href: /contact-us
 ---
-## Executive Summary
-
-Never let a competitor promotion go unnoticed. Jurnii monitors active sign-up offers across key regulated jurisdictions, helping operators calibrate margins, protect Net Gaming Revenue (NGR), and acquire players dynamically in high-volatility environments.
-
-## The Cost of Operating Blind
-
-In highly commoditised gaming jurisdictions where B2B platform stacks converge, operators waste millions copying rival promo terms blind. Manual compilation of wagering requirements and bonus values takes weeks, leaving CRM and trading teams two steps behind the market and causing severe margin dilution.
-
-When operator stacks converge on identical platforms and third-party software structures, customer acquisition efficiency and margin retention are the only durable barriers protecting Net Gaming Revenue (NGR). Running campaigns without automated competitor alerts or continuous user-flow speed benchmarking causes permanent player defection to regional rivals.
-
-> **Commercial Impact**: Commercial Impact
-
-## Operational Execution Flow
-
-### Step 01: Capture
-Scrape real-time campaign details, welcome incentives, and free spin levels across active competitors.
-
-### Step 02: Normalize
-Convert disparate text paragraphs into structured, machine-readable database records automatically.
-
-### Step 03: Score
-Run terms through the Promo Richness Index to calculate true player acquisition value mathematically.
-
-### Step 04: Alert
-Push critical pricing and generosity surges straight to Slack webhooks and trading desks for instant calibrations.
-
-## Platform Metrics
-
-- **1,000+** — Offers Scanned Weekly
-- **35** — Regulated States & Jurisdictions
-- **21** — Competitor Feature Vectors
-- **30+** — Hours Saved Weekly vs Manual
-
-## Feature Capabilities
-
-Automated, continuous intelligence tools to outpace competitive regional movements.
-
-### Wagering Hurdles Tracking
-
-Compare deposit wagering requirements, play-through multipliers, and spin constraints side-by-side to understand true player acquisition effort and protect operator hold rates.
-
-### Geo-Targeted Audits
-
-Isolate regional campaign variations deployed by rival conglomerates in specific states, provinces, or countries to exploit promotional voids and optimize local customer acquisition cost.
-
-### Active Signup Scanning
-
-Detect and log newly introduced welcome offers within minutes of launching to empower trading, CRM, and customer marketing response teams instantly.
-
-## Commercial Outcomes
-
-### +15.4% — Hold Rate Calibrations
-
-Calibrate deposit multiples against rival welcome flows to stabilize hold performance.
-
-### 20+ — Weekly Campaign Spikes Blocked
-
-Detect aggressive holiday promotional campaigns the moment they launch to protect GGR.
-
-### $1.2M — Margin Leakage Saved
-
-Prevent blind copies of competitor pricing structures, keeping CRM re-investment yield high.
-
-## How Jurnii Outpaces the Market
-
-| Capability | Jurnii Intelligence | Legacy Analytics | Manual Agencies |
-|---|---|---|---|
-| Audit Frequency | Continuous Real-Time | Ad-Hoc / Event Triggered | Monthly / Retrospective |
-| Attribution Logic | Cortex Causal Models | First-Click / Last-Click Errors | Subjective / Gut Feel |
-| Data Structure | Normalized Promo Richness | Raw Text Snippets | Scattered Spreadsheets |
-| UX Recommendations | 70+ Ranked Heuristics | Simple Funnel Dropout Counts | High-Level Consultant Slideware |
-| Jurisdictional Coverage | 35 Simultaneous Markets | Single Market / Restricted | Local Only |
-
-## Who Uses This Feature
-
-### Chief Commercial Officer
-
-Margin defense and yield planning. By cataloging terms and comparing user journeys, leadership maintains market parity and optimizes campaign holds.
-
-### Chief Marketing Officer
-
-Growth strategy and campaign ROAS optimization. Analyze rival copywriting propositions and value claims to deploy differentiatedPaid Media counter-campaigns.

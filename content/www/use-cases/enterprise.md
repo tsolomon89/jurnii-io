@@ -9,131 +9,116 @@ featureRefs: [competitor-analysis, market-trends]
 sections:
   - type: metrics
     data:
-      - num: '+46%'
-        label: True Marketing ROI Lift
-      - num: '$4.85M'
-        label: Budget Reallocated
-      - num: '3x'
-        label: Attribution Speed
-      - num: '40x'
-        label: ROI on Platform Investment
+      - num: 1,000+
+        label: Offers Tracked Weekly
+      - num: 35
+        label: Regulated Markets Monitored
+      - num: 21
+        label: Feature Areas Scanned
+      - num: 30+
+        label: Hours Saved per Week
   - type: manifesto
-    data: >-
-      For top-tier multi-brand operators, Jurnii serves as the central intelligence layer. We harmonize UX scoring and competitor campaign scraping across complex, highly-regulated international markets.
+    data: Enterprise operators manage multi-brand portfolios across dozens of regulated markets. Jurnii provides the unified intelligence infrastructure that global operations demand — consistent methodology, complete coverage, and causal attribution at scale.
   - type: challenge
     data:
-      eyebrow: The Commercial Challenge
+      eyebrow: The iGaming Challenge
       title: Operating Blind in a Saturated Market
-      para: >-
-        Multi-brand, multi-jurisdiction conglomerates operate in data siloes where boards are flooded with subjective design feedback and manual reporting.
+      para: Enterprise groups receive fragmented intelligence from multiple agencies, internal teams, and market reports. No single system provides consistent competitive analysis across the entire portfolio.
+      sharedPara: When betting portals share the same suppliers, customer experience is the only durable barrier to player defection. Failing to benchmark your flow speed and copywriting clarity against competitor movements leaves your team fighting fires reactively.
   - type: solution
     data:
-      para: >-
-        Jurnii streams structured, continuous competitor data directly into enterprise data warehouses. Cortex causal engines process multi-million dollar budgets to isolate campaign incrementality and true ROAS.
-      foot: >-
-        Enterprise Chief Executive Officers and Boards leverage Jurnii Meta Scores to manage brand portfolios and defend global EBITDA.
+      para: Jurnii unifies competitive intelligence, UX benchmarking, and causal attribution into a single platform spanning all brands, markets, and competitive dimensions with consistent methodology.
+      foot: Enterprise groups use Jurnii as the single source of competitive truth across their global portfolio operations.
+      implication: "Friction in onboarding and mismatched promotion structures dilutes Net Gaming Revenue (<b>NGR</b>) and increases Customer Acquisition Cost (<b>CAC</b>) by up to <b>35%</b>."
   - type: capabilities
     data:
-      - icon: layout-grid
-        title: Multi-Brand Benchmarking
-        body: >-
-          Evaluate, rank, and grade your entire portfolio of brands side-by-side under a unified metric system.
-      - icon: shield-check
-        title: Regulatory Compliance
-        body: >-
-          Maintain automated audit trails of competitor promotional terms and creative copy changes.
+      - icon: network
+        title: Portfolio Intelligence
+        body: Monitor competitive activity across all brands and markets in your portfolio from a single platform with consistent scoring methodology.
       - icon: database
-        title: Enterprise Data Pipes
-        body: >-
-          Feed structured, continuous competitor promo and UX data directly into local MMM and analytics warehouses.
-  - type: beforeAfter
+        title: Data Integration
+        body: Feed Jurnii competitive intelligence directly into internal BI platforms, data warehouses, and MMM frameworks via structured API exports.
+      - icon: shield
+        title: Strategic Planning
+        body: "Inform M&A due diligence, market entry decisions, and portfolio strategy with comprehensive competitive intelligence spanning all monitored markets."
+  - type: benchmark
     data:
-      heading: Operational Transformation
-      before:
-        - >-
-          Boards are presented with contradictory, subjective departmental slides.
-        - >-
-          Multi-brand conglomerates suffer from severe local jurisdiction blind spots.
-        - >-
-          CFOs allocate media budgets using models that ignore active competitor welcome sweeps.
-      after:
-        - >-
-          API data pipelines stream normalized promotions directly into corporate datastores.
-        - >-
-          CEOs track and grade experience scorecards globally on a single console.
-        - >-
-          Cortex causal models validate incrementality on million-dollar media spends.
-  - type: decisionMap
-    data:
-      heading: Strategic Decision Map
+      heading: How Jurnii Outpaces the Market
+      lede: A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.
+      cols:
+        - Jurnii Intelligence
+        - Legacy Analytics
+        - Manual Agencies
       rows:
-        - decision: >-
-            How is global media mix performing?
-          signal: >-
-            Cortex API causal models + multi-channel spends
-          output: >-
-            Boardroom-ready budget incrementality forecasts
-        - decision: >-
-            Are regional brands underperforming?
-          signal: >-
-            Experience scoring index comparisons across all domains
-          output: >-
-            Standardized technical experience directives
+        - feat: Audit Frequency
+          jurnii: Continuous Real-Time
+          legacy: Ad-Hoc / Event Triggered
+          manual: Monthly / Retrospective
+        - feat: Attribution Logic
+          jurnii: Cortex Causal Models
+          legacy: First-Click / Last-Click Errors
+          manual: Subjective / Gut Feel
+        - feat: Data Structure
+          jurnii: Normalized Promo Richness
+          legacy: Raw Text Snippets
+          manual: Scattered Spreadsheets
+        - feat: UX Recommendations
+          jurnii: 70+ Ranked Heuristics
+          legacy: Simple Funnel Dropout Counts
+          manual: High-Level Consultant Slideware
+        - feat: Jurisdictional Coverage
+          jurnii: 35 Simultaneous Markets
+          legacy: Single Market / Restricted
+          manual: Local Only
+  - type: cortex
+    data:
+      eyebrow: "Cortex Attribution & Yield Impact"
+      heading: Causal ROI Optimization
+      paras:
+        - All data harvested by Jurnii UX and Jurnii 360 is normalized and streamed directly into Cortex, our causal modeling and marketing mix attribution engine. Cortex eliminates last-click errors to attribute campaign success with statistical accuracy.
+        - By cataloging competitor promotions, pricing richness, and interface friction, Jurnii enables your data scientists to export MMM-ready datasets. Model the defensive strength of programmatic and search channels in real-time.
+      result: "+46% ROAS Lift"
+      resultNote: "Jurnii 360 tracks 100% of competitor promotion moves automatically, saving 30+ hours per week across CRM and commercial teams."
+  - type: testimonial
+    data:
+      quote: Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.
+      avatar: GM
+      name: General Manager, Europe iGaming Conglomerate
+      role: Integrated Portfolio Operations
+  - type: ecosystem
+    data:
+      heading: Intelligence Integrations
+      lede: Jurnii operates as a single unified system, feeding data seamlessly across your tech stack.
+      columns:
+        - label: Related Products
+          items:
+            - href: /products/jurnii-ux
+              title: Jurnii UX
+              desc: Automated usability and visual scoring.
+            - href: /products/jurnii-mmm
+              title: Cortex
+              desc: Causal attribution and planning mix.
+        - label: Core Features
+          items:
+            - href: /features/brand-usability
+              title: Usability
+              desc: Standardized heuristic usability auditing.
+            - href: /features/competitor-promotions
+              title: Promotions
+              desc: Automate promotional campaign tracking.
+        - label: Outcomes
+          items:
+            - href: /solutions/user-experience-benchmarking
+              title: UX Benchmarking
+              desc: Heuristics-based experience index scores.
+            - href: /solutions/competition-offers
+              title: Competitor Intel
+              desc: Continuous surveillance of competitor campaigns.
   - type: cta
     data:
-      heading: See how Jurnii works for your role.
-      sub: Book a live walkthrough with our commercial intelligence team.
+      heading: Ready to see the difference?
+      sub: Book a personalised walkthrough with our team.
       primary:
-        label: Book a Demo
+        label: Book a demo
         href: /contact-us
 ---
-
-## Overview
-
-Enterprise operators managing multiple brands across regulated jurisdictions rely on Jurnii for consolidated market intelligence and automated benchmarking.
-
-## Key Metrics
-
-- **+46%** — True Marketing ROI Lift
-- **$4.85M** — Inefficient Spend Reallocated
-- **3x** — Attribution Analysis Speed
-- **40x** — ROI on Platform Investment
-
-## Operating Context
-
-For top-tier multi-brand operators, Jurnii serves as the central intelligence layer. We harmonize UX scoring and competitor campaign scraping across complex, highly-regulated international markets, streaming normalized, structured API data directly into enterprise data warehouses to enable automated multi-brand scoring and causal budget optimization.
-
-## The Pressure Under Audit
-
-Multi-brand, multi-jurisdiction conglomerates operate in data siloes where boards are flooded with subjective design feedback and manual reporting. Squeezed by player multi-homing rates of 70–80% across 35 regulated markets, teams struggle to track 1,000+ weekly competitor offers, leading to last-click attribution leaks and massive CRM margin dilution.
-
-> **Direct Operational Pressures**: Eliminate reporting data siloes across global multi-brand conglomerates, streamline regulatory audit compliance trails, and justify capital budget allocations.
-
-> **Information Barrier**: Currently delayed or missing data: Automated, global competitor campaign historical databases and normalized, API-delivered multi-brand usability grades.
-
-## How Jurnii Restores Alignment
-
-Jurnii streams structured, continuous competitor data directly into enterprise data warehouses. Cortex causal engines process multi-million dollar budgets to isolate campaign incrementality and true ROAS. Simultaneously, Jurnii UX automates usability audits across all portfolio brands, delivering 70+ commercially weighted recommendations ranked by conversion yield impact.
-
-> **EBITDA Yield Implication**: Opinion-driven roadmaps and copycat promotions pricing dilutes Net Gaming wagers hold rates by up to 35% globally.
-
-## Operational Transformation
-
-### Before Jurnii
-
-- ❌ Boards are presented with contradictory, subjective departmental slides.
-- ❌ multi-brand conglomerates suffer from severe local jurisdiction blind spots.
-- ❌ CFOs allocate media budgets using models that ignore active competitor welcome sweeps.
-
-### After Jurnii
-
-- ✅ API data pipelines stream normalized promotions directly into corporate datastores.
-- ✅ CEOs track and grade experience scorecards globally on a single console.
-- ✅ Cortex causal models validate incrementality on million-dollar media spends.
-
-## Strategic Decision Map
-
-| Critical Decision | Information Signal Needed | Jurnii Output |
-|---|---|---|
-| How is global media mix performing? | Cortex API integration causal models + multi-channel spends | Boardroom-ready budget incrementality forecasts |
-| Are regional brands underperforming? | Experience scoring index comparisons across all domains | Standardized technical experience directives |

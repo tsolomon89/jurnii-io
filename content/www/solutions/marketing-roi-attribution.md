@@ -16,112 +16,116 @@ useCaseValueRefs: []
 sections:
   - type: metrics
     data:
-      - num: '+46%'
+      - num: "+46%"
         label: True Marketing ROI Lift
-      - num: '$4.85M'
+      - num: $4.85M
         label: Budget Reallocated
-      - num: '3x'
+      - num: 3×
         label: Attribution Speed
-      - num: '40x'
+      - num: 40×
         label: ROI on Platform Investment
   - type: manifesto
-    data: >-
-      Isolate true campaign impact. Determine how competitor deposit boosts and copywriting pivots influence your regional acquisition yield and CPA rates.
+    data: Attribute marketing spend to true incremental yield with causal accuracy. Cortex eliminates last-click errors to reveal which channels genuinely drive player acquisition, retention, and lifetime value growth.
   - type: challenge
     data:
       eyebrow: The iGaming Challenge
       title: Operating Blind in a Saturated Market
-      para: >-
-        Marketing attribution is broken, relying on last-click attribution that ignores competitor promotions and regional UX quality, causing massive budget waste.
+      para: Last-click attribution over-credits branded search and retargeting while under-valuing upper-funnel channels. This systematic bias causes operators to over-invest in low-incremental channels and starve genuine growth drivers.
+      sharedPara: When betting portals share the same suppliers and identical platform configurations, customer experience is the only durable barrier to player defection. Failing to benchmark your flow speed and copywriting clarity against competitor movements leaves your team fighting fires reactively, eroding margins over time.
   - type: solution
     data:
-      para: >-
-        Cortex correlates competitor promotional richness and internal UX scores with campaign yield to reveal true marketing contribution.
-      foot: >-
-        Chief Marketing Officers use Cortex to justify marketing mix updates and defend acquisition budgets.
+      para: Cortex builds causal models that isolate the true incremental contribution of each marketing channel. By combining Jurnii 360 competitive data with internal performance metrics, we eliminate attribution bias systematically.
+      foot: Chief Marketing Officers use Cortex attribution to defend marketing budgets with statistically validated ROI evidence.
+      implication: "Friction in onboarding and mismatched promotion structures dilutes Net Gaming Revenue (<b>NGR</b>) and increases Customer Acquisition Cost (<b>CAC</b>) by up to <b>35%</b>."
   - type: capabilities
     data:
+      - icon: git-merge
+        title: Causal Attribution Engine
+        body: Replace last-click and first-click heuristics with econometric causal models that isolate true incremental channel contribution.
       - icon: pie-chart
-        title: CPA Correlation Engine
-        body: >-
-          Correlate customer acquisition cost fluctuations against competitor campaign shifts and bonus variables.
-      - icon: gift
-        title: Promo Richness Modeling
-        body: >-
-          Measure player acquisition yields against rival bonus and wagering conditions using proprietary Cortex models.
-      - icon: shield
-        title: Yield Protection Planning
-        body: >-
-          Refine campaign budgets when competitor promo richness spikes to protect overall marketing ROAS.
+        title: Channel Contribution Maps
+        body: Visualise the marginal contribution of each channel — paid search, affiliates, display, social — to player acquisition and retention.
+      - icon: refresh-cw
+        title: Real-Time Recalibration
+        body: Continuously update attribution weights as market conditions change, ensuring budget allocation reflects current channel effectiveness.
+  - type: benchmark
+    data:
+      heading: How Jurnii Outpaces the Market
+      lede: A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.
+      cols:
+        - Jurnii Intelligence
+        - Legacy Analytics
+        - Manual Agencies
+      rows:
+        - feat: Audit Frequency
+          jurnii: Continuous Real-Time
+          legacy: Ad-Hoc / Event Triggered
+          manual: Monthly / Retrospective
+        - feat: Attribution Logic
+          jurnii: Cortex Causal Models
+          legacy: First-Click / Last-Click Errors
+          manual: Subjective / Gut Feel
+        - feat: Data Structure
+          jurnii: Normalized Promo Richness
+          legacy: Raw Text Snippets
+          manual: Scattered Spreadsheets
+        - feat: UX Recommendations
+          jurnii: 70+ Ranked Heuristics
+          legacy: Simple Funnel Dropout Counts
+          manual: High-Level Consultant Slideware
+        - feat: Jurisdictional Coverage
+          jurnii: 35 Simultaneous Markets
+          legacy: Single Market / Restricted
+          manual: Local Only
+  - type: cortex
+    data:
+      eyebrow: "Cortex Attribution & NGR Impact"
+      heading: Causal ROI Optimization
+      paras:
+        - All data harvested by Jurnii UX and Jurnii 360 is normalized and streamed directly into Cortex, our causal modeling and marketing mix attribution engine. Cortex eliminates last-click errors to attribute campaign success with statistical accuracy.
+        - By cataloging competitor promotions, pricing richness, and interface friction, Jurnii enables your data scientists to export MMM-ready datasets. Model the defensive strength of programmatic and search channels in real-time.
+      result: "+46% ROAS Lift"
+      resultNote: Continuous automated scanning prevents competitive blind spots across 35 monitored markets.
+  - type: testimonial
+    data:
+      quote: Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.
+      avatar: GM
+      name: General Manager, Europe iGaming Conglomerate
+      role: Integrated Portfolio Operations
+  - type: ecosystem
+    data:
+      heading: Intelligence Integrations
+      lede: Jurnii operates as a single unified system, feeding data seamlessly across your tech stack.
+      columns:
+        - label: Related Products
+          items:
+            - href: /products/jurnii-ux
+              title: Jurnii UX
+              desc: Automated usability and visual scoring.
+            - href: /products/jurnii-mmm
+              title: Cortex
+              desc: Causal attribution and planning mix.
+        - label: Core Features
+          items:
+            - href: /features/brand-usability
+              title: Usability
+              desc: Standardized heuristic usability auditing.
+            - href: /features/competitor-promotions
+              title: Promotions
+              desc: Automate promotional campaign tracking.
+        - label: Built For
+          items:
+            - href: /use-cases/cmo
+              title: CMO
+              desc: Growth strategy and campaign ROI.
+            - href: /use-cases/cco
+              title: CCO
+              desc: Margin defense and LTV protection.
   - type: cta
     data:
-      heading: See this in action.
-      sub: Book a live walkthrough with our commercial intelligence team.
+      heading: Ready to see the difference?
+      sub: Book a personalised walkthrough with our team.
       primary:
-        label: Book a Demo
+        label: Book a demo
         href: /contact-us
 ---
-
-## Executive Summary
-
-Isolate true campaign impact. Determine how competitor deposit boosts and copywriting pivots influence your regional acquisition yield and CPA rates.
-
-## The Cost of Operating Blind
-
-Marketing attribution is broken, relying on last-click attribution that ignores competitor promotions and regional UX quality, causing massive budget waste.
-
-When operator stacks rely on retrospective metrics and siloed data, they remain highly vulnerable to sudden competitive campaigns sweeps and hidden onboarding friction hurdles. Copying rival strategies blindly dilutes margins and erosion acquisition efficiency.
-
-## How Jurnii Resolves This
-
-Cortex correlates competitor promotional richness and internal UX scores with campaign yield to reveal true marketing contribution.
-
-> **Commercial Impact**: Unresolved conversions leaks and copycat bonus generosity pricing dilutes Net Gaming Revenue yields by up to 35%.
-
-## The Cost of Inaction
-
-### Flawed Last-Click Modeling
-
-CFO and CMO make multi-million dollar programmatic display budget decisions using models that ignore competitor promotions shifts.
-
-### Marketing & Finance Friction
-
-Inability to prove actual promotional incrementality drives internal budget arguments and strategic delays.
-
-### Inefficient Spend Attribution
-
-Programmatic bids copy rival generosity boosts blind, causing severe operator hold erosion during peaks.
-
-## Operational Execution Flow
-
-### Step 01: Ingest
-
-Consolidate clean competitor promotions data, welcome indices, and organic campaign databases.
-
-### Step 02: Model
-
-Separate organic contributions from competitor campaigns generosity volatility casual factors.
-
-### Step 03: Simulate
-
-Model Net Gaming Revenue yields, LTV, and conversion hold metrics under multiple budget scenarios.
-
-### Step 04: Report
-
-Generate board-ready marketing mix reallocation maps to defend campaigns ROAS.
-
-## What The Buyer Gets
-
-Our platform supplies decision desks with board-ready competitive profiles, quantitative usability scorecards, and causal spend allocation simulations.
-
-Verify marketing cost efficiencies dynamically, reconcile player acquisition costs against regional welcome shifts, and synchronize product priorities.
-
-## Who Owns This Solution
-
-### Chief Marketing Officer
-
-Justify programmatic media investments to the board using defensible, causal contribution models.
-
-### Chief Financial Officer
-
-Verify acquisition cost efficiency and protect EBITDA margin allocations before seasonal sporting campaigns.

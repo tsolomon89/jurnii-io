@@ -14,112 +14,116 @@ useCaseValueRefs: []
 sections:
   - type: metrics
     data:
-      - num: '300+'
+      - num: 300+
         label: Brands Analysed
-      - num: '70+'
+      - num: 70+
         label: Recommendations per Audit
-      - num: '4'
+      - num: 4
         label: Key UX Dimensions
-      - num: 'Mins'
+      - num: Mins
         label: Time to Full Audit
   - type: manifesto
-    data: >-
-      Calibrate player friction objectively. Replace sluggish, manual usability audits with automated heuristic evaluation of your key transactional pathways.
+    data: Quantify player experience with mathematical objectivity. Score the entire onboarding journey — from registration to first deposit — against competitor benchmarks to eliminate friction-driven abandonment.
   - type: challenge
     data:
       eyebrow: The iGaming Challenge
       title: Operating Blind in a Saturated Market
-      para: >-
-        Manual UX audits are slow, retrospective, and fail to scale across multi-brand and multi-market operator portfolios.
+      para: "70-80% of iGaming players hold accounts with multiple operators. A single extra form field or confusing KYC step pushes high-value players permanently to smoother competitor experiences."
+      sharedPara: When betting portals share the same suppliers and identical platform configurations, customer experience is the only durable barrier to player defection. Failing to benchmark your flow speed and copywriting clarity against competitor movements leaves your team fighting fires reactively, eroding margins over time.
   - type: solution
     data:
-      para: >-
-        Jurnii UX runs automated usability scans across key player journeys, grading each against 12 core onboarding heuristics.
-      foot: >-
-        Chief Product Officers leverage UX benchmarking to prioritize development sprints and vindicate roadmaps.
+      para: Jurnii evaluates complete player journeys across four UX dimensions — usability, performance, trust perception, and onboarding efficiency — to deliver ranked, revenue-weighted recommendations.
+      foot: Heads of UX deploy experience benchmarks to justify interface changes and accelerate development sprints.
+      implication: "Friction in onboarding and mismatched promotion structures dilutes Net Gaming Revenue (<b>NGR</b>) and increases Customer Acquisition Cost (<b>CAC</b>) by up to <b>35%</b>."
   - type: capabilities
     data:
-      - icon: smile
-        title: Heuristic Benchmarks
-        body: >-
-          Benchmark player flows against 12 core onboarding design principles to replace opinion with facts.
-      - icon: zap
-        title: Cognitive Fatigue Audits
-        body: >-
-          Isolate interaction points and redundant inputs causing player dropoffs during signup.
-      - icon: route
-        title: Onboarding Flow Scores
-        body: >-
-          Grade transaction flow paths against leading global sportsbooks to guide sprint updates.
+      - icon: activity
+        title: Journey Friction Mapping
+        body: Map click counts, form fields, and interaction steps across registration, KYC, and deposit flows to quantify friction relative to industry benchmarks.
+      - icon: check-circle
+        title: Heuristic Evaluation
+        body: Apply 12 core usability heuristics to evaluate experience quality against established design frameworks and competitor implementations.
+      - icon: trending-up
+        title: Experience Index Scores
+        body: Generate composite experience scores that combine usability, performance, and trust metrics into a single, board-ready quality indicator.
+  - type: benchmark
+    data:
+      heading: How Jurnii Outpaces the Market
+      lede: A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.
+      cols:
+        - Jurnii Intelligence
+        - Legacy Analytics
+        - Manual Agencies
+      rows:
+        - feat: Audit Frequency
+          jurnii: Continuous Real-Time
+          legacy: Ad-Hoc / Event Triggered
+          manual: Monthly / Retrospective
+        - feat: Attribution Logic
+          jurnii: Cortex Causal Models
+          legacy: First-Click / Last-Click Errors
+          manual: Subjective / Gut Feel
+        - feat: Data Structure
+          jurnii: Normalized Promo Richness
+          legacy: Raw Text Snippets
+          manual: Scattered Spreadsheets
+        - feat: UX Recommendations
+          jurnii: 70+ Ranked Heuristics
+          legacy: Simple Funnel Dropout Counts
+          manual: High-Level Consultant Slideware
+        - feat: Jurisdictional Coverage
+          jurnii: 35 Simultaneous Markets
+          legacy: Single Market / Restricted
+          manual: Local Only
+  - type: cortex
+    data:
+      eyebrow: "Cortex Attribution & NGR Impact"
+      heading: Causal ROI Optimization
+      paras:
+        - All data harvested by Jurnii UX and Jurnii 360 is normalized and streamed directly into Cortex, our causal modeling and marketing mix attribution engine. Cortex eliminates last-click errors to attribute campaign success with statistical accuracy.
+        - By cataloging competitor promotions, pricing richness, and interface friction, Jurnii enables your data scientists to export MMM-ready datasets. Model the defensive strength of programmatic and search channels in real-time.
+      result: "+46% ROAS Lift"
+      resultNote: Continuous automated scanning prevents competitive blind spots across 35 monitored markets.
+  - type: testimonial
+    data:
+      quote: Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.
+      avatar: GM
+      name: General Manager, Europe iGaming Conglomerate
+      role: Integrated Portfolio Operations
+  - type: ecosystem
+    data:
+      heading: Intelligence Integrations
+      lede: Jurnii operates as a single unified system, feeding data seamlessly across your tech stack.
+      columns:
+        - label: Related Products
+          items:
+            - href: /products/jurnii-ux
+              title: Jurnii UX
+              desc: Automated usability and visual scoring.
+            - href: /products/jurnii-mmm
+              title: Cortex
+              desc: Causal attribution and planning mix.
+        - label: Core Features
+          items:
+            - href: /features/brand-usability
+              title: Usability
+              desc: Standardized heuristic usability auditing.
+            - href: /features/competitor-promotions
+              title: Promotions
+              desc: Automate promotional campaign tracking.
+        - label: Built For
+          items:
+            - href: /use-cases/cmo
+              title: CMO
+              desc: Growth strategy and campaign ROI.
+            - href: /use-cases/cco
+              title: CCO
+              desc: Margin defense and LTV protection.
   - type: cta
     data:
-      heading: See this in action.
-      sub: Book a live walkthrough with our commercial intelligence team.
+      heading: Ready to see the difference?
+      sub: Book a personalised walkthrough with our team.
       primary:
-        label: Book a Demo
+        label: Book a demo
         href: /contact-us
 ---
-
-## Executive Summary
-
-Calibrate player friction objectively. Replace sluggish, manual usability audits with automated heuristic evaluation of your key transactional pathways.
-
-## The Cost of Operating Blind
-
-Manual UX audits are slow, retrospective, and fail to scale across multi-brand and multi-market operator portfolios.
-
-When operator stacks rely on retrospective metrics and siloed data, they remain highly vulnerable to sudden competitive campaigns sweeps and hidden onboarding friction hurdles. Copying rival strategies blindly dilutes margins and erosion acquisition efficiency.
-
-## How Jurnii Resolves This
-
-Jurnii UX runs automated usability scans across key player journeys, grading each against 12 core onboarding heuristics.
-
-> **Commercial Impact**: Unresolved conversions leaks and copycat bonus generosity pricing dilutes Net Gaming Revenue yields by up to 35%.
-
-## The Cost of Inaction
-
-### Paid Programmatic Leakage
-
-Acquired traffic is driven straight into registration blocks, KYC obstacles, and document load failures, triggering 45%+ dropout rates.
-
-### Subjective Roadmapping
-
-Creative and product teams debate styling choices and interface changes without commercial proof, wasting engineer capacity.
-
-### Mobile Connection Lag
-
-Unoptimized CSS payloads and heavy assets slow betslip loads under restricted mobile grids, causing player defection.
-
-## Operational Execution Flow
-
-### Step 01: Audit
-
-Run automated usability and core vitals diagnostics across player registration and deposit funnels.
-
-### Step 02: Diagnose
-
-Pinpoint exact stylesheet bugs, cognitive barriers, and security trust drop-offs causing funnel leaks.
-
-### Step 03: Prioritize
-
-Rank UX findings mathematically based on player conversion severity and revenue impact variables.
-
-### Step 04: Fix
-
-Provide engineering desks with clear visual checklists and layout templates for rapid corrections.
-
-## What The Buyer Gets
-
-Our platform supplies decision desks with board-ready competitive profiles, quantitative usability scorecards, and causal spend allocation simulations.
-
-Verify marketing cost efficiencies dynamically, reconcile player acquisition costs against regional welcome shifts, and synchronize product priorities.
-
-## Who Owns This Solution
-
-### Chief Product Officer
-
-Prioritize developer updates based on objective yield recovery, accelerating onboarding sprint success cycles.
-
-### Chief Operating Officer
-
-Defend checkout performance and transactions speed under volatile mobile peak wagering loads.

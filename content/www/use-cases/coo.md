@@ -7,139 +7,116 @@ productRefs: [jurnii-360, jurnii-ux, jurnii-mmm]
 sections:
   - type: metrics
     data:
-      - num: '300+'
+      - num: 300+
         label: Brands Analysed
-      - num: '70+'
+      - num: 70+
         label: Recommendations per Audit
-      - num: '4'
+      - num: 4
         label: Key UX Dimensions
-      - num: 'Mins'
+      - num: Mins
         label: Time to Full Audit
   - type: manifesto
-    data: >-
-      Operations leaders deploy Jurnii to align product, engineering, and marketing pipelines around objective usability indicators, eliminating manual competitive auditing and accelerating sprint impact.
+    data: COOs are accountable for operational velocity — registration throughput, KYC completion rates, and payment processing efficiency. Jurnii benchmarks your operational funnels against competitors to eliminate friction-driven revenue leakage.
   - type: challenge
     data:
-      eyebrow: The Commercial Challenge
+      eyebrow: The iGaming Challenge
       title: Operating Blind in a Saturated Market
-      para: >-
-        Cross-functional hand-offs between product, marketing, and trading teams are slowed by opinion-driven disagreements and manual auditing workflows that waste 30+ hours per week.
+      para: Operations teams optimise internal processes without competitive context. Your registration takes 6 steps while the industry benchmark is 3 — but without external data, this gap remains invisible.
+      sharedPara: When betting portals share the same suppliers, customer experience is the only durable barrier to player defection. Failing to benchmark your flow speed and copywriting clarity against competitor movements leaves your team fighting fires reactively.
   - type: solution
     data:
-      para: >-
-        Jurnii UX runs automated heuristic audits across four key UX dimensions, producing 70+ commercially weighted recommendations per audit to replace subjective opinion with verified digital facts.
-      foot: >-
-        Chief Operating Officers deploy Jurnii automated surveillance to align technical pipelines and eliminate conversion latency.
+      para: Jurnii benchmarks your operational funnels against industry leaders, quantifying friction at every stage and providing ranked recommendations to accelerate player onboarding and reduce operational costs.
+      foot: COOs use Jurnii operational benchmarks to set measurable efficiency targets and justify infrastructure investments.
+      implication: "Friction in onboarding and mismatched promotion structures dilutes Net Gaming Revenue (<b>NGR</b>) and increases Customer Acquisition Cost (<b>CAC</b>) by up to <b>35%</b>."
   - type: capabilities
     data:
-      - icon: workflow
-        title: Process Automation
-        body: >-
-          Replace slow manual spreadsheet competitor audits with automated active data feeds and continuous heuristic scoring.
       - icon: filter
-        title: Friction Identification
-        body: >-
-          Isolate and repair conversion leaks across high-value registration, document verification (KYC), and payment deposit pipelines.
-      - icon: target
-        title: Sprint Alignment
-        body: >-
-          Map developmental sprint roadmaps directly to verified industry usability standards, ranking updates by revenue impact.
-  - type: beforeAfter
+        title: Funnel Benchmarking
+        body: Compare registration, KYC, and deposit funnel efficiency against industry leaders to identify operational friction and prioritise infrastructure improvements.
+      - icon: zap
+        title: Speed Metrics
+        body: Benchmark page load times, form submission latency, and payment processing speed against competitors to eliminate performance bottlenecks.
+      - icon: check-circle
+        title: Compliance Efficiency
+        body: Evaluate KYC and AML process efficiency against regulatory requirements and competitor implementations to balance compliance with conversion.
+  - type: benchmark
     data:
-      heading: Operational Transformation
-      before:
-        - >-
-          Manual auditing workflows waste 30+ hours per week across teams.
-        - >-
-          Product, marketing, and trading teams disagree on UX priorities subjectively.
-        - >-
-          Platform migrations expose player funnels to massive drop-offs.
-      after:
-        - >-
-          Automated heuristic scoring replaces manual spreadsheet audits.
-        - >-
-          All teams align around the same objective UX indicators.
-        - >-
-          Conversion leaks are detected and ranked by revenue impact.
-  - type: decisionMap
-    data:
-      heading: Strategic Decision Map
+      heading: How Jurnii Outpaces the Market
+      lede: A side-by-side comparison of automated intelligence versus traditional retrospective manual setups.
+      cols:
+        - Jurnii Intelligence
+        - Legacy Analytics
+        - Manual Agencies
       rows:
-        - decision: >-
-            Which sprint items have highest yield?
-          signal: >-
-            Heuristic severity ranking + conversion funnel data
-          output: >-
-            Revenue-ranked sprint backlog
-        - decision: >-
-            Where is player friction highest?
-          signal: >-
-            UX score comparisons across registration/KYC/deposit
-          output: >-
-            Targeted friction remediation brief
+        - feat: Audit Frequency
+          jurnii: Continuous Real-Time
+          legacy: Ad-Hoc / Event Triggered
+          manual: Monthly / Retrospective
+        - feat: Attribution Logic
+          jurnii: Cortex Causal Models
+          legacy: First-Click / Last-Click Errors
+          manual: Subjective / Gut Feel
+        - feat: Data Structure
+          jurnii: Normalized Promo Richness
+          legacy: Raw Text Snippets
+          manual: Scattered Spreadsheets
+        - feat: UX Recommendations
+          jurnii: 70+ Ranked Heuristics
+          legacy: Simple Funnel Dropout Counts
+          manual: High-Level Consultant Slideware
+        - feat: Jurisdictional Coverage
+          jurnii: 35 Simultaneous Markets
+          legacy: Single Market / Restricted
+          manual: Local Only
+  - type: cortex
+    data:
+      eyebrow: "Cortex Attribution & Yield Impact"
+      heading: Causal ROI Optimization
+      paras:
+        - All data harvested by Jurnii UX and Jurnii 360 is normalized and streamed directly into Cortex, our causal modeling and marketing mix attribution engine. Cortex eliminates last-click errors to attribute campaign success with statistical accuracy.
+        - By cataloging competitor promotions, pricing richness, and interface friction, Jurnii enables your data scientists to export MMM-ready datasets. Model the defensive strength of programmatic and search channels in real-time.
+      result: "+46% ROAS Lift"
+      resultNote: "Jurnii 360 tracks 100% of competitor promotion moves automatically, saving 30+ hours per week across CRM and commercial teams."
+  - type: testimonial
+    data:
+      quote: Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.
+      avatar: GM
+      name: General Manager, Europe iGaming Conglomerate
+      role: Integrated Portfolio Operations
+  - type: ecosystem
+    data:
+      heading: Intelligence Integrations
+      lede: Jurnii operates as a single unified system, feeding data seamlessly across your tech stack.
+      columns:
+        - label: Related Products
+          items:
+            - href: /products/jurnii-ux
+              title: Jurnii UX
+              desc: Automated usability and visual scoring.
+            - href: /products/jurnii-mmm
+              title: Cortex
+              desc: Causal attribution and planning mix.
+        - label: Core Features
+          items:
+            - href: /features/brand-usability
+              title: Usability
+              desc: Standardized heuristic usability auditing.
+            - href: /features/competitor-promotions
+              title: Promotions
+              desc: Automate promotional campaign tracking.
+        - label: Outcomes
+          items:
+            - href: /solutions/user-experience-benchmarking
+              title: UX Benchmarking
+              desc: Heuristics-based experience index scores.
+            - href: /solutions/competition-offers
+              title: Competitor Intel
+              desc: Continuous surveillance of competitor campaigns.
   - type: cta
     data:
-      heading: See how Jurnii works for your role.
-      sub: Book a live walkthrough with our commercial intelligence team.
+      heading: Ready to see the difference?
+      sub: Book a personalised walkthrough with our team.
       primary:
-        label: Book a Demo
+        label: Book a demo
         href: /contact-us
 ---
-
-# Chief Operating Officer (COO)
-
-Operational velocity, cross-department alignment, and market expansion insights.
-
-## Overview
-
-When betting portals share identical platform configurations, user experience and promotional mechanics are the only durable barriers to player defection.
-
-### Key Operational Capabilities
-
-- **Automated Intelligence**: Continuous surveillance and real-time structured updates.
-- **Objective Benchmarking**: Replace subjective opinion with verified commercial facts.
-- **Decision-Grade Insights**: Surface actionable recommendations directly for commercial and product roadmaps.
-
-## Key Metrics
-
-- **300+** — Brands Analysed globally
-- **70+** — Recommendations per Audit
-- **4** — Key UX Dimensions Scanned
-- **Mins** — Continuous Audit Execution
-
-## Operating Context
-
-Operations leaders deploy Jurnii to align product, engineering, and marketing pipelines around objective usability indicators, eliminating manual competitive auditing and accelerating sprint impact. By establishing a single-source-of-truth usability database across scaling teams, COOs can bypass B2B vendor platform constraints and drive evidence-based development cycles that protect operator margins.
-
-## The Pressure Under Audit
-
-Cross-functional hand-offs between product, marketing, and trading teams are slowed by opinion-driven disagreements and manual auditing workflows that waste 30+ hours per week. Operational friction is compounded when operators enter new regulated markets or undergo platform migrations. Subtle user interface drop-offs during KYC verification and transaction deposit steps cause silent player abandonment that bleeds GGR, yet teams lack the structured metrics to prioritize the engineering roadmap.
-
-> **Direct Operational Pressures**: Coordinate multiple departments, accelerate product roadmap sprint times, and eliminate manual competitor tracking overhead.
-
-> **Information Barrier**: Currently delayed or missing data: Objective, mathematically structured usability metrics to replace subjective styling arguments across product pipelines.
-
-## How Jurnii Restores Alignment
-
-Jurnii UX runs automated, server-side heuristic audits across four key UX dimensions, producing 70+ commercially weighted recommendations per audit. Jurnii normalizes competitor registration processes and deposit requirements, delivering ranked usability heuristics that isolate actual funnel bottlenecks. This allows operations to replace subjective opinion with verified digital facts and guide development cycles by conversion yield impact.
-
-## Operational Transformation
-
-### Before Jurnii
-
-- ❌ Analysts waste 30+ hours weekly compiling manual competitor layouts.
-- ❌ Engineering sprints are dictated by subjective internal opinions.
-- ❌ Subtle KYC validation errors trigger immediate player defection.
-
-### After Jurnii
-
-- ✅ Server-side scrapers normalize competitor checkout interfaces.
-- ✅ Roadmaps are ranked systematically by GGR conversion severity.
-- ✅ Registration friction is resolved through verified UI best practices.
-
-## Strategic Decision Map
-
-| Critical Decision | Information Signal Needed | Jurnii Output |
-|---|---|---|
-| How should product sprints be ordered? | UX friction severity + conversion yield impact | Ranked developer roadmap priorities checklist |
-| Where is onboarding leaking player traffic? | KYC verification drop-offs vs competitor speed | Targeted single-page registration workflow design |
