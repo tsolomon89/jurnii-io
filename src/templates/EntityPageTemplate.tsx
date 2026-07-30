@@ -29,6 +29,24 @@ interface EntityPageTemplateProps {
   data: EntityPageModel;
 }
 
+/** Human-readable section labels for breadcrumbs and CTAs. */
+const SECTION_LABELS: Record<string, string> = {
+  products: 'Products',
+  features: 'Features',
+  solutions: 'Solutions',
+  'use-cases': 'Use Cases',
+};
+
+/** Strip vendor prefix from icon strings (e.g. "lucide:Zap" → "zap"). */
+function resolveIcon(raw?: string): string {
+  if (!raw) return 'zap';
+  const stripped = raw.includes(':') ? raw.split(':').pop()! : raw;
+  // Lucide expects lowercase-kebab, e.g. "arrow-right" not "ArrowRight"
+  return stripped
+    .replace(/([a-z])([A-Z])/g, '$1-$2')
+    .toLowerCase();
+}
+
 export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) => {
   useEffect(() => {
     if (typeof window !== 'undefined' && (window as any).lucide) {
@@ -36,91 +54,139 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
     }
   }, [data]);
 
+  // Sections-driven pages use the legacy uc-* rendering path.
+  // Pages WITHOUT sections (some products) use static heroFeatures/pullQuote/deepWork.
+  const hasSections = !!(data.sections && data.sections.length > 0);
+  const sectionLabel = SECTION_LABELS[data.section] || data.section;
+  const iconName = resolveIcon(data.icon);
+
   return (
     <article className="entity-page">
-      {/* 1. Jurnii Page Hero */}
-      <section className="page-hero">
-        <div className="container">
-          <p className="eyebrow">
-            <span className="dot" />
-            {data.category || data.section}
-          </p>
-          <h1 className="h1-page">{data.title}</h1>
-          <p className="page-hero-lede">{data.description}</p>
-          <div className="hero-cta-row">
-            <a href="/contact-us" className="btn primary lg">
-              Book a demo <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" />
-            </a>
-            <a href="#overview" className="btn ghost lg">
-              Explore specifications
-            </a>
-          </div>
-        </div>
-      </section>
 
-      {/* 2. Key Operational Capabilities */}
-      {data.heroFeatures && data.heroFeatures.length > 0 && (
-        <section className="section">
+      {/* ─── HERO ─── */}
+      {hasSections ? (
+        /* Legacy uc-hero: breadcrumbs, icon, kicker, title, lede, CTA */
+        <section className="uc-hero reveal">
           <div className="container">
-            <div className="section-head">
-              <p className="eyebrow"><span className="dot" />Capabilities</p>
-              <h2 className="h2-section">Key Operational Capabilities</h2>
-            </div>
-            <div className="feature-grid">
-              {data.heroFeatures.map((feat, idx) => (
-                <div key={idx} className="feature-cell">
-                  <div className="feature-icon">
-                    <i data-lucide={feat.icon || 'zap'} style={{ width: 18, height: 18 }} />
-                  </div>
-                  <h3>{feat.title}</h3>
-                  <p>{feat.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* 3. Pull Quote */}
-      {data.pullQuote && (
-        <section className="section section-tight">
-          <div className="container">
-            <figure className="pull-quote">
-              <blockquote>"{data.pullQuote}"</blockquote>
-              {data.pullQuoteAttribution && (
-                <figcaption>
-                  <b>{data.pullQuoteAttribution}</b>
-                </figcaption>
+            <nav className="uc-hero-crumb" aria-label="Breadcrumb">
+              <a href={`/${data.section}`}>{sectionLabel}</a>
+              {data.category && (
+                <>
+                  <span className="sep">/</span>
+                  <span>{data.category}</span>
+                </>
               )}
-            </figure>
-          </div>
-        </section>
-      )}
-
-      {/* 4. Deep Operational Capabilities */}
-      {data.deepWorkFeatures && data.deepWorkFeatures.length > 0 && (
-        <section className="section">
-          <div className="container">
-            <div className="section-head">
-              <p className="eyebrow"><span className="dot" />Deep Work</p>
-              <h2 className="h2-section">Operational Architecture</h2>
+              <span className="sep">/</span>
+              <span>{data.title}</span>
+            </nav>
+            <div className="uc-hero-head">
+              <div className="uc-hero-icon">
+                <i data-lucide={iconName} style={{ width: 26, height: 26 }} />
+              </div>
+              <p className="uc-hero-kicker">{data.category || sectionLabel}</p>
             </div>
-            <ol className="method-list">
-              {data.deepWorkFeatures.map((dw, idx) => (
-                <li key={idx}>
-                  <span className="method-num">{String(idx + 1).padStart(2, '0')}</span>
-                  <div>
-                    <h3>{dw.title}</h3>
-                    <p>{dw.description}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
+            <h1 className="h1-page">{data.title}</h1>
+            <p className="page-hero-lede">{data.description}</p>
+            <div className="hero-cta-row" style={{ marginTop: 8 }}>
+              <a href="/contact-us" className="btn primary lg">
+                Book a demo <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" />
+              </a>
+              <a href={`/${data.section}`} className="btn ghost lg">
+                All {sectionLabel.toLowerCase()}
+              </a>
+            </div>
+          </div>
+        </section>
+      ) : (
+        /* Static page-hero for product pages without sections */
+        <section className="page-hero">
+          <div className="container">
+            <p className="eyebrow">
+              <span className="dot" />
+              {data.category || data.section}
+            </p>
+            <h1 className="h1-page">{data.title}</h1>
+            <p className="page-hero-lede">{data.description}</p>
+            <div className="hero-cta-row">
+              <a href="/contact-us" className="btn primary lg">
+                Book a demo <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" />
+              </a>
+              <a href="#overview" className="btn ghost lg">
+                Explore specifications
+              </a>
+            </div>
           </div>
         </section>
       )}
 
-      {/* Polymorphic Sections */}
+      {/* ─── STATIC BLOCKS (only for pages WITHOUT sections) ─── */}
+      {!hasSections && (
+        <>
+          {/* Key Operational Capabilities */}
+          {data.heroFeatures && data.heroFeatures.length > 0 && (
+            <section className="section">
+              <div className="container">
+                <div className="section-head">
+                  <p className="eyebrow"><span className="dot" />Capabilities</p>
+                  <h2 className="h2-section">Key Operational Capabilities</h2>
+                </div>
+                <div className="feature-grid">
+                  {data.heroFeatures.map((feat, idx) => (
+                    <div key={idx} className="feature-cell">
+                      <div className="feature-icon">
+                        <i data-lucide={feat.icon || 'zap'} style={{ width: 18, height: 18 }} />
+                      </div>
+                      <h3>{feat.title}</h3>
+                      <p>{feat.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Pull Quote */}
+          {data.pullQuote && (
+            <section className="section section-tight">
+              <div className="container">
+                <figure className="pull-quote">
+                  <blockquote>"{data.pullQuote}"</blockquote>
+                  {data.pullQuoteAttribution && (
+                    <figcaption>
+                      <b>{data.pullQuoteAttribution}</b>
+                    </figcaption>
+                  )}
+                </figure>
+              </div>
+            </section>
+          )}
+
+          {/* Deep Operational Capabilities */}
+          {data.deepWorkFeatures && data.deepWorkFeatures.length > 0 && (
+            <section className="section">
+              <div className="container">
+                <div className="section-head">
+                  <p className="eyebrow"><span className="dot" />Deep Work</p>
+                  <h2 className="h2-section">Operational Architecture</h2>
+                </div>
+                <ol className="method-list">
+                  {data.deepWorkFeatures.map((dw, idx) => (
+                    <li key={idx}>
+                      <span className="method-num">{String(idx + 1).padStart(2, '0')}</span>
+                      <div>
+                        <h3>{dw.title}</h3>
+                        <p>{dw.description}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </section>
+          )}
+        </>
+      )}
+
+      {/* ─── POLYMORPHIC SECTIONS ─── */}
       {data.sections && data.sections.map((section, index) => {
         switch (section.type) {
           case 'metrics':
@@ -131,7 +197,7 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
             // Legacy template composed challenge + solution in one uc-challenge-grid.
             // Look ahead for adjacent 'solution' section to compose them together.
             const nextSection = data.sections?.[index + 1];
-            const hasSolution = nextSection?.type === 'solution';
+            const nextIsSolution = nextSection?.type === 'solution';
             return (
               <section key={index} className="uc-challenge section reveal">
                 <div className="container">
@@ -142,7 +208,7 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
                       <p>{section.data.para}</p>
                       {section.data.sharedPara && <p>{section.data.sharedPara}</p>}
                     </div>
-                    {hasSolution && <FeatureSolution {...nextSection.data} />}
+                    {nextIsSolution && <FeatureSolution {...nextSection.data} />}
                   </div>
                 </div>
               </section>
@@ -188,12 +254,12 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
         }
       })}
 
-      {/* 5. Mandatory Markdown Body Prose */}
+      {/* ─── MARKDOWN BODY PROSE ─── */}
       {data.bodyHtml && data.bodyHtml.trim().length > 0 && (
         <section id="overview" className="section">
           <div className="container container-narrow">
             <div className="section-head">
-              <p className="eyebrow"><span className="dot" />Overview & Specifications</p>
+              <p className="eyebrow"><span className="dot" />Overview &amp; Specifications</p>
               <h2 className="h2-section">Detailed Intelligence</h2>
             </div>
             <div className="article-body">
@@ -203,7 +269,7 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
         </section>
       )}
 
-      {/* 6. Related Platform Capabilities */}
+      {/* ─── RELATED PLATFORM CAPABILITIES ─── */}
       {data.relatedItems && data.relatedItems.length > 0 && (
         <section className="section">
           <div className="container">
@@ -223,13 +289,13 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
         </section>
       )}
 
-      {/* 7. Featured Publications */}
+      {/* ─── FEATURED PUBLICATIONS ─── */}
       {data.reverseEditorialItems && data.reverseEditorialItems.length > 0 && (
         <section className="section section-tight">
           <div className="container">
             <div className="section-head">
-              <p className="eyebrow"><span className="dot" />Research & Evidence</p>
-              <h2 className="h2-section">Featured Publications & Research</h2>
+              <p className="eyebrow"><span className="dot" />Research &amp; Evidence</p>
+              <h2 className="h2-section">Featured Publications &amp; Research</h2>
             </div>
             <div className="feature-grid">
               {data.reverseEditorialItems.map((ed, idx) => (

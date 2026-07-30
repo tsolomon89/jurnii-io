@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 // UX Scorecard — shared platform "Rating Card" component (mirrors component library).
 // Exported to window so other babel scripts (home-sections.jsx) can use it.
 
-  const { useState, useEffect, useRef } = React;
 
   /* ---------- helpers ---------- */
   function useInView(ref) {

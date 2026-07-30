@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef } from 'react';
 // Animated donut (draws in), animated competitor progress bars, count-up numbers,
 // working Sports/Casino + Show Banner Offers toggles, and scroll-triggered reveals.
 
-  const { useState, useEffect, useRef } = React;
 
   const REDUCE = typeof window !== 'undefined' && window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
