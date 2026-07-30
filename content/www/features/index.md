@@ -13,22 +13,22 @@ Dive deep into the 16 granular features powering Jurnii's three primary intellig
 
 Automated parsing, positioning, and analysis of competitor structures.
 
-[Promotions](competitor-promotions.html) [Positioning](competitor-positioning.html) [Comparison](competitor-comparison.html) [Analysis](competitor-analysis.html)
+[Promotions](/features/competitor-promotions) [Positioning](/features/competitor-positioning) [Comparison](/features/competitor-comparison) [Analysis](/features/competitor-analysis)
 
 ### Competitor Feed
 
 Real-time notifications, offer monitoring, and AI competitive insights.
 
-[Offer Feed](competitor-offer-feed.html) [Live Feed](competitor-live-feed.html) [Alerts](competitor-alerts.html) [AI Insights](competitor-ai-insights.html)
+[Offer Feed](/features/competitor-offer-feed) [Live Feed](/features/competitor-live-feed) [Alerts](/features/competitor-alerts) [AI Insights](/features/competitor-ai-insights)
 
 ### Brand
 
 Evaluate brand design themes, meta scoring, and promotion richness.
 
-[Meta Scoring](brand-meta-scoring.html) [Market Trends](brand-market-trends.html) [Design Themes](brand-design-themes.html) [Promotion Analysis](brand-promotion-analysis.html)
+[Meta Scoring](/features/brand-meta-scoring) [Market Trends](/features/brand-market-trends) [Design Themes](/features/brand-design-themes) [Promotion Analysis](/features/brand-promotion-analysis)
 
 ### Brand Performance
 
 Assess performance, usability, perception, and optimizations.
 
-[Performance](brand-performance.html) [Usability](brand-usability.html) [Perception](brand-perception.html) [Recommendations](brand-recommendations.html)
+[Performance](/features/brand-performance) [Usability](/features/brand-usability) [Perception](/features/brand-perception) [Recommendations](/features/brand-recommendations)

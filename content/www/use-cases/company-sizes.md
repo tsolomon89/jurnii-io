@@ -37,7 +37,7 @@ Scale player acquisition, secure regional market share, and compete directly wit
 
 Explore Operating View
 
-](company-sizes/smb.html)[
+](/use-cases/smb)[
 
 ### For MidMarket
 
@@ -45,7 +45,7 @@ Secure expansion margins, defend home territory, and expand aggressively across 
 
 Explore Operating View
 
-](company-sizes/midmarket.html)[
+](/use-cases/midmarket)[
 
 ### For Enterprise
 
@@ -53,4 +53,4 @@ Benchmark multi-brand portfolios, streamline global compliance, and dominate maj
 
 Explore Operating View
 
-](company-sizes/enterprise.html)
+](/use-cases/enterprise)

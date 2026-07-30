@@ -37,7 +37,7 @@ Eliminate last-click attribution leaks, isolate campaign incrementality, and ali
 
 Explore Operating View
 
-](roles/cmo.html)[
+](/use-cases/cmo)[
 
 ### For CCO
 
@@ -45,7 +45,7 @@ Protect EBITDA yields, calibrate welcome promo richness, and defend player lifet
 
 Explore Operating View
 
-](roles/cco.html)[
+](/use-cases/cco)[
 
 ### For COO
 
@@ -53,7 +53,7 @@ Accelerate product development cycles, eliminate player onboarding friction, and
 
 Explore Operating View
 
-](roles/coo.html)[
+](/use-cases/coo)[
 
 ### For CPO
 
@@ -61,7 +61,7 @@ Benchmark product UX layouts against competitor portals, rank customer registrat
 
 Explore Operating View
 
-](roles/cpo.html)[
+](/use-cases/cpo)[
 
 ### For CFO
 
@@ -69,7 +69,7 @@ Reconcile promotional campaign spend with causal attribution models, evaluate we
 
 Explore Operating View
 
-](roles/cfo.html)[
+](/use-cases/cfo)[
 
 ### For CEO
 
@@ -77,7 +77,7 @@ Establish complete regional market visibility, standardize portfolio experience 
 
 Explore Operating View
 
-](roles/ceo.html)[
+](/use-cases/ceo)[
 
 ### For Head of Product
 
@@ -85,7 +85,7 @@ Diagnose registration form friction, accelerate document upload steps, and deliv
 
 Explore Operating View
 
-](roles/head-of-product.html)[
+](/use-cases/head-of-product)[
 
 ### For Head of Marketing
 
@@ -93,7 +93,7 @@ Calibrate paid search bids against live competitor welcome matches, optimize acq
 
 Explore Operating View
 
-](roles/head-of-marketing.html)[
+](/use-cases/head-of-marketing)[
 
 ### For Head of CRM
 
@@ -101,4 +101,4 @@ Combat player churn contextually by triggering defensive loyalty bonuses when co
 
 Explore Operating View
 
-](roles/head-of-crm.html)
+](/use-cases/head-of-crm)

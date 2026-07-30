@@ -37,7 +37,7 @@ Increase acquisition yields, eliminate last-click attribution errors, and build 
 
 Explore Operating View
 
-](departments/marketing.html)[
+](/use-cases/marketing)[
 
 ### For Commercial
 
@@ -45,7 +45,7 @@ Calibrate pricing models, optimize promo richness, and defend Net Gaming Revenue
 
 Explore Operating View
 
-](departments/commercial.html)[
+](/use-cases/commercial)[
 
 ### For Product
 
@@ -53,4 +53,4 @@ Drive product sprint success, optimize user conversion funnels, and automate com
 
 Explore Operating View
 
-](departments/product.html)
+](/use-cases/product)

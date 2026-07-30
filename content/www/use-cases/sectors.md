@@ -37,7 +37,7 @@ Automate player conversion, track competitive campaigns, and dominate highly reg
 
 Explore Operating View
 
-](sectors/igaming.html)[
+](/use-cases/igaming)[
 
 ### For eCommerce
 
@@ -45,7 +45,7 @@ Maximize checkout conversions, audit transactional friction, and outpace competi
 
 Explore Operating View
 
-](sectors/ecommerce.html)[
+](/use-cases/ecommerce)[
 
 ### For FinTech
 
@@ -53,4 +53,4 @@ Streamline onboarding verification pipelines, minimize registration drop-offs, a
 
 Explore Operating View
 
-](sectors/fintech.html)
+](/use-cases/fintech)

@@ -333,7 +333,8 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
       })}
 
       {/* ─── MARKDOWN BODY PROSE ─── */}
-      {data.bodyHtml && data.bodyHtml.trim().length > 0 && (
+      {/* Product pages are purely section-driven (no body prose in legacy). */}
+      {!isProduct && data.bodyHtml && data.bodyHtml.trim().length > 0 && (
         <section id="overview" className="section">
           <div className="container container-narrow">
             <div className="section-head">

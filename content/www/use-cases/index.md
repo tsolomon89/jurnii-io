@@ -13,38 +13,38 @@ Jurnii delivers modular digital intelligence tailored around executive roles, op
 
 ### Roles
 
-](roles.html)
+](/use-cases/roles)
 
 Executive decisions and spend alignment.
 
-[CMO](roles/cmo.html) [CCO](roles/cco.html) [COO](roles/coo.html) [CPO](roles/cpo.html) [CFO](roles/cfo.html) [CEO](roles/ceo.html)
+[CMO](/use-cases/cmo) [CCO](/use-cases/cco) [COO](/use-cases/coo) [CPO](/use-cases/cpo) [CFO](/use-cases/cfo) [CEO](/use-cases/ceo)
 
 [
 
 ### Company Size
 
-](company-sizes.html)
+](/use-cases/company-sizes)
 
 Operating maturities from Challenger operators to Conglomerates.
 
-[SMB Operators](company-sizes/smb.html) [MidMarket Scaling](company-sizes/midmarket.html) [Enterprise Multi-Brand](company-sizes/enterprise.html)
+[SMB Operators](/use-cases/smb) [MidMarket Scaling](/use-cases/midmarket) [Enterprise Multi-Brand](/use-cases/enterprise)
 
 [
 
 ### Departments
 
-](departments.html)
+](/use-cases/departments)
 
 Cross-functional pipeline synchronization.
 
-[Marketing Team](departments/marketing.html) [Commercial Desk](departments/commercial.html) [Product Sprint](departments/product.html)
+[Marketing Team](/use-cases/marketing) [Commercial Desk](/use-cases/commercial) [Product Sprint](/use-cases/product)
 
 [
 
 ### Sectors
 
-](sectors.html)
+](/use-cases/sectors)
 
 conversion sensitive market sectors.
 
-[iGaming Operators](sectors/igaming.html) [eCommerce Brands](sectors/ecommerce.html) [FinTech Portals](sectors/fintech.html)
+[iGaming Operators](/use-cases/igaming) [eCommerce Brands](/use-cases/ecommerce) [FinTech Portals](/use-cases/fintech)
