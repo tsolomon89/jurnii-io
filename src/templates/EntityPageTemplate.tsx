@@ -60,11 +60,37 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
   const sectionLabel = SECTION_LABELS[data.section] || data.section;
   const iconName = resolveIcon(data.icon);
 
+  const isProduct = data.section === 'products';
+
   return (
     <article className="entity-page">
 
       {/* ─── HERO ─── */}
-      {hasSections ? (
+      {isProduct ? (
+        /* Product page-hero: eyebrow, title, lede, primary + secondary CTA */
+        <section className={`page-hero ${data.accentClass || ''}`}>
+          <div className="container">
+            {data.kicker && <p className="page-hero-kicker">{data.kicker}</p>}
+            <p className="eyebrow"><span className="dot" />{data.eyebrow || data.category || data.title}</p>
+            <h1 className="h1-page">{data.title}</h1>
+            <p className="page-hero-lede">{data.description}</p>
+            <div className="hero-cta-row">
+              {data.primaryCta ? (
+                <a href={data.primaryCta.href} className="btn primary lg">
+                  {data.primaryCta.label} <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" />
+                </a>
+              ) : (
+                <a href="/contact-us" className="btn primary lg">
+                  Book a demo <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" />
+                </a>
+              )}
+              {data.secondaryCta && (
+                <a href={data.secondaryCta.href} className="btn ghost lg">{data.secondaryCta.label}</a>
+              )}
+            </div>
+          </div>
+        </section>
+      ) : hasSections ? (
         /* Legacy uc-hero: breadcrumbs, icon, kicker, title, lede, CTA */
         <section className="uc-hero reveal">
           <div className="container">
@@ -98,7 +124,7 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
           </div>
         </section>
       ) : (
-        /* Static page-hero for product pages without sections */
+        /* Static page-hero for pages without sections */
         <section className="page-hero">
           <div className="container">
             <p className="eyebrow">
@@ -118,6 +144,8 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
           </div>
         </section>
       )}
+
+
 
       {/* ─── STATIC BLOCKS (only for pages WITHOUT sections) ─── */}
       {!hasSections && (
@@ -220,6 +248,32 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
             return <FeatureSolution key={index} {...section.data} />;
           case 'capabilities':
             return <FeatureCapabilities key={index} capabilities={section.data} />;
+          case 'features': {
+            const featData = section.data || data.features;
+            if (!featData) return null;
+            return (
+              <section key={index} className="section reveal">
+                <div className="container">
+                  <div className="section-head">
+                    <p className="eyebrow"><span className="dot" />Capabilities</p>
+                    <h2 className="h2-section">{featData.heading}</h2>
+                    {featData.sub && <p className="section-lede">{featData.sub}</p>}
+                  </div>
+                  <div className="feature-grid">
+                    {featData.items.map((it: any, i: number) => (
+                      <div key={i} className="feature-cell">
+                        <div className="feature-icon">
+                          <i data-lucide={resolveIcon(it.icon)} style={{ width: 18, height: 18 }} />
+                        </div>
+                        <h3>{it.title}</h3>
+                        <p>{it.body || it.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </section>
+            );
+          }
           case 'outcomes':
             return <OutcomeStrip key={index} {...section.data} />;
           case 'method':
@@ -246,8 +300,32 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
             if (section.data === 'hasPriceBoostTeaser') return <PriceBoostTeaser key={index} />;
             if (section.data === 'hasUXScorecard') return <UXScorecard key={index} />;
             if (section.data === 'hasUXTelemetry') return <UXTelemetry key={index} />;
-            if (section.data === 'hasCanvasComments') return <CanvasComments key={index} />;
-            if (section.data === 'hasPromotionsByVertical') return <PromotionsByVertical key={index} />;
+            if (section.data === 'hasCanvasComments') return (
+              <section key={index} className="section reveal collab-canvas-outer">
+                <div className="container">
+                  <div className="section-head">
+                    <p className="eyebrow"><span className="dot" />Collaboration</p>
+                    <h2 className="h2-section">Your whole team, on the same page.</h2>
+                    <p className="section-lede">Comment on any finding, up-vote or down-vote recommendations, and drop threaded conversations anywhere on the report — so decisions happen in context, not in email chains.</p>
+                  </div>
+                  <div className="collab-canvas-wrap cc-root">
+                    <CanvasComments />
+                  </div>
+                </div>
+              </section>
+            );
+            if (section.data === 'hasPromotionsByVertical') return (
+              <section key={index} className="section reveal">
+                <div className="container">
+                  <div className="section-head">
+                    <p className="eyebrow"><span className="dot" />Live view</p>
+                    <h2 className="h2-section">Every competitor promotion, structured by vertical.</h2>
+                    <p className="section-lede">See how promotional intensity breaks down across sports and casino — with live offer capture and per-competitor activity, refreshed daily. This is the same panel your trading and CRM teams work from.</p>
+                  </div>
+                  <PromotionsByVertical />
+                </div>
+              </section>
+            );
             return null;
           default:
             return null;

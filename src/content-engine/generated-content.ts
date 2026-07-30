@@ -205,6 +205,52 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "tags": [],
       "icon": "radar",
       "order": 1,
+      "eyebrow": "Jurnii 360",
+      "accentClass": "accent-360",
+      "primaryCta": {
+        "label": "Book a 45-min demo",
+        "href": "/contact-us"
+      },
+      "secondaryCta": {
+        "label": "See sample report",
+        "href": "/library?cat=report"
+      },
+      "features": {
+        "heading": "A live intelligence layer for the commercial floor.",
+        "sub": "Built on what mid-managers and Heads-of need every Monday morning — not what looks good in a vendor brochure.",
+        "items": [
+          {
+            "icon": "radar",
+            "title": "Daily promotion capture",
+            "body": "Welcome offers, reload offers, free bets, free spins, cashback — captured daily across the competitor set with full structured metadata."
+          },
+          {
+            "icon": "bell",
+            "title": "Real-time change alerts",
+            "body": "Slack or email alerts the moment a competitor changes a hero offer, lowers a wagering requirement, or launches a campaign."
+          },
+          {
+            "icon": "layers",
+            "title": "Promotion richness index",
+            "body": "A weighted composite score that lets you compare like-for-like across operators — beyond headline values."
+          },
+          {
+            "icon": "users",
+            "title": "Segmentation & targeting analysis",
+            "body": "Identify which player segments competitors are targeting, with what message, and at what cadence."
+          },
+          {
+            "icon": "history",
+            "title": "Historical database",
+            "body": "Multi-year history of every promotion in the market. Search, filter, and replay any competitor's playbook."
+          },
+          {
+            "icon": "plug-zap",
+            "title": "API & BI integration",
+            "body": "REST API, Snowflake / BigQuery / Databricks exports, and ready-made dashboards for Tableau and Looker."
+          }
+        ]
+      },
       "heroFeatures": [
         {
           "title": "Daily promotion capture",
@@ -246,6 +292,13 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "contentKind": "products",
       "sections": [
         {
+          "type": "features"
+        },
+        {
+          "type": "renderFlag",
+          "data": "hasPriceBoostTeaser"
+        },
+        {
           "type": "outcomes",
           "data": {
             "heading": "What changes for your team.",
@@ -273,6 +326,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
               }
             ]
           }
+        },
+        {
+          "type": "renderFlag",
+          "data": "hasPromotionsByVertical"
         },
         {
           "type": "method",
@@ -376,24 +433,17 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "cta",
           "data": {
-            "heading": "Ready to proceed?",
+            "heading": "See your competitor set, live.",
+            "sub": "A 45-minute demo, with sample data from your actual market.",
             "primary": {
-              "label": "Book a 45-min demo",
-              "href": "contact.html"
+              "label": "Book a demo",
+              "href": "/contact-us"
             },
             "secondary": {
-              "label": "See sample report",
-              "href": "resources.html?cat=report"
+              "label": "Read sample report",
+              "href": "/library?cat=report"
             }
           }
-        },
-        {
-          "type": "renderFlag",
-          "data": "hasPromotionsByVertical"
-        },
-        {
-          "type": "renderFlag",
-          "data": "hasPriceBoostTeaser"
         }
       ]
     },
@@ -415,6 +465,53 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "tags": [],
       "icon": "sparkles",
       "order": 3,
+      "eyebrow": "Jurnii Cortex",
+      "kicker": "iGAMING-NATIVE MEDIA MIX MODELLING",
+      "accentClass": "accent-mmm",
+      "primaryCta": {
+        "label": "Book a scoping call",
+        "href": "/contact-us"
+      },
+      "secondaryCta": {
+        "label": "Read the data-readiness guide",
+        "href": "/library?slug=mmm-data-readiness-igaming"
+      },
+      "features": {
+        "heading": "Designed for operators, not adapted from FMCG.",
+        "sub": "Every modelling choice we made started from \"what actually drives an iGaming P&L?\"",
+        "items": [
+          {
+            "icon": "sparkles",
+            "title": "Bonus mechanics as inputs",
+            "body": "Free bet value, wagering requirements, and reload cadence are first-class model inputs — not lumped into \"promotional spend\"."
+          },
+          {
+            "icon": "calendar",
+            "title": "Sporting calendar awareness",
+            "body": "Cheltenham, the Grand National, the World Cup, NFL season — the model knows the calendar and decomposes uplift accordingly."
+          },
+          {
+            "icon": "shield-alert",
+            "title": "Regulatory shock handling",
+            "body": "Stake limits, ad bans, affordability checks — modelled as exogenous shocks, not noise."
+          },
+          {
+            "icon": "swords",
+            "title": "Competitor pressure variable",
+            "body": "Direct integration with Jurnii 360 means competitor promo intensity is in the model, not assumed away."
+          },
+          {
+            "icon": "split",
+            "title": "FTD vs reactivation split",
+            "body": "New player acquisition and lapsed player reactivation are modelled separately — they don't respond to the same channels."
+          },
+          {
+            "icon": "target",
+            "title": "Decision-grade outputs",
+            "body": "Channel-level ROI, saturation curves, and an optimiser that respects real budget and contractual constraints."
+          }
+        ]
+      },
       "heroFeatures": [
         {
           "title": "Bonus mechanics as inputs",
@@ -464,6 +561,9 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "isIndexable": true,
       "contentKind": "products",
       "sections": [
+        {
+          "type": "features"
+        },
         {
           "type": "outcomes",
           "data": {
@@ -554,7 +654,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
                 "color": "orange"
               },
               {
-                "quote": "It’s the only model I’ve seen that treats a free-bet campaign and a TV burst in the same framework. That’s how we actually spend.",
+                "quote": "It’s the first UX report I’ve been able to take into a board meeting without translating it first. The commercial weight is already in the numbers.",
                 "author": "Hannah Vogel",
                 "role": "Chief Marketing Officer · Tier 2 operator",
                 "initials": "HV",
@@ -595,20 +695,17 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "cta",
           "data": {
-            "heading": "Ready to proceed?",
+            "heading": "Find out if your data is ready.",
+            "sub": "A 12-point readiness assessment, before any commitment.",
             "primary": {
               "label": "Book a scoping call",
-              "href": "contact.html"
+              "href": "/contact-us"
             },
             "secondary": {
               "label": "Read the data-readiness guide",
-              "href": "resource.html?slug=mmm-data-readiness-igaming"
+              "href": "/library?slug=mmm-data-readiness-igaming"
             }
           }
-        },
-        {
-          "type": "renderFlag",
-          "data": "hasCanvasComments"
         }
       ]
     },
@@ -630,6 +727,53 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "tags": [],
       "icon": "route",
       "order": 2,
+      "eyebrow": "Jurnii UX",
+      "kicker": "AUTOMATED UX BENCHMARKING",
+      "accentClass": "accent-ux",
+      "primaryCta": {
+        "label": "Book a demo",
+        "href": "/contact-us"
+      },
+      "secondaryCta": {
+        "label": "View a demo report",
+        "href": "/library?cat=thought"
+      },
+      "features": {
+        "heading": "A clear, comparable view of player experience.",
+        "sub": "Built around the journeys that actually move NGR.",
+        "items": [
+          {
+            "icon": "route",
+            "title": "Journey mapping",
+            "body": "Sign-up, deposit, first bet, casino-to-sport crossover, withdrawal — each scored against 60+ structured criteria."
+          },
+          {
+            "icon": "gauge",
+            "title": "Performance analysis",
+            "body": "Understand if your product is more or less performant than your competition. If not, use the technical recommendations to rectify."
+          },
+          {
+            "icon": "monitor-smartphone",
+            "title": "Mobile & Desktop",
+            "body": "iOS, Android, mobile web, desktop web — scored separately, then synthesised into a unified score."
+          },
+          {
+            "icon": "trophy",
+            "title": "Peer benchmarking",
+            "body": "See exactly where you sit vs your competitors on every criterion. No vague \"industry average\" averaging."
+          },
+          {
+            "icon": "list-checks",
+            "title": "Prioritised recommendations",
+            "body": "We provide you with categorised recommendations that allow you to build roadmaps, create optimisation experiments or pick off low-hanging fruits."
+          },
+          {
+            "icon": "refresh-cw",
+            "title": "Recurring assessments",
+            "body": "See how your releases are affecting your score month-on-month, whilst keeping a close eye on your competition, and closing the gap."
+          }
+        ]
+      },
       "heroFeatures": [
         {
           "title": "Journey mapping",
@@ -667,6 +811,17 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "isIndexable": true,
       "contentKind": "products",
       "sections": [
+        {
+          "type": "renderFlag",
+          "data": "hasUXTelemetry"
+        },
+        {
+          "type": "renderFlag",
+          "data": "hasCanvasComments"
+        },
+        {
+          "type": "features"
+        },
         {
           "type": "outcomes",
           "data": {
@@ -794,24 +949,13 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "cta",
           "data": {
-            "heading": "Ready to proceed?",
+            "heading": "See where your experience leaks NGR.",
+            "sub": "A scoping call shows the journey set, peer set, and timeline that fits your team.",
             "primary": {
-              "label": "Book a demo",
-              "href": "contact.html"
-            },
-            "secondary": {
-              "label": "View a demo report",
-              "href": "resources.html?cat=thought"
+              "label": "Book a scoping call",
+              "href": "/contact-us"
             }
           }
-        },
-        {
-          "type": "renderFlag",
-          "data": "hasUXScorecard"
-        },
-        {
-          "type": "renderFlag",
-          "data": "hasUXTelemetry"
         }
       ]
     },

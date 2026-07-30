@@ -6,6 +6,51 @@ description: >-
 category: Marketing Mix Modeling
 icon: sparkles
 order: 3
+eyebrow: Jurnii Cortex
+kicker: iGAMING-NATIVE MEDIA MIX MODELLING
+accentClass: accent-mmm
+primaryCta:
+  label: Book a scoping call
+  href: /contact-us
+secondaryCta:
+  label: Read the data-readiness guide
+  href: /library?slug=mmm-data-readiness-igaming
+features:
+  heading: Designed for operators, not adapted from FMCG.
+  sub: >-
+    Every modelling choice we made started from "what actually drives an iGaming
+    P&L?"
+  items:
+    - icon: sparkles
+      title: Bonus mechanics as inputs
+      body: >-
+        Free bet value, wagering requirements, and reload cadence are first-class
+        model inputs — not lumped into "promotional spend".
+    - icon: calendar
+      title: Sporting calendar awareness
+      body: >-
+        Cheltenham, the Grand National, the World Cup, NFL season — the model
+        knows the calendar and decomposes uplift accordingly.
+    - icon: shield-alert
+      title: Regulatory shock handling
+      body: >-
+        Stake limits, ad bans, affordability checks — modelled as exogenous
+        shocks, not noise.
+    - icon: swords
+      title: Competitor pressure variable
+      body: >-
+        Direct integration with Jurnii 360 means competitor promo intensity is
+        in the model, not assumed away.
+    - icon: split
+      title: FTD vs reactivation split
+      body: >-
+        New player acquisition and lapsed player reactivation are modelled
+        separately — they don't respond to the same channels.
+    - icon: target
+      title: Decision-grade outputs
+      body: >-
+        Channel-level ROI, saturation curves, and an optimiser that respects
+        real budget and contractual constraints.
 featureRefs:
   - market-trends
   - brand-analysis
@@ -45,6 +90,7 @@ deepWorkFeatures:
       Channel-level ROI, saturation curves, and budget optimiser respecting real
       constraints.
 sections:
+  - type: features
   - type: outcomes
     data:
       heading: 'Decisions, not dashboards.'
@@ -132,8 +178,9 @@ sections:
           initials: NR
           color: orange
         - quote: >-
-            It’s the only model I’ve seen that treats a free-bet campaign and a
-            TV burst in the same framework. That’s how we actually spend.
+            It’s the first UX report I’ve been able to take into a board meeting
+            without translating it first. The commercial weight is already in
+            the numbers.
           author: Hannah Vogel
           role: Chief Marketing Officer · Tier 2 operator
           initials: HV
@@ -167,15 +214,14 @@ sections:
             are modelled in the same framework.
   - type: cta
     data:
-      heading: Ready to proceed?
+      heading: Find out if your data is ready.
+      sub: A 12-point readiness assessment, before any commitment.
       primary:
         label: Book a scoping call
-        href: contact.html
+        href: /contact-us
       secondary:
         label: Read the data-readiness guide
-        href: resource.html?slug=mmm-data-readiness-igaming
-  - type: renderFlag
-    data: hasCanvasComments
+        href: /library?slug=mmm-data-readiness-igaming
 ---
 
 ## Overview

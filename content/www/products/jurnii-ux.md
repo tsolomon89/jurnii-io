@@ -6,6 +6,49 @@ description: >-
 category: Automated UX Benchmarking
 order: 2
 icon: route
+eyebrow: Jurnii UX
+kicker: AUTOMATED UX BENCHMARKING
+accentClass: accent-ux
+primaryCta:
+  label: Book a demo
+  href: /contact-us
+secondaryCta:
+  label: View a demo report
+  href: /library?cat=thought
+features:
+  heading: A clear, comparable view of player experience.
+  sub: Built around the journeys that actually move NGR.
+  items:
+    - icon: route
+      title: Journey mapping
+      body: >-
+        Sign-up, deposit, first bet, casino-to-sport crossover, withdrawal —
+        each scored against 60+ structured criteria.
+    - icon: gauge
+      title: Performance analysis
+      body: >-
+        Understand if your product is more or less performant than your
+        competition. If not, use the technical recommendations to rectify.
+    - icon: monitor-smartphone
+      title: Mobile & Desktop
+      body: >-
+        iOS, Android, mobile web, desktop web — scored separately, then
+        synthesised into a unified score.
+    - icon: trophy
+      title: Peer benchmarking
+      body: >-
+        See exactly where you sit vs your competitors on every criterion. No
+        vague "industry average" averaging.
+    - icon: list-checks
+      title: Prioritised recommendations
+      body: >-
+        We provide you with categorised recommendations that allow you to build
+        roadmaps, create optimisation experiments or pick off low-hanging fruits.
+    - icon: refresh-cw
+      title: Recurring assessments
+      body: >-
+        See how your releases are affecting your score month-on-month, whilst
+        keeping a close eye on your competition, and closing the gap.
 heroFeatures:
   - title: Journey mapping
     description: >-
@@ -36,6 +79,11 @@ useCaseValueRefs:
   - enterprise
   - igaming
 sections:
+  - type: renderFlag
+    data: hasUXTelemetry
+  - type: renderFlag
+    data: hasCanvasComments
+  - type: features
   - type: outcomes
     data:
       heading: What "evidence-based UX" looks like in practice.
@@ -153,17 +201,11 @@ sections:
             the acquisition spend.
   - type: cta
     data:
-      heading: Ready to proceed?
+      heading: See where your experience leaks NGR.
+      sub: A scoping call shows the journey set, peer set, and timeline that fits your team.
       primary:
-        label: Book a demo
-        href: contact.html
-      secondary:
-        label: View a demo report
-        href: resources.html?cat=thought
-  - type: renderFlag
-    data: hasUXScorecard
-  - type: renderFlag
-    data: hasUXTelemetry
+        label: Book a scoping call
+        href: /contact-us
 ---
 
 # Jurnii UX

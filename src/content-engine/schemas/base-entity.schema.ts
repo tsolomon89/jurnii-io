@@ -8,6 +8,24 @@ export const BaseEntitySchema = z.object({
   order: z.number().default(99),
   excerpt: z.string().optional(),
   tags: z.array(z.string()).default([]),
+  eyebrow: z.string().optional(),
+  kicker: z.string().optional(),
+  accentClass: z.string().optional(),
+  primaryCta: z.object({ label: z.string(), href: z.string() }).optional(),
+  secondaryCta: z.object({ label: z.string(), href: z.string() }).optional(),
+  features: z
+    .object({
+      heading: z.string(),
+      sub: z.string().optional(),
+      items: z.array(
+        z.object({
+          icon: z.string().optional(),
+          title: z.string(),
+          body: z.string(),
+        })
+      ),
+    })
+    .optional(),
   heroFeatures: z
     .array(
       z.object({
@@ -49,6 +67,10 @@ export const BaseEntitySchema = z.object({
       z.object({
         type: z.literal('capabilities'),
         data: z.array(z.object({ icon: z.string(), title: z.string(), body: z.string() }))
+      }),
+      z.object({
+        type: z.literal('features'),
+        data: z.any().optional()
       }),
       z.object({
         type: z.literal('outcomes'),

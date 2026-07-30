@@ -74,6 +74,12 @@ export interface EntityPageModel {
   category?: string;
   icon?: string;
   order?: number;
+  eyebrow?: string;
+  kicker?: string;
+  accentClass?: string;
+  primaryCta?: { label: string; href: string };
+  secondaryCta?: { label: string; href: string };
+  features?: { heading: string; sub?: string; items: { icon?: string; title: string; body: string }[] };
   heroFeatures?: { title: string; description: string }[];
   deepWorkFeatures?: { icon: string; title: string; description: string }[];
   pullQuote?: string;

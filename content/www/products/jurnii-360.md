@@ -6,6 +6,50 @@ description: >-
 category: Commercial Intelligence
 order: 1
 icon: radar
+eyebrow: Jurnii 360
+accentClass: accent-360
+primaryCta:
+  label: Book a 45-min demo
+  href: /contact-us
+secondaryCta:
+  label: See sample report
+  href: /library?cat=report
+features:
+  heading: A live intelligence layer for the commercial floor.
+  sub: >-
+    Built on what mid-managers and Heads-of need every Monday morning — not what
+    looks good in a vendor brochure.
+  items:
+    - icon: radar
+      title: Daily promotion capture
+      body: >-
+        Welcome offers, reload offers, free bets, free spins, cashback —
+        captured daily across the competitor set with full structured metadata.
+    - icon: bell
+      title: Real-time change alerts
+      body: >-
+        Slack or email alerts the moment a competitor changes a hero offer,
+        lowers a wagering requirement, or launches a campaign.
+    - icon: layers
+      title: Promotion richness index
+      body: >-
+        A weighted composite score that lets you compare like-for-like across
+        operators — beyond headline values.
+    - icon: users
+      title: Segmentation & targeting analysis
+      body: >-
+        Identify which player segments competitors are targeting, with what
+        message, and at what cadence.
+    - icon: history
+      title: Historical database
+      body: >-
+        Multi-year history of every promotion in the market. Search, filter, and
+        replay any competitor's playbook.
+    - icon: plug-zap
+      title: API & BI integration
+      body: >-
+        REST API, Snowflake / BigQuery / Databricks exports, and ready-made
+        dashboards for Tableau and Looker.
 heroFeatures:
   - title: Daily promotion capture
     description: >-
@@ -42,6 +86,9 @@ useCaseValueRefs:
   - commercial
   - igaming
 sections:
+  - type: features
+  - type: renderFlag
+    data: hasPriceBoostTeaser
   - type: outcomes
     data:
       heading: What changes for your team.
@@ -69,6 +116,8 @@ sections:
           desc: >-
             From contract signed to first live intelligence dashboard, including
             calibration period.
+  - type: renderFlag
+    data: hasPromotionsByVertical
   - type: method
     data:
       heading: How Jurnii 360 actually works.
@@ -166,17 +215,14 @@ sections:
             cooling — strategy-grade, not anecdotal.
   - type: cta
     data:
-      heading: Ready to proceed?
+      heading: See your competitor set, live.
+      sub: A 45-minute demo, with sample data from your actual market.
       primary:
-        label: Book a 45-min demo
-        href: contact.html
+        label: Book a demo
+        href: /contact-us
       secondary:
-        label: See sample report
-        href: resources.html?cat=report
-  - type: renderFlag
-    data: hasPromotionsByVertical
-  - type: renderFlag
-    data: hasPriceBoostTeaser
+        label: Read sample report
+        href: /library?cat=report
 ---
 
 # Jurnii 360

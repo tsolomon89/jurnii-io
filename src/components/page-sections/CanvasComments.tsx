@@ -28,6 +28,20 @@ const CC_TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "presence": true
 }/*EDITMODE-END*/;
 
+function useTweaks(defaults: any) {
+  const [tweaks, setTweaks] = useState(defaults);
+  const setTweak = (key: string, val: any) => {
+    setTweaks((prev: any) => ({ ...prev, [key]: val }));
+  };
+  return [tweaks, setTweak];
+}
+
+const TweaksPanel: React.FC<any> = ({ children }) => null;
+const TweakSection: React.FC<any> = () => null;
+const TweakColor: React.FC<any> = () => null;
+const TweakRadio: React.FC<any> = () => null;
+const TweakToggle: React.FC<any> = () => null;
+
 /* Jurnii brand mark — green arrow + two sparkles (light-surface fill) */
 const JurniiMark = ({ size = 32 }) => (
   <svg width={size} height={size} viewBox="0 0 88 88" fill="none" aria-hidden="true">
