@@ -90,7 +90,7 @@ const PriceBoostTable = () => {
       </div>
 
       <div className="pbt-fade">
-        <a className="pbt-more" href="contact-us.html">
+        <a className="pbt-more" href="/contact-us">
           <span className="pbt-more-count">840+</span> more promotions tracked today
         </a>
       </div>

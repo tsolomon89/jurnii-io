@@ -4,7 +4,7 @@
 //   <SolutionCategory catKey=".."/>  → parent page for one category
 // ============================================================
 
-const solLeafHref = (slug) => `solutions/${slug}.html`;
+const solLeafHref = (slug) => `/solutions/${slug}`;
 
 // A single solution card used on both index + category pages.
 const SolutionEntryCard = ({ slug }) => {
@@ -73,7 +73,7 @@ const SolutionCategory = ({ catKey }) => {
       <section className="uc-archive-hero">
         <div className="container">
           <nav className="uc-hero-crumb" aria-label="Breadcrumb">
-            <a href="solutions/index.html">Solutions</a>
+            <a href="/solutions">Solutions</a>
             <span className="sep">/</span>
             <span>{c.label}</span>
           </nav>

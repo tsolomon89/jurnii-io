@@ -181,7 +181,7 @@ const ICPDetail = ({ icp }) => {
           <div className="icp-products">
             {icp.products.map((p,i) => <span key={i} className="icp-product-pill">{p}</span>)}
           </div>
-          <a className="btn primary" href="contact-us.html" style={{marginTop:20, justifyContent:'center'}}>Book a demo <i data-lucide="arrow-right" style={{width:14,height:14}} className="arrow"/></a>
+          <a className="btn primary" href="/contact-us" style={{marginTop:20, justifyContent:'center'}}>Book a demo <i data-lucide="arrow-right" style={{width:14,height:14}} className="arrow"/></a>
         </div>
       </div>
 

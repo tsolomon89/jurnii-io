@@ -4,7 +4,7 @@
 //   <FeatureCategory catKey=".."/>   → parent page for one category
 // ============================================================
 
-const featLeafHref = (slug) => `features/${slug}.html`;
+const featLeafHref = (slug) => `/features/${slug}`;
 
 // A single solution card used on both index + category pages.
 const FeatureEntryCard = ({ slug }) => {
@@ -73,7 +73,7 @@ const FeatureCategory = ({ catKey }) => {
       <section className="uc-archive-hero">
         <div className="container">
           <nav className="uc-hero-crumb" aria-label="Breadcrumb">
-            <a href="features/index.html">Features</a>
+            <a href="/features">Features</a>
             <span className="sep">/</span>
             <span>{c.label}</span>
           </nav>

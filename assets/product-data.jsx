@@ -6,8 +6,8 @@ window.PRODUCT_DATA = {
     accent: 'accent-360',
     title: 'See every competitor move, the day it happens.',
     lede: 'Jurnii 360 monitors competitor promotions, segmentation, and proposition changes daily across 20+ operators — so your trading, CRM, and product teams stop running on guesswork.',
-    primary: { label: 'Book a 45-min demo', href: 'contact.html' },
-    secondary: { label: 'See sample report', href: 'resources.html?cat=report' },
+    primary: { label: 'Book a 45-min demo', href: '/contact-us' },
+    secondary: { label: 'See sample report', href: '/library?cat=report' },
 
     features: {
       heading: 'A live intelligence layer for the commercial floor.',
@@ -75,8 +75,8 @@ window.PRODUCT_DATA = {
     accent: 'accent-ux',
     title: 'Replace UX opinion with structured benchmarking.',
     lede: 'Jurnii UX scores every step of every critical journey across your operator and your peer set — so product and design teams ship with evidence, not anecdote.',
-    primary: { label: 'Book a demo', href: 'contact.html' },
-    secondary: { label: 'View a demo report', href: 'resources.html?cat=thought' },
+    primary: { label: 'Book a demo', href: '/contact-us' },
+    secondary: { label: 'View a demo report', href: '/library?cat=thought' },
 
     features: {
       heading: 'A clear, comparable view of player experience.',
@@ -143,8 +143,8 @@ window.PRODUCT_DATA = {
     accent: 'accent-mmm',
     title: 'MMM that actually understands iGaming.',
     lede: 'Cortex is built from the ground up for operators — incorporating bonus mechanics, sporting calendars, regulatory shocks, and competitor pressure as first-class inputs.',
-    primary: { label: 'Book a scoping call', href: 'contact.html' },
-    secondary: { label: 'Read the data-readiness guide', href: 'resource.html?slug=mmm-data-readiness-igaming' },
+    primary: { label: 'Book a scoping call', href: '/contact-us' },
+    secondary: { label: 'Read the data-readiness guide', href: '/library?slug=mmm-data-readiness-igaming' },
 
     features: {
       heading: 'Designed for operators, not adapted from FMCG.',

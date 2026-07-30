@@ -5,8 +5,7 @@
 // ============================================================
 
 const leafHrefFor = (slug) => {
-  const d = window.USE_CASE_DATA[slug];
-  return `use-cases/${d.cat}/${slug}.html`;
+  return `/use-cases/${slug}`;
 };
 
 // A single use-case card used on both index + category pages.
@@ -76,7 +75,7 @@ const UseCaseCategory = ({ catKey }) => {
       <section className="uc-archive-hero">
         <div className="container">
           <nav className="uc-hero-crumb" aria-label="Breadcrumb">
-            <a href="use-cases/index.html">Use Cases</a>
+            <a href="/use-cases">Use Cases</a>
             <span className="sep">/</span>
             <span>{c.label}</span>
           </nav>

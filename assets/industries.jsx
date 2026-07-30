@@ -102,7 +102,7 @@ const IndustryCard = ({ ind }) => {
           <div className="industry-proof-stat">{ind.proof.stat}</div>
           <div className="industry-proof-label">{ind.proof.label}</div>
         </div>
-        <a href="contact-us.html" className="btn ghost">Talk to us about {ind.name.split(' ')[0]} <i data-lucide="arrow-right" style={{width:14,height:14}} className="arrow"/></a>
+        <a href="/contact-us" className="btn ghost">Talk to us about {ind.name.split(' ')[0]} <i data-lucide="arrow-right" style={{width:14,height:14}} className="arrow"/></a>
       </footer>
     </article>
   );

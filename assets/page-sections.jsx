@@ -41,7 +41,7 @@ const FILTER_OPTS = [
 
 
 const ResourceCard = ({ r }) =>
-<a className="resource-card" href={`resource.html?slug=${r.slug}`}>
+<a className="resource-card" href={`/library/${r.slug}`}>
     <span className={`badge cat-${r.cat}`}>{CAT_LABEL[r.cat]}</span>
     <h3>{r.title}</h3>
     <p>{r.summary}</p>
@@ -89,7 +89,7 @@ const ResourcesHub = ({ featuredOnly = false, initialCat = 'all' }) => {
         </div>
         {featuredOnly &&
         <div style={{ marginTop: 32, textAlign: 'center' }}>
-            <a className="btn ghost" href="resources.html">See all resources <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" /></a>
+            <a className="btn ghost" href="/library">See all resources <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" /></a>
           </div>
         }
       </div>
@@ -124,7 +124,7 @@ const PricingSection = ({ heading, sub, withFooter = true }) =>
             </div>
             <p className="plan-note">{p.note}</p>
             <ul className="plan-feat">{p.features.map((f) => <li key={f}>{f}</li>)}</ul>
-            <a href="contact-us.html" className={`btn ${p.ctaVariant} lg`} style={{ justifyContent: 'center' }}>{p.cta}</a>
+            <a href="/contact-us" className={`btn ${p.ctaVariant} lg`} style={{ justifyContent: 'center' }}>{p.cta}</a>
           </div>
       )}
       </div>

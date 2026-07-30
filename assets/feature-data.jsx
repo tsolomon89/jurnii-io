@@ -10,7 +10,7 @@ window.FEATURE_CATS = {
     "key": "competitor",
     "label": "Competitor",
     "icon": "radar",
-    "href": "features/competitor.html",
+    "href": "/features/competitor",
     "tagline": "Parse promotions, positioning, and analysis.",
     "lede": "Automated parsing, positioning, and analysis of competitor structures — track every promotion, map how rivals position themselves, and run comparison sprints across your competitive set.",
     "children": [
@@ -24,7 +24,7 @@ window.FEATURE_CATS = {
     "key": "competitor-feed",
     "label": "Competitor Feed",
     "icon": "rss",
-    "href": "features/competitor-feed.html",
+    "href": "/features/competitor-feed",
     "tagline": "Real-time offers, alerts, and AI insights.",
     "lede": "Real-time notifications, offer monitoring, and AI competitive insights — a continuous surveillance layer that surfaces competitor moves the moment they go live.",
     "children": [
@@ -38,7 +38,7 @@ window.FEATURE_CATS = {
     "key": "brand",
     "label": "Brand",
     "icon": "sparkles",
-    "href": "features/brand.html",
+    "href": "/features/brand",
     "tagline": "Meta scoring, trends, themes, and promotions.",
     "lede": "Evaluate brand design themes, meta scoring, market trends, and promotion richness — a structured read on how your brand presents against the market.",
     "children": [
@@ -52,7 +52,7 @@ window.FEATURE_CATS = {
     "key": "brand-performance",
     "label": "Brand Performance",
     "icon": "gauge",
-    "href": "features/brand-performance.html",
+    "href": "/features/brand-performance",
     "tagline": "Performance, usability, perception, and recs.",
     "lede": "Assess technical performance, usability heuristics, trust perception, and actionable recommendations — turning experience audits into ranked, revenue-weighted fixes.",
     "children": [
@@ -136,12 +136,12 @@ window.FEATURE_SHARED = {
         "label": "Related Products",
         "items": [
           {
-            "href": "jurnii-ux.html",
+            "href": "/products/jurnii-ux",
             "title": "Jurnii UX",
             "desc": "Automated usability and visual scoring."
           },
           {
-            "href": "jurnii-360.html",
+            "href": "/products/jurnii-360",
             "title": "Jurnii 360",
             "desc": "Continuous competitor commercial radar."
           }
@@ -151,12 +151,12 @@ window.FEATURE_SHARED = {
         "label": "Related Solutions",
         "items": [
           {
-            "href": "solutions/competition-offers.html",
+            "href": "/solutions/competition-offers",
             "title": "Competitor Offers",
             "desc": "Standardised competitor promotion tracking."
           },
           {
-            "href": "solutions/user-experience-benchmarking.html",
+            "href": "/solutions/user-experience-benchmarking",
             "title": "UX Benchmarking",
             "desc": "Heuristics-based experience index scores."
           }
@@ -166,12 +166,12 @@ window.FEATURE_SHARED = {
         "label": "Built For",
         "items": [
           {
-            "href": "use-cases/roles/cmo.html",
+            "href": "/use-cases/cmo",
             "title": "CMO",
             "desc": "Growth strategy and campaign ROI."
           },
           {
-            "href": "use-cases/roles/cco.html",
+            "href": "/use-cases/cco",
             "title": "CCO",
             "desc": "Margin defense and LTV protection."
           }

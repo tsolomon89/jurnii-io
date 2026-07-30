@@ -277,9 +277,9 @@ window.BrandWordmark = BrandWordmark;
 
 // ---------- Nav ----------
 const NAV_PRODUCTS = [
-{ href: 'jurnii-ux.html', title: 'Jurnii UX', desc: 'AI-powered UX audit, commercial outcomes', icon: 'sparkles' },
-{ href: 'jurnii-360.html', title: 'Jurnii 360', desc: 'Real-time competitor promotion intelligence', icon: 'radar' },
-{ href: 'jurnii-mmm.html', title: 'Jurnii Cortex', desc: 'Marketing mix modelling for iGaming', icon: 'line-chart' }];
+{ href: '/products/jurnii-ux', title: 'Jurnii UX', desc: 'AI-powered UX audit, commercial outcomes', icon: 'sparkles' },
+{ href: '/products/jurnii-360', title: 'Jurnii 360', desc: 'Real-time competitor promotion intelligence', icon: 'radar' },
+{ href: '/products/jurnii-mmm', title: 'Jurnii Cortex', desc: 'Marketing mix modelling for iGaming', icon: 'line-chart' }];
 
 const NAV_RESOURCES = [
 { href: '/library?cat=Competitive%20Analysis', title: 'Jurnii vs X', desc: 'Honest comparisons against competitors', icon: 'git-compare' },
@@ -292,75 +292,75 @@ const NAV_RESOURCES = [
 
 const NAV_FEATURES = [
 { group: 'Competitor', items: [
-  { href: 'features/competitor-promotions.html', title: 'Promotions', icon: 'percent' },
-  { href: 'features/competitor-positioning.html', title: 'Positioning', icon: 'target' },
-  { href: 'features/competitor-comparison.html', title: 'Comparison', icon: 'git-compare' },
-  { href: 'features/competitor-analysis.html', title: 'Analysis', icon: 'search' },
-  { href: 'features/competitor-offer-feed.html', title: 'Offer Feed', icon: 'gift' },
-  { href: 'features/competitor-live-feed.html', title: 'Live Feed', icon: 'radio' },
-  { href: 'features/competitor-alerts.html', title: 'Alerts', icon: 'bell' },
-  { href: 'features/competitor-ai-insights.html', title: 'AI Insights', icon: 'sparkles' }]
+  { href: '/features/competitor-promotions', title: 'Promotions', icon: 'percent' },
+  { href: '/features/competitor-positioning', title: 'Positioning', icon: 'target' },
+  { href: '/features/competitor-comparison', title: 'Comparison', icon: 'git-compare' },
+  { href: '/features/competitor-analysis', title: 'Analysis', icon: 'search' },
+  { href: '/features/competitor-offer-feed', title: 'Offer Feed', icon: 'gift' },
+  { href: '/features/competitor-live-feed', title: 'Live Feed', icon: 'radio' },
+  { href: '/features/competitor-alerts', title: 'Alerts', icon: 'bell' },
+  { href: '/features/competitor-ai-insights', title: 'AI Insights', icon: 'sparkles' }]
 },
 { group: 'Brand', items: [
-  { href: 'features/brand-meta-scoring.html', title: 'Meta Scoring', icon: 'gauge' },
-  { href: 'features/brand-market-trends.html', title: 'Market Trends', icon: 'trending-up' },
-  { href: 'features/brand-design-themes.html', title: 'Design Themes', icon: 'palette' },
-  { href: 'features/brand-promotion-analysis.html', title: 'Promotion Analysis', icon: 'bar-chart-3' },
-  { href: 'features/brand-performance.html', title: 'Performance', icon: 'zap' },
-  { href: 'features/brand-usability.html', title: 'Usability', icon: 'mouse-pointer-click' },
-  { href: 'features/brand-perception.html', title: 'Perception', icon: 'eye' },
-  { href: 'features/brand-recommendations.html', title: 'Recommendations', icon: 'lightbulb' }]
+  { href: '/features/brand-meta-scoring', title: 'Meta Scoring', icon: 'gauge' },
+  { href: '/features/brand-market-trends', title: 'Market Trends', icon: 'trending-up' },
+  { href: '/features/brand-design-themes', title: 'Design Themes', icon: 'palette' },
+  { href: '/features/brand-promotion-analysis', title: 'Promotion Analysis', icon: 'bar-chart-3' },
+  { href: '/features/brand-performance', title: 'Performance', icon: 'zap' },
+  { href: '/features/brand-usability', title: 'Usability', icon: 'mouse-pointer-click' },
+  { href: '/features/brand-perception', title: 'Perception', icon: 'eye' },
+  { href: '/features/brand-recommendations', title: 'Recommendations', icon: 'lightbulb' }]
 }];
 
 
 const NAV_SOLUTIONS = [
 { group: 'Competition', items: [
-  { href: 'solutions/competition-discovery.html', title: 'Discovery', icon: 'search' },
-  { href: 'solutions/competition-offers.html', title: 'Offers', icon: 'gift' },
-  { href: 'solutions/competition-pricing.html', title: 'Pricing', icon: 'tag' },
-  { href: 'solutions/competition-positioning.html', title: 'Positioning', icon: 'target' }]
+  { href: '/solutions/competition-discovery', title: 'Discovery', icon: 'search' },
+  { href: '/solutions/competition-offers', title: 'Offers', icon: 'gift' },
+  { href: '/solutions/competition-pricing', title: 'Pricing', icon: 'tag' },
+  { href: '/solutions/competition-positioning', title: 'Positioning', icon: 'target' }]
 },
 { group: 'Benchmarking', items: [
-  { href: 'solutions/user-interface-benchmarking.html', title: 'User Interface', icon: 'layout-panel-left' },
-  { href: 'solutions/user-experience-benchmarking.html', title: 'User Experience', icon: 'mouse-pointer-click' },
-  { href: 'solutions/customer-journey-benchmarking.html', title: 'Customer Journey', icon: 'route' },
-  { href: 'solutions/market-positioning-benchmarking.html', title: 'Market Positioning', icon: 'crosshair' }]
+  { href: '/solutions/user-interface-benchmarking', title: 'User Interface', icon: 'layout-panel-left' },
+  { href: '/solutions/user-experience-benchmarking', title: 'User Experience', icon: 'mouse-pointer-click' },
+  { href: '/solutions/customer-journey-benchmarking', title: 'Customer Journey', icon: 'route' },
+  { href: '/solutions/market-positioning-benchmarking', title: 'Market Positioning', icon: 'crosshair' }]
 },
 { group: 'Attribution', items: [
-  { href: 'solutions/marketing-roi-attribution.html', title: 'Marketing ROI', icon: 'dollar-sign' },
-  { href: 'solutions/cross-channel-attribution.html', title: 'Cross-Channel', icon: 'shuffle' },
-  { href: 'solutions/marketing-mix-modeling-attribution.html', title: 'Marketing Mix', icon: 'layers' },
-  { href: 'solutions/market-growth-attribution.html', title: 'Market Growth', icon: 'trending-up' }]
+  { href: '/solutions/marketing-roi-attribution', title: 'Marketing ROI', icon: 'dollar-sign' },
+  { href: '/solutions/cross-channel-attribution', title: 'Cross-Channel', icon: 'shuffle' },
+  { href: '/solutions/marketing-mix-modeling-attribution', title: 'Marketing Mix', icon: 'layers' },
+  { href: '/solutions/market-growth-attribution', title: 'Market Growth', icon: 'trending-up' }]
 },
 { group: 'Optimization', items: [
-  { href: 'solutions/conversion-rate-optimization.html', title: 'Conversion Rate', icon: 'zap' },
-  { href: 'solutions/life-time-value-optimization.html', title: 'Lifetime Value', icon: 'gem' },
-  { href: 'solutions/churn-rate-optimization.html', title: 'Churn Rate', icon: 'trending-down' },
-  { href: 'solutions/customer-acquisition-cost-optimization.html', title: 'Acquisition Cost', icon: 'user-plus' }]
+  { href: '/solutions/conversion-rate-optimization', title: 'Conversion Rate', icon: 'zap' },
+  { href: '/solutions/life-time-value-optimization', title: 'Lifetime Value', icon: 'gem' },
+  { href: '/solutions/churn-rate-optimization', title: 'Churn Rate', icon: 'trending-down' },
+  { href: '/solutions/customer-acquisition-cost-optimization', title: 'Acquisition Cost', icon: 'user-plus' }]
 }];
 
 
 
 const NAV_USE_CASES = [
 { group: 'Roles', items: [
-  { href: 'use-cases/roles/cmo.html', title: 'CMO', icon: 'megaphone' },
-  { href: 'use-cases/roles/coo.html', title: 'COO', icon: 'settings' },
-  { href: 'use-cases/roles/cco.html', title: 'CCO', icon: 'handshake' }]
+  { href: '/use-cases/cmo', title: 'CMO', icon: 'megaphone' },
+  { href: '/use-cases/coo', title: 'COO', icon: 'settings' },
+  { href: '/use-cases/cco', title: 'CCO', icon: 'handshake' }]
 },
 { group: 'Company Size', items: [
-  { href: 'use-cases/company-sizes/smb.html', title: 'SMB', icon: 'store' },
-  { href: 'use-cases/company-sizes/midmarket.html', title: 'Mid-Market', icon: 'building' },
-  { href: 'use-cases/company-sizes/enterprise.html', title: 'Enterprise', icon: 'building-2' }]
+  { href: '/use-cases/smb', title: 'SMB', icon: 'store' },
+  { href: '/use-cases/midmarket', title: 'Mid-Market', icon: 'building' },
+  { href: '/use-cases/enterprise', title: 'Enterprise', icon: 'building-2' }]
 },
 { group: 'Departments', items: [
-  { href: 'use-cases/departments/marketing.html', title: 'Marketing', icon: 'megaphone' },
-  { href: 'use-cases/departments/commercial.html', title: 'Commercial', icon: 'briefcase' },
-  { href: 'use-cases/departments/product.html', title: 'Product', icon: 'package' }]
+  { href: '/use-cases/marketing', title: 'Marketing', icon: 'megaphone' },
+  { href: '/use-cases/commercial', title: 'Commercial', icon: 'briefcase' },
+  { href: '/use-cases/product', title: 'Product', icon: 'package' }]
 },
 { group: 'Sectors', items: [
-  { href: 'use-cases/sectors/igaming.html', title: 'iGaming', icon: 'gamepad-2' },
-  { href: 'use-cases/sectors/ecommerce.html', title: 'eCommerce', icon: 'shopping-cart' },
-  { href: 'use-cases/sectors/fintech.html', title: 'FinTech', icon: 'landmark' }]
+  { href: '/use-cases/igaming', title: 'iGaming', icon: 'gamepad-2' },
+  { href: '/use-cases/ecommerce', title: 'eCommerce', icon: 'shopping-cart' },
+  { href: '/use-cases/fintech', title: 'FinTech', icon: 'landmark' }]
 }];
 
 
@@ -494,23 +494,23 @@ const Nav = ({ active = '' }) => {
   return (
     <header className="nav">
       <div className="container nav-inner">
-        <a className="nav-brand" href="index.html" aria-label="Jurnii home">
+        <a className="nav-brand" href="/" aria-label="Jurnii home">
           <NavLogo height={28} />
         </a>
         <nav className="nav-links" aria-label="Primary">
           <Dropdown label="Products" items={NAV_PRODUCTS} />
-          <MegaDropdown label="Features" groups={NAV_FEATURES} viewAllHref="features/index.html" viewAllLabel="View all features" twoCol />
-          <MegaDropdown label="Solutions" groups={NAV_SOLUTIONS} viewAllHref="solutions/index.html" viewAllLabel="View all solutions" />
-          <MegaDropdown label="Use Cases" groups={NAV_USE_CASES} viewAllHref="use-cases/index.html" viewAllLabel="View all use cases" />
+          <MegaDropdown label="Features" groups={NAV_FEATURES} viewAllHref="/features" viewAllLabel="View all features" twoCol />
+          <MegaDropdown label="Solutions" groups={NAV_SOLUTIONS} viewAllHref="/solutions" viewAllLabel="View all solutions" />
+          <MegaDropdown label="Use Cases" groups={NAV_USE_CASES} viewAllHref="/use-cases" viewAllLabel="View all use cases" />
           <Dropdown label="Resources" items={NAV_RESOURCES} />
-          <a href="contact-us.html" className={isActive('contact')}>Contact</a>
+          <a href="/contact-us" className={isActive('contact')}>Contact</a>
         </nav>
         <div className="nav-cta">
           <button className="icon-btn theme-toggle desktop-only" onClick={cycleTheme} aria-label="Cycle theme" title={`Theme: ${theme}`}>
             <i data-lucide={themeIcon} style={{ width: 16, height: 16 }} />
           </button>
           <a href="https://app.jurnii.io" className="btn ghost sm desktop-only">Log in</a>
-          <a href="contact-us.html" className="btn primary sm">Book a demo</a>
+          <a href="/contact-us" className="btn primary sm">Book a demo</a>
           <button className="icon-btn nav-mobile-toggle" onClick={() => setMobileOpen(true)} aria-label="Open menu">
             <i data-lucide="menu" style={{ width: 18, height: 18 }} />
           </button>
@@ -528,22 +528,22 @@ const Nav = ({ active = '' }) => {
           {NAV_PRODUCTS.map((p) => <a key={p.href} href={p.href}>{p.title}</a>)}
           <div className="nav-mobile-group-head" style={{ marginTop: 16 }}>Features</div>
           {NAV_FEATURES.flatMap((g) => g.items).map((it) => <a key={it.href} href={it.href}>{it.title}</a>)}
-          <a href="features/index.html" className="nav-mobile-viewall">View all features →</a>
+          <a href="/features" className="nav-mobile-viewall">View all features →</a>
           <div className="nav-mobile-group-head" style={{ marginTop: 16 }}>Solutions</div>
           {NAV_SOLUTIONS.flatMap((g) => g.items).map((it) => <a key={it.href} href={it.href}>{it.title}</a>)}
-          <a href="solutions/index.html" className="nav-mobile-viewall">View all solutions →</a>
+          <a href="/solutions" className="nav-mobile-viewall">View all solutions →</a>
           <div className="nav-mobile-group-head" style={{ marginTop: 16 }}>Use Cases</div>
           {NAV_USE_CASES.flatMap((g) => g.items).map((it) => <a key={it.href} href={it.href}>{it.title}</a>)}
-          <a href="use-cases/index.html" className="nav-mobile-viewall">View all use cases →</a>
+          <a href="/use-cases" className="nav-mobile-viewall">View all use cases →</a>
           <div className="nav-mobile-group-head" style={{ marginTop: 16 }}>Resources</div>
           {NAV_RESOURCES.map((r) => <a key={r.href} href={r.href} {...r.external ? { target: '_blank', rel: 'noopener noreferrer' } : {}}>{r.title}</a>)}
-          <a href="contact-us.html" style={{ marginTop: 16 }}>Contact</a>
+          <a href="/contact-us" style={{ marginTop: 16 }}>Contact</a>
         </div>
         <div className="nav-mobile-foot">
           <button className="btn ghost theme-toggle" onClick={cycleTheme}>
             <i data-lucide={themeIcon} style={{ width: 14, height: 14 }} /> Theme: {theme}
           </button>
-          <a href="contact-us.html" className="btn accent">Book a demo</a>
+          <a href="/contact-us" className="btn accent">Book a demo</a>
         </div>
       </div>
     </header>);
@@ -558,7 +558,7 @@ const DemoCTA = ({ heading, sub }) =>
       <h2>{heading || 'See what your competitors are doing — before they do it to you.'}</h2>
       <p>{sub || 'A 45-minute demo, with sample intelligence for your real competitor set. No boilerplate deck, no sales pressure.'}</p>
       <div className="actions">
-        <a className="btn accent lg" href="contact-us.html">Book a demo <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" /></a>
+        <a className="btn accent lg" href="/contact-us">Book a demo <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" /></a>
         <a className="btn ghost-on-dark lg" href="/library">Read the research</a>
       </div>
       <div className="demo-cta-sub">
@@ -587,30 +587,30 @@ const Footer = () =>
         <div className="footer-cols">
           <div>
             <div className="footer-head">Products</div>
-            <a href="jurnii-ux.html">Jurnii UX</a>
-            <a href="jurnii-360.html">Jurnii 360</a>
-            <a href="jurnii-mmm.html">Jurnii Cortex</a>
+            <a href="/products/jurnii-ux">Jurnii UX</a>
+            <a href="/products/jurnii-360">Jurnii 360</a>
+            <a href="/products/jurnii-mmm">Jurnii Cortex</a>
           </div>
           <div>
             <div className="footer-head">Features</div>
-            <a href="features/competitor-promotions.html">Promotions</a>
-            <a href="features/competitor-alerts.html">Alerts</a>
-            <a href="features/brand-usability.html">Usability</a>
-            <a href="features/index.html">All features →</a>
+            <a href="/features/competitor-promotions">Promotions</a>
+            <a href="/features/competitor-alerts">Alerts</a>
+            <a href="/features/brand-usability">Usability</a>
+            <a href="/features">All features →</a>
           </div>
           <div>
             <div className="footer-head">Solutions</div>
-            <a href="solutions/user-experience-benchmarking.html">UX Benchmarking</a>
-            <a href="solutions/competition-offers.html">Competitor Offers</a>
-            <a href="solutions/conversion-rate-optimization.html">Conversion Rate</a>
-            <a href="solutions/index.html">All solutions →</a>
+            <a href="/solutions/user-experience-benchmarking">UX Benchmarking</a>
+            <a href="/solutions/competition-offers">Competitor Offers</a>
+            <a href="/solutions/conversion-rate-optimization">Conversion Rate</a>
+            <a href="/solutions">All solutions →</a>
           </div>
           <div>
             <div className="footer-head">Use Cases</div>
-            <a href="use-cases/roles/cmo.html">CMO</a>
-            <a href="use-cases/departments/marketing.html">Marketing</a>
-            <a href="use-cases/sectors/igaming.html">iGaming</a>
-            <a href="use-cases/index.html">All use cases →</a>
+            <a href="/use-cases/cmo">CMO</a>
+            <a href="/use-cases/marketing">Marketing</a>
+            <a href="/use-cases/igaming">iGaming</a>
+            <a href="/use-cases">All use cases →</a>
           </div>
           <div>
             <div className="footer-head">Resources</div>
@@ -621,10 +621,10 @@ const Footer = () =>
           </div>
           <div>
             <div className="footer-head">Company</div>
-            <a href="contact-us.html">Contact</a>
+            <a href="/contact-us">Contact</a>
             <a href="https://www.linkedin.com/company/jurnii-ltd/jobs" target="_blank" rel="noopener noreferrer">Careers</a>
-            <a href="privacy.html">Privacy</a>
-            <a href="terms.html">Terms</a>
+            <a href="/privacy">Privacy</a>
+            <a href="/terms">Terms</a>
           </div>
         </div>
       </div>
@@ -639,7 +639,7 @@ window.Footer = Footer;
 
 // ---------- Sticky mobile CTA ----------
 const StickyDemoCTA = () =>
-<a href="contact-us.html" className="sticky-demo-cta">
+<a href="/contact-us" className="sticky-demo-cta">
     <div className="label">
       Book a demo
       <span>45 min · Zoom or in-person</span>
@@ -920,7 +920,7 @@ window.PageChrome = PageChrome;
     const link = e.target.closest('a');
     if (!link) return;
     const txt = link.textContent.trim();
-    if (txt.startsWith('Book a demo') && link.getAttribute('href') === 'contact-us.html') {
+    if (txt.startsWith('Book a demo') && link.getAttribute('href') === '/contact-us') {
       e.preventDefault();
       openModal();
     }

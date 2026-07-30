@@ -41,7 +41,7 @@ const Hero = () => {
           <h1 className="display" data-no-split="1" style={{ width: '100%', fontWeight: 600, fontSize: '52px' }}>Compete on <span className="ink-muted">experience.</span><br />win on <span className="ink-green">intelligence.</span></h1>
           <p className="lede">Jurnii automates UX benchmarking and competitor proposition tracking at scale — turning manual research and reactive analytics into structured, near-real-time intelligence for iGaming operators.</p>
           <div className="hero-ctas">
-            <a href="contact-us.html" className="btn primary lg">Book a demo <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" /></a>
+            <a href="/contact-us" className="btn primary lg">Book a demo <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" /></a>
             <a href="#products" className="btn ghost lg">See the platform</a>
           </div>
           <div className="hero-stats">
@@ -303,7 +303,7 @@ const PRODUCT_TABS = [
 
   stats: [{ n: '70+', l: 'Recommendations' }, { n: '48h', l: 'Turnaround' }, { n: '20+', l: 'Operators benchmarked' }],
   chips: ['Registration', 'Deposit', 'Bet placement', 'Withdrawal', 'Reactivation', 'KYC', 'Mobile-first'],
-  detail: 'product-ux.html'
+  detail: '/products/jurnii-ux'
 },
 {
   id: '360', name: 'Jurnii 360', icon: 'radar',
@@ -319,7 +319,7 @@ const PRODUCT_TABS = [
 
   stats: [{ n: '850+', l: 'Promos tracked (Cheltenham)' }, { n: 'Daily', l: 'Update frequency' }, { n: '20+', l: 'Operators monitored' }],
   chips: ['Free bets', 'Reload', 'BOG', 'Spins', 'Cashback', 'Tournaments', 'Affiliate'],
-  detail: 'product-360.html'
+  detail: '/products/jurnii-360'
 },
 {
   id: 'mmm', name: 'Jurnii Cortex', icon: 'line-chart',
@@ -335,7 +335,7 @@ const PRODUCT_TABS = [
 
   stats: [{ n: '16', l: 'Channels modelled' }, { n: 'Qtrly', l: 'Model refresh' }, { n: 'Weeks', l: 'To first wins' }],
   chips: ['TV', 'Affiliate', 'Sponsorship', 'Bonus', 'FTP', 'Social', 'Display', 'OOH'],
-  detail: 'product-mmm.html'
+  detail: '/products/jurnii-mmm'
 }];
 
 
@@ -369,7 +369,7 @@ const ProductTabs = () => {
                 {tab.features.map((f, i) => <li key={i}><i data-lucide="check" style={{ width: 18, height: 18 }} />{f}</li>)}
               </ul>
               <div className="actions">
-                <a className="btn primary" href="contact-us.html">Book a demo <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" /></a>
+                <a className="btn primary" href="/contact-us">Book a demo <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" /></a>
                 <a className="btn ghost" href={tab.detail}>Learn More</a>
               </div>
             </div>
@@ -500,9 +500,9 @@ const CompareSection = () =>
         </div>
       </div>
       <div style={{ display: 'flex', gap: 12, marginTop: 24, flexWrap: 'wrap' }}>
-        <a className="btn ghost sm" href="compare-ekimetrics.html">vs Ekimetrics</a>
-        <a className="btn ghost sm" href="compare-nielsen.html">vs Nielsen</a>
-        <a className="btn ghost sm" href="compare-ux-agencies.html">vs UX agencies</a>
+        <a className="btn ghost sm" href="/library/compare-ekimetrics">vs Ekimetrics</a>
+        <a className="btn ghost sm" href="/library/compare-nielsen">vs Nielsen</a>
+        <a className="btn ghost sm" href="/library/compare-ux-agencies">vs UX agencies</a>
       </div>
     </div>
   </section>;

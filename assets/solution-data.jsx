@@ -10,7 +10,7 @@ window.SOLUTION_CATS = {
     "key": "competition",
     "label": "Competition",
     "icon": "radar",
-    "href": "solutions/competition.html",
+    "href": "/solutions/competition",
     "tagline": "Map rivals, offers, pricing, and positioning.",
     "lede": "Maintain total market awareness — discover new entrants, benchmark competitor offers, calibrate pricing, and track how rivals position themselves across every regulated jurisdiction.",
     "children": [
@@ -24,7 +24,7 @@ window.SOLUTION_CATS = {
     "key": "benchmarking",
     "label": "Benchmarking",
     "icon": "gauge",
-    "href": "solutions/benchmarking.html",
+    "href": "/solutions/benchmarking",
     "tagline": "Score interfaces, journeys, and market position.",
     "lede": "Replace subjective opinion with structured heuristic scoring — benchmark your interface, experience, customer journeys, and market positioning side-by-side against the peer set.",
     "children": [
@@ -38,7 +38,7 @@ window.SOLUTION_CATS = {
     "key": "attribution",
     "label": "Attribution",
     "icon": "git-merge",
-    "href": "solutions/attribution.html",
+    "href": "/solutions/attribution",
     "tagline": "Correlate spend with true incremental yield.",
     "lede": "Move past last-click errors — attribute marketing ROI, decompose cross-channel impact, run marketing mix modelling, and isolate the drivers of real market growth with Cortex causal models.",
     "children": [
@@ -52,7 +52,7 @@ window.SOLUTION_CATS = {
     "key": "optimization",
     "label": "Optimization",
     "icon": "trending-up",
-    "href": "solutions/optimization.html",
+    "href": "/solutions/optimization",
     "tagline": "Lift conversion, LTV, retention, and CPA.",
     "lede": "Minimise registration leakage, protect lifetime value, defend against churn, and lower acquisition cost — turning benchmarked friction points into measurable commercial yield.",
     "children": [
@@ -136,12 +136,12 @@ window.SOLUTION_SHARED = {
         "label": "Related Products",
         "items": [
           {
-            "href": "jurnii-ux.html",
+            "href": "/products/jurnii-ux",
             "title": "Jurnii UX",
             "desc": "Automated usability and visual scoring."
           },
           {
-            "href": "jurnii-mmm.html",
+            "href": "/products/jurnii-mmm",
             "title": "Cortex",
             "desc": "Causal attribution and planning mix."
           }
@@ -151,12 +151,12 @@ window.SOLUTION_SHARED = {
         "label": "Core Features",
         "items": [
           {
-            "href": "features/brand-usability.html",
+            "href": "/features/brand-usability",
             "title": "Usability",
             "desc": "Standardized heuristic usability auditing."
           },
           {
-            "href": "features/competitor-promotions.html",
+            "href": "/features/competitor-promotions",
             "title": "Promotions",
             "desc": "Automate promotional campaign tracking."
           }
@@ -166,12 +166,12 @@ window.SOLUTION_SHARED = {
         "label": "Built For",
         "items": [
           {
-            "href": "use-cases/roles/cmo.html",
+            "href": "/use-cases/cmo",
             "title": "CMO",
             "desc": "Growth strategy and campaign ROI."
           },
           {
-            "href": "use-cases/roles/cco.html",
+            "href": "/use-cases/cco",
             "title": "CCO",
             "desc": "Margin defense and LTV protection."
           }

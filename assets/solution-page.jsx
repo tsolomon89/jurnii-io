@@ -14,7 +14,7 @@ const SolutionPage = ({ slug }) => {
 
   // Sibling pages in the same category → "Built For" rail.
   const siblings = cat.children.filter((s) => s !== slug).map((s) => window.SOLUTION_DATA[s]);
-  const leafHref = (s) => `solutions/${s}.html`;
+  const leafHref = (s) => `/solutions/${s}`;
 
   const bench = S.benchmark;
 
@@ -24,7 +24,7 @@ const SolutionPage = ({ slug }) => {
       <section className="uc-hero reveal">
         <div className="container">
           <nav className="uc-hero-crumb" aria-label="Breadcrumb">
-            <a href="solutions/index.html">Solutions</a>
+            <a href="/solutions">Solutions</a>
             <span className="sep">/</span>
             <a href={cat.href}>{cat.label}</a>
             <span className="sep">/</span>
@@ -37,7 +37,7 @@ const SolutionPage = ({ slug }) => {
           <h1 className="h1-page">{d.title}</h1>
           <p className="page-hero-lede">{d.lede}</p>
           <div className="hero-cta-row" style={{ marginTop: 8 }}>
-            <a href="contact-us.html" className="btn primary lg">Book a demo <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" /></a>
+            <a href="/contact-us" className="btn primary lg">Book a demo <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" /></a>
             <a href={cat.href} className="btn ghost lg">All {cat.label.toLowerCase()} solutions</a>
           </div>
         </div>
