@@ -164,7 +164,7 @@ async function verifyDatabase() {
     // every atomic transition a lie, so this is checked rather than assumed.
     const c2 = await pool.connect();
     try {
-      await c2.query('CREATE TEMP TABLE _vp_rollback(x int)');
+      await c2.query('CREATE TEMP TABLE IF NOT EXISTS _vp_rollback(x int); TRUNCATE _vp_rollback;');
       await c2.query('BEGIN');
       await c2.query('INSERT INTO _vp_rollback VALUES (1)');
       await c2.query('ROLLBACK');
