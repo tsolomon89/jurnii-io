@@ -4,7 +4,9 @@
   "functions": {
     "api/v1/submissions/[id].js": { "maxDuration": 60 },
     "api/v1/bookings/index.js": { "maxDuration": 30 },
-    "api/v1/bookings/[id]/reschedule.js": { "maxDuration": 30 }
+    "api/v1/bookings/[id]/index.js": { "maxDuration": 30 },
+    "api/v1/bookings/[id]/reschedule.js": { "maxDuration": 30 },
+    "api/v1/bookings/[id]/status.js": { "maxDuration": 30 }
   },
   "headers": [
     {
