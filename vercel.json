@@ -16,6 +16,16 @@
       ]
     }
   ],
+  "crons": [
+    {
+      "path": "/api/v1/internal/jobs/run",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/v1/internal/jobs/retention",
+      "schedule": "15 3 * * *"
+    }
+  ],
   "rewrites": [
     {
       "source": "/(.*)",
