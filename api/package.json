@@ -1,0 +1,6 @@
+{
+  "//": "The root package.json declares \"type\": \"module\", and Vercel copies the nearest package.json into every function bundle. The /api shims and the whole booking/ module are CommonJS (module.exports = require(...)), which throws ReferenceError under ESM. This manifest scopes /api back to CommonJS. Do not remove: see the plan's finding #2.",
+  "name": "jurnii-api-shims",
+  "private": true,
+  "type": "commonjs"
+}

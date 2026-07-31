@@ -1,0 +1,46 @@
+<!doctype html>
+<html data-theme="dark" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manage your demo booking · Jurnii</title>
+<!-- Reached only via a signed manage link, so it must never be indexed. -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="/assets/jurnii-icon-light.svg">
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
+<link rel="preload" href="/assets/fonts/Geist-VariableFont_wght.woff2" as="font" type="font/woff2" crossorigin>
+<!--
+  A deliberately plain page, outside the SPA.
+
+  It is a real file in `dist/`, which is what makes `/manage.html` resolve: Vercel
+  checks the filesystem before applying the `/(.*)` → `/index.html` rewrite, so the
+  SPA fallback never swallows this route. Until this file existed, every emailed
+  manage link landed on the home page.
+
+  global.css carries the design tokens the booking stylesheet reads (--concrete-*,
+  --jurnii-*, --font-sans), and site.css carries the .btn classes its markup uses,
+  so all three are needed and all three are served at stable, unhashed paths.
+-->
+<link rel="stylesheet" href="/assets/global.css">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/booking/assets/booking-form.css">
+<style>
+  body { min-height: 100dvh; display: flex; align-items: center; justify-content: center; padding: 32px 16px; }
+  .manage-shell { width: 100%; max-width: 680px; }
+  .manage-brand { display: flex; justify-content: center; margin-bottom: 24px; }
+  .manage-brand img { height: 28px; width: auto; }
+</style>
+</head>
+<body>
+<main class="manage-shell">
+  <div class="manage-brand">
+    <a href="/" aria-label="Jurnii home"><img src="/assets/jurnii-light-full.svg" alt="Jurnii"></a>
+  </div>
+  <!-- booking-form.js auto-mounts the reschedule / cancel UI here. -->
+  <div id="jurnii-manage-inline"></div>
+</main>
+<script src="https://unpkg.com/lucide@1.25.0/dist/umd/lucide.min.js"></script>
+<script src="/booking/assets/booking-form.js"></script>
+</body>
+</html>

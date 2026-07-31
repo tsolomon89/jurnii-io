@@ -1,1366 +1,1727 @@
 /* =========================================================================
-   Jurnii Booking Form — Main JavaScript
-   Features: Progressive steps, Custom calendar scheduler, Inferred country,
-             UTM parameters capture, Real-time JSON debug panel.
-   ========================================================================= */
+   Jurnii Booking — the single shared frontend implementation.
 
-(function () {
-  // --- Country Code Mapping (must mirror the #jurnii-phone-code <select> options) ---
-  const countryMapping = {
-    '+44': 'United Kingdom',
-    '+1': 'United States',
-    '+356': 'Malta',
-    '+350': 'Gibraltar',
-    '+46': 'Sweden',
-    '+49': 'Germany',
-    '+34': 'Spain',
-    '+353': 'Ireland',
-    '+61': 'Australia',
-    '+599': 'Curaçao',
-    '+506': 'Costa Rica'
+   One file powers every surface:
+     · the site-wide demo modal    → site.jsx calls JurniiBooking.render(el, {onClose})
+     · genuine inline placements   → auto-mounts into #jurnii-booking-form-inline
+     · the manage page             → auto-mounts into #jurnii-manage-inline
+
+   There is deliberately no second implementation. `assets/booking-form.js` (the
+   legacy Calendar-iframe stub) is deleted: it posted to an empty endpoint, so the
+   site's demo modal captured nothing at all.
+
+   ---------------------------------------------------------------------------
+   MODULE SHAPE
+
+   A UMD-ish factory rather than a bare IIFE, for one reason: the tests need to
+   install the widget against a jsdom window instead of a real one. In a browser
+   `globalThis === window` and has a `document`, so the factory runs immediately
+   and assigns `window.JurniiBooking` — a plain classic script, exactly as before.
+   Under CommonJS the factory is exported un-invoked and nothing global is
+   touched.
+
+   ---------------------------------------------------------------------------
+   COUNTRY / PHONE CONFIGURATION
+
+   `booking/config/countries.js` is the single source of truth (spec §6) and is
+   shared verbatim with the server, which re-derives `phone_e164` and rejects a
+   disagreement. The widget therefore never carries its own country table and
+   never infers a country from a dial code — the defect this replaces mapped
+   `+44` back to "United Kingdom" and concatenated a domestic `07123 456789`
+   into `+4407123456789`.
+
+   The config is a separate file, so it is fetched once if the host has not
+   already loaded it. `render()` stays synchronous; painting happens on the
+   config promise, which is already resolved whenever the host included the
+   script itself.
+   ========================================================================= */
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory;
+  if (root && root.document) root.JurniiBooking = factory(root);
+})(typeof globalThis !== 'undefined' ? globalThis : this, function (win, installOpts) {
+  'use strict';
+
+  var opts0 = installOpts || {};
+  var doc = win.document;
+
+  // --- configuration --------------------------------------------------------
+  var API = trimSlash(win.JURNII_BOOKING_API_BASE || '/api/v1');
+  var CONFIG_URL = win.JURNII_BOOKING_CONFIG_URL || '/booking/config/countries.js';
+  var PROGRESS_KEY = 'jurnii_booking_progress';
+  var PROGRESS_TTL_MS = 2 * 60 * 60 * 1000;          // the flow token's own lifetime
+
+  // Cancellation is HIDDEN unless a deployment explicitly opts in. Production runs
+  // with `BOOKING_CANCELLATION_ENABLED=false` (§7.2) and a static page cannot read
+  // an environment variable, so the default is the safe one: hiding a button that
+  // would only ever answer `403 cancellation_disabled`.
+  function cancellationEnabled() { return win.JURNII_BOOKING_CANCELLATION_ENABLED === true; }
+  function supportEmail() { return win.JURNII_BOOKING_SUPPORT_EMAIL || 'hello@jurnii.io'; }
+
+  var POLL_FIRST_MS = 3000;
+  var POLL_MAX_MS = 10000;
+  var POLL_GIVE_UP_MS = 3 * 60 * 1000;   // stop asking; the invite is already emailed
+
+  // Whitelisted click ids — the same list the server accepts into attribution_extra.
+  var CLICK_IDS = ['gclid', 'fbclid', 'msclkid', 'ttclid', 'li_fat_id', 'twclid'];
+  var UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id'];
+
+  var PRODUCT_OPTIONS = [
+    { value: 'Jurnii UX', label: 'Jurnii UX — User Experience Benchmarking' },
+    { value: 'Jurnii 360', label: 'Jurnii 360 — Competitor Surveillance Radar' },
+    { value: 'Jurnii Cortex', label: 'Cortex / Growth — Attribution & Scenarios' },
+    { value: 'Not sure yet', label: 'Not sure yet' }
+  ];
+
+  /* =======================================================================
+     Visitor-facing copy, keyed by machine code.
+
+     Server messages are never rendered. Every string a visitor sees is authored
+     here, so no reason code, CRM id, calendar id or third-party error fragment
+     can reach the page even if a future handler starts echoing one.
+     ======================================================================= */
+  var COPY = {
+    // request/transport
+    generic: 'Something went wrong. Please try again.',
+    offline: 'We could not reach the server. Please check your connection and try again.',
+    store_unavailable: 'We could not save your details just now. Please try again.',
+    calendar_misconfigured: 'Booking is temporarily unavailable. Please try again shortly.',
+    availability_unavailable: 'We could not load the available times. Please try again.',
+    // page 1
+    business_email_required: 'Please use your work email address to book a demo.',
+    email_invalid: 'Please enter a valid email address.',
+    name_required: 'Please provide your first and last name.',
+    // page 2
+    company_required: 'Please provide your company name.',
+    country_unknown: 'Please choose your country.',
+    country_dial_mismatch: 'That dialling code does not match the country you selected.',
+    phone_missing: 'Please enter your phone number.',
+    phone_too_short: 'That phone number looks too short.',
+    phone_too_long: 'That phone number looks too long.',
+    // slots
+    slot_required: 'Please choose a date and time for your demo.',
+    slot_taken: 'That time was just taken. Please choose another.',
+    slot_malformed: 'Please choose a time from the calendar.',
+    slot_unaligned: 'Please choose a time from the calendar.',
+    slot_outside_hours: 'That time is outside our briefing hours. Please choose another.',
+    slot_too_soon: 'That time is too soon. Please choose a later slot.',
+    slot_beyond_horizon: 'That time is too far ahead. Please choose an earlier slot.',
+    // booking outcomes
+    booking_pending: 'Confirming your booking — this usually takes a few seconds.',
+    booking_pending_slow: 'This is taking longer than usual. Your invitation will be emailed to you as soon as it is confirmed.',
+    booking_failed: 'We could not hold that time after all. Please choose another slot.',
+    already_booked: 'You already have a demo booked. Please use the link in your confirmation email to change it.',
+    booking_cancelled: 'This booking has been cancelled.',
+    // manage
+    manage_link_invalid: 'This management link is invalid or has expired. Please use the link from your booking confirmation email.',
+    action_in_progress: 'A change to this booking is already in progress. Please try again in a moment.',
+    reschedule_pending: 'Updating your booking — this usually takes a few seconds.',
+    reschedule_done: 'Your demo has been moved. An updated calendar invitation has been sent to your email.',
+    cancel_pending: 'Cancelling your booking — this usually takes a few seconds.',
+    cancel_done: 'Your demo has been cancelled. You can book again any time.',
+    cancellation_disabled: 'To cancel this booking, please contact us.',
+    not_confirmed: 'This booking is not currently active.'
   };
 
-  // --- Work-email-only gate (client UX; server is authoritative) ---
-  const CLIENT_FREE_EMAIL_DOMAINS = new Set([
-    'gmail.com', 'googlemail.com', 'yahoo.com', 'yahoo.co.uk', 'hotmail.com', 'hotmail.co.uk',
-    'outlook.com', 'live.com', 'msn.com', 'aol.com', 'icloud.com', 'me.com', 'mac.com',
-    'protonmail.com', 'proton.me', 'gmx.com', 'mail.com', 'yandex.com', 'ymail.com', 'zoho.com'
-  ]);
-  function isWorkEmail(email) {
-    const at = (email || '').lastIndexOf('@');
-    if (at < 0) return false;
-    const domain = email.slice(at + 1).trim().toLowerCase();
-    if (!domain || domain.indexOf('.') < 0) return false;
-    return !CLIENT_FREE_EMAIL_DOMAINS.has(domain);
+  function copy(key) {
+    return (key && COPY[key]) || COPY.generic;
   }
 
-  // --- Progressive continuation persistence (resume after refresh) ---
-  const PROGRESS_KEY = 'jurnii_booking_progress';
+  /* =======================================================================
+     Small helpers
+     ======================================================================= */
+  function trimSlash(s) { return String(s || '').replace(/\/+$/, ''); }
 
-  function saveProgress() {
-    try {
-      const snapshot = {
-        step: currentStep,
-        journey_id: state.journey_id || null,
-        journey_email: state.journey_email || null,
-        token: continuationToken || null,
-        first_name: state.first_name,
-        last_name: state.last_name,
-        email: state.email,
-        marketing_consent: state.marketing_consent,
-        company: state.company,
-        job_title: state.job_title,
-        phone_country_code: state.phone_country_code,
-        phone_number: state.phone_number,
-        inferred_country: state.inferred_country,
-        optional_product_interest: state.optional_product_interest,
-        saved_at: Date.now()
-      };
-      localStorage.setItem(PROGRESS_KEY, JSON.stringify(snapshot));
-    } catch (_) { /* storage unavailable — non-fatal */ }
+  function escapeHtml(s) {
+    return String(s === undefined || s === null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
   }
 
-  function loadProgress() {
-    try {
-      const raw = localStorage.getItem(PROGRESS_KEY);
-      if (!raw) return null;
-      const snap = JSON.parse(raw);
-      // Continuation tokens expire after 2h; drop anything older.
-      if (!snap.saved_at || (Date.now() - snap.saved_at) > 2 * 60 * 60 * 1000) {
-        clearProgress();
-        return null;
-      }
-      return snap;
-    } catch (_) {
-      return null;
-    }
+  /** Only ever put an http(s) URL in an href, whoever produced it. */
+  function safeUrl(value) {
+    var s = String(value === undefined || value === null ? '' : value).trim();
+    return /^https?:\/\//i.test(s) ? s : null;
   }
 
-  function clearProgress() {
-    try { localStorage.removeItem(PROGRESS_KEY); } catch (_) { /* non-fatal */ }
-  }
-
-  // --- Client-generated journey id (deterministic idempotency) ---
-  // The journeyId is minted + persisted BEFORE the first Page-1 request and reused
-  // on every retry/concurrent submit, so the server always sees the same opaque
-  // correlation key. A new/unrelated journey (different email) mints a fresh one;
-  // it is cleared on booking completion.
   function genUUID() {
     try {
-      if (window.crypto && typeof crypto.randomUUID === 'function') return crypto.randomUUID();
+      if (win.crypto && typeof win.crypto.randomUUID === 'function') return win.crypto.randomUUID();
     } catch (_) { /* fall through */ }
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-      const rnd = (window.crypto && crypto.getRandomValues)
-        ? crypto.getRandomValues(new Uint8Array(1))[0] % 16
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var rnd = (win.crypto && win.crypto.getRandomValues)
+        ? win.crypto.getRandomValues(new Uint8Array(1))[0] % 16
         : Math.floor(Math.random() * 16);
-      const v = c === 'x' ? rnd : (rnd & 0x3) | 0x8;
+      var v = c === 'x' ? rnd : (rnd & 0x3) | 0x8;
       return v.toString(16);
     });
   }
 
-  function ensureJourneyId(email) {
-    // Unrelated journey (different email) → discard and start fresh.
-    if (state.journey_id && state.journey_email && state.journey_email !== email) {
-      state.journey_id = null;
-    }
-    if (!state.journey_id) {
-      state.journey_id = genUUID();
-      state.journey_email = email;
-      saveProgress();
-    }
-    return state.journey_id;
+  function icons() { try { if (win.lucide) win.lucide.createIcons(); } catch (_) {} }
+
+  /* -----------------------------------------------------------------------
+     Date bucketing — ONE explicit zone.
+
+     The old code built a `YYYY-MM-DD` from local getters and compared it against
+     a UTC ISO string with `startsWith`, so an 23:30Z slot bucketed under the
+     wrong day for every visitor west of UTC — and `todayStr` came from
+     `toISOString()` on a local midnight, which is a different day again.
+
+     The zone is now the visitor's own, consistently: the day a slot is filed
+     under is the day its own label reads, and the value submitted is always the
+     exact ISO instant the server offered, never a re-derived one. So display and
+     submission cannot disagree.
+     ----------------------------------------------------------------------- */
+  function localDateKey(date) {
+    var d = date instanceof Date ? date : new Date(date);
+    return d.getFullYear() + '-'
+      + String(d.getMonth() + 1).padStart(2, '0') + '-'
+      + String(d.getDate()).padStart(2, '0');
   }
 
-  // Restore a saved partial registration into a freshly-rendered form so a
-  // refresh (or return visit within the token's 2h life) resumes in place.
-  async function restoreProgress(container) {
-    const snap = loadProgress();
-    if (!snap || !snap.token || !snap.journey_id || !snap.step || snap.step < 2) return false;
+  /** Parse a `YYYY-MM-DD` key back to LOCAL midnight (`new Date(str)` is UTC). */
+  function fromLocalDateKey(key) {
+    var p = String(key || '').split('-');
+    return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+  }
 
-    continuationToken = snap.token;
-    Object.assign(state, {
-      journey_id: snap.journey_id,
-      journey_email: snap.journey_email || null,
-      first_name: snap.first_name || '',
-      last_name: snap.last_name || '',
-      email: snap.email || '',
-      marketing_consent: !!snap.marketing_consent,
-      company: snap.company || '',
-      job_title: snap.job_title || '',
-      phone_country_code: snap.phone_country_code || '+44',
-      phone_number: snap.phone_number || '',
-      inferred_country: snap.inferred_country || 'United Kingdom',
-      optional_product_interest: snap.optional_product_interest || ''
+  /** `{ '2026-08-03': [slot, …] }`, keyed in the visitor's zone. */
+  function bucketSlotsByLocalDay(slots) {
+    var out = {};
+    (slots || []).forEach(function (slot) {
+      if (!slot || !slot.start) return;
+      var d = new Date(slot.start);
+      if (isNaN(d.getTime())) return;
+      var key = localDateKey(d);
+      (out[key] || (out[key] = [])).push(slot);
     });
-
-    const setVal = (sel, val) => { const el = container.querySelector(sel); if (el && val != null) el.value = val; };
-    const setChk = (sel, val) => { const el = container.querySelector(sel); if (el) el.checked = !!val; };
-    setVal('#jurnii-first-name', state.first_name);
-    setVal('#jurnii-last-name', state.last_name);
-    setVal('#jurnii-email', state.email);
-    setChk('#jurnii-consent', state.marketing_consent);
-    setVal('#jurnii-company', state.company);
-    setVal('#jurnii-job-title', state.job_title);
-    setVal('#jurnii-phone-code', state.phone_country_code);
-    setVal('#jurnii-phone', state.phone_number);
-    setVal('#jurnii-interest', state.optional_product_interest);
-    updateDebugPanel();
-
-    if (snap.step >= 3 && currentFetchAvailability) {
-      await currentFetchAvailability();
-      renderCalendar();
-      goToStep(3);
-    } else {
-      goToStep(2);
-    }
-    return true;
-  }
-
-  // --- Initial Registration Object State ---
-  let state = {
-    registration_id: null,
-    journey_id: null,
-    journey_email: null,
-    submitted_at: null,
-    updated_at: new Date().toISOString(),
-    status: 'partial',
-    first_name: '',
-    last_name: '',
-    email: '',
-    marketing_consent: false,
-    company: '',
-    job_title: '',
-    phone_country_code: '+44',
-    phone_number: '',
-    inferred_country: 'United Kingdom',
-    optional_product_interest: '',
-    source_page: window.location.pathname || '/',
-    utm_source: '',
-    utm_medium: '',
-    utm_campaign: '',
-    selected_demo_datetime: null
-  };
-
-  let currentStep = 1;
-  let calendarDate = new Date();
-  let selectedDateStr = null; // "YYYY-MM-DD"
-  let selectedTimeStr = null; // "HH:MM"
-  let continuationToken = null;
-  let availableSlots = [];
-  // Set by bindFormEvents so resume-after-refresh can reload the calendar.
-  let currentFetchAvailability = null;
-
-  // --- Helper: Parse UTM parameters ---
-  function captureUTMParameters() {
-    const urlParams = new URLSearchParams(window.location.search);
-    state.utm_source = urlParams.get('utm_source') || '';
-    state.utm_medium = urlParams.get('utm_medium') || '';
-    state.utm_campaign = urlParams.get('utm_campaign') || '';
-  }
-
-  // --- Helper: Update State Log ---
-  function updateDebugPanel() {
-    const debugPre = document.getElementById('jurnii-debug-json');
-    if (debugPre) {
-      state.updated_at = new Date().toISOString();
-      debugPre.textContent = JSON.stringify(state, null, 2);
-    }
-  }
-
-  // --- Validation Helpers ---
-  function validateEmail(email) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
-  }
-
-  function validateStep(step) {
-    let isValid = true;
-    clearErrors();
-
-    if (step === 1) {
-      const fName = document.getElementById('jurnii-first-name');
-      const lName = document.getElementById('jurnii-last-name');
-      const email = document.getElementById('jurnii-email');
-
-      if (!fName || !fName.value.trim()) {
-        showError('jurnii-first-name');
-        isValid = false;
-      }
-      if (!lName || !lName.value.trim()) {
-        showError('jurnii-last-name');
-        isValid = false;
-      }
-      if (!email || !email.value.trim() || !validateEmail(email.value.trim())) {
-        showError('jurnii-email');
-        isValid = false;
-      }
-    } else if (step === 2) {
-      const company = document.getElementById('jurnii-company');
-      const jobTitle = document.getElementById('jurnii-job-title');
-      const phone = document.getElementById('jurnii-phone');
-
-      if (!company || !company.value.trim()) {
-        showError('jurnii-company');
-        isValid = false;
-      }
-      if (!jobTitle || !jobTitle.value.trim()) {
-        showError('jurnii-job-title');
-        isValid = false;
-      }
-      if (!phone || !phone.value.trim()) {
-        showError('jurnii-phone');
-        isValid = false;
-      }
-    } else if (step === 3) {
-      if (!state.selected_demo_datetime) {
-        alert('Please select a date and time slot for your demo briefing.');
-        isValid = false;
-      }
-    }
-
-    return isValid;
-  }
-
-  function showError(fieldId) {
-    const el = document.getElementById(fieldId);
-    if (el) el.classList.add('error');
-  }
-
-  function clearErrors() {
-    const errors = document.querySelectorAll('.jurnii-input.error');
-    errors.forEach(el => el.classList.remove('error'));
-  }
-
-  // --- Step Navigation Logic ---
-  function goToStep(step) {
-    // Transition UI steps
-    const stepEls = document.querySelectorAll('.jurnii-form-step');
-    stepEls.forEach((el, index) => {
-      if (index + 1 === step) {
-        el.classList.add('active');
-      } else {
-        el.classList.remove('active');
-      }
+    Object.keys(out).forEach(function (k) {
+      out[k].sort(function (a, b) { return new Date(a.start) - new Date(b.start); });
     });
-
-    // Update steps progress bar
-    const indicatorEls = document.querySelectorAll('.jurnii-step-indicator');
-    indicatorEls.forEach((el, index) => {
-      const idx = index + 1;
-      el.classList.remove('active', 'completed');
-      if (idx === step) {
-        el.classList.add('active');
-      } else if (idx < step) {
-        el.classList.add('completed');
-      }
-    });
-
-    currentStep = step;
-    
-    // Auto-focus first input on screen if relevant
-    if (step === 1) {
-      const fName = document.getElementById('jurnii-first-name');
-      if (fName) fName.focus();
-    } else if (step === 2) {
-      const company = document.getElementById('jurnii-company');
-      if (company) company.focus();
-    }
+    return out;
   }
 
-  // --- Generate Booking Calendar Markup ---
-  // --- Generate Booking Calendar Markup ---
-  function renderCalendar() {
-    const year = calendarDate.getFullYear();
-    const month = calendarDate.getMonth();
+  function timeLabel(iso) {
+    var d = new Date(iso);
+    var t = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+    var zone = '';
+    try {
+      var parts = new Intl.DateTimeFormat([], { timeZoneName: 'short' }).formatToParts(d);
+      for (var i = 0; i < parts.length; i++) {
+        if (parts[i].type === 'timeZoneName') { zone = parts[i].value; break; }
+      }
+    } catch (_) { /* zone label is cosmetic */ }
+    return zone ? t + ' (' + zone + ')' : t;
+  }
 
-    // Months names array
-    const monthNames = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
-    ];
+  function dateTimeLabel(iso) {
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return '';
+    return d.toLocaleDateString([], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+      + ' at ' + timeLabel(iso);
+  }
 
-    const monthTitle = document.getElementById('jurnii-month-title');
-    if (monthTitle) {
-      monthTitle.textContent = `${monthNames[month]} ${year}`;
+  /* =======================================================================
+     The shared country config, fetched once.
+     ======================================================================= */
+  var configPromise = null;
+
+  function loadConfig() {
+    if (win.JurniiBookingCountries) return Promise.resolve(win.JurniiBookingCountries);
+    if (configPromise) return configPromise;
+    configPromise = new Promise(function (resolve, reject) {
+      if (!doc) return reject(new Error('no_document'));
+      var existing = doc.querySelector('script[data-jurnii-booking-config]');
+      if (existing) {
+        existing.addEventListener('load', function () { resolve(win.JurniiBookingCountries); });
+        existing.addEventListener('error', function () { reject(new Error('config_unavailable')); });
+        return;
+      }
+      var s = doc.createElement('script');
+      s.src = CONFIG_URL;
+      s.setAttribute('data-jurnii-booking-config', '1');
+      s.addEventListener('load', function () {
+        if (win.JurniiBookingCountries) resolve(win.JurniiBookingCountries);
+        else reject(new Error('config_unavailable'));
+      });
+      s.addEventListener('error', function () { reject(new Error('config_unavailable')); });
+      (doc.body || doc.documentElement).appendChild(s);
+    });
+    return configPromise;
+  }
+
+  /* =======================================================================
+     First-touch attribution — captured ONCE, then replayed from the snapshot.
+
+     Spec §7.3: first touch is immutable, and the server's Page-1 upsert
+     deliberately omits every attribution column from its `DO UPDATE` list. So a
+     visitor who lands from an ad, browses, and books three pages later must send
+     the ORIGINAL landing URL and UTMs, not the ones visible at submit time.
+     ======================================================================= */
+  function captureFirstTouch() {
+    var loc = win.location || {};
+    var params = new (win.URLSearchParams || URLSearchParams)(loc.search || '');
+    var out = {
+      landing_url: loc.href || null,
+      referrer_url: (doc && doc.referrer) || null,
+      source_page: loc.pathname || '/',
+      client_timezone: null,
+      client_locale: (win.navigator && (win.navigator.language || win.navigator.userLanguage)) || null
+    };
+    try { out.client_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || null; } catch (_) {}
+    UTM_KEYS.forEach(function (k) { out[k] = params.get(k) || null; });
+    CLICK_IDS.forEach(function (k) {
+      var v = params.get(k);
+      if (v) { out.attribution_extra = out.attribution_extra || {}; out.attribution_extra[k] = v; }
+    });
+    return out;
+  }
+
+  /** The stored first touch, or a freshly captured one persisted for next time. */
+  function firstTouch() {
+    var snap = loadSnapshot();
+    if (snap && snap.attribution && snap.attribution.landing_url !== undefined) return snap.attribution;
+    var fresh = captureFirstTouch();
+    saveSnapshot(Object.assign({}, snap || {}, { attribution: fresh }));
+    return fresh;
+  }
+
+  /* =======================================================================
+     Progress snapshot (resume after refresh, within the flow token's 2h life)
+     ======================================================================= */
+  function storage() {
+    try { return win.localStorage; } catch (_) { return null; }
+  }
+
+  function loadSnapshot() {
+    var s = storage();
+    if (!s) return null;
+    try {
+      var raw = s.getItem(PROGRESS_KEY);
+      if (!raw) return null;
+      var snap = JSON.parse(raw);
+      if (!snap || typeof snap !== 'object') return null;
+      if (snap.saved_at && (Date.now() - snap.saved_at) > PROGRESS_TTL_MS) { clearSnapshot(); return null; }
+      return snap;
+    } catch (_) { return null; }
+  }
+
+  function saveSnapshot(next) {
+    var s = storage();
+    if (!s) return;
+    try {
+      var merged = Object.assign({}, next, { saved_at: Date.now() });
+      s.setItem(PROGRESS_KEY, JSON.stringify(merged));
+    } catch (_) { /* storage full or blocked — non-fatal */ }
+  }
+
+  function clearSnapshot() {
+    var s = storage();
+    if (!s) return;
+    try { s.removeItem(PROGRESS_KEY); } catch (_) {}
+  }
+
+  /* =======================================================================
+     HTTP
+     ======================================================================= */
+  function request(method, path, body, token) {
+    var init = { method: method, headers: {} };
+    if (body !== undefined && body !== null) {
+      init.headers['Content-Type'] = 'application/json';
+      init.body = JSON.stringify(body);
+    }
+    if (token) init.headers.Authorization = 'Bearer ' + token;
+    return win.fetch(API + path, init).then(function (res) {
+      return res.json().catch(function () { return {}; }).then(function (data) {
+        return { status: res.status, ok: res.ok, data: data || {} };
+      });
+    }, function () {
+      // A transport failure is NOT an outcome. `status: 0` keeps every classifier
+      // from mistaking "we could not ask" for "the server said no".
+      return { status: 0, ok: false, data: {}, offline: true };
+    });
+  }
+
+  /* =======================================================================
+     Response classifiers — pure, and the whole API contract in one place.
+     Exported for the tests so the contract is asserted directly rather than
+     inferred from DOM side effects.
+     ======================================================================= */
+
+  /** `POST /bookings` → what the form must do next. */
+  function classifyBooking(res) {
+    var code = res.data && res.data.code;
+    if (res.status === 200 && res.data && res.data.status === 'confirmed') {
+      return { action: 'confirmed' };
+    }
+    if (res.status === 202) return { action: 'poll', pollAfterMs: res.data.pollAfterMs || POLL_FIRST_MS };
+    if (res.status === 409) {
+      if (code === 'SLOT_TAKEN') return { action: 'reselect', copyKey: 'slot_taken', refresh: true };
+      if (code === 'booking_needs_attention') return { action: 'needs_attention' };
+      if (code === 'already_booked') return { action: 'message', copyKey: 'already_booked' };
+      if (code === 'booking_cancelled') return { action: 'message', copyKey: 'booking_cancelled' };
+      return { action: 'reselect', copyKey: 'generic', refresh: true };
+    }
+    if (res.status === 400) {
+      // The slot reason is a machine code; the visitor sees authored copy for it.
+      var reason = res.data && res.data.reason;
+      return { action: 'reselect', copyKey: COPY[reason] ? reason : 'slot_malformed', refresh: true };
+    }
+    if (res.status === 502 && code === 'booking_failed') {
+      return { action: 'reselect', copyKey: 'booking_failed', refresh: true };
+    }
+    if (res.status === 503) {
+      return { action: 'error', copyKey: code === 'calendar_misconfigured' ? 'calendar_misconfigured' : 'store_unavailable' };
+    }
+    if (res.status === 0) return { action: 'error', copyKey: 'offline' };
+    return { action: 'error', copyKey: 'generic' };
+  }
+
+  /**
+   * `GET /bookings/{id}/status` → terminal or keep polling.
+   *
+   * `meetLink: null` is a perfectly valid confirmed booking (§10): the event
+   * exists and the invitation is sent, and Google may simply not have minted the
+   * conference link yet. It must never be treated as failure.
+   */
+  function classifyStatus(res) {
+    if (res.status !== 200) {
+      if (res.status === 401 || res.status === 403) return { terminal: true, kind: 'expired' };
+      return { terminal: false, kind: 'retry' };
+    }
+    var s = res.data && res.data.bookingStatus;
+    if (s === 'confirmed') return { terminal: true, kind: 'confirmed' };
+    if (s === 'needs_attention') return { terminal: true, kind: 'needs_attention' };
+    if (s === 'booking_failed') return { terminal: true, kind: 'booking_failed' };
+    if (s === 'cancelled') return { terminal: true, kind: 'cancelled' };
+    return { terminal: false, kind: 'pending' };
+  }
+
+  /** 3s → 10s, so a slow confirmation does not hammer the endpoint. */
+  function nextPollDelay(prev) {
+    return Math.min(POLL_MAX_MS, Math.round((prev || POLL_FIRST_MS) * 1.5));
+  }
+
+  /** `Not sure yet` means "no product", so the field is OMITTED, never sent. */
+  function productForSubmit(value) {
+    var v = String(value || '').trim();
+    if (!v || v.toLowerCase() === 'not sure yet') return undefined;
+    return v;
+  }
+
+  /**
+   * Which manage actions may be offered.
+   *
+   * Cancellation is gated and hidden by default; an escalated booking hides BOTH
+   * actions and shows the support line, because §5.5 refuses every mutating
+   * request on such a journey and offering a button that always 409s is worse
+   * than offering none.
+   */
+  function manageActions(status, flags) {
+    var f = flags || {};
+    var s = (status && status.bookingStatus) || null;
+    if (s === 'needs_attention' || (status && status.integrationStatus === 'needs_attention' && s !== 'confirmed')) {
+      return { reschedule: false, cancel: false, support: true, attention: true };
+    }
+    if (s === 'cancelled') return { reschedule: false, cancel: false, support: true, attention: false };
+    if (s !== 'confirmed') return { reschedule: false, cancel: false, support: true, attention: false };
+    return { reschedule: true, cancel: f.cancellationEnabled === true, support: f.cancellationEnabled !== true, attention: false };
+  }
+
+  /* =======================================================================
+     Markup
+     ======================================================================= */
+
+  /**
+   * `showCloseButton` is false for the embedded case: the site's own
+   * `#demo-modal` already renders `.demo-modal-close`, and painting a second
+   * close control inside its body was one of the two things that made the
+   * shared module unusable from `site.jsx`.
+   */
+  function formMarkup(o) {
+    var showClose = o && o.showCloseButton;
+    var finishInline = o && o.finishInline;
+    return ''
+      + '<div class="jurnii-booking-container" data-jurnii-booking-root="1">'
+      + '<div class="jurnii-notice" data-role="notice" style="display:none"></div>'
+      + (showClose ? '<button type="button" class="jurnii-close-btn" data-role="close" aria-label="Close"><i data-lucide="x" style="width:18px;height:18px;"></i></button>' : '')
+
+      + '<div class="jurnii-progress-container">'
+      + '<div class="jurnii-progress-steps">'
+      + '<div class="jurnii-step-indicator active" data-step-indicator="1"><div class="jurnii-step-bar"></div><span class="jurnii-step-label">Your details</span></div>'
+      + '<div class="jurnii-step-indicator" data-step-indicator="2"><div class="jurnii-step-bar"></div><span class="jurnii-step-label">Company</span></div>'
+      + '<div class="jurnii-step-indicator" data-step-indicator="3"><div class="jurnii-step-bar"></div><span class="jurnii-step-label">Book demo</span></div>'
+      + '</div></div>'
+
+      /* ---- step 1 ---- */
+      + '<div class="jurnii-form-step active" data-step="1">'
+      + '<div class="jurnii-form-header"><h3>Let\'s get started</h3>'
+      + '<p>Tell us a little bit about yourself so we can customize your platform access and intelligence briefs.</p></div>'
+      + '<div class="jurnii-form-grid">'
+      + '<div class="jurnii-form-group"><label class="jurnii-label" for="jurnii-first-name">First name *</label>'
+      + '<input type="text" class="jurnii-input" id="jurnii-first-name" data-field="firstName" autocomplete="given-name" placeholder="Alex" required></div>'
+      + '<div class="jurnii-form-group"><label class="jurnii-label" for="jurnii-last-name">Last name *</label>'
+      + '<input type="text" class="jurnii-input" id="jurnii-last-name" data-field="lastName" autocomplete="family-name" placeholder="Mercer" required></div>'
+      + '<div class="jurnii-form-group full-width"><label class="jurnii-label" for="jurnii-email">Business email *</label>'
+      + '<input type="email" class="jurnii-input" id="jurnii-email" data-field="email" autocomplete="email" placeholder="alex@company.com" required></div>'
+      + '<div class="jurnii-form-group full-width" style="margin-top:10px;">'
+      + '<label class="jurnii-consent-checkbox"><div class="jurnii-checkbox-wrapper">'
+      + '<input type="checkbox" id="jurnii-consent" data-field="marketingConsent"><span class="jurnii-checkbox-checkmark"></span>'
+      + '</div><span class="jurnii-consent-text">I consent to receive Jurnii\'s regular market intelligence reports and marketing updates. You can unsubscribe at any time.</span></label>'
+      + '</div></div>'
+      + '<div class="jurnii-form-actions"><button type="button" class="btn accent lg" data-role="next-1">Next: Company details &rarr;</button></div>'
+      + '</div>'
+
+      /* ---- step 2 ---- */
+      + '<div class="jurnii-form-step" data-step="2">'
+      + '<div class="jurnii-form-header"><h3>Tell us about your organization</h3>'
+      + '<p>We tailor Jurnii benchmarking to your specific competitive set and company profile.</p></div>'
+      + '<div class="jurnii-form-grid">'
+      + '<div class="jurnii-form-group"><label class="jurnii-label" for="jurnii-company">Company / Organization *</label>'
+      + '<input type="text" class="jurnii-input" id="jurnii-company" data-field="company" autocomplete="organization" placeholder="e.g. Flutter Entertainment" required></div>'
+      + '<div class="jurnii-form-group"><label class="jurnii-label" for="jurnii-job-title">Job Title *</label>'
+      + '<input type="text" class="jurnii-input" id="jurnii-job-title" data-field="jobTitle" autocomplete="organization-title" placeholder="e.g. Head of Product" required></div>'
+      + '<div class="jurnii-form-group"><label class="jurnii-label" for="jurnii-country">Country code *</label>'
+      + '<select class="jurnii-select" id="jurnii-country" data-field="countryIso2"></select></div>'
+      + '<div class="jurnii-form-group"><label class="jurnii-label" for="jurnii-phone">Phone number *</label>'
+      + '<input type="tel" class="jurnii-input" id="jurnii-phone" data-field="nationalNumber" autocomplete="tel-national" placeholder="e.g. 7123 456789" required></div>'
+      + '<div class="jurnii-form-group full-width"><label class="jurnii-label" for="jurnii-interest">What are you interested in seeing? (Optional)</label>'
+      + '<select class="jurnii-select" id="jurnii-interest" data-field="productInterest">'
+      + '<option value="" selected>Select an option...</option>'
+      + PRODUCT_OPTIONS.map(function (p) {
+        return '<option value="' + escapeHtml(p.value) + '">' + escapeHtml(p.label) + '</option>';
+      }).join('')
+      + '</select></div>'
+      + '</div>'
+      + '<div class="jurnii-form-actions split">'
+      + '<button type="button" class="btn ghost-on-dark sm" data-role="back-2">&larr; Back</button>'
+      + '<button type="button" class="btn accent lg" data-role="next-2">Next: Book Demo briefing &rarr;</button>'
+      + '</div></div>'
+
+      /* ---- step 3 ---- */
+      + '<div class="jurnii-form-step" data-step="3">'
+      + '<div class="jurnii-form-header"><h3>Schedule your Jurnii Demonstration</h3>'
+      + '<p>Select an available briefing slot in the calendar below. Briefings are conducted virtually in GMT/CET.</p></div>'
+      + schedulerMarkup()
+      + '<div class="jurnii-form-actions split">'
+      + '<button type="button" class="btn ghost-on-dark sm" data-role="back-3">&larr; Back</button>'
+      + '<button type="button" class="btn accent lg" data-role="confirm">Confirm Demo briefing</button>'
+      + '</div></div>'
+
+      /* ---- step 4: waiting on an uncertain create ---- */
+      + '<div class="jurnii-form-step" data-step="pending">'
+      + '<div class="jurnii-confirm-state">'
+      + '<div class="jurnii-confirm-icon"><i data-lucide="loader" style="width:32px;height:32px;"></i></div>'
+      + '<h3>Confirming your booking</h3>'
+      + '<p data-role="pending-msg">' + escapeHtml(COPY.booking_pending) + '</p>'
+      + '</div></div>'
+
+      /* ---- step 5: confirmation. Every value comes from the response. ---- */
+      + '<div class="jurnii-form-step" data-step="confirmed">'
+      + '<div class="jurnii-confirm-state">'
+      + '<div class="jurnii-confirm-icon"><i data-lucide="check" style="width:32px;height:32px;stroke-width:3;"></i></div>'
+      + '<h3>Demo Briefing Confirmed</h3>'
+      + '<p>Your product demonstration has been scheduled. Calendar invitation and Google Meet details have been sent to your email.</p>'
+      + '<div class="jurnii-confirm-meta">'
+      + '<div><span class="label">Briefing Time:</span><span class="val" data-role="confirm-time"></span></div>'
+      + '<div><span class="label">Booking Reference:</span><span class="val val-mono" data-role="confirm-ref"></span></div>'
+      + '<div data-role="confirm-meet-row" style="margin-top:10px;"><span class="label">Google Meet:</span><span class="val" data-role="confirm-meet"></span></div>'
+      + '</div>'
+      + '<div data-role="confirm-manage-row" style="margin:4px 0 18px;text-align:center;display:none;">'
+      + '<a data-role="confirm-manage" href="#" style="color:var(--jurnii-300);text-decoration:underline;font-size:14px;">Reschedule or cancel this booking</a>'
+      + '</div>'
+      + (finishInline
+        ? '<a href="/" class="btn primary lg">Back to Home</a>'
+        : '<button type="button" class="btn primary lg" data-role="finish">Finish &amp; Close</button>')
+      + '</div></div>'
+
+      /* ---- needs attention: a human is on it, and no action is offered ---- */
+      + attentionMarkup()
+
+      + '</div>';
+  }
+
+  function schedulerMarkup() {
+    return ''
+      + '<div class="jurnii-scheduler-container">'
+      + '<div class="jurnii-calendar-wrapper">'
+      + '<div class="jurnii-calendar-header"><span data-role="month-title">&mdash;</span>'
+      + '<div class="jurnii-calendar-nav">'
+      + '<button type="button" class="jurnii-calendar-nav-btn" data-role="cal-prev" aria-label="Previous Month"><i data-lucide="chevron-left" style="width:14px;height:14px;"></i></button>'
+      + '<button type="button" class="jurnii-calendar-nav-btn" data-role="cal-next" aria-label="Next Month"><i data-lucide="chevron-right" style="width:14px;height:14px;"></i></button>'
+      + '</div></div>'
+      + '<div class="jurnii-calendar-weekdays"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>'
+      + '<div class="jurnii-calendar-grid" data-role="cal-grid"></div>'
+      + '</div>'
+      + '<div class="jurnii-slots-wrapper" data-role="slots">'
+      + '<div class="jurnii-slots-empty">Select a date to view available time slots.</div>'
+      + '</div></div>';
+  }
+
+  /** No reason code, no CRM id, no calendar id, no raw error — §5.5. */
+  function attentionMarkup() {
+    return ''
+      + '<div class="jurnii-form-step" data-step="attention">'
+      + '<div class="jurnii-confirm-state">'
+      + '<div class="jurnii-confirm-icon" style="background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.18);color:var(--concrete-200);">'
+      + '<i data-lucide="life-buoy" style="width:32px;height:32px;"></i></div>'
+      + '<h3>We\'re looking into this</h3>'
+      + '<p>Something needs a person to check it, and someone is on it. Please contact us and we will sort your booking out.</p>'
+      + '<p><a data-role="support-link" href="#" style="color:var(--jurnii-300);text-decoration:underline;"></a></p>'
+      + '</div></div>';
+  }
+
+  function manageMarkup() {
+    return ''
+      + '<div class="jurnii-booking-container" data-jurnii-manage-root="1">'
+      + '<div class="jurnii-notice" data-role="notice" style="display:none"></div>'
+
+      + '<div class="jurnii-form-step active" data-step="home">'
+      + '<div class="jurnii-form-header"><h3>Manage your demo booking</h3>'
+      + '<p data-role="home-lede">Loading your booking&hellip;</p></div>'
+      + '<div class="jurnii-confirm-meta" data-role="home-meta" style="display:none;">'
+      + '<div><span class="label">Briefing Time:</span><span class="val" data-role="home-time"></span></div>'
+      + '</div>'
+      + '<div class="jurnii-form-actions split" data-role="home-actions" style="display:none;">'
+      + '<button type="button" class="btn ghost-on-dark sm" data-role="cancel" style="display:none;">Cancel booking</button>'
+      + '<button type="button" class="btn accent lg" data-role="to-reschedule" style="display:none;">Reschedule &rarr;</button>'
+      + '</div>'
+      + '<p data-role="support" style="display:none;font-size:13px;color:var(--concrete-300);margin-top:18px;"></p>'
+      + '</div>'
+
+      + '<div class="jurnii-form-step" data-step="reschedule">'
+      + '<div class="jurnii-form-header"><h3>Pick a new time</h3><p>Select an available briefing slot below.</p></div>'
+      + schedulerMarkup()
+      + '<div class="jurnii-form-actions split">'
+      + '<button type="button" class="btn ghost-on-dark sm" data-role="manage-back">&larr; Back</button>'
+      + '<button type="button" class="btn accent lg" data-role="manage-confirm">Confirm new time</button>'
+      + '</div></div>'
+
+      + '<div class="jurnii-form-step" data-step="pending">'
+      + '<div class="jurnii-confirm-state">'
+      + '<div class="jurnii-confirm-icon"><i data-lucide="loader" style="width:32px;height:32px;"></i></div>'
+      + '<h3>Updating your booking</h3><p data-role="pending-msg"></p>'
+      + '</div></div>'
+
+      + '<div class="jurnii-form-step" data-step="result">'
+      + '<div class="jurnii-confirm-state">'
+      + '<div class="jurnii-confirm-icon"><i data-lucide="check" style="width:32px;height:32px;stroke-width:3;"></i></div>'
+      + '<h3 data-role="result-title">Done</h3><p data-role="result-msg"></p>'
+      + '<a href="/" class="btn primary lg">Back to Home</a>'
+      + '</div></div>'
+
+      + attentionMarkup()
+      + '</div>';
+  }
+
+  /* =======================================================================
+     A scheduler bound to one container — shared by booking and reschedule.
+     ======================================================================= */
+  function createScheduler(root, hooks) {
+    var slots = [];
+    var byDay = {};
+    var selectedDay = null;
+    var selectedStart = null;
+    var month = new Date();
+    month.setDate(1);
+
+    var q = function (role) { return root.querySelector('[data-role="' + role + '"]'); };
+
+    function load() {
+      var grid = q('cal-grid');
+      if (grid) grid.innerHTML = '';
+      var panel = q('slots');
+      if (panel) panel.innerHTML = '<div class="jurnii-slots-empty">Loading available times&hellip;</div>';
+      return request('GET', '/availability').then(function (res) {
+        if (res.status !== 200) {
+          slots = []; byDay = {};
+          renderMonth();
+          // 503 availability_unavailable is explicit and retryable — never a
+          // silently all-disabled calendar, which is what the old form showed.
+          renderSlotsError();
+          return false;
+        }
+        slots = (res.data && res.data.slots) || [];
+        byDay = bucketSlotsByLocalDay(slots);
+        // Open on the first month that actually has a slot.
+        var days = Object.keys(byDay).sort();
+        if (days.length) { month = fromLocalDateKey(days[0]); month.setDate(1); }
+        if (selectedDay && !byDay[selectedDay]) { selectedDay = null; selectedStart = null; }
+        renderMonth();
+        renderSlots();
+        return true;
+      });
     }
 
-    const grid = document.getElementById('jurnii-calendar-days');
-    if (!grid) return;
-    grid.innerHTML = '';
-
-    // Prev month disabled check
-    const prevBtn = document.getElementById('jurnii-calendar-prev');
-    const now = new Date();
-    if (prevBtn) {
-      prevBtn.disabled = (year === now.getFullYear() && month === now.getMonth());
+    function renderSlotsError() {
+      var panel = q('slots');
+      if (!panel) return;
+      panel.innerHTML = '<div class="jurnii-slots-empty">' + escapeHtml(COPY.availability_unavailable)
+        + '<br><br><button type="button" class="btn ghost-on-dark sm" data-role="retry-availability">Try again</button></div>';
+      var btn = panel.querySelector('[data-role="retry-availability"]');
+      if (btn) btn.addEventListener('click', function () { load(); });
     }
 
-    const firstDayIndex = new Date(year, month, 1).getDay();
-    const totalDays = new Date(year, month + 1, 0).getDate();
+    function renderMonth() {
+      var title = q('month-title');
+      var grid = q('cal-grid');
+      if (!grid) return;
+      var year = month.getFullYear();
+      var mon = month.getMonth();
+      var names = ['January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'];
+      if (title) title.textContent = names[mon] + ' ' + year;
 
-    // Fill blank cells from previous month
-    for (let i = 0; i < firstDayIndex; i++) {
-      const cell = document.createElement('div');
-      cell.className = 'jurnii-calendar-day empty';
-      grid.appendChild(cell);
-    }
+      var now = new Date();
+      var prev = q('cal-prev');
+      if (prev) prev.disabled = (year === now.getFullYear() && mon === now.getMonth());
 
-    // Render active days
-    const today = new Date();
-    today.setHours(0,0,0,0);
-    const todayStr = today.toISOString().split('T')[0];
+      grid.innerHTML = '';
+      var firstIdx = new Date(year, mon, 1).getDay();
+      var total = new Date(year, mon + 1, 0).getDate();
+      var todayKey = localDateKey(now);
 
-    for (let day = 1; day <= totalDays; day++) {
-      const cellDate = new Date(year, month, day);
-      const cell = document.createElement('button');
-      cell.type = 'button';
-      cell.textContent = day;
-
-      const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-      const dayOfWeek = cellDate.getDay();
-
-      if (dateString < todayStr) {
-        // Past days
-        cell.className = 'jurnii-calendar-day past';
-        cell.disabled = true;
-      } else if (dayOfWeek === 0 || dayOfWeek === 6) {
-        // Weekends
-        cell.className = 'jurnii-calendar-day weekend';
-        cell.disabled = true;
-      } else {
-        // Check if this date has any available slots
-        const hasSlots = availableSlots.some(slot => slot.start.startsWith(dateString));
-        if (hasSlots) {
-          cell.className = 'jurnii-calendar-day available';
-          if (selectedDateStr === dateString) {
-            cell.classList.add('selected');
-          }
-
-          cell.addEventListener('click', (e) => {
-            e.preventDefault();
-            
-            document.querySelectorAll('.jurnii-calendar-day.selected').forEach(el => {
-              el.classList.remove('selected');
-            });
-            cell.classList.add('selected');
-            selectedDateStr = dateString;
-            
-            // Reset time slot selection
-            selectedTimeStr = null;
-            state.selected_demo_datetime = null;
-            
-            // Re-render time slots
-            renderTimeSlots(dateString);
-            updateDebugPanel();
-          });
+      for (var i = 0; i < firstIdx; i++) {
+        var blank = doc.createElement('div');
+        blank.className = 'jurnii-calendar-day empty';
+        grid.appendChild(blank);
+      }
+      for (var day = 1; day <= total; day++) {
+        var key = year + '-' + String(mon + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+        var cell = doc.createElement('button');
+        cell.type = 'button';
+        cell.textContent = String(day);
+        cell.setAttribute('data-day', key);
+        var dow = new Date(year, mon, day).getDay();
+        if (key < todayKey) {
+          cell.className = 'jurnii-calendar-day past';
+          cell.disabled = true;
+        } else if (dow === 0 || dow === 6) {
+          cell.className = 'jurnii-calendar-day weekend';
+          cell.disabled = true;
+        } else if (byDay[key] && byDay[key].length) {
+          cell.className = 'jurnii-calendar-day available' + (selectedDay === key ? ' selected' : '');
+          cell.addEventListener('click', onDayClick);
         } else {
-          // No slots left for this day
           cell.className = 'jurnii-calendar-day past';
           cell.disabled = true;
         }
+        grid.appendChild(cell);
       }
-
-      grid.appendChild(cell);
-    }
-  }
-
-  // --- Render Time Slots for Selected Date ---
-  function renderTimeSlots(dateStr) {
-    const container = document.getElementById('jurnii-slots-list');
-    if (!container) return;
-
-    if (!dateStr) {
-      container.innerHTML = '<div class="jurnii-slots-empty">Select a date to view available time slots.</div>';
-      return;
     }
 
-    const slotsForDate = availableSlots.filter(slot => slot.start.startsWith(dateStr));
-
-    container.innerHTML = '';
-    
-    const title = document.createElement('h4');
-    title.className = 'jurnii-slots-title';
-    
-    const dObj = new Date(dateStr);
-    const dateFormatted = dObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-    title.textContent = `Available slots for ${dateFormatted}:`;
-    container.appendChild(title);
-
-    if (slotsForDate.length === 0) {
-      const noSlots = document.createElement('div');
-      noSlots.className = 'jurnii-slots-empty';
-      noSlots.textContent = 'No slots available for this day.';
-      container.appendChild(noSlots);
-      return;
+    function onDayClick(e) {
+      e.preventDefault();
+      selectedDay = e.currentTarget.getAttribute('data-day');
+      selectedStart = null;
+      renderMonth();
+      renderSlots();
+      if (hooks && hooks.onSelect) hooks.onSelect(null);
     }
 
-    const grid = document.createElement('div');
-    grid.className = 'jurnii-slots-grid';
-
-    slotsForDate.forEach(slot => {
-      const dateObj = new Date(slot.start);
-      const timeFormatted = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
-      const tzName = dateObj.toLocaleDateString([], { timeZoneName: 'short' }).split(', ')[1] || 'Local';
-      const slotLabel = `${timeFormatted} (${tzName})`;
-
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'jurnii-time-slot-btn';
-      btn.textContent = slotLabel;
-
-      if (state.selected_demo_datetime === slot.start) {
-        btn.classList.add('selected');
+    function renderSlots() {
+      var panel = q('slots');
+      if (!panel) return;
+      if (!selectedDay) {
+        panel.innerHTML = '<div class="jurnii-slots-empty">Select a date to view available time slots.</div>';
+        return;
       }
-
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        
-        document.querySelectorAll('.jurnii-time-slot-btn.selected').forEach(el => {
-          el.classList.remove('selected');
+      var list = byDay[selectedDay] || [];
+      var heading = fromLocalDateKey(selectedDay)
+        .toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+      var html = '<h4 class="jurnii-slots-title">Available slots for ' + escapeHtml(heading) + ':</h4>';
+      if (!list.length) {
+        panel.innerHTML = html + '<div class="jurnii-slots-empty">No slots available for this day.</div>';
+        return;
+      }
+      html += '<div class="jurnii-slots-grid">' + list.map(function (slot) {
+        var sel = selectedStart === slot.start ? ' selected' : '';
+        return '<button type="button" class="jurnii-time-slot-btn' + sel + '" data-start="'
+          + escapeHtml(slot.start) + '">' + escapeHtml(timeLabel(slot.start)) + '</button>';
+      }).join('') + '</div>';
+      panel.innerHTML = html;
+      Array.prototype.forEach.call(panel.querySelectorAll('.jurnii-time-slot-btn'), function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          // The value submitted is the server's own ISO string, untouched.
+          selectedStart = btn.getAttribute('data-start');
+          Array.prototype.forEach.call(panel.querySelectorAll('.jurnii-time-slot-btn'), function (b) {
+            b.classList.remove('selected');
+          });
+          btn.classList.add('selected');
+          if (hooks && hooks.onSelect) hooks.onSelect(selectedStart);
         });
-        btn.classList.add('selected');
-        selectedTimeStr = timeFormatted;
-        state.selected_demo_datetime = slot.start;
-        updateDebugPanel();
       });
+    }
 
-      grid.appendChild(btn);
+    var prevBtn = q('cal-prev');
+    if (prevBtn) prevBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      month.setMonth(month.getMonth() - 1);
+      renderMonth();
+    });
+    var nextBtn = q('cal-next');
+    if (nextBtn) nextBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      month.setMonth(month.getMonth() + 1);
+      renderMonth();
     });
 
-    container.appendChild(grid);
+    return {
+      load: load,
+      reload: load,
+      selected: function () { return selectedStart; },
+      clearSelection: function () { selectedStart = null; renderSlots(); },
+      renderMonth: renderMonth
+    };
   }
 
-  // --- Build Form Component Markup ---
-  function createFormMarkup(isModal) {
-    let markup = `
-      <div class="jurnii-booking-container">
-        <div id="jurnii-form-error" style="display:none; color: #ff5252; background: rgba(255,82,82,0.1); padding: 12px; border-radius: 6px; margin-bottom: 16px; font-size: 14px; text-align: center; border: 1px solid rgba(255,82,82,0.2);"></div>
-        ${isModal ? `<button class="jurnii-close-btn" id="jurnii-modal-close" aria-label="Close modal"><i data-lucide="x" style="width:18px;height:18px;"></i></button>` : ''}
-        
-        <!-- Progress Steps -->
-        <div class="jurnii-progress-container">
-          <div class="jurnii-progress-steps">
-            <div class="jurnii-step-indicator active">
-              <div class="jurnii-step-bar"></div>
-              <span class="jurnii-step-label">Your details</span>
-            </div>
-            <div class="jurnii-step-indicator">
-              <div class="jurnii-step-bar"></div>
-              <span class="jurnii-step-label">Company</span>
-            </div>
-            <div class="jurnii-step-indicator">
-              <div class="jurnii-step-bar"></div>
-              <span class="jurnii-step-label">Book demo</span>
-            </div>
-          </div>
-        </div>
+  /* =======================================================================
+     The booking form
+     ======================================================================= */
+  function createBooking(container, options) {
+    var opts = options || {};
+    var embedded = resolveEmbedded(opts);
+    var data = readPlacement(container, opts);
+    var countries = null;
+    var poller = null;
+    var destroyed = false;
 
-        <!-- Step 1: Basic details -->
-        <div class="jurnii-form-step active" id="jurnii-step-1">
-          <div class="jurnii-form-header">
-            <h3>Let's get started</h3>
-            <p>Tell us a little bit about yourself so we can customize your platform access and intelligence briefs.</p>
-          </div>
-          <div class="jurnii-form-grid">
-            <div class="jurnii-form-group">
-              <label class="jurnii-label" for="jurnii-first-name">First name *</label>
-              <input type="text" class="jurnii-input" id="jurnii-first-name" placeholder="Alex" required>
-            </div>
-            <div class="jurnii-form-group">
-              <label class="jurnii-label" for="jurnii-last-name">Last name *</label>
-              <input type="text" class="jurnii-input" id="jurnii-last-name" placeholder="Mercer" required>
-            </div>
-            <div class="jurnii-form-group full-width">
-              <label class="jurnii-label" for="jurnii-email">Business email *</label>
-              <input type="email" class="jurnii-input" id="jurnii-email" placeholder="alex@company.com" required>
-            </div>
-            <div class="jurnii-form-group full-width" style="margin-top: 10px;">
-              <label class="jurnii-consent-checkbox">
-                <div class="jurnii-checkbox-wrapper">
-                  <input type="checkbox" id="jurnii-consent">
-                  <span class="jurnii-checkbox-checkmark"></span>
-                </div>
-                <span class="jurnii-consent-text">I consent to receive Jurnii's regular market intelligence reports and marketing updates. You can unsubscribe at any time.</span>
-              </label>
-            </div>
-          </div>
-          <div class="jurnii-form-actions">
-            <button type="button" class="btn accent lg" id="jurnii-next-1">Next: Company details &rarr;</button>
-          </div>
-        </div>
+    var vals = {
+      firstName: '', lastName: '', email: '', marketingConsent: false,
+      company: '', jobTitle: '', countryIso2: 'GB', nationalNumber: '', productInterest: ''
+    };
+    var journeyId = null;
+    var journeyEmail = null;
+    var token = null;
+    var scheduler = null;
+    var root = null;
 
-        <!-- Step 2: Company details -->
-        <div class="jurnii-form-step" id="jurnii-step-2">
-          <div class="jurnii-form-header">
-            <h3>Tell us about your organization</h3>
-            <p>We tailor Jurnii benchmarking to your specific competitive set and company profile.</p>
-          </div>
-          <div class="jurnii-form-grid">
-            <div class="jurnii-form-group">
-              <label class="jurnii-label" for="jurnii-company">Company / Organization *</label>
-              <input type="text" class="jurnii-input" id="jurnii-company" placeholder="e.g. Flutter Entertainment" required>
-            </div>
-            <div class="jurnii-form-group">
-              <label class="jurnii-label" for="jurnii-job-title">Job Title *</label>
-              <input type="text" class="jurnii-input" id="jurnii-job-title" placeholder="e.g. Head of Product" required>
-            </div>
-            <div class="jurnii-form-group">
-              <label class="jurnii-label" for="jurnii-phone-code">Country code *</label>
-              <select class="jurnii-select" id="jurnii-phone-code">
-                <option value="+44" selected>United Kingdom (+44)</option>
-                <option value="+1">United States (+1)</option>
-                <option value="+356">Malta (+356)</option>
-                <option value="+350">Gibraltar (+350)</option>
-                <option value="+46">Sweden (+46)</option>
-                <option value="+49">Germany (+49)</option>
-                <option value="+34">Spain (+34)</option>
-                <option value="+353">Ireland (+353)</option>
-                <option value="+61">Australia (+61)</option>
-                <option value="+599">Curaçao (+599)</option>
-                <option value="+506">Costa Rica (+506)</option>
-              </select>
-            </div>
-            <div class="jurnii-form-group">
-              <label class="jurnii-label" for="jurnii-phone">Phone number *</label>
-              <input type="tel" class="jurnii-input" id="jurnii-phone" placeholder="e.g. 7123 456789" required>
-            </div>
-            <div class="jurnii-form-group full-width">
-              <label class="jurnii-label" for="jurnii-interest">What are you interested in seeing? (Optional)</label>
-              <select class="jurnii-select" id="jurnii-interest">
-                <option value="" disabled selected>Select an option...</option>
-                <option value="Jurnii UX">Jurnii UX — User Experience Benchmarking</option>
-                <option value="Jurnii 360">Jurnii 360 — Competitor Surveillance Radar</option>
-                <option value="Jurnii Cortex">Cortex / Growth — Attribution & Scenarios</option>
-                <option value="Not sure yet">Not sure yet</option>
-              </select>
-            </div>
-          </div>
-          <div class="jurnii-form-actions split">
-            <button type="button" class="btn ghost-on-dark sm" id="jurnii-back-2">&larr; Back</button>
-            <button type="button" class="btn accent lg" id="jurnii-next-2">Next: Book Demo briefing &rarr;</button>
-          </div>
-        </div>
+    function q(role) { return root && root.querySelector('[data-role="' + role + '"]'); }
+    function field(name) { return root && root.querySelector('[data-field="' + name + '"]'); }
 
-        <!-- Step 3: Demo booking -->
-        <div class="jurnii-form-step" id="jurnii-step-3">
-          <div class="jurnii-form-header">
-            <h3>Schedule your Jurnii Demonstration</h3>
-            <p>Select an available briefing slot in the calendar below. Briefings are conducted virtually in GMT/CET.</p>
-          </div>
-          
-          <div class="jurnii-scheduler-container">
-            <!-- Calendar grid -->
-            <div class="jurnii-calendar-wrapper">
-              <div class="jurnii-calendar-header">
-                <span id="jurnii-month-title">July 2026</span>
-                <div class="jurnii-calendar-nav">
-                  <button type="button" class="jurnii-calendar-nav-btn" id="jurnii-calendar-prev" aria-label="Previous Month"><i data-lucide="chevron-left" style="width:14px;height:14px;"></i></button>
-                  <button type="button" class="jurnii-calendar-nav-btn" id="jurnii-calendar-next" aria-label="Next Month"><i data-lucide="chevron-right" style="width:14px;height:14px;"></i></button>
-                </div>
-              </div>
-              <div class="jurnii-calendar-weekdays">
-                <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
-              </div>
-              <div class="jurnii-calendar-grid" id="jurnii-calendar-days">
-                <!-- Dynamic day buttons populated by JS -->
-              </div>
-            </div>
+    function notice(msg, tone) {
+      var el = q('notice');
+      if (!el) return;
+      if (!msg) { el.style.display = 'none'; el.textContent = ''; return; }
+      el.textContent = msg;
+      el.setAttribute('data-tone', tone || 'error');
+      el.style.cssText = 'display:block;padding:12px;border-radius:6px;margin-bottom:16px;font-size:14px;text-align:center;'
+        + (tone === 'info'
+          ? 'color:#0b6b3a;background:rgba(16,185,129,0.10);border:1px solid rgba(16,185,129,0.25);'
+          : 'color:#ff5252;background:rgba(255,82,82,0.1);border:1px solid rgba(255,82,82,0.2);');
+    }
 
-            <!-- Time Slots side panel -->
-            <div class="jurnii-slots-wrapper" id="jurnii-slots-list">
-              <div class="jurnii-slots-empty">Select a date to view available time slots.</div>
-            </div>
-          </div>
+    function clearFieldErrors() {
+      Array.prototype.forEach.call(root.querySelectorAll('.jurnii-input.error'), function (el) {
+        el.classList.remove('error');
+      });
+    }
+    function markInvalid(name) {
+      var el = field(name);
+      if (el) el.classList.add('error');
+    }
 
-          <div class="jurnii-form-actions split">
-            <button type="button" class="btn ghost-on-dark sm" id="jurnii-back-3">&larr; Back</button>
-            <button type="button" class="btn accent lg" id="jurnii-confirm-booking">Confirm Demo briefing</button>
-          </div>
-        </div>
+    function showStep(step) {
+      Array.prototype.forEach.call(root.querySelectorAll('[data-step]'), function (el) {
+        el.classList.toggle('active', el.getAttribute('data-step') === String(step));
+      });
+      var numeric = Number(step);
+      Array.prototype.forEach.call(root.querySelectorAll('[data-step-indicator]'), function (el) {
+        var idx = Number(el.getAttribute('data-step-indicator'));
+        el.classList.remove('active', 'completed');
+        if (!numeric) { if (idx <= 3) el.classList.add('completed'); return; }
+        if (idx === numeric) el.classList.add('active');
+        else if (idx < numeric) el.classList.add('completed');
+      });
+      icons();
+    }
 
-        <!-- Step 4: Final Confirmation Screen -->
-        <div class="jurnii-form-step" id="jurnii-step-confirm">
-          <div class="jurnii-confirm-state">
-            <div class="jurnii-confirm-icon">
-              <i data-lucide="check" style="width:32px;height:32px;stroke-width:3;"></i>
-            </div>
-            <h3>Demo Briefing Confirmed</h3>
-            <p>Your product demonstration has been scheduled. Calendar invitation and Google Meet details have been sent to your email.</p>
-            
-            <div class="jurnii-confirm-meta">
-              <div>
-                <span class="label">Briefing Time:</span>
-                <span class="val" id="jurnii-confirm-time">July 15, 2026 at 2:00 PM CET</span>
-              </div>
-              <div>
-                <span class="label">Booking Reference:</span>
-                <span class="val val-mono" id="jurnii-confirm-reg-id">REG_XXXXXXXXX</span>
-              </div>
-              <div id="jurnii-confirm-meet-container" style="margin-top: 10px;">
-                <span class="label">Google Meet:</span>
-                <span class="val" id="jurnii-confirm-meet">Generating link...</span>
-              </div>
-              <div>
-                <span class="label">Status:</span>
-                <span class="val" style="color: var(--jurnii-300);">Confirmed</span>
-              </div>
-            </div>
-
-            <div id="jurnii-confirm-manage-container" style="margin: 4px 0 18px; text-align: center;">
-              <a id="jurnii-confirm-manage" href="#" style="color: var(--jurnii-300); text-decoration: underline; font-size: 14px;">Reschedule or cancel this booking</a>
-            </div>
-
-            ${isModal ? `<button type="button" class="btn primary lg" id="jurnii-confirm-close">Finish & Close</button>` : `<a href="index.html" class="btn primary lg">Back to Home</a>`}
-          </div>
-        </div>
-      </div>
-    `;
-    return markup;
-  }
-
-  // --- Bind Form Events & Synchronize Fields ---
-  function bindFormEvents(container) {
-    const fName = container.querySelector('#jurnii-first-name');
-    const lName = container.querySelector('#jurnii-last-name');
-    const email = container.querySelector('#jurnii-email');
-    const consent = container.querySelector('#jurnii-consent');
-    const company = container.querySelector('#jurnii-company');
-    const jobTitle = container.querySelector('#jurnii-job-title');
-    const phoneCode = container.querySelector('#jurnii-phone-code');
-    const phone = container.querySelector('#jurnii-phone');
-    const interest = container.querySelector('#jurnii-interest');
-
-    // Helper to manage loading state on buttons
-    function setLoadingState(btn, loading) {
-      if (loading) {
+    function setLoading(role, on) {
+      var btn = q(role);
+      if (!btn) return;
+      if (on) {
         btn.disabled = true;
-        btn.dataset.originalText = btn.textContent;
+        if (!btn.getAttribute('data-label')) btn.setAttribute('data-label', btn.textContent);
         btn.textContent = 'Processing...';
       } else {
         btn.disabled = false;
-        btn.textContent = btn.dataset.originalText || btn.textContent;
+        var label = btn.getAttribute('data-label');
+        if (label) btn.textContent = label;
       }
     }
 
-    function showGlobalError(msg) {
-      const errEl = container.querySelector('#jurnii-form-error');
-      if (errEl) {
-        errEl.textContent = msg;
-        errEl.style.display = 'block';
-        errEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    /* ---- paint ---- */
+    function paint() {
+      if (destroyed) return;
+      root = container;
+      container.innerHTML = formMarkup({
+        showCloseButton: !embedded && opts.showCloseButton === true,
+        // A host that supplied `onClose` gets a button that calls it; a genuine
+        // inline placement has nothing to close, so it gets a home link instead.
+        finishInline: typeof opts.onClose !== 'function'
+      });
+      populateCountries();
+      bind();
+      restore();
+      icons();
+    }
+
+    function populateCountries() {
+      var sel = field('countryIso2');
+      if (!sel || !countries) return;
+      // ISO2 values, straight from the shared config. No local country table, and
+      // no dial-code → country inference anywhere (spec §6).
+      sel.innerHTML = countries.COUNTRIES.map(function (c) {
+        return '<option value="' + escapeHtml(c.iso2) + '"' + (c.iso2 === vals.countryIso2 ? ' selected' : '') + '>'
+          + escapeHtml(c.name + ' (' + c.dialCode + ')') + '</option>';
+      }).join('');
+    }
+
+    function bind() {
+      ['firstName', 'lastName', 'email', 'company', 'jobTitle', 'nationalNumber'].forEach(function (name) {
+        var el = field(name);
+        if (el) el.addEventListener('input', function (e) { vals[name] = e.target.value; persist(); });
+      });
+      var consent = field('marketingConsent');
+      if (consent) consent.addEventListener('change', function (e) { vals.marketingConsent = !!e.target.checked; persist(); });
+      var country = field('countryIso2');
+      if (country) country.addEventListener('change', function (e) { vals.countryIso2 = e.target.value; persist(); });
+      var interest = field('productInterest');
+      if (interest) interest.addEventListener('change', function (e) { vals.productInterest = e.target.value; persist(); });
+
+      var n1 = q('next-1'); if (n1) n1.addEventListener('click', submitPage1);
+      var n2 = q('next-2'); if (n2) n2.addEventListener('click', submitPage2);
+      var b2 = q('back-2'); if (b2) b2.addEventListener('click', function (e) { e.preventDefault(); showStep(1); });
+      var b3 = q('back-3'); if (b3) b3.addEventListener('click', function (e) { e.preventDefault(); showStep(2); });
+      var cf = q('confirm'); if (cf) cf.addEventListener('click', submitBooking);
+
+      var close = q('close');
+      if (close) close.addEventListener('click', function (e) { e.preventDefault(); requestClose(); });
+      var finish = q('finish');
+      if (finish) finish.addEventListener('click', function (e) { e.preventDefault(); requestClose(); });
+
+      var support = q('support-link');
+      if (support) {
+        support.textContent = supportEmail();
+        support.href = 'mailto:' + supportEmail();
+      }
+
+      scheduler = createScheduler(root, {
+        onSelect: function () { notice(null); }
+      });
+    }
+
+    function requestClose() {
+      stopPolling();
+      if (typeof opts.onClose === 'function') opts.onClose();
+    }
+
+    /* ---- snapshot ---- */
+    function persist() {
+      var snap = loadSnapshot() || {};
+      saveSnapshot(Object.assign({}, snap, {
+        journey_id: journeyId,
+        journey_email: journeyEmail,
+        token: token,
+        step: currentStepNumber(),
+        values: vals,
+        attribution: snap.attribution || firstTouch()
+      }));
+    }
+
+    function currentStepNumber() {
+      var active = root && root.querySelector('.jurnii-form-step.active');
+      var s = active && active.getAttribute('data-step');
+      return Number(s) || 1;
+    }
+
+    function restore() {
+      var snap = loadSnapshot();
+      if (!snap) return;
+      if (snap.values) Object.assign(vals, snap.values);
+      journeyId = snap.journey_id || null;
+      journeyEmail = snap.journey_email || null;
+      token = snap.token || null;
+      Object.keys(vals).forEach(function (name) {
+        var el = field(name);
+        if (!el) return;
+        if (el.type === 'checkbox') el.checked = !!vals[name];
+        else if (vals[name] !== undefined && vals[name] !== null) el.value = vals[name];
+      });
+      if (token && journeyId && Number(snap.step) >= 3) {
+        showStep(3);
+        scheduler.load();
+      } else if (token && journeyId && Number(snap.step) === 2) {
+        showStep(2);
       }
     }
 
-    function clearGlobalError() {
-      const errEl = container.querySelector('#jurnii-form-error');
-      if (errEl) {
-        errEl.style.display = 'none';
-        errEl.textContent = '';
-        errEl.style.color = '';
-        errEl.style.background = '';
-        errEl.style.border = '';
-      }
+    /** A fresh journey: new id, and the stored token/id dropped. */
+    function resetJourney() {
+      journeyId = genUUID();
+      journeyEmail = vals.email;
+      token = null;
+      persist();
+      return journeyId;
     }
 
-    // Neutral (non-error) notice, e.g. "our team will follow up" for Manual Review.
-    function showGlobalInfo(msg) {
-      const errEl = container.querySelector('#jurnii-form-error');
-      if (errEl) {
-        errEl.textContent = msg;
-        errEl.style.color = '#0b6b3a';
-        errEl.style.background = 'rgba(16,185,129,0.10)';
-        errEl.style.border = '1px solid rgba(16,185,129,0.25)';
-        errEl.style.display = 'block';
-        errEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
+    function ensureJourneyId() {
+      if (journeyId && journeyEmail && journeyEmail !== vals.email) return resetJourney();
+      if (!journeyId) return resetJourney();
+      return journeyId;
     }
 
-    async function fetchAvailability() {
-      try {
-        const res = await fetch('/api/v1/availability');
-        const data = await res.json();
-        availableSlots = data.slots || [];
-      } catch (err) {
-        console.error('Failed to fetch availability:', err);
-      }
+    /* ---- page 1 ---- */
+    function page1Body() {
+      var att = firstTouch();
+      var body = {
+        journeyId: ensureJourneyId(),
+        firstName: String(vals.firstName || '').trim(),
+        lastName: String(vals.lastName || '').trim(),
+        email: String(vals.email || '').trim(),
+        marketingConsent: !!vals.marketingConsent,
+        // First touch, replayed from the snapshot — never re-read at submit time.
+        landingUrl: att.landing_url,
+        referrerUrl: att.referrer_url,
+        sourcePage: att.source_page,
+        clientTimezone: att.client_timezone,
+        clientLocale: att.client_locale,
+        // Hidden placement metadata, from render options or container data-*.
+        formPlacement: data.formPlacement,
+        ctaId: data.ctaId,
+        formVariant: data.formVariant
+      };
+      UTM_KEYS.forEach(function (k) { body[k] = att[k] || null; });
+      if (att.attribution_extra) body.attributionExtra = att.attribution_extra;
+      return body;
     }
-    currentFetchAvailability = fetchAvailability;
 
-    // Attach real-time synchronization listeners to update state
-    if (fName) fName.addEventListener('input', (e) => { state.first_name = e.target.value.trim(); updateDebugPanel(); });
-    if (lName) lName.addEventListener('input', (e) => { state.last_name = e.target.value.trim(); updateDebugPanel(); });
-    if (email) email.addEventListener('input', (e) => { state.email = e.target.value.trim(); updateDebugPanel(); });
-    if (consent) consent.addEventListener('change', (e) => { state.marketing_consent = e.target.checked; updateDebugPanel(); });
-    if (company) company.addEventListener('input', (e) => { state.company = e.target.value.trim(); updateDebugPanel(); });
-    if (jobTitle) jobTitle.addEventListener('input', (e) => { state.job_title = e.target.value.trim(); updateDebugPanel(); });
-    if (phone) phone.addEventListener('input', (e) => { state.phone_number = e.target.value.trim(); updateDebugPanel(); });
-    
-    if (phoneCode) phoneCode.addEventListener('change', (e) => {
-      const code = e.target.value;
-      state.phone_country_code = code;
-      state.inferred_country = countryMapping[code] || 'Unknown';
-      updateDebugPanel();
-    });
+    function submitPage1(e) {
+      if (e) e.preventDefault();
+      clearFieldErrors();
+      notice(null);
+      var ok = true;
+      if (!String(vals.firstName || '').trim()) { markInvalid('firstName'); ok = false; }
+      if (!String(vals.lastName || '').trim()) { markInvalid('lastName'); ok = false; }
+      var email = String(vals.email || '').trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { markInvalid('email'); ok = false; }
+      if (!ok) { notice(COPY.name_required); return Promise.resolve(false); }
 
-    if (interest) interest.addEventListener('change', (e) => {
-      state.optional_product_interest = e.target.value;
-      updateDebugPanel();
-    });
+      setLoading('next-1', true);
+      return send(false).then(function (done) {
+        setLoading('next-1', false);
+        return done;
+      });
 
-    // Step 1 Next Actions
-    const next1 = container.querySelector('#jurnii-next-1');
-    if (next1) {
-      next1.addEventListener('click', async (e) => {
-        e.preventDefault();
-        if (validateStep(1)) {
-          if (!isWorkEmail(state.email)) {
-            showError('jurnii-email');
-            showGlobalError('Please use your work email address to book a demo.');
-            return;
+      function send(isRetry) {
+        return request('POST', '/submissions/start', page1Body()).then(function (res) {
+          if (res.status === 200) {
+            token = res.data.token;
+            journeyId = res.data.journeyId || journeyId;
+            journeyEmail = email;
+            showStep(2);
+            persist();
+            return true;
           }
-          clearGlobalError();
-          setLoadingState(next1, true);
-          try {
-            // Mint + persist the journeyId BEFORE the request so retries reuse it.
-            const journeyId = ensureJourneyId(state.email);
-            const res = await fetch('/api/v1/submissions/start', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                journeyId,
-                firstName: state.first_name,
-                lastName: state.last_name,
-                email: state.email,
-                consent: state.marketing_consent,
-                sourcePage: state.source_page,
-                utmSource: state.utm_source,
-                utmMedium: state.utm_medium,
-                utmCampaign: state.utm_campaign
-              })
-            });
-            const data = await res.json();
-            if (res.status === 409 && data.code === 'MANUAL_REVIEW') {
-              showGlobalInfo(data.error || "We already have a record for this email — our team will be in touch.");
+          // `409 journey_conflict` means this id is bound to a different email.
+          // A fresh journey is the fix, and it is invisible to the visitor.
+          if (res.status === 409 && (res.data.code === 'journey_conflict' || res.data.code === 'wrong_step') && !isRetry) {
+            clearSnapshot();
+            resetJourney();
+            return send(true);
+          }
+          if (res.status === 400 && res.data.code === 'business_email_required') {
+            markInvalid('email'); notice(COPY.business_email_required); return false;
+          }
+          if (res.status === 400) { markInvalid('email'); notice(COPY.email_invalid); return false; }
+          if (res.status === 0) { notice(COPY.offline); return false; }
+          notice(COPY.store_unavailable);
+          return false;
+        });
+      }
+    }
+
+    /* ---- page 2 ---- */
+    function submitPage2(e) {
+      if (e) e.preventDefault();
+      clearFieldErrors();
+      notice(null);
+      if (!countries) { notice(COPY.generic); return Promise.resolve(false); }
+
+      var ok = true;
+      if (!String(vals.company || '').trim()) { markInvalid('company'); ok = false; }
+      if (!String(vals.jobTitle || '').trim()) { markInvalid('jobTitle'); ok = false; }
+      if (!ok) { notice(COPY.company_required); return Promise.resolve(false); }
+
+      // The SHARED normaliser, so the client shows what the server will derive.
+      var phone = countries.normalizePhone({
+        iso2: vals.countryIso2,
+        nationalNumber: vals.nationalNumber
+      });
+      if (!phone.ok) {
+        markInvalid(phone.reason === 'country_unknown' ? 'countryIso2' : 'nationalNumber');
+        notice(copy(phone.reason));
+        return Promise.resolve(false);
+      }
+
+      var body = {
+        company: String(vals.company || '').trim(),
+        jobTitle: String(vals.jobTitle || '').trim(),
+        countryIso2: vals.countryIso2,
+        dialCode: phone.dialCode,
+        nationalNumber: phone.nationalNumber,
+        e164: phone.e164
+      };
+      var product = productForSubmit(vals.productInterest);
+      if (product !== undefined) body.productInterest = product;
+
+      setLoading('next-2', true);
+      // A failed save must NOT advance: the calendar never opens on unsaved data.
+      return request('PATCH', '/submissions/' + encodeURIComponent(journeyId), body, token).then(function (res) {
+        if (res.status === 200) {
+          token = res.data.token || token;
+          showStep(3);
+          persist();
+          return scheduler.load();
+        }
+        if (res.status === 400) {
+          var reason = res.data && res.data.reason;
+          markInvalid(reason === 'country_unknown' ? 'countryIso2' : 'nationalNumber');
+          notice(copy(reason));
+          return false;
+        }
+        if (res.status === 409) { notice(COPY.generic); return false; }
+        if (res.status === 0) { notice(COPY.offline); return false; }
+        notice(COPY.store_unavailable);
+        return false;
+      }).then(function (r) {
+        setLoading('next-2', false);
+        return r;
+      });
+    }
+
+    /* ---- page 3 ---- */
+    function submitBooking(e) {
+      if (e) e.preventDefault();
+      notice(null);
+      var start = scheduler.selected();
+      if (!start) { notice(COPY.slot_required); return Promise.resolve(false); }
+
+      setLoading('confirm', true);
+      return request('POST', '/bookings', { slotStart: start }, token).then(function (res) {
+        setLoading('confirm', false);
+        var verdict = classifyBooking(res);
+
+        if (verdict.action === 'confirmed') {
+          finishConfirmed(res.data);
+          return true;
+        }
+        if (verdict.action === 'poll') {
+          showStep('pending');
+          startPolling(verdict.pollAfterMs);
+          return true;
+        }
+        if (verdict.action === 'needs_attention') { showAttention(); return false; }
+        if (verdict.action === 'reselect') {
+          notice(copy(verdict.copyKey));
+          showStep(3);
+          scheduler.clearSelection();
+          if (verdict.refresh) scheduler.reload();
+          return false;
+        }
+        if (verdict.action === 'message') { notice(copy(verdict.copyKey), 'info'); return false; }
+        notice(copy(verdict.copyKey));
+        return false;
+      });
+    }
+
+    /* ---- 202 → poll → terminal ---- */
+    function startPolling(firstDelay) {
+      stopPolling();
+      var delay = firstDelay || POLL_FIRST_MS;
+      var startedAt = Date.now();
+      var timer = null;
+      poller = { stop: function () { if (timer) win.clearTimeout(timer); timer = null; } };
+
+      function tick() {
+        if (destroyed) return;
+        request('GET', '/bookings/' + encodeURIComponent(journeyId) + '/status', null, token)
+          .then(function (res) {
+            if (destroyed) return;
+            var verdict = classifyStatus(res);
+            if (verdict.terminal) {
+              stopPolling();
+              if (verdict.kind === 'confirmed') return finishConfirmed(res.data);
+              if (verdict.kind === 'needs_attention') return showAttention();
+              if (verdict.kind === 'cancelled') { notice(COPY.booking_cancelled, 'info'); return showStep(3); }
+              // `booking_failed` means G3 PROVED no event was created, so the slot
+              // is genuinely free again and a retry is safe and correct.
+              notice(COPY.booking_failed);
+              showStep(3);
+              scheduler.clearSelection();
+              scheduler.reload();
               return;
             }
-            if (!res.ok) throw new Error(data.error || 'Failed to initialize submission');
-
-            continuationToken = data.token;
-            state.journey_id = data.journeyId || journeyId;
-            goToStep(2);
-            saveProgress();
-            updateDebugPanel();
-          } catch (err) {
-            showGlobalError(err.message);
-          } finally {
-            setLoadingState(next1, false);
-          }
-        }
-      });
-    }
-
-    // Step 2 Actions
-    const next2 = container.querySelector('#jurnii-next-2');
-    if (next2) {
-      next2.addEventListener('click', async (e) => {
-        e.preventDefault();
-        if (validateStep(2)) {
-          clearGlobalError();
-          setLoadingState(next2, true);
-          // Availability is Zoho-independent — prefetch it concurrently with the
-          // save. Pre-attach a catch so a rejected prefetch can never surface as an
-          // unhandled rejection if the save fails first.
-          const availabilityReady = fetchAvailability().catch(() => {});
-          try {
-            const res = await fetch(`/api/v1/submissions/${state.journey_id}`, {
-              method: 'PATCH',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${continuationToken}`
-              },
-              body: JSON.stringify({
-                company: state.company,
-                jobTitle: state.job_title,
-                phone: state.phone_country_code + state.phone_number,
-                country: state.inferred_country,
-                productInterest: state.optional_product_interest
-              })
-            });
-            const data = await res.json();
-            // A failed save must NOT advance — the calendar never opens on unsaved data.
-            if (!res.ok) throw new Error(data.error || 'Failed to save company details');
-
-            continuationToken = data.token;
-
-            // Save succeeded → reveal the calendar as soon as availability is ready.
-            await availabilityReady;
-            renderCalendar();
-            goToStep(3);
-            saveProgress();
-            updateDebugPanel();
-          } catch (err) {
-            showGlobalError(err.message);
-          } finally {
-            setLoadingState(next2, false);
-          }
-        }
-      });
-    }
-
-    const back2 = container.querySelector('#jurnii-back-2');
-    if (back2) {
-      back2.addEventListener('click', (e) => {
-        e.preventDefault();
-        goToStep(1);
-      });
-    }
-
-    // Step 3 Actions
-    const back3 = container.querySelector('#jurnii-back-3');
-    if (back3) {
-      back3.addEventListener('click', (e) => {
-        e.preventDefault();
-        goToStep(2);
-      });
-    }
-
-    const confirmBtn = container.querySelector('#jurnii-confirm-booking');
-    if (confirmBtn) {
-      confirmBtn.addEventListener('click', async (e) => {
-        e.preventDefault();
-        if (validateStep(3)) {
-          clearGlobalError();
-          setLoadingState(confirmBtn, true);
-          try {
-            const res = await fetch('/api/v1/bookings', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${continuationToken}`
-              },
-              body: JSON.stringify({
-                slotStart: state.selected_demo_datetime
-              })
-            });
-            const data = await res.json();
-            if (res.status === 409 && data.code === 'SLOT_TAKEN') {
-              showGlobalError(data.error || 'That slot was just taken. Please pick another.');
-              state.selected_demo_datetime = null;
-              selectedTimeStr = null;
-              await fetchAvailability();
-              renderCalendar();
-              renderTimeSlots(selectedDateStr);
+            if (Date.now() - startedAt > POLL_GIVE_UP_MS) {
+              stopPolling();
+              var msg = q('pending-msg');
+              if (msg) msg.textContent = COPY.booking_pending_slow;
               return;
             }
-            if (!res.ok || data.status !== 'confirmed') {
-              throw new Error(data.error || data.message || 'Failed to complete booking');
-            }
-
-            clearProgress();
-            // Journey complete — drop the id so any later booking starts a fresh journey.
-            state.journey_id = null;
-            state.journey_email = null;
-            state.submitted_at = new Date().toISOString();
-            state.status = 'confirmed';
-            state.registration_id = data.bookingId;
-            updateDebugPanel();
-
-            // Populate confirmation panel variables
-            const confirmTime = container.querySelector('#jurnii-confirm-time');
-            const confirmRegId = container.querySelector('#jurnii-confirm-reg-id');
-            const confirmMeet = container.querySelector('#jurnii-confirm-meet');
-            
-            if (confirmTime && state.selected_demo_datetime) {
-              const dateObj = new Date(state.selected_demo_datetime);
-              confirmTime.textContent = dateObj.toLocaleDateString('en-US', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              }) + ' at ' + selectedTimeStr;
-            }
-            if (confirmRegId) {
-              confirmRegId.textContent = state.registration_id;
-            }
-            if (confirmMeet && data.meetLink) {
-              confirmMeet.innerHTML = `<a href="${data.meetLink}" target="_blank" style="color: var(--jurnii-300); text-decoration: underline; font-weight: 500;">Join Google Meet</a>`;
-            } else if (confirmMeet) {
-              confirmMeet.textContent = 'Invitation sent via email';
-            }
-
-            const confirmManage = container.querySelector('#jurnii-confirm-manage');
-            if (confirmManage && data.manageUrl) {
-              confirmManage.href = data.manageUrl;
-            } else if (confirmManage) {
-              confirmManage.parentElement.style.display = 'none';
-            }
-
-            goToStep(4);
-          } catch (err) {
-            showGlobalError(err.message);
-          } finally {
-            setLoadingState(confirmBtn, false);
-          }
-        }
-      });
-    }
-
-    // Calendar Navigation
-    const prevMonth = container.querySelector('#jurnii-calendar-prev');
-    if (prevMonth) {
-      prevMonth.addEventListener('click', (e) => {
-        e.preventDefault();
-        calendarDate.setMonth(calendarDate.getMonth() - 1);
-        renderCalendar();
-      });
-    }
-
-    const nextMonth = container.querySelector('#jurnii-calendar-next');
-    if (nextMonth) {
-      nextMonth.addEventListener('click', (e) => {
-        e.preventDefault();
-        calendarDate.setMonth(calendarDate.getMonth() + 1);
-        renderCalendar();
-      });
-    }
-
-    // Initialize Lucide icons if loaded
-    if (typeof lucide !== 'undefined') {
-      lucide.createIcons();
-    }
-  }
-
-  // --- Initialize Modal Overlay Layout ---
-  function initModalOverlay() {
-    let overlay = document.querySelector('.jurnii-modal-overlay');
-    if (overlay) return overlay;
-
-    overlay = document.createElement('div');
-    overlay.className = 'jurnii-modal-overlay';
-    overlay.innerHTML = `
-      <div class="jurnii-modal-wrapper">
-        <!-- Render form dynamically here -->
-      </div>
-    `;
-
-    document.body.appendChild(overlay);
-
-    // Modal close hook: click on the backdrop closes the modal.
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay) {
-        closeModal();
+            delay = nextPollDelay(delay);
+            timer = win.setTimeout(tick, delay);
+          });
       }
+      timer = win.setTimeout(tick, delay);
+    }
+
+    function stopPolling() {
+      if (poller) { poller.stop(); poller = null; }
+    }
+
+    /* ---- terminal states ---- */
+    function finishConfirmed(payload) {
+      clearSnapshot();
+      journeyId = payload.bookingId || journeyId;
+      var time = q('confirm-time');
+      var ref = q('confirm-ref');
+      var meet = q('confirm-meet');
+      var meetRow = q('confirm-meet-row');
+      var manageRow = q('confirm-manage-row');
+      var manage = q('confirm-manage');
+
+      // Every value comes from the response. The shipped `Status: Confirmed`,
+      // `REG_XXXXXXXXX` and `July 15, 2026 at 2:00 PM CET` placeholders are gone.
+      if (time) time.textContent = dateTimeLabel(payload.slotStart);
+      if (ref) ref.textContent = payload.bookingId || '';
+
+      var link = safeUrl(payload.meetLink);
+      if (link && meet) {
+        meet.innerHTML = '<a href="' + escapeHtml(link) + '" target="_blank" rel="noopener"'
+          + ' style="color:var(--jurnii-300);text-decoration:underline;font-weight:500;">Join Google Meet</a>';
+      } else if (meet) {
+        // meetLink: null is a VALID confirmed booking — the invite is already sent.
+        meet.textContent = 'Invitation sent via email';
+      }
+      if (meetRow) meetRow.style.display = '';
+
+      var mUrl = safeUrl(payload.manageUrl);
+      if (mUrl && manage && manageRow) { manage.href = mUrl; manageRow.style.display = ''; }
+      else if (manageRow) { manageRow.style.display = 'none'; }
+
+      showStep('confirmed');
+      if (typeof opts.onConfirmed === 'function') opts.onConfirmed(payload);
+    }
+
+    function showAttention() {
+      stopPolling();
+      var support = q('support-link');
+      if (support) { support.textContent = supportEmail(); support.href = 'mailto:' + supportEmail(); }
+      showStep('attention');
+    }
+
+    /* ---- boot ---- */
+    loadConfig().then(function (cfg) {
+      countries = cfg;
+      paint();
+    }, function () {
+      // Fail closed and visibly, rather than falling back to a private country
+      // table that could disagree with the server's normalisation.
+      container.innerHTML = '<div class="jurnii-booking-container"><div class="jurnii-notice" style="padding:12px;'
+        + 'border-radius:6px;font-size:14px;text-align:center;color:#ff5252;background:rgba(255,82,82,0.1);'
+        + 'border:1px solid rgba(255,82,82,0.2);">' + escapeHtml(COPY.calendar_misconfigured) + '</div></div>';
     });
 
-    return overlay;
-  }
-
-  function openModal() {
-    const overlay = initModalOverlay();
-    const wrapper = overlay.querySelector('.jurnii-modal-wrapper');
-    
-    // Inject form markup
-    wrapper.innerHTML = createFormMarkup(true);
-    bindFormEvents(wrapper);
-
-    // Reset step
-    goToStep(1);
-
-    // Display modal
-    overlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
-
-    // Bind local close buttons
-    const closeBtn = wrapper.querySelector('#jurnii-modal-close');
-    if (closeBtn) closeBtn.addEventListener('click', closeModal);
-
-    const finishBtn = wrapper.querySelector('#jurnii-confirm-close');
-    if (finishBtn) finishBtn.addEventListener('click', closeModal);
-    
-    updateDebugPanel();
-  }
-
-  function closeModal() {
-    const overlay = document.querySelector('.jurnii-modal-overlay');
-    if (overlay) {
-      overlay.classList.remove('active');
-      document.body.style.overflow = '';
-      
-      // Delay cleaning form markup to allow transition animation to complete
-      setTimeout(() => {
-        const wrapper = overlay.querySelector('.jurnii-modal-wrapper');
-        if (wrapper) wrapper.innerHTML = '';
-      }, 300);
-    }
-  }
-
-  // --- Self-service manage (cancel / reschedule) on manage.html ---
-  async function fetchAvailabilityGlobal() {
-    try {
-      const res = await fetch('/api/v1/availability');
-      const data = await res.json();
-      availableSlots = data.slots || [];
-    } catch (err) {
-      console.error('Failed to fetch availability:', err);
-    }
-  }
-
-  function createManageMarkup() {
-    return `
-      <div class="jurnii-booking-container">
-        <div id="jurnii-form-error" style="display:none; color:#ff5252; background:rgba(255,82,82,0.1); padding:12px; border-radius:6px; margin-bottom:16px; font-size:14px; text-align:center; border:1px solid rgba(255,82,82,0.2);"></div>
-
-        <div class="jurnii-form-step active" id="jurnii-manage-home">
-          <div class="jurnii-form-header">
-            <h3>Manage your demo booking</h3>
-            <p>Reschedule to a new time or cancel your Jurnii product demonstration.</p>
-          </div>
-          <div class="jurnii-form-actions split">
-            <button type="button" class="btn ghost-on-dark sm" id="jurnii-manage-cancel">Cancel booking</button>
-            <button type="button" class="btn accent lg" id="jurnii-manage-reschedule">Reschedule &rarr;</button>
-          </div>
-        </div>
-
-        <div class="jurnii-form-step" id="jurnii-manage-reschedule-step">
-          <div class="jurnii-form-header">
-            <h3>Pick a new time</h3>
-            <p>Select an available briefing slot below.</p>
-          </div>
-          <div class="jurnii-scheduler-container">
-            <div class="jurnii-calendar-wrapper">
-              <div class="jurnii-calendar-header">
-                <span id="jurnii-month-title">—</span>
-                <div class="jurnii-calendar-nav">
-                  <button type="button" class="jurnii-calendar-nav-btn" id="jurnii-calendar-prev" aria-label="Previous Month"><i data-lucide="chevron-left" style="width:14px;height:14px;"></i></button>
-                  <button type="button" class="jurnii-calendar-nav-btn" id="jurnii-calendar-next" aria-label="Next Month"><i data-lucide="chevron-right" style="width:14px;height:14px;"></i></button>
-                </div>
-              </div>
-              <div class="jurnii-calendar-weekdays">
-                <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
-              </div>
-              <div class="jurnii-calendar-grid" id="jurnii-calendar-days"></div>
-            </div>
-            <div class="jurnii-slots-wrapper" id="jurnii-slots-list">
-              <div class="jurnii-slots-empty">Select a date to view available time slots.</div>
-            </div>
-          </div>
-          <div class="jurnii-form-actions split">
-            <button type="button" class="btn ghost-on-dark sm" id="jurnii-manage-back">&larr; Back</button>
-            <button type="button" class="btn accent lg" id="jurnii-manage-confirm">Confirm new time</button>
-          </div>
-        </div>
-
-        <div class="jurnii-form-step" id="jurnii-manage-result">
-          <div class="jurnii-confirm-state">
-            <div class="jurnii-confirm-icon"><i data-lucide="check" style="width:32px;height:32px;stroke-width:3;"></i></div>
-            <h3 id="jurnii-manage-result-title">Done</h3>
-            <p id="jurnii-manage-result-msg"></p>
-            <a href="index.html" class="btn primary lg">Back to Home</a>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  function showManageStep(container, id) {
-    ['jurnii-manage-home', 'jurnii-manage-reschedule-step', 'jurnii-manage-result'].forEach(s => {
-      const el = container.querySelector('#' + s);
-      if (el) el.classList.toggle('active', s === id);
-    });
-  }
-
-  function bindManageEvents(container, token, journeyId) {
-    const errEl = container.querySelector('#jurnii-form-error');
-    const showErr = (m) => { if (errEl) { errEl.textContent = m; errEl.style.display = 'block'; } };
-    const clearErr = () => { if (errEl) { errEl.style.display = 'none'; errEl.textContent = ''; } };
-    const setLoading = (btn, on) => {
-      if (!btn) return;
-      if (on) { btn.disabled = true; btn.dataset.orig = btn.textContent; btn.textContent = 'Processing...'; }
-      else { btn.disabled = false; btn.textContent = btn.dataset.orig || btn.textContent; }
+    return {
+      kind: 'booking',
+      destroy: function () { destroyed = true; stopPolling(); },
+      // test seams
+      _submitPage1: function () { return submitPage1(); },
+      _submitPage2: function () { return submitPage2(); },
+      _submitBooking: function () { return submitBooking(); },
+      _scheduler: function () { return scheduler; },
+      _values: vals,
+      _setValues: function (patch) { Object.assign(vals, patch); },
+      _journeyId: function () { return journeyId; },
+      _setJourney: function (id, tok) { journeyId = id; token = tok; },
+      _step: function () {
+        var active = container.querySelector('.jurnii-form-step.active');
+        return active ? active.getAttribute('data-step') : null;
+      }
     };
-    const result = (title, msg) => {
-      const t = container.querySelector('#jurnii-manage-result-title');
-      const m = container.querySelector('#jurnii-manage-result-msg');
+  }
+
+  /* =======================================================================
+     The manage page
+     ======================================================================= */
+  function createManage(container, options) {
+    var opts = options || {};
+    var params = new (win.URLSearchParams || URLSearchParams)((win.location && win.location.search) || '');
+    var token = opts.token || params.get('token');
+    var journeyId = opts.journeyId || params.get('id');
+    var scheduler = null;
+    var status = null;
+    var poller = null;
+    var destroyed = false;
+    var root = container;
+
+    function q(role) { return root.querySelector('[data-role="' + role + '"]'); }
+
+    function notice(msg, tone) {
+      var el = q('notice');
+      if (!el) return;
+      if (!msg) { el.style.display = 'none'; el.textContent = ''; return; }
+      el.textContent = msg;
+      el.style.cssText = 'display:block;padding:12px;border-radius:6px;margin-bottom:16px;font-size:14px;text-align:center;'
+        + (tone === 'info'
+          ? 'color:#0b6b3a;background:rgba(16,185,129,0.10);border:1px solid rgba(16,185,129,0.25);'
+          : 'color:#ff5252;background:rgba(255,82,82,0.1);border:1px solid rgba(255,82,82,0.2);');
+    }
+
+    function showStep(step) {
+      Array.prototype.forEach.call(root.querySelectorAll('[data-step]'), function (el) {
+        el.classList.toggle('active', el.getAttribute('data-step') === step);
+      });
+      icons();
+    }
+
+    function setLoading(role, on) {
+      var btn = q(role);
+      if (!btn) return;
+      if (on) {
+        btn.disabled = true;
+        if (!btn.getAttribute('data-label')) btn.setAttribute('data-label', btn.textContent);
+        btn.textContent = 'Processing...';
+      } else {
+        btn.disabled = false;
+        var label = btn.getAttribute('data-label');
+        if (label) btn.textContent = label;
+      }
+    }
+
+    function result(title, msg) {
+      var t = q('result-title');
+      var m = q('result-msg');
       if (t) t.textContent = title;
       if (m) m.textContent = msg;
-      showManageStep(container, 'jurnii-manage-result');
-      if (typeof lucide !== 'undefined') lucide.createIcons();
-    };
-
-    const reBtn = container.querySelector('#jurnii-manage-reschedule');
-    if (reBtn) reBtn.addEventListener('click', async () => {
-      clearErr();
-      showManageStep(container, 'jurnii-manage-reschedule-step');
-      await fetchAvailabilityGlobal();
-      renderCalendar();
-      if (typeof lucide !== 'undefined') lucide.createIcons();
-    });
-
-    const backBtn = container.querySelector('#jurnii-manage-back');
-    if (backBtn) backBtn.addEventListener('click', () => { clearErr(); showManageStep(container, 'jurnii-manage-home'); });
-
-    const confirmBtn = container.querySelector('#jurnii-manage-confirm');
-    if (confirmBtn) confirmBtn.addEventListener('click', async () => {
-      clearErr();
-      if (!state.selected_demo_datetime) { showErr('Please select a date and time slot.'); return; }
-      setLoading(confirmBtn, true);
-      try {
-        const res = await fetch(`/api/v1/bookings/${encodeURIComponent(journeyId)}/reschedule`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-          body: JSON.stringify({ slotStart: state.selected_demo_datetime })
-        });
-        const data = await res.json().catch(() => ({}));
-        if (res.status === 409 && data.code === 'SLOT_TAKEN') {
-          showErr('That slot was just taken. Please pick another.');
-          state.selected_demo_datetime = null;
-          await fetchAvailabilityGlobal();
-          renderCalendar();
-          renderTimeSlots(selectedDateStr);
-          return;
-        }
-        if (!res.ok) throw new Error(data.error || 'Could not reschedule the booking.');
-        result('Booking rescheduled', 'Your demo has been moved. An updated calendar invitation has been sent to your email.');
-      } catch (err) {
-        showErr(err.message);
-      } finally {
-        setLoading(confirmBtn, false);
-      }
-    });
-
-    const cancelBtn = container.querySelector('#jurnii-manage-cancel');
-    if (cancelBtn) cancelBtn.addEventListener('click', async () => {
-      clearErr();
-      if (!window.confirm('Cancel your demo booking? This cannot be undone.')) return;
-      setLoading(cancelBtn, true);
-      try {
-        const res = await fetch(`/api/v1/bookings/${encodeURIComponent(journeyId)}`, {
-          method: 'DELETE',
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data.error || 'Could not cancel the booking.');
-        result('Booking cancelled', 'Your demo has been cancelled. You can book again any time.');
-      } catch (err) {
-        showErr(err.message);
-      } finally {
-        setLoading(cancelBtn, false);
-      }
-    });
-
-    const prev = container.querySelector('#jurnii-calendar-prev');
-    if (prev) prev.addEventListener('click', () => { calendarDate.setMonth(calendarDate.getMonth() - 1); renderCalendar(); });
-    const next = container.querySelector('#jurnii-calendar-next');
-    if (next) next.addEventListener('click', () => { calendarDate.setMonth(calendarDate.getMonth() + 1); renderCalendar(); });
-  }
-
-  function initManage(container) {
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get('token');
-    const id = params.get('id');
-    container.innerHTML = createManageMarkup();
-
-    if (!token || !id) {
-      const err = container.querySelector('#jurnii-form-error');
-      if (err) { err.textContent = 'This management link is invalid or has expired. Please use the link from your booking confirmation email.'; err.style.display = 'block'; }
-      const actions = container.querySelector('#jurnii-manage-home .jurnii-form-actions');
-      if (actions) actions.remove();
-      if (typeof lucide !== 'undefined') lucide.createIcons();
-      return;
+      showStep('result');
     }
 
-    bindManageEvents(container, token, id);
-    showManageStep(container, 'jurnii-manage-home');
-    if (typeof lucide !== 'undefined') lucide.createIcons();
-  }
+    function showAttention() {
+      stopPolling();
+      var support = q('support-link');
+      if (support) { support.textContent = supportEmail(); support.href = 'mailto:' + supportEmail(); }
+      showStep('attention');
+    }
 
-  // --- Initialize JSON Debug Logging Console ---
-  function initDebugPanel() {
-    // Gate to development environments only
-    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    if (!isLocalhost) return;
+    function paint() {
+      container.innerHTML = manageMarkup();
+      root = container;
 
-    let debugToggle = document.getElementById('jurnii-debug-toggle');
-    if (debugToggle) return;
+      if (!token || !journeyId) {
+        // No reason code, no id echoed back — just the one thing they can act on.
+        notice(COPY.manage_link_invalid);
+        var actions = q('home-actions');
+        if (actions) actions.style.display = 'none';
+        var lede = q('home-lede');
+        if (lede) lede.textContent = '';
+        icons();
+        return;
+      }
 
-    // Toggle button
-    debugToggle = document.createElement('button');
-    debugToggle.id = 'jurnii-debug-toggle';
-    debugToggle.className = 'jurnii-debug-toggle';
-    debugToggle.innerHTML = '<span class="badge"></span> Debug Logs';
-    document.body.appendChild(debugToggle);
-
-    // Floating logger panel
-    const debugPanel = document.createElement('div');
-    debugPanel.id = 'jurnii-debug-panel';
-    debugPanel.className = 'jurnii-debug-panel';
-    debugPanel.innerHTML = `
-      <div class="jurnii-debug-header">
-        <span class="title"><i data-lucide="terminal" style="width:14px;height:14px;color:var(--jurnii-200);"></i> JURNII REGISTRATION OBJECT</span>
-        <button class="clear" id="jurnii-debug-clear">Reset</button>
-      </div>
-      <div class="jurnii-debug-content">
-        <pre id="jurnii-debug-json"></pre>
-      </div>
-    `;
-    document.body.appendChild(debugPanel);
-
-    // Bind open/close toggle
-    debugToggle.addEventListener('click', (e) => {
-      e.preventDefault();
-      debugPanel.classList.toggle('active');
-    });
-
-    // Reset simulator state
-    const clearBtn = debugPanel.querySelector('#jurnii-debug-clear');
-    if (clearBtn) {
-      clearBtn.addEventListener('click', (e) => {
+      var back = q('manage-back');
+      if (back) back.addEventListener('click', function (e) { e.preventDefault(); notice(null); showStep('home'); });
+      var toRe = q('to-reschedule');
+      if (toRe) toRe.addEventListener('click', function (e) {
         e.preventDefault();
-        
-        // Reset state object
-        state = {
-          registration_id: null,
-          submitted_at: null,
-          updated_at: new Date().toISOString(),
-          status: 'partial',
-          first_name: '',
-          last_name: '',
-          email: '',
-          marketing_consent: false,
-          company: '',
-          job_title: '',
-          phone_country_code: '+44',
-          phone_number: '',
-          inferred_country: 'United Kingdom',
-          optional_product_interest: '',
-          source_page: window.location.pathname || '/',
-          utm_source: '',
-          utm_medium: '',
-          utm_campaign: '',
-          selected_demo_datetime: null
-        };
-        
-        selectedDateStr = null;
-        selectedTimeStr = null;
-        currentStep = 1;
+        notice(null);
+        showStep('reschedule');
+        scheduler.load();
+      });
+      var confirm = q('manage-confirm');
+      if (confirm) confirm.addEventListener('click', submitReschedule);
+      var cancel = q('cancel');
+      if (cancel) cancel.addEventListener('click', submitCancel);
 
-        // Re-capture UTMs
-        captureUTMParameters();
+      scheduler = createScheduler(root, { onSelect: function () { notice(null); } });
+      icons();
+      return refreshStatus();
+    }
 
-        // Refresh UI
-        const inlineContainer = document.getElementById('jurnii-booking-form-inline');
-        if (inlineContainer) {
-          inlineContainer.innerHTML = createFormMarkup(false);
-          bindFormEvents(inlineContainer);
-          goToStep(1);
-        } else {
-          // If modal is active, refresh wrappers
-          const modalWrapper = document.querySelector('.jurnii-modal-wrapper');
-          if (modalWrapper && modalWrapper.innerHTML !== '') {
-            modalWrapper.innerHTML = createFormMarkup(true);
-            bindFormEvents(modalWrapper);
-            goToStep(1);
+    function refreshStatus() {
+      return request('GET', '/bookings/' + encodeURIComponent(journeyId) + '/status', null, token)
+        .then(function (res) {
+          if (res.status === 401 || res.status === 403) {
+            notice(COPY.manage_link_invalid);
+            var a = q('home-actions'); if (a) a.style.display = 'none';
+            var l = q('home-lede'); if (l) l.textContent = '';
+            return false;
           }
-        }
+          if (res.status !== 200) { notice(COPY.generic); return false; }
+          status = res.data;
+          renderHome();
+          return true;
+        });
+    }
 
-        updateDebugPanel();
+    function renderHome() {
+      var acts = manageActions(status, { cancellationEnabled: cancellationEnabled() });
+      if (acts.attention) return showAttention();
+
+      var lede = q('home-lede');
+      var meta = q('home-meta');
+      var time = q('home-time');
+      var actions = q('home-actions');
+      var reBtn = q('to-reschedule');
+      var cxBtn = q('cancel');
+      var support = q('support');
+
+      var slot = status && (status.slotStart || null);
+      if (time && slot) time.textContent = dateTimeLabel(slot);
+      if (meta) meta.style.display = slot ? '' : 'none';
+
+      if (lede) {
+        lede.textContent = acts.reschedule
+          ? 'Reschedule to a new time or contact us about your Jurnii product demonstration.'
+          : (status && status.bookingStatus === 'cancelled'
+            ? COPY.booking_cancelled
+            : COPY.not_confirmed);
+      }
+      if (actions) actions.style.display = (acts.reschedule || acts.cancel) ? '' : 'none';
+      if (reBtn) reBtn.style.display = acts.reschedule ? '' : 'none';
+      if (cxBtn) cxBtn.style.display = acts.cancel ? '' : 'none';
+      if (support) {
+        if (acts.support) {
+          support.innerHTML = escapeHtml(COPY.cancellation_disabled) + ' <a href="mailto:' + escapeHtml(supportEmail())
+            + '" style="color:var(--jurnii-300);text-decoration:underline;">' + escapeHtml(supportEmail()) + '</a>';
+          support.style.display = '';
+        } else {
+          support.style.display = 'none';
+        }
+      }
+      showStep('home');
+    }
+
+    function submitReschedule(e) {
+      if (e) e.preventDefault();
+      notice(null);
+      var start = scheduler.selected();
+      if (!start) { notice(COPY.slot_required); return Promise.resolve(false); }
+      setLoading('manage-confirm', true);
+      return request('PATCH', '/bookings/' + encodeURIComponent(journeyId) + '/reschedule',
+        { slotStart: start }, token).then(function (res) {
+        setLoading('manage-confirm', false);
+        if (res.status === 200) { result('Booking rescheduled', COPY.reschedule_done); return true; }
+        if (res.status === 202) {
+          var msg = q('pending-msg');
+          if (msg) msg.textContent = COPY.reschedule_pending;
+          showStep('pending');
+          startPolling(res.data.pollAfterMs, 'reschedule');
+          return true;
+        }
+        if (res.status === 409) {
+          var code = res.data && res.data.code;
+          if (code === 'SLOT_TAKEN') {
+            notice(COPY.slot_taken);
+            scheduler.clearSelection();
+            scheduler.reload();
+            return false;
+          }
+          if (code === 'action_in_progress') { notice(COPY.action_in_progress); return false; }
+          if (code === 'booking_needs_attention') { showAttention(); return false; }
+          if (code === 'booking_cancelled') { notice(COPY.booking_cancelled); return false; }
+          notice(COPY.generic);
+          return false;
+        }
+        if (res.status === 400) {
+          notice(copy(res.data && res.data.reason));
+          scheduler.clearSelection();
+          return false;
+        }
+        if (res.status === 0) { notice(COPY.offline); return false; }
+        notice(COPY.generic);
+        return false;
       });
     }
 
-    if (typeof lucide !== 'undefined') {
-      lucide.createIcons();
+    function submitCancel(e) {
+      if (e) e.preventDefault();
+      notice(null);
+      if (!cancellationEnabled()) { notice(COPY.cancellation_disabled); return Promise.resolve(false); }
+      if (win.confirm && !win.confirm('Cancel your demo booking? This cannot be undone.')) return Promise.resolve(false);
+      setLoading('cancel', true);
+      return request('DELETE', '/bookings/' + encodeURIComponent(journeyId), null, token).then(function (res) {
+        setLoading('cancel', false);
+        if (res.status === 200) { result('Booking cancelled', COPY.cancel_done); return true; }
+        if (res.status === 202) {
+          var msg = q('pending-msg');
+          if (msg) msg.textContent = COPY.cancel_pending;
+          showStep('pending');
+          startPolling(res.data.pollAfterMs, 'cancel');
+          return true;
+        }
+        if (res.status === 403) { notice(COPY.cancellation_disabled); return false; }
+        if (res.status === 409 && res.data && res.data.code === 'booking_needs_attention') { showAttention(); return false; }
+        if (res.status === 409 && res.data && res.data.code === 'action_in_progress') { notice(COPY.action_in_progress); return false; }
+        if (res.status === 409 && res.data && res.data.code === 'booking_cancelled') { notice(COPY.booking_cancelled); return false; }
+        if (res.status === 0) { notice(COPY.offline); return false; }
+        notice(COPY.generic);
+        return false;
+      });
     }
+
+    function startPolling(firstDelay, intent) {
+      stopPolling();
+      var delay = firstDelay || POLL_FIRST_MS;
+      var startedAt = Date.now();
+      var timer = null;
+      poller = { stop: function () { if (timer) win.clearTimeout(timer); timer = null; } };
+
+      function tick() {
+        if (destroyed) return;
+        request('GET', '/bookings/' + encodeURIComponent(journeyId) + '/status', null, token)
+          .then(function (res) {
+            if (destroyed) return;
+            if (res.status === 200) {
+              status = res.data;
+              var s = status.bookingStatus;
+              if (s === 'needs_attention') { stopPolling(); return showAttention(); }
+              if (intent === 'cancel' && s === 'cancelled') {
+                stopPolling();
+                return result('Booking cancelled', COPY.cancel_done);
+              }
+              if (intent === 'reschedule' && s === 'confirmed' && !status.pendingSlotStart) {
+                stopPolling();
+                return result('Booking rescheduled', COPY.reschedule_done);
+              }
+            }
+            if (Date.now() - startedAt > POLL_GIVE_UP_MS) {
+              stopPolling();
+              notice(intent === 'cancel' ? COPY.cancel_pending : COPY.reschedule_pending, 'info');
+              return renderHome();
+            }
+            delay = nextPollDelay(delay);
+            timer = win.setTimeout(tick, delay);
+          });
+      }
+      timer = win.setTimeout(tick, delay);
+    }
+
+    function stopPolling() { if (poller) { poller.stop(); poller = null; } }
+
+    var booted = paint();
+
+    return {
+      kind: 'manage',
+      ready: Promise.resolve(booted),
+      destroy: function () { destroyed = true; stopPolling(); },
+      _refresh: refreshStatus,
+      _reschedule: function () { return submitReschedule(); },
+      _cancel: function () { return submitCancel(); },
+      _scheduler: function () { return scheduler; },
+      _step: function () {
+        var active = container.querySelector('.jurnii-form-step.active');
+        return active ? active.getAttribute('data-step') : null;
+      }
+    };
   }
 
-  // --- Initial Setup on DOM Content Load ---
-  document.addEventListener('DOMContentLoaded', () => {
-    // Capture UTM and source path
-    captureUTMParameters();
-    initDebugPanel();
-    updateDebugPanel();
+  /* =======================================================================
+     Placement metadata and embedded detection
+     ======================================================================= */
 
-    // Dedicated booking-management page (manage.html)?
-    const manageContainer = document.getElementById('jurnii-manage-inline');
-    if (manageContainer) {
-      initManage(manageContainer);
-      return;
+  /**
+   * `formPlacement` / `ctaId` / `formVariant` come from render options first, then
+   * container `data-*`. They are hidden metadata: no new visible field.
+   */
+  function readPlacement(container, opts) {
+    function pick(optKey, attr) {
+      if (opts && opts[optKey]) return String(opts[optKey]);
+      if (container && container.getAttribute) {
+        var v = container.getAttribute(attr);
+        if (v) return v;
+      }
+      return null;
     }
+    return {
+      formPlacement: pick('formPlacement', 'data-form-placement'),
+      ctaId: pick('ctaId', 'data-cta-id'),
+      formVariant: pick('formVariant', 'data-form-variant')
+    };
+  }
 
-    // Check if the page is the dedicated booking landing page
-    const inlineContainer = document.getElementById('jurnii-booking-form-inline');
-    if (inlineContainer) {
-      // Embed inline booking form directly
-      inlineContainer.innerHTML = createFormMarkup(false);
-      bindFormEvents(inlineContainer);
-      goToStep(1);
-      // Resume a partial registration if one was saved (refresh / return visit).
-      restoreProgress(inlineContainer);
+  /**
+   * True when a host page owns the modal chrome, in which case this module must
+   * not open one of its own and must not paint a second close button.
+   *
+   * Three signals, any of which suffices: an explicit `embedded`, an `onClose`
+   * callback (only a host modal supplies one), or the page-level
+   * `JURNII_BOOKING_EMBEDDED` flag that `site.jsx` sets before it injects this
+   * script — set before load precisely so the bootstrap below never wires a
+   * competing modal in the first place.
+   */
+  function resolveEmbedded(opts) {
+    if (opts && typeof opts.embedded === 'boolean') return opts.embedded;
+    if (opts && typeof opts.onClose === 'function') return true;
+    return win.JURNII_BOOKING_EMBEDDED === true;
+  }
+
+  /* =======================================================================
+     The module's own modal — inline/legacy placements ONLY.
+     ======================================================================= */
+  var ownModal = null;
+
+  function openOwnModal() {
+    if (win.JURNII_BOOKING_EMBEDDED === true) return null;   // the host owns the modal
+    if (!ownModal) {
+      var overlay = doc.createElement('div');
+      overlay.className = 'jurnii-modal-overlay';
+      overlay.innerHTML = '<div class="jurnii-modal-wrapper"></div>';
+      doc.body.appendChild(overlay);
+      overlay.addEventListener('click', function (e) { if (e.target === overlay) closeOwnModal(); });
+      ownModal = { overlay: overlay, instance: null };
     }
+    var wrapper = ownModal.overlay.querySelector('.jurnii-modal-wrapper');
+    if (ownModal.instance) ownModal.instance.destroy();
+    ownModal.instance = createBooking(wrapper, {
+      showCloseButton: true,
+      embedded: false,
+      onClose: closeOwnModal
+    });
+    ownModal.overlay.classList.add('active');
+    try { doc.body.style.overflow = 'hidden'; } catch (_) {}
+    return ownModal.instance;
+  }
 
-    // Intercept `.open-booking-modal-btn` and booking triggers
-    document.addEventListener('click', (e) => {
-      // Traverse target parents to identify if it is a trigger
-      let el = e.target;
-      while (el && el !== document.body) {
+  function closeOwnModal() {
+    if (!ownModal) return;
+    ownModal.overlay.classList.remove('active');
+    try { doc.body.style.overflow = ''; } catch (_) {}
+    if (ownModal.instance) { ownModal.instance.destroy(); ownModal.instance = null; }
+    var wrapper = ownModal.overlay.querySelector('.jurnii-modal-wrapper');
+    if (wrapper) wrapper.innerHTML = '';
+  }
+
+  /* =======================================================================
+     Public API
+     ======================================================================= */
+  var instances = [];
+
+  function render(container, options) {
+    if (!container) return null;
+    var opts = options || {};
+    // A host modal is authoritative from its first render, even if the page
+    // forgot to set the flag before load.
+    if (resolveEmbedded(opts)) win.JURNII_BOOKING_EMBEDDED = true;
+
+    var isManage = opts.mode === 'manage'
+      || (opts.mode !== 'book' && container.id === 'jurnii-manage-inline');
+
+    // Re-rendering the same container replaces the instance rather than stacking
+    // two sets of listeners on one DOM tree.
+    for (var i = instances.length - 1; i >= 0; i--) {
+      if (instances[i].container === container) {
+        try { instances[i].instance.destroy(); } catch (_) {}
+        instances.splice(i, 1);
+      }
+    }
+    container.setAttribute('data-jurnii-mounted', '1');
+    var inst = isManage ? createManage(container, opts) : createBooking(container, opts);
+    instances.push({ container: container, instance: inst });
+    return inst;
+  }
+
+  function renderManage(container, options) {
+    return render(container, Object.assign({}, options || {}, { mode: 'manage' }));
+  }
+
+  /* =======================================================================
+     Bootstrap — auto-mount for genuine inline placements.
+
+     Auto-mount is retained unconditionally: an inline `#jurnii-booking-form-inline`
+     or `#jurnii-manage-inline` is a real placement and must still work with no
+     host script at all. The MODAL wiring is what gets suppressed when a host owns
+     the chrome, so the two never compete for one CTA click.
+     ======================================================================= */
+  function bootstrapPlan(document_, globals) {
+    var g = globals || {};
+    var mounts = [];
+    ['jurnii-manage-inline', 'jurnii-booking-form-inline', 'jurnii-booking-aside'].forEach(function (id) {
+      var el = document_ && document_.getElementById && document_.getElementById(id);
+      if (el && !(el.getAttribute && el.getAttribute('data-jurnii-mounted'))) {
+        mounts.push({ id: id, el: el, mode: id === 'jurnii-manage-inline' ? 'manage' : 'book' });
+      }
+    });
+    return { mounts: mounts, interceptModal: g.JURNII_BOOKING_EMBEDDED !== true };
+  }
+
+  function bootstrap() {
+    var plan = bootstrapPlan(doc, win);
+    plan.mounts.forEach(function (m) {
+      render(m.el, { mode: m.mode, embedded: false });
+    });
+
+    if (!plan.interceptModal) return;
+
+    // Delegated, and deliberately narrow: the legacy `.open-booking-modal-btn`
+    // class and a `book.html` href, which is what the pre-SPA pages used.
+    doc.addEventListener('click', function (e) {
+      if (win.JURNII_BOOKING_EMBEDDED === true) return;
+      var el = e.target;
+      while (el && el !== doc.body) {
         if (el.classList && el.classList.contains('open-booking-modal-btn')) {
           e.preventDefault();
-          openModal();
+          openOwnModal();
           return;
         }
-        
-        // Intercept navigation Book a demo links or old buttons
-        if (el.tagName === 'A' && el.getAttribute('href') === 'book.html') {
-          // If JS is active, open modal instead of redirecting (progressive enhancement)
-          // EXCEPT on the book.html page itself where it's embedded inline
-          if (!inlineContainer) {
+        var href = el.tagName === 'A' && el.getAttribute && el.getAttribute('href');
+        if (href === 'book.html' || href === '/book.html') {
+          if (!doc.getElementById('jurnii-booking-form-inline')) {
             e.preventDefault();
-            openModal();
+            openOwnModal();
             return;
           }
         }
-        
         el = el.parentElement;
       }
     });
-  });
-})();
+  }
+
+  if (doc && opts0.bootstrap !== false) {
+    if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', bootstrap);
+    else bootstrap();
+  }
+
+  return {
+    version: '2.0.0',
+    render: render,
+    renderManage: renderManage,
+    openModal: openOwnModal,
+    closeModal: closeOwnModal,
+    /** Test-only seams. Not part of the page-facing contract. */
+    internals: {
+      COPY: COPY,
+      classifyBooking: classifyBooking,
+      classifyStatus: classifyStatus,
+      nextPollDelay: nextPollDelay,
+      productForSubmit: productForSubmit,
+      manageActions: manageActions,
+      resolveEmbedded: resolveEmbedded,
+      readPlacement: readPlacement,
+      bootstrapPlan: bootstrapPlan,
+      bucketSlotsByLocalDay: bucketSlotsByLocalDay,
+      localDateKey: localDateKey,
+      fromLocalDateKey: fromLocalDateKey,
+      captureFirstTouch: captureFirstTouch,
+      firstTouch: firstTouch,
+      formMarkup: formMarkup,
+      manageMarkup: manageMarkup,
+      loadSnapshot: loadSnapshot,
+      saveSnapshot: saveSnapshot,
+      clearSnapshot: clearSnapshot,
+      POLL_FIRST_MS: POLL_FIRST_MS,
+      POLL_MAX_MS: POLL_MAX_MS,
+      POLL_GIVE_UP_MS: POLL_GIVE_UP_MS
+    }
+  };
+});

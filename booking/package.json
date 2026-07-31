@@ -2,12 +2,21 @@
   "name": "jurnii-booking",
   "version": "1.0.0",
   "private": true,
+  "type": "commonjs",
   "description": "Progressive booking form + Zoho CRM / Google Calendar backend. Self-contained, copyable module.",
   "scripts": {
-    "test": "node --test tests/*.test.js"
+    "test": "node --test \"tests/*.test.js\"",
+    "test:db": "node --test \"tests/db/*.test.js\"",
+    "migrate": "node db/migrate.js",
+    "register-calendar": "node db/register-calendar.js"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^0.10.4",
     "googleapis": "^140.0.1",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "jsdom": "^29.1.1"
   }
 }
