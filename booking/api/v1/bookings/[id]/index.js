@@ -1,82 +1,82 @@
-const jwt = require('jsonwebtoken');
-const { listEventByJourneyId, readEventPrivate, cancelGoogleEvent } = require('../../../_utils/google');
-const {
-  searchEventByExternalId,
-  updateZohoEvent
-} = require('../../../_utils/zoho');
-const { normalizeEmail } = require('../../../_utils/email');
+'use strict';
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const { fail, methodNotAllowed, log } = require('../../../../lib/http');
+const { requireManage } = require('../../../../lib/auth');
+const V = require('../../../../lib/validate');
+const G = require('../../../../integrations/google');
+const db = require('../../../../db');
+const J = require('../../../../db/queries/journeys');
+const I = require('../../../../db/queries/intents');
 
-function fail(res, status, code, message) {
-  return res.status(status).json({ error: message || code, code });
-}
-
-// Ownership is bound to the signed journeyId (+ normalized email for Google).
-// Contact/Deal ids are mutable relationships, never ownership keys.
-function googleEventOwned(event, decoded) {
-  const p = readEventPrivate(event);
-  if (p.journeyId && p.journeyId !== decoded.journeyId) return false;
-  if (p.email) return normalizeEmail(p.email) === normalizeEmail(decoded.email || '');
-  return true;
-}
-function zohoEventOwned(event, decoded) {
-  const ext = event && event.Ext_Calendar_Booking_ID;
-  return !ext || ext === decoded.journeyId;
-}
-
+/**
+ * DELETE /api/v1/bookings/{journeyId} — visitor cancellation.
+ *
+ * GATED. `BOOKING_CANCELLATION_ENABLED` defaults to false in Production and the
+ * endpoint answers `403 cancellation_disabled` with no Google or Zoho call and no
+ * intent recorded. The durable infrastructure ships in full; only the visitor-facing
+ * action waits on the separately approved Deluge correction (§7.2), because the
+ * closest available CRM representation routes to a "thanks for attending" cadence for
+ * a demo that never happened.
+ */
 module.exports = async function handler(req, res) {
-  if (req.method !== 'DELETE') return fail(res, 405, 'method_not_allowed', 'Method not allowed');
+  if (req.method !== 'DELETE') return methodNotAllowed(res, ['DELETE']);
 
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) return fail(res, 401, 'auth_required', 'Unauthorized');
+  // Step 0, before anything else: no token check, no read, no write.
+  if (process.env.BOOKING_CANCELLATION_ENABLED !== 'true') {
+    return fail(res, 403, 'cancellation_disabled',
+      `Please contact ${process.env.BOOKING_SUPPORT_EMAIL || 'support'} to change this booking.`);
+  }
 
-  let decoded;
+  const journeyId = req.query && (req.query.id || req.query.journeyId);
+  if (!journeyId || !V.isUuid(journeyId)) return fail(res, 400, 'validation', 'Invalid booking reference.');
+
+  const auth = requireManage(req, { journeyId });
+  if (!auth.ok) return fail(res, auth.status, auth.code, 'Unauthorized');
+
+  const journey = await db.withTransaction((tx) => J.get(tx, journeyId));
+  const refusal = I.refusalFor(journey, 'cancel');
+  if (refusal === 'journey_not_found') return fail(res, 404, refusal, 'Booking not found.');
+  if (refusal === 'booking_needs_attention') {
+    return fail(res, 409, refusal, 'We are checking on this booking. Please contact us.');
+  }
+  if (refusal === 'booking_cancelled') return fail(res, 409, refusal, 'This booking was already cancelled.');
+  if (refusal === 'action_in_progress') return fail(res, 409, refusal, 'A change is already in progress.');
+  if (refusal) return fail(res, 409, refusal, 'This booking cannot be cancelled.');
+
+  // TRANSACTION R3 — google_cancel only. zoho_cancel_propagate is NOT created here:
+  // Zoho must never be told a meeting was cancelled before Google confirms it was.
+  let intentVersion;
   try {
-    decoded = jwt.verify(authHeader.split(' ')[1], JWT_SECRET);
+    ({ intentVersion } = await db.withTransaction((tx) => J.R3_cancelIntent(tx, journeyId)));
   } catch (err) {
-    return fail(res, 401, 'auth_invalid', 'Unauthorized');
+    return fail(res, 409, 'action_in_progress', 'A change is already in progress.');
   }
 
-  if (decoded.purpose !== 'manage') return fail(res, 403, 'forbidden', 'This token cannot manage a booking.');
+  const calendarId = journey.google_calendar_id;   // PERSISTED, never the environment
+  const outcome = await G.cancelEvent(calendarId, journey.google_event_id);
 
-  const { id } = req.query;
-  if (!id) return fail(res, 400, 'validation', 'Missing required field: id');
-  if (decoded.journeyId !== id) return fail(res, 403, 'forbidden', 'Token does not match this booking.');
-
-  try {
-    // Soft-cancel the Google event (notifies attendees) — ownership-verified.
-    const googleEvent = await listEventByJourneyId(id);
-    if (googleEvent) {
-      if (!googleEventOwned(googleEvent, decoded)) {
-        return fail(res, 409, 'correlation_conflict', 'This booking reference is associated with different details.');
-      }
-      await cancelGoogleEvent(googleEvent.id);
-      console.log(`[cancel] cancelled Google event ${googleEvent.id}`);
-    } else {
-      console.warn(`[cancel] no Google event for journey ${id}`);
-    }
-
-    // Mark the Zoho event cancelled (title/description marker only — avoids
-    // writing an unverified picklist value) — ownership-verified.
-    const zohoEvent = await searchEventByExternalId(id);
-    if (zohoEvent) {
-      if (!zohoEventOwned(zohoEvent, decoded)) {
-        return fail(res, 409, 'correlation_conflict', 'This booking reference is associated with different details.');
-      }
-      await updateZohoEvent(zohoEvent.id, {
-        Event_Title: `[CANCELLED] ${zohoEvent.Event_Title || 'Jurnii Product Demo Meeting'}`,
-        Description: `[CANCELLED]\n${zohoEvent.Description || ''}`
-      });
-      console.log(`[cancel] marked Zoho event ${zohoEvent.id} cancelled`);
-    } else {
-      console.warn(`[cancel] no Zoho event for journey ${id}`);
-    }
-
-    console.log(`[cancel] cancelled booking for journey ${id}`);
-    return res.status(200).json({ success: true, bookingId: id, message: 'Booking cancelled.' });
-  } catch (error) {
-    console.error('[cancel] error:', error.code || error.message);
-    return fail(res, 502, error.code || 'cancel_failed', 'We could not cancel the booking. Please try again.');
+  let proven = outcome.kind === 'cancelled' || outcome.kind === 'gone';
+  if (outcome.kind === 'not_found') {
+    // A bare 404 is NOT proof — the same rule the worker applies. Treating a
+    // permissions-artefact 404 as "already cancelled" would release the slot AND tell
+    // Zoho the meeting was cancelled while a live event and its reminder carried on.
+    const { verdict } = await G.qualifyNotFound(calendarId);
+    proven = verdict === 'absent';
   }
+
+  if (proven) {
+    try {
+      await db.withTransaction((tx) => J.G4_cancelled(tx, journeyId, {
+        intentVersion, propagateToZoho: true,
+      }));
+      log({ evt: 'bookings.cancelled', journeyId });
+      return res.status(200).json({ status: 'cancelled', bookingId: journeyId });
+    } catch (err) {
+      log({ evt: 'bookings.cancel_commit_failed', journeyId, code: err.code || 'unknown' });
+    }
+  }
+
+  // Uncertain, or an unqualified 404: the intent survives and the worker finishes it.
+  log({ evt: 'bookings.cancel_pending', journeyId, outcome: outcome.kind });
+  return res.status(202).json({ status: 'cancel_pending', bookingId: journeyId, pollAfterMs: 3000 });
 };

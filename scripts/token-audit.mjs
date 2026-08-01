@@ -43,7 +43,8 @@ const SCOPE = {
     "assets/use-case-data.jsx",
     "assets/product-data.jsx",
     "assets/compare-data.jsx",
-    "assets/booking-form.js",
+    // The booking widget lives in the portable `booking/` module, whose styling is
+    // confined to booking/assets/booking-form.css — audited there, not here.
     "assets/headline-split.js",
   ],
 };

@@ -4,14 +4,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Book a demo</title>
-  <!-- Form styles. In the Jurnii site these ride in via site.css @import; standalone, link them directly. -->
+  <!-- Standalone host page: link the form's stylesheet directly. In the Jurnii site
+       index.html links it explicitly instead — nothing @imports it. -->
   <link rel="stylesheet" href="../assets/booking-form.css">
 </head>
 <body>
-  <!-- booking-form.js renders the multi-step form into this container. -->
-  <div id="jurnii-booking-form-inline"></div>
+  <!-- booking-form.js auto-mounts the multi-step form into this container.
+       The optional data-* attributes become hidden attribution fields. -->
+  <div id="jurnii-booking-form-inline"
+       data-form-placement="standalone-book-page"
+       data-cta-id="book-html"></div>
 
-  <!-- Point src at wherever the host serves booking/assets/booking-form.js -->
+  <!-- The shared country + phone config (spec §6). Loading it up front means the
+       widget paints immediately; otherwise it fetches this file itself from
+       JURNII_BOOKING_CONFIG_URL (default /booking/config/countries.js). -->
+  <script src="../config/countries.js"></script>
   <script src="../assets/booking-form.js"></script>
 </body>
 </html>

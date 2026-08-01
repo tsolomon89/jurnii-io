@@ -3,8 +3,12 @@ const assert = require('node:assert');
 const path = require('node:path');
 
 const products = require('../api/_utils/products');
-const zoho = require('../api/_utils/zoho');
-const google = require('../api/_utils/google');
+// Repointed to the new integration layer (api/_utils/{google,zoho}.js are deleted).
+// Every behavioural requirement these tests cover is still valid, so they are adapted
+// rather than replaced: writePayload, readConversion and extractMeetLink all carry the
+// same contracts in the new modules.
+const zoho = require('../integrations/zoho');
+const google = require('../integrations/google');
 const { isBusinessEmail } = require('../api/_utils/email');
 
 test('canonicalProduct maps form values to canonical Zoho product names', () => {

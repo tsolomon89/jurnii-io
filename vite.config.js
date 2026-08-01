@@ -31,13 +31,27 @@ function htmlInputs() {
   };
 }
 
+/**
+ * Runtime files that must reach `dist` at STABLE, unhashed URLs.
+ *
+ * The booking widget is a classic `<script src>` that `assets/site.jsx` injects by
+ * a hardcoded absolute path, and `manage.html` is a plain page outside the SPA, so
+ * neither can tolerate a content hash. Mirroring `booking/` into `dist/booking/`
+ * keeps the dev server and the deployed site on identical URLs — in dev Vite
+ * serves the same paths straight from the source tree.
+ */
+const BOOKING_RUNTIME = [
+  'booking/assets/booking-form.js',
+  'booking/assets/booking-form.css',
+  'booking/config/countries.js',
+];
+
 function copyRuntimeAssets() {
   return {
     name: 'copy-runtime-assets',
     closeBundle() {
       const files = [
         'headline-split.js',
-        'booking-form.js',
         'fonts-mono.css',
         'global.css',
         'site.css',
@@ -64,6 +78,29 @@ function copyRuntimeAssets() {
         const dest = path.join(fontDir, f);
         if (!fs.existsSync(dest)) fs.copyFileSync(src, dest);
       }
+
+      // The shared booking widget, its stylesheet and the shared country config.
+      // Missing here is not a cosmetic problem — the demo modal would 404 — so a
+      // vanished source file fails the build rather than shipping a broken page.
+      for (const rel of BOOKING_RUNTIME) {
+        const src = path.join(root, rel);
+        if (!fs.existsSync(src)) {
+          throw new Error(`copy-runtime-assets: required booking file missing: ${rel}`);
+        }
+        const dest = path.join(root, 'dist', rel);
+        fs.mkdirSync(path.dirname(dest), { recursive: true });
+        fs.copyFileSync(src, dest);
+      }
+
+      // manage.html is a REAL route, not an SPA path. Vercel checks the filesystem
+      // before applying rewrites, so a file at dist/manage.html is served directly
+      // and the `/(.*)` → /index.html fallback never sees the request. Every emailed
+      // manage link (PUBLIC_BASE_URL + /manage.html?token=…&id=…) depends on it.
+      const manageSrc = path.join(root, 'manage.html');
+      if (!fs.existsSync(manageSrc)) {
+        throw new Error('copy-runtime-assets: manage.html is missing — emailed manage links would 404');
+      }
+      fs.copyFileSync(manageSrc, path.join(root, 'dist/manage.html'));
     },
   };
 }

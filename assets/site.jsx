@@ -863,17 +863,27 @@ window.PageChrome = PageChrome;
 (function () {
   let modalEl = null;
 
+  // The one shared booking implementation (booking/assets/booking-form.js).
+  const BOOKING_SRC = '/booking/assets/booking-form.js';
+
   // Ensure the shared vanilla booking wizard is available, then run cb.
-  function ensureBooking(cb) {
+  function ensureBooking(cb, onFail) {
     if (window.JurniiBooking) { cb(); return; }
+    // This page owns the #demo-modal chrome, so the shared module must not open a
+    // modal of its own. Set BEFORE injection: the module's bootstrap reads this
+    // flag as it loads and skips its own CTA interception entirely.
+    window.JURNII_BOOKING_EMBEDDED = true;
     let s = document.querySelector('script[data-jurnii-booking]');
     if (!s) {
       s = document.createElement('script');
-      s.src = 'assets/booking-form.js';
+      // Absolute. A relative src resolved against the current route, so it 404'd
+      // on every nested path (/products/…, /use-cases/…).
+      s.src = BOOKING_SRC;
       s.setAttribute('data-jurnii-booking', '1');
       document.body.appendChild(s);
     }
     s.addEventListener('load', cb);
+    if (onFail) s.addEventListener('error', onFail);
   }
 
   function buildModal() {
@@ -897,7 +907,16 @@ window.PageChrome = PageChrome;
     el.querySelector('.demo-modal-close').addEventListener('click', closeModal);
     document.addEventListener('keydown', function (e) {if (e.key === 'Escape') closeModal();});
     ensureBooking(function () {
-      window.JurniiBooking.render(el.querySelector('#demo-modal-mount'), { onClose: closeModal });
+      // `onClose` is also how the module detects that a host owns the modal, so it
+      // paints no close button of its own inside .demo-modal-body.
+      window.JurniiBooking.render(el.querySelector('#demo-modal-mount'), {
+        onClose: closeModal,
+        formPlacement: 'site-demo-modal',
+        ctaId: 'book-a-demo'
+      });
+    }, function () {
+      const mount = el.querySelector('#demo-modal-mount');
+      if (mount) mount.innerHTML = '<p style="color:var(--muted-foreground);font-size:14px">Booking is temporarily unavailable. Please email <a href="mailto:hello@jurnii.io">hello@jurnii.io</a> and we will find a slot.</p>';
     });
     return el;
   }

@@ -1,108 +1,104 @@
-const { checkFreeBusy } = require('../_utils/google');
+'use strict';
 
-module.exports = async function handler(req, res) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  try {
-    const hostTimeZone = process.env.HOST_TIMEZONE || 'Europe/London';
-    const now = new Date();
-
-    // 24 hours notice limit
-    const minNoticeTime = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-    // 60 days horizon limit
-    const maxHorizonTime = new Date(now.getTime() + 60 * 24 * 60 * 60 * 1000);
-
-    // Parse query params or fallback
-    let timeMin = req.query.timeMin ? new Date(req.query.timeMin) : minNoticeTime;
-    let timeMax = req.query.timeMax ? new Date(req.query.timeMax) : new Date(timeMin.getTime() + 14 * 24 * 60 * 60 * 1000); // 14 days by default
-
-    // Bound query range by notice and horizon
-    if (timeMin < minNoticeTime) timeMin = minNoticeTime;
-    if (timeMax > maxHorizonTime) timeMax = maxHorizonTime;
-    if (timeMin >= timeMax) {
-      return res.status(200).json({ slots: [] });
-    }
-
-    // Query Google FreeBusy
-    // We query slightly before/after the range to catch overlapping events at bounds
-    const queryMin = new Date(timeMin.getTime() - 60 * 60 * 1000).toISOString();
-    const queryMax = new Date(timeMax.getTime() + 60 * 60 * 1000).toISOString();
-    const busyPeriods = await checkFreeBusy(queryMin, queryMax);
-
-    // Generate slots
-    const slots = [];
-    const durationMs = 30 * 60 * 1000;
-    const bufferMs = 15 * 60 * 1000;
-
-    // Align start search time to the next 30-minute boundary
-    let current = new Date(timeMin);
-    const ms = current.getTime();
-    const alignTo = 30 * 60 * 1000;
-    current = new Date(Math.ceil(ms / alignTo) * alignTo);
-
-    while (current < timeMax) {
-      const slotStart = new Date(current);
-      const slotEnd = new Date(current.getTime() + durationMs);
-
-      // Verify the slot falls entirely within working hours and working days in host timezone
-      if (isWorkingHours(slotStart, slotEnd, hostTimeZone)) {
-        // Enforce 15-minute buffers pre and post
-        const bufferedStart = slotStart.getTime() - bufferMs;
-        const bufferedEnd = slotEnd.getTime() + bufferMs;
-
-        // Check overlap with busy periods
-        const isBusy = busyPeriods.some(busy => {
-          const busyStart = new Date(busy.start).getTime();
-          const busyEnd = new Date(busy.end).getTime();
-          // Standard overlap check: Max(start1, start2) < Min(end1, end2)
-          return Math.max(bufferedStart, busyStart) < Math.min(bufferedEnd, busyEnd);
-        });
-
-        if (!isBusy) {
-          slots.push({
-            start: slotStart.toISOString(),
-            end: slotEnd.toISOString()
-          });
-        }
-      }
-      current.setTime(current.getTime() + alignTo); // increment by 30 mins
-    }
-
-    return res.status(200).json({ slots });
-  } catch (error) {
-    console.error('Availability Error:', error);
-    return res.status(500).json({ error: 'Failed to fetch availability', message: error.message });
-  }
-};
+const { fail, methodNotAllowed, log } = require('../../lib/http');
+const S = require('../../config/slots');
+const G = require('../../integrations/google');
+const db = require('../../db');
 
 /**
- * Returns true if the slot falls entirely within 09:00 - 18:00 on a weekday in the host timezone.
+ * GET /api/v1/availability
+ *
+ * Slots are offered only when BOTH Google and Postgres agree they are free. Postgres
+ * holds are subtracted using the buffered boundary `hold_end_utc`, which is exactly
+ * the FreeBusy conflict predicate, so the two sources cannot disagree about what
+ * "taken" means (finding #8).
+ *
+ * FAILS CLOSED. When Postgres cannot be read the response is `503`, never a
+ * Google-only slot list: showing a slot that another journey already holds invites a
+ * double booking that only surfaces at `events.insert`. The old handler returned
+ * `500` with `error.message` attached, which both leaked internals and left the
+ * calendar silently empty.
  */
-function isWorkingHours(start, end, timeZone) {
-  // Check day of week in host timezone
-  const dayStr = start.toLocaleDateString('en-US', { timeZone, weekday: 'short' });
-  if (dayStr === 'Sat' || dayStr === 'Sun') {
-    return false;
+module.exports = async function handler(req, res) {
+  if (req.method !== 'GET') return methodNotAllowed(res, ['GET']);
+
+  const calendarId = process.env.GOOGLE_CALENDAR_ID;
+  const calendarKey = process.env.BOOKING_CALENDAR_KEY;
+  if (!calendarId || !calendarKey) {
+    return fail(res, 503, 'calendar_misconfigured', 'Booking is temporarily unavailable.');
   }
 
-  // Get hour and minute in host timezone
-  const timeFormatter = new Intl.DateTimeFormat('en-US', {
-    timeZone,
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: false
-  });
+  const now = new Date();
+  const noticeFloor = new Date(now.getTime() + S.minNoticeMs());
+  const horizonCeil = new Date(now.getTime() + S.horizonMs());
 
-  const [{ value: startHour },, { value: startMin }] = timeFormatter.formatToParts(start);
-  const [{ value: endHour },, { value: endMin }] = timeFormatter.formatToParts(end);
+  let timeMin = req.query && req.query.timeMin ? new Date(req.query.timeMin) : noticeFloor;
+  let timeMax = req.query && req.query.timeMax
+    ? new Date(req.query.timeMax)
+    : new Date(timeMin.getTime() + 14 * 24 * 60 * 60 * 1000);
+  if (Number.isNaN(timeMin.getTime()) || Number.isNaN(timeMax.getTime())) {
+    return fail(res, 400, 'validation', 'Invalid date range.');
+  }
+  if (timeMin < noticeFloor) timeMin = noticeFloor;
+  if (timeMax > horizonCeil) timeMax = horizonCeil;
+  if (timeMin >= timeMax) return res.status(200).json({ slots: [] });
 
-  const startVal = parseInt(startHour, 10) * 60 + parseInt(startMin, 10);
-  const endVal = parseInt(endHour, 10) * 60 + parseInt(endMin, 10);
+  // Postgres FIRST, so an unreadable store fails the request before any Google call.
+  let holds;
+  try {
+    const q = await db.query(
+      `SELECT slot_start_utc, hold_end_utc
+         FROM booking_slot_reservations
+        WHERE host_calendar_key = $1
+          AND status IN ('pending','confirmed')
+          AND hold_end_utc > $2
+          AND slot_start_utc < $3`,
+      [calendarKey, new Date(timeMin.getTime() - S.BUFFER_MS), timeMax]
+    );
+    holds = q.rows;
+  } catch (err) {
+    log({ evt: 'availability.store_unavailable', code: err.code || 'unknown' });
+    return fail(res, 503, 'availability_unavailable', 'We could not load availability. Please try again.');
+  }
 
-  const workStart = 9 * 60; // 09:00
-  const workEnd = 18 * 60;  // 18:00
+  let busy;
+  try {
+    // Query slightly wide so an event overlapping the boundary is still seen.
+    busy = await G.checkFreeBusy(
+      calendarId,
+      new Date(timeMin.getTime() - 60 * 60 * 1000).toISOString(),
+      new Date(timeMax.getTime() + 60 * 60 * 1000).toISOString()
+    );
+  } catch (err) {
+    log({ evt: 'availability.calendar_unavailable', code: err.code || 'unknown' });
+    return fail(res, 503, 'availability_unavailable', 'We could not load availability. Please try again.');
+  }
 
-  return startVal >= workStart && endVal <= workEnd;
-}
+  const slots = [];
+  let cursor = S.ceilToGrid(timeMin);
+  while (cursor < timeMax) {
+    const start = new Date(cursor);
+    const end = new Date(start.getTime() + S.SLOT_MS);
+
+    if (S.isWorkingHours(start, end)) {
+      const w = S.bufferedWindow(start);
+      const googleConflict = busy.some((b) => {
+        const bs = new Date(b.start).getTime();
+        const be = new Date(b.end).getTime();
+        return Math.max(w.from.getTime(), bs) < Math.min(w.to.getTime(), be);
+      });
+      // A hold conflicts iff its buffered window overlaps this candidate's, i.e. iff
+      // the two starts are <60 minutes apart. `hold_end_utc` is that boundary.
+      const holdConflict = holds.some((h) => {
+        const hs = new Date(h.slot_start_utc).getTime();
+        return Math.abs(hs - start.getTime()) < 60 * 60 * 1000;
+      });
+      if (!googleConflict && !holdConflict) {
+        slots.push({ start: start.toISOString(), end: end.toISOString() });
+      }
+    }
+    cursor = new Date(cursor.getTime() + S.SLOT_MS);
+  }
+
+  return res.status(200).json({ slots });
+};

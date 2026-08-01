@@ -1,89 +1,88 @@
-const jwt = require('jsonwebtoken');
-const { checkFreeBusy, listEventByJourneyId, readEventPrivate, updateGoogleEvent } = require('../../../_utils/google');
-const {
-  searchEventByExternalId,
-  updateZohoEvent
-} = require('../../../_utils/zoho');
-const { normalizeEmail } = require('../../../_utils/email');
+'use strict';
 
-const JWT_SECRET = process.env.JWT_SECRET;
-const SLOT_MINUTES = 30;
-const BUFFER_MS = 15 * 60 * 1000;
+const { fail, methodNotAllowed, log } = require('../../../../lib/http');
+const { requireManage } = require('../../../../lib/auth');
+const V = require('../../../../lib/validate');
+const S = require('../../../../config/slots');
+const G = require('../../../../integrations/google');
+const db = require('../../../../db');
+const J = require('../../../../db/queries/journeys');
+const I = require('../../../../db/queries/intents');
 
-function fail(res, status, code, message) {
-  return res.status(status).json({ error: message || code, code });
-}
-
-// Ownership is bound to the signed journeyId (+ normalized email for Google).
-// Contact/Deal ids are mutable relationships, never ownership keys.
-function googleEventOwned(event, decoded) {
-  const p = readEventPrivate(event);
-  if (p.journeyId && p.journeyId !== decoded.journeyId) return false;
-  if (p.email) return normalizeEmail(p.email) === normalizeEmail(decoded.email || '');
-  return true;
-}
-function zohoEventOwned(event, decoded) {
-  const ext = event && event.Ext_Calendar_Booking_ID;
-  return !ext || ext === decoded.journeyId;
-}
-
+/**
+ * PATCH /api/v1/bookings/{journeyId}/reschedule
+ *
+ * ZERO Zoho calls. Propagation is activated by G5, in the same transaction that
+ * promotes the hold.
+ *
+ * Release is driven ENTIRELY by what a Google read proves — never by retry exhaustion
+ * or a TTL. A `409 SLOT_TAKEN` never disturbs the existing booking: R4 is a single
+ * transaction, so a rejected hold leaves the confirmed slot exactly as it was.
+ */
 module.exports = async function handler(req, res) {
-  if (req.method !== 'PATCH') return fail(res, 405, 'method_not_allowed', 'Method not allowed');
+  if (req.method !== 'PATCH' && req.method !== 'POST') return methodNotAllowed(res, ['PATCH', 'POST']);
 
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) return fail(res, 401, 'auth_required', 'Unauthorized');
+  const journeyId = req.query && (req.query.id || req.query.journeyId);
+  if (!journeyId || !V.isUuid(journeyId)) return fail(res, 400, 'validation', 'Invalid booking reference.');
 
-  let decoded;
+  const auth = requireManage(req, { journeyId });
+  if (!auth.ok) return fail(res, auth.status, auth.code, 'Unauthorized');
+
+  const journey = await db.withTransaction((tx) => J.get(tx, journeyId));
+  const refusal = I.refusalFor(journey, 'reschedule');
+  if (refusal === 'journey_not_found') return fail(res, 404, refusal, 'Booking not found.');
+  if (refusal === 'booking_needs_attention') {
+    return fail(res, 409, refusal, 'We are checking on this booking. Please contact us.');
+  }
+  if (refusal === 'booking_cancelled') return fail(res, 409, refusal, 'This booking was cancelled.');
+  if (refusal === 'action_in_progress') return fail(res, 409, refusal, 'A change is already in progress.');
+  if (refusal) return fail(res, 409, refusal, 'This booking cannot be rescheduled.');
+
+  const slot = S.validateSlotStart((req.body || {}).slotStart);
+  if (!slot.ok) return fail(res, 400, 'validation', 'That time is not available.', { reason: slot.reason });
+
+  // TRANSACTION R4 — insert the pending hold, arm it, start the intent cycle.
+  // A 23P01 surfaces as SLOT_TAKEN with nothing mutated.
+  let intentVersion;
   try {
-    decoded = jwt.verify(authHeader.split(' ')[1], JWT_SECRET);
+    ({ intentVersion } = await db.withTransaction((tx) => J.R4_rescheduleIntent(tx, journeyId, {
+      hostCalendarKey: journey.host_calendar_key,
+      slotStartUtc: slot.start.toISOString(),
+    })));
   } catch (err) {
-    return fail(res, 401, 'auth_invalid', 'Unauthorized');
+    if (err.code === 'SLOT_TAKEN') {
+      return fail(res, 409, 'SLOT_TAKEN', 'That time was just taken. Please choose another.');
+    }
+    return fail(res, 409, 'action_in_progress', 'A change is already in progress.');
   }
 
-  if (decoded.purpose !== 'manage') return fail(res, 403, 'forbidden', 'This token cannot manage a booking.');
+  const calendarId = journey.google_calendar_id;   // PERSISTED
+  const outcome = await G.updateEventTimes(calendarId, journey.google_event_id, {
+    start: slot.start.toISOString(),
+    end: slot.end.toISOString(),
+  });
 
-  const { id } = req.query;
-  const { slotStart } = req.body || {};
-  if (!id || !slotStart) return fail(res, 400, 'validation', 'Missing required fields: id, slotStart');
-  if (decoded.journeyId !== id) return fail(res, 403, 'forbidden', 'Token does not match this booking.');
-
-  const start = new Date(slotStart);
-  const end = new Date(start.getTime() + SLOT_MINUTES * 60 * 1000);
-
-  try {
-    // Re-verify availability over the buffered window.
-    const busyPeriods = await checkFreeBusy(
-      new Date(start.getTime() - BUFFER_MS).toISOString(),
-      new Date(end.getTime() + BUFFER_MS).toISOString()
-    );
-    const conflict = busyPeriods.some(b => {
-      const bs = new Date(b.start).getTime();
-      const be = new Date(b.end).getTime();
-      return Math.max(start.getTime() - BUFFER_MS, bs) < Math.min(end.getTime() + BUFFER_MS, be);
-    });
-    if (conflict) return fail(res, 409, 'SLOT_TAKEN', 'The selected slot is no longer available.');
-
-    const googleEvent = await listEventByJourneyId(id);
-    if (!googleEvent) return fail(res, 404, 'not_found', 'Calendar event not found for this booking.');
-    if (!googleEventOwned(googleEvent, decoded)) {
-      return fail(res, 409, 'correlation_conflict', 'This booking reference is associated with different details.');
+  if (outcome.kind === 'updated') {
+    try {
+      // TRANSACTION G5 — release the old confirmed hold FIRST, then promote the new
+      // one, then activate Zoho propagation.
+      await db.withTransaction((tx) => J.G5_reschedulePromoted(tx, journeyId, {
+        intentVersion,
+        slotStartUtc: slot.start.toISOString(),
+        slotEndUtc: slot.end.toISOString(),
+      }));
+      log({ evt: 'bookings.rescheduled', journeyId });
+      return res.status(200).json({
+        status: 'confirmed', bookingId: journeyId, slotStart: slot.start.toISOString(),
+      });
+    } catch (err) {
+      log({ evt: 'bookings.reschedule_commit_failed', journeyId, code: err.code || 'unknown' });
     }
-    await updateGoogleEvent(googleEvent.id, { start: start.toISOString(), end: end.toISOString() });
-
-    const zohoEvent = await searchEventByExternalId(id);
-    if (!zohoEvent) return fail(res, 404, 'not_found', 'Meeting record not found for this booking.');
-    if (!zohoEventOwned(zohoEvent, decoded)) {
-      return fail(res, 409, 'correlation_conflict', 'This booking reference is associated with different details.');
-    }
-    await updateZohoEvent(zohoEvent.id, {
-      Start_DateTime: start.toISOString(),
-      End_DateTime: end.toISOString()
-    });
-
-    console.log(`[reschedule] moved booking for journey ${id} to ${start.toISOString()}`);
-    return res.status(200).json({ success: true, bookingId: id, newStart: start.toISOString() });
-  } catch (error) {
-    console.error('[reschedule] error:', error.code || error.message);
-    return fail(res, 502, error.code || 'reschedule_failed', 'We could not reschedule the booking. Please try again.');
   }
+
+  // Anything else — including a bare 404 — is left to the worker, which applies the
+  // access probe before concluding anything. Both holds are retained meanwhile: a
+  // missing event means neither slot is proven free.
+  log({ evt: 'bookings.reschedule_pending', journeyId, outcome: outcome.kind });
+  return res.status(202).json({ status: 'reschedule_pending', bookingId: journeyId, pollAfterMs: 3000 });
 };

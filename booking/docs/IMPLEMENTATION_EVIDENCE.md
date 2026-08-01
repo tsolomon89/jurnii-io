@@ -1,5 +1,24 @@
 # Booking integration — implementation evidence & handoff
 
+> ## ⛔ SUPERSEDED — historical record only
+>
+> This file documents the **pre-rewrite synchronous implementation** and is kept only as the
+> record of what was replaced. Nearly every specific claim below is now false: Page 1 and
+> Page 2 make **zero** Zoho calls, Page 3 makes zero Zoho calls, `409 MANUAL_REVIEW` is
+> gone, the test files it names are deleted, and the frontend it describes
+> (`assets/booking-form.js`) no longer exists.
+>
+> Current documents, in reading order:
+>
+> | For | Read |
+> |---|---|
+> | What is built, and how it deviates from the plan | [`implementation-notes.md`](./implementation-notes.md) |
+> | Operating it | [`runbook.md`](./runbook.md) |
+> | Design | [`architecture.md`](./architecture.md) — its "As built" section wins where the older prose disagrees |
+> | Wiring and portability | [`../README.md`](../README.md) |
+>
+> Do not cite anything below as current behaviour.
+
 Implements the **KISS booking flow**: Page 2 performs one required Zoho save and advances to the calendar
 immediately (no conversion/Deal polling, no Manual-Review gate); Page 3 books Google Calendar + Meet and
 takes **one** CRM snapshot, linking the Zoho Meeting to the resolved person and — only if it already

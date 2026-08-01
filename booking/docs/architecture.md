@@ -1,7 +1,34 @@
 # Jurnii Booking Integration Architecture
 
-This document describes the **implemented** design, API contracts, and sync logic for the
-Jurnii website booking form's integration with Zoho CRM and Google Calendar.
+> ## ⚠ Read "As-built" first
+>
+> **The sections below — including the sequence diagram, "Identity resolution (Page 1)" and
+> "Page-2 behaviour" — describe the PRE-REWRITE synchronous design and are materially out of
+> date.** They are retained because they document the reasoning that led here, and because
+> readers familiar with the old system will look for them.
+>
+> The **[As-built](#as-built-how-the-implementation-differs-from-the-literal-plan)** section at
+> the end of this file is authoritative wherever it disagrees. In particular, these claims above
+> are now **wrong**:
+>
+> | Says | Actually |
+> |---|---|
+> | Page 1 searches Contacts and Leads and writes to Zoho | Page 1 is **Postgres-only**, zero Zoho calls |
+> | Page 1 can answer `409 MANUAL_REVIEW` | Removed — ambiguity is undiscoverable there, so the visitor books normally and the worker raises a Task |
+> | Page 2 sends the workflow-enabled Lead update inline | Page 2 is transaction **R1** and queues `zoho_identity_resolve`; the single workflow-enabled update is the worker's, at most once |
+> | Booking takes "ONE bounded CRM snapshot" and creates the Zoho Event | Booking makes **zero** Zoho calls; G1 activates `zoho_meeting_create` |
+> | Google private metadata holds `{journeyId, email}` | It holds `{journeyId, attempt}` — no email is written to a third party |
+> | The flow token carries `recordType`/`recordId`/`product` | Reduced to `{journeyId, email, step, purpose}`; CRM state lives in Postgres |
+> | A meeting is never retro-linked | `zoho_deal_reconcile` retro-links Contact + Deal in one triggers-enabled PUT |
+> | The site loads `assets/booking-form.js` | That stub is **deleted**. One implementation: `booking/assets/booking-form.js`, served at `/booking/assets/booking-form.js` |
+> | The confirmation panel is static | Every value comes from the response; `202 booking_pending` polls `GET /bookings/{id}/status` for the outcome and the `manageUrl` |
+>
+> Implementation is complete. What remains is Preview provisioning and the §12 live
+> verifications, both separately gated. See `docs/implementation-notes.md` for the as-built
+> record and `docs/runbook.md` for operations.
+
+This document describes the design, API contracts, and sync logic for the Jurnii website
+booking form's integration with Zoho CRM and Google Calendar.
 
 The website is a thin orchestration layer. **Zoho Deluge automation (`processLead` /
 `processContact` → `processAccount`/`processDeal`, and `handleMeetingEvent`) is the sole
@@ -103,14 +130,32 @@ automation — Zoho reconciles the graph after the fact, and it is read **once**
   the website, and it never creates a productless Deal or a Quote (`processDeal` owns the Deal + scaffold
   Quote).
 
-## Known limitation (deliberate KISS trade-off)
+## ~~Known limitation~~ — CLOSED by the durable backend
 
-The website raises **no** Manual-Review Task and blocks nothing. If a product was selected but its
-Product Deal is **not yet visible** at booking time (conversion still in flight, or the rep hasn't
-created it), the meeting is created **person-linked** (`Who_Id` = Contact or Lead, no `What_Id`) and the
-booking confirms. Such a meeting will **not** trigger `handleMeetingEvent` pipeline advancement, and it
-is **not** retro-linked if the Deal appears later. Guaranteeing eventual Deal-linkage would require a
-separate Zoho-side reconciliation workflow, which is intentionally **out of scope** for this module.
+> This section described the pre-rewrite behaviour and is **no longer accurate**. It is kept because
+> readers who know the old system will look for it.
+
+**Formerly:** the website raised no Manual Review Task, and a meeting created before its Product Deal was
+visible stayed person-linked forever, never triggering `handleMeetingEvent` and never being retro-linked.
+
+**Now:** both halves are closed.
+
+- **Manual Review exists.** `zoho_manual_review` creates or updates exactly **one Task per journey** for
+  its whole life, with an append-only reason ledger. Reasons are per *occurrence*, so the same problem
+  recurring after a resolution reopens the same Task rather than being silently swallowed.
+- **The retro-link happens.** `zoho_deal_reconcile` polls a 5m/15m/1h/6h/24h ladder and, once the final
+  Contact is **explicitly discovered** and the Meeting exists, issues **one triggers-enabled PUT applying
+  `Who_Id` and `What_Id` together** with `$se_module='Deals'` — which re-fires WF007 and advances the
+  pipeline. Unresolved or ambiguous after the window escalates to Manual Review; it never fabricates a
+  Deal or creates a second Meeting.
+
+Two constraints are unchanged and load-bearing. A Deal is linked **only** together with the final
+Contact, never over a Lead `Who_Id` — `handleMeetingEvent.deluge` passes `Who_Id` into
+`routeContactSequence(<contactId>, …)`, so a Lead id in the Contact position silently mis-routes. And
+the person-linked phase still drives **no** Deluge automation: it buys CRM visibility, and the retro-link
+is what advances the pipeline.
+
+No Zoho-side reconciliation workflow was added — and none may be. See the metadata boundary below.
 
 ## Journey UUID, JWT & continuation
 
@@ -189,3 +234,143 @@ longer polls; it does one save and returns.
 See [`IMPLEMENTATION_EVIDENCE.md`](./IMPLEMENTATION_EVIDENCE.md) for the verification checklist. The
 Contact path needs **no** Deluge, OAuth, or custom-field change; the only pre-deploy items are the
 standard Google/Vercel credentials + production E2E.
+
+---
+
+# As-built: how the implementation differs from the literal plan
+
+This section is authoritative where it disagrees with anything above or with the
+implementation plan. Each item is a correction forced by real PostgreSQL or Zoho
+behaviour, verified against PostgreSQL 17.10, and pinned by a named regression test.
+Full reasoning is in `docs/implementation-notes.md`.
+
+## Zoho metadata boundary (global)
+
+No module, field, layout, picklist value, workflow, validation rule, blueprint, OAuth
+scope or connection is ever created or altered, and none may be added. Enforced by
+omission and by test. **A missing dependency is a prerequisite failure to report, not
+permission to repair metadata.** Deluge is likewise never published or edited;
+`processLead` / `processContact` / `processDeal` remain the sole owners of the
+commercial graph, and Node creates no Contact, Account, Deal or Quote.
+
+## 1. Reservation geometry is trigger-maintained, not generated
+
+`slot_end_utc`, `slot_hold` and `hold_end_utc` are plain columns assigned
+**unconditionally** by the `bsr_derive` BEFORE INSERT OR UPDATE trigger, which ignores
+any value the application supplies. They cannot be generated columns: `timestamptz +
+interval` is STABLE, not IMMUTABLE, so PostgreSQL rejects the expression outright
+(`generation expression is not immutable`), and the epoch round-trip fails identically.
+Every property is preserved — derived, authoritative, indexed by the EXCLUDE constraint,
+and exactly equal to the availability conflict predicate.
+
+## 2. Event-binding replacement is two ordered statements
+
+Close the live binding **first**, insert the replacement **second**, inside one
+transaction. A single statement doing both violates `bjeb_one_live_per_journey`, because
+a unique index is checked per statement. This is the same load-bearing ordering as G5
+against `bsr_one_confirmed`. `bindEvent()` enforces it; the tests pin **both** directions
+so a refactor that collapses them fails loudly.
+
+Adoption is **not** write-once: an adopted event can itself disappear, and the operator
+must be able to adopt a second verified replacement. `booking_journey_event_bindings`
+keeps the full chain with one live binding per journey and per event.
+
+## 3. The retention busy predicate must return a concrete boolean
+
+Every nullable comparison is `COALESCE`d and the whole expression wrapped in
+`COALESCE(…, false)`. `google_outcome_state` is nullable, so `NULL IN (…)` is NULL,
+`false OR NULL` is NULL, and `NOT NULL` is NULL — which silently excluded **every journey
+with a null outcome state from every scrub sweep**. Nothing would ever have been scrubbed
+while the job reported success.
+
+## 4. Reason insertion and escalation updates are ordered statements
+
+`addReviewReason` cannot be one data-modifying CTE: the CTE's INSERT is not visible to
+the outer UPDATE, so `bj_guard` would not see the new reason row and would reject the
+journey update with `invariant_attention_without_reason`. Hence: lock the newest
+occurrence, advance the clock, insert the occurrence, then `refreshAttention`. For the
+same reason **every escalation adds its reason before its status update** — invariant
+T-a′ requires an open reason to exist by the time `google_outcome_state='unresolved'`
+lands.
+
+`needs_attention`, `needs_attention_code` and `needs_attention_at` are **derived** from
+the ledger by `refreshAttention` and by nothing else; the trigger rejects a row where
+they disagree. Clearing attention by hand is impossible, not merely discouraged.
+
+## 5. `parkOp` may only write `parked` from safe states
+
+`parked` is precisely the state `ensureOp` re-arms, so writing it over `outcome_unknown`,
+`accepted`, `sending` or `terminal` would hand a revivable row to a later `ensureOp`.
+The concrete failure: the workflow-enabled Lead update's response is lost, Z6 latches
+`outcome_unknown`, the op is claimed again, the handler correctly refuses to resend and
+returns `parked_precondition` — and that refusal **overwrote the latch**, permitting a
+second `processLead`. `parkOp` now preserves latched states while still clearing
+`next_retry_at`.
+
+## 6. `Retry-After` handling is explicitly typed
+
+`recordOutcome`'s `next_retry_at` CASE casts the parameter (`$6::double precision`).
+Without it a NULL `Retry-After` — the common case — failed with *could not determine data
+type*, so **no outcome was recorded at all**: the lease stayed live, the op looked
+crashed, and the crash counter climbed toward termination.
+
+## 7. The status endpoint and the polling handoff
+
+`GET /api/v1/bookings/{journeyId}/status` is new and is how an uncertain create resolves
+for the visitor. It accepts **either** a flow token (the browser polls with what it
+already has after a `202`) or a manage token, and mints a fresh 30-day manage token
+**only** when the booking is confirmed — that is how the browser obtains a durable
+credential on the `202` path, where it never sees a `200`.
+
+The manage token is minted **before** `events.insert`, so the calendar invite always
+carries a working management URL even when the browser gives up. The projection exposes
+no CRM id, calendar id, reason code or raw error: booking truth and integration state are
+separate axes, so a visitor whose cancellation failed is still correctly told their
+meeting is real.
+
+## Google recovery, in one place
+
+Correlation is **always** a direct `events.get` on the deterministic per-attempt id;
+`listEventByJourneyId` is deleted, because `showDeleted:false` cannot see a cancelled
+event. `events.list` survives for exactly one purpose — reading `accessRole` in the
+access probe — and a test asserts it has a single call site.
+
+A bare `404` is **never** proof of absence. `booking_failed` requires a `404` **plus** a
+confirmed `writer`/`owner` probe **plus** the deadline. `writerWithoutPrivateAccess` is
+unconfirmed by default. Anything else is `unknown`: the hold is retained, the attempt
+stays open, and `[google_calendar_unreadable]` surfaces it for a human. The visible cost
+is that an unreachable calendar withholds a slot until someone intervenes — the
+deliberate trade against releasing a slot Google may already have booked, or telling Zoho
+a live meeting was cancelled.
+
+## 8. One frontend implementation
+
+There is one booking widget, `booking/assets/booking-form.js`, and the site's demo modal
+renders it. `assets/booking-form.js` — the Calendar-iframe stub that posted to an empty
+endpoint — is deleted, so the modal captures a real submission for the first time.
+
+`window.JurniiBooking.render(container, options)` is the host contract. Supplying
+`onClose` (or `embedded: true`, or the page-level `JURNII_BOOKING_EMBEDDED` flag) tells the
+widget a host owns the modal chrome: it paints no close button of its own and its own
+`.open-booking-modal-btn` interception never wires up, so one CTA click cannot open two
+modals. Auto-mount into `#jurnii-booking-form-inline` / `#jurnii-manage-inline` is retained
+unconditionally, because an inline placement is a real surface that must work with no host
+script at all.
+
+`manage.html` is a **real file**, not an SPA route. Vercel resolves the filesystem before
+applying the `/(.*)` → `/index.html` rewrite, which is what stops the fallback swallowing
+it — and it is why every emailed manage link was previously dead. The build throws if the
+file or any widget asset is missing, rather than shipping a 404 on the booking path.
+
+Two properties are worth stating because they are structural rather than incidental. First,
+**no server message string is ever rendered**: all visitor copy is authored in the widget
+and selected by machine `code`, so a reason code, CRM id, calendar id or third-party
+fragment cannot reach the page even if a handler later starts echoing one. Second,
+**display and submission cannot disagree about time**: slots are bucketed and labelled in
+the visitor's own zone, while the value sent back is the exact ISO instant `/availability`
+offered, never re-derived from the label.
+
+Cancellation is hidden unless a deployment sets `JURNII_BOOKING_CANCELLATION_ENABLED`.
+A static page cannot read `BOOKING_CANCELLATION_ENABLED`, and this is the fail-safe
+direction: a misconfiguration hides a button that would only answer `403`, rather than
+offering one that always fails.

@@ -190,7 +190,7 @@ Use Cases, Resources, Company). Mono column heads. Legal row. `hello@jurnii.io`,
 - `<DemoCTA>` — dark full-width "Book a demo" band with radial green glow, appended by `PageChrome`.
 - `.cta-band` — inset dark rounded CTA (headline + actions) for mid-page use.
 - `<StickyDemoCTA>` — mobile-only fixed bottom bar.
-- **"Book a demo" links** (`href="contact-us.html"`) are intercepted globally to open the demo modal (`booking-form.js` wizard). Keep that href + label to opt in.
+- **"Book a demo" links** (`href="/contact-us"`) are intercepted globally to open the demo modal, which renders the shared booking widget (`booking/assets/booking-form.js`). Keep that href + label to opt in.
 
 ### Tables
 - `.compare-table` — feature comparison; Jurnii column highlighted green (`.is-jurnii` / `.us-col`), `.cmp-yes/-no/-partial` cells.
@@ -201,7 +201,13 @@ Use Cases, Resources, Company). Mono column heads. Legal row. `hello@jurnii.io`,
 ### Forms
 - `.contact-form` / `.form-row` — mono uppercase labels, card-bg inputs radius 8–10, focus =
   `jurnii-500` border + green glow ring. Validation: `.invalid` (red), `.form-status.is-success/-error`.
-- Booking wizard (`booking-form.js`) is a 3-step flow used in the demo modal and contact page.
+- Booking wizard — **one** implementation, `booking/assets/booking-form.js`, styled by
+  `booking/assets/booking-form.css` (linked from `index.html`; every selector is `.jurnii-*` scoped).
+  A 3-step flow plus asynchronous-confirmation, needs-attention and confirmation states. Hosts call
+  `window.JurniiBooking.render(container, { onClose })`; supplying `onClose` marks the page as owning
+  the modal chrome, so the widget paints no close button and opens no modal of its own. It also
+  auto-mounts into `#jurnii-booking-form-inline` / `#jurnii-manage-inline` for inline placements.
+  The self-service manage page is the real route `/manage.html`.
 
 ### FAQ — `.faq-list`
 Accordion; plus-icon rotates to × and fills dark when open; body height-animated.
