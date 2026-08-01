@@ -500,6 +500,7 @@ async function verifyZoho() {
   }
   const probeJourney = crypto.randomUUID();
   let taskId = null;
+  let dupTaskId = null;
   try {
     // The Owner is read from ZOHO_MANUAL_REVIEW_OWNER_ID inside the builder; the
     // contactId is deliberately null so the payload is genuinely unlinked.
@@ -527,7 +528,10 @@ async function verifyZoho() {
 
         // DUPLICATE_DATA shape, if the module enforces uniqueness on Subject.
         try {
-          await Z.createTaskSuppressed(payload);
+          const dup = await Z.createTaskSuppressed(payload);
+          // Capture the id so the finally deletes it too — Tasks does not enforce
+          // uniqueness, so this second create SUCCEEDS and would otherwise leak.
+          dupTaskId = dup && (dup.id || (dup.details && dup.details.id));
           warn(G_, 'duplicate-data-shape',
             'a second identical Task was accepted — Tasks does not enforce uniqueness here, so the ' +
             'DUPLICATE_DATA path is exercised by Leads/Contacts instead. Verify it there.');
@@ -547,12 +551,15 @@ async function verifyZoho() {
   } catch (err) {
     fail(G_, 'unlinked-task', err.message);
   } finally {
-    if (taskId) {
+    // Delete BOTH the primary and the duplicate-test Task. Tasks does not enforce
+    // Subject uniqueness, so the duplicate create succeeds and must be cleaned too.
+    for (const id of [taskId, dupTaskId]) {
+      if (!id) continue;
       try {
-        await Z.requestZoho('DELETE', `/crm/v6/Tasks/${encodeURIComponent(taskId)}`);
-        console.log(`         cleaned up disposable Task ${taskId}`);
+        await Z.requestZoho('DELETE', `/crm/v6/Tasks/${encodeURIComponent(id)}`);
+        console.log(`         cleaned up disposable Task ${id}`);
       } catch (_) {
-        leaked.push(`zoho Task ${taskId} (subject: ${Z.manualReviewSubject(probeJourney)})`);
+        leaked.push(`zoho Task ${id} (subject: ${Z.manualReviewSubject(probeJourney)})`);
       }
     }
   }
