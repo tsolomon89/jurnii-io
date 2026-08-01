@@ -44,7 +44,10 @@ function dataLoadPayload(j, { includeCompany = true } = {}) {
   if (j.phone_e164) p.Phone = j.phone_e164;
   if (j.country_name) p.Country = j.country_name;
   if (j.job_title_raw) p[process.env.ZOHO_LEAD_JOBTITLE_RAW_FIELD || 'Job_Title_Raw'] = j.job_title_raw;
-  if (j.product_interest) p.Product_Interest = j.product_interest;
+  // Product_Interest is a multiselectpicklist (jsonarray) in Zoho: a bare string is
+  // rejected with INVALID_DATA (expected_data_type: jsonarray). Send a single-element
+  // array of the already-canonical value.
+  if (j.product_interest) p.Product_Interest = [j.product_interest];
   return p;
 }
 
