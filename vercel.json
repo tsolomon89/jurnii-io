@@ -6,7 +6,10 @@
     "api/v1/bookings/index.js": { "maxDuration": 30 },
     "api/v1/bookings/[id]/index.js": { "maxDuration": 30 },
     "api/v1/bookings/[id]/reschedule.js": { "maxDuration": 30 },
-    "api/v1/bookings/[id]/status.js": { "maxDuration": 30 }
+    "api/v1/bookings/[id]/status.js": { "maxDuration": 30 },
+    "api/v1/internal/jobs/run.js": { "maxDuration": 60 },
+    "api/v1/internal/jobs/retention.js": { "maxDuration": 60 },
+    "api/v1/internal/journeys/[id]/resolve.js": { "maxDuration": 60 }
   },
   "headers": [
     {
