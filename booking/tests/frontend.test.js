@@ -1035,8 +1035,11 @@ test('the build declares every booking runtime file and the manage page', () => 
 
 test('manage.html survives the SPA fallback and links only deployed paths', () => {
   const vercel = JSON.parse(fs.readFileSync(path.join(ROOT, 'vercel.json'), 'utf8'));
-  const spa = (vercel.rewrites || []).find((r) => r.source === '/(.*)');
-  assert.ok(spa && spa.destination === '/index.html', 'the SPA fallback is still in place');
+  const spa = (vercel.rewrites || []).find((r) => r.destination === '/index.html');
+  assert.ok(spa, 'the SPA fallback is still in place');
+  // The catch-all must NOT rewrite /api/ routes to index.html (commit 5e03a86),
+  // so API functions resolve instead of being swallowed by the SPA fallback.
+  assert.match(spa.source, /\(\?!api\//, 'the SPA fallback must exclude /api/ routes');
 
   // Vercel resolves the filesystem BEFORE rewrites, so a real file at
   // dist/manage.html is served and the `/(.*)` catch-all never sees the request.
