@@ -151,12 +151,13 @@ test('Phone and Job_Title_Raw exist on Contacts, so the conversion repair can la
 // Exceptions, each justified empirically. The assertion below requires this set to
 // match reality EXACTLY, so fixing the Zoho side makes the test fail and tells you
 // to delete the entry — the debt cannot rot silently.
-const KNOWN_UNUSED_BUT_WRITTEN = {
-  // OPEN ZOHO ACTION: restore to the Deals layout (Setup > Modules > Deals > Layout >
-  // Unused Fields). Until then WF010c can never fire, because sendDemoReminder is
-  // bound to this very field as its date trigger.
-  Deals: ['Demo_Reminder_Send_At'],
-};
+// RESOLVED 2026-08-02: `Deals.Demo_Reminder_Send_At` and `Deals.Automation_Suppressed`
+// were restored to the Deals Standard layout (Pipeline Information section). Both now
+// persist — proved by read-back on a scratch Deal, and by WF007 writing the reminder
+// onto the retained Deal 991103000003230018 for the first time. The map is empty
+// again, which is the state to defend: any new entry means a field written by this
+// codebase has been moved into Unused Fields and its writes are being discarded.
+const KNOWN_UNUSED_BUT_WRITTEN = {};
 
 // `Quotes.Quoted_Items` is in the bin too but is NOT a hazard: it is the line-items
 // subform, and both scaffold Quotes created on 2026-08-02 came back carrying their

@@ -631,10 +631,6 @@
     ],
     "Accounts": [],
     "Deals": [
-      "Automation_Suppressed",
-      "Demo_Reminder_Send_At",
-      "Next_Comm_Follow_Up_Date",
-      "Next_Step",
       "Record_Image"
     ],
     "Events": [],
