@@ -213,6 +213,71 @@ one transaction rather than weakening the schema for testability.
 
 ---
 
+## Live defects found by end-to-end verification
+
+Both were found only by driving a real booking through Production against the live Zoho
+org, on 2026-08-02. Both suppressed **every** Meeting while the Lead, the workflow-enabled
+update, the Deluge conversion and the resulting Contact, Account and Deal all succeeded —
+so the CRM looked half-populated and the journeys sat in `manual_review` with a reason code
+that named the symptom and not the cause.
+
+Neither was reachable by the offline suites. That is the lesson: nothing asserted that a
+booking produced a CRM record, and both defects lived in the gap. `scripts/e2e-booking.js`
+and `scripts/inspect-journey.js` exist because of them.
+
+### `getDealsForAccount` omitted the required v6 `fields` parameter
+
+`GET /crm/v6/Accounts/{id}/Deals` returns HTTP 400 `REQUIRED_PARAM_MISSING` without a
+`fields` query parameter. `TERMINAL_CODES` classifies 400 as terminal, so it never retried
+and escalated the journey instead.
+
+`meetingCreate` resolves the Deal inside its try block **before**
+`incrementCreateAttempts`, so the Event create was never even attempted —
+`create_attempts` stayed `0`, which is the tell that separates this from a rejected create.
+`dealReconcile` would have hit the same 400.
+
+The existing `resolveProductDeal` tests pass a `fetchDeals` seam, which tests the matching
+rule while bypassing the URL entirely. That is exactly how this shipped, so the regression
+test reads the source and asserts every v6 related-list read carries `fields` — a seam
+cannot bypass it.
+
+### A converted Lead id was sent as an Event `Who_Id`
+
+`Who_Id` on an Event is a **Contact** lookup. A converted Lead id is rejected with
+`INVALID_DATA` at `$.data[0].Who_Id.id` — terminal again.
+
+Z5 arms `zoho_meeting_create` and `zoho_conversion_discover` in the same transaction at the
+same `op_priority` (both 40), and `processLead` converts the Lead within seconds of the
+workflow-enabled update. The Meeting op routinely won that race and addressed a Lead that
+had just stopped being addressable. Because the ordering is arbitrary, this was
+intermittent in principle and total in practice.
+
+`meetingCreate` now waits for the Contact on the Lead path. The wait is `no_progress`, so
+it consumes no retry budget, and it is bounded by conversion discovery's own deadline —
+once that op is `done` or `terminal` the Meeting proceeds with **no person** rather than
+never being created. `dealReconcile` applies `Who_Id` and `What_Id` together afterwards
+regardless, so nothing is lost by creating the Meeting unlinked.
+
+### The reason ledger recorded the symptom, not the cause
+
+`Z10_escalate` stores `meeting_create_failed` and `terminateOp` preserves it as
+`last_error_code`, so the actual Zoho code was discarded at the point of failure. Finding
+the cause needed a live replay of the exact payload. `meetingCreate` now logs
+`zoho.meeting.create_rejected` with the classifier's code — a safe code, never a
+third-party message.
+
+### A converted Lead is not readable by id
+
+`GET /crm/v6/Leads/{id}` answers `{"data": []}` once the Lead is converted, so
+`getRecord` returns null. `conversionDiscover` already tolerates this via its Contact-search
+fallback, which is why conversion discovery worked throughout. Both new scripts had to
+learn the same rule: an empty read plus a known Contact means **converted**, not missing.
+Reading it as missing points every investigation at the wrong end of the chain, and in the
+E2E script's cleanup it would have deleted the very converted Leads the cleanup exists to
+preserve.
+
+---
+
 ## Integration layer
 
 `api/_utils/{google,zoho}.js` are **deleted**. `integrations/{google,zoho}/index.js` are

@@ -386,8 +386,13 @@ async function cleanup(journeyId, snap) {
   // A converted Lead is kept: deleting it does not remove the Contact, Account or Deal
   // it produced, and it destroys the only audit trail linking them to this run.
   if (snap.zoho_record_id) {
-    let converted = false;
-    try { converted = Z.readConversion(await Z.getLead(snap.zoho_record_id)).converted; } catch (_) { /* treat as unconverted */ }
+    // A converted Lead is NOT readable by id — v6 answers `{"data": []}` — so an empty
+    // read plus a known Contact means converted, exactly as the assertions above treat
+    // it. Reading `readConversion(null)` as "unconverted" would delete every converted
+    // Lead, which is the one case this branch exists to prevent.
+    let lead = null;
+    try { lead = await Z.getLead(snap.zoho_record_id); } catch (_) { /* fall through */ }
+    const converted = lead ? Z.readConversion(lead).converted : Boolean(snap.zoho_contact_id);
     if (converted) undeletable.push(`Lead ${snap.zoho_record_id} (converted — deleting it would orphan the Contact/Account/Deal)`);
     else await attempt(`Zoho Lead ${snap.zoho_record_id}`, () => zohoDelete('Leads', snap.zoho_record_id));
   }

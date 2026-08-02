@@ -132,6 +132,18 @@ cd booking && npm test
 The offline suite includes the frontend tests, which install the widget against a jsdom window — hence
 `jsdom` in the root `devDependencies`. It is a dev dependency only and is never served or bundled.
 
+Neither suite touches Zoho — the offline tests stub it and the DB tests assert it is *not* called. Three
+scripts cover what they cannot, against a real deployment (`vercel env pull` first, then `node --env-file`):
+
+```
+booking/scripts/inspect-journey.js       read-only: is the data there, and where is the chain stuck?
+booking/scripts/verify-prerequisites.js  credentials, scopes and field metadata
+booking/scripts/e2e-booking.js           a real booking driven to zoho_status=complete
+```
+
+`e2e-booking.js` needs `--allow-live-crm-writes` before it will create anything, and it creates records
+Deluge will not let it delete. Read §7a of `docs/runbook.md` before pointing it at Production.
+
 ## CRM notes
 
 > **Zoho metadata boundary.** This module never creates or alters a Zoho module, field, layout, picklist
