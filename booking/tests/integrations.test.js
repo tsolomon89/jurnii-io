@@ -335,6 +335,34 @@ test('resolveProductDeal never guesses when several Deals match', async () => {
   assert.equal(called, false, 'no Deal read is issued without both inputs');
 });
 
+/**
+ * Regression: every v6 RELATED-LIST read must carry `fields`.
+ *
+ * `GET /crm/v6/Accounts/{id}/Deals` without it returns HTTP 400
+ * `REQUIRED_PARAM_MISSING`, which is classified TERMINAL — so it never retried and
+ * escalated the journey instead. Because `meetingCreate` resolves the Deal inside its
+ * try block BEFORE `incrementCreateAttempts`, the Event create was never attempted and
+ * EVERY booking landed in `manual_review` with `meeting_create_failed`.
+ *
+ * The `fetchDeals` seam above tests the matching rule while bypassing the URL entirely,
+ * which is exactly why this shipped. This test reads the source, so it cannot be
+ * bypassed by a seam.
+ */
+test('every v6 related-list read carries the required `fields` parameter', () => {
+  const src = require('fs').readFileSync(
+    path.join(__dirname, '..', 'integrations', 'zoho', 'index.js'), 'utf8');
+
+  // `/crm/v6/<Module>/<id-expression>/<RelatedList>` — a search or single-record read
+  // has no third segment and is not subject to the rule.
+  const related = [...src.matchAll(/`\/crm\/v6\/[A-Za-z_]+\/\$\{[^}]+\}\/([A-Za-z_]+)([^`]*)`/g)];
+  assert.ok(related.length >= 2, 'expected the Deals and Tasks related-list reads to be found');
+
+  for (const [whole, list, query] of related) {
+    assert.match(query, /[?&]fields=/,
+      `${list} related-list read omits \`fields\` and will 400: ${whole}`);
+  }
+});
+
 test('Node cannot create a Contact, Account, Deal or Quote — the functions do not exist', () => {
   for (const forbidden of [
     'createContact', 'createAccount', 'createDeal', 'createQuote',
