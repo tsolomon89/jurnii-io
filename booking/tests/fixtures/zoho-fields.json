@@ -621,5 +621,31 @@
       "Terms_and_Conditions",
       "Valid_Till"
     ]
+  },
+  "unused": {
+    "Leads": [
+      "Designation"
+    ],
+    "Contacts": [
+      "Title"
+    ],
+    "Accounts": [],
+    "Deals": [
+      "Automation_Suppressed",
+      "Demo_Reminder_Send_At",
+      "Next_Comm_Follow_Up_Date",
+      "Next_Step",
+      "Record_Image"
+    ],
+    "Events": [],
+    "Tasks": [],
+    "Quotes": [
+      "Adjustment",
+      "Discount",
+      "Grand_Total",
+      "Quoted_Items",
+      "Sub_Total",
+      "Tax"
+    ]
   }
 }

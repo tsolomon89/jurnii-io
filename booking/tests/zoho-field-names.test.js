@@ -133,3 +133,58 @@ test('Phone and Job_Title_Raw exist on Contacts, so the conversion repair can la
   assert.ok(has('Contacts', 'Phone'));
   assert.ok(has('Contacts', 'Job_Title_Raw'));
 });
+
+// ---------------------------------------------------------------------------
+// Zoho's "Unused Fields" bin — writes to it are SILENTLY DISCARDED
+//
+// A field removed from a module layout keeps its data and still reports
+// `read_only: false` / `api_update: true`, but a write returns code=SUCCESS,
+// message="record updated", bumps Modified_Time and throws the value away.
+// Proved live 2026-08-02 on a scratch Deal: three unused fields discarded, an
+// on-layout control persisted.
+//
+// This is the real reason no demo reminder has ever been written. The corrected
+// Deluge is live and correct; `Deals.Demo_Reminder_Send_At` is simply in the bin,
+// so neither Deluge nor REST can set it until it is restored to the layout.
+// ---------------------------------------------------------------------------
+
+// Exceptions, each justified empirically. The assertion below requires this set to
+// match reality EXACTLY, so fixing the Zoho side makes the test fail and tells you
+// to delete the entry — the debt cannot rot silently.
+const KNOWN_UNUSED_BUT_WRITTEN = {
+  // OPEN ZOHO ACTION: restore to the Deals layout (Setup > Modules > Deals > Layout >
+  // Unused Fields). Until then WF010c can never fire, because sendDemoReminder is
+  // bound to this very field as its date trigger.
+  Deals: ['Demo_Reminder_Send_At'],
+};
+
+// `Quotes.Quoted_Items` is in the bin too but is NOT a hazard: it is the line-items
+// subform, and both scaffold Quotes created on 2026-08-02 came back carrying their
+// line. The bin rule applies to ordinary fields, not to the subform.
+const UNUSED_BUT_PERSISTS = { Quotes: ['Quoted_Items'] };
+
+test('no field the booking chain writes sits in the Unused Fields bin', () => {
+  assert.ok(snapshot.unused, 'snapshot has no `unused` map — re-run zoho-field-snapshot.js');
+  const found = {};
+  for (const [module, fields] of Object.entries(WRITTEN)) {
+    const bin = snapshot.unused[module] || [];
+    const exempt = UNUSED_BUT_PERSISTS[module] || [];
+    const hit = fields.filter((f) => bin.includes(f) && !exempt.includes(f));
+    if (hit.length) found[module] = hit.sort();
+  }
+  assert.deepStrictEqual(found, KNOWN_UNUSED_BUT_WRITTEN,
+    'The set of written-but-unused fields changed.\n'
+    + '  · a NEW entry means a field was removed from its layout and writes to it are\n'
+    + '    now being silently discarded — restore it or stop writing it;\n'
+    + '  · a MISSING entry means the Zoho layout was fixed — delete it from\n'
+    + '    KNOWN_UNUSED_BUT_WRITTEN so the debt does not linger in the test.');
+});
+
+test('the subform exemption is still justified', () => {
+  for (const [module, fields] of Object.entries(UNUSED_BUT_PERSISTS)) {
+    for (const f of fields) {
+      assert.ok((snapshot.unused[module] || []).includes(f),
+        `${module}.${f} is no longer unused — drop the exemption`);
+    }
+  }
+});

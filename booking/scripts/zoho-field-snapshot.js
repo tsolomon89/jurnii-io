@@ -31,6 +31,26 @@ const MODULES = ['Leads', 'Contacts', 'Accounts', 'Deals', 'Events', 'Tasks', 'Q
 const OUT = path.join(__dirname, '..', 'tests', 'fixtures', 'zoho-fields.json');
 const CHECK = process.argv.includes('--check');
 
+/**
+ * Zoho's "Unused Fields" bin. A field removed from a module layout keeps its stored
+ * data and still reports `read_only: false, api_update: true` — but a write to it
+ * returns `code: SUCCESS`, `message: "record updated"`, bumps `Modified_Time`, and
+ * SILENTLY DISCARDS the value. Proved on 2026-08-02 against a scratch Deal:
+ *
+ *   Demo_Reminder_Send_At     unused  api=SUCCESS  -> DISCARDED
+ *   Next_Comm_Follow_Up_Date  unused  api=SUCCESS  -> DISCARDED
+ *   Next_Step                 unused  api=SUCCESS  -> DISCARDED
+ *   Description               on-layout            -> PERSISTED
+ *
+ * This is why no demo reminder has ever been written: the field is in the bin, so
+ * neither Deluge nor REST can set it, however correct the calling code is.
+ */
+async function unusedFor(module) {
+  const res = await Z.requestZoho('GET', `/crm/v6/settings/fields?module=${module}&type=unused`);
+  return (((res.body || res).fields) || [])
+    .map((f) => f.api_name).filter(Boolean).sort((a, b) => a.localeCompare(b));
+}
+
 async function fieldsFor(module) {
   // `type=all` is LOAD-BEARING. Without it v6 returns only the layout-scoped subset —
   // 65 of 70 Deal fields — and `Demo_Reminder_Send_At` is one of the five it omits.
@@ -46,10 +66,12 @@ async function fieldsFor(module) {
 }
 
 async function main() {
-  const snapshot = { generatedFrom: 'live Zoho metadata', modules: {} };
+  const snapshot = { generatedFrom: 'live Zoho metadata', modules: {}, unused: {} };
   for (const m of MODULES) {
     snapshot.modules[m] = await fieldsFor(m);
-    console.log(`${m.padEnd(10)} ${snapshot.modules[m].length} fields`);
+    snapshot.unused[m] = await unusedFor(m);
+    console.log(`${m.padEnd(10)} ${String(snapshot.modules[m].length).padStart(3)} fields`
+      + `  ${snapshot.unused[m].length} unused`);
   }
   const next = `${JSON.stringify(snapshot, null, 2)}\n`;
 
