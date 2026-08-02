@@ -315,27 +315,65 @@ async function assertZohoEndState(journeyId, email, snap) {
     }
   }
 
-  // Meeting — by correlation key. Zoho search indexing lags, so absence is retried
-  // before it is believed, and a stored id with a lagging index is a WARN not a FAIL.
+  // Meeting — read by the STORED id first. A direct read is immediately consistent,
+  // whereas the correlation search depends on Zoho's index, which lags by seconds to
+  // minutes; asserting existence through the search made a healthy run report a WARN.
+  // The search still runs, but only to verify the correlation key resolves back to the
+  // same record, and a lagging index there is a WARN rather than a failure.
   let event = null;
-  for (let attempt = 1; attempt <= 3 && !event; attempt += 1) {
-    try { event = await Z.searchEventByExternalId(journeyId); } catch (e) {
-      fail('zoho: Meeting created', `search failed: ${e.code || e.message}`);
-      break;
+  if (snap.zoho_meeting_id) {
+    try {
+      event = await Z.getRecord('Events', snap.zoho_meeting_id);
+      if (event) pass('zoho: Meeting created', `id ${event.id}`);
+      else fail('zoho: Meeting created', `database recorded ${snap.zoho_meeting_id} but it is not readable`);
+    } catch (e) {
+      fail('zoho: Meeting created', `${e.code || e.message}`);
     }
-    if (!event && attempt < 3) await sleep(10_000);
-  }
-  if (event) {
-    if (event.id === snap.zoho_meeting_id) {
-      pass('zoho: Meeting created', `id ${event.id}, Ext_Calendar_Booking_ID matches`);
-    } else {
-      fail('zoho: Meeting created',
-        `CRM has Event ${event.id} but the database recorded ${snap.zoho_meeting_id || 'none'}`);
-    }
-  } else if (snap.zoho_meeting_id) {
-    warn('zoho: Meeting created', `database has ${snap.zoho_meeting_id} but search has not indexed it yet`);
   } else {
     fail('zoho: Meeting created', 'no Meeting exists and none was recorded');
+  }
+
+  if (snap.zoho_meeting_id) {
+    let found = null;
+    for (let attempt = 1; attempt <= 3 && !found; attempt += 1) {
+      try { found = await Z.searchEventByExternalId(journeyId); } catch (e) {
+        warn('zoho: Meeting is findable by Ext_Calendar_Booking_ID', `search failed: ${e.code || e.message}`);
+        break;
+      }
+      if (!found && attempt < 3) await sleep(10_000);
+    }
+    if (found && found.id === snap.zoho_meeting_id) {
+      pass('zoho: Meeting is findable by Ext_Calendar_Booking_ID');
+    } else if (found) {
+      // The correlation key is what every recovery path keys on, so two records
+      // answering to one journey is a genuine defect, not an indexing artefact.
+      fail('zoho: Meeting is findable by Ext_Calendar_Booking_ID',
+        `search returned Event ${found.id} but the database recorded ${snap.zoho_meeting_id}`);
+    } else {
+      warn('zoho: Meeting is findable by Ext_Calendar_Booking_ID', 'search index has not caught up yet');
+    }
+  }
+
+  // The Meeting's LINKAGE is the actual business outcome. `handleMeetingEvent` (WF007)
+  // returns early unless What_Id is set AND $se_module === 'Deals', so a Meeting that
+  // exists but is not linked advances no pipeline — a green run that verified only
+  // existence would be reporting success for a Meeting that does nothing.
+  if (event) {
+    const whoId = event.Who_Id && event.Who_Id.id;
+    const whatId = event.What_Id && event.What_Id.id;
+    if (snap.zoho_deal_id) {
+      if (whatId === snap.zoho_deal_id && event.$se_module === 'Deals' && whoId === snap.zoho_contact_id) {
+        pass('zoho: Meeting satisfies the WF007 precondition',
+          `Who_Id=${whoId} What_Id=${whatId} $se_module=Deals`);
+      } else {
+        fail('zoho: Meeting satisfies the WF007 precondition',
+          `Who_Id=${whoId || 'none'} What_Id=${whatId || 'none'} $se_module=${event.$se_module || 'none'}`);
+      }
+    } else if (whatId) {
+      fail('zoho: Meeting linkage', `What_Id=${whatId} is set but no Deal was recorded in the database`);
+    } else {
+      warn('zoho: Meeting satisfies the WF007 precondition', 'no Deal linked, so WF007 will not advance the pipeline');
+    }
   }
 
   // Contact — the thing the operator actually looks for in the CRM.
