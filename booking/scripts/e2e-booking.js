@@ -15,8 +15,11 @@
  *   matched to a pre-existing real company rather than created. Those ids are reported
  *   for manual removal, never deleted automatically.
  *
- *   Without the flag the script is HTTP-only: today's status-code smoke test, plus the
- *   database assertions, and it stops before the booking is placed.
+ *   Without the flag the script places no booking and touches no CRM record — but it is
+ *   NOT write-free: Page 2 commits and arms `zoho_identity_resolve` in the same
+ *   transaction, so the run leaves live outbox work behind. The journey row is therefore
+ *   deleted at the end of BOTH modes, which cascades the ops row before the worker can
+ *   reach `zoho_record_write` — the first step that would write anything to Zoho.
  *
  * WHY IT EXISTS
  *
@@ -201,7 +204,8 @@ async function preflight() {
 
   console.log(`Target       : ${BASE_URL}`);
   console.log(`Database     : ${info.dbname}`);
-  console.log(`Mode         : ${LIVE ? 'FULL E2E — creates real CRM records' : 'HTTP + DB only (pass --allow-live-crm-writes for the full chain)'}`);
+  console.log(`Mode         : ${LIVE ? 'FULL E2E — creates real CRM records'
+    : 'HTTP + DB only — places no booking (pass --allow-live-crm-writes for the full chain)'}`);
   console.log('-'.repeat(72));
 }
 
@@ -506,13 +510,21 @@ async function main() {
     console.log('');
     await assertZohoEndState(journeyId, email, snap);
   } finally {
-    // Cleanup is skipped after a failure unless forced: cleaning up after a failed run
-    // destroys the only reproduction there was.
+    // Cleanup runs in BOTH modes. Page 2 arms `zoho_identity_resolve` in the same
+    // transaction that commits it, so even the no-booking run leaves live outbox work
+    // that the cron would drive on to create a real Lead. The journey row must go, and
+    // promptly — deleting it cascades the ops row before the worker can reach
+    // `zoho_record_write`, the first step that writes anything to Zoho.
+    //
+    // A FAILED live run is the one exception: cleaning up after it destroys the only
+    // reproduction there was. That exemption does not extend to the no-booking mode,
+    // where there is nothing to reproduce and leaving the row armed is a live side
+    // effect rather than evidence.
     const failed = results.some((r) => r.state === 'FAIL');
-    if (journeyId && LIVE) {
+    if (journeyId) {
       snap = await snapshot(journeyId).catch(() => snap);
       if (KEEP) console.log('\n--keep: leaving every record in place.');
-      else if (failed && !has('--force-cleanup')) {
+      else if (LIVE && failed && !has('--force-cleanup')) {
         console.log('\nRun FAILED — cleanup skipped so the state stays inspectable. Re-run with --force-cleanup to remove it.');
         if (snap) undeletable.push(`journey ${journeyId} (database row retained for diagnosis)`);
       } else {
