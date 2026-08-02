@@ -278,8 +278,26 @@ test('#11/#37 a Deal is linked only together with the final Contact', () => {
   const contactOnly = Z.buildMeetingPayload({ ...base, contactId: '800' });
   assert.equal('What_Id' in contactOnly, false);
 
+  // No person at all -> Who_Id is OMITTED, never sent empty or null.
+  //
+  // This is the fallback `meetingCreate` uses once the Lead has been converted and no
+  // Contact has been discovered yet. `Who_Id` is a CONTACT lookup: a converted Lead id
+  // is rejected with INVALID_DATA, which is terminal, and that escalated the journey
+  // instead of retrying. A Meeting with no person is recoverable — `dealReconcile`
+  // applies Who_Id and What_Id together afterwards — whereas a terminal reject is not.
+  const noPerson = Z.buildMeetingPayload({ ...base });
+  assert.equal('Who_Id' in noPerson, false, 'no person means no Who_Id key at all');
+  assert.equal('What_Id' in noPerson, false);
+  assert.equal(noPerson.Ext_Calendar_Booking_ID, 'j1', 'correlation still allows recovery');
+
+  // A Deal without a person is never linked: What_Id over an absent Who_Id would let
+  // WF007 route a sequence with no contact.
+  const dealNoPerson = Z.buildMeetingPayload({ ...base, dealId: '900' });
+  assert.equal('What_Id' in dealNoPerson, false);
+  assert.equal('$se_module' in dealNoPerson, false);
+
   // The correlation key is always re-sent, never cleared.
-  for (const p of [leadWithDeal, contactWithDeal, contactOnly]) {
+  for (const p of [leadWithDeal, contactWithDeal, contactOnly, noPerson]) {
     assert.equal(p.Ext_Calendar_Booking_ID, 'j1');
   }
 });
