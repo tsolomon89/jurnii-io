@@ -7,7 +7,7 @@
     "build": "tsx scripts/compile-content-manifest.ts && vite build",
     "preview": "vite preview",
     "test": "node --test \"booking/tests/*.test.js\"",
-    "test:db": "node --test \"booking/tests/db/*.test.js\"",
+    "test:db": "node --import ./booking/tests/db/_guard.mjs --test \"booking/tests/db/*.test.js\"",
     "patch:html": "node scripts/patch-cwv-html.mjs",
     "lighthouse:ci": "node scripts/lighthouse-ci.mjs",
     "perf:baseline": "node scripts/lighthouse-ci.mjs --baseline"
