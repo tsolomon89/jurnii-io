@@ -384,8 +384,20 @@ function buildMeetingPayload({
 // Deals — READ ONLY. Node never creates a Deal.
 // ---------------------------------------------------------------------------
 
+/**
+ * `fields` is REQUIRED on a v6 related-list read. Omitting it returns HTTP 400
+ * `REQUIRED_PARAM_MISSING`, which `TERMINAL_CODES` classifies as terminal — so the
+ * failure never retried and instead escalated the whole journey. That is how a
+ * missing query parameter suppressed every Meeting: `meetingCreate` calls this
+ * inside its try block BEFORE `incrementCreateAttempts`, so the Event create was
+ * never even attempted (`create_attempts` stayed 0) and the journey went to
+ * `manual_review` with `meeting_create_failed`.
+ *
+ * `id` is always returned, so `Deal_Name` — the only field `resolveProductDeal`
+ * matches on — is the complete requirement.
+ */
 async function getDealsForAccount(accountId) {
-  const res = await requestZoho('GET', `/crm/v6/Accounts/${accountId}/Deals`);
+  const res = await requestZoho('GET', `/crm/v6/Accounts/${accountId}/Deals?fields=Deal_Name`);
   return res && Array.isArray(res.data) ? res.data : [];
 }
 

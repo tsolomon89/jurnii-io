@@ -278,8 +278,26 @@ test('#11/#37 a Deal is linked only together with the final Contact', () => {
   const contactOnly = Z.buildMeetingPayload({ ...base, contactId: '800' });
   assert.equal('What_Id' in contactOnly, false);
 
+  // No person at all -> Who_Id is OMITTED, never sent empty or null.
+  //
+  // This is the fallback `meetingCreate` uses once the Lead has been converted and no
+  // Contact has been discovered yet. `Who_Id` is a CONTACT lookup: a converted Lead id
+  // is rejected with INVALID_DATA, which is terminal, and that escalated the journey
+  // instead of retrying. A Meeting with no person is recoverable — `dealReconcile`
+  // applies Who_Id and What_Id together afterwards — whereas a terminal reject is not.
+  const noPerson = Z.buildMeetingPayload({ ...base });
+  assert.equal('Who_Id' in noPerson, false, 'no person means no Who_Id key at all');
+  assert.equal('What_Id' in noPerson, false);
+  assert.equal(noPerson.Ext_Calendar_Booking_ID, 'j1', 'correlation still allows recovery');
+
+  // A Deal without a person is never linked: What_Id over an absent Who_Id would let
+  // WF007 route a sequence with no contact.
+  const dealNoPerson = Z.buildMeetingPayload({ ...base, dealId: '900' });
+  assert.equal('What_Id' in dealNoPerson, false);
+  assert.equal('$se_module' in dealNoPerson, false);
+
   // The correlation key is always re-sent, never cleared.
-  for (const p of [leadWithDeal, contactWithDeal, contactOnly]) {
+  for (const p of [leadWithDeal, contactWithDeal, contactOnly, noPerson]) {
     assert.equal(p.Ext_Calendar_Booking_ID, 'j1');
   }
 });
@@ -333,6 +351,34 @@ test('resolveProductDeal never guesses when several Deals match', async () => {
   assert.equal((await Z.resolveProductDeal(null, 'Platform', guard)).status, 'none');
   assert.equal((await Z.resolveProductDeal('810', null, guard)).status, 'none');
   assert.equal(called, false, 'no Deal read is issued without both inputs');
+});
+
+/**
+ * Regression: every v6 RELATED-LIST read must carry `fields`.
+ *
+ * `GET /crm/v6/Accounts/{id}/Deals` without it returns HTTP 400
+ * `REQUIRED_PARAM_MISSING`, which is classified TERMINAL — so it never retried and
+ * escalated the journey instead. Because `meetingCreate` resolves the Deal inside its
+ * try block BEFORE `incrementCreateAttempts`, the Event create was never attempted and
+ * EVERY booking landed in `manual_review` with `meeting_create_failed`.
+ *
+ * The `fetchDeals` seam above tests the matching rule while bypassing the URL entirely,
+ * which is exactly why this shipped. This test reads the source, so it cannot be
+ * bypassed by a seam.
+ */
+test('every v6 related-list read carries the required `fields` parameter', () => {
+  const src = require('fs').readFileSync(
+    path.join(__dirname, '..', 'integrations', 'zoho', 'index.js'), 'utf8');
+
+  // `/crm/v6/<Module>/<id-expression>/<RelatedList>` — a search or single-record read
+  // has no third segment and is not subject to the rule.
+  const related = [...src.matchAll(/`\/crm\/v6\/[A-Za-z_]+\/\$\{[^}]+\}\/([A-Za-z_]+)([^`]*)`/g)];
+  assert.ok(related.length >= 2, 'expected the Deals and Tasks related-list reads to be found');
+
+  for (const [whole, list, query] of related) {
+    assert.match(query, /[?&]fields=/,
+      `${list} related-list read omits \`fields\` and will 400: ${whole}`);
+  }
 });
 
 test('Node cannot create a Contact, Account, Deal or Quote — the functions do not exist', () => {

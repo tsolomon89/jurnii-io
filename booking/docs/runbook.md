@@ -67,6 +67,28 @@ by a pass ending early.
 
 ### Diagnosing a stuck journey
 
+Start with the script — it runs the queries below plus a worker-liveness headline and a
+per-journey verdict, and `--zoho` reads the CRM back so you can see where the database and
+Zoho disagree:
+
+```bash
+vercel env pull --environment=production .env.production.local
+
+node --env-file=.env.production.local booking/scripts/inspect-journey.js            # latest 10
+node --env-file=.env.production.local booking/scripts/inspect-journey.js --stuck --zoho
+node --env-file=.env.production.local booking/scripts/inspect-journey.js --journey=<uuid>
+```
+
+It is read-only — every statement runs under `SET TRANSACTION READ ONLY` — and it exits 0
+even when it finds problems, so it is safe to run anywhere. Pass `--fail-on-stuck` for
+monitoring, `--json` to pipe it, `--full-email` when masked addresses are not enough.
+
+The verdict distinguishes the case a status page cannot: an op that is *retrying* from one
+that *nothing is executing*. If work is due but no op has been touched in minutes, the
+worker is not running — check the cron and that `CRON_SECRET` matches.
+
+The raw queries, for when you want them by hand:
+
 ```sql
 SELECT op, state, failure_count, crash_reclaim_count, create_attempts,
        next_retry_at, deadline_at, watch_until_at, last_outcome_kind, last_error_code
@@ -370,6 +392,48 @@ fails — not a licence to change metadata.
 | Per-minute cron availability (Pro/Enterprise) | Hobby is one jittered daily run, which makes the cadence unusable. |
 | `btree_gist` on the target instance | Required by the overlap constraint. |
 | `Ext_Calendar_Booking_ID` still exists and is **removed from the Tier-2 deletion batch** | It is the Meeting correlation key for everything. |
+
+Two of these were verified the hard way — see "Live defects found by end-to-end
+verification" in `implementation-notes.md`. Both were invisible to every offline test and
+both suppressed **every** Meeting in production while Leads, Contacts, Accounts and Deals
+all looked healthy.
+
+---
+
+## 7a. End-to-end verification
+
+`verify-prerequisites.js` proves the credentials and the field metadata. It does not prove
+that a booking produces a CRM record — nothing did, which is how two live defects shipped
+green. `e2e-booking.js` closes that gap by driving a real journey and, crucially, driving
+the worker itself, so "is the chain correct" is isolated from "is the cron firing".
+
+```bash
+# HTTP + database assertions only. Places no booking, creates nothing in Zoho.
+node --env-file=.env.production.local booking/scripts/e2e-booking.js
+
+# the full chain: a real Google event, a real Lead, the workflow-enabled update,
+# the Deluge conversion, the Meeting and the Deal link
+node --env-file=.env.production.local booking/scripts/e2e-booking.js --allow-live-crm-writes
+```
+
+A healthy run ends at `zoho_status=complete` and prints the state transition after every
+worker pass. Exit codes: `0` pass · `1` an assertion failed or something leaked · `2`
+misconfiguration · `3` **the deployment and the script are pointed at different
+databases** · `4` timed out driving the worker.
+
+Read these before running it against Production:
+
+- **It cannot use a disposable calendar.** It goes through `/api/v1/bookings`, so the event
+  lands on the configured booking calendar. It is cancelled at cleanup. If that is not
+  acceptable, run it against a Preview deployment pointed at a separate `GOOGLE_CALENDAR_ID`.
+- **Deluge creates records it cannot delete.** The workflow-enabled Lead update starts
+  `processLead`, which creates a Contact, an Account and a Deal. Those ids are printed under
+  `CREATED BY ZOHO DELUGE` for manual removal — never deleted automatically, because an
+  Account may have been *matched* to a real company rather than created.
+- **A converted Lead is kept, not deleted.** Deleting it would orphan the Contact, Account
+  and Deal without removing them.
+- **Cleanup is skipped after a failure** so the state stays inspectable. Force it with
+  `--force-cleanup`, or keep everything with `--keep`.
 
 ---
 

@@ -305,6 +305,30 @@ async function meetingCreate(claim) {
   }
   if (j.zoho_meeting_id) return { kind: 'progress' };
 
+  /**
+   * `Who_Id` on an Event is a CONTACT lookup, and a CONVERTED Lead id is rejected with
+   * INVALID_DATA — which is terminal, so it escalated the journey instead of retrying.
+   *
+   * `processLead` converts the Lead within seconds of the workflow-enabled update, and
+   * Z5 arms this op and `zoho_conversion_discover` in the SAME transaction at the SAME
+   * `op_priority` (both 40). This op therefore routinely won the race and addressed a
+   * Lead that had just stopped being addressable. That is what suppressed every
+   * Meeting in production.
+   *
+   * So on the Lead path the Meeting waits for the Contact. The wait consumes no retry
+   * budget and is bounded by conversion discovery's own deadline: once that op reaches
+   * `done` or `terminal` this check stops holding the Meeting back, and the Meeting is
+   * then created with no person at all rather than with an unaddressable id —
+   * `dealReconcile` applies `Who_Id` and `What_Id` together later regardless.
+   */
+  const contactPending = !j.zoho_contact_id && j.lead_terminal_update_state === 'accepted';
+  if (contactPending) {
+    const discover = await db.withTransaction((tx) => O.getOp(tx, journeyId, 'zoho_conversion_discover'));
+    if (discover && !['done', 'terminal'].includes(discover.state)) {
+      return { kind: 'no_progress', errorCode: 'awaiting_contact' };
+    }
+  }
+
   try {
     // Reuse by the correlation key before creating — the recovery path for an uncertain
     // create, and also what makes a retry safe.
@@ -344,7 +368,10 @@ async function meetingCreate(claim) {
       journeyId,
       startIso: j.slot_start_utc, endIso: j.slot_end_utc,
       contactId: j.zoho_contact_id,
-      leadId: j.zoho_contact_id ? null : j.zoho_record_id,
+      // Only an UNCONVERTED Lead is addressable. Once the terminal update is accepted
+      // `processLead` owns the Lead's conversion, so its id must not be sent as a person.
+      leadId: (j.zoho_contact_id || j.lead_terminal_update_state === 'accepted')
+        ? null : j.zoho_record_id,
       dealId,
       meetLink: j.google_meet_url,
       product: j.product_interest,
@@ -358,6 +385,10 @@ async function meetingCreate(claim) {
   } catch (err) {
     const c = classify(err);
     if (c.kind === 'terminal') {
+      // The reason ledger only records `meeting_create_failed`, so without this the
+      // ACTUAL Zoho code is discarded and the escalation says nothing about the cause.
+      // A safe code, never a third-party message.
+      log({ evt: 'zoho.meeting.create_rejected', journeyId, code: c.code });
       await db.withTransaction((tx) => ZS.Z10_escalate(tx, journeyId,
         { op: 'zoho_meeting_create', code: 'meeting_create_failed' }));
       return { kind: 'progress', recorded: true };
