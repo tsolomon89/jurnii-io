@@ -6,7 +6,7 @@
   "description": "Progressive booking form + Zoho CRM / Google Calendar backend. Self-contained, copyable module.",
   "scripts": {
     "test": "node --test \"tests/*.test.js\"",
-    "test:db": "node --test \"tests/db/*.test.js\"",
+    "test:db": "node --import ./tests/db/_guard.mjs --test \"tests/db/*.test.js\"",
     "migrate": "node db/migrate.js",
     "register-calendar": "node db/register-calendar.js",
     "inspect": "node scripts/inspect-journey.js",

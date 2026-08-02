@@ -1,6 +1,7 @@
 'use strict';
 
 const { ConflictError, isSlotTaken } = require('../errors');
+const { emailDomain } = require('../../api/_utils/email');
 const R = require('./reservations');
 const O = require('./ops');
 const RV = require('./review');
@@ -104,7 +105,24 @@ async function patchZoho(tx, journeyId, patch) {
  * or `409 wrong_step`.
  */
 async function upsertPage1(tx, journeyId, fields) {
-  const cols = Object.keys(fields);
+  // `email_domain` and `marketing_consent_at` are DERIVED here and stripped from the
+  // caller's object first. Both are provenance: a client-supplied domain would decide
+  // Account resolution downstream, and a client-supplied consent timestamp would be
+  // attacker-chosen evidence of when consent was given. Neither may be accepted.
+  //
+  // The ON CONFLICT branch already stamped `marketing_consent_at` on first-true, but the
+  // INSERT never did — so a journey that consented on its FIRST submission (the normal
+  // case) committed `marketing_consent = true` with a null timestamp, and only a retry
+  // repaired it. Both paths now stamp it, and neither ever clears it.
+  const { email_domain: _ignoredDomain, marketing_consent_at: _ignoredAt, ...caller } = fields;
+  const derived = {
+    ...caller,
+    // '' would defeat the COALESCE backfill below and read as "derived, but empty".
+    email_domain: emailDomain(caller.email_normalized || caller.email) || null,
+    marketing_consent_at: caller.marketing_consent ? new Date() : null,
+  };
+
+  const cols = Object.keys(derived);
   const placeholders = cols.map((_, i) => `$${i + 2}`).join(', ');
   const res = await tx.query(
     `INSERT INTO booking_journeys (journey_id, ${cols.join(', ')}, form_step, page_1_completed_at)
@@ -112,6 +130,9 @@ async function upsertPage1(tx, journeyId, fields) {
      ON CONFLICT (journey_id) DO UPDATE SET
        first_name = EXCLUDED.first_name,
        last_name = EXCLUDED.last_name,
+       -- Backfill only: an established domain is never rewritten, and the guard below
+       -- already refuses a conflicting email.
+       email_domain = COALESCE(booking_journeys.email_domain, EXCLUDED.email_domain),
        marketing_consent = EXCLUDED.marketing_consent,
        marketing_consent_at = CASE WHEN EXCLUDED.marketing_consent
                                      AND booking_journeys.marketing_consent_at IS NULL
@@ -120,7 +141,7 @@ async function upsertPage1(tx, journeyId, fields) {
      WHERE booking_journeys.email_normalized = EXCLUDED.email_normalized
        AND booking_journeys.booking_status = 'draft'
      RETURNING *`,
-    [journeyId, ...cols.map((c) => fields[c])]
+    [journeyId, ...cols.map((c) => derived[c])]
   );
   return res.rowCount ? res.rows[0] : null;
 }

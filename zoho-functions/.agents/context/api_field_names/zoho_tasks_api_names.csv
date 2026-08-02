@@ -1,0 +1,28 @@
+Field Label,API Name,Data Type,Custom Field
+Blocks Sequence,Blocks_Sequence,Pick List,Yes
+Closed Time,Closed_Time,DateTime,
+Contact Name,Who_Id,Lookup,
+Created By,Created_By,Ownerlookup,
+Created Time,Created_Time,DateTime,
+Description,Description,Multi Line,
+Due Date,Due_Date,Date,
+Last Activity Time,Last_Activity_Time,DateTime,
+Locked,Locked__s,Boolean,
+Modified By,Modified_By,Ownerlookup,
+Modified Time,Modified_Time,DateTime,
+Priority,Priority,Pick List,
+Record Id,id,Long Integer,
+Record Status,Record_Status__s,Pick List,
+Related To,What_Id,Lookup,
+Reminder,Remind_At,Alarm,
+Repeat,Recurring_Activity,Rrule,
+Send Notification Email,Send_Notification_Email,Boolean,
+Status,Status,Pick List,
+Subject,Subject,Single Line,
+Tag,Tag,Single Line,
+Task Outcome,Task_Outcome,Pick List,Yes
+Task Owner,Owner,Ownerlookup,
+Task Sequence Managed,Task_Sequence_Managed,Boolean,Yes
+Task Sequence Stage,Task_Sequence_Stage,Single Line,Yes
+Task Sequence Type,Task_Sequence_Type,Pick List,Yes
+Task Type,Task_Type,Pick List,Yes

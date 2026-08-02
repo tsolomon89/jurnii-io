@@ -24,6 +24,19 @@ const { log } = require('../lib/http');
 
 const LEAD_SOURCE = process.env.ZOHO_LEAD_SOURCE || 'Website';
 
+/**
+ * Marketing consent has a DIFFERENT api_name per module — verified against live
+ * metadata on 2026-08-02 and pinned by `tests/zoho-field-names.test.js`:
+ *
+ *   Leads    -> Contact_Marketing_Consent   (label "Contact Marketing Consent")
+ *   Contacts -> Marketing_Consent           (label "Marketing Consent")
+ *
+ * Sending the Lead name on a Contact update is an INVALID_DATA rejection, which
+ * `classify()` treats as terminal — it would escalate the journey rather than fail
+ * quietly. The map is the single source of truth for both call sites.
+ */
+const CONSENT_FIELD = { Leads: 'Contact_Marketing_Consent', Contacts: 'Marketing_Consent' };
+
 function classify(err) {
   if (err instanceof Z.ZohoError) {
     if (err.terminal) return { kind: 'terminal', code: err.code, retryAfter: null };
@@ -33,21 +46,52 @@ function classify(err) {
 }
 
 /** The full data-load payload, sent SUPPRESSED so no conversion is initiated. */
-function dataLoadPayload(j, { includeCompany = true } = {}) {
+function dataLoadPayload(j, { includeCompany = true, module = 'Leads' } = {}) {
   const p = {
     First_Name: j.first_name,
     Last_Name: j.last_name,
     Email: j.email,
     Lead_Source: LEAD_SOURCE,
   };
+  const isLead = module === 'Leads';
   if (includeCompany && j.company) p.Company = j.company;
   if (j.phone_e164) p.Phone = j.phone_e164;
-  if (j.country_name) p.Country = j.country_name;
   if (j.job_title_raw) p[process.env.ZOHO_LEAD_JOBTITLE_RAW_FIELD || 'Job_Title_Raw'] = j.job_title_raw;
-  // Product_Interest is a multiselectpicklist (jsonarray) in Zoho: a bare string is
-  // rejected with INVALID_DATA (expected_data_type: jsonarray). Send a single-element
-  // array of the already-canonical value.
-  if (j.product_interest) p.Product_Interest = [j.product_interest];
+  /**
+   * `Country` and `Product_Interest` are LEAD-ONLY api_names — neither exists on
+   * Contacts (live metadata 2026-08-02: Contacts has `Mailing_Country`, and product
+   * interest lives in the `Products_Linked` junction that `processLead` populates).
+   *
+   * Sending them on the Contact path made the ENTIRE update INVALID_DATA, which
+   * `classify()` treats as terminal. That path runs whenever identity resolves to an
+   * existing Contact — a returning visitor — so the update carrying their phone, job
+   * title AND marketing consent was rejected wholesale, not merely missing a field.
+   * Latent until now only because every journey so far created a new Lead.
+   *
+   * Product_Interest is a multiselectpicklist (jsonarray) on Leads: a bare string is
+   * rejected with INVALID_DATA (expected_data_type: jsonarray), so it is sent as a
+   * single-element array of the already-canonical value.
+   */
+  if (isLead && j.country_name) p.Country = j.country_name;
+  if (isLead && j.product_interest) p.Product_Interest = [j.product_interest];
+  /**
+   * Marketing consent — WRITE-TRUE-ONLY.
+   *
+   * The visitor's consent was captured in Postgres and then dropped on the floor: this
+   * payload never carried it, so every Lead and Contact read
+   * `Contact_Marketing_Consent = false` no matter what the visitor ticked.
+   *
+   * Only `true` is ever emitted. Omitting the key on a false/absent consent is what
+   * makes "never downgrade an existing true" structural rather than a race: this
+   * payload is used for the Lead create, the convergent Lead update AND the
+   * post-conversion Contact update, so sending `false` on any of them could overwrite
+   * a `true` recorded by another channel between our read and our write. A brand-new
+   * record simply keeps Zoho's own `false` default, which is the same two-state
+   * outcome. An incoming `true` therefore upgrades an empty or false value, and
+   * nothing this code sends can ever clear one.
+   */
+  const consentField = CONSENT_FIELD[module];
+  if (j.marketing_consent === true && consentField) p[consentField] = true;
   return p;
 }
 
@@ -121,7 +165,8 @@ async function recordWrite(claim) {
   try {
     if (j.zoho_identity_outcome === 'contact_reused') {
       // Contacts carry company via the Account lookup, so Company is omitted.
-      await Z.updateContactSuppressed(j.zoho_contact_id, dataLoadPayload(j, { includeCompany: false }));
+      await Z.updateContactSuppressed(j.zoho_contact_id,
+        dataLoadPayload(j, { includeCompany: false, module: 'Contacts' }));
       await db.withTransaction((tx) => ZS.Z4_contactWritten(tx, journeyId));
       return { kind: 'progress', recorded: true };
     }
