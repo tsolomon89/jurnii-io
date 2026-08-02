@@ -1,0 +1,65 @@
+Field Label,API Name,Data Type,Custom Field,Formula,Pick List Values,Deletion Dependency / Deletion Note
+Adjustment,Adjustment,Currency,,,,
+Discount,Discount,Currency,,,,
+Tax,Tax,Currency,,,,
+Discount,Discount,Currency,,,,
+List Price,List_Price,Currency,,,,
+Tax,Tax,Currency,,,,
+Valid Till,Valid_Till,Date,,,,
+Billing Address - Latitude,Billing_Address_Latitude,Decimal,,,,
+Billing Address - Longitude,Billing_Address_Longitude,Decimal,,,,
+Shipping Address - Latitude,Shipping_Address_Latitude,Decimal,,,,
+Shipping Address - Longitude,Shipping_Address_Longitude,Decimal,,,,
+Quantity,Quantity,Decimal,,,,
+Grand Total,Grand_Total,Formula,,,,
+Sub Total,Sub_Total,Formula,,,,
+Amount,Amount,Formula,,,,
+Total,Total,Formula,,,,
+Total After Discount,Total_After_Discount,Formula,,,,
+Quote Number,Quote_Number,Long Integer,,,,
+Account Name,Account_Name,Lookup,,,,
+Contact Name,Contact_Name,Lookup,,,,
+Deal Name,Deal_Name,Lookup,,,,
+Quote Owner,Quote_Owner,Lookup,,,,
+Price Book,Price_Book_Name,Lookup,,,,
+Product Name,Product_Name,Lookup,,,,
+Description,Description,Multi Line (Large),,,,
+Terms and Conditions,Terms_and_Conditions,Multi Line (Large),,,,
+Description,Description,Multi Line (Large),,,,
+Connected To,Connected_To__s,MultiModuleLookup,,,,
+Billing Address - Country / Region,Billing_Address_Country_Region,Pick LIst,,,,
+Billing Address - State / Province,Billing_Address_State_Province,Pick LIst,,,,
+Carrier,Carrier,Pick LIst,,,,
+Quote Stage,Quote_Stage,Pick LIst,,,Draft;Negotiation;Delivered;On Hold;Confirmed;Closed Won;Closed Lost,
+Shipping Address - Country / Region,Shipping_Address_Country_Region,Pick LIst,,,,
+Shipping Address - State / Province,Shipping_Address_State_Province,Pick LIst,,,,
+Billing Address - City,Billing_Address_City,Single Line,,,,
+Billing Address - Flat / House No./ Building / Apartment Name,Billing_Address_Flat_House_No./_Building_Apartment_Name,Single Line,,,,
+Billing Address - Street Address,Billing_Address_Street_Address,Single Line,,,,
+Billing Address - Zip / Postal Code,Billing_Address_Zip_Postal_Code,Single Line,,,,
+Created By,Created_By,Single Line,,,,
+Modified By,Modified_By,Single Line,,,,
+Shipping Address - City,Shipping_Address_City,Single Line,,,,
+Shipping Address - Flat / House No./ Building / Apartment Name,Shipping_Address_Flat_House_No./_Building_Apartment_Name,Single Line,,,,
+Shipping Address - Street Address,Shipping_Address_Street_Address,Single Line,,,,
+Shipping Address - Zip / Postal Code,Shipping_Address_Zip_Postal_Code,Single Line,,,,
+Subject,Subject,Single Line,,,,
+Tag,Tag,Single Line,,,,
+Created By,Created_By,Single Line,,,,
+Quoted Items,Quoted_Items,Subform,,,,
+Quote Product,Quote_Product,Lookup (Products),Yes,,,(verified live 2026-06-26) the SKU this Quote represents
+Opportunity Type,Opportunity_Type,Pick List,Yes,,FTP;RTP,(verified live 2026-06-26)
+Contract Date Start,Contract_Date_Start,Date,Yes,,,(verified live 2026-06-26)
+Contract Date End,Contract_Date_End,Date,Yes,,,(verified live 2026-06-26)
+Contract ACV,Contract_ACV,Currency,Yes,,,(verified live 2026-06-26) frozen contract value
+Contract Signed Date,Contract_Signed_Date,Date,Yes,,,(verified live 2026-06-26)
+Contract Type,Contract_Type,Pick List,Yes,,Initial;Current,(verified live 2026-06-26)
+Quote Last Deal ID,Quote_Last_Deal_ID,Single Line,Yes,,,(verified live 2026-06-26) reassignment marker
+Quote Applied Activity Keys,Quote_Applied_Activity_Keys,Multi Line,Yes,,,(verified live 2026-06-26) newline-delimited idempotency keys (also holds ImportBootstrap keys)
+[Quoted Items subform] Product Name,Product_Name,Lookup (Products),,,,(subform child)
+[Quoted Items subform] Quantity,Quantity,Decimal,,,,(subform child)
+[Quoted Items subform] List Price,List_Price,Currency,,,,(subform child) line ACV written here
+[Quoted Items subform] Quoted Item Plan Brands,Quoted_Item_Plan_Brands,Integer,Yes,,,(subform child)
+[Quoted Items subform] Quoted Item Pricing Tier,Quoted_Item_Pricing_Tier,Pick List,Yes,,-None-;Base;Markup;Agency,(subform child)
+[Quoted Items subform] Quoted Item Pricing Band,Quoted_Item_Pricing_Band,Pick List,Yes,,-None-;5;7;10;15;20;50;100,(subform child)
+[Quoted Items subform] Quoted Item Frequency,Quoted_Item_Frequency,Pick List,Yes,,-None-;4x per day;2x per day;1x per day,(subform child) Jurnii 360 only

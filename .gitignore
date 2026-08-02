@@ -9,3 +9,6 @@ scripts/perf-baselines/*-mobile.json
 .env
 .env*.local
 
+
+# Consolidated zoho-functions: exclude untracked binary attachment
+zoho-functions/.agents/context/activity-workflows/emails.zip
