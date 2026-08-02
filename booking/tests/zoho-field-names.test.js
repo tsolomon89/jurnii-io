@@ -1,0 +1,135 @@
+'use strict';
+
+/**
+ * Field-name contract — every Zoho api_name this codebase writes must exist on the
+ * module that receives it.
+ *
+ * ROOT CAUSE THIS PINS
+ *
+ *   `handleMeetingEvent` put `Demo_Start_DateTime` and `Demo_Reminder_Send_At` into ONE
+ *   `zoho.crm.updateRecord("Deals", …)` map. `Demo_Start_DateTime` does not exist on
+ *   Deals, so the whole map was rejected and the supported reminder field was never
+ *   written — silently, on every booking, for as long as the code shipped. Nothing
+ *   failed loudly because nothing compared the written names against live metadata.
+ *
+ *   Runs OFFLINE against `tests/fixtures/zoho-fields.json`, refreshed from live Zoho by
+ *   `booking/scripts/zoho-field-snapshot.js` (`--check` fails on drift).
+ */
+
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('fs');
+const path = require('path');
+
+const snapshot = require('./fixtures/zoho-fields.json');
+const has = (module, field) => (snapshot.modules[module] || []).includes(field);
+
+const DELUGE_DIR = path.join(__dirname, '..', '..', 'zoho-functions', 'v6');
+// The Deluge source is published to Zoho, and is only tracked in this repo once the
+// live functions match it. Until then the source-scanning assertions skip rather than
+// fail — the snapshot assertions, which need no source, always run.
+const noDeluge = fs.existsSync(DELUGE_DIR) ? false : 'zoho-functions/v6 is not present';
+
+function delugeFiles(dir) {
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+    const p = path.join(dir, e.name);
+    return e.isDirectory() ? delugeFiles(p) : (e.name.endsWith('.deluge') ? [p] : []);
+  });
+}
+
+// ---------------------------------------------------------------------------
+// The snapshot itself
+// ---------------------------------------------------------------------------
+
+test('the field snapshot covers every module the booking chain writes to', () => {
+  for (const m of ['Leads', 'Contacts', 'Accounts', 'Deals', 'Events', 'Tasks', 'Quotes']) {
+    assert.ok(Array.isArray(snapshot.modules[m]) && snapshot.modules[m].length > 0,
+      `snapshot is missing module ${m} — re-run booking/scripts/zoho-field-snapshot.js`);
+  }
+});
+
+// ---------------------------------------------------------------------------
+// The specific regression
+// ---------------------------------------------------------------------------
+
+test('Deals.Demo_Start_DateTime does not exist and must never be written again', () => {
+  assert.strictEqual(has('Deals', 'Demo_Start_DateTime'), false,
+    'live metadata now HAS this field — if it was created deliberately, update this test');
+
+  // Comments are stripped first: the fix itself documents the dead field by name, and a
+  // naive substring search would forbid explaining why it must never come back.
+  const code = (src) => src.split('\n').filter((l) => !l.trim().startsWith('//')).join('\n');
+  const offenders = delugeFiles(DELUGE_DIR)
+    .filter((f) => code(fs.readFileSync(f, 'utf8')).includes('Demo_Start_DateTime'))
+    .map((f) => path.relative(DELUGE_DIR, f));
+  assert.deepStrictEqual(offenders, [],
+    'Demo_Start_DateTime was reintroduced into Deluge; it is not a Deals field and its '
+    + 'presence in an updateRecord map silently voids every other key in that map');
+});
+
+test('Deals.Demo_Reminder_Send_At exists and is the supported reminder field', () => {
+  assert.ok(has('Deals', 'Demo_Reminder_Send_At'));
+});
+
+test('the Deal reminder mirror writes Demo_Reminder_Send_At and nothing else', { skip: noDeluge }, () => {
+  const src = fs.readFileSync(path.join(DELUGE_DIR, 'activity', 'handleMeetingEvent.deluge'), 'utf8');
+  const block = src.slice(src.indexOf('dUpd = Map();'));
+  const puts = [...block.matchAll(/dUpd\.put\("([^"]+)"/g)].map((m) => m[1]);
+  assert.deepStrictEqual(puts, ['Demo_Reminder_Send_At'],
+    'the Deal mirror must carry exactly one key, so an unsupported name can never void it');
+});
+
+// ---------------------------------------------------------------------------
+// Every field the booking path writes, per module
+// ---------------------------------------------------------------------------
+
+const WRITTEN = {
+  // booking/workflows/zoho-ops.js -> dataLoadPayload + buildMeetingPayload
+  Leads: ['First_Name', 'Last_Name', 'Email', 'Lead_Source', 'Company', 'Phone',
+    'Country', 'Job_Title_Raw', 'Product_Interest', 'Contact_Marketing_Consent'],
+  // the post-conversion Contact update, and processLead's step-5 enrichment
+  // NB: no Country, no Product_Interest, no Personal_Phone — see the lead-only test below.
+  Contacts: ['First_Name', 'Last_Name', 'Email', 'Lead_Source', 'Phone',
+    'Job_Title_Raw', 'Marketing_Consent', 'Stage', 'State',
+    'Status', 'Contact_Role1', 'Account_Name'],
+  Events: ['Ext_Calendar_Booking_ID', 'Start_DateTime', 'End_DateTime', 'Who_Id',
+    'What_Id', 'Description', 'Event_Title', 'Meeting_Task_Stage',
+    'Meeting_Task_Status', 'Meeting_Task_Pipeline', 'Meeting_Task_Opportunity',
+    'Reminder_Send_At'],
+  Deals: ['Deal_Name', 'Deal_Key', 'Deal_Product', 'Deal_Product_Key', 'Account_Name',
+    'Contact_Name', 'Opportunity_State', 'Opportunity_Status', 'Stage', 'Pipeline',
+    'Closing_Date', 'Lead_Source', 'Demo_Reminder_Send_At'],
+  Accounts: ['Account_Name', 'Account_Key', 'Website', 'Phone', 'Company_Tier'],
+  Tasks: ['Subject', 'Status', 'What_Id', 'Who_Id', 'Task_Type', 'Description'],
+  Quotes: ['Subject', 'Quote_Stage', 'Quote_Type', 'Account_Name', 'Deal_Name',
+    'Quote_Product', 'Quote_Target_ACV', 'Contract_ACV', 'Quoted_Items',
+    'Quote_Applied_Activity_Keys', 'Contact_Name'],
+};
+
+for (const [module, fields] of Object.entries(WRITTEN)) {
+  for (const field of fields) {
+    test(`${module}.${field} exists in live metadata`, () => {
+      assert.ok(has(module, field),
+        `${module}.${field} is written by the booking chain but is absent from live `
+        + 'metadata. Either the name is wrong or the field was deleted in Zoho.');
+    });
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Consent, which is module-specific and was the second live defect
+// ---------------------------------------------------------------------------
+
+test('marketing consent has a different api_name on Leads and Contacts', () => {
+  assert.ok(has('Leads', 'Contact_Marketing_Consent'));
+  assert.ok(has('Contacts', 'Marketing_Consent'));
+  // The inverse names must NOT exist, or a wrong-module write would look valid.
+  assert.strictEqual(has('Leads', 'Marketing_Consent'), false);
+  assert.strictEqual(has('Contacts', 'Contact_Marketing_Consent'), false);
+});
+
+test('Phone and Job_Title_Raw exist on Contacts, so the conversion repair can land', () => {
+  assert.ok(has('Contacts', 'Phone'));
+  assert.ok(has('Contacts', 'Job_Title_Raw'));
+});
