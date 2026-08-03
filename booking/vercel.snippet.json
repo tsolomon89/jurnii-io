@@ -2,7 +2,7 @@
   "//": "Merge these keys into the HOST project's root vercel.json. Paths are the root /api shim paths (Vercel serves functions only from the root /api directory).",
   "functions": {
     "api/v1/submissions/[id].js": { "maxDuration": 60 },
-    "api/v1/bookings/index.js": { "maxDuration": 30 },
+    "api/v1/bookings/index.js": { "maxDuration": 60 },
     "api/v1/bookings/[id]/reschedule.js": { "maxDuration": 30 }
   },
   "headers": [

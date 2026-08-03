@@ -1,7 +1,9 @@
 'use strict';
 
+const { waitUntil } = require('@vercel/functions');
 const { fail, methodNotAllowed, log } = require('../../../../../lib/http');
 const { requireAdminSecret, requireCronSecret } = require('../../../../../lib/auth');
+const dispatch = require('../../../../../lib/dispatch');
 const V = require('../../../../../lib/validate');
 const { UnknownKeyError } = require('../../../../../lib/fingerprint');
 const db = require('../../../../../db');
@@ -113,6 +115,7 @@ module.exports = async function handler(req, res) {
   }
 
   // ---- PHASE 3: APPLY + FINALISE, one transaction, fence FIRST -----------
+  const runnable = new Set();
   try {
     const outcome = await db.withTransaction(async (tx) => {
       const status = verified.ok ? 200 : 409;
@@ -172,12 +175,18 @@ module.exports = async function handler(req, res) {
         resolvedReasonKeys: resolvedKeys,
       });
       return { status: 200, body };
-    });
+    }, { collectRunnable: runnable });
 
     log({
       evt: 'resolve.applied', journeyId, resolutionId: request.resolutionId,
       escalation: request.escalation, action: request.action, status: outcome.status,
     });
+    // Only a committed apply populates `runnable`, so a fenced-off or version-conflicted
+    // resolution publishes nothing. For MR1 this is what turns `create_meeting_only`'s
+    // "lands on the next worker pass (a minute)" into "lands now": the repair re-armed
+    // `zoho_meeting_create`, and the drain performs the Zoho write — still suppressed,
+    // because the retro-link's trigger remains gated on the automation flag.
+    dispatch.publish(runnable, { reason: `resolve_${request.escalation}`, waitUntil });
     return res.status(outcome.status).json(outcome.body);
   } catch (err) {
     if (err.code === 'resolution_lease_lost') {

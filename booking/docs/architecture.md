@@ -244,6 +244,41 @@ implementation plan. Each item is a correction forced by real PostgreSQL or Zoho
 behaviour, verified against PostgreSQL 17.10, and pinned by a named regression test.
 Full reasoning is in `docs/implementation-notes.md`.
 
+## Dispatch: a committed write starts the work, not a timer
+
+Operations are armed inside the transaction that makes them necessary (the universal outbox
+rule, §4.8), but for a long time nothing *looked* for them except a per-minute cron — and a
+pass claimed one batch, so each hop in a chain cost a full interval. A five-hop Lead journey
+spent ~4–5 minutes queueing before Zoho's own timing counted.
+
+Two changes fix that, and they are separable:
+
+1. **A pass claims one operation at a time and re-claims after each one.** This was
+   introduced to fix a defect — a batch claim leased rows it might never start, and the
+   claim's crash arithmetic then counted them as crashes — but it also means a pass
+   continues into whatever it arms. One pass now walks the whole runnable chain.
+2. **`publish()` registers a journey-scoped drain after a commit**, so the chain starts in
+   seconds instead of at the next tick. `booking/lib/dispatch.js`, gated on
+   `BOOKING_DISPATCH_ENABLED`.
+
+`withTransaction(fn, { collectRunnable })` returns the set of journeys the transaction made
+runnable; the handler publishes it at the top level, after `COMMIT` and **before** the
+response returns. Publication is deliberately *not* inside `withTransaction`: that helper is
+also used by the worker, the CLI scripts and the test suite, none of which should acquire a
+detached network effect, and none of which has a request context for `waitUntil`. It also
+means worker contexts cannot publish at all — they simply never pass a collector — so a
+drain cannot fan out wakes for the operations its own loop is about to run.
+
+The dispatch is a **hint with no authority**. Postgres remains the queue; losing a hint
+costs latency and nothing else, because the operation is still `pending` and the sweep
+claims it. That is what makes best-effort acceptable here, and it is why there is no
+internal HTTP call, no second credential and no queue in this layer.
+
+`runJourneyUntilBlocked` reports *why* it stopped, because stopping is not the same as
+finishing: `no_due_work` means genuinely waiting, while `budget_exhausted`/`max_ops` with
+`continuationRequired` means runnable work was left for the sweep. It never sleeps and never
+overrides `next_retry_at`, so it cannot busy-poll Zoho.
+
 ## Zoho metadata boundary (global)
 
 No module, field, layout, picklist value, workflow, validation rule, blueprint, OAuth

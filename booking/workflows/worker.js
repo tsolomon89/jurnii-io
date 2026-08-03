@@ -96,6 +96,15 @@ async function claimOne() {
   });
 }
 
+/** `claimOne`, narrowed to one journey. Same protocol, same guarantees. */
+async function claimOneForJourney(journeyId) {
+  return db.withTransaction(async (tx) => {
+    const claimed = await tx.query(O.CLAIM_ONE_FOR_JOURNEY_SQL, [journeyId]);
+    const ready = await readyAfterCeiling(tx, claimed.rows);
+    return { claim: ready[0] || null, claimedRow: claimed.rowCount === 1 };
+  });
+}
+
 /**
  * Run one claimed operation.
  *
@@ -105,8 +114,12 @@ async function claimOne() {
  * handler that throws is recorded as `retryable_failure`, so a claimed op never ends a
  * pass with no outcome and an unreleased lease.
  */
-async function runOne(claim) {
+async function runOne(claim, source) {
   const { journey_id: journeyId, op } = claim;
+  // `via` answers "which mechanism performed this step?" from logs alone. Without it,
+  // "the cron no longer does the happy-path work" is an assertion rather than a
+  // measurement, and that measurement is the gate on reducing the cron's cadence.
+  const via = source || 'cron';
   const handler = HANDLERS[op];
   if (!handler) {
     await db.withTransaction((tx) => O.recordOutcome(tx, journeyId, op, 'retryable_failure',
@@ -123,7 +136,7 @@ async function runOne(claim) {
     const code = err && err.code ? String(err.code) : 'handler_error';
     await db.withTransaction((tx) => O.recordOutcome(tx, journeyId, op, 'retryable_failure',
       { errorCode: code }));
-    log({ evt: 'worker.op.failed', journeyId, op, code });
+    log({ evt: 'worker.op.failed', journeyId, op, code, via });
     return { op, journeyId, outcome: 'retryable_failure', code };
   }
 
@@ -135,7 +148,7 @@ async function runOne(claim) {
       retryAfterSeconds: result.retryAfterSeconds || null,
     }));
   }
-  log({ evt: 'worker.op.done', journeyId, op, outcome: result.kind });
+  log({ evt: 'worker.op.done', journeyId, op, outcome: result.kind, via });
   return { op, journeyId, outcome: result.kind };
 }
 
@@ -204,6 +217,67 @@ async function runPass({ limit, timeBudgetMs, opReserveMs } = {}) {
   };
 }
 
+/**
+ * Drain ONE journey until it is genuinely blocked, then report why.
+ *
+ * The shared primitive behind post-commit dispatch. It reuses `runOne` unchanged and every
+ * existing `db/queries/*` transition — no handler logic and no state machine is
+ * reimplemented here, so the tests that pin those transitions also pin this.
+ *
+ * STOPPING IS NOT THE SAME AS FINISHING. `no_due_work` means the journey is genuinely
+ * waiting on something external. `budget_exhausted` and `max_ops` mean we ran out of room
+ * and runnable work may remain — so the caller is told, via `continuationRequired`, that
+ * acknowledging here would strand work. Every stop reason is already a row fact:
+ *
+ *   next_retry_at in the future        the claim predicate excludes it
+ *   waiting for Lead conversion        zoho_conversion_discover -> no_progress
+ *   waiting for Deal creation          zoho_deal_reconcile -> no_progress
+ *   external-create outcome uncertain  outcome_unknown; create_attempts >= 1 blocks a retry
+ *   Manual Review required             Z10_escalate -> terminal/done
+ *   journey complete                   completeOp -> next_retry_at = NULL
+ *   precondition unmet                 parkOp -> next_retry_at = NULL
+ *
+ * It cannot busy-poll Zoho: it never overrides `next_retry_at`, and every `no_progress`
+ * outcome has already pre-committed a wait inside its claim transaction. It never sleeps.
+ */
+async function runJourneyUntilBlocked(journeyId, { budgetMs, maxOps, opReserveMs, source } = {}) {
+  const budget = budgetMs ?? Number(process.env.BOOKING_DISPATCH_BUDGET_MS || 40_000);
+  const limit = maxOps ?? Number(process.env.BOOKING_DISPATCH_MAX_OPS || 20);
+  const reserve = opReserveMs ?? Number(process.env.JOBS_OP_RESERVE_MS || 5_000);
+  const startedAt = Date.now();
+
+  const results = [];
+  let stoppedBecause = 'no_due_work';
+
+  for (;;) {
+    // Budget checked BEFORE claiming, for the same reason as `runPass`: a claim costs a
+    // five-minute lease, so we never take one we cannot start.
+    if (Date.now() - startedAt > budget - reserve) { stoppedBecause = 'budget_exhausted'; break; }
+    if (results.length >= limit) { stoppedBecause = 'max_ops'; break; }
+
+    const { claim, claimedRow } = await claimOneForJourney(journeyId);
+    if (!claimedRow) { stoppedBecause = 'no_due_work'; break; }
+    if (!claim) continue;                     // over-ceiling: terminated, never run
+
+    results.push(await runOne(claim, source || 'dispatch'));
+  }
+
+  const state = await db.withTransaction((tx) => O.journeyRunState(tx, journeyId));
+
+  return {
+    ran: results.length,
+    outcomes: results.reduce((acc, r) => { acc[r.outcome] = (acc[r.outcome] || 0) + 1; return acc; }, {}),
+    stoppedBecause,
+    journeyComplete: state.journeyComplete,
+    hasDueNow: state.hasDueNow,
+    // Only a limit-induced stop can strand runnable work. A `no_due_work` stop with
+    // `hasDueNow` true would mean another worker claimed it, which is not ours to continue.
+    continuationRequired: state.hasDueNow
+      && ['budget_exhausted', 'max_ops'].includes(stoppedBecause),
+    nextDueAt: state.nextDueAt,
+  };
+}
+
 /** The per-minute reservation TTL sweep, independent of any journey's ops. */
 async function sweepReservations(limit) {
   const released = await db.withTransaction((tx) => R.releaseExpiredHolds(tx, limit || 100));
@@ -211,4 +285,7 @@ async function sweepReservations(limit) {
   return released.length;
 }
 
-module.exports = { claimBatch, claimOne, runOne, runPass, sweepReservations, HANDLERS };
+module.exports = {
+  claimBatch, claimOne, claimOneForJourney,
+  runOne, runPass, runJourneyUntilBlocked, sweepReservations, HANDLERS,
+};

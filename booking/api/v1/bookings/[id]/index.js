@@ -1,6 +1,8 @@
 'use strict';
 
+const { waitUntil } = require('@vercel/functions');
 const { fail, methodNotAllowed, log } = require('../../../../lib/http');
+const dispatch = require('../../../../lib/dispatch');
 const { requireManage } = require('../../../../lib/auth');
 const V = require('../../../../lib/validate');
 const G = require('../../../../integrations/google');
@@ -46,8 +48,10 @@ module.exports = async function handler(req, res) {
   // TRANSACTION R3 — google_cancel only. zoho_cancel_propagate is NOT created here:
   // Zoho must never be told a meeting was cancelled before Google confirms it was.
   let intentVersion;
+  const runnable = new Set();
   try {
-    ({ intentVersion } = await db.withTransaction((tx) => J.R3_cancelIntent(tx, journeyId)));
+    ({ intentVersion } = await db.withTransaction((tx) => J.R3_cancelIntent(tx, journeyId),
+      { collectRunnable: runnable }));
   } catch (err) {
     return fail(res, 409, 'action_in_progress', 'A change is already in progress.');
   }
@@ -68,8 +72,9 @@ module.exports = async function handler(req, res) {
     try {
       await db.withTransaction((tx) => J.G4_cancelled(tx, journeyId, {
         intentVersion, propagateToZoho: true,
-      }));
+      }), { collectRunnable: runnable });
       log({ evt: 'bookings.cancelled', journeyId });
+      dispatch.publish(runnable, { reason: 'cancel_committed', waitUntil });
       return res.status(200).json({ status: 'cancelled', bookingId: journeyId });
     } catch (err) {
       log({ evt: 'bookings.cancel_commit_failed', journeyId, code: err.code || 'unknown' });
@@ -78,5 +83,7 @@ module.exports = async function handler(req, res) {
 
   // Uncertain, or an unqualified 404: the intent survives and the worker finishes it.
   log({ evt: 'bookings.cancel_pending', journeyId, outcome: outcome.kind });
+  // R3 armed `google_cancel`, so there is work even on the 202 path.
+  dispatch.publish(runnable, { reason: 'cancel_pending', waitUntil });
   return res.status(202).json({ status: 'cancel_pending', bookingId: journeyId, pollAfterMs: 3000 });
 };

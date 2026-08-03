@@ -1,7 +1,9 @@
 'use strict';
 
+const { waitUntil } = require('@vercel/functions');
 const { fail, methodNotAllowed, log } = require('../../../lib/http');
 const { requireFlow, manageUrlFor } = require('../../../lib/auth');
+const dispatch = require('../../../lib/dispatch');
 const { verifyEventOwnership } = require('../../../lib/ownership');
 const S = require('../../../config/slots');
 const G = require('../../../integrations/google');
@@ -189,19 +191,23 @@ module.exports = async function handler(req, res) {
 
   // ---- step 5a: TRANSACTION G1 --------------------------------------------
   const meetLink = await G.awaitMeetLink(calendarId, event);
+  const runnable = new Set();
   try {
     await db.withTransaction((tx) => J.G1_createConfirmed(tx, journeyId, {
       googleEventId: event.id,
       slotStartUtc: slot.start.toISOString(),
       slotEndUtc: slot.end.toISOString(),
       meetUrl: meetLink,
-    }));
+    }), { collectRunnable: runnable });
   } catch (err) {
     log({ evt: 'bookings.confirm_failed', journeyId, code: err.code || 'unknown' });
     return res.status(202).json({ status: 'booking_pending', bookingId: journeyId, pollAfterMs: 3000 });
   }
 
   log({ evt: 'bookings.confirmed', journeyId, attempt: attemptVersion });
+  // G1 armed `zoho_meeting_create`. Register the drain now, before responding — the
+  // visitor's confirmation does not wait for the Zoho Meeting, Contact or Deal.
+  dispatch.publish(runnable, { reason: 'google_confirmed', waitUntil });
   // A missing Meet link never fails a booking that exists (§10).
   return res.status(200).json({
     status: 'confirmed',
