@@ -137,14 +137,43 @@ async function markLeadUpdateSending(tx, journeyId) {
   return res.rows[0].lead_terminal_update_attempted_at;
 }
 
-/** Z7 — conversion discovered. Deal reconcile starts only once a Meeting exists. */
+/**
+ * Z7 — conversion discovered. Deal reconcile starts only once a Meeting exists.
+ *
+ * THE MEETING RE-ARM IS THE MISSING EDGE. `meetingCreate` correctly parks with
+ * `awaiting_record_saved` when there is no Contact and the Lead's terminal update is
+ * already `accepted`: a converting Lead is unaddressable as an Event `Who_Id`, and sending
+ * it is `INVALID_DATA`, which is terminal. But the op is `parked`, so `next_retry_at` is
+ * NULL and it never polls again — it runs only when another transaction reactivates it.
+ * Z4 and Z5 do that, and both run BEFORE conversion. This transition is the one that
+ * actually establishes `zoho_contact_id`, and it used to arm only `zoho_deal_reconcile`.
+ *
+ * So a Meeting that parked after Z5, whose Contact then arrived here, was stranded
+ * permanently — and silently, because parking raises no review reason, leaving
+ * `needs_attention` false and nothing for an operator to see. Found by a live Phase-1 E2E:
+ * booking confirmed, Contact and Account present, `zoho_meeting_create` parked at
+ * `awaiting_record_saved` with `next_retry_at` NULL, and no path back.
+ *
+ * The invariant this restores: Contact discovered AND booking confirmed AND no Meeting
+ * yet => Meeting creation is runnable.
+ *
+ * `ensureOp` is the right primitive and needs no widening: `parked` is precisely the state
+ * it re-arms, while its predicate still refuses `sending`, `accepted`, `outcome_unknown`
+ * and `terminal` — so this cannot revive a create whose outcome was uncertain and cannot
+ * open a second-Meeting path. Suppression is unaffected: the retro-link's trigger is still
+ * gated on `BOOKING_MEETING_AUTOMATION_ENABLED`.
+ */
 async function Z7_conversionDiscovered(tx, journeyId, { contactId, accountId = null }) {
   const row = await patchZoho(tx, journeyId, {
     zoho_contact_id: contactId,
     zoho_account_id: accountId,
   });
   await O.completeOp(tx, journeyId, 'zoho_conversion_discover');
-  if (row.zoho_meeting_id) await O.ensureOp(tx, journeyId, 'zoho_deal_reconcile');
+  if (row.zoho_meeting_id) {
+    await O.ensureOp(tx, journeyId, 'zoho_deal_reconcile');
+  } else if (row.booking_status === 'confirmed') {
+    await O.ensureOp(tx, journeyId, 'zoho_meeting_create');
+  }
   return row;
 }
 
