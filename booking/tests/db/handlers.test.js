@@ -685,7 +685,11 @@ test('availability fails closed with 503 when Postgres is unreadable', { skip },
   const calls = stubGoogle({ checkFreeBusy: async () => [] });
   const dbPath = require.resolve('../../db/index.js');
   const realDb = require(dbPath);
-  require.cache[dbPath].exports = { ...realDb, query: async () => { throw new Error('pg down'); } };
+  // Both access paths are stubbed, so this stays a test of "fails closed" rather than a
+  // test of which helper the handler happens to call. Availability now opens a short
+  // transaction (release expired holds, then read) instead of a bare query.
+  const down = async () => { throw new Error('pg down'); };
+  require.cache[dbPath].exports = { ...realDb, query: down, withTransaction: down };
   try {
     const res = mockRes();
     await loadHandler('availability.js')({ method: 'GET', headers: {}, query: {} }, res);
@@ -721,6 +725,157 @@ test('availability subtracts Postgres holds as well as Google busy periods', { s
   assert.ok(!offered.includes(new Date(held.getTime() - 1800000).toISOString()));
   assert.ok(offered.includes(new Date(held.getTime() + 3600000).toISOString()),
     'exactly 60 minutes away is offerable');
+});
+
+// --------------------------------------------------------------------------
+// §8.3 tier 1 — an expired hold stops blocking its slot the moment anyone asks.
+//
+// This is what makes slowing the scheduled sweep safe: correctness stops depending on
+// a timer having run. The proofs below are the ones the plan requires.
+// --------------------------------------------------------------------------
+
+test('§8.3 an EXPIRED hold cannot block a slot, with no sweep and no event', { skip }, async () => {
+  const holder = await seedJourney();
+  const slot = futureSlot(29);
+  await db.withTransaction((tx) => R.upsertPendingHold(tx, holder, {
+    purpose: 'initial', hostCalendarKey: 'jurnii_local', slotStartUtc: slot.toISOString() }));
+
+  // Age the hold past its TTL. Nothing else runs: no sweep, no delayed event.
+  await db.query(
+    `UPDATE booking_slot_reservations SET expires_at = now() - interval '1 minute'
+      WHERE journey_id = $1 AND purpose = 'initial'`, [holder]);
+
+  forbidZoho();
+  stubGoogle({ checkFreeBusy: async () => [] });
+  const res = mockRes();
+  await loadHandler('availability.js')({
+    method: 'GET', headers: {},
+    query: { timeMin: new Date(slot.getTime() - 7200000).toISOString(),
+             timeMax: new Date(slot.getTime() + 7200000).toISOString() },
+  }, res);
+
+  assert.equal(res.statusCode, 200);
+  assert.ok(res.body.slots.map((s) => s.start).includes(slot.toISOString()),
+    'the expired hold released on read, so its slot is offerable again');
+
+  const row = await db.withTransaction(async (tx) => (await tx.query(
+    `SELECT status FROM booking_slot_reservations WHERE journey_id = $1 AND purpose = 'initial'`,
+    [holder])).rows[0]);
+  assert.equal(row.status, 'expired', 'and the release was durably committed');
+});
+
+test('§8.3 a LIVE hold is still withheld — the release is not indiscriminate', { skip }, async () => {
+  const holder = await seedJourney();
+  const slot = futureSlot(30);
+  await db.withTransaction((tx) => R.upsertPendingHold(tx, holder, {
+    purpose: 'initial', hostCalendarKey: 'jurnii_local', slotStartUtc: slot.toISOString() }));
+
+  forbidZoho();
+  stubGoogle({ checkFreeBusy: async () => [] });
+  const res = mockRes();
+  await loadHandler('availability.js')({
+    method: 'GET', headers: {},
+    query: { timeMin: new Date(slot.getTime() - 7200000).toISOString(),
+             timeMax: new Date(slot.getTime() + 7200000).toISOString() },
+  }, res);
+
+  assert.ok(!res.body.slots.map((s) => s.start).includes(slot.toISOString()),
+    'an unexpired hold still blocks its slot');
+  const row = await db.withTransaction(async (tx) => (await tx.query(
+    `SELECT status FROM booking_slot_reservations WHERE journey_id = $1 AND purpose = 'initial'`,
+    [holder])).rows[0]);
+  assert.equal(row.status, 'pending', 'and was not released');
+});
+
+test('§8.3 an ARMED expired hold is protected — Google uncertainty outranks the TTL', { skip }, async () => {
+  // `armed` means a Google create may be in flight. Releasing that slot could hand it to
+  // someone else while an event quietly lands on it.
+  const holder = await seedJourney();
+  const slot = futureSlot(31);
+  await db.withTransaction(async (tx) => {
+    await R.upsertPendingHold(tx, holder, {
+      purpose: 'initial', hostCalendarKey: 'jurnii_local', slotStartUtc: slot.toISOString(), armed: true });
+  });
+  await db.query(
+    `UPDATE booking_slot_reservations SET expires_at = now() - interval '1 minute'
+      WHERE journey_id = $1 AND purpose = 'initial'`, [holder]);
+
+  forbidZoho();
+  stubGoogle({ checkFreeBusy: async () => [] });
+  const res = mockRes();
+  await loadHandler('availability.js')({
+    method: 'GET', headers: {},
+    query: { timeMin: new Date(slot.getTime() - 7200000).toISOString(),
+             timeMax: new Date(slot.getTime() + 7200000).toISOString() },
+  }, res);
+
+  assert.ok(!res.body.slots.map((s) => s.start).includes(slot.toISOString()),
+    'an armed hold keeps its slot even past TTL');
+  const row = await db.withTransaction(async (tx) => (await tx.query(
+    `SELECT status FROM booking_slot_reservations WHERE journey_id = $1 AND purpose = 'initial'`,
+    [holder])).rows[0]);
+  assert.equal(row.status, 'pending', 'and is not released');
+});
+
+test('§8.3 concurrent availability reads do not block or double-release', { skip }, async () => {
+  const holder = await seedJourney();
+  const slot = futureSlot(32);
+  await db.withTransaction((tx) => R.upsertPendingHold(tx, holder, {
+    purpose: 'initial', hostCalendarKey: 'jurnii_local', slotStartUtc: slot.toISOString() }));
+  await db.query(
+    `UPDATE booking_slot_reservations SET expires_at = now() - interval '1 minute'
+      WHERE journey_id = $1 AND purpose = 'initial'`, [holder]);
+
+  forbidZoho();
+  stubGoogle({ checkFreeBusy: async () => [] });
+  const q = { timeMin: new Date(slot.getTime() - 7200000).toISOString(),
+              timeMax: new Date(slot.getTime() + 7200000).toISOString() };
+  const handler = loadHandler('availability.js');
+  const [a, b, c] = [mockRes(), mockRes(), mockRes()];
+  await Promise.all([
+    handler({ method: 'GET', headers: {}, query: q }, a),
+    handler({ method: 'GET', headers: {}, query: q }, b),
+    handler({ method: 'GET', headers: {}, query: q }, c),
+  ]);
+
+  for (const r of [a, b, c]) assert.equal(r.statusCode, 200, 'FOR UPDATE SKIP LOCKED: none blocked or errored');
+  const rows = await db.withTransaction(async (tx) => (await tx.query(
+    `SELECT status FROM booking_slot_reservations WHERE journey_id = $1`, [holder])).rows);
+  assert.equal(rows.length, 1, 'still exactly one reservation row');
+  assert.equal(rows[0].status, 'expired');
+});
+
+test('§8.3 no transaction is held across the Google call', { skip }, async () => {
+  // Regression guard for the boundary itself. If the release/read transaction were still
+  // open during `checkFreeBusy`, one of the pool's three connections would be pinned to
+  // Google's latency on a public, unauthenticated endpoint.
+  const holder = await seedJourney();
+  const slot = futureSlot(33);
+  await db.withTransaction((tx) => R.upsertPendingHold(tx, holder, {
+    purpose: 'initial', hostCalendarKey: 'jurnii_local', slotStartUtc: slot.toISOString() }));
+
+  let idleInTransaction = null;
+  forbidZoho();
+  stubGoogle({
+    checkFreeBusy: async () => {
+      // Observed from a SEPARATE connection while Google is "in flight".
+      const q = await db.query(
+        `SELECT count(*)::int n FROM pg_stat_activity
+          WHERE datname = current_database() AND state = 'idle in transaction'`);
+      idleInTransaction = q.rows[0].n;
+      return [];
+    },
+  });
+  const res = mockRes();
+  await loadHandler('availability.js')({
+    method: 'GET', headers: {},
+    query: { timeMin: new Date(slot.getTime() - 7200000).toISOString(),
+             timeMax: new Date(slot.getTime() + 7200000).toISOString() },
+  }, res);
+
+  assert.equal(res.statusCode, 200);
+  assert.equal(idleInTransaction, 0,
+    `a transaction was open during the Google call (idle in transaction = ${idleInTransaction})`);
 });
 
 // --------------------------------------------------------------------------
