@@ -17,12 +17,13 @@ const O = require('../../db/queries/ops');
 const R = require('../../db/queries/reservations');
 const J = require('../../db/queries/journeys');
 
+const { track, purgeTracked } = require('./_fixtures');
 const skip = db.isConfigured() ? false : 'DATABASE_URL not set';
 
 let seq = 0;
 async function newJourney(overrides = {}) {
   seq += 1;
-  const id = `cafe0003-0000-4000-8000-${String(seq).padStart(12, '0')}`;
+  const id = track(`cafe0003-0000-4000-8000-${String(seq).padStart(12, '0')}`);
   await db.withTransaction(async (tx) => {
     await tx.query('DELETE FROM booking_journeys WHERE journey_id = $1', [id]);
     const cols = Object.keys(overrides);
@@ -53,7 +54,7 @@ async function age(id, interval) {
   });
 }
 
-test.after(async () => { if (!skip) await db.close(); });
+test.after(async () => { if (!skip) { await purgeTracked(); await db.close(); } });
 
 test('REGRESSION: the busy predicate returns false, never NULL', { skip }, async () => {
   // A brand-new journey has google_outcome_state NULL, which under three-valued

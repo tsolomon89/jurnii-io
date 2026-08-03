@@ -46,13 +46,82 @@ curl -s -X POST "$BASE/api/v1/internal/jobs/run" \
 ```
 
 ```json
-{ "ok": true, "claimed": 4, "ran": 4, "outcomes": { "progress": 3, "no_progress": 1 },
-  "reservationsExpired": 0 }
+{ "ok": true, "claimed": 4, "ran": 4, "ceilingTerminated": 0,
+  "outcomes": { "progress": 3, "no_progress": 1 }, "reservationsExpired": 0 }
 ```
 
-A pass is bounded by `JOBS_BATCH_LIMIT` (20) and `JOBS_TIME_BUDGET_MS` (40s). Unstarted
-claims keep their pre-committed backoff and are simply due next pass — nothing is lost
-by a pass ending early.
+A pass claims **one operation at a time** and checks its remaining budget **before** each
+claim, so `claimed === ran + ceilingTerminated` always holds — no claim is ever taken
+without being started. It is bounded by `JOBS_BATCH_LIMIT` (20, the maximum *operations
+per pass*), `JOBS_TIME_BUDGET_MS` (40 s) and `JOBS_OP_RESERVE_MS` (5 s of headroom so a
+pass does not start an operation at the edge of its budget).
+
+A row that is due but not reached holds **no lease** and keeps its existing
+`next_retry_at`, so it is claimable immediately on the next pass. This matters: a claim
+commits a 5-minute lease, and the claim predicate requires that lease to have expired, so
+a row claimed but never executed would be blocked for five minutes and then counted as a
+crash. That is what the pass used to do to its unstarted tail — see
+[implementation-notes.md](implementation-notes.md) *"A worker pass claimed more work than
+it could run"*.
+
+### Auditing for the old over-claim defect
+
+Both queries are **read-only**. Run them with `vercel env pull` credentials.
+
+**1. Is anything stranded behind a live unrecorded lease right now?**
+
+A row with an *expired* lease is reclaimable and is not stranded — the predicate that
+matters is a **live** lease with no recorded outcome:
+
+```sql
+SELECT journey_id, op, state, run_count, crash_reclaim_count,
+       lease_expires_at, next_retry_at, updated_at
+  FROM booking_journey_ops
+ WHERE outcome_recorded = false
+   AND lease_expires_at > now()
+ ORDER BY lease_expires_at;
+```
+
+There is **no lease owner and no handler-start timestamp**, so a single snapshot cannot
+tell an actively-running handler from a claim that was never started. Take **two
+snapshots at least 60 seconds apart** — comfortably longer than any single step, which is
+bounded by `ZOHO_REQUEST_TIMEOUT_MS` (12 s) and `PG_STATEMENT_TIMEOUT_MS` (15 s) — and
+classify each row:
+
+| Appears in | Logs show handler activity | Classification |
+|---|---|---|
+| snapshot 1 only, or `updated_at` moved | yes | **active** — normal |
+| both snapshots, unchanged | no | **abandoned** — the lease will expire and be reclaimed |
+| both snapshots, unchanged | no logs retained | **indeterminate** |
+
+**2. Which `worker_crash_loop` escalations exist, and did that work ever run?**
+
+```sql
+SELECT r.journey_id, r.code, r.generation, r.occurrences,
+       r.first_seen_at, r.last_seen_at, r.resolved_at,
+       o.op, o.state, o.run_count, o.crash_reclaim_count,
+       o.create_attempts, o.first_attempted_at, o.completed_at
+  FROM booking_journey_review_reasons r
+  LEFT JOIN booking_journey_ops o
+         ON o.journey_id = r.journey_id AND o.last_error_code = 'worker_crash_loop'
+ WHERE r.code LIKE 'worker_crash_loop%'
+ ORDER BY r.first_seen_at DESC;
+
+-- And the ops side directly, which does not depend on a reason row existing:
+SELECT journey_id, op, state, run_count, crash_reclaim_count, create_attempts,
+       first_attempted_at, completed_at, last_error_code
+  FROM booking_journey_ops
+ WHERE state = 'terminal' AND last_error_code = 'worker_crash_loop'
+ ORDER BY completed_at DESC;
+```
+
+**Read the result carefully: this query cannot answer "did the handler run?"**
+`run_count` and `first_attempted_at` are both written by the *claim*, not by the handler,
+so a row that was claimed and abandoned looks identical to one that was claimed and
+executed. Establishing which is which is **best-effort correlation against worker logs**
+(`worker.op.done` / `worker.op.failed` for that `journeyId` and `op`), bounded by log
+retention. Report findings with their confidence level; do not infer a count the data
+cannot support.
 
 ### Reading the outcome kinds
 

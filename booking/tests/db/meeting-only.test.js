@@ -21,9 +21,9 @@ const O = require('../../db/queries/ops');
 const RV = require('../../db/queries/review');
 const ZS = require('../../db/queries/zoho-state');
 
+const { track, purgeTracked } = require('./_fixtures');
 const skip = db.isConfigured() ? false : 'DATABASE_URL not set';
 
-const created = new Set();
 let seq = 0;
 
 // --- Zoho transport stub -----------------------------------------------------
@@ -48,8 +48,7 @@ function stubZoho({ existingMeeting = null, deal = { status: 'none' }, contact =
 function restoreZoho() { Object.assign(Z, realEvent); }
 
 async function seedJourney(over = {}) {
-  const id = crypto.randomUUID();
-  created.add(id);
+  const id = track(crypto.randomUUID());
   const local = `mo.${process.pid}.${seq += 1}`;
   await db.withTransaction((tx) => J.upsertPage1(tx, id, {
     email: `${local}@example.test`, email_normalized: `${local}@example.test`,
@@ -81,9 +80,7 @@ const claim = async (id, op) => {
 
 test.after(async () => {
   restoreZoho();
-  for (const id of created) {
-    await db.withTransaction((tx) => tx.query('DELETE FROM booking_journeys WHERE journey_id=$1', [id])).catch(() => {});
-  }
+  await purgeTracked();
   await db.close().catch(() => {});
 });
 

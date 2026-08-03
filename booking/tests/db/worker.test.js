@@ -20,6 +20,7 @@ const O = require('../../db/queries/ops');
 const RV = require('../../db/queries/review');
 const B = require('../../db/queries/bindings');
 const RES = require('../../db/queries/resolutions');
+const { track, purgeTracked } = require('./_fixtures');
 
 const skip = db.isConfigured() ? false : 'DATABASE_URL not set';
 
@@ -98,7 +99,7 @@ function slotFor(i) {
 }
 
 async function seed(overrides = {}) {
-  const id = nextId();
+  const id = track(nextId());
   await db.withTransaction(async (tx) => {
     await tx.query('DELETE FROM booking_journeys WHERE journey_id = $1', [id]);
     const cols = Object.keys(overrides);
@@ -125,13 +126,16 @@ async function seed(overrides = {}) {
  * is covered by the dedicated tests below; this exercises the handler plus
  * outcome recording, which is what the per-op tests are about.
  */
-async function runOp(journeyId, op) {
-  const worker = loadWorker();
-  const claim = await db.withTransaction(async (tx) => {
-    // Mirror what CLAIM_SQL commits: a lease and a pre-committed backoff.
+async function mirrorClaim(journeyId, op) {
+  return db.withTransaction(async (tx) => {
+    // Mirror what CLAIM_SQL commits: a lease, a pre-committed backoff, and the crash
+    // arithmetic — an expired lease with no recorded outcome counts as a crash.
     const res = await tx.query(
       `UPDATE booking_journey_ops SET
          run_count = run_count + 1, outcome_recorded = false,
+         crash_reclaim_count = crash_reclaim_count
+           + CASE WHEN lease_expires_at IS NOT NULL AND lease_expires_at < now()
+                       AND outcome_recorded = false THEN 1 ELSE 0 END,
          first_attempted_at = COALESCE(first_attempted_at, now()),
          lease_expires_at = now() + interval '5 minutes',
          next_retry_at = now() + ladder_delay(op, state, failure_count,
@@ -144,16 +148,115 @@ async function runOp(journeyId, op) {
       [journeyId, op]);
     return res.rows[0];
   });
+}
+
+async function runOp(journeyId, op) {
+  const worker = loadWorker();
+  const claim = await mirrorClaim(journeyId, op);
   if (!claim) return { outcome: 'not_claimed' };
   return worker.runOne(claim);
 }
 
+/** Would the real claim predicate select this row right now? Journey-scoped, side-effect free. */
+async function isClaimable(journeyId, op) {
+  const res = await db.query(
+    `SELECT 1 FROM booking_journey_ops
+      WHERE journey_id = $1 AND op = $2
+        AND next_retry_at <= now()
+        AND (lease_expires_at IS NULL OR lease_expires_at < now())`,
+    [journeyId, op]);
+  return res.rowCount === 1;
+}
+
 test.afterEach(() => restore());
-test.after(async () => { if (!skip) await db.close(); });
+// The op queue is global, so a leftover journey is a due row that later runs will claim
+// and abandon. See `_fixtures.js`.
+test.after(async () => { if (!skip) { await purgeTracked(); await db.close(); } });
 
 // ==========================================================================
 // Claim protocol
 // ==========================================================================
+
+test('0a a claim that is never executed blocks its row for the LEASE, and is counted as a crash', { skip }, async () => {
+  // The mechanism that made over-claiming harmful. `CLAIM_SQL` commits a 5-minute lease
+  // and `outcome_recorded = false`; the claim predicate requires an EXPIRED lease. So a
+  // claimed-but-unexecuted row waits for the lease, NOT for its ladder delay — and when
+  // the lease expires the crash arithmetic counts it, because no outcome was recorded.
+  // Three of those and the ceiling terminates an op that never ran. This test pins the
+  // semantics; 0b pins that `runPass` can no longer create the situation.
+  const id = await seed();
+  await db.withTransaction((tx) => O.ensureOp(tx, id, 'zoho_identity_resolve'));
+  assert.equal(await isClaimable(id, 'zoho_identity_resolve'), true, 'armed due-now');
+
+  // Claim it and do NOT run it — exactly what a batch claim did to its unstarted tail.
+  const claim = await mirrorClaim(id, 'zoho_identity_resolve');
+  assert.ok(claim, 'claimed');
+
+  const leased = await db.withTransaction((tx) => O.getOp(tx, id, 'zoho_identity_resolve'));
+  assert.equal(leased.outcome_recorded, false, 'no outcome was recorded');
+  assert.ok(new Date(leased.lease_expires_at) > new Date(), 'the lease is LIVE');
+  // The ladder rung for this op is 1 minute, but the lease is 5 — the lease is what binds.
+  assert.ok(new Date(leased.lease_expires_at) > new Date(leased.next_retry_at),
+    'the lease outlasts the pre-committed backoff, so the lease is the real block');
+  assert.equal(await isClaimable(id, 'zoho_identity_resolve'), false,
+    'unclaimable while the lease is live, even once next_retry_at has passed');
+
+  // Let only the lease expire, then reclaim: the crash counter moves for work that never ran.
+  await db.query(
+    `UPDATE booking_journey_ops
+        SET lease_expires_at = now() - interval '1 second',
+            next_retry_at = now() - interval '1 second'
+      WHERE journey_id = $1 AND op = 'zoho_identity_resolve'`, [id]);
+  assert.equal(await isClaimable(id, 'zoho_identity_resolve'), true);
+
+  await mirrorClaim(id, 'zoho_identity_resolve');
+  const reclaimed = await db.withTransaction((tx) => O.getOp(tx, id, 'zoho_identity_resolve'));
+  assert.equal(reclaimed.crash_reclaim_count, 1,
+    'an operation that never entered a handler is counted as a crash');
+});
+
+test('0b runPass never leaves a row leased-but-unstarted, and budget exhaustion claims nothing', { skip }, async () => {
+  stubGoogle(); stubZoho();
+  const worker = loadWorker();
+  const id = await seed();
+  await db.withTransaction((tx) => O.ensureOp(tx, id, 'zoho_identity_resolve'));
+
+  // Reserve larger than the budget: the pass must stop BEFORE claiming anything.
+  const pass = await worker.runPass({ timeBudgetMs: 1_000, opReserveMs: 60_000 });
+  assert.equal(pass.claimed, 0, 'no claim is taken when there is no budget to run it');
+  assert.equal(pass.ran, 0);
+
+  // Any un-stubbed external call throws, so this also proves no handler ran.
+  const op = await db.withTransaction((tx) => O.getOp(tx, id, 'zoho_identity_resolve'));
+  assert.equal(op.outcome_recorded, true, 'never claimed, so its outcome flag is untouched');
+  assert.equal(op.lease_expires_at, null, 'NO lease was taken');
+  assert.equal(op.crash_reclaim_count, 0, 'budget exhaustion does not inflate the crash counter');
+  assert.equal(op.run_count, 0, 'and it was never counted as a run');
+  assert.equal(await isClaimable(id, 'zoho_identity_resolve'), true,
+    'still due immediately — not parked behind a five-minute lease');
+});
+
+test('0c a claim is never wasted: claimed === ran + ceilingTerminated', { skip }, async () => {
+  // The no-over-claim identity, and the reason throughput does not regress: every claim
+  // the pass takes is either executed or deliberately terminated by the ceiling.
+  stubGoogle(); stubZoho({
+    searchContactsByEmail: async () => [],
+    searchUnconvertedLeadsByEmail: async () => [],
+  });
+  const worker = loadWorker();
+  const id = await seed();
+  await db.withTransaction((tx) => O.ensureOp(tx, id, 'zoho_identity_resolve'));
+
+  const pass = await worker.runPass({ limit: 3 });
+  assert.equal(pass.claimed, pass.ran + pass.ceilingTerminated,
+    'no claim is taken without being started or terminated');
+  assert.ok(pass.claimed <= 3, 'bounded by the operation limit');
+
+  // The op queue is global, so other rows may also have been claimed. Ours specifically
+  // must have reached a recorded outcome rather than sitting under a live lease.
+  const op = await db.withTransaction((tx) => O.getOp(tx, id, 'zoho_identity_resolve'));
+  assert.equal(op.outcome_recorded, true, 'our op ran and recorded an outcome');
+});
 
 test('#50 the crash ceiling TERMINATES inside the claim transaction, before any handler runs', { skip }, async () => {
   const id = await seed();

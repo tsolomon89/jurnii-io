@@ -193,6 +193,55 @@ update is sent at most once and NEVER resent after an uncertain outcome"*, which
 the op a second time and asserts both that no second send occurs and that the state is
 still `outcome_unknown`.
 
+### A worker pass claimed more work than it could run, and the surplus was counted as crashed
+
+`runPass` claimed a batch of up to `JOBS_BATCH_LIMIT` (20) rows up front, then stopped
+iterating when `JOBS_TIME_BUDGET_MS` (40 s) ran out. The comment here said the unstarted
+claims *"keep their pre-committed `next_retry_at`, so they are simply due again on the next
+pass."* **That was wrong, and it was the load-bearing sentence.**
+
+The claim commits three things together: a 5-minute `lease_expires_at`,
+`outcome_recorded = false`, and the ladder backoff. The claim predicate requires
+`lease_expires_at IS NULL OR lease_expires_at < now()`. So an unstarted claim was blocked for
+**the lease**, not for its ladder rung — five minutes instead of one. Worse, when that lease
+expired, `CLAIM_SQL`'s crash arithmetic incremented `crash_reclaim_count`, because the
+condition is an expired lease *with no recorded outcome* — which is exactly the state an
+operation that was never started is in. At `JOBS_MAX_CRASH_RECLAIMS` (3), `claimBatch`
+terminated the op with `worker_crash_loop` and escalated it to Manual Review. `terminal` is
+not revivable by `ensureOp`.
+
+**So an operation that never entered a handler could be permanently terminated and escalated.**
+`ZOHO_REQUEST_TIMEOUT_MS` is 12 s against a 40 s budget, so a Zoho slowdown executed roughly 3
+of 20 claimed rows; and because the batch is ordered by `op_priority`, the abandoned tail was
+disproportionately the low-priority ops — `zoho_deal_reconcile` (50) and `zoho_manual_review`
+(60). It needed a backlog of ≳20 due operations to bite, which is unlikely in steady state but
+is precisely the condition that exists **after an outage**.
+
+The fix is to claim exactly what is about to be executed. `runPass` now checks the remaining
+budget **before** each claim and takes one row at a time via `CLAIM_ONE_SQL`, so every leased
+row is one that is genuinely running. A row that is due but not reached keeps its existing
+`next_retry_at` and holds **no** lease, so it is claimable immediately on the next pass —
+which is what the old comment incorrectly claimed was already happening. `claimBatch` is
+retained for the crash-ceiling tests, which need a large limit so a lowest-priority op is not
+starved behind other rows, and the ceiling logic is shared by both forms through
+`readyAfterCeiling` so it keeps one definition.
+
+`JOBS_BATCH_LIMIT` therefore changes meaning from *claim size* to *maximum operations per
+pass*; the name and default are unchanged so no environment needs editing.
+`JOBS_OP_RESERVE_MS` (5 s) is the new headroom that stops a pass starting an operation at the
+very edge of its budget.
+
+Pinned by three tests: **0a** proves the mechanism (a claimed-but-unexecuted row is blocked by
+the lease rather than the ladder, and is counted as a crash on reclaim), **0b** proves
+`runPass` no longer creates that state and that budget exhaustion takes no lease at all, and
+**0c** proves the identity `claimed === ran + ceilingTerminated` — no claim is ever wasted.
+
+Note for anyone auditing historical damage: **the database cannot prove whether a given
+historical claimed operation entered its handler.** `run_count` and `first_attempted_at` are
+both written by the claim, not by the handler, and there is no lease owner and no
+handler-start timestamp. Correlating past `worker_crash_loop` escalations against real
+execution is best-effort log work, bounded by log retention — see the runbook's audit queries.
+
 ### `recordOutcome` failed on a null `Retry-After`
 
 `next_retry_at = CASE WHEN $6 IS NOT NULL THEN … make_interval(secs => $6) …` gave

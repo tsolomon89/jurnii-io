@@ -341,8 +341,25 @@ async function listOps(tx, journeyId) {
  * Claim due work. Ceiling termination happens INSIDE this transaction and
  * over-ceiling rows are excluded from the returned batch, so no handler and no
  * external call ever executes for them.
+ *
+ * A CLAIM IS NOT FREE, and that is why there are two forms of it. Every claim commits a
+ * 5-minute `lease_expires_at` and `outcome_recorded = false`, and the claim predicate
+ * below requires the lease to have EXPIRED before a row can be claimed again. So a row
+ * that is claimed but never executed is unclaimable for five minutes — not for its
+ * ladder delay — and when that lease does expire the `crash_reclaim_count` arithmetic
+ * above counts it as a crash, because `outcome_recorded` is still false. Three of those
+ * and `claimBatch` terminates the op and escalates it to Manual Review, for work that
+ * never ran.
+ *
+ * `CLAIM_ONE_SQL` therefore exists so a caller can claim exactly what it is about to
+ * execute. `CLAIM_SQL` is retained for callers that genuinely want a whole batch (the
+ * crash-ceiling tests, which need a large limit to avoid being starved by other rows).
+ *
+ * `limitClause` is a literal supplied by this module — never a caller's value — so
+ * interpolating it cannot carry untrusted input into the statement.
  */
-const CLAIM_SQL = `
+function claimStatement(limitClause) {
+  return `
 UPDATE booking_journey_ops o SET
   run_count           = o.run_count + 1,
   crash_reclaim_count = o.crash_reclaim_count
@@ -362,10 +379,17 @@ WHERE (o.journey_id, o.op) IN (
     AND (lease_expires_at IS NULL OR lease_expires_at < now())
   ORDER BY op_priority(op), next_retry_at
   FOR UPDATE SKIP LOCKED
-  LIMIT $1)
+  ${limitClause})
 RETURNING o.journey_id, o.op, o.state, o.failure_count, o.crash_reclaim_count,
           o.max_crash_reclaims, o.max_failures, o.create_attempts, o.unknown_since,
           o.deadline_at, o.watch_until_at, o.watch_started_at, o.cycle_version`;
+}
+
+/** Batch form: `$1` is the limit. */
+const CLAIM_SQL = claimStatement('LIMIT $1');
+
+/** Single-row form, for a caller that runs each claim immediately. No parameters. */
+const CLAIM_ONE_SQL = claimStatement('LIMIT 1');
 
 module.exports = {
   MAX_FAILURES,
@@ -373,6 +397,7 @@ module.exports = {
   ATTEMPT_OPS,
   OUTCOME_KINDS,
   CLAIM_SQL,
+  CLAIM_ONE_SQL,
   maxFailures,
   maxCrashReclaims,
   ensureOp,

@@ -20,6 +20,7 @@ const O = require('../../db/queries/ops');
 const RV = require('../../db/queries/review');
 const B = require('../../db/queries/bindings');
 
+const { track, purgeTracked } = require('./_fixtures');
 const skip = db.isConfigured() ? false : 'DATABASE_URL not set';
 
 let seq = 0;
@@ -29,7 +30,7 @@ function nextId() {
 }
 
 async function newJourney(overrides = {}) {
-  const id = nextId();
+  const id = track(nextId());
   await db.withTransaction(async (tx) => {
     await tx.query('DELETE FROM booking_journeys WHERE journey_id = $1', [id]);
     const cols = Object.keys(overrides);
@@ -54,7 +55,7 @@ async function expectFailure(fn) {
   assert.fail('expected the statement to be rejected, but it succeeded');
 }
 
-test.after(async () => { if (!skip) await db.close(); });
+test.after(async () => { if (!skip) { await purgeTracked(); await db.close(); } });
 
 // ---------------------------------------------------------------------------
 // APPROVED DEVIATION 1 — trigger-derived reservation geometry

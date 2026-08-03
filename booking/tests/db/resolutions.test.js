@@ -17,6 +17,7 @@ const RES = require('../../db/queries/resolutions');
 const RV = require('../../db/queries/review');
 const J = require('../../db/queries/journeys');
 
+const { track, purgeTracked } = require('./_fixtures');
 const skip = db.isConfigured() ? false : 'DATABASE_URL not set';
 
 // The protocol needs a fingerprint key; local .env.local supplies one, but make the
@@ -31,7 +32,7 @@ function nextJourney() {
 }
 
 async function seedEscalated() {
-  const id = nextJourney();
+  const id = track(nextJourney());
   await db.withTransaction(async (tx) => {
     await tx.query('DELETE FROM booking_journeys WHERE journey_id = $1', [id]);
     await tx.query(
@@ -63,7 +64,7 @@ function requestFor(id, row, overrides = {}) {
   };
 }
 
-test.after(async () => { if (!skip) await db.close(); });
+test.after(async () => { if (!skip) { await purgeTracked(); await db.close(); } });
 
 test('#104 a completed resolution replays verbatim and re-executes nothing', { skip }, async () => {
   const { id, row } = await seedEscalated();

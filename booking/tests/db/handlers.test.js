@@ -36,6 +36,7 @@ const R = require('../../db/queries/reservations');
 const O = require('../../db/queries/ops');
 const RV = require('../../db/queries/review');
 
+const { track, purgeTracked } = require('./_fixtures');
 const skip = db.isConfigured() ? false : 'DATABASE_URL not set';
 
 process.env.JWT_SECRET ||= 'handler-test-secret';
@@ -138,7 +139,7 @@ function futureSlot(index = 0) {
 }
 
 async function seedJourney({ step = 2, ...overrides } = {}) {
-  const id = nextId();
+  const id = track(nextId());
   await db.withTransaction(async (tx) => {
     await tx.query('DELETE FROM booking_journeys WHERE journey_id = $1', [id]);
     const cols = Object.keys(overrides);
@@ -165,7 +166,7 @@ async function registerCalendar() {
 
 test.before(async () => { if (!skip) await registerCalendar(); });
 test.afterEach(() => restoreModules());
-test.after(async () => { if (!skip) await db.close(); });
+test.after(async () => { if (!skip) { await purgeTracked(); await db.close(); } });
 
 // --------------------------------------------------------------------------
 // Page 1 — Postgres only
@@ -176,7 +177,7 @@ test('Page 1 performs ZERO Zoho calls and persists only to Postgres', { skip }, 
   stubGoogle();
   const handler = loadHandler('submissions/start.js');
 
-  const journeyId = nextId();
+  const journeyId = track(nextId());
   // Ids are deterministic per file, so clear any row left by a previous run —
   // otherwise the §4.7 binding guard correctly answers 409 on the second run.
   await db.withTransaction((tx) => tx.query('DELETE FROM booking_journeys WHERE journey_id = $1', [journeyId]));
@@ -208,7 +209,7 @@ test('Page 1 performs ZERO Zoho calls and persists only to Postgres', { skip }, 
 test('Page 1 refuses an email rebind on an existing journey', { skip }, async () => {
   forbidZoho(); stubGoogle();
   const handler = loadHandler('submissions/start.js');
-  const journeyId = nextId();
+  const journeyId = track(nextId());
   await db.withTransaction((tx) => tx.query('DELETE FROM booking_journeys WHERE journey_id = $1', [journeyId]));
   const base = { journeyId, firstName: 'Ada', lastName: 'L' };
 
