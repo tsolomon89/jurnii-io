@@ -728,13 +728,14 @@ test('availability subtracts Postgres holds as well as Google busy periods', { s
 });
 
 // --------------------------------------------------------------------------
-// §8.3 tier 1 — an expired hold stops blocking its slot the moment anyone asks.
+// Expired holds are released on read — an abandoned hold stops blocking its slot the
+// moment anyone asks about it, instead of waiting for the sweep's next tick.
 //
-// This is what makes slowing the scheduled sweep safe: correctness stops depending on
-// a timer having run. The proofs below are the ones the plan requires.
+// The per-minute sweep still runs and is still the safety net; this removes the
+// dependency on its timing for the slot a visitor is actually looking at.
 // --------------------------------------------------------------------------
 
-test('§8.3 an EXPIRED hold cannot block a slot, with no sweep and no event', { skip }, async () => {
+test('expiry: an EXPIRED hold cannot block a slot, with no sweep and no event', { skip }, async () => {
   const holder = await seedJourney();
   const slot = futureSlot(29);
   await db.withTransaction((tx) => R.upsertPendingHold(tx, holder, {
@@ -764,7 +765,7 @@ test('§8.3 an EXPIRED hold cannot block a slot, with no sweep and no event', { 
   assert.equal(row.status, 'expired', 'and the release was durably committed');
 });
 
-test('§8.3 a LIVE hold is still withheld — the release is not indiscriminate', { skip }, async () => {
+test('expiry: a LIVE hold is still withheld — the release is not indiscriminate', { skip }, async () => {
   const holder = await seedJourney();
   const slot = futureSlot(30);
   await db.withTransaction((tx) => R.upsertPendingHold(tx, holder, {
@@ -787,7 +788,7 @@ test('§8.3 a LIVE hold is still withheld — the release is not indiscriminate'
   assert.equal(row.status, 'pending', 'and was not released');
 });
 
-test('§8.3 an ARMED expired hold is protected — Google uncertainty outranks the TTL', { skip }, async () => {
+test('expiry: an ARMED expired hold is protected — Google uncertainty outranks the TTL', { skip }, async () => {
   // `armed` means a Google create may be in flight. Releasing that slot could hand it to
   // someone else while an event quietly lands on it.
   const holder = await seedJourney();
@@ -817,7 +818,7 @@ test('§8.3 an ARMED expired hold is protected — Google uncertainty outranks t
   assert.equal(row.status, 'pending', 'and is not released');
 });
 
-test('§8.3 concurrent availability reads do not block or double-release', { skip }, async () => {
+test('expiry: concurrent availability reads do not block or double-release', { skip }, async () => {
   const holder = await seedJourney();
   const slot = futureSlot(32);
   await db.withTransaction((tx) => R.upsertPendingHold(tx, holder, {
@@ -845,7 +846,7 @@ test('§8.3 concurrent availability reads do not block or double-release', { ski
   assert.equal(rows[0].status, 'expired');
 });
 
-test('§8.3 no transaction is held across the Google call', { skip }, async () => {
+test('expiry: no transaction is held across the Google call', { skip }, async () => {
   // Regression guard for the boundary itself. If the release/read transaction were still
   // open during `checkFreeBusy`, one of the pool's three connections would be pinned to
   // Google's latency on a public, unauthenticated endpoint.

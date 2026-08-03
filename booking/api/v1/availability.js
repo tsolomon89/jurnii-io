@@ -47,12 +47,15 @@ module.exports = async function handler(req, res) {
   /**
    * Postgres FIRST, so an unreadable store fails the request before any Google call.
    *
-   * TIER 1 OF RESERVATION EXPIRY, and the reason the scheduled sweep can eventually be
-   * slowed down. An abandoned hold stops blocking its slot the moment somebody asks
-   * whether that slot is free, rather than whenever a timer next happens to run — so a
-   * slot can never be reported unavailable because of an expired hold, regardless of
-   * whether any sweep or event was delivered. The delayed release event is promptness
-   * for observers who are NOT currently asking; the sweep is a third-level safety net.
+   * EXPIRED HOLDS ARE RELEASED ON READ. An abandoned hold stops blocking its slot the
+   * moment somebody asks whether that slot is free, rather than whenever the sweep next
+   * happens to run — so a slot can never be reported unavailable because of an expired
+   * hold, regardless of whether the sweep has run recently.
+   *
+   * This does NOT replace the per-minute sweep, which still releases holds nobody is
+   * currently asking about and remains the safety net. It removes the dependency on the
+   * sweep's timing for the one case that matters to a visitor: the slot they are looking
+   * at right now.
    *
    * `releaseExpiredHolds` is reused unchanged: its `FOR UPDATE SKIP LOCKED` means two
    * concurrent availability requests (or a request and the sweep) never block each
