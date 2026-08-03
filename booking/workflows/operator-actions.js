@@ -213,11 +213,23 @@ async function verify(request) {
         if (!contactNow) return refuse('contact_not_readable');
       }
 
-      let existingMeetingId = null;
+      let existingMeetingId = journey.zoho_meeting_id || null;
       try {
         const found = await Z.searchEventByExternalId(request.journeyId);
         if (found) existingMeetingId = found.id;
       } catch (_) { return unavailable('zoho_unreadable'); }
+
+      /**
+       * An UNCERTAIN create must never be blindly retried. `create_attempts >= 1` with
+       * no Meeting discoverable by the correlation key means a create request left this
+       * process and its outcome is unknown — a retry could produce a second Meeting,
+       * which fires WF007 twice and corrupts the pipeline. That case belongs to the
+       * operator, not to an automated repair.
+       */
+      if (!existingMeetingId) {
+        const op = await db.withTransaction((tx) => O.getOp(tx, request.journeyId, 'zoho_meeting_create'));
+        if (op && op.create_attempts >= 1) return refuse('meeting_create_outcome_uncertain');
+      }
 
       // Best-known Deal, informational only. Absence is legitimate.
       let dealId = journey.zoho_deal_id || null;
@@ -451,7 +463,12 @@ async function apply(tx, { request, journey, verified }) {
         zoho_status: journey.zoho_meeting_id ? 'meeting_created' : 'record_saved',
         zoho_meeting_activation_state: 'not_requested',
       });
-      await O.ensureOp(tx, jid, 'zoho_meeting_create');
+      // `ensureOp` cannot revive a `done` create op — that refusal is the
+      // duplicate-Meeting guard. The repair needs the narrow door, which only opens
+      // when `create_attempts = 0` proves no create request ever left this process.
+      const revived = journey.zoho_meeting_id
+        ? { revived: false }
+        : await O.reviveMeetingCreateForRepair(tx, jid);
       if (journey.zoho_contact_id) await O.ensureOp(tx, jid, 'zoho_deal_reconcile');
       return {
         meetingId: verified.observed.existingMeetingId,
@@ -460,6 +477,7 @@ async function apply(tx, { request, journey, verified }) {
         accountId: verified.observed.accountId,
         dealId: verified.observed.dealId,
         googleEventId: verified.observed.googleEventId,
+        meetingCreateRearmed: revived.revived,
         meetingWriteDeferredToWorker: true,
       };
     }

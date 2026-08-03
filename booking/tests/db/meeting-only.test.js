@@ -262,3 +262,25 @@ test('10+11+12: create_meeting_only re-arms, closes only meeting_create_failed, 
       'SELECT op FROM booking_journey_ops WHERE journey_id=$1', [id])).rows.length);
     assert.strictEqual(opsAfter, opsNow.length, 'no extra ops from a repeat');
   });
+
+test('create_meeting_only revives a create op that never attempted, and refuses an uncertain one',
+  { skip }, async () => {
+    const id = await seedJourney({ zoho_contact_id: 'C1', zoho_account_id: 'A1' });
+    // `ensureOp` cannot revive a `done` op; the repair door must.
+    await db.withTransaction((tx) => O.completeOp(tx, id, 'zoho_meeting_create'));
+    let op = await db.withTransaction((tx) => O.getOp(tx, id, 'zoho_meeting_create'));
+    assert.strictEqual(op.state, 'done');
+    const ensured = await db.withTransaction((tx) => O.ensureOp(tx, id, 'zoho_meeting_create'));
+    assert.strictEqual(ensured.armed, false, 'ensureOp must NOT revive a done create op');
+
+    const r = await db.withTransaction((tx) => O.reviveMeetingCreateForRepair(tx, id));
+    assert.strictEqual(r.revived, true);
+    op = await db.withTransaction((tx) => O.getOp(tx, id, 'zoho_meeting_create'));
+    assert.strictEqual(op.state, 'pending', 'the repair door revives it');
+
+    // An op that DID attempt a create is left alone: retrying it could duplicate.
+    await db.withTransaction((tx) => O.incrementCreateAttempts(tx, id, 'zoho_meeting_create'));
+    await db.withTransaction((tx) => O.completeOp(tx, id, 'zoho_meeting_create'));
+    const r2 = await db.withTransaction((tx) => O.reviveMeetingCreateForRepair(tx, id));
+    assert.strictEqual(r2.revived, false, 'an uncertain create is never revived');
+  });

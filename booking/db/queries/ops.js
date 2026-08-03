@@ -91,6 +91,33 @@ async function ensureOp(tx, journeyId, op, { delaySeconds = 0, deadlineAt = null
 }
 
 /**
+ * MR1 repair — revive a `zoho_meeting_create` that finished WITHOUT creating anything.
+ *
+ * `ensureOp` deliberately refuses to revive a `done` op, and `resumeOp` is restricted to
+ * `google_create_recovery`. Both refusals exist to stop a second Meeting, so the repair
+ * needs its own narrow door rather than a widened one.
+ *
+ * `create_attempts = 0` is the whole guarantee. It means no create request ever left
+ * this process, so there is no possibility of an in-flight or landed Meeting to
+ * duplicate — the op escalated before it ever tried, which is exactly the bug
+ * `create_meeting_only` repairs. An op with `create_attempts >= 1` had an UNCERTAIN
+ * outcome; reviving that could produce a duplicate, so it is left to the operator and
+ * this statement matches nothing.
+ */
+async function reviveMeetingCreateForRepair(tx, journeyId) {
+  const res = await tx.query(
+    `UPDATE booking_journey_ops SET
+       state = 'pending', next_retry_at = now(), completed_at = NULL,
+       lease_expires_at = NULL, outcome_recorded = true, failure_count = 0,
+       updated_at = now()
+      WHERE journey_id = $1 AND op = 'zoho_meeting_create' AND create_attempts = 0
+      RETURNING op`,
+    [journeyId]
+  );
+  return { revived: res.rowCount === 1 };
+}
+
+/**
  * Begin a genuinely new cycle. One implementation, two names for the two counters,
  * both requiring a STRICTLY NEWER version.
  *
@@ -355,6 +382,7 @@ module.exports = {
   completeOp,
   parkOp,
   terminateOp,
+  reviveMeetingCreateForRepair,
   incrementCreateAttempts,
   enterWatching,
   recordOutcome,
