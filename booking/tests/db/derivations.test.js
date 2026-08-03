@@ -20,6 +20,7 @@ const crypto = require('crypto');
 
 const db = require('../../db');
 const J = require('../../db/queries/journeys');
+const { track, purgeTracked } = require('./_fixtures');
 
 const skip = db.isConfigured() ? false : 'DATABASE_URL not set';
 
@@ -40,22 +41,16 @@ const page1 = (over = {}) => {
 };
 
 // Every journey this file creates is tracked and removed, so the suite is safe to run
-// against a real database and leaves the row count exactly as it found it.
-const created = new Set();
-const track = (id) => { created.add(id); return id; };
-
+// against a real database and leaves the row count exactly as it found it. The rule now
+// lives in `_fixtures.js` so all seven files share it — see the note there on why a
+// leftover journey is not inert.
 async function fresh(fields) {
   const id = track(crypto.randomUUID());
   const row = await db.withTransaction((tx) => J.upsertPage1(tx, id, fields));
   return { id, row };
 }
 
-test.after(async () => {
-  for (const id of created) {
-    await db.withTransaction((tx) =>
-      tx.query('DELETE FROM booking_journeys WHERE journey_id = $1', [id])).catch(() => {});
-  }
-});
+test.after(async () => { await purgeTracked(); });
 
 test('INSERT derives email_domain from the normalised email', { skip }, async () => {
   const { row } = await fresh(page1());
