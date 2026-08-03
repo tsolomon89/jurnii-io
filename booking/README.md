@@ -21,8 +21,8 @@ booking/
     _utils/{email,products}.js
   integrations/{google,zoho}/index.js   the two third-party clients
   db/                      migrations, repository functions, migrate + register-calendar
-  workflows/               the cron worker and its 13 operations
-  lib/, config/            shared helpers; countries + slot geometry
+  workflows/               the durable worker and its 13 operations
+  lib/, config/            shared helpers (incl. dispatch.js); countries + slot geometry
   assets/booking-form.{js,css}   THE frontend widget — one implementation, no fork
   tests/*.test.js          offline suite (node:test)
   tests/db/*.test.js       against-PostgreSQL suite (skipped without DATABASE_URL)
@@ -118,7 +118,10 @@ Host-page globals, all optional: `JURNII_BOOKING_EMBEDDED`, `JURNII_BOOKING_CANC
    `package.json` (`npm install`).
 8. **Vercel config:** merge `vercel.snippet.json` (60s `maxDuration` headroom for Zoho token refresh on
    the submissions/booking functions + `/api/*` security headers) into the host `vercel.json`, and add a
-   per-minute cron for `/api/v1/internal/jobs/run`.
+   per-minute cron for `/api/v1/internal/jobs/run`. The cron is the **recovery** mechanism; normal
+   processing is started by the committed write itself — set `BOOKING_DISPATCH_ENABLED=true` for that,
+   which needs `@vercel/functions` (already a dependency) for `waitUntil`. Leaving it unset is safe: the
+   cron then does all the work, exactly as before.
 
 ## Test
 

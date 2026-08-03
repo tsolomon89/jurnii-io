@@ -81,12 +81,20 @@ async function query(text, params) {
  * transaction in the inventory is version- or token-guarded, so a replay either
  * re-applies identically or matches zero rows.
  */
-async function withTransaction(fn, { retries = 2 } = {}) {
+async function withTransaction(fn, { retries = 2, collectRunnable } = {}) {
   let lastErr;
   for (let attempt = 0; attempt <= retries; attempt++) {
     const client = await pool().connect();
+    /**
+     * Journeys this transaction made RUNNABLE NOW. Populated by `tx.markRunnable`, which
+     * the arming primitives call. Pure bookkeeping — no I/O, not observable outside this
+     * function, and reset per attempt so the bounded serialization retry below cannot
+     * double-count.
+     */
+    const runnable = new Set();
     const tx = {
       query: (text, params) => client.query(text, params),
+      markRunnable: (journeyId) => { if (journeyId) runnable.add(journeyId); },
       /** Escape hatch for repository helpers that need the raw client. */
       _client: client,
     };
@@ -94,6 +102,16 @@ async function withTransaction(fn, { retries = 2 } = {}) {
       await client.query('BEGIN');
       const result = await fn(tx);
       await client.query('COMMIT');
+      // ONLY after COMMIT has returned. A rollback publishes nothing, which is what makes
+      // "no event before its transaction commits" structural rather than a convention.
+      //
+      // This deliberately hands the set BACK to the caller instead of firing anything
+      // here. `withTransaction` is used by request handlers, the worker, the CLI scripts
+      // and the test suite; giving a generic database helper a detached network effect
+      // would give all of them one, would have no request context for `waitUntil`, and
+      // would fight the test harness that throws on un-stubbed external calls. Publication
+      // belongs to the top-level execution context that knows whether it wants it.
+      if (collectRunnable) for (const id of runnable) collectRunnable.add(id);
       return result;
     } catch (err) {
       try { await client.query('ROLLBACK'); } catch (_) { /* connection already gone */ }

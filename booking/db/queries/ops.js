@@ -53,6 +53,22 @@ function maxCrashReclaims() {
 }
 
 /**
+ * Record that this transaction made a journey RUNNABLE NOW, so the top-level execution
+ * context can wake a worker for it after COMMIT (see `db/index.js`).
+ *
+ * Called ONLY when an arming primitive actually changed something and the row is due
+ * immediately. An op armed with a delay is not runnable now, so it is deliberately not
+ * marked — a wake for it would find nothing to claim.
+ *
+ * Guarded: `withSession`, hand-built test transactions and any future caller may pass a
+ * bare `tx`. Marking is an optimisation, never a correctness requirement, so its absence
+ * must be silent rather than a crash.
+ */
+function markRunnable(tx, journeyId) {
+  if (tx && typeof tx.markRunnable === 'function') tx.markRunnable(journeyId);
+}
+
+/**
  * Make a first-time operation exist. NEVER revives a latch.
  *
  * The `WHERE` clause is the whole safety property: a non-matching predicate is a
@@ -87,7 +103,9 @@ async function ensureOp(tx, journeyId, op, { delaySeconds = 0, deadlineAt = null
     [journeyId, op, maxFailures(op), maxCrashReclaims(), delaySeconds, deadlineAt]
   );
   // rowCount 0 means "already exists and is authoritative" — a success, not a failure.
-  return { armed: res.rowCount === 1 };
+  const armed = res.rowCount === 1;
+  if (armed && delaySeconds === 0) markRunnable(tx, journeyId);
+  return { armed };
 }
 
 /**
@@ -114,7 +132,11 @@ async function reviveMeetingCreateForRepair(tx, journeyId) {
       RETURNING op`,
     [journeyId]
   );
-  return { revived: res.rowCount === 1 };
+  const revived = res.rowCount === 1;
+  // `next_retry_at = now()`, so the repair is runnable the moment this commits — which is
+  // what replaces "lands on the next worker pass (a minute)" with "lands now".
+  if (revived) markRunnable(tx, journeyId);
+  return { revived };
 }
 
 /**
@@ -147,7 +169,9 @@ async function startCycleOp(tx, journeyId, op, cycleVersion, { delaySeconds = 0,
      RETURNING op, cycle_version`,
     [journeyId, op, maxFailures(op), maxCrashReclaims(), delaySeconds, deadlineAt, cycleVersion]
   );
-  return { armed: res.rowCount === 1 };
+  const armed = res.rowCount === 1;
+  if (armed && delaySeconds === 0) markRunnable(tx, journeyId);
+  return { armed };
 }
 
 async function startIntentOp(tx, journeyId, op, intentVersion, opts) {
@@ -187,6 +211,7 @@ async function resumeOp(tx, journeyId, op, cycleVersion, { deadlineSeconds }) {
     [journeyId, op, deadlineSeconds, cycleVersion]
   );
   if (!res.rowCount) throw new ConflictError('resume_not_applicable');
+  markRunnable(tx, journeyId);   // sets next_retry_at = now()
   return res.rows[0];
 }
 
@@ -355,10 +380,22 @@ async function listOps(tx, journeyId) {
  * execute. `CLAIM_SQL` is retained for callers that genuinely want a whole batch (the
  * crash-ceiling tests, which need a large limit to avoid being starved by other rows).
  *
- * `limitClause` is a literal supplied by this module — never a caller's value — so
- * interpolating it cannot carry untrusted input into the statement.
+ * `CLAIM_ONE_FOR_JOURNEY_SQL` narrows the same protocol to a single journey, for the
+ * post-commit drain. It keeps `FOR UPDATE SKIP LOCKED`, the same lease, the same
+ * pre-committed ladder and the same `op_priority` ordering, so a journey-scoped consumer
+ * and the global cron cannot both take the same row. `LIMIT 1` is deliberate rather than a
+ * batch: `zoho_meeting_create` and `zoho_conversion_discover` share priority 40, and a
+ * batched claim pre-commits a backoff for both — so if the Meeting ran first it would
+ * correctly report `awaiting_contact`, having already burned its claim, and would then wait
+ * a full minute even though conversion discovery finds the Contact seconds later. Claiming
+ * one at a time re-evaluates priority after every operation, so the Meeting is not claimed
+ * until it can succeed. The `(journey_id, op)` primary key and `idx_bjo_active` already
+ * support the narrowed scan, so no migration is needed.
+ *
+ * `limitClause` and `byJourney` are literals supplied by this module — never a caller's
+ * value — so interpolating them cannot carry untrusted input into the statement.
  */
-function claimStatement(limitClause) {
+function claimStatement(limitClause, { byJourney = false } = {}) {
   return `
 UPDATE booking_journey_ops o SET
   run_count           = o.run_count + 1,
@@ -377,6 +414,7 @@ WHERE (o.journey_id, o.op) IN (
   SELECT journey_id, op FROM booking_journey_ops
   WHERE next_retry_at <= now()
     AND (lease_expires_at IS NULL OR lease_expires_at < now())
+    ${byJourney ? 'AND journey_id = $1' : ''}
   ORDER BY op_priority(op), next_retry_at
   FOR UPDATE SKIP LOCKED
   ${limitClause})
@@ -391,6 +429,43 @@ const CLAIM_SQL = claimStatement('LIMIT $1');
 /** Single-row form, for a caller that runs each claim immediately. No parameters. */
 const CLAIM_ONE_SQL = claimStatement('LIMIT 1');
 
+/** Single row within ONE journey: `$1` is the journey id. The limit is a literal 1. */
+const CLAIM_ONE_FOR_JOURNEY_SQL = claimStatement('LIMIT 1', { byJourney: true });
+
+/**
+ * The run state of one journey, for deciding what to schedule after a drain stops.
+ *
+ * `hasDueNow` uses the CLAIM PREDICATE, not "any row with a past `next_retry_at`", so it
+ * reports what a claim would actually get — work currently leased by another worker is
+ * correctly excluded rather than counted as ours to do.
+ *
+ * `journeyComplete` is the negation of `idx_bjo_active`'s partial-index predicate, so it
+ * reuses that index directly. A journey with no op rows reads as complete: there is
+ * nothing outstanding, which is the question being asked.
+ *
+ * `bool_or` over zero rows is NULL, hence the COALESCEs.
+ */
+async function journeyRunState(tx, journeyId) {
+  const res = await tx.query(
+    `SELECT
+       min(next_retry_at)                                     AS next_due_at,
+       COALESCE(bool_or(next_retry_at <= now()
+                        AND (lease_expires_at IS NULL
+                             OR lease_expires_at < now())), false)          AS has_due_now,
+       NOT COALESCE(bool_or(next_retry_at IS NOT NULL
+                            OR state IN ('sending','watching','outcome_unknown')),
+                    false)                                                 AS journey_complete
+     FROM booking_journey_ops WHERE journey_id = $1`,
+    [journeyId]
+  );
+  const r = res.rows[0];
+  return {
+    nextDueAt: r.next_due_at,
+    hasDueNow: r.has_due_now,
+    journeyComplete: r.journey_complete,
+  };
+}
+
 module.exports = {
   MAX_FAILURES,
   INTENT_OPS,
@@ -398,6 +473,8 @@ module.exports = {
   OUTCOME_KINDS,
   CLAIM_SQL,
   CLAIM_ONE_SQL,
+  CLAIM_ONE_FOR_JOURNEY_SQL,
+  journeyRunState,
   maxFailures,
   maxCrashReclaims,
   ensureOp,

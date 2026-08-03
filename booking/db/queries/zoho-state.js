@@ -238,7 +238,7 @@ async function Z11_taskReconciled(tx, journeyId, { taskId, branch, snapshotVersi
   );
 
   // Requeue when EITHER a newer reason arrived mid-flight OR a close is now owed.
-  await tx.query(
+  const requeued = await tx.query(
     `UPDATE booking_journey_ops o SET
        state             = CASE WHEN s.more_work THEN 'pending' ELSE 'done' END,
        next_retry_at     = CASE WHEN s.more_work THEN now()     ELSE NULL   END,
@@ -253,9 +253,17 @@ async function Z11_taskReconciled(tx, journeyId, { taskId, branch, snapshotVersi
               ) AS more_work
          FROM booking_journeys j WHERE j.journey_id = $1
      ) s
-     WHERE o.journey_id = $1 AND o.op = 'zoho_manual_review'`,
+     WHERE o.journey_id = $1 AND o.op = 'zoho_manual_review'
+     RETURNING o.next_retry_at`,
     [journeyId, snapshotVersion]
   );
+
+  // This path sets `next_retry_at = now()` directly rather than through `ensureOp`, so it
+  // has to mark the journey runnable itself — otherwise a newer reason that arrived
+  // mid-flight would wait for a scheduled sweep instead of being picked up immediately.
+  if (requeued.rowCount && requeued.rows[0].next_retry_at) {
+    if (typeof tx.markRunnable === 'function') tx.markRunnable(journeyId);
+  }
 
   return get(tx, journeyId);
 }

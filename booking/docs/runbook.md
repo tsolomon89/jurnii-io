@@ -123,6 +123,65 @@ executed. Establishing which is which is **best-effort correlation against worke
 retention. Report findings with their confidence level; do not infer a count the data
 cannot support.
 
+### Post-commit dispatch — the normal path
+
+With `BOOKING_DISPATCH_ENABLED=true`, a committed write that makes an operation runnable
+**now** registers a background drain for that journey before the request responds. The
+first Zoho call then happens in seconds instead of waiting for the next cron tick, and a
+whole chain drains in one invocation.
+
+It is a **hint, never a delivery.** Postgres remains the authority on what work exists, so
+a lost dispatch costs latency and nothing else: the operation is still `pending` with
+`next_retry_at <= now()`, and the next cron pass claims it — worst case ~80 s (60 s
+interval plus the claim's 0–20 s jitter). Nothing in the dispatch path writes operation
+state, so a lost hint is indistinguishable from one that was never due.
+
+Trigger points (all after their transaction commits, all before the response returns):
+
+| Commit | Reason logged | Arms |
+|---|---|---|
+| Page 2 | `page2_commit` | `zoho_identity_resolve` |
+| Google confirmation | `google_confirmed` | `zoho_meeting_create` |
+| Reschedule | `reschedule_committed` / `reschedule_pending` | `zoho_reschedule_propagate` / `google_reschedule` |
+| Cancel | `cancel_committed` / `cancel_pending` | `zoho_cancel_propagate` / `google_cancel` |
+| Operator resolution | `resolve_<escalation>` | whatever the action re-armed (MR1 → `zoho_meeting_create`) |
+
+**Rollback is a single environment variable.** Unset `BOOKING_DISPATCH_ENABLED` — no deploy
+needed. Every publish becomes a no-op and the cron resumes as the sole mechanism, which is
+byte-identical to the pre-dispatch behaviour.
+
+```
+{"evt":"dispatch.published","reason":"page2_commit","count":1}
+{"evt":"dispatch.drained","journeyId":"…","reason":"page2_commit","ran":4,
+ "stoppedBecause":"no_due_work","journeyComplete":false,"continuationRequired":false}
+```
+
+| Log line | Means |
+|---|---|
+| `dispatch.published` | drains registered for N journeys |
+| `dispatch.drained` | a drain finished; read `stoppedBecause` and `continuationRequired` |
+| `dispatch.failed` | the drain threw, or registration failed. **The operation is untouched** — the sweep recovers it |
+| `dispatch.skipped_no_waituntil` | no `waitUntil` in this runtime; deliberately no detached promise. The sweep covers it |
+
+`stoppedBecause` is the important field. `no_due_work` means the journey is genuinely
+waiting on something external. `budget_exhausted` or `max_ops` with
+`continuationRequired: true` means runnable work was left behind and the cron will pick it
+up — if that appears routinely, raise `BOOKING_DISPATCH_MAX_OPS` or investigate why a
+journey has so much due at once.
+
+### Which mechanism did the work?
+
+Every `worker.op.done` / `worker.op.failed` line carries `via`:
+
+| `via` | Source |
+|---|---|
+| `dispatch` | a post-commit drain — the intended normal path |
+| `cron` | the scheduled sweep |
+| `manual` | a hand-invoked pass |
+
+On the happy path `via: 'cron'` should approach zero once dispatch is enabled. That count
+is the evidence for whether the cron can later be reduced; it is not something to assume.
+
 ### Reading the outcome kinds
 
 | Outcome | Means |

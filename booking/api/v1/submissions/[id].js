@@ -1,7 +1,9 @@
 'use strict';
 
+const { waitUntil } = require('@vercel/functions');
 const { fail, methodNotAllowed, log } = require('../../../lib/http');
 const { requireFlow, signFlowToken } = require('../../../lib/auth');
+const dispatch = require('../../../lib/dispatch');
 const V = require('../../../lib/validate');
 const db = require('../../../db');
 const J = require('../../../db/queries/journeys');
@@ -50,6 +52,7 @@ module.exports = async function handler(req, res) {
   if (product && !canonical) return fail(res, 400, 'validation', 'Please select a product from the list.');
 
   try {
+    const runnable = new Set();
     const row = await db.withTransaction((tx) => J.R1_page2Commit(tx, journeyId, {
       company,
       job_title_raw: V.truncate(body.jobTitle || body.job_title, V.LIMITS.job_title_raw),
@@ -59,9 +62,17 @@ module.exports = async function handler(req, res) {
       phone_national_number: phone.phone_national_number,
       phone_e164: phone.phone_e164,
       product_interest: canonical,
-    }));
+    }), { collectRunnable: runnable });
 
     log({ evt: 'submissions.page2', journeyId, step: 2, zohoStatus: row.zoho_status });
+
+    // Commit -> register -> respond. Synchronous registration, after COMMIT returned and
+    // before this handler returns, so the response cannot be sent before the background
+    // work is registered. It never awaits Zoho and never awaits the drain, so the visitor
+    // waits for neither; and it never throws, so a dispatch problem cannot turn a saved
+    // submission into an error.
+    dispatch.publish(runnable, { reason: 'page2_commit', waitUntil });
+
     return res.status(200).json({
       success: true,
       journeyId,

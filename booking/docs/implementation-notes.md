@@ -242,6 +242,43 @@ both written by the claim, not by the handler, and there is no lease owner and n
 handler-start timestamp. Correlating past `worker_crash_loop` escalations against real
 execution is best-effort log work, bounded by log retention — see the runbook's audit queries.
 
+### `waitUntil(runDrain(...))` started work it did not own
+
+Caught by its own test. `publish()` registered background work as
+`waitUntil(runDrain(journeyId, reason))` — and argument evaluation means `runDrain` **runs
+first**. So when `waitUntil` threw (no request context: a CLI script, a test, an unexpected
+runtime), registration failed *after* the drain had already started, leaving exactly the
+detached, unowned promise the module exists to avoid — one already issuing real external
+calls with nothing tracking it. The test that caught it was asserting the operation stays
+untouched when dispatch fails, and it flickered rather than failing outright, because
+whether the assertions observed the drain's writes depended on scheduling.
+
+The work is now deferred one microtask behind a cancellation flag:
+
+```js
+let cancelled = false;
+const work = Promise.resolve().then(() => (cancelled ? undefined : runDrain(journeyId, reason)));
+try { waitUntil(work); registered += 1; }
+catch (err) { cancelled = true; log({ evt: 'dispatch.failed', … }); }
+```
+
+`waitUntil` is called synchronously, before any microtask can run, so a throw reaches
+`cancelled = true` first and the body becomes a no-op. The general lesson is worth keeping:
+**a promise passed to a registration function has already started.** If starting must be
+conditional on registration succeeding, the body has to be deferred and cancellable.
+
+### Change A came free with the Phase 0 claim fix
+
+The plan listed a "drain loop" as separate Phase 1 work — make a pass continue past the
+operations it arms rather than stopping at one batch. Claiming one row at a time already
+does that: the loop re-claims after every operation, so an op armed by handler N is picked
+up later in the same pass. Verified rather than assumed — one `runPass` walks
+`zoho_identity_resolve` → `zoho_record_write` → `zoho_lead_terminal_update` →
+`zoho_conversion_discover` and stops at `no_progress`, which is the Deluge wait.
+
+So the Phase 0 defect fix and the Phase 1 latency win were the same change. What Phase 1
+adds on top is only *who starts the pass*: a committed write rather than a timer.
+
 ### `recordOutcome` failed on a null `Retry-After`
 
 `next_retry_at = CASE WHEN $6 IS NOT NULL THEN … make_interval(secs => $6) …` gave
