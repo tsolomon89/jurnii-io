@@ -164,11 +164,20 @@ async function Z8_meetingCreated(tx, journeyId, { meetingId }) {
   return row;
 }
 
-/** Z9 — Deal linked. The journey is complete. */
-async function Z9_dealLinked(tx, journeyId, { dealId }) {
+/**
+ * Z9 — Deal linked. The journey is complete.
+ *
+ * `activationState` records whether that link ALSO invoked the commercial automation.
+ * `complete` means the retro-link was triggers-enabled and WF007 was given the Event;
+ * `suppressed` means the Meeting is fully written and correctly linked but automation
+ * was deliberately not invoked. Both are finished states — the journey reaches
+ * `zoho_status = 'complete'` either way, and suppression raises no review reason.
+ */
+async function Z9_dealLinked(tx, journeyId, { dealId, activationState = 'complete' }) {
   const row = await patchZoho(tx, journeyId, {
     zoho_deal_id: dealId,
     zoho_status: 'complete',
+    zoho_meeting_activation_state: activationState,
     processing_completed_at: new Date(),
   });
   await O.completeOp(tx, journeyId, 'zoho_deal_reconcile');

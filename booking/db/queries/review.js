@@ -44,6 +44,9 @@ const ESCALATION_REASONS = {
   t4: ['lead_update_outcome_unknown', 'conversion_not_discovered'],
   g7: ['reschedule_event_missing'],
   rr1: ['crm_cancellation_followup_required'],
+  // MR1 — the Meeting itself could not be created or verified. `create_meeting_only`
+  // closes ONLY this occurrence; every unrelated reason on the journey stays open.
+  mr1: ['meeting_create_failed'],
 };
 
 /**

@@ -22,7 +22,7 @@ const actions = require('../../../../../workflows/operator-actions');
  * transaction, so a presumed-dead owner that is merely slow mutates nothing.
  */
 
-const ESCALATIONS = new Set(['t1', 't2', 't3', 't4', 'g7', 'rr1']);
+const ESCALATIONS = new Set(['t1', 't2', 't3', 't4', 'g7', 'rr1', 'mr1']);
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return methodNotAllowed(res, ['POST']);

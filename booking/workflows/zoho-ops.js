@@ -7,6 +7,7 @@ const ZS = require('../db/queries/zoho-state');
 const O = require('../db/queries/ops');
 const RV = require('../db/queries/review');
 const { zohoEventOwned } = require('../lib/ownership');
+const { activationStateForLink, retroLinkTriggersEnabled } = require('../lib/meeting-automation');
 const { log } = require('../lib/http');
 
 /**
@@ -344,8 +345,24 @@ async function meetingCreate(claim) {
   if (j.booking_status !== 'confirmed') {
     return { kind: 'parked_precondition', errorCode: 'awaiting_google_confirmation' };
   }
-  if (!['record_saved', 'meeting_created', 'complete'].includes(j.zoho_status)) {
-    // Identity is not loaded yet. G1 created this op; Z4/Z5 will reactivate it.
+  /**
+   * The Meeting waits for a USABLE CRM IDENTITY, not for the whole commercial graph.
+   *
+   * This used to demand `zoho_status ∈ {record_saved, meeting_created, complete}`.
+   * That conflates "we have someone to attach the Meeting to" with "the Lead write
+   * finished", and it is why two Production journeys escalated
+   * `meeting_create_failed` while holding a perfectly good Contact, Account and
+   * confirmed Google event: the Meeting was never attempted, so no Meeting existed to
+   * fail. A confirmed booking with a person we can address must get its Meeting.
+   *
+   * A usable identity is a Contact, or an UNCONVERTED Lead. A Lead whose terminal
+   * update was accepted is mid-conversion and unaddressable, so it does not count —
+   * that case falls through to the `contactPending` wait below.
+   */
+  const hasContact = Boolean(j.zoho_contact_id);
+  const hasAddressableLead = Boolean(j.zoho_record_id) && j.lead_terminal_update_state !== 'accepted';
+  if (!hasContact && !hasAddressableLead) {
+    // No person yet. G1 created this op; Z4/Z5 reactivate it once identity lands.
     return { kind: 'parked_precondition', errorCode: 'awaiting_record_saved' };
   }
   if (j.zoho_meeting_id) return { kind: 'progress' };
@@ -489,17 +506,36 @@ async function dealReconcile(claim) {
       return { kind: 'no_progress', errorCode: 'deal_not_visible_yet' };
     }
 
-    // ONE triggers-enabled PUT applying Contact and Deal TOGETHER, so WF007
-    // reprocesses the Meeting and the pipeline advances.
+    /**
+     * ONE PUT applying Contact and Deal TOGETHER. Both keys always travel together —
+     * WF007's first guard returns early unless `What_Id` is set AND
+     * `$se_module === 'Deals'`, and a Lead id in the Contact position mis-routes
+     * `routeContactSequence`. The linkage is identical in both modes; only the
+     * TRIGGER differs, which is precisely the persistence/automation seam.
+     */
+    const triggersEnabled = retroLinkTriggersEnabled(process.env);
+    const alreadyLinked = j.zoho_deal_id === resolved.deal.id
+      && j.zoho_meeting_activation_state === activationStateForLink(process.env);
+    if (alreadyLinked) {
+      // A repeat pass in suppressed mode must make NO further Zoho write once the
+      // Meeting is already correctly linked.
+      await db.withTransaction((tx) => ZS.Z9_dealLinked(tx, journeyId,
+        { dealId: resolved.deal.id, activationState: activationStateForLink(process.env) }));
+      return { kind: 'progress', recorded: true };
+    }
+
     await Z.updateEvent(j.zoho_meeting_id, {
       Who_Id: { id: j.zoho_contact_id },
       What_Id: { id: resolved.deal.id },
       $se_module: 'Deals',
       Ext_Calendar_Booking_ID: journeyId,
-    }, { triggersEnabled: true });
+    }, { triggersEnabled });
 
-    await db.withTransaction((tx) => ZS.Z9_dealLinked(tx, journeyId, { dealId: resolved.deal.id }));
-    log({ evt: 'zoho.deal.linked', journeyId });
+    await db.withTransaction((tx) => ZS.Z9_dealLinked(tx, journeyId, {
+      dealId: resolved.deal.id,
+      activationState: activationStateForLink(process.env),
+    }));
+    log({ evt: 'zoho.deal.linked', journeyId, activation: activationStateForLink(process.env) });
     return { kind: 'progress', recorded: true };
   } catch (err) {
     const c = classify(err);

@@ -27,6 +27,7 @@ const LEGAL = {
   t4: ['adopt_identity', 'abandon'],
   g7: ['adopt_at_old_slot', 'adopt_at_new_slot', 'mark_cancelled'],
   rr1: ['confirm_followup_done'],
+  mr1: ['create_meeting_only'],
 };
 
 function legalActions(escalation) { return LEGAL[escalation] || []; }
@@ -178,6 +179,67 @@ async function verify(request) {
         if (verdict !== 'absent') return unavailable('verification_unavailable');
       }
       return { ok: true, observed: { source: 'events.get', outcome: 'missing' } };
+    }
+
+    /**
+     * MR1 — the Meeting could not be created or verified. Prove, by reading only, that
+     * a Meeting can now legitimately be produced:
+     *   · the booking is confirmed and its Google event is readable and live;
+     *   · a usable CRM identity exists (Contact, or an UNCONVERTED Lead);
+     *   · the correlation key resolves to an existing Meeting, or to nothing.
+     * The Deal is looked up too, but its absence is NOT disqualifying — a person-linked
+     * Meeting is a valid outcome and the Deal retro-links later.
+     */
+    case 'create_meeting_only': {
+      if (journey.booking_status !== 'confirmed') return refuse('booking_not_confirmed');
+      if (!journey.google_event_id) return refuse('no_google_event');
+
+      let event;
+      try {
+        event = await G.readEvent(calendarId, journey.google_event_id);
+      } catch (_) { return unavailable('google_unreadable'); }
+      if (!event || event.status === 'cancelled') return refuse('event_absent');
+
+      const hasContact = Boolean(journey.zoho_contact_id);
+      const hasAddressableLead = Boolean(journey.zoho_record_id)
+        && journey.lead_terminal_update_state !== 'accepted';
+      if (!hasContact && !hasAddressableLead) return refuse('no_usable_identity');
+
+      // Re-read the identity live: a stored id Zoho can no longer address would produce
+      // an INVALID_DATA on the Meeting write, which classify() treats as terminal.
+      if (hasContact) {
+        let contactNow;
+        try { contactNow = await Z.getContact(journey.zoho_contact_id); } catch (_) { return unavailable('zoho_unreadable'); }
+        if (!contactNow) return refuse('contact_not_readable');
+      }
+
+      let existingMeetingId = null;
+      try {
+        const found = await Z.searchEventByExternalId(request.journeyId);
+        if (found) existingMeetingId = found.id;
+      } catch (_) { return unavailable('zoho_unreadable'); }
+
+      // Best-known Deal, informational only. Absence is legitimate.
+      let dealId = journey.zoho_deal_id || null;
+      if (!dealId && journey.zoho_account_id && journey.product_interest) {
+        try {
+          const resolved = await Z.resolveProductDeal(journey.zoho_account_id, journey.product_interest);
+          if (resolved.status === 'one') dealId = resolved.deal.id;
+        } catch (_) { /* the worker reconciles under its own deadline */ }
+      }
+
+      return {
+        ok: true,
+        observed: {
+          source: 'zoho',
+          existingMeetingId,
+          contactId: journey.zoho_contact_id || null,
+          leadId: hasContact ? null : journey.zoho_record_id,
+          accountId: journey.zoho_account_id || null,
+          dealId,
+          googleEventId: event.id,
+        },
+      };
     }
 
     case 'adopt_identity': {
@@ -358,6 +420,48 @@ async function apply(tx, { request, journey, verified }) {
         await RV.addReviewReason(tx, jid, 'crm_cancellation_followup_required');
       }
       return {};
+    }
+
+    /**
+     * MR1 — repair a journey that escalated `meeting_create_failed`.
+     *
+     * The Zoho write is performed by the WORKER, not here. Every other action in this
+     * file is a pure repository transaction, and `apply` runs inside an open Postgres
+     * transaction — issuing a Zoho HTTP call from here would hold that transaction
+     * across network I/O and duplicate the bounded-recovery, create-attempt and
+     * correlation-key logic `meetingCreate`/`dealReconcile` already own. So this action
+     * re-arms those ops and lets the fixed suppressed path do exactly one create.
+     *
+     * The effect the operator asked for is unchanged, and it lands on the next worker
+     * pass (a minute): search by `Ext_Calendar_Booking_ID` and reuse if present,
+     * otherwise ONE suppressed create, then Contact+Deal applied together — also
+     * suppressed while `BOOKING_MEETING_AUTOMATION_ENABLED` is false. Re-running with
+     * the same `resolutionId` replays the stored result and re-arms nothing.
+     *
+     * It cannot fire WF007 (the retro-link's trigger is gated by the flag), cannot send
+     * email or advance a stage (those are WF007's downstream), and creates no Contact,
+     * Account, Deal or Quote (the worker's Zoho surface writes Leads, Events and Tasks
+     * only). It closes just the `meeting_create_failed` occurrence, because
+     * `reasonsFor({escalation:'mr1'})` returns exactly that code.
+     */
+    case 'create_meeting_only': {
+      await J.patchZoho(tx, jid, {
+        // Back to the state the Meeting step waits on. `record_saved` is the truthful
+        // description: identity is loaded, the Meeting is not yet written.
+        zoho_status: journey.zoho_meeting_id ? 'meeting_created' : 'record_saved',
+        zoho_meeting_activation_state: 'not_requested',
+      });
+      await O.ensureOp(tx, jid, 'zoho_meeting_create');
+      if (journey.zoho_contact_id) await O.ensureOp(tx, jid, 'zoho_deal_reconcile');
+      return {
+        meetingId: verified.observed.existingMeetingId,
+        contactId: verified.observed.contactId,
+        leadId: verified.observed.leadId,
+        accountId: verified.observed.accountId,
+        dealId: verified.observed.dealId,
+        googleEventId: verified.observed.googleEventId,
+        meetingWriteDeferredToWorker: true,
+      };
     }
 
     case 'adopt_identity': {

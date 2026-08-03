@@ -32,7 +32,8 @@ const GOOGLE_COLUMNS = new Set([
 const ZOHO_COLUMNS = new Set([
   'zoho_status', 'zoho_identity_outcome', 'zoho_record_type', 'zoho_record_id',
   'zoho_contact_id', 'zoho_account_id', 'zoho_deal_id', 'zoho_meeting_id',
-  'zoho_manual_review_task_id', 'lead_terminal_update_state',
+  'zoho_manual_review_task_id', 'zoho_meeting_activation_state',
+  'lead_terminal_update_state',
   'lead_terminal_update_attempted_at', 'processing_started_at', 'processing_completed_at',
   'manual_review_reasons_applied', 'manual_review_applied_version',
   'manual_review_closed_version',
