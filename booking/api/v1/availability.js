@@ -4,6 +4,7 @@ const { fail, methodNotAllowed, log } = require('../../lib/http');
 const S = require('../../config/slots');
 const G = require('../../integrations/google');
 const db = require('../../db');
+const R = require('../../db/queries/reservations');
 
 /**
  * GET /api/v1/availability
@@ -43,23 +44,49 @@ module.exports = async function handler(req, res) {
   if (timeMax > horizonCeil) timeMax = horizonCeil;
   if (timeMin >= timeMax) return res.status(200).json({ slots: [] });
 
-  // Postgres FIRST, so an unreadable store fails the request before any Google call.
+  /**
+   * Postgres FIRST, so an unreadable store fails the request before any Google call.
+   *
+   * EXPIRED HOLDS ARE RELEASED ON READ. An abandoned hold stops blocking its slot the
+   * moment somebody asks whether that slot is free, rather than whenever the sweep next
+   * happens to run — so a slot can never be reported unavailable because of an expired
+   * hold, regardless of whether the sweep has run recently.
+   *
+   * This does NOT replace the per-minute sweep, which still releases holds nobody is
+   * currently asking about and remains the safety net. It removes the dependency on the
+   * sweep's timing for the one case that matters to a visitor: the slot they are looking
+   * at right now.
+   *
+   * `releaseExpiredHolds` is reused unchanged: its `FOR UPDATE SKIP LOCKED` means two
+   * concurrent availability requests (or a request and the sweep) never block each
+   * other — one releases, the other skips and reads the result. A row it skips is
+   * simply released by the next caller.
+   *
+   * The transaction covers the release and the read ONLY, and commits before the Google
+   * call below. Holding it across `checkFreeBusy` would pin one of the pool's three
+   * connections to Google's latency — the same rule `operator-actions.js` enforces for
+   * Zoho.
+   */
   let holds;
   try {
-    const q = await db.query(
-      `SELECT slot_start_utc, hold_end_utc
-         FROM booking_slot_reservations
-        WHERE host_calendar_key = $1
-          AND status IN ('pending','confirmed')
-          AND hold_end_utc > $2
-          AND slot_start_utc < $3`,
-      [calendarKey, new Date(timeMin.getTime() - S.BUFFER_MS), timeMax]
-    );
-    holds = q.rows;
+    holds = await db.withTransaction(async (tx) => {
+      await R.releaseExpiredHolds(tx, 50);
+      const q = await tx.query(
+        `SELECT slot_start_utc, hold_end_utc
+           FROM booking_slot_reservations
+          WHERE host_calendar_key = $1
+            AND status IN ('pending','confirmed')
+            AND hold_end_utc > $2
+            AND slot_start_utc < $3`,
+        [calendarKey, new Date(timeMin.getTime() - S.BUFFER_MS), timeMax]
+      );
+      return q.rows;
+    });
   } catch (err) {
     log({ evt: 'availability.store_unavailable', code: err.code || 'unknown' });
     return fail(res, 503, 'availability_unavailable', 'We could not load availability. Please try again.');
   }
+  // COMMITTED. Everything below runs with no transaction open.
 
   let busy;
   try {
