@@ -260,6 +260,111 @@ test('10+11+12: create_meeting_only re-arms, closes only meeting_create_failed, 
     assert.strictEqual(opsAfter, opsNow.length, 'no extra ops from a repeat');
   });
 
+// ---------------------------------------------------------------------------
+// Z7 must reactivate a Meeting that parked waiting for the Contact.
+//
+// The exact live ordering that stranded a Production journey: the Meeting is attempted
+// while the Lead is still converting, so it correctly parks — but `parked` clears
+// `next_retry_at`, so it only runs again if another transaction reactivates it, and the
+// transition that actually establishes the Contact (Z7) did not. Silent, because parking
+// raises no review reason.
+// ---------------------------------------------------------------------------
+
+test('Z7 re-arms a Meeting that parked awaiting the Contact, and one Meeting results',
+  { skip }, async () => {
+    delete process.env.BOOKING_MEETING_AUTOMATION_ENABLED;
+    // Confirmed booking, Lead mid-conversion: no Contact, terminal update accepted.
+    const id = await seedJourney({
+      zoho_record_id: 'L1', lead_terminal_update_state: 'accepted', zoho_status: 'record_saved',
+    });
+    stubZoho({ deal: { status: 'one', deal: { id: 'D1' } } });
+    const ops = require('../../workflows/zoho-ops');
+
+    // 1-4: the Meeting runs before conversion completes and parks.
+    const first = await ops.meetingCreate(await claim(id, 'zoho_meeting_create'));
+    assert.strictEqual(first.kind, 'parked_precondition');
+    assert.strictEqual(first.errorCode, 'awaiting_record_saved');
+    await db.withTransaction((tx) => O.recordOutcome(tx, id, 'zoho_meeting_create',
+      first.kind, { errorCode: first.errorCode }));
+    let op = await db.withTransaction((tx) => O.getOp(tx, id, 'zoho_meeting_create'));
+    assert.strictEqual(op.state, 'parked');
+    assert.strictEqual(op.next_retry_at, null, 'parked clears next_retry_at — it cannot poll');
+    assert.strictEqual(calls.create.length, 0, 'nothing was created yet');
+
+    // 5-6: conversion discovery writes the Contact through Z7, which must re-arm it.
+    await db.withTransaction((tx) => ZS.Z7_conversionDiscovered(tx, id,
+      { contactId: 'C1', accountId: 'A1' }));
+    op = await db.withTransaction((tx) => O.getOp(tx, id, 'zoho_meeting_create'));
+    assert.strictEqual(op.state, 'pending', 'Z7 re-armed the parked Meeting');
+    assert.ok(op.next_retry_at, 'and it is due again');
+    assert.ok(new Date(op.next_retry_at) <= new Date(), 'due NOW, so the same drain can take it');
+
+    // 7-8: the Meeting is created exactly once, addressed to the discovered Contact.
+    const second = await ops.meetingCreate(await claim(id, 'zoho_meeting_create'));
+    assert.strictEqual(second.kind, 'progress');
+    assert.strictEqual(calls.create.length, 1, 'exactly one Meeting create');
+    assert.strictEqual(calls.create[0].Who_Id.id, 'C1', 'addressed to the discovered Contact');
+    const r1 = await row(id);
+    assert.strictEqual(r1.zoho_meeting_id, 'MEET1');
+
+    // 9: Deal reconciliation is armed normally by Z8.
+    const dr = await db.withTransaction((tx) => O.getOp(tx, id, 'zoho_deal_reconcile'));
+    assert.ok(dr, 'zoho_deal_reconcile armed');
+    await ops.dealReconcile(await claim(id, 'zoho_deal_reconcile'));
+    const r2 = await row(id);
+    assert.strictEqual(r2.zoho_status, 'complete');
+    assert.strictEqual(r2.zoho_meeting_activation_state, 'suppressed',
+      'the fix must not disturb Meeting-only mode');
+    assert.strictEqual(calls.update.every((u) => u.opts.triggersEnabled === false), true,
+      'no WF007 trigger on any write');
+
+    // 10: a healthy transition raises no Manual Review.
+    const open = await db.withTransaction((tx) => RV.openReasonKeys(tx, id));
+    assert.deepStrictEqual(open, [], 'a recovered ordering is not an escalation');
+    const mc = await db.withTransaction((tx) => O.getOp(tx, id, 'zoho_meeting_create'));
+    assert.ok(mc.create_attempts <= 1, `create_attempts must never exceed 1, got ${mc.create_attempts}`);
+    restoreZoho();
+  });
+
+test('Z7 does not revive a Meeting whose outcome was uncertain, nor one already sent',
+  { skip }, async () => {
+    // The guard that stops the new edge becoming a duplicate-Meeting path.
+    for (const state of ['sending', 'accepted', 'outcome_unknown', 'terminal']) {
+      const id = await seedJourney({ zoho_record_id: 'L1', lead_terminal_update_state: 'accepted' });
+      await db.withTransaction(async (tx) => {
+        await tx.query(
+          `UPDATE booking_journey_ops SET state=$2, next_retry_at=NULL, create_attempts=1
+            WHERE journey_id=$1 AND op='zoho_meeting_create'`, [id, state]);
+      });
+      await db.withTransaction((tx) => ZS.Z7_conversionDiscovered(tx, id,
+        { contactId: 'C1', accountId: 'A1' }));
+      const op = await db.withTransaction((tx) => O.getOp(tx, id, 'zoho_meeting_create'));
+      assert.strictEqual(op.state, state, `a ${state} Meeting op must NOT be revived`);
+      assert.strictEqual(op.next_retry_at, null, `a ${state} Meeting op must stay un-runnable`);
+    }
+  });
+
+test('Z7 arms nothing for an unconfirmed journey, and Deal reconcile when a Meeting exists',
+  { skip }, async () => {
+    // Unconfirmed: there is no booking to attach a Meeting to.
+    const unconfirmed = await seedJourney({ zoho_record_id: 'L1' });
+    await db.withTransaction((tx) => tx.query(
+      `UPDATE booking_journeys SET booking_status='draft' WHERE journey_id=$1`, [unconfirmed]));
+    await db.withTransaction((tx) => O.parkOp(tx, unconfirmed, 'zoho_meeting_create', 'test'));
+    await db.withTransaction((tx) => ZS.Z7_conversionDiscovered(tx, unconfirmed,
+      { contactId: 'C1', accountId: 'A1' }));
+    const parked = await db.withTransaction((tx) => O.getOp(tx, unconfirmed, 'zoho_meeting_create'));
+    assert.strictEqual(parked.next_retry_at, null, 'an unconfirmed journey arms no Meeting');
+
+    // A journey that already HAS a Meeting takes the Deal branch, not the Meeting branch.
+    const withMeeting = await seedJourney({ zoho_record_id: 'L1' });
+    await db.withTransaction((tx) => J.patchZoho(tx, withMeeting, { zoho_meeting_id: 'MEET9' }));
+    await db.withTransaction((tx) => ZS.Z7_conversionDiscovered(tx, withMeeting,
+      { contactId: 'C1', accountId: 'A1' }));
+    const deal = await db.withTransaction((tx) => O.getOp(tx, withMeeting, 'zoho_deal_reconcile'));
+    assert.ok(deal, 'Deal reconciliation armed when a Meeting already exists');
+  });
+
 test('create_meeting_only revives a create op that never attempted, and refuses an uncertain one',
   { skip }, async () => {
     const id = await seedJourney({ zoho_contact_id: 'C1', zoho_account_id: 'A1' });
