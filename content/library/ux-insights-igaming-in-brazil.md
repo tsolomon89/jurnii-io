@@ -10,6 +10,7 @@ date: '2026-03-12'
 medium: Article
 category: Market Intelligence
 author: Tristan Dexter
+authorImage: /assets/library/authors/tristan-dexter.png
 tags:
   - Market Intelligence
   - iGaming

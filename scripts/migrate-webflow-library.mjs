@@ -118,7 +118,10 @@ async function cachedPage(href) {
   return html;
 }
 
-/** Download `url` into assets/library/<slug>/<name>.<ext>; returns the site-absolute path. */
+/**
+ * Download `url` into assets/library/<slug>/<name>.<ext>; returns the site-absolute
+ * path. `slug` is usually an article, but the shared author portraits pass "authors".
+ */
 async function downloadImage(url, slug, name) {
   const ext = (path.extname(new URL(url).pathname) || '.png').toLowerCase();
   const dir = path.join(imageRoot, slug);
@@ -343,6 +346,14 @@ async function extract(entry) {
   const authorName = clean(header.find('.div-block-248 h6').first().text());
   const authorRole = clean(header.find('.div-block-248 .text-block-57').first().text());
 
+  // The author portraits are the last images still living only on Webflow's CDN.
+  // Nothing renders them yet, but the CMS is being decommissioned, so they are
+  // pulled into the repo keyed by author rather than by article — three files for
+  // the whole library instead of one copy per post.
+  const avatarUrl = header.find('.div-block-248 img').first().attr('src');
+  const authorImage =
+    avatarUrl && authorName ? await downloadImage(avatarUrl, 'authors', slugify(authorName)) : null;
+
   const coverUrl = $('meta[property="og:image"]').attr('content') || entry.thumb || entry.fallbackThumb;
   const coverImage = coverUrl ? await downloadImage(coverUrl, slug, 'cover') : null;
 
@@ -409,6 +420,7 @@ async function extract(entry) {
       medium: 'Article',
       category,
       author: authorName || 'Jurnii Research',
+      ...(authorImage ? { authorImage } : {}),
       tags,
       coverImage,
       isIndexable: true,

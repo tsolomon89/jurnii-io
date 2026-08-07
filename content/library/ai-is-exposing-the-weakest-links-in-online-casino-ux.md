@@ -12,6 +12,7 @@ date: '2026-03-26'
 medium: Article
 category: Commercial Strategy
 author: Fraser Dunk
+authorImage: /assets/library/authors/fraser-dunk.jpg
 tags:
   - Commercial Strategy
   - iGaming

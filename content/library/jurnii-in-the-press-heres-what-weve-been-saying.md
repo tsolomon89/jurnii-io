@@ -14,6 +14,7 @@ date: '2026-02-17'
 medium: Article
 category: Announcement
 author: Fraser Dunk
+authorImage: /assets/library/authors/fraser-dunk.jpg
 tags:
   - Announcement
   - iGaming

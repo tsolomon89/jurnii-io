@@ -58,6 +58,7 @@ function processDirectory(dirPath: string, categoryKey: string): any[] {
         excerpt: parsed.data.excerpt || parsed.data.description || '',
         description: parsed.data.description || '',
         author: parsed.data.author || 'Jurnii Research',
+        authorImage: parsed.data.authorImage,
         category: parsed.data.category,
         tags: Array.isArray(parsed.data.tags) ? parsed.data.tags : [],
         subtitle: parsed.data.subtitle,

@@ -10,6 +10,7 @@ date: '2025-06-09'
 medium: Article
 category: Announcement
 author: Fraser Dunk
+authorImage: /assets/library/authors/fraser-dunk.jpg
 tags:
   - Announcement
   - iGaming

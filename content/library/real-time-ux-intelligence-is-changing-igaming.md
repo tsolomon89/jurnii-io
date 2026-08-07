@@ -10,6 +10,7 @@ date: '2026-03-03'
 medium: Article
 category: Conversation
 author: Mitch V.
+authorImage: /assets/library/authors/mitch-v.png
 tags:
   - Conversation
   - iGaming

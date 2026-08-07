@@ -10,6 +10,7 @@ date: '2026-02-23'
 medium: Article
 category: Case Study
 author: Tristan Dexter
+authorImage: /assets/library/authors/tristan-dexter.png
 tags:
   - Case Study
   - iGaming
