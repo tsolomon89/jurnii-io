@@ -18,6 +18,7 @@ tags:
   - Competitive Intelligence
   - iGaming
   - Intelligence
+coverImage: /assets/library/automating-the-radar-building-a-modern-competitive-intelligence-unit-in-igaming/cover.png
 isIndexable: true
 ---
 # Automating the Radar: Building a Modern Competitive Intelligence Unit in iGaming

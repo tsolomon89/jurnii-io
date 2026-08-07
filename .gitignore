@@ -7,6 +7,8 @@ scripts/perf-baselines/*-mobile.json
 !scripts/perf-baselines/BASELINE.md
 .vercel/
 .neon
+# Scraped HTML kept by scripts/migrate-webflow-library.mjs so re-runs are offline.
+.migration-cache/
 .env
 .env*.local
 

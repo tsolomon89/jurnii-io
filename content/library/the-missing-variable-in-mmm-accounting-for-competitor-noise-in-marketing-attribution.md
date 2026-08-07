@@ -18,6 +18,7 @@ tags:
   - Econometrics
   - iGaming
   - Intelligence
+coverImage: /assets/library/the-missing-variable-in-mmm-accounting-for-competitor-noise-in-marketing-attribution/cover.png
 isIndexable: true
 ---
 # The Missing Variable in MMM: Accounting for Competitor Noise in Marketing Attribution

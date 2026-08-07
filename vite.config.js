@@ -46,6 +46,17 @@ const BOOKING_RUNTIME = [
   'booking/config/countries.js',
 ];
 
+function copyDir(src, dest) {
+  if (!fs.existsSync(src)) return;
+  fs.mkdirSync(dest, { recursive: true });
+  for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
+    const from = path.join(src, entry.name);
+    const to = path.join(dest, entry.name);
+    if (entry.isDirectory()) copyDir(from, to);
+    else fs.copyFileSync(from, to);
+  }
+}
+
 function copyRuntimeAssets() {
   return {
     name: 'copy-runtime-assets',
@@ -70,6 +81,16 @@ function copyRuntimeAssets() {
         const src = path.join(root, 'assets', f);
         if (fs.existsSync(src)) fs.copyFileSync(src, path.join(destDir, f));
       }
+      // Library cover art and in-article figures. Markdown and front matter reference
+      // these by absolute URL (/assets/library/<slug>/…), so they never pass through
+      // Rollup and would otherwise be missing from dist entirely.
+      copyDir(path.join(root, 'assets/library'), path.join(root, 'dist/assets/library'));
+
+      // KaTeX's stylesheet and fonts, loaded on demand by `Prose` for the maths
+      // papers. Its `url(fonts/…)` references are relative, so the directory has to
+      // land in dist with its shape intact.
+      copyDir(path.join(root, 'assets/vendor'), path.join(root, 'dist/assets/vendor'));
+
       // Nested <base href> pages keep href="assets/*.css"; also rewrite is unnecessary if copied.
       const fontDir = path.join(root, 'dist/assets/fonts');
       fs.mkdirSync(fontDir, { recursive: true });

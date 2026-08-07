@@ -16,6 +16,7 @@ tags:
   - Econometrics
   - iGaming
   - Intelligence
+coverImage: /assets/library/the-cfos-guide-to-ux-connecting-usability-metrics-to-net-gaming-revenue/cover.png
 isIndexable: true
 ---
 # The CFO's Guide to UX: Connecting Usability Metrics to Net Gaming Revenue

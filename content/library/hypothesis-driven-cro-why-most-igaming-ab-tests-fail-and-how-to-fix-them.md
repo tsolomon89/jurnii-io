@@ -16,6 +16,7 @@ tags:
   - Commercial Strategy
   - iGaming
   - Intelligence
+coverImage: /assets/library/hypothesis-driven-cro-why-most-igaming-ab-tests-fail-and-how-to-fix-them/cover.png
 isIndexable: true
 ---
 # Hypothesis-Driven CRO: Why Most iGaming A/B Tests Fail and How to Fix Them

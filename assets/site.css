@@ -1551,7 +1551,9 @@ html.js-gsap .pbt-row.is-in, .pbt-row.is-in { opacity: 1; transform: translateY(
 .library-sidebar.mobile-hidden { display: none; }
 @media (min-width: 768px) { .library-sidebar.mobile-hidden { display: block; } }
 
-.library-main { flex: 1; padding: var(--spacing-6); max-width: 1152px; margin: 0 auto; width: 100%; }
+/* min-width:0 lets the flex item shrink past its content's min-content width, so a
+   wide data table scrolls inside its own `overflow-x` box instead of widening the page. */
+.library-main { flex: 1; min-width: 0; padding: var(--spacing-6); max-width: 1152px; margin: 0 auto; width: 100%; }
 @media (min-width: 640px) { .library-main { padding: var(--spacing-8); } }
 @media (min-width: 1024px) { .library-main { padding: var(--spacing-12); } }
 
@@ -1566,7 +1568,13 @@ html.js-gsap .pbt-row.is-in, .pbt-row.is-in { opacity: 1; transform: translateY(
 .library-card-grid { display: grid; grid-template-columns: 1fr; gap: var(--spacing-6); }
 @media (min-width: 768px) { .library-card-grid { grid-template-columns: repeat(2, 1fr); } }
 
-.library-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-2xl); padding: var(--spacing-6); display: flex; flex-direction: column; gap: var(--spacing-4); transition: border-color 150ms ease, background 150ms ease; }
+.library-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-2xl); padding: var(--spacing-6); display: flex; flex-direction: column; gap: var(--spacing-4); transition: border-color 150ms ease, background 150ms ease; overflow: hidden; }
+/* The covers are designed promotional cards that carry their own headline type, not
+   photographs — a 16:9 `cover` crop cut the words off 28 of the 50. `contain` in a
+   3:2 panel shows each one whole; the ratio is the compromise that leaves the least
+   dead space across a set that is mostly 1:1 and 4:3. */
+.library-card-cover { margin: calc(-1 * var(--spacing-6)) calc(-1 * var(--spacing-6)) 0; aspect-ratio: 3 / 2; background: var(--accent); overflow: hidden; }
+.library-card-cover img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .library-card:hover { border-color: var(--jurnii-500); }
 [data-theme="dark"] .library-card:hover, [data-theme="jurnii-v1"] .library-card:hover { border-color: var(--jurnii-300); }
 .library-card-meta { display: flex; justify-content: space-between; align-items: center; }
@@ -1589,12 +1597,63 @@ html.js-gsap .pbt-row.is-in, .pbt-row.is-in { opacity: 1; transform: translateY(
 .article-prose ol { padding-left: var(--spacing-6); list-style-type: decimal; }
 .article-prose li { margin-bottom: var(--spacing-2); }
 .article-prose a { color: var(--jurnii-700); text-decoration: underline; text-underline-offset: 4px; }
+/* Migrated posts sometimes link a bare URL and use the URL as the link text; at
+   375px an unbreakable 90-character token would push the whole column sideways. */
+.article-prose a, .article-prose p, .article-prose li { overflow-wrap: anywhere; }
+/* Long formulas scroll inside the equation block rather than widening the page. */
+.article-prose .katex-display { overflow-x: auto; overflow-y: hidden; padding-bottom: var(--spacing-2); }
+.article-prose .katex { max-width: 100%; }
 [data-theme="dark"] .article-prose a, [data-theme="jurnii-v1"] .article-prose a { color: var(--jurnii-300); }
 .article-prose a:hover { color: var(--foreground); }
 .article-prose blockquote { border-left: 4px solid var(--jurnii-500); padding-left: var(--spacing-4); margin: var(--spacing-6) 0; font-style: italic; color: var(--muted-foreground); }
 .article-prose code { font-family: var(--font-mono); font-size: 0.9em; padding: 2px 4px; background: var(--muted); border-radius: var(--radius-sm); }
 .article-prose pre { padding: var(--spacing-4); background: var(--muted); border-radius: var(--radius-md); overflow-x: auto; margin-bottom: var(--spacing-5); }
 .article-prose pre code { background: transparent; padding: 0; }
+
+/* Editorial media: charts, figures, images, and data tables (used by market reports) */
+.article-prose figure { margin: var(--spacing-8) 0; }
+.article-prose figure.chart svg { display: block; width: 100%; height: auto; }
+.article-prose figcaption { margin-top: var(--spacing-3); font-size: var(--text-sm); line-height: 1.55; color: var(--muted-foreground); }
+.article-prose figcaption strong { color: var(--foreground); font-weight: var(--fw-bold); }
+.article-prose .chart-source { display: block; margin-top: 2px; font-family: var(--font-mono); font-size: var(--text-xs); opacity: 0.75; }
+.article-prose img { max-width: 100%; height: auto; border-radius: var(--radius-md); }
+
+/* Migrated artwork arrives at every aspect ratio the old CMS allowed, from 9:1
+   banners to 0.54 phone screenshots. `width: auto` with both caps lets each one
+   settle at whatever size fits the column and the height budget, so a portrait
+   screenshot stops running past a screen and a small source is never upscaled
+   into blur. Photographic figures are centred and captioned centre; the market
+   reports' `figure.chart` keeps its full-width, left-aligned analytical caption. */
+.article-prose figure:not(.chart) img { display: block; margin: 0 auto; width: auto; max-width: 100%; max-height: 520px; }
+.article-prose figure:not(.chart) figcaption { text-align: center; }
+
+/* Screenshot galleries: a swipeable row rather than a tall stack. The partly
+   visible next card is the affordance that says there is more to the right. */
+.article-prose .figure-row {
+  display: grid; grid-auto-flow: column; grid-auto-columns: minmax(220px, 260px);
+  gap: var(--spacing-4); margin: var(--spacing-8) 0;
+  overflow-x: auto; overscroll-behavior-inline: contain;
+  scroll-snap-type: x proximity; padding-bottom: var(--spacing-3);
+}
+.article-prose .figure-row figure { margin: 0; scroll-snap-align: start; }
+.article-prose .figure-row img { width: 100%; max-height: none; border: 1px solid var(--border); }
+@media (max-width: 640px) {
+  .article-prose .figure-row { grid-auto-columns: minmax(180px, 62vw); }
+}
+.article-prose table { width: 100%; border-collapse: collapse; margin: var(--spacing-6) 0; font-size: var(--text-sm); display: block; overflow-x: auto; }
+.article-prose thead th { text-align: left; font-family: var(--font-mono); font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted-foreground); border-bottom: 2px solid var(--border); padding: var(--spacing-2) var(--spacing-3); white-space: nowrap; }
+.article-prose tbody td { padding: var(--spacing-2) var(--spacing-3); border-bottom: 1px solid var(--border); color: var(--foreground); vertical-align: top; }
+.article-prose tbody tr:last-child td { border-bottom: none; }
+.article-prose tbody td:first-child { font-weight: 600; }
+
+/* Half the migrated covers are 1:1 promotional cards and one is portrait, so a
+   plain width:100% hero fills the whole fold before a word of the article shows.
+   Capping the height and shrink-wrapping the frame to the image keeps a wide cover
+   edge-to-edge while a square one becomes a centred card — no crop, since the
+   artwork carries its own headline type, and no letterbox bars. */
+.article-cover { width: fit-content; max-width: min(100%, 68ch); margin: 0 0 var(--spacing-8); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); background: var(--accent); }
+.article-cover img { display: block; width: auto; max-width: 100%; max-height: min(460px, 56vh); }
+@media (max-width: 640px) { .article-cover img { max-height: 62vh; } }
 
 .article-header { border-bottom: 1px solid var(--border); padding-bottom: var(--spacing-8); margin-bottom: var(--spacing-8); }
 .article-header-meta { display: flex; align-items: center; gap: var(--spacing-3); font-family: var(--font-mono); font-size: var(--text-xs); color: var(--muted-foreground); flex-wrap: wrap; }

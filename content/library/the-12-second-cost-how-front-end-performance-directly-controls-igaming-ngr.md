@@ -16,6 +16,7 @@ tags:
   - UX & Product
   - iGaming
   - Intelligence
+coverImage: /assets/library/the-12-second-cost-how-front-end-performance-directly-controls-igaming-ngr/cover.png
 isIndexable: true
 ---
 # The 1.2-Second Cost: How Front-End Performance Directly Controls iGaming NGR

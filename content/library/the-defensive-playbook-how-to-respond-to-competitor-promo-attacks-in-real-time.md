@@ -18,6 +18,7 @@ tags:
   - Competitive Intelligence
   - iGaming
   - Intelligence
+coverImage: /assets/library/the-defensive-playbook-how-to-respond-to-competitor-promo-attacks-in-real-time/cover.png
 isIndexable: true
 ---
 # The Defensive Playbook: How to Respond to Competitor Promo Attacks in Real-Time

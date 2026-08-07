@@ -18,6 +18,7 @@ tags:
   - Commercial Strategy
   - iGaming
   - Intelligence
+coverImage: /assets/library/the-ux-of-trust-how-digital-experience-shapes-player-sentiment-and-brand-loyalty/cover.png
 isIndexable: true
 ---
 # The UX of Trust: How Digital Experience Shapes Player Sentiment and Brand Loyalty
