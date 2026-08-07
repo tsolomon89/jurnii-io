@@ -1575,6 +1575,18 @@ html.js-gsap .pbt-row.is-in, .pbt-row.is-in { opacity: 1; transform: translateY(
    dead space across a set that is mostly 1:1 and 4:3. */
 .library-card-cover { margin: calc(-1 * var(--spacing-6)) calc(-1 * var(--spacing-6)) 0; aspect-ratio: 3 / 2; background: var(--accent); overflow: hidden; }
 .library-card-cover img { width: 100%; height: 100%; object-fit: contain; display: block; }
+/* Stand-in panel for the articles written for this site, which have no cover art.
+   A watermarked mark rather than a text label: the category and title already sit
+   directly beneath, so anything readable here would just repeat them. */
+.library-card-cover.is-placeholder {
+  background: linear-gradient(135deg, var(--accent), var(--muted));
+  background-image: url('/assets/jurnii-icon-light.svg'), linear-gradient(135deg, var(--accent), var(--muted));
+  background-repeat: no-repeat; background-position: center; background-size: 56px auto, cover;
+  border-bottom: 1px solid var(--border); opacity: 0.85;
+}
+[data-theme="dark"] .library-card-cover.is-placeholder, [data-theme="jurnii-v1"] .library-card-cover.is-placeholder {
+  background-image: url('/assets/jurnii-icon-dark.svg'), linear-gradient(135deg, var(--accent), var(--muted));
+}
 .library-card:hover { border-color: var(--jurnii-500); }
 [data-theme="dark"] .library-card:hover, [data-theme="jurnii-v1"] .library-card:hover { border-color: var(--jurnii-300); }
 .library-card-meta { display: flex; justify-content: space-between; align-items: center; }

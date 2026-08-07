@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   ContentItem,
   EntityPageModel,
@@ -51,6 +51,29 @@ const PageChromeWrapper: React.FC<{ active?: string; children: React.ReactNode }
 export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath }) => {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
+
+  /**
+   * The filter lives in the URL, so `?cat=Playbook` is shareable and the browser's
+   * back button steps through filters. The sidebar pill is a plain link everywhere
+   * else; here it is intercepted so the index filters without a reload.
+   */
+  const selectCategory = useCallback((category?: string) => {
+    setSelectedCategory(category);
+    if (typeof window === 'undefined') return;
+    const url = new URL(window.location.href);
+    if (category) url.searchParams.set('cat', category);
+    else url.searchParams.delete('cat');
+    window.history.pushState({ cat: category ?? null }, '', url);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const onPop = () => {
+      setSelectedCategory(new URLSearchParams(window.location.search).get('cat') ?? undefined);
+    };
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
   const [renderState, setRenderState] = useState<{
     type: 'entity' | 'directory' | 'article' | 'paper' | 'page' | 'library-index' | 'not-found';
     data?: any;
@@ -208,8 +231,6 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
           <SharedSubdomainLayout
             libraryItems={renderState.data.libraryItems}
             currentSlug={renderState.data.model.slug}
-            activeCategory={selectedCategory}
-            onSelectCategory={setSelectedCategory}
           >
             <ArticleTemplate data={renderState.data.model} />
           </SharedSubdomainLayout>
@@ -220,8 +241,6 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
           <SharedSubdomainLayout
             libraryItems={renderState.data.libraryItems}
             currentSlug={renderState.data.model.slug}
-            activeCategory={selectedCategory}
-            onSelectCategory={setSelectedCategory}
           >
             <PaperTemplate data={renderState.data.model} />
           </SharedSubdomainLayout>
@@ -240,7 +259,7 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
           <SharedSubdomainLayout
             libraryItems={renderState.data.items}
             activeCategory={selectedCategory}
-            onSelectCategory={setSelectedCategory}
+            onSelectCategory={selectCategory}
           >
             <div>
               <header className="library-header">
@@ -266,10 +285,17 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
                       href={href}
                       className="library-card"
                     >
-                      {item.meta.coverImage && (
+                      {/* Eleven library articles were written for this site and never
+                          had Webflow artwork to migrate. They cluster into whole
+                          categories, so without a placeholder a filtered view like
+                          ?cat=Playbook renders as an all-text grid that reads as
+                          broken rather than as deliberate. */}
+                      {item.meta.coverImage ? (
                         <div className="library-card-cover">
                           <img src={item.meta.coverImage} alt="" loading="lazy" />
                         </div>
+                      ) : (
+                        <div className="library-card-cover is-placeholder" aria-hidden="true" />
                       )}
                       <div className="library-card-meta">
                         <span className="pill solid">

@@ -10,6 +10,39 @@ interface SharedSubdomainLayoutProps {
   onSelectCategory?: (category?: string) => void;
 }
 
+/**
+ * A real link, always. The sidebar renders on article pages too, where there is no
+ * list to filter — as a button the pill silently did nothing. With an href it
+ * navigates back to the filtered index from anywhere, and stays middle-clickable
+ * and shareable. `onSelect` is the enhancement: where a list *is* on screen, the
+ * index filters in place and rewrites the URL instead of reloading.
+ */
+const CategoryPill: React.FC<{ href: string; label: string; active: boolean; onSelect?: () => void }> = ({
+  href,
+  label,
+  active,
+  onSelect,
+}) => (
+  <a
+    href={href}
+    aria-current={active ? 'true' : undefined}
+    onClick={(e) => {
+      if (!onSelect || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      e.preventDefault();
+      onSelect();
+    }}
+    className={`pill ${active ? 'solid' : ''}`}
+    style={{
+      cursor: 'pointer',
+      textDecoration: 'none',
+      background: active ? 'rgba(var(--jurnii-300-rgb), 0.1)' : 'transparent',
+      color: active ? 'var(--jurnii-300)' : 'var(--muted-foreground)',
+    }}
+  >
+    {label}
+  </a>
+);
+
 export const SharedSubdomainLayout: React.FC<SharedSubdomainLayoutProps> = ({
   children,
   libraryItems = [],
@@ -75,22 +108,15 @@ export const SharedSubdomainLayout: React.FC<SharedSubdomainLayoutProps> = ({
           <div style={{ marginBottom: '32px' }}>
             <div className="eyebrow" style={{ marginBottom: '12px' }}>Research Domains</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-              <button
-                onClick={() => onSelectCategory && onSelectCategory(undefined)}
-                className={`pill ${!activeCategory ? 'solid' : ''}`}
-                style={{ cursor: 'pointer', background: !activeCategory ? 'rgba(var(--jurnii-300-rgb), 0.1)' : 'transparent', color: !activeCategory ? 'var(--jurnii-300)' : 'var(--muted-foreground)' }}
-              >
-                All
-              </button>
+              <CategoryPill href={getHomeHref()} label="All" active={!activeCategory} onSelect={onSelectCategory && (() => onSelectCategory(undefined))} />
               {categories.map((cat) => (
-                <button
+                <CategoryPill
                   key={cat}
-                  onClick={() => onSelectCategory && onSelectCategory(cat)}
-                  className={`pill ${activeCategory === cat ? 'solid' : ''}`}
-                  style={{ cursor: 'pointer', background: activeCategory === cat ? 'rgba(var(--jurnii-300-rgb), 0.1)' : 'transparent', color: activeCategory === cat ? 'var(--jurnii-300)' : 'var(--muted-foreground)' }}
-                >
-                  {cat}
-                </button>
+                  href={`${getHomeHref()}?cat=${encodeURIComponent(cat)}`}
+                  label={cat}
+                  active={activeCategory === cat}
+                  onSelect={onSelectCategory && (() => onSelectCategory(cat))}
+                />
               ))}
             </div>
           </div>
