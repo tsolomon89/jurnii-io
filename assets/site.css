@@ -1557,6 +1557,19 @@ html.js-gsap .pbt-row.is-in, .pbt-row.is-in { opacity: 1; transform: translateY(
 @media (min-width: 640px) { .library-main { padding: var(--spacing-8); } }
 @media (min-width: 1024px) { .library-main { padding: var(--spacing-12); } }
 
+/* Research Domains filter. The selected pill takes the same dark chip as the
+   "Library" badge beside the wordmark — one high-contrast treatment that holds up
+   on the light sidebar and the dark one without needing a per-theme variant. */
+.library-domain-pill { cursor: pointer; text-decoration: none; background: transparent; color: var(--muted-foreground); transition: color 150ms ease, background 150ms ease, border-color 150ms ease; }
+.library-domain-pill:hover { color: var(--foreground); border-color: var(--jurnii-500); }
+.library-domain-pill.is-active { background: var(--concrete-950); color: var(--jurnii-200); border-color: var(--white-a-10); }
+
+/* Medium badge on each archive entry, in the same green as the cards' "Read
+   Monograph" link — including its lift to a brighter tone once the panel behind
+   it goes dark. */
+.library-nav-medium { flex-shrink: 0; padding: 2px 6px; border-radius: 4px; background: var(--white-a-6); font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; color: var(--jurnii-600); }
+[data-theme="dark"] .library-nav-medium, [data-theme="jurnii-v1"] .library-nav-medium { color: var(--jurnii-300); }
+
 .library-mobile-bar { display: flex; align-items: center; justify-content: space-between; padding: var(--spacing-4); border-bottom: 1px solid var(--border); background: var(--sidebar-background); color: var(--sidebar-foreground); }
 @media (min-width: 768px) { .library-mobile-bar { display: none; } }
 

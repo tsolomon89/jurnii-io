@@ -31,13 +31,7 @@ const CategoryPill: React.FC<{ href: string; label: string; active: boolean; onS
       e.preventDefault();
       onSelect();
     }}
-    className={`pill ${active ? 'solid' : ''}`}
-    style={{
-      cursor: 'pointer',
-      textDecoration: 'none',
-      background: active ? 'rgba(var(--jurnii-300-rgb), 0.1)' : 'transparent',
-      color: active ? 'var(--jurnii-300)' : 'var(--muted-foreground)',
-    }}
+    className={`pill library-domain-pill${active ? ' is-active' : ''}`}
   >
     {label}
   </a>
@@ -148,9 +142,7 @@ export const SharedSubdomainLayout: React.FC<SharedSubdomainLayoutProps> = ({
                         {item.meta.title}
                       </span>
                       {item.meta.medium && (
-                        <span style={{ fontSize: '9px', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', background: 'var(--white-a-6)', padding: '2px 6px', borderRadius: '4px', color: 'var(--jurnii-400)', flexShrink: 0 }}>
-                          {item.meta.medium}
-                        </span>
+                        <span className="library-nav-medium">{item.meta.medium}</span>
                       )}
                     </div>
                     {item.meta.date && (

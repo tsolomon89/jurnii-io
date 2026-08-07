@@ -231,6 +231,7 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
           <SharedSubdomainLayout
             libraryItems={renderState.data.libraryItems}
             currentSlug={renderState.data.model.slug}
+            activeCategory={renderState.data.model.category}
           >
             <ArticleTemplate data={renderState.data.model} />
           </SharedSubdomainLayout>
@@ -241,6 +242,7 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
           <SharedSubdomainLayout
             libraryItems={renderState.data.libraryItems}
             currentSlug={renderState.data.model.slug}
+            activeCategory={renderState.data.model.category}
           >
             <PaperTemplate data={renderState.data.model} />
           </SharedSubdomainLayout>
