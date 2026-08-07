@@ -16,6 +16,7 @@ tags:
   - Commercial Strategy
   - iGaming
   - Intelligence
+coverImage: /assets/library/from-audit-to-interface-a-framework-for-implementing-70-ux-recommendations/cover.png
 isIndexable: true
 ---
 # From Audit to Interface: A Framework for Implementing 70+ UX Recommendations

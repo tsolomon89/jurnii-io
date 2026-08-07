@@ -16,6 +16,7 @@ tags:
   - Commercial Strategy
   - iGaming
   - Intelligence
+coverImage: /assets/library/the-psychology-of-the-multi-homing-player-what-triggers-the-switch/cover.png
 isIndexable: true
 ---
 # The Psychology of the Multi-Homing Player: What Triggers the Switch?

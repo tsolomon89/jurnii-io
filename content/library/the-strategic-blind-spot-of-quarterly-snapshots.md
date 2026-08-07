@@ -16,6 +16,7 @@ tags:
   - Commercial Strategy
   - iGaming
   - Intelligence
+coverImage: /assets/library/the-strategic-blind-spot-of-quarterly-snapshots/cover.png
 isIndexable: true
 ---
 # The Strategic Blind Spot of Quarterly Snapshots

@@ -30,6 +30,12 @@ export const ArticleTemplate: React.FC<ArticleTemplateProps> = ({ data }) => {
         )}
       </header>
 
+      {data.coverImage && (
+        <figure className="article-cover">
+          <img src={data.coverImage} alt="" />
+        </figure>
+      )}
+
       {data.tableOfContents && data.tableOfContents.length > 0 && (
         <nav className="article-toc">
           <h2>

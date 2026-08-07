@@ -16,6 +16,7 @@ tags:
   - Commercial Strategy
   - iGaming
   - Intelligence
+coverImage: /assets/library/speed-is-commercial-leverage/cover.png
 isIndexable: true
 ---
 # Speed is Commercial Leverage

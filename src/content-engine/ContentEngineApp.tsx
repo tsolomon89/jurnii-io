@@ -266,6 +266,11 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
                       href={href}
                       className="library-card"
                     >
+                      {item.meta.coverImage && (
+                        <div className="library-card-cover">
+                          <img src={item.meta.coverImage} alt="" loading="lazy" />
+                        </div>
+                      )}
                       <div className="library-card-meta">
                         <span className="pill solid">
                           {item.meta.category || 'Paper'}

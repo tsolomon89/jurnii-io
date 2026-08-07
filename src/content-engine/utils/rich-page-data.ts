@@ -1,13 +1,37 @@
 import { ContentItem, EntityPageModel, EntityType, TocItem } from '../types';
 import { getByPath, getContentByRef } from './markdown';
 
+const NAMED_ENTITIES: Record<string, string> = {
+  amp: '&',
+  lt: '<',
+  gt: '>',
+  quot: '"',
+  apos: "'",
+  nbsp: ' ',
+};
+
+/**
+ * Table-of-contents entries are rendered as React text, so anything the markdown
+ * pipeline escaped has to be decoded first — otherwise a heading like
+ * "Discovery & Research" reaches the sidebar as "Discovery &amp; Research".
+ */
+function decodeEntities(text: string): string {
+  return text.replace(/&(#x?[0-9a-f]+|[a-z]+);/gi, (match, ref: string) => {
+    if (ref[0] === '#') {
+      const code = ref[1] === 'x' || ref[1] === 'X' ? parseInt(ref.slice(2), 16) : parseInt(ref.slice(1), 10);
+      return Number.isFinite(code) ? String.fromCodePoint(code) : match;
+    }
+    return NAMED_ENTITIES[ref.toLowerCase()] ?? match;
+  });
+}
+
 export function processHeadings(html: string = ''): { html: string; toc: TocItem[] } {
   const toc: TocItem[] = [];
   const headingRegex = /<h([1-3])([^>]*)>([\s\S]*?)<\/h\d>/gi;
 
   const processedHtml = html.replace(headingRegex, (match, levelStr, attrs, text) => {
     const level = parseInt(levelStr, 10);
-    const plainText = text.replace(/<[^>]+>/g, '').trim();
+    const plainText = decodeEntities(text.replace(/<[^>]+>/g, '')).trim();
     const id = plainText
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')

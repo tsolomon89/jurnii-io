@@ -16,6 +16,7 @@ tags:
   - Commercial Strategy
   - iGaming
   - Intelligence
+coverImage: /assets/library/why-reactive-analytics-cost-you-ftds/cover.png
 isIndexable: true
 ---
 # Why Reactive Analytics Cost You FTDs

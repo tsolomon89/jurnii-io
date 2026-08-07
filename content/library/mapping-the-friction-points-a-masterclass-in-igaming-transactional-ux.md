@@ -16,6 +16,7 @@ tags:
   - Commercial Strategy
   - iGaming
   - Intelligence
+coverImage: /assets/library/mapping-the-friction-points-a-masterclass-in-igaming-transactional-ux/cover.png
 isIndexable: true
 ---
 # Mapping the Friction Points: A Masterclass in iGaming Transactional UX

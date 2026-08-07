@@ -18,6 +18,7 @@ tags:
   - UX & Product
   - iGaming
   - Intelligence
+coverImage: /assets/library/designing-for-the-flow-state-applying-usability-heuristics-to-igaming-lobbies-and-betslips/cover.png
 isIndexable: true
 ---
 # Designing for the Flow State: Applying Usability Heuristics to iGaming Lobbies and Betslips

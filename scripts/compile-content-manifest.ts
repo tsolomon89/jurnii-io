@@ -9,7 +9,11 @@ marked.use(
   { gfm: true, breaks: true },
   markedKatex({
     throwOnError: false,
-    nonStandard: true,
+    // Standard delimiter rules only. `nonStandard` also treats a `$` with whitespace
+    // beside it as a delimiter, which turned every pair of currency figures in the
+    // market reports into math: "$350m to its Brazil position ... above $90m" rendered
+    // as "350mtoitsBrazilposition…". The papers' real `$…$` and `$$…$$` are unaffected.
+    nonStandard: false,
   })
 );
 

@@ -16,6 +16,7 @@ tags:
   - Commercial Strategy
   - iGaming
   - Intelligence
+coverImage: /assets/library/experience-is-the-last-defensible-advantage/cover.png
 isIndexable: true
 ---
 # Experience is the Last Defensible Advantage

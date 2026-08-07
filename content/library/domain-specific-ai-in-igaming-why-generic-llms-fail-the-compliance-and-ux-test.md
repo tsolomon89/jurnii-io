@@ -18,6 +18,7 @@ tags:
   - Commercial Strategy
   - iGaming
   - Intelligence
+coverImage: /assets/library/domain-specific-ai-in-igaming-why-generic-llms-fail-the-compliance-and-ux-test/cover.png
 isIndexable: true
 ---
 # Domain-Specific AI in iGaming: Why Generic LLMs Fail the Compliance and UX Test
