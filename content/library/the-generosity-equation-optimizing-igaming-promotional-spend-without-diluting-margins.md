@@ -19,6 +19,7 @@ tags:
   - iGaming
   - Intelligence
 coverImage: /assets/library/the-generosity-equation-optimizing-igaming-promotional-spend-without-diluting-margins/cover.png
+authorImage: /assets/library/authors/mitch-vidler.png
 isIndexable: true
 ---
 # The Generosity Equation: Optimizing iGaming Promotional Spend Without Diluting Margins

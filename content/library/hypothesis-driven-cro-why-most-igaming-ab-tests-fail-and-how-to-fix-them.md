@@ -11,17 +11,18 @@ excerpt: >-
 date: '2026-05-10'
 medium: Article
 category: Commercial Strategy
-author: Tristan Dunk
+author: Tristan Dexter
 tags:
   - Commercial Strategy
   - iGaming
   - Intelligence
 coverImage: /assets/library/hypothesis-driven-cro-why-most-igaming-ab-tests-fail-and-how-to-fix-them/cover.png
+authorImage: /assets/library/authors/tristan-dexter.png
 isIndexable: true
 ---
 # Hypothesis-Driven CRO: Why Most iGaming A/B Tests Fail and How to Fix Them
 
-By Tristan Dunk, CPO
+By Tristan Dexter, CPO
 
 A/B testing is the standard tool for conversion rate optimization (CRO) in the online gaming industry. Product and marketing teams routinely launch experiments on registration forms, deposit screens, and casino lobbies, hoping to find a layout that increases first-time deposits (FTDs) and player lifetime value. However, the reality of iGaming experimentation is a story of wasted effort. 
 Up to 70% of product experiments fail to show a statistically significant result, or they reveal a negative impact on conversion. 

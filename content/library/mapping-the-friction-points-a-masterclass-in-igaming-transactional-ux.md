@@ -11,17 +11,18 @@ excerpt: >-
 date: '2026-05-10'
 medium: Article
 category: Commercial Strategy
-author: Tristan Dunk
+author: Tristan Dexter
 tags:
   - Commercial Strategy
   - iGaming
   - Intelligence
 coverImage: /assets/library/mapping-the-friction-points-a-masterclass-in-igaming-transactional-ux/cover.png
+authorImage: /assets/library/authors/tristan-dexter.png
 isIndexable: true
 ---
 # Mapping the Friction Points: A Masterclass in iGaming Transactional UX
 
-By Tristan Dunk, CPO
+By Tristan Dexter, CPO
 
 iGaming operators spend millions of pounds on player acquisition. They optimize their marketing channels. They bid on expensive keywords. They sign high-profile brand ambassadors. Yet, much of this investment is wasted because of a critical failure at the point of conversion. Minor, unnoticed friction points across key transactional journeys silently kill conversion rates every day. 
 When an operator loses a player during registration, deposit, or withdrawal, it is rarely due to a single catastrophic technical error. Instead, it is the result of cumulative friction. It is the weight of two extra form fields, a poorly sequenced verification step, or a moment of hesitation introduced by a confusing interface decision. 

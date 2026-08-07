@@ -17,6 +17,7 @@ tags:
   - iGaming
   - Intelligence
 coverImage: /assets/library/why-reactive-analytics-cost-you-ftds/cover.png
+authorImage: /assets/library/authors/fraser-dunk.jpg
 isIndexable: true
 ---
 # Why Reactive Analytics Cost You FTDs

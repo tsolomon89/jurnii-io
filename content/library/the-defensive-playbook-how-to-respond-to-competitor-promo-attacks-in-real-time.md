@@ -19,6 +19,7 @@ tags:
   - iGaming
   - Intelligence
 coverImage: /assets/library/the-defensive-playbook-how-to-respond-to-competitor-promo-attacks-in-real-time/cover.png
+authorImage: /assets/library/authors/mitch-vidler.png
 isIndexable: true
 ---
 # The Defensive Playbook: How to Respond to Competitor Promo Attacks in Real-Time

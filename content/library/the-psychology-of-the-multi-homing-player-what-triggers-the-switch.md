@@ -17,6 +17,7 @@ tags:
   - iGaming
   - Intelligence
 coverImage: /assets/library/the-psychology-of-the-multi-homing-player-what-triggers-the-switch/cover.png
+authorImage: /assets/library/authors/fraser-dunk.jpg
 isIndexable: true
 ---
 # The Psychology of the Multi-Homing Player: What Triggers the Switch?

@@ -13,6 +13,7 @@ tags:
   - iGaming
   - Intelligence
 productRefs: [jurnii-360, jurnii-ux, cortex]
+authorImage: /assets/library/authors/mitch-vidler.png
 isIndexable: true
 ---
 

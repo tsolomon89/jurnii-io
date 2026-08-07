@@ -17,6 +17,7 @@ tags:
   - iGaming
   - Intelligence
 coverImage: /assets/library/vip-retention-in-the-friction-age-why-high-value-players-churn-silently/cover.png
+authorImage: /assets/library/authors/fraser-dunk.jpg
 isIndexable: true
 ---
 # VIP Retention in the Friction Age: Why High-Value Players Churn Silently

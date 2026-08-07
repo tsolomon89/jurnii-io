@@ -11,17 +11,18 @@ excerpt: >-
 date: '2026-05-10'
 medium: Article
 category: Commercial Strategy
-author: Tristan Dunk
+author: Tristan Dexter
 tags:
   - Commercial Strategy
   - iGaming
   - Intelligence
 coverImage: /assets/library/from-audit-to-interface-a-framework-for-implementing-70-ux-recommendations/cover.png
+authorImage: /assets/library/authors/tristan-dexter.png
 isIndexable: true
 ---
 # From Audit to Interface: A Framework for Implementing 70+ UX Recommendations
 
-By Tristan Dunk, CPO
+By Tristan Dexter, CPO
 
 Finding user experience flaws in an online gaming product is relatively straightforward. If you run a standard usability audit, use heatmaps, or conduct user testing session reviews, you will quickly identify dozens of friction points. The real challenge is execution. 
 In the complex iGaming environment, translating diagnostic findings into live, compliant, and high-converting product improvements is an operational bottleneck. 

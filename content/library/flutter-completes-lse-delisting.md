@@ -13,6 +13,7 @@ tags:
   - Commercial Strategy
   - Capital Markets
   - Market Intelligence
+authorImage: /assets/library/authors/fraser-dunk.jpg
 isIndexable: true
 ---
 # Flutter Completes LSE Delisting: What the Shift to New York Signals for iGaming Capital and Commercial Strategy

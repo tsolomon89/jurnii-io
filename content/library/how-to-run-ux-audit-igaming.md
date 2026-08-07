@@ -13,6 +13,7 @@ tags:
   - iGaming
   - Intelligence
 productRefs: [jurnii-ux]
+authorImage: /assets/library/authors/fraser-dunk.jpg
 isIndexable: true
 ---
 

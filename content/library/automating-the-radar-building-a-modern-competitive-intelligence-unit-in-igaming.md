@@ -19,6 +19,7 @@ tags:
   - iGaming
   - Intelligence
 coverImage: /assets/library/automating-the-radar-building-a-modern-competitive-intelligence-unit-in-igaming/cover.png
+authorImage: /assets/library/authors/mitch-vidler.png
 isIndexable: true
 ---
 # Automating the Radar: Building a Modern Competitive Intelligence Unit in iGaming

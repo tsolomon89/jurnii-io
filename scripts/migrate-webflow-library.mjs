@@ -62,6 +62,15 @@ const EXISTING = {
   '/post/experience-is-the-last-defensible-advantage': 'experience-is-the-last-defensible-advantage.md',
 };
 
+/**
+ * The CMS bylines a couple of people differently from the rest of the library.
+ * Canonicalising here keeps one spelling per person across the archive, which is
+ * also what keys their portrait file.
+ */
+const AUTHOR_CANONICAL = {
+  'Mitch V.': 'Mitch Vidler',
+};
+
 /** Webflow's own tag vocabulary, mapped onto the library's category taxonomy. */
 const CATEGORY_MAP = {
   '': 'Commercial Strategy',
@@ -343,7 +352,8 @@ async function extract(entry) {
   const slug = EXISTING[entry.href] ? EXISTING[entry.href].replace(/\.md$/, '') : slugify(title);
 
   const lede = clean(header.find('.global_subheading').first().text());
-  const authorName = clean(header.find('.div-block-248 h6').first().text());
+  const liveAuthor = clean(header.find('.div-block-248 h6').first().text());
+  const authorName = AUTHOR_CANONICAL[liveAuthor] || liveAuthor;
   const authorRole = clean(header.find('.div-block-248 .text-block-57').first().text());
 
   // The author portraits are the last images still living only on Webflow's CDN.
@@ -357,8 +367,11 @@ async function extract(entry) {
   const coverUrl = $('meta[property="og:image"]').attr('content') || entry.thumb || entry.fallbackThumb;
   const coverImage = coverUrl ? await downloadImage(coverUrl, slug, 'cover') : null;
 
-  // Existing files keep their rewritten prose; only the cover is backfilled.
-  if (EXISTING[entry.href]) return { entry, slug, title, coverImage, existingFile: EXISTING[entry.href] };
+  // Existing files keep their rewritten prose; only the cover is backfilled. The
+  // portrait still gets recorded so the library-wide pass can place it by author.
+  if (EXISTING[entry.href]) {
+    return { entry, slug, title, coverImage, authorName, authorImage, existingFile: EXISTING[entry.href] };
+  }
 
   const bodyHost = entry.kind === 'case-study' ? $('.div-block-279').first() : header;
   const bodyBlocks = bodyHost.children().filter((_i, el) => isLiveRichText($, el));
@@ -412,6 +425,8 @@ async function extract(entry) {
     slug,
     title,
     coverImage,
+    authorName,
+    authorImage,
     frontmatter: {
       title,
       description: summary,
@@ -435,11 +450,11 @@ async function extract(entry) {
 // ---------------------------------------------------------------------------
 
 /**
- * Add `coverImage` to a file that already exists without reformatting the rest of
- * its front matter — gray-matter's serialiser would rewrite every quoted string
- * and folded block in the file, which would bury the one-line change in noise.
+ * Set one front-matter key on a file that already exists, without reformatting the
+ * rest of it — gray-matter's serialiser would rewrite every quoted string and folded
+ * block in the file, which would bury a one-line change in noise.
  */
-function backfillCover(file, coverImage) {
+function setFrontmatterKey(file, key, value) {
   const abs = path.join(libraryDir, file);
   const raw = fs.readFileSync(abs, 'utf-8');
   const lines = raw.split(/\r?\n/);
@@ -447,8 +462,8 @@ function backfillCover(file, coverImage) {
   const end = lines.indexOf('---', 1);
   if (end < 0) throw new Error(`${file}: unterminated front matter`);
 
-  const existing = lines.findIndex((l, i) => i > 0 && i < end && /^coverImage:/.test(l));
-  const entry = `coverImage: ${coverImage}`;
+  const existing = lines.findIndex((l, i) => i > 0 && i < end && new RegExp(`^${key}:`).test(l));
+  const entry = `${key}: ${value}`;
   if (existing >= 0) {
     if (lines[existing] === entry) return false;
     lines[existing] = entry;
@@ -458,6 +473,21 @@ function backfillCover(file, coverImage) {
   }
   fs.writeFileSync(abs, lines.join('\n'), 'utf-8');
   return true;
+}
+
+/**
+ * Attach each downloaded portrait to every article that author wrote, across the
+ * whole library rather than only the migrated posts — the same people wrote the
+ * pieces authored directly in this repo, and they should carry the same byline art.
+ */
+function attachAuthorPortraits(portraits) {
+  let touched = 0;
+  for (const file of fs.readdirSync(libraryDir).filter((f) => f.endsWith('.md'))) {
+    const { data } = matter(fs.readFileSync(path.join(libraryDir, file), 'utf-8'));
+    const portrait = portraits.get(data.author);
+    if (portrait && setFrontmatterKey(file, 'authorImage', portrait)) touched++;
+  }
+  return touched;
 }
 
 function writeArticle(result) {
@@ -512,11 +542,13 @@ async function main() {
 
   let created = 0;
   let backfilled = 0;
+  const portraits = new Map();
 
   for (const entry of entries) {
     const result = await extract(entry);
+    if (result.authorName && result.authorImage) portraits.set(result.authorName, result.authorImage);
     if (result.existingFile) {
-      const changed = result.coverImage && backfillCover(result.existingFile, result.coverImage);
+      const changed = result.coverImage && setFrontmatterKey(result.existingFile, 'coverImage', result.coverImage);
       if (changed) backfilled++;
       console.log(`${changed ? '+cover' : '  skip'}  ${result.existingFile}`);
     } else {
@@ -526,7 +558,10 @@ async function main() {
     }
   }
 
+  const portraitsAttached = attachAuthorPortraits(portraits);
+
   console.log(`\nCreated ${created} articles, backfilled ${backfilled} cover images.`);
+  console.log(`Portraits: ${portraits.size} author(s), attached to ${portraitsAttached} further article(s).`);
 }
 
 main().catch((err) => {

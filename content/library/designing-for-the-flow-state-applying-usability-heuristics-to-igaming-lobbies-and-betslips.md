@@ -13,17 +13,18 @@ excerpt: >-
 date: '2026-05-10'
 medium: Article
 category: UX & Product
-author: Tristan Dunk
+author: Tristan Dexter
 tags:
   - UX & Product
   - iGaming
   - Intelligence
 coverImage: /assets/library/designing-for-the-flow-state-applying-usability-heuristics-to-igaming-lobbies-and-betslips/cover.png
+authorImage: /assets/library/authors/tristan-dexter.png
 isIndexable: true
 ---
 # Designing for the Flow State: Applying Usability Heuristics to iGaming Lobbies and Betslips
 
-By Tristan Dunk, CPO
+By Tristan Dexter, CPO
 
 Internal design debates frequently delay product roadmaps in iGaming organizations. Product managers, designers, and commercial executives spend hours arguing about aesthetic choices. They debate the color of a deposit button, the layout of a sports betting slip, or the density of a casino lobby. These discussions are typically led by subjective style opinions or the highest-paid person's preference. This is a costly operational distraction. Subjective debates do not improve conversion rates, protect player retention, or increase net gaming revenue (NGR). 
 To accelerate your product development cycle and optimize player value, you must replace opinion with structured benchmarking. Usability is not a matter of taste. It is an objective measure of how easily players navigate, understand, and interact with your product. 

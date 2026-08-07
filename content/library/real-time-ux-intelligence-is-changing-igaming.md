@@ -9,8 +9,8 @@ excerpt: >-
 date: '2026-03-03'
 medium: Article
 category: Conversation
-author: Mitch V.
-authorImage: /assets/library/authors/mitch-v.png
+author: Mitch Vidler
+authorImage: /assets/library/authors/mitch-vidler.png
 tags:
   - Conversation
   - iGaming
@@ -21,7 +21,7 @@ sourceUrl: 'https://www.jurnii.io/post/real-time-ux-intelligence-is-changing-iga
 ---
 # Real-Time UX Intelligence Is Changing iGaming
 
-By Mitch V., Chief Operating Officer
+By Mitch Vidler, Chief Operating Officer
 
 In a recent conversation with SiGMA World, our Chief Commercial Officer, Mitch Vidler, discusses the industry trends reshaping operator strategies. Competition is intensifying as stricter advertising rules continue to roll out, meaning operators are becoming less reliant on acquisition-led growth and placing greater emphasis on retention, customer experience and share of wallet. Mitch explores this shift, alongside the evolving role of pricing and promotions, and how real-time intelligence is increasingly shaping commercial decision-making.
 

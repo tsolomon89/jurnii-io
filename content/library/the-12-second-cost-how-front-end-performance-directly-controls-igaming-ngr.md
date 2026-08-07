@@ -11,17 +11,18 @@ excerpt: >-
 date: '2026-05-10'
 medium: Article
 category: UX & Product
-author: Tristan Dunk
+author: Tristan Dexter
 tags:
   - UX & Product
   - iGaming
   - Intelligence
 coverImage: /assets/library/the-12-second-cost-how-front-end-performance-directly-controls-igaming-ngr/cover.png
+authorImage: /assets/library/authors/tristan-dexter.png
 isIndexable: true
 ---
 # The 1.2-Second Cost: How Front-End Performance Directly Controls iGaming NGR
 
-By Tristan Dunk, CPO
+By Tristan Dexter, CPO
 
 A slow front-end experience is a direct threat to an operator's bottom line. In the online gaming market, where product offerings are highly commoditised, technical speed is a major commercial differentiator. When players hold 3 to 5 active accounts, they have no patience for lagging interfaces. If your deposit screen takes too long to load, or your sports betting slip delays confirmation, players do not wait. They close your application and open a competitor's app. 
 At Jurnii, our experience intelligence shows that any delay over 1.2 seconds on a transaction screen correlates with transaction abandonment. This is the 1.2-second cost. 

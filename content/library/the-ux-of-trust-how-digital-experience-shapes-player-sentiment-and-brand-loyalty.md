@@ -13,17 +13,18 @@ excerpt: >-
 date: '2026-05-10'
 medium: Article
 category: Commercial Strategy
-author: Tristan Dunk
+author: Tristan Dexter
 tags:
   - Commercial Strategy
   - iGaming
   - Intelligence
 coverImage: /assets/library/the-ux-of-trust-how-digital-experience-shapes-player-sentiment-and-brand-loyalty/cover.png
+authorImage: /assets/library/authors/tristan-dexter.png
 isIndexable: true
 ---
 # The UX of Trust: How Digital Experience Shapes Player Sentiment and Brand Loyalty
 
-By Tristan Dunk, CPO
+By Tristan Dexter, CPO
 
 Brand trust is not built by multi-million-pound television campaigns, sports sponsorships, or celebrity endorsements. These marketing efforts can drive brand awareness and encourage players to visit your landing pages. However, they do not create trust. 
 Trust is built or broken during digital interactions. It is formed when a player registers an account, makes a deposit, places a bet, or requests a withdrawal. In the iGaming market, where player loyalty is fragile and the cost of switching is zero, digital trust is a critical commercial asset. 
