@@ -144,8 +144,20 @@ Lead (intake only)
 ### Partnership deals
 
 Products in the **Partnership** pipeline create *Partnership* Deals, not B2B ones. The
-automated B2B sequence and cadence emails **do not run** on them — they're held, and no
-Sequence Activation task is raised. Track and progress partnership opportunities manually.
+automated B2B sequence and cadence emails **do not run** on them — they're held.
+
+A qualifying Partnership contact (a Decision Maker with exactly one Partnership driver Deal and
+no B2B Deal) **does** get a Sequence Activation task. You can set a route and commit it, and both
+are stored on the contact. But **nothing is ever dispatched**: no cadence Call, no cadence task,
+no scheduled or automated cadence email — not at the stage where you committed it, and not at any
+later stage. This is a standing rule checked on every stage entry, not a one-off check at commit,
+and no B2B cadence is ever silently applied to a Partnership contact.
+
+The task exists so the engagement preference is *recorded* where everyone can see it. Track and
+progress partnership opportunities manually.
+
+If a contact has **both** a B2B and a Partnership Deal, nothing changes: B2B wins, and the
+sequence runs on the B2B Deal exactly as before.
 
 ---
 
@@ -191,13 +203,43 @@ Optionally, add a **Note** on the task with a single word to pick the opener ton
 Once committed, `Sequence_Activated_At` is stamped and outreach begins. **That timestamp is
 the master proof of activation** — until it's set, no email can go out, ever.
 
+### Changing your mind after activation
+
+The activation task stays **permanently editable**. There is one task per contact and it is
+never replaced, so it is always the place to change how that contact is engaged.
+
+**Changing the route (`Task_Sequence_Type`) is *prospective*.** It records your choice for the
+**next** stage the contact enters. The stage that is running now finishes exactly as it was —
+nothing is restarted, rebuilt, converted, replaced or interrupted.
+
+> **This includes `Manual`.** Selecting `Manual` mid-cadence **stops nothing**. The next Call,
+> its cadence email and the post-call email all still go out. `Manual` takes effect when the
+> contact reaches its next stage, and from there no cadence Call, cadence task or cadence email
+> is created. If you want outreach to stop **now**, use `Task_State` instead.
+
+**Changing `Task_State` is *immediate*.**
+
+| You set | What happens right away |
+| --- | --- |
+| `Lost` | Outreach stops. Open cadence Calls are cancelled, scheduled cadence emails are cancelled, the sequence goes to `Stopped`. Means: *deliberately switched off*. |
+| `Open` (on a task you'd already set to `Won`) | Exactly the same stop, but the task stays visibly open. Means: *unaddressed, still deciding*. |
+| `Won` (from `Lost` or `Open`) | Re-enables the contact. Adopts a changed route in the same save. **Nothing is replayed** — no emails resend and the interrupted stage does not resume; your stored route is used at the next stage. |
+
+Neither `Lost` nor `Open` changes the contact's own **State**, **Status** or **Stage**, and
+neither touches the Deal. They only switch the cadence off. Your route choice and the
+activation timestamp are both preserved, so re-enabling picks up cleanly.
+
+Re-saving the task without changing anything is always a no-op. It never re-sends, re-routes
+or re-starts anything.
+
 ### Why it sometimes *doesn't* appear automatically
 
 - The contact isn't a **Decision Maker** → no auto-activation task (by design).
-- The contact has **more than one** B2B Deal → you get a *review* task instead, so you can
+- The contact has **more than one** driver Deal → you get a *review* task instead, so you can
   pick which product's sequence to run (the system never auto-picks).
-- The Deal is **Partnership** or its product is unresolved → no sequence (Partnership deals
-  don't run the B2B cadence).
+- The contact has **no resolved product** at all, or only an unresolved product key → no task.
+- A **Partnership** contact **does** now get an activation task, and its route and commit are
+  stored — but it dispatches nothing (see §3).
 
 ---
 
@@ -228,10 +270,17 @@ Demos live on **Meetings/Events**. Set **`Meeting_Task_State`** and use
 - **Book a demo** → creating the meeting advances the Contact to **Demo Confirmation** and
   the system sends a confirmation email + schedules a reminder (1 business day before).
 - **Demo attended** (`Won`) → advances toward Proposal Preparation (post-demo follow-up).
+  The meeting is only marked **Closed** once the contact has actually reached Proposal
+  Preparation **or later**. If the routing genuinely fails, the meeting **reopens** to
+  `Working` with a `[meeting_route_not_applied]` review instead of being silently closed — so
+  fixing the problem and re-saving actually retries. A contact **already** at Onboarding closes
+  successfully and is **not** dragged back to Proposal Preparation.
 - **Demo booked but didn't happen** — mark the meeting `Lost` with reason **`No Meeting /
-  Demo`**. The Contact **stays at Demo Hosted** and runs the 5-step **Demo Hosted recovery**
-  cadence to re-hold it (the copy never claims the demo happened). It does *not* revert a
-  stage. *(This is the correct way to handle a no-show — use `No Meeting / Demo`.)*
+  Demo`**. The Contact **stays where it is** and you re-engage by hand. Nothing is replayed:
+  the old 5-step "Demo Hosted recovery" cadence no longer runs, because a stage's cadence
+  cannot restart once it has finished. **Book another meeting whenever you're ready** — it
+  routes normally. It does *not* revert a stage.
+  *(This is still the correct way to record a no-show — use `No Meeting / Demo`.)*
 - **Demo Lost for any other reason** (e.g. `No Authority`, `Invalid / Bad Data`,
   `Duplicate / Test Record`) → routes per the loss table in §8 (find a decision maker, data
   repair, suppress, or a review). It doesn't revert the stage or close the Deal by itself.
@@ -384,21 +433,32 @@ look for the Onboarding/Renewal stage and a Closed Won quote.
 
 ### Loss is always local
 
-Marking one **call, meeting, or task** as Lost does **not** close the Deal. Loss routes by
-reason:
+**Marking one call, meeting or task as Lost describes that record and nothing else.** It never
+marks the **contact** Lost and it never closes the **Deal** — whatever the reason, and on all
+three record types. Loss routes by reason:
 
 | Lost reason | What happens |
 | --- | --- |
-| `No Response` | Continues the cadence (or, if exhausted, marks the contact lost). |
+| `No Response` | Continues the cadence. If the sequence is genuinely exhausted you get an `[activity_lost_suggests_contact_loss]` review — the contact is **not** closed for you. |
 | `No Authority` | Creates a "find the decision maker" task. |
 | `No Fit` / `No Commercial Interest` / `No Budget` | Raises a Manual Review. |
-| `Terms Rejected` / `Churned / Did Not Renew` | Closes the Deal **only** at the final commercial step; otherwise a review. |
+| `Terms Rejected` / `Churned / Did Not Renew` | Raises a Manual Review for an explicit Deal-level decision. |
 | `Invalid / Bad Data` | Creates a Data Repair task. |
 | `Duplicate / Test Record` | Suppresses the record. |
-| `No Meeting / Demo` | Continues the demo cadence, or a review. |
+| `No Meeting / Demo` | The contact stays where it is and you re-engage by hand. Book another meeting whenever you like — it processes normally. The old 5-step "recovery cadence" no longer replays. |
 
-A **Deal** closes only when **all** its contacts are Lost (or an explicit Deal-level loss),
-or when a **Renewal quote is Closed Lost** (churn).
+**Each level of loss is its own decision, and each one is yours:**
+
+1. An **activity** (call / meeting / task) is Lost → that activity only.
+2. A **contact** is Lost → only via an explicit contact-level decision. This sets the contact's
+   `State` and `Status` and **does not touch the Deal**.
+3. A **Deal** is Lost → only via an explicit Deal-level decision.
+
+If you mark a Deal's Primary Contact Lost and no other open contact remains, you get a
+`[deal_has_no_viable_contact]` review. The Deal stays **Open** until you decide otherwise.
+
+The only remaining automated Deal closure is quote-driven (a **Renewal quote Closed Lost** =
+churn), which is unchanged.
 
 ### Renewals happen automatically
 
@@ -421,7 +481,7 @@ Common codes and what they mean:
 | --- | --- | --- |
 | `[product_unresolved]` / `[product_key_unresolved]` | A product name didn't match the catalogue. | Fix the product value to an exact catalogue name (see §7 / Appendix A). |
 | `[quote_product_mismatch]` | More than one product resolved on one Deal, or the quote's product doesn't match. | Correct the product on the activity/quote so it's unambiguous. |
-| `[multi_product_sequence_ambiguous]` | The contact has >1 B2B Deal; the system won't pick which to sequence. | Choose the right Deal and activate its sequence. |
+| `[multi_product_sequence_ambiguous]` | The contact has >1 driver Deal in the same pipeline; the system won't pick which to sequence. | Choose the right Deal and activate its sequence. |
 | `[pricing_unavailable]` | Couldn't price a line from the catalogue (Cortex, or a missing brand count / frequency). | Add the missing detail, or price the quote by hand. |
 | `[pricing_from_imported_acv]` / `[imported_acv_variance]` | An imported contract value was used, or differs from the catalogue benchmark. | Informational — confirm the imported value is right. |
 | a **"could not be auto-priced"** review | A line couldn't be priced (Cortex, or a missing brand count / frequency) and was left unpriced. *(Free-text subject, not a bracketed code.)* | Add the missing detail, or price the quote by hand. |
@@ -431,6 +491,16 @@ Common codes and what they mean:
 | `[quote_write_failed]` / `[quote_post_write_verification_failed]` | A quote couldn't be saved or verified after writing. | Usually transient — re-trigger the activity; if it persists, escalate to an admin. |
 | `[activity_relationship_mismatch]` | A call/meeting/task isn't linked to the right Contact + Deal. **The activity made no changes** until it's re-linked. | Re-link the activity to the correct Contact and Deal, then re-save. |
 | `[draft_commercials_*]` / `[send_commercials_*]` | The quote package wasn't ready when a commercial task ran. | Read the note, fix the quote/products, then complete the task again. |
+| `[meeting_route_not_applied]` | A meeting was set `Won` but the contact never reached Proposal Preparation. **The meeting was left open**, so it can be retried. | Check the meeting's Contact and Deal links, then set `Meeting_Task_State = Won` again. |
+| `[meeting_contact_unresolved]` | A meeting was set `Won`/`Lost` but its **Contact** (`Who_Id`) is blank. Nothing was routed and the meeting was **not** closed. | Set the meeting's Contact, then set the result again. |
+| `[activity_lost_suggests_contact_loss]` | A call, meeting or task was Lost with the sequence exhausted. **The contact was NOT closed** — that is your decision. | Decide explicitly: close the contact, or re-engage. Then clear the review. |
+| `[deal_has_no_viable_contact]` | A Deal's Primary Contact was marked Lost and no other open contact remains. **The Deal was NOT closed.** | Reassign the Deal to another contact, or close the Deal explicitly. |
+| `[pipeline_unresolved_no_dispatch]` | A Deal's pipeline couldn't be resolved from its product, so no cadence was dispatched. Never silently treated as B2B. | Fix the Deal's Product Interest to an exact catalogue name, then re-enter the stage. |
+| `[activation_control_ambiguous]` | The contact has **several** active Sequence Activation tasks that aren't identical, so automation won't pick one. **Nothing was changed** — not the duplicates, not the task you edited. | Set the ones you don't want to native `Status = Deferred`, leaving exactly one, then re-save it. |
+| `[activation_no_active_control]` | Every Sequence Activation task for the contact is retired (`Deferred`) and none is active. No replacement is created automatically. | Reinstate the intended task, or confirm the contact should have no activation control. |
+| `[activation_legacy_command_unresolved]` | An older activation task has no command marker and its contact has no stored route, so the previous command can't be reconstructed. Nothing was routed. | Set the contact's `Sequence_Type` to the route actually running, then re-save the task. |
+| `[activation_marker_unreadable]` | The activation task's automation-owned `ActivationCommand\|` line is malformed or duplicated. | Restore it to a single well-formed line, or delete it entirely so it's rebuilt, then re-save. |
+| `[activation_command_state_conflict]` | An activation task's commit signals disagree and the evidence is too weak to tell a fresh task from a committed one. Nothing was routed. | Confirm the intended route on the contact, then re-save the task. |
 
 *(Codes are open-ended: any other `[bracketed_code]` you see names its own problem. The
 subject text always spells out what to fix. There is **no** `[company_tier_conflict]` — a
@@ -475,6 +545,14 @@ fields · all `*_Completed_At` timestamps · `Deal_Key` / `Deal_Product_Key` ·
 `Product_Interest_Staging` (a read-only formula).
 
 Editing these either gets overwritten on the next run or breaks the loop-prevention rules.
+
+> **Also automation-owned: the `ActivationCommand|` line in a Sequence Activation task's
+> Description.** It records the last command the automation processed (`state=…|type=…`) and is
+> what makes the task safely re-editable. **Do not edit or delete it.** Everything else in that
+> Description — the instructions and anything you add yourself — is yours and is preserved
+> untouched. If the line is deleted the automation reconstructs it where the evidence is
+> unambiguous and otherwise stops with a review; it never guesses, and it never re-runs a
+> sequence you already committed.
 
 ---
 

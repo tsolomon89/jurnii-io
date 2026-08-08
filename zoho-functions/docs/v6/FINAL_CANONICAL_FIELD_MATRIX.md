@@ -6,14 +6,39 @@ This matrix describes the intended final field authority after the repository re
 live deployment. Live field presence, layouts, conditional rules, and deletion status still require
 CRM verification before this can be treated as a deployed-state matrix.
 
+> **Field authority.** The authoritative record of which fields exist live is
+> [`booking/tests/fixtures/zoho-fields.json`](../../../booking/tests/fixtures/zoho-fields.json)
+> (`"generatedFrom": "live Zoho metadata"`). The `.agents/context/api_field_names/*.csv` exports and
+> `docs/zoho_custom_fields_by_module.csv` are **stale** and must not be used to decide field existence.
+
+## Canonical Activation Task identity
+
+**The Sequence Activation Task is identified by `Who_Id` (Contact) + `Task_Type`, and nothing else.**
+`Task_Sequence_Stage`, `What_Id` / `$se_module` and native `Status` remain useful context but are not
+identity. The Task is canonical and permanent once created: its identity and continued reuse do not
+depend on Stage, Deal, pipeline, open/closed status or current automation eligibility.
+
+- **The active-control set** is every Activation Task for the Contact *minus* those with native
+  `Status = "Deferred"`. `Completed` Tasks stay valid controls — that is the normal state of a
+  committed Activation Task. **Retirement is final**: a `Deferred` Task is inert on every execution,
+  is excluded from the control set, and is never automatically replaced.
+- **The processed-command marker** is one line in the Task Description:
+  `ActivationCommand|state=<Task_State>|type=<Task_Sequence_Type or ->`. It is **automation-owned**
+  and authoritative. `Task_Status` is now only a human-readable mirror, no longer the activation
+  processed-marker. Only that one line is ever rewritten; every other line, including anything a rep
+  added, is preserved byte for byte.
+- **Ambiguity stops, never guesses.** Where several active Activation Tasks exist and are not
+  provably indistinguishable, automation modifies nothing — not the duplicates, and not the Task the
+  rep edited — and raises `[activation_control_ambiguous]`.
+
 ## Lifecycle Fields To Retain
 
 | Module | Field | Values | User authority | Automation authority | Final purpose |
 | --- | --- | --- | --- | --- | --- |
-| Tasks | `Task_State` | `Open`, `Won`, `Lost` | Primary command for ordinary Tasks | Defaults to `Open`; may reopen blocked tasks | Sole ordinary Task lifecycle command |
+| Tasks | `Task_State` | `Open`, `Won`, `Lost` | Primary command for ordinary Tasks. On a **Sequence Activation** Task it is the commit / disable / re-enable control and is **permanently editable** | Defaults to `Open`; may reopen blocked tasks. **Immediate**: `Won` enables the preference, `Lost` and `Open`-after-Won both disable the cadence at once (differing only in human meaning) | Sole ordinary Task lifecycle command |
 | Tasks | `Task_Status` | `New`, `Working`, `Closed` | None | Derived mirror | Human-readable activity status |
 | Tasks | `Task_Lost_Reasons` | Canonical Lost Reasons | Required only when `Task_State=Lost` | Read only with Lost state | Loss context |
-| Tasks | `Task_Sequence_Type` | `Email`, `Call`, `Manual` | Sole command for Sequence Activation Tasks | Read to route, then close task | Activation route choice |
+| Tasks | `Task_Sequence_Type` | `Email`, `Call`, `Manual` | **Preference, not a commit.** Rep-owned; automation never writes it | **Prospective** — a change takes effect at the NEXT eligible Stage entry; it never interrupts, restarts or rebuilds the running Stage cadence, `Manual` included | Activation route choice |
 | Calls | `Call_Task_State` | `Open`, `Won`, `Lost` | Primary command | Defaults to `Open`; may reopen missing-reason calls | Sole Call lifecycle command |
 | Calls | `Call_Task_Status` | `New`, `Working`, `Closed` | None | Derived mirror | Human-readable call status |
 | Calls | `Call_Task_Lost_Reasons` | Canonical Lost Reasons | Required only when `Call_Task_State=Lost` | Read only with Lost state | Loss context |
@@ -31,7 +56,7 @@ CRM verification before this can be treated as a deployed-state matrix.
 
 | Module | Fields | Purpose |
 | --- | --- | --- |
-| Tasks | `Task_Type`, `Task_Sequence_Stage`, `Task_Sequence_Step`, `Blocks_Sequence`, `Task_Pipeline`, `Task_Opportunity`, `Task_Stage` | Task type, sequence context, blocking behavior, and Deal context mirrors. |
+| Tasks | `Task_Type`, `Task_Sequence_Stage`, `Blocks_Sequence`, `Task_Pipeline`, `Task_Opportunity`, `Task_Stage` | Task type, sequence context, blocking behavior, and Deal context mirrors. (D2: `Task_Sequence_Step` was listed here but **does not exist live** — confirmed absent from Tasks metadata 2026-08-08. Removed.) |
 | Tasks | `Task_Contract_Products`, `Task_Contract_Brands`, `Task_Contract_Date_Start`, `Task_Contract_Date_End`, `Task_Contract_Frequency` | Commercial evidence, not lifecycle commands. |
 | Calls | `Call_Task_Type`, `Call_Task_Stage`, `Call_Task_Pipeline`, `Call_Task_Opportunity`, `Sequence_Stage`, `Sequence_Attempt`, `Next_Follow_Up_Date` | Call context and scheduling. |
 | Calls | `Call_Task_Contract_Products`, `Call_Task_Contract_Brands`, `Call_Task_Contract_Date_Start`, `Call_Task_Contract_Date_End`, `Call_Task_Contract_Frequency` | Commercial evidence, not lifecycle commands. |

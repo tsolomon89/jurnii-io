@@ -46,9 +46,19 @@ void automation.handleMeetingEvent(string eventIdStr)
 	if(isNull(deal) || isNull(deal.get("id"))) { return; }
 
 	// Contact: prefer the Meeting's Who_Id; fall back to Deal.Contact_Name.
+	// CHANGE 15: the fallback is kept for the NON-ACTIVITY paths (reminder computation, activity
+	// mirrors, type inference) but must not feed the router on a terminal path. The router's
+	// activity context requires Event.Who_Id == contactId, so a fallback Contact is rejected with
+	// who_id_mismatch - a void call whose failure used to be invisible while the Event was
+	// nevertheless marked Closed, permanently trapping it behind MTG-4.
 	contactId = "";
+	contactFromWhoId = false;
 	whoLookup = event.get("Who_Id");
-	if(!isNull(whoLookup) && !isNull(whoLookup.get("id"))) { contactId = whoLookup.get("id").toString(); }
+	if(!isNull(whoLookup) && !isNull(whoLookup.get("id")))
+	{
+		contactId = whoLookup.get("id").toString();
+		contactFromWhoId = true;
+	}
 	if(contactId == "")
 	{
 		cnLookup = deal.get("Contact_Name");
@@ -77,6 +87,24 @@ void automation.handleMeetingEvent(string eventIdStr)
 	if((mState == "Won" || mState == "Lost") && mStatus == "Closed")
 	{
 		automation.logAutomationEvent("handleMeetingEvent", "Events", eventId.toString(), "guard", "skip_state_already_processed", {"meeting_state":mState});
+		return;
+	}
+
+	// ---- CHANGE 14 + 15: a TERMINAL state with no usable Contact must not fall through -------
+	// Previously a Won/Lost meeting whose Contact could not be resolved fell past both terminal
+	// branches (each requires contactId != "") into the UPCOMING branch, which writes
+	// Meeting_Task_Status = "New" onto a terminal meeting - permanently defeating MTG-4, since
+	// the record can then never reach Closed by any path.
+	// The router will also REJECT a Contact that came from the Deal.Contact_Name fallback
+	// (who_id_mismatch, because the activity context requires Event.Who_Id == contactId), so on a
+	// terminal path an unusable Contact is treated exactly like a missing one. Writing the
+	// resolved Contact back into Event.Who_Id would also work but mutates a rep-owned
+	// relationship field, so the inert path is preferred.
+	if((mState == "Won" || mState == "Lost") && (contactId == "" || !contactFromWhoId))
+	{
+		zoho.crm.updateRecord("Events", eventId, {"Meeting_Task_Status":"Working"}, noTrigger);
+		automation.createManualReview(contactId, dealId.toString(), "meeting_contact_unresolved", "Meeting " + eventId + " was set to " + mState + " but its Contact could not be resolved from the meeting itself (Who_Id is blank). Nothing was routed and the meeting was NOT closed, so it can be reprocessed. Set the meeting's Contact (Who_Id), then set Meeting_Task_State = " + mState + " again.");
+		automation.logAutomationEvent("handleMeetingEvent", "Events", eventId.toString(), "guard", "terminal_state_no_contact", {"meeting_state":mState, "deal":dealId.toString(), "contact_from_who_id":contactFromWhoId.toString()});
 		return;
 	}
 
@@ -182,17 +210,23 @@ void automation.handleMeetingEvent(string eventIdStr)
 			loss = Map();
 			if(!isNull(lossRaw) && lossRaw.toString().trim() != "") { loss = lossRaw.toString().toMap(); }
 			act = ifnull(loss.get("action"), "manual_review").toString();
-			// Close the activity before downstream recovery routing. Live WF007 evidence showed
-			// routeContactSequence can mutate the Contact/Deal and leave this derived status unwritten.
-			zoho.crm.updateRecord("Events", eventId, {"Meeting_Task_Status":"Closed"}, noTrigger);
+			// CHANGE 13: the Meeting_Task_Status = "Closed" write MOVED to AFTER the loss action
+			// and is now VERIFIED. Every terminal write must follow confirmation of the intended
+			// effect - never mark processed before the outcome is known. createAuxTask returns a
+			// Task id, so "" is a detectable failure. lostActionOk tracks that.
+			lostActionOk = true;
 			if(act == "deal_lost" && contactId != "")
 			{
-				automation.createAuxTask(contactId, dealId.toString(), "Manual Review", "Commercial meeting " + eventId + " Lost (" + mReason + ") suggests opportunity loss. Make an explicit Deal-level loss decision; activity loss alone does not close the Deal.");
+				lostRefId = automation.createAuxTask(contactId, dealId.toString(), "Manual Review", "Commercial meeting " + eventId + " Lost (" + mReason + ") suggests opportunity loss. Make an explicit Deal-level loss decision; activity loss alone does not close the Deal.");
+				if(ifnull(lostRefId, "").toString() == "") { lostActionOk = false; }
 			}
 			else if(act == "contact_lost" && contactId != "")
 			{
+				// CHANGE 16: loss is LOCAL. A Lost meeting describes that meeting only. This now
+				// matches how act == "deal_lost" is already handled immediately above.
 				clr = ifnull(loss.get("contactLostReason"), "No Response").toString();
-				automation.routeContactSequence(contactId, dealId.toString(), "contactlost:" + clr, "{}");
+				automation.createAuxTask(contactId, dealId.toString(), "Manual Review", "[activity_lost_suggests_contact_loss] Meeting " + eventId + " Lost (" + clr + ") with the Contact's sequence exhausted. Closing the Contact is an explicit Contact-level decision; activity loss alone does not make the Contact or Deal Lost.");
+				automation.logAutomationEvent("handleMeetingEvent", "Events", eventId.toString(), "activity_lost_contact_loss_referred", clr, {"contact":contactId, "deal":dealId.toString()});
 			}
 			else if(act == "find_decision_maker" && contactId != "")
 			{
@@ -205,6 +239,16 @@ void automation.handleMeetingEvent(string eventIdStr)
 			else
 			{
 				if(contactId != "") { automation.createAuxTask(contactId, dealId.toString(), "Manual Review", "Commercial meeting " + eventId + " Lost (" + mReason + ") - review (re-book, find another contact, or close the opportunity). Deal stays Open unless terms finally rejected."); }
+			}
+			// Verified close: only record the meeting as processed once the loss action landed.
+			if(lostActionOk)
+			{
+				zoho.crm.updateRecord("Events", eventId, {"Meeting_Task_Status":"Closed"}, noTrigger);
+			}
+			else
+			{
+				zoho.crm.updateRecord("Events", eventId, {"Meeting_Task_State":"Open", "Meeting_Task_Status":"Working"}, noTrigger);
+				automation.logAutomationEvent("handleMeetingEvent", "Events", eventId.toString(), "commercial_meeting_lost", "lost_reopened_action_not_applied", {"deal":dealId.toString(), "action":act});
 			}
 			automation.logAutomationEvent("handleMeetingEvent", "Events", eventId.toString(), "commercial_meeting_lost", act, {"deal":dealId.toString(), "reason":mReason});
 		}
@@ -223,8 +267,30 @@ void automation.handleMeetingEvent(string eventIdStr)
 	{
 		// demo qualified -> advance; carry any Product evidence to processDeal (via the router)
 		automation.routeContactSequence(contactId, dealId.toString(), "demo:qualified", ctxStr);
-		zoho.crm.updateRecord("Events", eventId, {"Meeting_Task_Status":"Closed"}, noTrigger);
-		automation.logAutomationEvent("handleMeetingEvent", "Events", eventId.toString(), "result_won", "demo:qualified", {"deal":dealId.toString(), "products":prodList.size().toString()});
+
+		// ---- CHANGE 13: VERIFIED close. routeContactSequence is void, so success cannot be
+		// returned; rather than change its signature (20+ call sites, out of scope) verify the
+		// OBSERVABLE OUTCOME, exactly as the commercial-Won path already verifies processDeal.
+		// Success is "Proposal Preparation or ANY LATER Stage" - NOT "the Stage changed". A
+		// Contact already at Onboarding therefore closes successfully with no regression
+		// (Change 12) and no duplicate Draft Commercials work; it must not reopen merely because
+		// the Stage did not move. The reopen path is reserved for genuine routing failure, and it
+		// makes retry real: MTG-4 no longer traps the Event.
+		wonPostStage = "";
+		wonContact = zoho.crm.getRecordById("Contacts", contactId.toLong());
+		if(!isNull(wonContact) && !isNull(wonContact.get("id"))) { wonPostStage = ifnull(wonContact.get("Stage"), "").toString().trim(); }
+		wonRank = ifnull(stageRanks.get(wonPostStage), 0).toLong();
+		if(wonRank >= ifnull(stageRanks.get("Proposal Preparation"), 5).toLong())
+		{
+			zoho.crm.updateRecord("Events", eventId, {"Meeting_Task_Status":"Closed"}, noTrigger);
+			automation.logAutomationEvent("handleMeetingEvent", "Events", eventId.toString(), "result_won", "won_routed", {"deal":dealId.toString(), "products":prodList.size().toString(), "stage":wonPostStage});
+		}
+		else
+		{
+			zoho.crm.updateRecord("Events", eventId, {"Meeting_Task_State":"Open", "Meeting_Task_Status":"Working"}, noTrigger);
+			automation.createAuxTask(contactId, dealId.toString(), "Manual Review", "[meeting_route_not_applied] Meeting " + eventId + " was set to Won but the Contact did not reach Proposal Preparation or later (Stage is now '" + wonPostStage + "'), so the meeting was NOT closed and can be reprocessed. Check the meeting's Contact and Deal relationships, then set Meeting_Task_State = Won again.");
+			automation.logAutomationEvent("handleMeetingEvent", "Events", eventId.toString(), "result_won", "won_reopened_route_not_applied", {"deal":dealId.toString(), "stage":wonPostStage});
+		}
 		return;
 	}
 	if(mState == "Lost" && contactId != "")
@@ -242,9 +308,10 @@ void automation.handleMeetingEvent(string eventIdStr)
 		loss = Map();
 		if(!isNull(lossRaw) && lossRaw.toString().trim() != "") { loss = lossRaw.toString().toMap(); }
 		act = ifnull(loss.get("action"), "manual_review").toString();
-		// Close the activity before downstream recovery routing. Lost state is terminal
-		// for the Event even when recovery reschedules or creates follow-up work.
-		zoho.crm.updateRecord("Events", eventId, {"Meeting_Task_Status":"Closed"}, noTrigger);
+		// CHANGE 13: the Closed write MOVED to AFTER the loss action and is now verified. Lost
+		// state is still terminal for the Event, but it is only RECORDED as processed once the
+		// action it implies has actually landed.
+		lostActionOk = true;
 		if(act == "continue_cadence")
 		{
 			// SEQ-1: No Meeting / Demo (missed/lost demo) -> keep the Contact at Demo Hosted
@@ -258,8 +325,11 @@ void automation.handleMeetingEvent(string eventIdStr)
 		}
 		else if(act == "contact_lost")
 		{
+			// CHANGE 16: loss is LOCAL. 'No Response' on an exhausted sequence must not mark the
+			// Contact Lost, and must never close the Deal.
 			clr = ifnull(loss.get("contactLostReason"), "No Response").toString();
-			automation.routeContactSequence(contactId, dealId.toString(), "contactlost:" + clr, "{}");
+			automation.createAuxTask(contactId, dealId.toString(), "Manual Review", "[activity_lost_suggests_contact_loss] Demo " + eventId + " Lost (" + clr + ") with the Contact's sequence exhausted. Closing the Contact is an explicit Contact-level decision; activity loss alone does not make the Contact or Deal Lost.");
+			automation.logAutomationEvent("handleMeetingEvent", "Events", eventId.toString(), "activity_lost_contact_loss_referred", clr, {"contact":contactId, "deal":dealId.toString()});
 		}
 		else if(act == "find_decision_maker")
 		{
@@ -275,7 +345,20 @@ void automation.handleMeetingEvent(string eventIdStr)
 		}
 		else
 		{
-			automation.createAuxTask(contactId, dealId.toString(), "Manual Review", "Demo " + eventId + " marked Lost (" + mReason + ") - review (reschedule, find another contact, or close the Contact). Deal stays Open.");
+			lostRefId2 = automation.createAuxTask(contactId, dealId.toString(), "Manual Review", "Demo " + eventId + " marked Lost (" + mReason + ") - review (reschedule, find another contact, or close the Contact). Deal stays Open.");
+			if(ifnull(lostRefId2, "").toString() == "") { lostActionOk = false; }
+		}
+		// Verified close. Reopen is the retry path: a reopened record is reprocessed on the next
+		// save, which is exactly why the truthfulness fix and MTG-4 are compatible - MTG-4 only
+		// traps records genuinely marked Closed.
+		if(lostActionOk)
+		{
+			zoho.crm.updateRecord("Events", eventId, {"Meeting_Task_Status":"Closed"}, noTrigger);
+		}
+		else
+		{
+			zoho.crm.updateRecord("Events", eventId, {"Meeting_Task_State":"Open", "Meeting_Task_Status":"Working"}, noTrigger);
+			automation.logAutomationEvent("handleMeetingEvent", "Events", eventId.toString(), "result_lost", "lost_reopened_action_not_applied", {"deal":dealId.toString(), "action":act});
 		}
 		automation.logAutomationEvent("handleMeetingEvent", "Events", eventId.toString(), "result_lost", act, {"deal":dealId.toString(), "reason":mReason});
 		return;
@@ -321,9 +404,20 @@ void automation.handleMeetingEvent(string eventIdStr)
 	// stamp the guidance on the first UPCOMING pass - but ONLY when the rep has not written their own
 	// agenda/notes into Description (never overwrite user content). handleMeetingEvent reads Meeting Task
 	// State (+ Contract fields) on save and advances the sequence / upserts the Quote.
-	if(ifnull(event.get("Description"), "").toString().trim() == "")
+	// CHANGE 17: APPEND the guidance when it is absent, rather than only writing when Description
+	// is blank. The blank-only check never fired on a booked demo, because the booking backend
+	// always writes a non-blank Description ("Booking Reference:" is unconditional), so the one
+	// population that most needs the contract never saw it. Detection is by a stable marker
+	// substring so it appends exactly ONCE and never overwrites a rep's agenda.
+	evDescNow = ifnull(event.get("Description"), "").toString();
+	if(!evDescNow.contains("Automation-managed meeting."))
 	{
-		evUpd.put("Description", "Automation-managed meeting." + nl + "After it happens, log the result on this Event:" + nl + "- Went ahead / qualified -> set Meeting Task State = Won" + nl + "- Did not happen / lost -> set Meeting Task State = Lost + choose Meeting Task Lost Reasons" + nl + "If commercial terms were discussed, quoted or agreed, also fill the Meeting Task Contract fields (Products / Brands / Date Start / Date End / Frequency) before Won." + nl + "Do not edit Meeting Task Status, Reminder Send At, or the Stage / Pipeline fields - automation advances the sequence (and creates/updates the Quote from the Contract fields) once you save the result.");
+		// The product-conditional requirements are derived from _util_resolveQuoteLinePrice, not
+		// invented: Brands are required for all products, Frequency is Jurnii 360 only, and
+		// Jurnii Cortex cannot be auto-priced. Same shape as the Draft Commercials description.
+		evGuide = "Automation-managed meeting." + nl + "After it happens, log the result on this Event:" + nl + "- Went ahead / qualified -> set Meeting Task State = Won" + nl + "- Did not happen / lost -> set Meeting Task State = Lost + choose Meeting Task Lost Reasons" + nl + "If commercial terms were discussed, quoted or agreed, also fill the Meeting Task Contract fields before Won:" + nl + "- Meeting Task Contract Products and Meeting Task Contract Brands are required for every product." + nl + "- Meeting Task Contract Date Start and Date End are required." + nl + "- Meeting Task Contract Frequency is required for Jurnii 360 ONLY." + nl + "- Jurnii Cortex cannot be priced automatically; it raises a Manual Review for manual pricing." + nl + "Automation builds the Quote from these fields - do not enter Quote data yourself." + nl + "Do not edit Meeting Task Status, Reminder Send At, or the Stage / Pipeline fields - automation advances the sequence (and creates/updates the Quote from the Contract fields) once you save the result.";
+		if(evDescNow.trim() == "") { evUpd.put("Description", evGuide); }
+		else { evUpd.put("Description", evDescNow + nl + nl + evGuide); }
 	}
 	if(mStage != "" && ifnull(event.get("Meeting_Task_Stage"), "").toString() == "") { evUpd.put("Meeting_Task_Stage", mStage); }
 	if(ifnull(event.get("Meeting_Task_Status"), "").toString() == "") { evUpd.put("Meeting_Task_Status", "New"); }

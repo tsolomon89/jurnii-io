@@ -449,6 +449,10 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 	targetStage = st;
 	isActivation = false;
 	resolved = false;   // true once a branch fully decided (early-return analogue)
+	// CHANGE 21: set true when THIS Stage entry is itself the activation-establishing event, so
+	// Sequence_Activated_At is stamped here and nowhere earlier. Still set-once: it was blank.
+	stampActivationAtEntry = false;
+	isNewStageEntry = false;
 
 	// ===================== ACTIVATION =====================
 	if(trigLc.startsWith("activate:"))
@@ -574,33 +578,43 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 	{
 		if(trigLc == "demo:qualified")
 		{
-			targetStage = "Proposal Preparation"; doSupersede = "true"; doEntry = true;
+			// CHANGE 12: targeted no-regression. A Won demo on a Contact ALREADY at Proposal
+			// Preparation or later must not be pulled backwards - that desynchronised the Contact
+			// from Deal.Opportunity_Stage (which keeps its RTP floor) and raised a spurious second
+			// Draft Commercials Task. Two lines in ONE branch: no allow-list, no exception table,
+			// and no change to the Contact.Stage write itself. The duplicate Draft Commercials
+			// disappears as a CONSEQUENCE, because taskStages entry is only reached on an actual
+			// Stage change into Proposal Preparation.
+			if(ifnull(stageRanks.get(st), 1).toLong() >= ifnull(stageRanks.get("Proposal Preparation"), 5).toLong())
+			{
+				targetStage = st;
+				automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "stage_guard", "demo_qualified_already_progressed", {"contact_stage":st});
+			}
+			else
+			{
+				targetStage = "Proposal Preparation";
+			}
+			doSupersede = "true"; doEntry = true;
 			sideEmailKind = "demo_post_demo";
 			reason = "demo_qualified";
 		}
 		else if(trigLc == "demo:followup")
 		{
-			// Missed/lost demo (No Meeting/Demo, continue_cadence): keep the Contact at
-			// Demo Hosted and run the 5-step Demo Hosted RECOVERY cadence. The recovery's
-			// SOLE opener is demo-hosted:1:initial (wired on entry); the one-off
-			// demo_no_show side email is SUPPRESSED on this path. GUARD: a repeat WF007
-			// edit on a Contact already mid-recovery (already at Demo Hosted, Sequence_Stage
-			// =Call, step>=1) must NOT reset the cadence to step 1 — leave it in place and
-			// resume the current step without re-superseding its own in-flight Call.
-			if(st == "Demo Hosted" && sStage == "Call" && stepNum >= 1)
-			{
-				nextSeqState = "Running";
-				nextSeqStage = "Call";
-				nextStep = stepStr;
-				action = "create_call";
-				reason = "demo_followup_recovery_inflight";
-				resolved = true;
-			}
-			else
-			{
-				targetStage = "Demo Hosted"; doSupersede = "true"; doEntry = true;
-				reason = "demo_followup";
-			}
+			// CHANGE 11: a missed/lost demo must NOT replay the Demo Hosted cadence. This branch
+			// used to set targetStage=Demo Hosted + doSupersede + doEntry with a step-1 cadence
+			// side email - a full SAME-STAGE restart, which the specification forbids: a completed
+			// or stopped same-Stage cadence cannot restart. The Contact stays live and the rep
+			// re-engages; another Meeting may still be booked and routes normally through
+			// meeting:created. The in-flight recovery guard that used to sit here is dead code
+			// once the recovery cadence itself is gone, so it is removed with it.
+			nextSeqState = "Running";
+			nextSeqStage = "None";
+			nextStep = "None";
+			action = "none";
+			sideEmailKind = "";
+			reason = "demo_followup_manual_engagement";
+			resolved = true;
+			automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "demo_followup", "demo_followup_manual_engagement", {"contact_stage":st});
 		}
 		else if(trigLc == "demo:not_qualified")
 		{
@@ -817,21 +831,17 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 		{
 			nextSeqStage = "Call";
 			nextStep = "1";
-			if(isActivation && sType == "Email")
+			// CHANGE 10: the STORED preference governs EVERY cadence-Stage entry, not only the
+			// first. `isActivation` used to gate this, so Email and Call differed at exactly one
+			// moment in the Contact's life and a prospective type change was unobservable. This
+			// routes into each Stage's EXISTING cadence - no new sequence is invented and no new
+			// template is needed, since all five cadence Stages already have a :1:initial key.
+			// Entered-once protection comes free from the existing SendKey and the Call dedupe.
+			if(sType == "Email")
 			{
 				action = "send_opener_then_call";
 				emailKind = "opener";
 				emailStep = 1;
-			}
-			else if(targetStage == "Demo Hosted" && trigLc == "demo:followup")
-			{
-				// Demo Hosted RECOVERY entry (missed/lost demo via demo:followup): the SOLE
-				// immediate opener is demo-hosted:1:initial. Send the step-1 cadence email
-				// alongside Call 1 (Call-first 5-step cadence), and explicitly SUPPRESS the
-				// one-off demo_no_show side email on this path.
-				action = "create_call";
-				sideEmailKind = "cadence";
-				sideEmailStep = 1;
 			}
 			else
 			{
@@ -873,11 +883,123 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 	//   commercial:signed and dispatched email without ever having been activated.
 	// =====================================================================
 	isActivationTrigger = (trigLc == "activate:email" || trigLc == "activate:call" || trigLc == "activate:manual");
+
+	// ---- CHANGE 8a: isNewStageEntry ---------------------------------------------------------
+	// Computed once, AFTER the state machine and the shared entry block have resolved nextStage,
+	// so it covers every branch uniformly - doEntry branches, the resolved=true branches that set
+	// nextStage directly (meeting:created, meeting:attended), and continuation callbacks alike.
+	// A continuation callback belonging to the CURRENT Stage (call:neutral creating Call n+1,
+	// commercial:followup_due, meeting:noshow, resume recreating a Call) leaves nextStage == st,
+	// so the running cadence is never touched by a Manual preference.
+	isNewStageEntry = (nextStage != st);
+
+	// ---- CHANGE 21: a committed preference establishes activation at the next cadence-eligible
+	// Stage entry, BY ITSELF. This is what makes a Won recorded while ineligible a stored
+	// PREFERENCE rather than a pending instruction: no second Task save, and no route into the
+	// earlier Stage. Evaluated BEFORE the gate below. -----------------------------------------
+	// The two Contact-field conjuncts are a cheap PRE-FILTER, so the common path costs no reads.
+	// Broken into separate statements purely for readability and to keep the guard debuggable -
+	// the compound form parses fine (cf. handleTaskCompletion's sibling predicate).
+	estTypeValid = false;
+	if(sType == "Email" || sType == "Call" || sType == "Manual") { estTypeValid = true; }
+	estStageEligible = false;
+	if(cadenceStages.contains(nextStage)) { estStageEligible = true; }
+	estCandidate = false;
+	if(!activationEstablished && !isActivationTrigger && isNewStageEntry && estStageEligible && sState == "Not Activated" && estTypeValid) { estCandidate = true; }
+
+	if(estCandidate)
+	{
+		// The marker on the ACTIVE canonical Activation Task is the AUTHORITATIVE check - this
+		// plan has been bitten twice by treating a Contact field as sufficient evidence of a Task
+		// command, and this is the same trap.
+		estMarker = "";
+		estTasks = zoho.crm.getRelatedRecords("Tasks", "Contacts", contactId);
+		if(isNull(estTasks) || estTasks.size() == 0 || estTasks.toString().startsWith("{\"code\""))
+		{
+			estTasks = zoho.crm.searchRecords("Tasks", "(Who_Id:equals:" + contactId + ")");
+		}
+		if(!isNull(estTasks) && estTasks.size() > 0 && !estTasks.toString().startsWith("{\"code\""))
+		{
+			estActive = 0;
+			estNl = hextoText("0A");
+			for each etk in estTasks
+			{
+				etkWho = "";
+				etkWhoL = etk.get("Who_Id");
+				if(!isNull(etkWhoL) && !isNull(etkWhoL.get("id"))) { etkWho = etkWhoL.get("id").toString(); }
+				if(etkWho != contactId.toString()) { continue; }
+				if(ifnull(etk.get("Task_Type"), "").toString() != "Sequence Activation") { continue; }
+				if(ifnull(etk.get("Status"), "").toString() == "Deferred") { continue; }
+				estActive = estActive + 1;
+				// HOIST the collection. `for each x in var.toList(",")` parses (see :771 in
+				// handleTaskCompletion), but a deeply nested header does NOT - this exact loop
+				// written as `for each eLine in ifnull(etk.get("Description"), "")
+				// .toString().toList(hextoText("0A"))` failed to publish with an "Improper
+				// Statement" error. Keep the collection in a plain variable.
+				etkDesc = ifnull(etk.get("Description"), "").toString();
+				estLines = etkDesc.toList(estNl);
+				for each eLine in estLines
+				{
+					eLineT = eLine.trim();
+					if(eLineT.startsWith("ActivationCommand|")) { estMarker = eLineT; }
+				}
+			}
+			// Only an UNAMBIGUOUS single active control may establish anything.
+			if(estActive != 1) { estMarker = ""; }
+		}
+		// Contact eligibility is the last conjunct: a Contact still Lost establishes nothing.
+		estEligible = true;
+		if(ifnull(contact.get("State"), "Open").toString().trim() == "Lost") { estEligible = false; }
+		estWant = "ActivationCommand|state=Won|type=" + sType;
+		if(estMarker == estWant && estEligible)
+		{
+			activationEstablished = true;
+			stampActivationAtEntry = true;
+			automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "activation_established_at_stage_entry", sType, {"deal":dealId.toString(), "stage":nextStage, "type":sType});
+		}
+	}
+
 	dispatchSuppressed = (sState == "Stopped");
 	if(!activationEstablished && !isActivationTrigger)
 	{
 		dispatchSuppressed = true;
 		automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "dispatch_gate", "activation_not_established", {"deal":dealId.toString(), "trigger":trig, "seq_state":sState, "seq_type":sType});
+	}
+
+	// ---- CHANGE 20: Partnership no-dispatch as a STANDING gate at every Stage entry ---------
+	// The pipeline is already resolved once per run below for the activity mirror fields, so this
+	// costs one extra read at most. Reuses the exact semantic of the proven send-time defence in
+	// sendSequencedEmail: a genuine Partnership block is expected and SILENT; an UNRESOLVED
+	// pipeline means an upstream data problem and raises a review. Evaluated on every run rather
+	// than only at commit, so a Partnership Contact with Email or Call stored dispatches no
+	// cadence Call, cadence Task, scheduled cadence email or automated cadence email - at the
+	// Stage where it was activated, and at every Stage it ever reaches.
+	gatePipeline = automation.resolveDealPipeline(dealId.toString());
+	if(gatePipeline != "B2B")
+	{
+		dispatchSuppressed = true;
+		if(gatePipeline == "Partnership")
+		{
+			automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "dispatch_gate", "dispatch_suppressed_partnership", {"deal":dealId.toString(), "pipeline":gatePipeline, "seq_type":sType});
+		}
+		else
+		{
+			automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "[pipeline_unresolved_no_dispatch] Deal " + dealId + " has an unresolved pipeline (" + gatePipeline + "), so no cadence was dispatched for this Contact. An unrecognised Product Interest / Deal_Product_Key must never be treated as B2B. Correct the Deal's product so the pipeline resolves, then re-enter the Stage.");
+			automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "dispatch_gate", "pipeline_unresolved_no_dispatch", {"deal":dealId.toString(), "pipeline":gatePipeline});
+		}
+	}
+
+	// ---- CHANGE 8a (Manual): prospective, scoped to NEW STAGE ENTRY only -------------------
+	// Selecting Manual mid-cadence stops NOTHING. Every remaining step of the already-running
+	// Stage cadence executes - the next cadence Call, its cadence email, the post-call email.
+	// Manual becomes effective only when the Contact ENTERS the next eligible Stage.
+	// activate:manual keeps its existing immediate Stopped write: at INITIAL commit there is no
+	// running cadence to protect, and after Change 1 there is exactly one Task, so initial commit
+	// and prospective change can never be confused.
+	if(sType == "Manual" && isNewStageEntry && !isActivationTrigger)
+	{
+		dispatchSuppressed = true;
+		automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "dispatch_gate", "dispatch_suppressed_manual_new_stage", {"deal":dealId.toString(), "from":st, "to":nextStage});
 	}
 	// commercial:* (driven by processDeal after a verified term gate) and an explicit
 	// loss still perform their structural writes; only the auto next-action dispatch
@@ -948,7 +1070,9 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 	// process Stage mirror = nextStage. Stamped on created Calls/Tasks for reporting parity.
 	// F3 FIX: Deluge getRecordById omits the special Pipeline field; resolve via the shared
 	// REST-backed resolver (never deal.get("Pipeline"), which returns blank).
-	mirrorPipeline = automation.resolveDealPipeline(dealId.toString());
+	// Already resolved once for the Change 20 standing gate above - reuse it rather than paying
+	// for a second read.
+	mirrorPipeline = gatePipeline;
 	mirrorOppType  = ifnull(stageOpportunity.get(nextStage), ifnull(deal.get("Stage"), "")).toString();
 
 	// ---- 2. + 3. Side cadence email + primary action (create_call / create_task /
@@ -993,12 +1117,15 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 	// Set once, on the activation trigger, and never cleared — a Stop/Complete/re-entry
 	// must not erase the fact that the rep activated this Contact, or the router would
 	// have to re-derive activation from the same untrustworthy signals all over again.
-	if(isActivationTrigger && !activationEstablished)
+	// CHANGE 21 adds a THIRD establishing event: a cadence-eligible new Stage entry on a Contact
+	// carrying a committed (Won, type) marker. stampActivationAtEntry is only ever true when the
+	// timestamp was blank, so the field stays set-once and is still never cleared.
+	if((isActivationTrigger || stampActivationAtEntry) && seqActivatedAt == "")
 	{
 		// Local CRM time without an explicit timezone — same convention as the stage
 		// completion timestamps below (an offset or a literal Z stores an hour out).
 		cUpd.put("Sequence_Activated_At", zoho.currenttime.toString("yyyy-MM-dd'T'HH:mm:ss"));
-		automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "activation_stamped", trigLc, {"deal":dealId.toString(), "seq_type":nextSeqType});
+		automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "activation_stamped", trigLc, {"deal":dealId.toString(), "seq_type":nextSeqType, "at_stage_entry":stampActivationAtEntry.toString()});
 	}
 
 	// STATE-EVIDENCE INTEGRITY: a Contact that was never activated must NEVER be
@@ -1012,27 +1139,44 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 	// customer sitting at Onboarding is legitimately Working even though it was never
 	// activated, and the Deal/Account rollup reads Status via anyContactWorking. Gating
 	// the sequence lie must not silently drop those Deals out of the rollup.
+	// ---- CHANGE 9: make Manual STICK, but only from the point it becomes effective ----------
+	// Any doEntry trigger writes Sequence_State = "Running" over "Stopped", which is what made
+	// Manual non-sticky. The isNewStageEntry conjunct is the correction: without it, the first
+	// continuation callback after the rep selects Manual (a call:neutral from handleCallOutcome,
+	// say) would write Stopped and kill the cadence the specification says must finish. With it,
+	// Sequence_State stays Running through the rest of the CURRENT Stage and flips to Stopped
+	// exactly once, at the boundary. From there the existing dispatchSuppressed carries the
+	// suppression forward on its own - correctly, since a Manual Contact then has no running
+	// cadence to continue. Structural writes are unaffected: they run outside the dispatch gate.
+	// NOTE the ordering: wouldRun is captured FIRST, before this flip, exactly as it is captured
+	// before the not-activated clamp below. Being worked and running a sequence are different
+	// things - a Manual Contact is legitimately Working, and the Deal/Account rollup reads Status
+	// via anyContactWorking. Flipping the state before wouldRun would silently drop these Deals
+	// out of the rollup.
 	wouldRun = (nextSeqState == "Running");
+
+	if(sType == "Manual" && isNewStageEntry && !isActivationTrigger)
+	{
+		nextSeqState = "Stopped";
+	}
+
 	if(!activationEstablished && !isActivationTrigger)
 	{
 		nextSeqState = "Not Activated";
 		nextSeqStage = "None";
 		nextStep = "None";
-		nextSeqType = "";
+		// CHANGE 21 (required sub-change): the clamp must NOT wipe the committed preference.
+		// It exists to stop a never-activated Contact being stamped Running; erasing a rep's
+		// committed choice was never its purpose, and Change 21 reads exactly this value as its
+		// pre-filter at the next Stage entry. `nextSeqType` is deliberately preserved here.
 	}
 
-	// TASK-1 cleanup: when the sequence Stops or Completes, CLEAR Sequence_Type so a
-	// residual Email/Call value cannot pre-arm a future Activation Task. EXCEPT a Manual
-	// type (manual activation / call:manualonly), which is an intentional standing mode,
-	// not a residual pre-arm risk — preserve it.
-	if((nextSeqState == "Stopped" || nextSeqState == "Complete") && nextSeqType != "Manual")
-	{
-		cUpd.put("Sequence_Type", "");
-	}
-	else
-	{
-		cUpd.put("Sequence_Type", nextSeqType);
-	}
+	// CHANGE 8: when the sequence Stops or Completes, PRESERVE Sequence_Type for ALL THREE
+	// types, not only Manual. The clear existed to stop a residual value pre-arming a FUTURE
+	// Activation Task; with the canonical Task permanently editable (Change 1) and the
+	// preference explicitly stored as a committed command (Change 2), clearing it destroys the
+	// very state Changes 2, 10 and 21 depend on.
+	cUpd.put("Sequence_Type", nextSeqType);
 	cUpd.put("Sequence_State", nextSeqState);
 	cUpd.put("Sequence_Stage", nextSeqStage);
 	cUpd.put("Sequence_Step", nextStep);
@@ -1137,13 +1281,13 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 			}
 			else
 			{
-				dLost = Map();
-				// Deal viability = Opportunity_State/Opportunity_Status (Deals have no bare State/Status).
-				dLost.put("Opportunity_State", "Lost");
-				dLost.put("Opportunity_Status", "Closed");
-				if(ifnull(deal.get("Lost_Reasons"), "").toString() == "" && dealLostReason != "") { dLost.put("Lost_Reasons", dealLostReason); }
-				zoho.crm.updateRecord("Deals", dealId, dLost, noTrigger);
-				automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "primary_lost", "deal_lost", {"deal":dealId.toString()});
+				// CHANGE 19: a Contact becoming Lost does not by itself make its Deal Lost. The
+				// viability check above is KEPT and becomes the EVIDENCE in this review rather
+				// than the trigger for a write, so this third branch now behaves like the two
+				// above it. Opportunity_State / Opportunity_Status / Lost_Reasons are untouched.
+				// A Deal may become Lost only through a separate, explicit Deal-level decision.
+				automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "[deal_has_no_viable_contact] The Primary Contact was marked Lost (" + dealLostReason + ") and no other open Contact remains in the Deal Contact Roles. Closing the Deal is an explicit Deal-level decision; Contact loss alone does not close it.");
+				automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "primary_lost", "primary_lost_deal_closure_referred", {"deal":dealId.toString(), "reason":dealLostReason});
 			}
 		}
 		// non-primary loss: Contact stopped above; Deal untouched.
@@ -1272,7 +1416,21 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 	// All create_* / send_* record creation + their logs were MOVED here unchanged from
 	// the former in-line section (which ran before processDeal).
 	// =====================================================================
-	if(!dispatchSuppressed && !suppressOuter)
+	// ---- CHANGE 8b: the dispatch gate is per ARTIFACT CLASS, not one switch ------------------
+	// The classification is derived, not assumed: sendSequencedEmail's canonical-key map already
+	// separates the five 5-step cadence families from the six single-shot event emails.
+	//   cadence      = create_call / schedule_email / send_email_now / send_opener_then_call, and
+	//                  side emails of kind opener|cadence|postcall           -> SUPPRESSIBLE
+	//   commercial   = create_task (Draft Commercials / Onboarding Setup)    -> ALWAYS RUNS
+	//   transactional= demo_confirmation / demo_reminder / demo_post_demo /
+	//                  commercials_terms side emails                         -> ALWAYS RUNS
+	// Manual and Partnership Contacts must still receive their commercial work and their
+	// booked-meeting and commercial-boundary emails; only the CADENCE stops. Previously the
+	// single switch also stopped create_task, so a Manual Contact silently stalled at Proposal
+	// Preparation and Onboarding with no Task ever raised (C7).
+	cadenceDispatchOk = (!dispatchSuppressed && !suppressOuter);
+	nonCadenceDispatchOk = (!suppressOuter);
+	if(cadenceDispatchOk || nonCadenceDispatchOk)
 	{
 		// ---- 2. Side cadence email (accompanies the primary action) — DISPATCH ----
 		// A 'cadence' side email keys off the cadence stage actually entered (nextStage):
@@ -1283,7 +1441,12 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 		// verified-signed branch owns it; sideEmailKind is blank for commercial:signed.)
 		sideEmailStage = stage;
 		if(sideEmailKind == "cadence") { sideEmailStage = nextStage; }
-		if(sideEmailKind != "")
+		// Cadence = kind in {opener, cadence, postcall}. Every other kind is transactional and
+		// is NOT gated by cadence suppression.
+		sideEmailIsCadence = (sideEmailKind == "opener" || sideEmailKind == "cadence" || sideEmailKind == "postcall");
+		sideEmailOk = nonCadenceDispatchOk;
+		if(sideEmailIsCadence) { sideEmailOk = cadenceDispatchOk; }
+		if(sideEmailKind != "" && sideEmailOk)
 		{
 			// Trace the side-email through selection -> attempt -> result so a future silent
 			// non-delivery is visible (sendSequencedEmail owns dedup/idempotency + its own
@@ -1297,6 +1460,14 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 		}
 
 		// ---- 3. Primary action (createStageCall / createStageTask / scheduleSequencedEmail absorbed) ----
+		// CADENCE actions only - suppressed for a Stopped / never-activated / Manual-at-a-new-Stage
+		// / non-B2B Contact. create_task is handled separately below and is never suppressed.
+		if(!cadenceDispatchOk && action != "create_task")
+		{
+			automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "dispatch_suppressed", action, {"deal":dealId.toString(), "stage":nextStage, "reason":"cadence_suppressed"});
+			action = "none";
+		}
+
 		// email-entry opener: send the opener, then fall through to the shared create_call block.
 		if(action == "send_opener_then_call")
 		{
@@ -1498,6 +1669,10 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 	}
 	else
 	{
+		// Reached only when suppressOuter is true - the post-reconciliation gate stops EVERY
+		// class, commercial and transactional included, because it means the run itself is not
+		// safe to dispatch from (transitionRouted / processDeal !success / re-read Stopped /
+		// open blocking Task). Cadence-only suppression is logged inside the block above.
 		dispatchSkipReason = "sequence_state_stopped";
 		if(suppressOuter) { dispatchSkipReason = suppressWhy; }
 		automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "dispatch_suppressed", action, {"deal":dealId.toString(), "stage":nextStage, "reason":dispatchSkipReason});

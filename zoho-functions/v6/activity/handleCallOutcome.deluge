@@ -472,9 +472,15 @@ void automation.handleCallOutcome(string callIdStr)
 				genuinelyExhausted = (atRecoveryExhaustion && notStopped && stageUnchanged && preconditionsChecked && !openCallExists && !scheduledSendActionable && !futureMeetingExists);
 				if(genuinelyExhausted)
 				{
-					automation.routeContactSequence(contactId.toString(), dealId.toString(), "contactlost:" + clr, "{}");
+					// CHANGE 16: loss is LOCAL at every level, on all three activity handlers. A Lost
+					// Call describes that Call only. The exhaustion verification above is KEPT and
+					// becomes the EVIDENCE in the review rather than the trigger for a Contact write -
+					// leaving this handler out would mean a Lost Call could still close a Contact
+					// while a Lost Meeting or Task could not, which is exactly the inconsistency the
+					// rule exists to remove.
+					automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "[activity_lost_suggests_contact_loss] Call " + callId + " Lost (" + clr + ") with the Contact's sequence verifiably exhausted. Closing the Contact is an explicit Contact-level decision; activity loss alone does not make the Contact or Deal Lost.");
 					zoho.crm.updateRecord("Calls", callId, {"Call_Task_Status":"Closed", "Outgoing_Call_Status":"Completed"}, noTrigger);
-					automation.logAutomationEvent("handleCallOutcome", "Calls", callId.toString(), "state_lost", "contact_lost_verified", {"deal":dealId.toString(), "contact":contactId.toString(), "reason":clr});
+					automation.logAutomationEvent("handleCallOutcome", "Calls", callId.toString(), "state_lost", "activity_lost_contact_loss_referred", {"deal":dealId.toString(), "contact":contactId.toString(), "reason":clr});
 				}
 				else
 				{

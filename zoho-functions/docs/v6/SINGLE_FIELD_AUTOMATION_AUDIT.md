@@ -6,6 +6,27 @@ Single-field means the rep advances the activity lifecycle with exactly one prim
 command field. Product, quote, contract, stage, sequence, and relationship fields are
 context or evidence; they are not lifecycle commands.
 
+> **Correction (D1).** Earlier revisions of this document described `Task_Sequence_Type` as the
+> *sole command* for a Sequence Activation Task, with `Task_State = Won` automation-derived. That is
+> backwards, and both the code and `SALES_GUIDE.md` §4 say so. The Activation Task carries **two
+> independent controls**:
+>
+> - `Task_Sequence_Type` is the **preference**. Rep-owned, automation never writes it, and it starts
+>   nothing on its own. A change is **prospective** — effective at the next eligible Stage entry.
+> - `Task_State` is the **commit** (`Won`) and the **immediate off-switch** (`Lost`, or `Open` after
+>   a `Won`). It is the only control with an immediate effect.
+>
+> The Activation Task is the one place the single-field rule does not apply, and that is deliberate:
+> a preference and a commitment are different decisions and a rep must be able to change either one
+> after the fact.
+>
+> **Loss is always local, at every level.** No activity-level `Lost` — Task, Call or Meeting —
+> writes `Contact.State`, `Contact.Status`, `Contact.Stage` or any Deal field, **including
+> `No Response` on an exhausted sequence**. It raises `[activity_lost_suggests_contact_loss]`
+> instead. An explicit Contact-level loss writes the Contact and **no Deal field**; a Deal becomes
+> Lost only through a separate, explicit Deal-level decision, surfaced by
+> `[deal_has_no_viable_contact]`.
+
 ## Command Surfaces
 
 | Use case | User command | Optional context | Automation-derived fields |
@@ -13,7 +34,11 @@ context or evidence; they are not lifecycle commands.
 | Ordinary Task success | `Task_State = Won` | `Task_Type`, commercial evidence, relationship fields | `Task_Status = Closed`, native `Status = Completed`, downstream Contact/Deal/Quote/sequence writes |
 | Ordinary Task loss | `Task_State = Lost` | `Task_Lost_Reasons` required | `Task_Status = Closed`, native `Status = Completed`, local loss routing |
 | Ordinary Task unresolved | `Task_State = Open` | Task context/evidence | `Task_Status = New` or `Working`; no terminal transition |
-| Activation Task | `Task_Sequence_Type = Email/Call/Manual` | `Task_Sequence_Stage` | Route execution, `Task_State = Won`, `Task_Status = Closed`, native `Status = Completed` |
+| Activation Task — choose the route | `Task_Sequence_Type = Email/Call/Manual` | `Task_Sequence_Stage` | **Nothing by itself.** The preference is recorded; it is **prospective** and takes effect at the next eligible Stage entry. `Manual` included: selecting it mid-cadence stops nothing and the current Stage finishes |
+| Activation Task — commit | `Task_State = Won` | latest Note = `Warm`/`Cold` (Email route only) | Route execution, `Task_Status = Closed`, native `Status = Completed`, `ActivationCommand\|state=Won\|type=…` marker |
+| Activation Task — disable (deliberate) | `Task_State = Lost` | none; no Lost Reason required | Cadence Calls cancelled, ScheduledSend Tasks cancelled, `Sequence_State = Stopped`, marker `state=Lost`. `Sequence_Type` and `Sequence_Activated_At` **preserved**; Contact `State`/`Status`/`Stage` and every Deal field **unchanged** |
+| Activation Task — disable (unaddressed) | `Task_State = Open` after a `Won` | none | Same neutralization as `Lost`; `Task_Status = Working`, native `Status = In Progress`, marker `state=Open` |
+| Activation Task — re-enable | `Task_State = Won` from `Lost`/`Open` | new `Task_Sequence_Type` adopted in the same save | `Sequence_State = Not Activated`, `Sequence_Stage`/`Sequence_Step` cleared, marker `state=Won`. **Routes nothing** — no replay, no resume of the interrupted Stage; `Sequence_Activated_At` not re-stamped |
 | Call success | `Call_Task_State = Won` | Call stage, attempt, Product/contract evidence | `Call_Task_Status = Closed`, native activity close, next sequence action |
 | Call loss | `Call_Task_State = Lost` | `Call_Task_Lost_Reasons` required | `Call_Task_Status = Closed`, local loss routing |
 | Call reschedule | `Call_Task_State = Open` | `Next_Follow_Up_Date` | Replacement/scheduled Call; no new State or Status value |

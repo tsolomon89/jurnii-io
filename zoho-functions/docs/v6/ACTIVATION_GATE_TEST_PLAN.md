@@ -135,3 +135,144 @@ Contacts in the org had a non-null `Sequence_Type`, so no live activated sequenc
 exists to grandfather. Re-verify with the query above before publishing — if it ever
 returns Contacts that WERE legitimately activated, backfill
 `Sequence_Activated_At` for them first or the gate will silence their sequences.
+
+---
+
+# Activation & Meeting Alignment — added acceptance tests (2026-08-08)
+
+Every AG-* test above is **retained as a regression guard** and must still pass. The tests below
+are added by the Activation & Meeting Alignment sprint (Changes 1-21). Run them in the order
+given. Seed Contacts use Gmail plus-addressing (`t.l.c.solomon+<runkey>@gmail.com`) so deliveries
+are observable and attributable. Record every created id and delete all synthetic records
+afterwards.
+
+## Preconditions
+
+Every precondition above still applies, plus:
+
+- `Task_Sequence_Type` and `Task_State` are **visible and editable on a completed Activation
+  Task** (otherwise Changes 3-6 are unreachable from the UI).
+- `Task_Status` and native `Status` are read-only/hidden for reps (the mirrors stay
+  automation-owned).
+- `BOOKING_MEETING_AUTOMATION_ENABLED` is still `false`.
+- V4 confirmed (`Task_Type` contains `Scheduled Send` and `Email Sent` — **verified 2026-08-08**).
+- V5 confirmed (`Meeting_Task_Contract_Products` carries the 4 active catalogue names —
+  **verified 2026-08-08, already repaired**).
+- V6 confirmed (no Zoho Cadence active on Contacts — **hand verification still required**).
+
+> **Baseline from the pre-publish audit** (`AUDIT_RESULTS_PRE_PUBLISH.md`): the org contains 153
+> Activation Tasks, **all uncommitted** (`Open`/`New`), **zero** Contacts with
+> `Sequence_Activated_At`, and **zero** Events with a terminal `Meeting_Task_State`. The LG-*
+> tests therefore have **no naturally-occurring records** to run against and must be run on
+> **seeded** ones.
+
+## Canonical identity (Change 1)
+
+| ID | Scenario | Expected |
+| --- | --- | --- |
+| ID-1 | Contact with a completed Activation Task at an older Stage; force `processContact` to re-run | **No second Activation Task.** Log shows the existing one found. |
+| ID-2 | Contact with a completed Task on Deal A; create Deal B and re-run | **No second Task.** Identity ignored the Deal. |
+| ID-3 | Seed two Activation Tasks: one committed (`Won`, marker present), one Open/New/blank. Edit either. | **Nothing is deferred. Neither Task is modified. The edited command is not acted on.** One `[activation_control_ambiguous]` review naming both ids and their `Task_Sequence_Type`. Re-save twice → still exactly one review Task. |
+| ID-4 | **Retirement finality, four steps.** (1) Seed two Open/New/blank Tasks with no marker; edit one, so collapse runs. (2) Let WF008 fire on the newly `Deferred` sibling. (3) Re-save the retained Task. (4) Re-run `processContact`. | (1) Lowest id kept, sibling `Deferred`. (2) Deferred sibling inert — handler returns, nothing written. (3) Retained Task **still usable**: its command processes normally. (4) **No ambiguity review, no additional Task.** Exactly one active candidate at every step. |
+| ID-5 | Set the sole Activation Task to `Deferred` by hand, then re-run `processContact` | **No replacement Task.** One `[activation_no_active_control]` report. Re-run twice → still one. |
+
+## Legacy / marker resolution (Change 2) — **the first gate**
+
+Run LG-1..LG-6 **before anything else**. They prove no pre-existing Task can replay activation.
+
+| ID | Scenario | Expected |
+| --- | --- | --- |
+| LG-1 | Completed `Won` Task, **no** marker, Contact has `Sequence_Activated_At` + `Sequence_Type='Email'`; change the type to `Call` | **`preference_change`, not a replay.** 0 emails, 0 Calls, no Stage change, `Sequence_State` untouched. Marker written `(Won, Call)`. |
+| LG-2 | The same Task saved with **no** change | **`legacy_bootstrap`**: marker written `(Won, Email)` and nothing else — 0 emails, 0 Calls, 0 Tasks. Save again → `idempotent_skip`. |
+| LG-3 | Delete the `ActivationCommand\|` line from a processed Task, then save | Reconstructed as legacy. **Never replays.** Marker restored; rep-facing text intact. |
+| LG-4 | Legacy Task set to `Lost` (and separately `Open`) on a Contact with the timestamp stamped | The corresponding immediate disable runs. No replay, no Contact/Deal state change. |
+| LG-5 | Legacy Task whose Contact has the timestamp stamped but **blank** `Sequence_Type` | **Stops safely.** One `[activation_legacy_command_unresolved]` review. 0 emails, 0 Calls. Re-save twice → still one review. |
+| LG-6 | Task with two `ActivationCommand\|` lines, or a malformed one | **Stops safely.** `[activation_marker_unreadable]`, nothing written. |
+| LG-7 | **The last replay path.** (1) On an **ineligible** Contact with a **blank** timestamp, record `Won`/`Call`. (2) Delete the marker line. (3) Reopen the Contact. (4) Re-save the Task unchanged. | **Nothing starts at any step.** 0 emails, 0 Calls, 0 Tasks, no Stage change, timestamp **still blank**. At (4) it resolves as *reconstruct*: marker restored to `(Won, Call)`, nothing else. Then advance a Stage → exactly one Call 1 for that Stage, nothing from the earlier one. |
+| LG-8 | Repeat LG-7 but change the type to `Email` in the same save as (4) | **Stops safely.** `[activation_command_state_conflict]`, nothing written. |
+
+## The two independent controls (Changes 3-7)
+
+| ID | Scenario | Expected |
+| --- | --- | --- |
+| AC-1 | Canonical Task Open; set `Task_Sequence_Type=Email`, leave `Task_State` | Nothing starts. 0 emails, 0 Calls. Timestamp blank. Log `activation_awaiting_commit`. |
+| AC-2 | Set `Task_State=Won` | Cadence starts from the **Contact's current** Stage. Exactly 1 opener email + 1 Call 1. Timestamp stamped. |
+| AC-3 | Contact at Commercial Agreement; commit a Task frozen at `Marketing Consent` | Stage **stays** Commercial Agreement. Log `stage_adoption_skipped_no_regress`. |
+| AC-4 | Won Contact running an Email cadence; change type to `Call` | Current cadence unchanged — no new Call, none cancelled, no resend. `Sequence_Type='Call'`. Advance a Stage → Call-only entry, 0 opener emails. |
+| AC-5 | **Manual is prospective — the load-bearing test.** Contact mid-cadence at Call 2 of 5. Change type to `Manual`. Then drive Calls 2-5 neutral. | On the change: `Sequence_Type='Manual'`, **`Sequence_State` still `Running`**, 0 cancelled, 0 deferred. Then **every remaining step still executes** — Calls 3/4/5 created, cadence emails 2/3/4 sent, the `:5:final` postcall scheduled and sent. |
+| AC-5b | Continue AC-5: advance to the next Stage | **Now** Manual takes effect: 0 cadence Calls, 0 cadence emails, 0 ScheduledSend Tasks. `Sequence_State → Stopped` once, at the boundary. At Proposal Preparation a **Draft Commercials Task IS created**. |
+| AC-6 | Set `Task_State=Lost` mid-cadence | Open cadence Calls → `Outgoing_Call_Status=Cancelled`, `Call_Task_Status=Closed`. ScheduledSend Tasks neutralized. `Sequence_State=Stopped`. **Unchanged:** Contact `State`/`Status`/`Stage`, `Sequence_Type`, `Sequence_Activated_At`, every Quote and Deal field, every open Draft Commercials / Manual Review / Data Repair Task, every meeting and reminder. |
+| AC-7 | Set a previously-Won Task to `Open` | Same neutralization. `Task_Status='Working'`, native `Status='In Progress'`. Log `activation_unaddressed`. |
+| AC-8 | Set the Task back to `Won` (from Lost, then from Open) | **Re-enable runs.** `Sequence_State → Not Activated`, marker `(Won, type)`. No replay: 0 emails, 0 Calls, no resume. Timestamp **not** re-stamped. |
+| AC-8b | Save the re-enabled Task three more times unchanged | `idempotent_skip` each time. 0 of everything, marker unchanged. |
+| AC-8c | From Lost with `Email`, set type `Manual` **and** state `Won` in one save | One `re_enable` adopting Manual. Logs `activation_re_enabled`, not `activated`; `Sequence_State → Not Activated`, not `Stopped`. |
+
+## Storage vs eligibility, and Stage-entry establishment (Changes 2, 21)
+
+| ID | Scenario | Expected |
+| --- | --- | --- |
+| AC-9 | **Run twice** — once on a Contact that **was** activated before going Lost (timestamp stamped), once on one that **never** was (blank). Contact `State=Lost`. (1) type `Email`→`Call`. (2) `Task_State=Lost`. (3) back to `Won`. | **Every command is recorded.** Markers written at each step; `Contact.Sequence_Type='Call'`. **Throughout: Contact stays `State=Lost`/`Status=Closed`, Stage unchanged, Deal completely unchanged, 0 emails, 0 Calls, 0 Tasks. `Sequence_Activated_At` UNCHANGED in both runs** — preserved in the stamped run, still blank in the other. |
+| AC-9b | Continue: a separate process reopens the Contact (`State → Open`). Then re-save the unchanged Task. | **Neither action starts anything.** Reopening: structural work only. Re-saving: `idempotent_skip`. |
+| AC-9c | Continue: advance the reopened Contact to the **next** cadence-eligible Stage legitimately | **The stored `Call` preference takes effect automatically, with no further Task save.** Never-activated run: timestamp stamped **now**, logged `activation_established_at_stage_entry`. Both runs: exactly one Call 1 for **this** Stage, 0 opener emails. **Nothing from the earlier Stage is re-entered.** |
+| AC-9d | Repeat AC-9c with a marker reading `(Lost, Call)` | **No establishment.** Timestamp stays blank, 0 Calls, 0 emails. |
+
+## Partnership coverage and the standing gate (Changes 18, 20)
+
+| ID | Scenario | Expected |
+| --- | --- | --- |
+| AC-10 | Partnership-only Contact; commit `Email` + `Won` | Exactly one canonical Task. Committed state and preference stored. **0** Calls, **0** Tasks, **0** ScheduledSend, **0** emails. Log `dispatch_suppressed_partnership`. |
+| AC-10b | Continue: advance that Contact through two further Stages | **Still 0** cadence artifacts at every Stage. The gate holds beyond commit. |
+| AC-10c | Contact with a B2B **and** a Partnership Deal | **Unchanged from today**: activates on the B2B Deal, no ambiguity review, cadence runs. |
+
+Candidate seeds for AC-10 (Partnership-only, from the pre-publish audit): Chris Garthwaite,
+Elliot Berg, Paul Bishop, Haris Khan, Adam Wilson, Lee Knott, Ed Birkin, Leigh Nissim,
+Pedro Barreda — the nine primary Contacts on the org's nine Partnership driver Deals. Prefer a
+synthetic seed; use these only to confirm the population behaves as expected.
+
+## Loss is local (Changes 16, 19)
+
+| ID | Scenario | Expected |
+| --- | --- | --- |
+| CL-1 | Explicitly mark a Deal's Primary Contact Lost, no other open Contact | Contact `State=Lost`, `Status=Closed`. **Deal untouched** — `Opportunity_State` still `Open`. `[deal_has_no_viable_contact]` raised. |
+| CL-2 | Log a Call `Lost` with `No Response` on a Contact whose `Sequence_State='Complete'` | **Contact NOT Lost. Deal NOT closed.** `[activity_lost_suggests_contact_loss]`. Same assertion for a Lost Task and a Lost Meeting. |
+
+## Meeting truthfulness (Changes 11-17)
+
+| ID | Scenario | Expected |
+| --- | --- | --- |
+| MT-1 | New meeting, no result entered | `Meeting_Task_State` Open/blank. Reminder computed only if still future. |
+| MT-2 | Set `Meeting_Task_State=Won` on a Demo Hosted Contact | Contact → Proposal Preparation **exactly once**. `Meeting_Task_Status=Closed` only after the Stage re-read confirms rank >= Proposal Preparation. Exactly 1 Draft Commercials Task, 1 post-demo email. |
+| MT-3 | Force a genuine routing failure (blank `Who_Id`, terminal state) | Event **not** Closed. Reopened to `Working` + `[meeting_contact_unresolved]`. Contact unchanged. Fix `Who_Id`, re-save → processes correctly, still exactly once. |
+| MT-4 | Set a second Event to Won for the same Contact | No second advance, no duplicate Draft Commercials, no duplicate post-demo email. |
+| MT-5 | Set `Lost` + `No Meeting / Demo` | Lost recorded with reason. `Contact.State` Open, `Deal.Opportunity_State` Open. **Contact stays put with no replayed recovery cadence** — 0 Calls, 0 cadence emails; log `demo_followup_manual_engagement`. A new meeting can be booked and processes normally. |
+| MT-6 | Set `Lost` + `No Response` on a Contact whose `Sequence_State='Complete'` | **Contact NOT Lost. Deal NOT closed.** `[activity_lost_suggests_contact_loss]`. |
+| MT-7 | Set `Lost` with a blank Lost Reason | Event reopened to `Open`/`Working` + review. No routing. |
+| MT-8 | Won Event on a Contact already at Onboarding | Contact **stays** at Onboarding. **Event closes successfully** — **not** reopened. No Draft Commercials Task. Logs `demo_qualified_already_progressed` + `won_routed`. |
+| MT-9 | Re-save an already-processed Won/Lost Event three times | MTG-4 returns each time. No duplicate Task, Call, email or Quote key. |
+| MT-10 | Open a booked demo Event that already has a `Booking Reference:` Description | The guidance is **appended once**, below the existing text, which is preserved. Re-save twice → still appended exactly once. |
+
+## Rollout gate and deployment
+
+| ID | Scenario | Expected |
+| --- | --- | --- |
+| BK-1 | **Rollout gate.** Set `BOOKING_MEETING_AUTOMATION_ENABLED=true` in a controlled environment; make one web booking end to end | Exactly one Zoho Event, correlated by `Ext_Calendar_Booking_ID`. WF007 fires once. Contact advances to Demo Confirmation exactly once. Confirmation email + reminder as expected. **Production enablement only after this and MT-1..MT-9 pass.** |
+| DA-1 | Publish every changed function, change no record | Zero automation-log entries attributable to the publish. AUD-1..AUD-5 counts identical before and after. Flag still `false`. |
+| DA-2 | Re-run AUD-1..AUD-5 | Existing canonical Tasks in place. No bulk regeneration, reset, or automatic activation. |
+| DA-3 | Review the audit output | Missing / duplicate / conflicting controls appear as reviewable lists, not silent repairs. |
+
+## Offline contract suites that must be green first
+
+These run locally and gate the live tests. `python tests/<name>.py`, or all under pytest.
+
+| Suite | Proves |
+| --- | --- |
+| `test_activation_command.py` | The command table, marker round-trip, and **the closed proof that nothing returns `activate` unless `last_kind == "absent"`**. |
+| `test_activation_identity.py` | Canonical identity, the retirement rule, collapse finality, and every refusal path leaving an empty retire-list. |
+| `test_cadence_artifact.py` | Neutralization reaches cadence Calls and ScheduledSend Tasks **only** — never commercial, rep-owned or sent-email records. |
+| `test_cadence_dispatch_gate.py` | Manual scoping to new Stage entry, `create_task` never suppressed, the standing Partnership gate, and Change 21 establishment. |
+| `test_activity_loss_propagation.py` | No activity Lost propagates, on any handler, for any action; no path closes a Deal. |
+| `test_stage_guard.py` | The two targeted Stage guards and the meeting-Won success rule. |
+
+Plus the pre-existing `test_quote_subject.py`, `test_pipeline_mapping.py` and the booking suites
+(`zoho-field-names.test.js`, `deluge-reminder-rule.test.js`, `meeting-automation.test.js`,
+`integrations.test.js`, `tests/db/*`).

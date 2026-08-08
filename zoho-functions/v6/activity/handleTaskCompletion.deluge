@@ -125,56 +125,452 @@ void automation.handleTaskCompletion(string taskIdStr)
 	if(tType == "Sequence Activation")
 	{
 		taskStatusMirror = ifnull(task.get("Task_Status"), "").toString().trim();
-		if(taskState == "Won" && taskStatusMirror == "Closed")
+		nlChar = hextoText("0A");
+
+		contactSeqType = ifnull(contact.get("Sequence_Type"), "").toString().trim();
+		if(contactSeqType == "-None-") { contactSeqType = ""; }
+		if(contactSeqType != "Email" && contactSeqType != "Call" && contactSeqType != "Manual") { contactSeqType = ""; }
+		contactActivatedAt = ifnull(contact.get("Sequence_Activated_At"), "").toString().trim();
+		contactStateNow = ifnull(contact.get("State"), "Open").toString().trim();
+		// Eligibility gates EXECUTION only; it never changes what the command IS.
+		actEligible = (contactStateNow != "Lost");
+
+		// =================================================================================
+		// CHANGE 1 - the active control set, Contact-scoped.
+		//   candidates       = every Activation Task for this Contact (Who_Id + Task_Type)
+		//   activeCandidates = candidates where Status != "Deferred"
+		// THIS Task is always active here: the Status == "Deferred" guard above already
+		// returned for a retired one, which is why a Deferred sibling needs no new code.
+		// =================================================================================
+		actReadOk = true;
+		actTasks = zoho.crm.getRelatedRecords("Tasks", "Contacts", contactId);
+		if(isNull(actTasks) || actTasks.size() == 0 || actTasks.toString().startsWith("{\"code\""))
 		{
-			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "guard", "activation_already_processed", {"status":tStatus});
+			actTasks = zoho.crm.searchRecords("Tasks", "(Who_Id:equals:" + contactId + ")");
+		}
+		if(isNull(actTasks))
+		{
+			actReadOk = false;
+			actTasks = List();
+		}
+		else if(actTasks.toString().startsWith("{\"code\""))
+		{
+			if(actTasks.toString().contains("NO_CONTENT")) { actReadOk = true; }
+			else { actReadOk = false; }
+			actTasks = List();
+		}
+
+		actActive = List();
+		actActiveBlank = List();
+		actDetail = Map();
+		for each atk in actTasks
+		{
+			aWho = "";
+			aWhoL = atk.get("Who_Id");
+			if(!isNull(aWhoL) && !isNull(aWhoL.get("id"))) { aWho = aWhoL.get("id").toString(); }
+			if(aWho != contactId.toString()) { continue; }
+			if(ifnull(atk.get("Task_Type"), "").toString() != "Sequence Activation") { continue; }
+			if(ifnull(atk.get("Status"), "").toString() == "Deferred") { continue; }
+			aId = atk.get("id").toString();
+			aState2 = ifnull(atk.get("Task_State"), "").toString().trim();
+			aTStat2 = ifnull(atk.get("Task_Status"), "").toString().trim();
+			aType2 = ifnull(atk.get("Task_Sequence_Type"), "").toString().trim();
+			if(aType2 == "-None-") { aType2 = ""; }
+			aDesc2 = ifnull(atk.get("Description"), "").toString();
+			actActive.add(aId);
+			actDetail.put(aId, aState2 + "/" + aType2);
+			if(aState2 == "Open" && aTStat2 == "New" && aType2 == "" && !aDesc2.contains("ActivationCommand|"))
+			{
+				actActiveBlank.add(aId);
+			}
+		}
+		// The edited Task is a candidate by construction; include it if the read missed it.
+		if(!actActive.contains(taskId.toString()))
+		{
+			actActive.add(taskId.toString());
+			actDetail.put(taskId.toString(), taskState + "/" + taskSeqType);
+			if(taskState == "Open" && taskStatusMirror == "New" && taskSeqType == "" && !tDesc.contains("ActivationCommand|"))
+			{
+				actActiveBlank.add(taskId.toString());
+			}
+		}
+
+		if(!actReadOk)
+		{
+			// Fail safe: never act on a partial control set.
+			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "guard", "activation_control_read_unresolved", {"contact":contactId.toString()});
 			return;
 		}
 
-		// ---- HARDENED COMMIT MODEL: Task_Sequence_Type is the route PARAMETER; Task_State = Won is the
-		//      COMMIT. Editing Task_Sequence_Type alone (State not yet Won) is a NO-OP — do not start the
-		//      sequence or defer sibling activation tasks until the rep commits with Task_State = Won. ----
-		if(taskState != "Won")
+		// ---- the collapse rule -----------------------------------------------------------
+		if(actActive.size() > 1)
+		{
+			if(actActiveBlank.size() == actActive.size())
+			{
+				collKeep = 999999999999999999;
+				for each kId in actActive
+				{
+					if(kId.toLong() < collKeep) { collKeep = kId.toLong(); }
+				}
+				for each rId in actActive
+				{
+					if(rId.toLong() != collKeep)
+					{
+						zoho.crm.updateRecord("Tasks", rId.toLong(), {"Status":"Deferred", "Blocks_Sequence":"No"}, noTrigger);
+						automation.logAutomationEvent("handleTaskCompletion", "Tasks", rId, "activation_dedupe", "deferred_duplicate", {"contact":contactId.toString(), "kept":collKeep.toString()});
+					}
+				}
+				if(taskId != collKeep)
+				{
+					// THIS Task was the one retired. It is now inert; the kept Task is the control.
+					automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activation_dedupe", "self_retired", {"contact":contactId.toString(), "kept":collKeep.toString()});
+					return;
+				}
+			}
+			else
+			{
+				// STOP SAFELY: raise the review and return WITHOUT acting on the edited Task.
+				// No route, no disable, no preference write, and no sibling is deferred.
+				ambDetail2 = "";
+				for each aId2 in actActive
+				{
+					ambDetail2 = ambDetail2 + " " + aId2 + "(" + ifnull(actDetail.get(aId2), "").toString() + ")";
+				}
+				automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "[activation_control_ambiguous] Several active Sequence Activation Tasks exist for this Contact and they are not provably indistinguishable, so the command on task " + taskId + " was NOT applied. Candidates (id, Task_State/Task_Sequence_Type):" + ambDetail2 + ". Retire the ones that are not the intended control (native Status = Deferred), leaving exactly one, then re-save it.");
+				automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activation_control_ambiguous", "blocked", {"contact":contactId.toString(), "candidates":actActive.toString()});
+				return;
+			}
+		}
+
+		// =================================================================================
+		// CHANGE 2 - resolve `last`, the processed-command tuple, BEFORE the command table.
+		// The marker is one line in the Description, the pattern already proven by
+		// ScheduledSend| and SendKey:. It is AUTHORITATIVE; Task_Status is only a mirror.
+		// =================================================================================
+		markerCount = 0;
+		markerRaw = "";
+		descLines = tDesc.toList(nlChar);
+		for each dLine in descLines
+		{
+			if(dLine.trim().startsWith("ActivationCommand|"))
+			{
+				markerCount = markerCount + 1;
+				markerRaw = dLine.trim();
+			}
+		}
+
+		lastKind = "";
+		lastState = "";
+		lastType = "";
+		if(markerCount > 1)
+		{
+			lastKind = "unreadable";
+		}
+		else if(markerCount == 1)
+		{
+			mParts = markerRaw.toList("|");
+			mOk = false;
+			if(mParts.size() == 3 && mParts.get(1).startsWith("state=") && mParts.get(2).startsWith("type="))
+			{
+				// getSuffix, not substring(int): the one-argument form is not reliably available
+				// in this org's Deluge, and getSuffix is the proven idiom (processContact:82).
+				mState = mParts.get(1).getSuffix("state=").trim();
+				mType = mParts.get(2).getSuffix("type=").trim();
+				if(mState == "Open" || mState == "Won" || mState == "Lost")
+				{
+					if(mType == "-") { mType = ""; mOk = true; }
+					else if(mType == "Email" || mType == "Call" || mType == "Manual") { mOk = true; }
+				}
+				if(mOk) { lastState = mState; lastType = mType; }
+			}
+			if(mOk) { lastKind = "parsed"; }
+			else { lastKind = "unreadable"; }
+		}
+		else if(contactActivatedAt != "")
+		{
+			// Legacy bootstrap: committed before the marker existed, or the marker was edited
+			// away. A stamped timestamp plus a stored preference is solid evidence of the commit.
+			if(contactSeqType != "") { lastKind = "legacy"; lastState = "Won"; lastType = contactSeqType; }
+			else { lastKind = "unresolvable"; }
+		}
+		else if(taskStatusMirror == "New" && tStatus == "Not Started")
+		{
+			// Genuinely uncommitted. The ONLY route to initial activation.
+			lastKind = "absent";
+		}
+		else if(taskState == "Won" && (taskStatusMirror == "Closed" || tStatus == "Completed") && taskSeqType != "" && taskSeqType == contactSeqType)
+		{
+			// Change 21 leaves a durable (Won, type) command whose timestamp is still blank.
+			// Reconstruct it. Weaker evidence than the stamped case, so the Task type must AGREE
+			// with the Contact's stored preference - a disagreement is a conflict to report, not
+			// a preference change to infer.
+			lastKind = "legacy"; lastState = "Won"; lastType = taskSeqType;
+		}
+		else
+		{
+			lastKind = "conflict";
+		}
+
+		// ---- the three stop-safely kinds: one idempotent Manual Review, nothing written ----
+		if(lastKind == "unreadable")
+		{
+			automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "[activation_marker_unreadable] Activation task " + taskId + " carries a malformed or duplicated 'ActivationCommand|' line in its Description, so no command was processed and nothing was written. That line is automation-owned: restore it to a single well-formed line, or delete it entirely so it can be rebuilt, then re-save the task.");
+			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activation_marker_unreadable", "blocked", {"contact":contactId.toString(), "marker_lines":markerCount.toString()});
+			return;
+		}
+		if(lastKind == "unresolvable")
+		{
+			automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "[activation_legacy_command_unresolved] Activation task " + taskId + " has no 'ActivationCommand|' marker and its Contact was activated (Sequence_Activated_At is set) but carries no Sequence_Type, so the previously-processed command cannot be reconstructed. Nothing was routed and nothing was written. Set the Contact's Sequence Type to the route that is actually running, then re-save this task.");
+			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activation_legacy_command_unresolved", "blocked", {"contact":contactId.toString()});
+			return;
+		}
+		if(lastKind == "conflict")
+		{
+			automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "[activation_command_state_conflict] Activation task " + taskId + " has no 'ActivationCommand|' marker and its commit signals disagree (Task_State=" + taskState + ", Task_Status=" + taskStatusMirror + ", Status=" + tStatus + ", Task_Sequence_Type=" + taskSeqType + ", Contact Sequence_Type=" + contactSeqType + "). The evidence is too weak to tell an uncommitted task from a committed one, so nothing was routed and nothing was written. Confirm the intended route on the Contact, then re-save this task.");
+			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activation_command_state_conflict", "blocked", {"contact":contactId.toString(), "task_state":taskState, "task_status":taskStatusMirror, "status":tStatus});
+			return;
+		}
+
+		// =================================================================================
+		// The command contract. cur = (taskState, taskSeqType); last as resolved above.
+		// =================================================================================
+		curType = taskSeqType;
+		if(curType != "Email" && curType != "Call" && curType != "Manual") { curType = ""; }
+
+		actOutcome = "";
+		markerState = "";
+		markerType = "";
+		if(lastKind == "absent")
+		{
+			if(taskState != "Won") { actOutcome = "awaiting_commit"; }
+			else if(curType == "") { actOutcome = "no_route"; }
+			else { actOutcome = "activate"; markerState = "Won"; markerType = curType; }
+		}
+		else if(lastKind == "parsed" && taskState == lastState && curType == lastType)
+		{
+			actOutcome = "idempotent_skip";
+		}
+		else if(lastKind == "legacy" && taskState == lastState && curType == lastType)
+		{
+			actOutcome = "legacy_bootstrap"; markerState = lastState; markerType = lastType;
+		}
+		else if(lastState == "Won")
+		{
+			if(taskState == "Won")
+			{
+				if(curType == "") { actOutcome = "no_route"; }
+				else { actOutcome = "preference_change"; markerState = "Won"; markerType = curType; }
+			}
+			else if(taskState == "Lost")
+			{
+				actOutcome = "disable_lost"; markerState = "Lost"; markerType = curType;
+				if(markerType == "") { markerType = lastType; }
+			}
+			else if(taskState == "Open")
+			{
+				actOutcome = "disable_open"; markerState = "Open"; markerType = curType;
+				if(markerType == "") { markerType = lastType; }
+			}
+			else { actOutcome = "awaiting_commit"; }
+		}
+		else
+		{
+			// last.state is Lost or Open - the control is disabled.
+			if(taskState == "Won")
+			{
+				if(curType == "") { actOutcome = "no_route"; }
+				else { actOutcome = "re_enable"; markerState = "Won"; markerType = curType; }
+			}
+			else if(taskState == "Lost" || taskState == "Open")
+			{
+				actOutcome = "record_preference_while_disabled"; markerState = taskState; markerType = curType;
+			}
+			else { actOutcome = "awaiting_commit"; }
+		}
+
+		// ---- the two outcomes that write nothing at all -----------------------------------
+		if(actOutcome == "awaiting_commit")
 		{
 			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activation_awaiting_commit", ifnull(taskSeqType, "").toString(), {"contact":contactId.toString(), "task_state":taskState});
 			return;
 		}
-
-		// ---- D1 FIX (2026-06-22): race-proof backstop. processContact §6b tries to defer
-		//      duplicate activation tasks at creation, but two concurrent processContact runs
-		//      (processLead's inline call + the WF001b2 Contacts-create trigger) can both create
-		//      one before either sweep sees the other, leaving TWO "Not Started" tasks (observed
-		//      in E2E). Here, at the single-threaded human completion point, defer EVERY other
-		//      open Sequence Activation task for this Contact + Stage so only THIS task activates. ----
-		sibTasks = zoho.crm.getRelatedRecords("Tasks", "Deals", dealId);
-		if(isNull(sibTasks) || sibTasks.size() == 0 || sibTasks.toString().startsWith("{\"code\"")) { sibTasks = zoho.crm.searchRecords("Tasks", "(What_Id:equals:" + dealId + ")"); }
-		if(!isNull(sibTasks) && sibTasks.size() > 0 && !sibTasks.toString().startsWith("{\"code\""))
+		if(actOutcome == "idempotent_skip")
 		{
-			for each sib in sibTasks
-			{
-				sibId = "";
-				if(!isNull(sib.get("id"))) { sibId = sib.get("id").toString(); }
-				sibWho = "";
-				sibWhoL = sib.get("Who_Id");
-				if(!isNull(sibWhoL) && !isNull(sibWhoL.get("id"))) { sibWho = sibWhoL.get("id").toString(); }
-				sibStatus = ifnull(sib.get("Status"), "").toString();
-				if(sibId != "" && sibId != taskId.toString() && sibWho == contactId.toString() && ifnull(sib.get("Task_Type"), "").toString() == "Sequence Activation" && ifnull(sib.get("Task_Sequence_Stage"), "").toString() == taskStage && (sibStatus == "Not Started" || sibStatus == "In Progress"))
-				{
-					zoho.crm.updateRecord("Tasks", sibId.toLong(), {"Status":"Deferred", "Blocks_Sequence":"No"}, noTrigger);
-					automation.logAutomationEvent("handleTaskCompletion", "Tasks", sibId, "activation_dedupe", "deferred_sibling", {"contact":contactId.toString(), "kept":taskId.toString()});
-				}
-			}
+			// The repeated-save case, and the ONLY outcome of re-saving an unchanged task at any
+			// later point. There is no route-on-re-save path.
+			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activation_idempotent_skip", lastState + "/" + lastType, {"contact":contactId.toString()});
+			return;
 		}
-
-		// ---- 1. Resolve route: Task_Sequence_Type is the route parameter for this Won commit.
-		//      Task_State = Won with a blank/invalid route -> reopen the activation task and raise a
-		//      Manual Review so the rep picks a route, then commits Task_State = Won again. ----
-		routeType = taskSeqType;
-		if(routeType != "Email" && routeType != "Call" && routeType != "Manual")
+		if(actOutcome == "no_route")
 		{
+			// NO marker is written, so a corrected retry works.
 			zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Open", "Task_Status":"Working", "Status":"In Progress"}, noTrigger);
 			automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "[activation_no_route] Activation task " + taskId + " was set to Task State = Won without choosing Task Sequence Type. Choose Email / Call / Manual, then set Task State = Won again.");
 			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activation_no_route", ifnull(taskSeqType, "").toString(), {"contact":contactId.toString()});
+			return;
+		}
+
+		// ---- rebuild the Description, replacing exactly the one ActivationCommand| line ----
+		//      Every other line - the rep-facing activation instructions written at create, and
+		//      anything a rep added - is carried through untouched.
+		markerNew = "ActivationCommand|state=" + markerState + "|type=" + markerType;
+		if(markerType == "") { markerNew = "ActivationCommand|state=" + markerState + "|type=-"; }
+		descRebuilt = "";
+		descFirst = true;
+		for each dLine2 in descLines
+		{
+			if(dLine2.trim().startsWith("ActivationCommand|")) { continue; }
+			if(descFirst) { descRebuilt = dLine2; descFirst = false; }
+			else { descRebuilt = descRebuilt + nlChar + dLine2; }
+		}
+		if(descFirst) { descRebuilt = markerNew; }
+		else { descRebuilt = descRebuilt + nlChar + markerNew; }
+
+		// =================================================================================
+		// CHANGE 3 - prospective type change, Manual included. Records intent, acts on nothing.
+		// =================================================================================
+		if(actOutcome == "preference_change" || actOutcome == "record_preference_while_disabled")
+		{
+			zoho.crm.updateRecord("Contacts", contactId, {"Sequence_Type": markerType}, noTrigger);
+			zoho.crm.updateRecord("Tasks", taskId, {"Description": descRebuilt}, noTrigger);
+			// Sequence_State / Sequence_Stage / Sequence_Step / Stage / Sequence_Activated_At are
+			// deliberately untouched. Nothing is superseded, cancelled, deferred or rebuilt, and
+			// the current Stage's cadence runs to completion - including when the new value is
+			// Manual, which becomes effective only at the NEXT Stage entry (Change 8's scope).
+			if(actOutcome == "preference_change")
+			{
+				automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activation_preference_changed", markerType, {"contact":contactId.toString(), "from":lastType, "to":markerType});
+			}
+			else
+			{
+				automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activation_preference_recorded_while_disabled", markerType, {"contact":contactId.toString(), "state":markerState});
+			}
+			return;
+		}
+
+		// =================================================================================
+		// CHANGE 2 (legacy bootstrap) - write the marker, route nothing, create nothing.
+		// =================================================================================
+		if(actOutcome == "legacy_bootstrap")
+		{
+			zoho.crm.updateRecord("Tasks", taskId, {"Description": descRebuilt}, noTrigger);
+			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "legacy_marker_bootstrapped", lastState + "/" + lastType, {"contact":contactId.toString()});
+			return;
+		}
+
+		// =================================================================================
+		// CHANGES 4 and 5 - the two immediate disables. Same neutralization, different
+		// human meaning: Open = unaddressed, Lost = deliberately disabled.
+		// =================================================================================
+		if(actOutcome == "disable_lost" || actOutcome == "disable_open")
+		{
+			// --- neutralize cadence artifacts, and ONLY cadence artifacts ---
+			// Cadence Calls: Sequence_Managed = "Yes" is written in exactly three places, all
+			// automation cadence Calls. A rep-created Call never carries it.
+			neuCalls = zoho.crm.getRelatedRecords("Calls", "Contacts", contactId);
+			if(isNull(neuCalls) || neuCalls.size() == 0 || neuCalls.toString().startsWith("{\"code\""))
+			{
+				neuCalls = zoho.crm.searchRecords("Calls", "(Who_Id:equals:" + contactId + ")");
+			}
+			if(!isNull(neuCalls) && neuCalls.size() > 0 && !neuCalls.toString().startsWith("{\"code\""))
+			{
+				for each ncl in neuCalls
+				{
+					nclWho = "";
+					nclWhoL = ncl.get("Who_Id");
+					if(!isNull(nclWhoL) && !isNull(nclWhoL.get("id"))) { nclWho = nclWhoL.get("id").toString(); }
+					if(nclWho == contactId.toString() && ifnull(ncl.get("Sequence_Managed"), "No").toString() == "Yes" && ifnull(ncl.get("Call_Task_State"), "").toString() == "Open" && ifnull(ncl.get("Call_Task_Status"), "").toString() == "Working")
+					{
+						// Call_Task_State is left Open - the Call was neither Won nor Lost, and
+						// rewriting it would falsify history.
+						zoho.crm.updateRecord("Calls", ncl.get("id").toLong(), {"Outgoing_Call_Status":"Cancelled", "Call_Task_Status":"Closed"}, noTrigger);
+						automation.logAutomationEvent("handleTaskCompletion", "Calls", ncl.get("id").toString(), "activation_disable", "cadence_call_cancelled", {"contact":contactId.toString()});
+					}
+				}
+			}
+			// Scheduled-send wake-up Tasks: Task_Type = "Scheduled Send" is written in exactly one
+			// place. Reuses the Contact-scoped read already taken above. NOTE: native Status has no
+			// live "Cancelled" value (see AUDIT_RESULTS_PRE_PUBLISH.md L21), so this writes
+			// Deferred + Task_Status=Closed - both live-valid, and either alone already satisfies
+			// the stop-gate at sendScheduledEmailFromTask.deluge:32.
+			for each ntk in actTasks
+			{
+				ntkWho = "";
+				ntkWhoL = ntk.get("Who_Id");
+				if(!isNull(ntkWhoL) && !isNull(ntkWhoL.get("id"))) { ntkWho = ntkWhoL.get("id").toString(); }
+				if(ntkWho != contactId.toString()) { continue; }
+				if(ifnull(ntk.get("Task_Type"), "").toString() != "Scheduled Send") { continue; }
+				ntkStatus = ifnull(ntk.get("Status"), "").toString();
+				if(ntkStatus == "Completed" || ntkStatus == "Cancelled" || ntkStatus == "Deferred") { continue; }
+				if(ifnull(ntk.get("Task_Status"), "").toString() == "Closed") { continue; }
+				ntkDesc = ifnull(ntk.get("Description"), "").toString();
+				zoho.crm.updateRecord("Tasks", ntk.get("id").toLong(), {"Status":"Deferred", "Task_Status":"Closed", "Description": ntkDesc + nlChar + "Cadence disabled by Activation Task " + taskId + "."}, noTrigger);
+				automation.logAutomationEvent("handleTaskCompletion", "Tasks", ntk.get("id").toString(), "activation_disable", "scheduled_send_cancelled", {"contact":contactId.toString()});
+			}
+
+			// Sequence_Type and Sequence_Activated_At are PRESERVED. Contact.State / Status /
+			// Stage and every Deal field are UNCHANGED - loss is local, and disabling a cadence
+			// is not an activity loss (so no Task_Lost_Reasons is required either).
+			cDis = Map();
+			cDis.put("Sequence_State", "Stopped");
+			if(markerType != "") { cDis.put("Sequence_Type", markerType); }
+			zoho.crm.updateRecord("Contacts", contactId, cDis, noTrigger);
+
+			if(actOutcome == "disable_lost")
+			{
+				zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Lost", "Task_Status":"Closed", "Status":"Completed", "Description": descRebuilt}, noTrigger);
+				automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activation_disabled", markerType, {"contact":contactId.toString()});
+			}
+			else
+			{
+				// Task_Status = "Working" (not Closed) keeps the task visibly open on the layout
+				// while it is awaiting a decision. Also resolves E4.
+				zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Open", "Task_Status":"Working", "Status":"In Progress", "Description": descRebuilt}, noTrigger);
+				automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activation_unaddressed", markerType, {"contact":contactId.toString()});
+			}
+			return;
+		}
+
+		// =================================================================================
+		// CHANGE 6 - re-enablement. Releases the Stopped block without claiming a running
+		// sequence, adopts a changed type in the same operation, and routes NOTHING.
+		// =================================================================================
+		if(actOutcome == "re_enable")
+		{
+			cRe = Map();
+			cRe.put("Sequence_State", "Not Activated");
+			cRe.put("Sequence_Stage", "None");
+			cRe.put("Sequence_Step", "None");
+			cRe.put("Sequence_Type", markerType);
+			// Sequence_Activated_At UNTOUCHED (set-once, never re-stamped, never cleared).
+			zoho.crm.updateRecord("Contacts", contactId, cRe, noTrigger);
+			zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Won", "Task_Status":"Closed", "Status":"Completed", "Description": descRebuilt}, noTrigger);
+			// Do NOT route, do NOT resend, do NOT resume the interrupted same-Stage cadence. The
+			// stored route is used at the next Stage entry (Change 10), and where activation was
+			// never established that Stage entry is itself the establishing event (Change 21).
+			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activation_re_enabled", markerType, {"contact":contactId.toString(), "from":lastState + "/" + lastType});
+			return;
+		}
+
+		// =================================================================================
+		// Initial activation. Reached ONLY when lastKind == "absent" - the closed proof that
+		// no existing task can replay its Stage.
+		// =================================================================================
+		// ---- 1. The route is the command table's curType; it is non-blank by construction here
+		//         (a blank/invalid route resolved to "no_route" above and already returned). ----
+		routeType = curType;
+
+		// ---- 1b. ELIGIBILITY. Command resolution is complete and the command is now RECORDED.
+		//      Execution is a separate, later step. A commercially ineligible Contact still gets
+		//      its marker and its preference; nothing routes, nothing sends, no Stage changes,
+		//      and Sequence_Activated_At is left exactly as it was - preserved if stamped, blank
+		//      if not. The Contact is NOT revived, and nothing is queued: the stored preference
+		//      becomes usable only at the next cadence-eligible Stage entry, via Change 21. ----
+		if(!actEligible)
+		{
+			zoho.crm.updateRecord("Contacts", contactId, {"Sequence_Type": routeType}, noTrigger);
+			zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Won", "Task_Status":"Closed", "Status":"Completed", "Description": descRebuilt}, noTrigger);
+			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activation_recorded_not_executed", routeType, {"contact":contactId.toString(), "contact_state":contactStateNow});
 			return;
 		}
 
@@ -182,17 +578,31 @@ void automation.handleTaskCompletion(string taskIdStr)
 		//         command task without routing again. Manual is allowed even when Running. ----
 		if((routeType == "Email" || routeType == "Call") && contactSeqState == "Running")
 		{
-			zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Won", "Task_Status":"Closed", "Status":"Completed"}, noTrigger);
+			zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Won", "Task_Status":"Closed", "Status":"Completed", "Description": descRebuilt}, noTrigger);
 			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "idempotency_skip", routeType, {"contact":contactId.toString()});
 			return;
 		}
 
 		// ---- 3. Stage adoption: the Activation Task's business Stage (Task_Sequence_Stage) wins
-		//         onto Contact.Stage so the sequence enters at the intended stage. ----
+		//         onto Contact.Stage so the sequence enters at the intended stage.
+		//      CHANGE 7: rank-guarded, mirroring processLead.deluge:454. Task_Sequence_Stage is
+		//      frozen at create, so an unguarded adoption can drag a Contact BACKWARDS from a
+		//      value set months earlier. Forward adoption is preserved - it is load-bearing for
+		//      Contacts imported at a later Stage. One of exactly two Stage guards in this sprint. ----
+		actStageRanks = {"Marketing Consent":1, "Demo Booking":2, "Demo Confirmation":3, "Demo Hosted":4, "Proposal Preparation":5, "Commercial Agreement":6, "Onboarding":7, "Renewal":8};
 		if(taskStage != "" && taskStage != contactStage)
 		{
-			zoho.crm.updateRecord("Contacts", contactId, {"Stage": taskStage}, noTrigger);
-			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "stage_adopted", taskStage, {"contact":contactId.toString(), "from":contactStage});
+			taskStageRank = ifnull(actStageRanks.get(taskStage), 1).toLong();
+			contactStageRank = ifnull(actStageRanks.get(contactStage), 1).toLong();
+			if(taskStageRank > contactStageRank)
+			{
+				zoho.crm.updateRecord("Contacts", contactId, {"Stage": taskStage}, noTrigger);
+				automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "stage_adopted", taskStage, {"contact":contactId.toString(), "from":contactStage});
+			}
+			else
+			{
+				automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "stage_adoption_skipped_no_regress", taskStage, {"contact":contactId.toString(), "contact_stage":contactStage});
+			}
 		}
 
 		// ---- 4. Route exactly once (routeContactSequence owns the Contact.Sequence_* writes) ----
@@ -250,7 +660,10 @@ void automation.handleTaskCompletion(string taskIdStr)
 		}
 
 		automation.routeContactSequence(contactId.toString(), dealId.toString(), actTrig, actCtx);
-		zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Won", "Task_Status":"Closed", "Status":"Completed"}, noTrigger);
+		// The ActivationCommand| marker is written HERE, with the commit, so the task carries the
+		// processed-command tuple from now on. Task_Status stays as the human-readable mirror but
+		// is no longer the processed-marker for activation.
+		zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Won", "Task_Status":"Closed", "Status":"Completed", "Description": descRebuilt}, noTrigger);
 		automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activated", actTrig, {"contact":contactId.toString(), "deal":dealId.toString(), "route_via":"Task_Sequence_Type", "opener_variant":actCtx});
 		return;
 	}
@@ -293,8 +706,14 @@ void automation.handleTaskCompletion(string taskIdStr)
 		act = ifnull(loss.get("action"), "manual_review").toString();
 		if(act == "contact_lost")
 		{
+			// CHANGE 16: loss is LOCAL at every level. A Lost Task describes the result of that
+			// Task only - it may not invoke contact_lost, write Contact.State/Status, or close a
+			// Deal, INCLUDING on 'No Response' with the sequence exhausted. Closing the Contact is
+			// an explicit Contact-level decision. resolveActivityLoss is unchanged: it is a pure
+			// advisor, and the CALLER decides propagation - already its documented contract.
 			clr = ifnull(loss.get("contactLostReason"), "No Response").toString();
-			automation.routeContactSequence(contactId.toString(), dealId.toString(), "contactlost:" + clr, "{}");
+			automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "[activity_lost_suggests_contact_loss] Task " + taskId + " Lost (" + clr + ") with the Contact's sequence exhausted. Closing the Contact is an explicit Contact-level decision; activity loss alone does not make the Contact or Deal Lost.");
+			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activity_lost_contact_loss_referred", clr, {"contact":contactId.toString(), "deal":dealId.toString()});
 		}
 		else if(act == "continue_cadence")
 		{

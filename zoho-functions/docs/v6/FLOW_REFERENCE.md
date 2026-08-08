@@ -34,13 +34,18 @@
 | Calls | `Call_Task_Contract_Products` | Multi-select picklist | Product-name strings selected by the rep. |
 | Events | `Meeting_Task_Contract_Products` | Multi-select picklist | Product-name strings selected by the rep. |
 
-Required actual values must equal `Products.Product_Name`, including:
-- `Jurnii 360 - Fixed`
-- `Jurnii 360 - Flex`
-- `Jurnii UX - Fixed`
-- `Jurnii UX - Flex`
-- `Jurnii Cortex - Fixed`
-- `Jurnii Cortex - Flex`
+Required actual values must equal `Products.Product_Name`. The **four active catalogue products**
+are name-only — there are no `- Fixed` / `- Flex` variants in the live catalogue:
+- `Jurnii 360`
+- `Jurnii UX`
+- `Jurnii Cortex`
+- `Partnership`
+
+> **Corrected 2026-08-08 (D3 / Z3).** This list previously named six `- Fixed` / `- Flex` SKUs.
+> Those six values still exist on the `Meeting_Task_Contract_Products` picklist but are
+> **deactivated** (`unused`); the four names above are the live, selectable values, verified
+> against live Zoho metadata. Selecting a deactivated variant name resolves no Product, which is
+> what blocked the Won-meeting → Quote path.
 
 ## Activity Context
 ```json

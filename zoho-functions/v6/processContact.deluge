@@ -246,6 +246,12 @@ void automation.processContact(string contact_id)
 	// Deal (HARD RULE 5: evidence matches the Deal product, established by normalize).
 	productDealIds = List();
 	b2bDriverDealIds = List();   // subset eligible to DRIVE the B2B sequence (pipeline == B2B)
+	// CHANGE 18 (Option A coverage): Partnership drivers are collected ALONGSIDE B2B ones so a
+	// Partnership-only Contact can hold a canonical Activation Task and store a preference.
+	// B2B still WINS whenever it exists, so every outcome that works today is preserved bit for
+	// bit - including "B2B product + Partnership product -> activates on the B2B Deal".
+	// "unresolved" is excluded from BOTH lists: an unrecognised product key drives nothing.
+	partnerDriverDealIds = List();
 	for each prod in products
 	{
 		pProductId = ifnull(prod.get("product_id"), "").toString();
@@ -271,7 +277,9 @@ void automation.processContact(string contact_id)
 		// unresolved) Deals are still created + linked + reconciled (held out inside processDeal),
 		// but are EXCLUDED from the sequence-driver count so they never make the Contact ambiguous
 		// or block B2B activation. Product Interest is authoritative (pipelineForProductKey).
-		if(automation.pipelineForProductKey(pProductKey) == "B2B") { b2bDriverDealIds.add(pDealId); }
+		pPipeline = automation.pipelineForProductKey(pProductKey);
+		if(pPipeline == "B2B") { b2bDriverDealIds.add(pDealId); }
+		else if(pPipeline == "Partnership") { partnerDriverDealIds.add(pDealId); }
 
 		// processDeal = sole owner of Contacts, Roles, Products, Primary Contact,
 		// Opportunity_* rollup, Account rollup. Reconcile each Product Deal (a Partnership
@@ -302,46 +310,155 @@ void automation.processContact(string contact_id)
 	if(contactRoleNow == "") { contactRoleNow = contactRoleVal; }
 	if(contactRoleNow == "Decision Maker" && contactState == "Open" && contactSeqState == "Not Activated")
 	{
-		// Only B2B-pipeline Deals drive the sequence. Count the B2B DRIVERS, not all Product
-		// Deals, so a Contact with a B2B product + Partnership activates normally on the B2B Deal.
+		// CHANGE 18: B2B drivers win whenever they exist; Partnership drivers are consulted ONLY
+		// when there is no B2B driver at all. A Partnership Contact gets the canonical Task and
+		// stores its committed state + preference, but dispatches NOTHING at any Stage - that is
+		// Change 20's standing gate in routeContactSequence, not a one-time check here.
+		driverDealIds = b2bDriverDealIds;
+		driverPipeline = "B2B";
 		if(b2bDriverDealIds.size() == 0)
 		{
-			// Partnership-only (or unresolved-only) Contact: created + linked, but no B2B sequence
-			// to start. Held for the Partnership flow (out of scope); never a B2B Activation Task.
-			automation.logAutomationEvent("processContact", "Contacts", cleanId, "activation", "no_b2b_sequence_driver", {"product_deals":productDealIds.size().toString()});
+			driverDealIds = partnerDriverDealIds;
+			driverPipeline = "Partnership";
+		}
+
+		if(driverDealIds.size() == 0)
+		{
+			// No driver of ANY pipeline (unresolved-only): created + linked, nothing to activate.
+			automation.logAutomationEvent("processContact", "Contacts", cleanId, "activation", "no_sequence_driver", {"product_deals":productDealIds.size().toString()});
 			return;
 		}
-		// HARD RULE 7: ONE active automated B2B sequence per Contact. Multiple B2B Deals are
-		// ambiguous -> Manual Review; never auto-pick. Partnership Deals never contribute here.
-		if(b2bDriverDealIds.size() > 1)
+		// HARD RULE 7: ONE active automated sequence per Contact. Multiple drivers are ambiguous
+		// -> Manual Review; never auto-pick. This now covers a multi-Partnership Contact too,
+		// which is the correct "stop safely rather than choose an arbitrary Deal".
+		if(driverDealIds.size() > 1)
 		{
-			automation.createManualReview(cleanId, b2bDriverDealIds.get(0), "multi_product_sequence_ambiguous", "Contact maps to multiple B2B Product Deals but only one Contact sequence can run; a human must choose which Product Deal drives the sequence.");
+			automation.createManualReview(cleanId, driverDealIds.get(0), "multi_product_sequence_ambiguous", "Contact maps to multiple " + driverPipeline + " Product Deals but only one Contact sequence can run; a human must choose which Product Deal drives the sequence.");
 			return;
 		}
 
-		// Exactly one B2B Product Deal -> it drives the sequence.
-		dealId = b2bDriverDealIds.get(0);
-		// dedup: an open Sequence Activation Task for this Contact + Stage already exists?
-		activationExists = false;
-		existingTasks = zoho.crm.getRelatedRecords("Tasks", "Deals", dealId.toLong());
-		if(isNull(existingTasks) || existingTasks.size() == 0 || existingTasks.toString().startsWith("{\"code\""))
+		// Exactly one driver Product Deal -> it drives the sequence.
+		dealId = driverDealIds.get(0);
+		// ---- CHANGE 1: canonical Activation Task identity ----------------------------------
+		// The identity is Who_Id (Contact) + Task_Type = "Sequence Activation", and NOTHING else.
+		// Task_Sequence_Stage, What_Id/$se_module and native Status remain useful context but
+		// stop being identity, so a Stage move or a second Deal can no longer hide an existing
+		// Task from dedupe and produce a duplicate control.
+		//
+		// Retrieval must therefore be CONTACT-scoped. The Deal-scoped read this replaced could
+		// not see a Task hosted on a different Deal. getRelatedRecords("Tasks","Contacts",..) is
+		// a proven relation name in this org - see createManualReview.deluge:55.
+		//
+		//   candidates       = every Activation Task for this Contact
+		//   activeCandidates = candidates where Status != "Deferred"      (the control set)
+		//
+		// Completed Tasks stay valid controls (that is the normal state of a committed
+		// Activation Task); Deferred Tasks are RETIRED and retirement is final.
+		actReadOk = true;
+		actTasks = zoho.crm.getRelatedRecords("Tasks", "Contacts", cleanId.toLong());
+		if(isNull(actTasks) || actTasks.size() == 0 || actTasks.toString().startsWith("{\"code\""))
 		{
-			existingTasks = zoho.crm.searchRecords("Tasks", "(What_Id:equals:" + dealId + ")");
+			actTasks = zoho.crm.searchRecords("Tasks", "(Who_Id:equals:" + cleanId + ")");
 		}
-		if(!isNull(existingTasks) && existingTasks.size() > 0 && !existingTasks.toString().startsWith("{\"code\""))
+		if(isNull(actTasks))
 		{
-			for each tk in existingTasks
+			actReadOk = false;
+			actTasks = List();
+		}
+		else if(actTasks.toString().startsWith("{\"code\""))
+		{
+			// NO_CONTENT means "genuinely no rows"; anything else is an UNRESOLVED read.
+			// HARD RULE (plan 11.11): an unreadable related list is NEVER read as "empty", or
+			// Change 1 would create the very duplicate it exists to prevent.
+			if(actTasks.toString().contains("NO_CONTENT")) { actReadOk = true; }
+			else { actReadOk = false; }
+			actTasks = List();
+		}
+
+		actCandidates = List();      // ids, identity = Who_Id + Task_Type
+		actActive = List();          // ids, the control set
+		actActiveBlank = List();     // ids of active candidates that are indistinguishable-concurrent-create
+		actDetail = Map();           // id -> "state/type" for the ambiguity review
+		for each atk in actTasks
+		{
+			aWho = "";
+			aWhoL = atk.get("Who_Id");
+			if(!isNull(aWhoL) && !isNull(aWhoL.get("id"))) { aWho = aWhoL.get("id").toString(); }
+			if(aWho != cleanId) { continue; }
+			if(ifnull(atk.get("Task_Type"), "").toString() != "Sequence Activation") { continue; }
+			aId = atk.get("id").toString();
+			actCandidates.add(aId);
+			if(ifnull(atk.get("Status"), "").toString() == "Deferred") { continue; }
+			actActive.add(aId);
+			aState = ifnull(atk.get("Task_State"), "").toString().trim();
+			aTStatus = ifnull(atk.get("Task_Status"), "").toString().trim();
+			aType = ifnull(atk.get("Task_Sequence_Type"), "").toString().trim();
+			if(aType == "-None-") { aType = ""; }
+			aDesc = ifnull(atk.get("Description"), "").toString();
+			actDetail.put(aId, aState + "/" + aType);
+			// The four-part indistinguishability test - exactly the shape two racing
+			// processContact runs produce: neither sets Task_Sequence_Type, and neither has been
+			// through handleTaskCompletion, so neither carries a marker.
+			if(aState == "Open" && aTStatus == "New" && aType == "" && !aDesc.contains("ActivationCommand|"))
 			{
-				tWho = "";
-				whoL = tk.get("Who_Id");
-				if(!isNull(whoL) && !isNull(whoL.get("id"))) { tWho = whoL.get("id").toString(); }
-				if(tWho == cleanId && ifnull(tk.get("Task_Type"), "").toString() == "Sequence Activation" && ifnull(tk.get("Task_Sequence_Stage"), "").toString() == contactStage && (ifnull(tk.get("Status"), "").toString() == "Not Started" || ifnull(tk.get("Status"), "").toString() == "In Progress"))
-				{
-					activationExists = true;
-					break;
-				}
+				actActiveBlank.add(aId);
 			}
 		}
+
+		if(!actReadOk)
+		{
+			// Fail safe: skip creation and log. Never treat an unresolved read as "none exist".
+			automation.logAutomationEvent("processContact", "Contacts", cleanId, "activation", "activation_task_read_unresolved", {"deal":dealId});
+			return;
+		}
+
+		// ---- the collapse rule: one rule, used identically at all three sites --------------
+		if(actActive.size() > 1)
+		{
+			if(actActiveBlank.size() == actActive.size())
+			{
+				// Every active candidate is indistinguishable -> keep the lowest id, retire the
+				// rest. Retired siblings LEAVE the active set, so the collapse is operationally
+				// final: the next execution sees exactly one active control.
+				collKeep = 999999999999999999;
+				for each cId2 in actActive
+				{
+					if(cId2.toLong() < collKeep) { collKeep = cId2.toLong(); }
+				}
+				for each cId3 in actActive
+				{
+					if(cId3.toLong() != collKeep)
+					{
+						zoho.crm.updateRecord("Tasks", cId3.toLong(), {"Status":"Deferred", "Blocks_Sequence":"No"}, {"trigger": List()});
+						automation.logAutomationEvent("processContact", "Tasks", cId3, "activation_dedupe", "deferred_duplicate", {"contact":cleanId, "kept":collKeep.toString()});
+					}
+				}
+			}
+			else
+			{
+				// STOP SAFELY. Defer nothing, change nothing. Anointing whichever Task happened to
+				// be found is precisely the arbitrary choice the rule forbids.
+				ambDetail = "";
+				for each cId4 in actActive
+				{
+					ambDetail = ambDetail + " " + cId4 + "(" + ifnull(actDetail.get(cId4), "").toString() + ")";
+				}
+				automation.createManualReview(cleanId, dealId, "activation_control_ambiguous", "Several active Sequence Activation Tasks exist for this Contact and they are not provably indistinguishable, so automation will not choose between them. Candidates (id, Task_State/Task_Sequence_Type):" + ambDetail + ". Retire the ones that are not the intended control (native Status = Deferred), leaving exactly one.");
+				return;
+			}
+		}
+		else if(actActive.size() == 0 && actCandidates.size() > 0)
+		{
+			// The Contact's control was retired and none replaced it. That is a data condition
+			// for a human, not something to paper over with a fresh Task.
+			automation.createManualReview(cleanId, dealId, "activation_no_active_control", "Every Sequence Activation Task for this Contact is retired (native Status = Deferred) and no active control remains. Automation will not create a replacement. Reinstate the intended Task or confirm the Contact should have no activation control.");
+			return;
+		}
+
+		// Any Activation Task - open, completed, at any Stage, on any Deal - means one already
+		// exists. Because the predicate WIDENS, this can only reduce Task creation, never
+		// increase it.
+		activationExists = (actActive.size() > 0);
 
 		if(!activationExists)
 		{
@@ -391,46 +508,11 @@ void automation.processContact(string contact_id)
 			info "processContact: created Sequence Activation Task resp=" + actResp;
 		}
 
-		// ---- 6b. Self-heal: collapse duplicate open Sequence Activation Tasks created by a
-		//          CONCURRENT processContact run. On lead-convert, processLead's inline
-		//          processContact() call and the WF001b2 Contacts-create trigger can both pass the
-		//          dedup check above before either commits createRecord -> two identical tasks.
-		//          Deterministic: keep the lowest-id open task; Defer the rest. A Deferred task is
-		//          skipped by handleTaskCompletion (Status=Deferred -> return), so a deferred
+		// ---- 6b. The self-heal that used to live here is now the CHANGE 1 collapse rule above.
+		//          It runs BEFORE creation rather than after it, evaluates the same Contact-scoped
+		//          activeCandidates set the runtime and the offline remediation use, and refuses
+		//          to collapse anything that is not provably indistinguishable. A Deferred Task is
+		//          skipped by handleTaskCompletion (Status=Deferred -> return), so a retired
 		//          duplicate never activates; the write is suppressed so WF008 does not re-fire.
-		dupeOpen = List();
-		dupeKeep = 999999999999999999;
-		sweepTasks = zoho.crm.getRelatedRecords("Tasks", "Deals", dealId.toLong());
-		if(isNull(sweepTasks) || sweepTasks.size() == 0 || sweepTasks.toString().startsWith("{\"code\""))
-		{
-			sweepTasks = zoho.crm.searchRecords("Tasks", "(What_Id:equals:" + dealId + ")");
-		}
-		if(!isNull(sweepTasks) && sweepTasks.size() > 0 && !sweepTasks.toString().startsWith("{\"code\""))
-		{
-			for each stk in sweepTasks
-			{
-				stWho = "";
-				stWhoL = stk.get("Who_Id");
-				if(!isNull(stWhoL) && !isNull(stWhoL.get("id"))) { stWho = stWhoL.get("id").toString(); }
-				stStatus = ifnull(stk.get("Status"), "").toString();
-				if(stWho == cleanId && ifnull(stk.get("Task_Type"), "").toString() == "Sequence Activation" && ifnull(stk.get("Task_Sequence_Stage"), "").toString() == contactStage && (stStatus == "Not Started" || stStatus == "In Progress"))
-				{
-					sIdL = stk.get("id").toString().toLong();
-					if(sIdL < dupeKeep) { dupeKeep = sIdL; }
-					dupeOpen.add(stk.get("id").toString());
-				}
-			}
-		}
-		if(dupeOpen.size() > 1)
-		{
-			for each dOpen in dupeOpen
-			{
-				if(dOpen.toLong() != dupeKeep)
-				{
-					zoho.crm.updateRecord("Tasks", dOpen.toLong(), {"Status":"Deferred", "Blocks_Sequence":"No"}, {"trigger": List()});
-					automation.logAutomationEvent("processContact", "Tasks", dOpen, "activation_dedupe", "deferred_duplicate", {"contact":cleanId, "kept":dupeKeep.toString()});
-				}
-			}
-		}
 	}
 }
