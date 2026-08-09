@@ -3672,6 +3672,136 @@
           "used": false
         }
       ]
+    },
+    "Events": {
+      "Meeting_Task_Stage": [
+        {
+          "value": "Marketing Consent",
+          "label": "Marketing Consent",
+          "used": true
+        },
+        {
+          "value": "Demo Booking",
+          "label": "Demo Booking",
+          "used": true
+        },
+        {
+          "value": "Demo Booked",
+          "label": "Demo Confirmation",
+          "used": true
+        },
+        {
+          "value": "Demo Attended",
+          "label": "Demo Hosted",
+          "used": true
+        },
+        {
+          "value": "Commercials Sent",
+          "label": "Proposal Preparation",
+          "used": true
+        },
+        {
+          "value": "Commercials Signed",
+          "label": "Commercial Agreement",
+          "used": true
+        },
+        {
+          "value": "Onboarding",
+          "label": "Onboarding",
+          "used": true
+        },
+        {
+          "value": "Renewall",
+          "label": "Renewal",
+          "used": true
+        }
+      ],
+      "Meeting_Task_State": [
+        {
+          "value": "Open",
+          "label": "Open",
+          "used": true
+        },
+        {
+          "value": "Won",
+          "label": "Won",
+          "used": true
+        },
+        {
+          "value": "Lost",
+          "label": "Lost",
+          "used": true
+        }
+      ],
+      "Meeting_Task_Status": [
+        {
+          "value": "Open",
+          "label": "New",
+          "used": true
+        },
+        {
+          "value": "Working",
+          "label": "Working",
+          "used": true
+        },
+        {
+          "value": "Closed",
+          "label": "Closed",
+          "used": true
+        }
+      ],
+      "Meeting_Task_Contract_Products": [
+        {
+          "value": "Jurnii 360 - Flex",
+          "label": "Jurnii 360 - Flex",
+          "used": false
+        },
+        {
+          "value": "Jurnii UX - Flex",
+          "label": "Jurnii UX - Flex",
+          "used": false
+        },
+        {
+          "value": "Jurni Cortex - Flex",
+          "label": "Jurnii Cortex - Flex",
+          "used": false
+        },
+        {
+          "value": "Jurnii 360 - Fixed",
+          "label": "Jurnii 360 - Fixed",
+          "used": false
+        },
+        {
+          "value": "Jurnii UX - Fixed",
+          "label": "Jurnii UX - Fixed",
+          "used": false
+        },
+        {
+          "value": "Jurni Cortex - Fixed",
+          "label": "Jurnii Cortex - Fixed",
+          "used": false
+        },
+        {
+          "value": "Jurnii 360",
+          "label": "Jurnii 360",
+          "used": true
+        },
+        {
+          "value": "Jurnii Cortex",
+          "label": "Jurnii Cortex",
+          "used": true
+        },
+        {
+          "value": "Jurnii UX",
+          "label": "Jurnii UX",
+          "used": true
+        },
+        {
+          "value": "Partnership",
+          "label": "Partnership",
+          "used": true
+        }
+      ]
     }
   },
   "lengths": {
@@ -3682,6 +3812,10 @@
     "Contacts": {
       "Job_Title_Raw": 120,
       "Phone": 50
+    },
+    "Events": {
+      "Event_Title": 255,
+      "Ext_Calendar_Booking_ID": 200
     }
   }
 }

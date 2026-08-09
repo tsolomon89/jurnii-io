@@ -48,6 +48,43 @@ class ZohoError extends Error {
 }
 
 /**
+ * A bounded, PII-free summary of a Zoho rejection, for the application log.
+ *
+ * `ZohoError.detail` already holds Zoho's response body, but every caller logged only
+ * the transport code. A terminal write therefore surfaced as a bare `zoho_http_400` with
+ * no indication of WHICH field Zoho objected to — the whole cause had to be bisected by
+ * hand against the live org (journey ef6397f4, 2026-08-09).
+ *
+ * Only Zoho's own error code and the FIELD NAMES it names are extracted. Never
+ * `message` (free text) and never a field's value: a rejected payload carries the
+ * visitor's email, phone and company, and an application log is not the place for them.
+ * That is the same reason the reason ledger stores a fixed code rather than a
+ * third-party string — this adds diagnosis without widening what is retained.
+ */
+const ERROR_DETAIL_KEYS = ['api_name', 'parent_api_name', 'expected_data_type', 'index'];
+
+function describeZohoError(err) {
+  const detail = err && err.detail;
+  if (!detail || typeof detail !== 'object') return null;
+  // A write rejection nests per-record errors under `data`; a request-level one does not.
+  const rows = Array.isArray(detail.data) ? detail.data : [detail];
+  const out = [];
+  for (const row of rows) {
+    if (!row || typeof row !== 'object') continue;
+    const one = {};
+    if (row.code) one.code = String(row.code).slice(0, 64);
+    const d = row.details;
+    if (d && typeof d === 'object') {
+      for (const k of ERROR_DETAIL_KEYS) {
+        if (d[k] !== undefined && d[k] !== null) one[k] = String(d[k]).slice(0, 64);
+      }
+    }
+    if (Object.keys(one).length) out.push(one);
+  }
+  return out.length ? out.slice(0, 5) : null;
+}
+
+/**
  * Is an error a genuine "definite reject", or merely unresolved?
  *
  * The distinction decides whether an uncertain create may be retried. Anything not
@@ -527,6 +564,7 @@ module.exports = {
   RETRYABLE_CODES,
   TERMINAL_CODES,
   isDefiniteReject,
+  describeZohoError,
   retryAfterSeconds,
   requestZoho,
   rawRequest,

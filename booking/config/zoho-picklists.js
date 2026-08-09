@@ -616,6 +616,34 @@
         "Clay",
         "Website"
       ]
+    },
+    "Events": {
+      "Meeting_Task_Stage": [
+        "Marketing Consent",
+        "Demo Booking",
+        "Demo Booked",
+        "Demo Attended",
+        "Commercials Sent",
+        "Commercials Signed",
+        "Onboarding",
+        "Renewall"
+      ],
+      "Meeting_Task_State": [
+        "Open",
+        "Won",
+        "Lost"
+      ],
+      "Meeting_Task_Status": [
+        "Open",
+        "Working",
+        "Closed"
+      ],
+      "Meeting_Task_Contract_Products": [
+        "Jurnii 360",
+        "Jurnii Cortex",
+        "Jurnii UX",
+        "Partnership"
+      ]
     }
   };
 

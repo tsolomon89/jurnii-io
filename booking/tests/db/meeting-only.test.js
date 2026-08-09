@@ -569,3 +569,87 @@ test('a reschedule moves the times and never the title', { skip }, async () => {
   assert.strictEqual((await row(id)).meeting_title, title, 'the stored title is untouched');
   restoreZoho();
 });
+
+// ---------------------------------------------------------------------------
+// The converted-Lead Who_Id race
+//
+// Production journey ef6397f4 (2026-08-03) reached the calendar with no Meeting in the
+// CRM: the create sent Who_Id = the Lead id during the `sending` window, and Deluge had
+// already converted that Lead. Zoho answers 400 / INVALID_DATA, which is TERMINAL, so
+// the journey escalated rather than retrying.
+// ---------------------------------------------------------------------------
+
+test('a Lead mid-conversion is never sent as a person', { skip }, async () => {
+  const ops = require('../../workflows/zoho-ops');
+
+  for (const state of ['sending', 'accepted', 'outcome_unknown', 'unresolved']) {
+    const id = await seedJourney({
+      zoho_record_id: 'L1', zoho_status: 'record_saved', lead_terminal_update_state: state,
+    });
+    stubZoho();
+    // The Meeting waits for the Contact rather than addressing a Lead that may already
+    // have been converted. The wait consumes no retry budget.
+    const r = await ops.meetingCreate(await claim(id, 'zoho_meeting_create'));
+    assert.strictEqual(calls.create.length, 0, `${state}: no Meeting may be created yet`);
+    // It PARKS rather than waits: with no Contact and no provably-unconverted Lead there
+    // is no usable identity, so the addressability guard returns before the payload is
+    // ever built. Z5/Z7 re-arm the op once the Contact lands.
+    assert.strictEqual(r.kind, 'parked_precondition', `${state}: kind`);
+    assert.strictEqual(r.errorCode, 'awaiting_record_saved', `${state}: reason`);
+    restoreZoho();
+  }
+});
+
+test('a Lead whose conversion provably never started is still addressable', { skip }, async () => {
+  const ops = require('../../workflows/zoho-ops');
+
+  for (const state of ['not_sent', 'rejected']) {
+    const id = await seedJourney({
+      zoho_record_id: 'L1', zoho_status: 'record_saved', lead_terminal_update_state: state,
+    });
+    stubZoho();
+    await ops.meetingCreate(await claim(id, 'zoho_meeting_create'));
+    assert.strictEqual(calls.create.length, 1, `${state}: the Meeting must still be created`);
+    assert.strictEqual(calls.create[0].Who_Id.id, 'L1',
+      `${state}: an unconverted Lead is a valid person for the Meeting`);
+    restoreZoho();
+  }
+});
+
+test('once the Contact is known it is used, whatever the Lead state', { skip }, async () => {
+  const ops = require('../../workflows/zoho-ops');
+  const id = await seedJourney({
+    zoho_record_id: 'L1', zoho_contact_id: 'C1', zoho_account_id: 'A1',
+    lead_terminal_update_state: 'sending',
+  });
+  stubZoho({ deal: { status: 'one', deal: { id: 'D1' } } });
+  await ops.meetingCreate(await claim(id, 'zoho_meeting_create'));
+  assert.strictEqual(calls.create.length, 1);
+  assert.strictEqual(calls.create[0].Who_Id.id, 'C1', 'the Contact always wins over the Lead');
+  restoreZoho();
+});
+
+test('a parked journey gets its Meeting once the Contact is discovered', { skip }, async () => {
+  // The end-to-end shape of the fix: park while the Lead is mid-conversion, then create
+  // normally against the Contact. This is what journey ef6397f4 should have done.
+  const ops = require('../../workflows/zoho-ops');
+  const id = await seedJourney({
+    zoho_record_id: 'L1', zoho_status: 'record_saved', lead_terminal_update_state: 'sending',
+  });
+
+  stubZoho();
+  const parked = await ops.meetingCreate(await claim(id, 'zoho_meeting_create'));
+  assert.strictEqual(parked.kind, 'parked_precondition');
+  assert.strictEqual(calls.create.length, 0, 'nothing sent while the Lead may be converting');
+
+  // Z7 — conversion discovered. It records the Contact and re-arms this op.
+  await db.withTransaction((tx) => ZS.Z7_conversionDiscovered(tx, id, { contactId: 'C1', accountId: 'A1' }));
+
+  stubZoho({ deal: { status: 'one', deal: { id: 'D1' } } });
+  await ops.meetingCreate(await claim(id, 'zoho_meeting_create'));
+  assert.strictEqual(calls.create.length, 1, 'the Meeting is created once there is a Contact');
+  assert.strictEqual(calls.create[0].Who_Id.id, 'C1', 'against the Contact, never the Lead');
+  assert.strictEqual(calls.create[0].Ext_Calendar_Booking_ID, id, 'still correlated for recovery');
+  assert.strictEqual((await row(id)).zoho_meeting_id, 'MEET1');
+  restoreZoho();
+});

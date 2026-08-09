@@ -44,6 +44,40 @@ const LEAD_SOURCE = process.env.ZOHO_LEAD_SOURCE || 'Website';
 const CONSENT_FIELD = { Leads: 'Contact_Marketing_Consent', Contacts: 'Marketing_Consent' };
 
 /**
+ * May this journey's Lead id still be sent as a person (`Who_Id` on an Event)?
+ *
+ * `Who_Id` is a CONTACT lookup. A CONVERTED Lead id is rejected with HTTP 400 /
+ * INVALID_DATA, which `classify()` treats as TERMINAL — so it escalates the journey to
+ * `meeting_create_failed` rather than retrying, and the booking never gets a Meeting at
+ * all. The test is therefore not "do we believe it is converted" but "can we PROVE it is
+ * not".
+ *
+ * Only two states are proof:
+ *
+ *   not_sent  — the workflow-enabled update has never been issued, so `processLead` has
+ *               never run and no conversion can have started.
+ *   rejected  — that update was refused TERMINALLY by Zoho, so the workflow never fired.
+ *
+ * Every other state means the update may already have landed:
+ *
+ *   sending          — committed BEFORE the request leaves, precisely so a lost response
+ *                      cannot be replayed. Zoho may already have it.
+ *   accepted         — conversion is under way by definition.
+ *   outcome_unknown  — the request may have arrived; recovery is read-only for exactly
+ *                      this reason.
+ *   unresolved       — we gave up establishing what happened.
+ *
+ * REGRESSION (production, journey ef6397f4 on 2026-08-03, reproduced 2026-08-09): this
+ * was keyed on `accepted` alone, so the ~700ms `sending` window was wide open. A booking
+ * confirmed inside that window sent a Lead id that `processLead` had already converted,
+ * and the demo reached the calendar with no Meeting in the CRM. Verified against the live
+ * org: no `Who_Id` creates, a Contact `Who_Id` creates, a converted Lead `Who_Id` 400s.
+ */
+function leadStillAddressable(j) {
+  return ['not_sent', 'rejected'].includes(j.lead_terminal_update_state);
+}
+
+/**
  * The ONE product whose Deal this journey's Meeting anchors to via `What_Id`.
  *
  * `meeting_anchor_product` is derived at page-2 commit in canonical order, whose last
@@ -77,10 +111,15 @@ function workerManageUrl(j) {
 
 function classify(err) {
   if (err instanceof Z.ZohoError) {
-    if (err.terminal) return { kind: 'terminal', code: err.code, retryAfter: null };
-    return { kind: 'retryable', code: err.code, retryAfter: err.retryAfterSeconds };
+    // `detail` is Zoho's own error code plus the FIELD NAMES it refused, and nothing
+    // else. The reason ledger still records only a fixed code; this exists so the
+    // application log can say which field, instead of a bare `zoho_http_400` that has to
+    // be bisected against the live org.
+    const detail = Z.describeZohoError(err);
+    if (err.terminal) return { kind: 'terminal', code: err.code, retryAfter: null, detail };
+    return { kind: 'retryable', code: err.code, retryAfter: err.retryAfterSeconds, detail };
   }
-  return { kind: 'retryable', code: 'zoho_unknown_error', retryAfter: null };
+  return { kind: 'retryable', code: 'zoho_unknown_error', retryAfter: null, detail: null };
 }
 
 /** The full data-load payload, sent SUPPRESSED so no conversion is initiated. */
@@ -445,12 +484,12 @@ async function meetingCreate(claim) {
    * confirmed Google event: the Meeting was never attempted, so no Meeting existed to
    * fail. A confirmed booking with a person we can address must get its Meeting.
    *
-   * A usable identity is a Contact, or an UNCONVERTED Lead. A Lead whose terminal
-   * update was accepted is mid-conversion and unaddressable, so it does not count —
-   * that case falls through to the `contactPending` wait below.
+   * A usable identity is a Contact, or a Lead we can PROVE is still unconverted —
+   * see `leadStillAddressable`. Anything else falls through to the `contactPending`
+   * wait below.
    */
   const hasContact = Boolean(j.zoho_contact_id);
-  const hasAddressableLead = Boolean(j.zoho_record_id) && j.lead_terminal_update_state !== 'accepted';
+  const hasAddressableLead = Boolean(j.zoho_record_id) && leadStillAddressable(j);
   if (!hasContact && !hasAddressableLead) {
     // No person yet. G1 created this op; Z4/Z5 reactivate it once identity lands.
     return { kind: 'parked_precondition', errorCode: 'awaiting_record_saved' };
@@ -467,13 +506,18 @@ async function meetingCreate(claim) {
    * Lead that had just stopped being addressable. That is what suppressed every
    * Meeting in production.
    *
-   * So on the Lead path the Meeting waits for the Contact. The wait consumes no retry
-   * budget and is bounded by conversion discovery's own deadline: once that op reaches
-   * `done` or `terminal` this check stops holding the Meeting back, and the Meeting is
-   * then created with no person at all rather than with an unaddressable id —
-   * `dealReconcile` applies `Who_Id` and `What_Id` together later regardless.
+   * CURRENTLY UNREACHABLE, and kept deliberately as defence in depth. The guard above
+   * already parks (`awaiting_record_saved`) whenever there is no Contact and no
+   * provably-unconverted Lead, which is every case that would reach here — verified
+   * exhaustively over all 24 combinations of {Contact, Lead, the six
+   * `lead_terminal_update_state` values}. Z5 and Z7 re-arm the op, so a parked journey
+   * still gets its Meeting once the Contact is discovered.
+   *
+   * It stays because it is the second line of the SAME defence: if the addressability
+   * gate above is ever loosened, this stops a Lead id mid-conversion reaching `Who_Id`
+   * anyway. Do not delete it to "remove dead code" without re-checking that gate.
    */
-  const contactPending = !j.zoho_contact_id && j.lead_terminal_update_state === 'accepted';
+  const contactPending = !j.zoho_contact_id && !leadStillAddressable(j);
   if (contactPending) {
     const discover = await db.withTransaction((tx) => O.getOp(tx, journeyId, 'zoho_conversion_discover'));
     if (discover && !['done', 'terminal'].includes(discover.state)) {
@@ -524,10 +568,10 @@ async function meetingCreate(claim) {
       title: meetingTitleFor(j),
       startIso: j.slot_start_utc, endIso: j.slot_end_utc,
       contactId: j.zoho_contact_id,
-      // Only an UNCONVERTED Lead is addressable. Once the terminal update is accepted
-      // `processLead` owns the Lead's conversion, so its id must not be sent as a person.
-      leadId: (j.zoho_contact_id || j.lead_terminal_update_state === 'accepted')
-        ? null : j.zoho_record_id,
+      // Only a PROVABLY unconverted Lead may be sent as a person — see
+      // `leadStillAddressable`. Once the conversion-triggering update has left, the id
+      // may already belong to a converted Lead, which Zoho rejects terminally.
+      leadId: (j.zoho_contact_id || !leadStillAddressable(j)) ? null : j.zoho_record_id,
       dealId,
       meetLink: j.google_meet_url,
       // Every selected product, canonical and ordered — this is the Meeting's structured
@@ -547,7 +591,7 @@ async function meetingCreate(claim) {
       // The reason ledger only records `meeting_create_failed`, so without this the
       // ACTUAL Zoho code is discarded and the escalation says nothing about the cause.
       // A safe code, never a third-party message.
-      log({ evt: 'zoho.meeting.create_rejected', journeyId, code: c.code });
+      log({ evt: 'zoho.meeting.create_rejected', journeyId, code: c.code, detail: c.detail });
       await db.withTransaction((tx) => ZS.Z10_escalate(tx, journeyId,
         { op: 'zoho_meeting_create', code: 'meeting_create_failed' }));
       return { kind: 'progress', recorded: true };
@@ -641,6 +685,10 @@ async function dealReconcile(claim) {
   } catch (err) {
     const c = classify(err);
     if (c.kind === 'terminal' || claim.failure_count + 1 >= claim.max_failures) {
+      // Same reasoning as the Meeting create: the ledger records a fixed reason code, so
+      // without this the actual Zoho refusal is lost and the escalation says nothing
+      // about which field caused it.
+      log({ evt: 'zoho.deal.link_rejected', journeyId, code: c.code, detail: c.detail });
       await db.withTransaction((tx) => ZS.Z10_escalate(tx, journeyId,
         { op: 'zoho_deal_reconcile', code: 'deal_reconcile_failed' }));
       return { kind: 'progress', recorded: true };
@@ -726,4 +774,5 @@ module.exports = {
   reschedulePropagate,
   dataLoadPayload,
   classify,
+  leadStillAddressable,
 };

@@ -51,7 +51,10 @@ function stub(modPath, overrides) {
       'formatZohoDateTime', 'readConversion', 'accountIdOfContact', 'taskIsClosed',
       'duplicateRecordId', 'firstWriteResult', 'manualReviewSubject', 'isDefiniteReject',
       'retryAfterSeconds', 'extractMeetLink', 'deterministicEventId', 'requireCalendarId',
-      'classify', 'sha256hex', 'resolveProductDeal'].includes(name)) continue;
+      // `describeZohoError` is a pure formatter over an error object — `classify` calls
+      // it on EVERY failure path, so throwing here would replace the real outcome with a
+      // harness error and leave the journey in whatever state preceded the catch.
+      'classify', 'sha256hex', 'resolveProductDeal', 'describeZohoError'].includes(name)) continue;
     wrapped[name] = (...args) => {
       calls.push({ name, args, unexpected: true });
       throw new Error(`unexpected external call: ${name}`);
