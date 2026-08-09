@@ -151,6 +151,7 @@ test('#16/#81 the scrub nulls PII, retains safe analytics, and computes the bool
   const id = await newJourney({
     zoho_status: 'complete', booking_status: 'confirmed', host_calendar_key: 'jurnii_local',
     google_calendar_id: 'demos-local@jurnii.io', product_interest: 'Platform',
+    product_interests: ['Jurnii UX', 'Partnership'], lead_source: 'Trade Show',
   });
   await db.withTransaction((tx) => tx.query(
     `UPDATE booking_journeys SET
@@ -183,6 +184,11 @@ test('#16/#81 the scrub nulls PII, retains safe analytics, and computes the bool
   // very often a mailbox address, the opaque key is not.
   assert.equal(row.host_calendar_key, 'jurnii_local');
   assert.equal(row.product_interest, 'Platform');
+  // Migration 0004's columns are commercial signal, not PII, and survive the scrub on
+  // the same reasoning as the legacy scalar. Pinned so it stays a decision, not an
+  // accident of the scrub statement not having been updated.
+  assert.deepEqual(row.product_interests, ['Jurnii UX', 'Partnership']);
+  assert.equal(row.lead_source, 'Trade Show');
   assert.ok(row.pii_scrubbed_at);
 
   // Idempotent.

@@ -189,14 +189,34 @@ void automation.processLead(string lead_id)
 	leadCompanyExpansionRegional = leadRecord.get("Company_Expansion_Regional");
 	leadCompanyExpansionTimeline = leadRecord.get("Company_Expansion_Timeline");
 
-	// ---- 1b. Resolve Contact_Role from Job_Title and stamp on Lead BEFORE conversion ----
+	// ---- 1b. Resolve Contact_Role from the title and stamp on Lead BEFORE conversion ----
 	// Inlined here because standalone cross-function calls silently fail in some CRM configs.
 	// Stamping Lead.Contact_Role ensures Zoho's native field mapping carries it to Contact.
+	//
+	// RAW-TITLE FALLBACK (2026-08-08). This block used to gate on Job_Title alone, and the
+	// booking backend only ever wrote Job_Title_Raw — so every booking-sourced Lead reached
+	// conversion with a blank Contact_Role1 and never met the activation gate. Two changes
+	// fix it, on both sides:
+	//
+	//   Node  now writes Job_Title too, but ONLY when the visitor's title is an exact live
+	//         picklist value. The live list is a curated 154-value subset of the 415 persona
+	//         titles, and an unknown value in a picklist field makes the whole update
+	//         INVALID_DATA — taking the phone, company and consent in the same map with it.
+	//   HERE  resolves from Job_Title_Raw when Job_Title is blank, so the ~260 governed
+	//         persona titles that are not picklist values (and any 'Other' free text) still
+	//         reach the SAME map below. Role authority stays entirely in this function.
+	//
+	// The default differs by path, deliberately. A Job_Title with no map entry keeps the
+	// long-standing "Decision Maker" default: it can only be a curated picklist value, so a
+	// missing entry is a curation gap and that guess is defensible. A RAW title with no map
+	// entry is arbitrary visitor free text, so it resolves to nothing — defaulting it would
+	// silently inflate the highest-value segment with every unrecognised title anyone types,
+	// indistinguishable downstream from a real Decision Maker. Blank is honest and filterable.
 	leadContactRole = ifnull(leadRecord.get("Contact_Role1"), "").toString().trim();
-	if(leadJobTitle != "" && leadContactRole == "")
+	if((leadJobTitle != "" || leadJobTitleRaw != "") && leadContactRole == "")
 	{
-		resolvedRole = "Decision Maker";
-		titleKey = leadJobTitle.trim().toLowerCase();
+		resolvedRole = if(leadJobTitle != "", "Decision Maker", "");
+		titleKey = if(leadJobTitle != "", leadJobTitle.trim().toLowerCase(), leadJobTitleRaw.trim().toLowerCase());
 
 		dmTitles = {"automation & ai transformation director","casino director","chief architect","chief commercial officer","chief customer officer","chief data officer","chief executive officer","chief financial officer","chief marketing officer","chief online gaming","chief operating officer","chief product officer","chief revenue officer","chief strategy officer","chief systems officer","chief technology officer","chief trading officer","chief transformation officer","co-founder","commercial director","commerical director","company director","customer experience director","data director","design director","digital director","digital experience director","director of digital product","director of gaming","director of information technology","director of operations","director of product","director of product & operations management","director of product analysis","director of product operations","director of strategy & customer experience","director of technology","director of ux & growth","director product & tech","director product & technology","experimentation lead","founder","fp&a director","gaming director","general manager","global cmo","global cxo","global director of product support & services","global head of product","global product director","global product manager","group cfo","group chief operating officer","group gaming director emea","group head of commercial gaming operations","group product manager","group strategy director","group trading director","growth director","head of acquisition","head of analytics","head of bi","head of brand","head of brand & creative","head of brand marketing","head of casino","head of casino business development","head of commercial","head of crm","head of cro","head of customer experience","head of customer marketing","head of customer value management","head of cx","head of data platform","head of design","head of digital","head of digital product","head of engineering","head of finance","head of gaming","head of gaming commercial","head of gaming operations","head of gaming product","head of group marketing","head of growth","head of igaming","head of infrastructure","head of internal audit","head of international horse racing","head of marketing","head of online","head of online & customer acquisition","head of online casino operations","head of product","head of product design","head of product marketing","head of program product + chief of staff","head of promotions","head of proposition","head of research","head of retention","head of special product development","head of sports","head of sportsbook","head of strategy & performance","head of technology","head of ux","lifecycle director","manager of global product management","managing director","market manager","marketing director","operational product supplier manager","owner","performance marketing director","president","product design director","product director","product management lead","product operations director","promotions director","proposition director","regional director","revenue director","senior global brand manager","senior ia & ai business transformation architect","senior product manager","senior vice president product development","sportsbook director","svp product","ux director","vice managing director","vice president","vice president & general manager","vice president marketing","vice president of commercials","vice president of finance","vice president of global operations & media","vice president of operations","vice president of pricing strategy","vice president of product","vice president of product development","vice president of sales & marketing","vice president product management","vice president risk","vp customer experience","vp growth","vp product"};
 		if(dmTitles.contains(titleKey))
@@ -220,10 +240,18 @@ void automation.processLead(string lead_id)
 			}
 		}
 
-		info "Resolved Contact_Role for Lead: title='" + leadJobTitle + "' → role='" + resolvedRole + "'";
-		leadStampResp = zoho.crm.updateRecord("Leads", cleanId.toLong(), {"Contact_Role1": resolvedRole});
-		info "Lead Contact_Role stamp resp: " + leadStampResp;
-		leadContactRole = resolvedRole;
+		if(resolvedRole != "")
+		{
+			info "Resolved Contact_Role for Lead: title='" + titleKey + "' → role='" + resolvedRole + "'";
+			leadStampResp = zoho.crm.updateRecord("Leads", cleanId.toLong(), {"Contact_Role1": resolvedRole});
+			info "Lead Contact_Role stamp resp: " + leadStampResp;
+			leadContactRole = resolvedRole;
+		}
+		else
+		{
+			// A raw title with no map entry. Left blank rather than guessed — see above.
+			info "Contact_Role unresolved for raw title='" + titleKey + "' — left blank for manual triage";
+		}
 	}
 
 	// Lead.Product_Interest is a Multiselect picklist of SKU Product names.

@@ -1,0 +1,78 @@
+<!doctype html>
+<html data-theme="dark" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Internal booking · Jurnii</title>
+<!--
+  LOW-DISCOVERY INTERNAL ROUTE — not a secured administration surface.
+
+  It is deliberately unauthenticated: no password, no session, no cookie, no identity
+  provider. It is simply not linked from the navigation, footer or any CTA, is excluded
+  from search indexes below, and cannot appear in the sitemap (which is generated solely
+  from the content manifest, and this is a physical file).
+
+  What that means for what may live here:
+    · it exposes NO CRM records and reads NO CRM data;
+    · it holds NO credentials or server secrets — the Lead Source options come from a
+      generated static file whose values were captured from Zoho at build time;
+    · the additional fields it submits go through the ordinary booking backend, which
+      validates them against the same authoritative Zoho configuration.
+
+  Stronger access control can be added later without rebuilding the form: the server
+  honours a submitted `leadSource` only for a journey whose stored `form_placement` is
+  `internal-booking`, and that check in booking/api/v1/submissions/[id].js is where an
+  authentication gate would attach.
+-->
+<meta name="robots" content="noindex, nofollow">
+<meta name="googlebot" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="/assets/jurnii-icon-light.svg">
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
+<link rel="preload" href="/assets/fonts/Geist-VariableFont_wght.woff2" as="font" type="font/woff2" crossorigin>
+<!--
+  A plain page outside the SPA, exactly like manage.html. Vercel resolves the filesystem
+  before rewrites, so dist/admin-form.html is served directly and the `/(.*)` →
+  /index.html fallback never sees it; vercel.json additionally maps the extensionless
+  /admin-form onto this file.
+
+  global.css carries the design tokens the booking stylesheet reads (--concrete-*,
+  --jurnii-*, --font-sans) and site.css carries the .btn classes its markup uses, so all
+  three stylesheets are needed and all three are served at stable, unhashed paths.
+-->
+<link rel="stylesheet" href="/assets/global.css">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/booking/assets/booking-form.css">
+<style>
+  body { min-height: 100dvh; display: flex; align-items: center; justify-content: center; padding: 32px 16px; }
+  .admin-shell { width: 100%; max-width: 760px; }
+  .admin-brand { display: flex; justify-content: center; margin-bottom: 16px; }
+  .admin-brand img { height: 28px; width: auto; }
+  .admin-note {
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted-foreground);
+    margin: 0 0 24px;
+  }
+</style>
+</head>
+<body>
+<main class="admin-shell">
+  <div class="admin-brand">
+    <a href="/" aria-label="Jurnii home"><img src="/assets/jurnii-light-full.svg" alt="Jurnii"></a>
+  </div>
+  <p class="admin-note">Internal booking form — submissions are tagged <code>internal-booking</code>.</p>
+  <!--
+    booking-form.js auto-mounts `#jurnii-booking-form-inline` in booking mode.
+    `data-internal="1"` adds the Lead Source field; `data-form-placement` is what the
+    backend actually gates on, and is written to the journey on page 1.
+  -->
+  <div id="jurnii-booking-form-inline"
+       data-internal="1"
+       data-form-placement="internal-booking"
+       data-cta-id="admin-form"></div>
+</main>
+<script src="https://unpkg.com/lucide@1.25.0/dist/umd/lucide.min.js"></script>
+<script src="/booking/assets/booking-form.js"></script>
+</body>
+</html>

@@ -210,6 +210,10 @@ string automation.processDeal(string deal_id, string contextJson)
 				cStatusLoop = ifnull(fullC.get("Status"), "").toString();
 				cStage = ifnull(fullC.get("Stage"), "Marketing Consent").toString();
 				cJobTitleLoop = ifnull(fullC.get("Job_Title"), "").toString().trim();
+				// The booking form's raw title. Only ~154 of the 415 governed persona titles
+				// are live Job_Title picklist values, so the rest (and any "Other" free text)
+				// arrive here in Job_Title_Raw alone. Read for the role fallback below.
+				cJobTitleRawLoop = ifnull(fullC.get("Job_Title_Raw"), "").toString().trim();
 				contactJobTitleMap.put(cId, cJobTitleLoop);
 				contactRoleMap.put(cId, ifnull(fullC.get("Contact_Role1"), "Decision Maker").toString());
 				contactStageMap.put(cId, cStage);
@@ -230,16 +234,30 @@ string automation.processDeal(string deal_id, string contextJson)
 				cDates.put("Renewal", ifnull(fullC.get("Contact_Completed_Renewal_At"), ""));
 				contactDatesMap.put(cId, cDates);
 
-				// Stamp Contact_Role on the Contact if blank and Job_Title resolves to a role
+				// Stamp Contact_Role on the Contact if blank and the title resolves to a role.
+				// Falls back to Job_Title_Raw when the governed picklist is empty, matching
+				// processLead and processContact. The DEFAULT differs by path, deliberately and
+				// identically to those two: an unmatched PICKLIST title keeps "Decision Maker"
+				// (it can only be a curated value, so a miss is a curation gap), while an
+				// unmatched RAW title resolves to nothing — defaulting arbitrary visitor free
+				// text would silently inflate the highest-value segment.
 				cContactRoleLoop = ifnull(fullC.get("Contact_Role1"), "").toString().trim();
-				if(cContactRoleLoop == "" && cJobTitleLoop != "")
+				if(cContactRoleLoop == "" && (cJobTitleLoop != "" || cJobTitleRawLoop != ""))
 				{
-					resolvedRoleLoop = "Decision Maker";
-					tKeyLoop = cJobTitleLoop.toLowerCase();
-					if(euTitles.contains(tKeyLoop)) { resolvedRoleLoop = "End User"; }
+					resolvedRoleLoop = if(cJobTitleLoop != "", "Decision Maker", "");
+					tKeyLoop = if(cJobTitleLoop != "", cJobTitleLoop.toLowerCase(), cJobTitleRawLoop.toLowerCase());
+					if(dmTitles.contains(tKeyLoop)) { resolvedRoleLoop = "Decision Maker"; }
+					else if(euTitles.contains(tKeyLoop)) { resolvedRoleLoop = "End User"; }
 					else if(infTitles.contains(tKeyLoop)) { resolvedRoleLoop = "Influencer"; }
-					stampResp = zoho.crm.updateRecord("Contacts", cId.toLong(), {"Contact_Role1": resolvedRoleLoop}, noTrigger);
-					info "processDeal: stamped Contact_Role1 on " + cId + " title='" + cJobTitleLoop + "' -> '" + resolvedRoleLoop + "' resp=" + stampResp;
+					if(resolvedRoleLoop != "")
+					{
+						stampResp = zoho.crm.updateRecord("Contacts", cId.toLong(), {"Contact_Role1": resolvedRoleLoop}, noTrigger);
+						info "processDeal: stamped Contact_Role1 on " + cId + " title='" + tKeyLoop + "' -> '" + resolvedRoleLoop + "' resp=" + stampResp;
+					}
+					else
+					{
+						info "processDeal: Contact_Role unresolved for raw title='" + tKeyLoop + "' on " + cId + " — left blank for manual triage";
+					}
 				}
 
 				// Per-contact raw product-name evidence (for product-scoped Contact_Role stamping in Section 3).

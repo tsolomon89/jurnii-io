@@ -47,6 +47,8 @@
   // --- configuration --------------------------------------------------------
   var API = trimSlash(win.JURNII_BOOKING_API_BASE || '/api/v1');
   var CONFIG_URL = win.JURNII_BOOKING_CONFIG_URL || '/booking/config/countries.js';
+  var JOB_TITLES_URL = win.JURNII_BOOKING_JOB_TITLES_URL || '/booking/config/job-titles.js';
+  var LEAD_SOURCES_URL = win.JURNII_BOOKING_LEAD_SOURCES_URL || '/booking/config/lead-sources.js';
   var PROGRESS_KEY = 'jurnii_booking_progress';
   var PROGRESS_TTL_MS = 2 * 60 * 60 * 1000;          // the flow token's own lifetime
 
@@ -65,11 +67,17 @@
   var CLICK_IDS = ['gclid', 'fbclid', 'msclkid', 'ttclid', 'li_fat_id', 'twclid'];
   var UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id'];
 
+  /**
+   * `value` is the canonical Zoho `Product_Interest` string and MUST match live
+   * metadata exactly — the live multiselect offers precisely these four. `label` is
+   * marketing copy and is never submitted; `booking/tests/zoho-payload.test.js` and
+   * the page-2 endpoint both reject a label as a value.
+   */
   var PRODUCT_OPTIONS = [
     { value: 'Jurnii UX', label: 'Jurnii UX — User Experience Benchmarking' },
     { value: 'Jurnii 360', label: 'Jurnii 360 — Competitor Surveillance Radar' },
-    { value: 'Jurnii Cortex', label: 'Cortex / Growth — Attribution & Scenarios' },
-    { value: 'Not sure yet', label: 'Not sure yet' }
+    { value: 'Jurnii Cortex', label: 'Jurnii Cortex — Attribution & Scenarios' },
+    { value: 'Partnership', label: 'Partnership — Commercial partnership enquiry' }
   ];
 
   /* =======================================================================
@@ -92,6 +100,10 @@
     name_required: 'Please provide your first and last name.',
     // page 2
     company_required: 'Please provide your company name.',
+    job_title_required: 'Please choose your job title.',
+    job_title_other_required: 'Please tell us your job title.',
+    product_invalid: 'Please choose from the listed products.',
+    lead_source_invalid: 'That lead source is not available. Please choose another.',
     country_unknown: 'Please choose your country.',
     country_dial_mismatch: 'That dialling code does not match the country you selected.',
     phone_missing: 'Please enter your phone number.',
@@ -250,6 +262,53 @@
   }
 
   /* =======================================================================
+     Optional, lazily-fetched input aids.
+
+     DELIBERATELY NOT part of `loadConfig`. The country table gates `paint()` and
+     hard-blocks page-2 submission, because the server re-derives E.164 from it and
+     the two must agree. These files gate nothing: the job-title list is a typing
+     aid over a field that accepts free text anyway, and the lead-source list only
+     exists on the internal route. Folding them into the same promise would let a
+     404 on a convenience file take the entire booking form down.
+
+     Each therefore resolves to `null` on failure rather than rejecting, and every
+     caller degrades to a plain input.
+     ======================================================================= */
+  var lazyScripts = {};
+
+  function loadScriptOnce(url, attr, read) {
+    if (read()) return Promise.resolve(read());
+    if (lazyScripts[url]) return lazyScripts[url];
+    lazyScripts[url] = new Promise(function (resolve) {
+      if (!doc) return resolve(null);
+      var done = function () { resolve(read() || null); };
+      var existing = doc.querySelector('script[' + attr + ']');
+      if (existing) {
+        existing.addEventListener('load', done);
+        existing.addEventListener('error', function () { resolve(null); });
+        return;
+      }
+      var s = doc.createElement('script');
+      s.src = url;
+      s.setAttribute(attr, '1');
+      s.addEventListener('load', done);
+      s.addEventListener('error', function () { resolve(null); });
+      (doc.body || doc.documentElement).appendChild(s);
+    });
+    return lazyScripts[url];
+  }
+
+  function loadJobTitles() {
+    return loadScriptOnce(JOB_TITLES_URL, 'data-jurnii-booking-job-titles',
+      function () { return win.JurniiBookingJobTitles; });
+  }
+
+  function loadLeadSources() {
+    return loadScriptOnce(LEAD_SOURCES_URL, 'data-jurnii-booking-lead-sources',
+      function () { return win.JurniiBookingLeadSources; });
+  }
+
+  /* =======================================================================
      First-touch attribution — captured ONCE, then replayed from the snapshot.
 
      Spec §7.3: first touch is immutable, and the server's Page-1 upsert
@@ -401,11 +460,84 @@
     return Math.min(POLL_MAX_MS, Math.round((prev || POLL_FIRST_MS) * 1.5));
   }
 
-  /** `Not sure yet` means "no product", so the field is OMITTED, never sent. */
-  function productForSubmit(value) {
-    var v = String(value || '').trim();
-    if (!v || v.toLowerCase() === 'not sure yet') return undefined;
-    return v;
+  /* =======================================================================
+     Job title — pure helpers.
+
+     The list is 415 governed titles from the persona CSV. It is NOT the live Zoho
+     `Job_Title` picklist, which is a curated 154-value subset: the server decides
+     which selections may enter the governed picklist and which travel as
+     `Job_Title_Raw` only. The browser deliberately makes no such judgement, and
+     never derives or submits a Contact Role.
+     ======================================================================= */
+  var JOB_TITLE_OTHER = 'Other';
+  var JOB_TITLE_MAX_VISIBLE = 50;
+
+  /**
+   * Case-insensitive substring filter, prefix matches first.
+   *
+   * Two bands rather than a score: a visitor typing "head" wants "Head of Product"
+   * before "Deputy Head of CRM", but beyond that the CSV's own order carries no
+   * meaning, so within a band the input order is preserved (`sort` is stable).
+   * Returns at most `limit` titles plus the total, so the caller can render a
+   * "+N more" hint instead of 400 nodes.
+   */
+  function filterJobTitles(titles, query, limit) {
+    var list = titles || [];
+    var q = String(query === undefined || query === null ? '' : query).trim().toLowerCase();
+    var cap = limit === undefined ? JOB_TITLE_MAX_VISIBLE : limit;
+
+    var matches;
+    if (!q) {
+      matches = list.slice();
+    } else {
+      matches = list.filter(function (t) { return t.toLowerCase().indexOf(q) !== -1; });
+      matches.sort(function (a, b) {
+        var pa = a.toLowerCase().indexOf(q) === 0 ? 0 : 1;
+        var pb = b.toLowerCase().indexOf(q) === 0 ? 0 : 1;
+        return pa - pb;
+      });
+    }
+    return { visible: matches.slice(0, cap), total: matches.length };
+  }
+
+  /**
+   * The one string sent as `jobTitle`.
+   *
+   * `Other` is a UI sentinel, never a submitted value: it resolves to whatever the
+   * visitor typed in the revealed field. The wire contract stays a single title
+   * string with no `isOther` flag — the server decides governance from its own
+   * picklist snapshot rather than trusting a claim from the browser.
+   */
+  function effectiveJobTitle(vals) {
+    var v = vals || {};
+    var chosen = String(v.jobTitle === undefined || v.jobTitle === null ? '' : v.jobTitle).trim();
+    if (chosen === JOB_TITLE_OTHER) {
+      return String(v.jobTitleOther === undefined || v.jobTitleOther === null ? '' : v.jobTitleOther).trim();
+    }
+    return chosen;
+  }
+
+  /**
+   * Canonical product values for submission.
+   *
+   * Accepts a scalar so a snapshot written by the previous single-select build
+   * migrates in place rather than losing the visitor's choice. `Not sure yet` was
+   * that build's "no product" sentinel and is still dropped; the current form has
+   * no such option — an empty selection means the same thing.
+   */
+  function productsForSubmit(list) {
+    var input = Array.isArray(list) ? list : (list ? [list] : []);
+    var out = [];
+    var seen = {};
+    for (var i = 0; i < input.length; i++) {
+      var s = String(input[i] === undefined || input[i] === null ? '' : input[i]).trim();
+      if (!s) continue;
+      var key = s.toLowerCase();
+      if (key === 'not sure yet' || seen[key]) continue;
+      seen[key] = true;
+      out.push(s);
+    }
+    return out;
   }
 
   /**
@@ -432,10 +564,18 @@
      ======================================================================= */
 
   /**
-   * `showCloseButton` is false for the embedded case: the site's own
-   * `#demo-modal` already renders `.demo-modal-close`, and painting a second
-   * close control inside its body was one of the two things that made the
-   * shared module unusable from `site.jsx`.
+   * `showCloseButton` is opt-in and is the host's decision, not a consequence of
+   * being embedded.
+   *
+   * It used to be forced off whenever a host owned the modal, because `site.jsx`
+   * painted its own `.demo-modal-close` in a header bar above the card — so the
+   * only way to avoid two close controls was for the widget to paint none. That
+   * header bar (and the white card it sat on) is gone; the booking card is now the
+   * dialog, so the host asks the widget for the ONE close button and it lands
+   * anchored inside the card where it belongs.
+   *
+   * An embedded host that paints its own control simply omits the flag, which is
+   * still the default.
    */
   function formMarkup(o) {
     var showClose = o && o.showCloseButton;
@@ -478,19 +618,13 @@
       + '<div class="jurnii-form-grid">'
       + '<div class="jurnii-form-group"><label class="jurnii-label" for="jurnii-company">Company / Organization *</label>'
       + '<input type="text" class="jurnii-input" id="jurnii-company" data-field="company" autocomplete="organization" placeholder="e.g. Flutter Entertainment" required></div>'
-      + '<div class="jurnii-form-group"><label class="jurnii-label" for="jurnii-job-title">Job Title *</label>'
-      + '<input type="text" class="jurnii-input" id="jurnii-job-title" data-field="jobTitle" autocomplete="organization-title" placeholder="e.g. Head of Product" required></div>'
-      + '<div class="jurnii-form-group"><label class="jurnii-label" for="jurnii-country">Country code *</label>'
+      + jobTitleMarkup()
+      + '<div class="jurnii-form-group"><label class="jurnii-label" for="jurnii-country">Country *</label>'
       + '<select class="jurnii-select" id="jurnii-country" data-field="countryIso2"></select></div>'
       + '<div class="jurnii-form-group"><label class="jurnii-label" for="jurnii-phone">Phone number *</label>'
       + '<input type="tel" class="jurnii-input" id="jurnii-phone" data-field="nationalNumber" autocomplete="tel-national" placeholder="e.g. 7123 456789" required></div>'
-      + '<div class="jurnii-form-group full-width"><label class="jurnii-label" for="jurnii-interest">What are you interested in seeing? (Optional)</label>'
-      + '<select class="jurnii-select" id="jurnii-interest" data-field="productInterest">'
-      + '<option value="" selected>Select an option...</option>'
-      + PRODUCT_OPTIONS.map(function (p) {
-        return '<option value="' + escapeHtml(p.value) + '">' + escapeHtml(p.label) + '</option>';
-      }).join('')
-      + '</select></div>'
+      + productMarkup()
+      + (o && o.internal ? leadSourceMarkup() : '')
       + '</div>'
       + '<div class="jurnii-form-actions split">'
       + '<button type="button" class="btn ghost-on-dark sm" data-role="back-2">&larr; Back</button>'
@@ -537,6 +671,92 @@
       /* ---- needs attention: a human is on it, and no action is offered ---- */
       + attentionMarkup()
 
+      + '</div>';
+  }
+
+  /**
+   * Job Title — an ARIA 1.2 combobox over the governed list.
+   *
+   * The input keeps focus throughout and the highlighted option is tracked with
+   * `aria-activedescendant` rather than a roving tabindex, which is what lets Tab
+   * commit-and-leave instead of stepping through 415 options.
+   *
+   * The listbox starts empty and `hidden`: nothing is rendered, and the title file
+   * is not even fetched, until the field is focused.
+   */
+  function jobTitleMarkup() {
+    return ''
+      + '<div class="jurnii-form-group jurnii-combobox" data-role="jobtitle-group">'
+      + '<label class="jurnii-label" for="jurnii-job-title">Job Title *</label>'
+      + '<input type="text" class="jurnii-input" id="jurnii-job-title" data-field="jobTitle"'
+      + ' role="combobox" aria-expanded="false" aria-controls="jurnii-job-title-list"'
+      + ' aria-autocomplete="list" aria-haspopup="listbox"'
+      + ' autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"'
+      + ' placeholder="Start typing, e.g. Head of Product" required>'
+      + '<ul class="jurnii-listbox" id="jurnii-job-title-list" role="listbox"'
+      + ' aria-label="Job titles" data-role="jobtitle-listbox" hidden></ul>'
+      + '<p class="jurnii-field-hint" role="status" aria-live="polite" data-role="jobtitle-status"></p>'
+      + '</div>'
+      // Revealed only by choosing `Other`. Kept out of the grid flow until then, so
+      // the layout does not reserve a gap for a field nobody is using.
+      + '<div class="jurnii-form-group" data-role="jobtitle-other-group" hidden>'
+      + '<label class="jurnii-label" for="jurnii-job-title-other">Your job title *</label>'
+      + '<input type="text" class="jurnii-input" id="jurnii-job-title-other" data-field="jobTitleOther"'
+      + ' autocomplete="organization-title" placeholder="e.g. Head of Competitive Intelligence">'
+      + '<p class="jurnii-field-hint">'
+      + '<button type="button" class="jurnii-linklike" data-role="jobtitle-clear">Choose from the list instead</button>'
+      + '</p>'
+      + '</div>';
+  }
+
+  /**
+   * Product Interest — a checkbox group, because Zoho's `Product_Interest` is a
+   * multiselect and always was; the single `<select>` was the narrower side of that
+   * contract.
+   *
+   * `value` carries the canonical CRM string and the visible text carries the
+   * marketing label. They are separate attributes precisely so a label can never be
+   * submitted: the change handler reads `input.value`, never `textContent`.
+   *
+   * There is no `Not sure yet` option. An untouched group already means "no
+   * product" and sends nothing, which is exactly what that option did — while also
+   * being a pseudo-product that had to be special-cased on both sides.
+   */
+  function productMarkup() {
+    return ''
+      + '<div class="jurnii-form-group full-width">'
+      + '<fieldset class="jurnii-checkbox-group" data-role="product-group">'
+      + '<legend class="jurnii-label">What are you interested in seeing? (Optional)</legend>'
+      + PRODUCT_OPTIONS.map(function (p, i) {
+        var id = 'jurnii-product-' + i;
+        return '<label class="jurnii-checkbox-option" for="' + id + '">'
+          + '<div class="jurnii-checkbox-wrapper">'
+          + '<input type="checkbox" id="' + id + '" data-field="productInterests"'
+          + ' value="' + escapeHtml(p.value) + '">'
+          + '<span class="jurnii-checkbox-checkmark"></span></div>'
+          + '<span class="jurnii-checkbox-label">' + escapeHtml(p.label) + '</span>'
+          + '</label>';
+      }).join('')
+      + '<p class="jurnii-field-hint">Choose as many as apply, or leave blank if you are not sure yet.</p>'
+      + '</fieldset></div>';
+  }
+
+  /**
+   * Lead Source — INTERNAL ROUTE ONLY (`/admin-form`).
+   *
+   * Options are fetched from the generated `lead-sources.js`, whose values come from
+   * live Zoho metadata. It is populated at runtime rather than baked in here for the
+   * same reason the country select is: a hand-typed CRM picklist value is a silent
+   * write failure waiting to happen.
+   */
+  function leadSourceMarkup() {
+    return ''
+      + '<div class="jurnii-form-group full-width">'
+      + '<label class="jurnii-label" for="jurnii-lead-source">Lead Source (internal)</label>'
+      + '<select class="jurnii-select" id="jurnii-lead-source" data-field="leadSource">'
+      + '<option value="" selected>Use the default (Website)</option>'
+      + '</select>'
+      + '<p class="jurnii-field-hint">Recorded against this booking only. Public bookings always use the configured default.</p>'
       + '</div>';
   }
 
@@ -780,24 +1000,34 @@
      ======================================================================= */
   function createBooking(container, options) {
     var opts = options || {};
-    var embedded = resolveEmbedded(opts);
+    // NB: no `embedded` local. It used to suppress the close button; that is now the
+    // host's explicit `showCloseButton`. `resolveEmbedded` still governs whether this
+    // module opens a modal of its own, and is consulted in `render` and `bootstrap`.
     var data = readPlacement(container, opts);
+    var internal = resolveInternal(container, opts);
     var countries = null;
     var poller = null;
     var destroyed = false;
 
     var vals = {
       firstName: '', lastName: '', email: '', marketingConsent: false,
-      company: '', jobTitle: '', countryIso2: 'GB', nationalNumber: '', productInterest: ''
+      company: '', jobTitle: '', jobTitleOther: '', countryIso2: 'GB',
+      nationalNumber: '', productInterests: [], leadSource: ''
     };
     var journeyId = null;
     var journeyEmail = null;
     var token = null;
     var scheduler = null;
     var root = null;
+    var titles = null;                 // the governed job-title list, once fetched
 
     function q(role) { return root && root.querySelector('[data-role="' + role + '"]'); }
     function field(name) { return root && root.querySelector('[data-field="' + name + '"]'); }
+    /** The checkbox-group form of `field`; `querySelector` only ever finds the first. */
+    function fields(name) {
+      return root ? Array.prototype.slice.call(
+        root.querySelectorAll('[data-field="' + name + '"]')) : [];
+    }
 
     function notice(msg, tone) {
       var el = q('notice');
@@ -855,15 +1085,38 @@
       if (destroyed) return;
       root = container;
       container.innerHTML = formMarkup({
-        showCloseButton: !embedded && opts.showCloseButton === true,
+        showCloseButton: opts.showCloseButton === true,
         // A host that supplied `onClose` gets a button that calls it; a genuine
         // inline placement has nothing to close, so it gets a home link instead.
-        finishInline: typeof opts.onClose !== 'function'
+        finishInline: typeof opts.onClose !== 'function',
+        internal: internal
       });
       populateCountries();
       bind();
       restore();
       icons();
+      if (internal) populateLeadSources();
+    }
+
+    /**
+     * INTERNAL ROUTE ONLY. Failure is silent and safe: with no options the select
+     * offers only "use the default", and the server falls back to the configured
+     * public Lead Source exactly as it does for a public booking.
+     */
+    function populateLeadSources() {
+      loadLeadSources().then(function (mod) {
+        if (destroyed || !mod || !root) return;
+        var sel = field('leadSource');
+        if (!sel) return;
+        sel.innerHTML = '<option value="">Use the default (Website)</option>'
+          + mod.LEAD_SOURCES.map(function (s) {
+            // label = Zoho display_value, value = actual_value. Five differ live, so
+            // submitting the label would be an INVALID_DATA rejection.
+            return '<option value="' + escapeHtml(s.value) + '"'
+              + (s.value === vals.leadSource ? ' selected' : '') + '>'
+              + escapeHtml(s.label) + '</option>';
+          }).join('');
+      });
     }
 
     function populateCountries() {
@@ -877,8 +1130,247 @@
       }).join('');
     }
 
+    /* =====================================================================
+       Job Title combobox
+       ===================================================================== */
+    var jt = { open: false, index: -1, options: [], committed: '' };
+
+    function jtInput() { return field('jobTitle'); }
+    function jtList() { return q('jobtitle-listbox'); }
+
+    /** The list is an input aid; if it never arrives the field stays a plain input. */
+    function jtDegrade() {
+      var input = jtInput();
+      if (!input) return;
+      ['role', 'aria-expanded', 'aria-controls', 'aria-autocomplete', 'aria-haspopup',
+        'aria-activedescendant'].forEach(function (a) { input.removeAttribute(a); });
+      input.setAttribute('autocomplete', 'organization-title');
+      var status = q('jobtitle-status');
+      if (status) status.textContent = '';
+    }
+
+    /** Fetched on first focus — 415 options are neither rendered nor downloaded early. */
+    function jtEnsureTitles() {
+      if (titles) return Promise.resolve(titles);
+      return loadJobTitles().then(function (mod) {
+        if (destroyed) return null;
+        if (!mod || !Array.isArray(mod.TITLES) || !mod.TITLES.length) { jtDegrade(); return null; }
+        titles = mod.TITLES;
+        return titles;
+      });
+    }
+
+    function jtClose() {
+      jt.open = false;
+      jt.index = -1;
+      var list = jtList();
+      var input = jtInput();
+      if (list) { list.hidden = true; list.innerHTML = ''; }
+      if (input && input.getAttribute('role') === 'combobox') {
+        input.setAttribute('aria-expanded', 'false');
+        input.removeAttribute('aria-activedescendant');
+      }
+    }
+
+    function jtHighlight(i) {
+      var list = jtList();
+      var input = jtInput();
+      if (!list || !input) return;
+      var nodes = list.querySelectorAll('[role="option"]');
+      if (!nodes.length) return;
+      // Wrap: from the last option Down returns to the first, which is what a visitor
+      // scanning a long list expects.
+      jt.index = ((i % nodes.length) + nodes.length) % nodes.length;
+      Array.prototype.forEach.call(nodes, function (n, idx) {
+        var on = idx === jt.index;
+        n.classList.toggle('active', on);
+        n.setAttribute('aria-selected', on ? 'true' : 'false');
+        if (on) {
+          input.setAttribute('aria-activedescendant', n.id);
+          if (typeof n.scrollIntoView === 'function') {
+            try { n.scrollIntoView({ block: 'nearest' }); } catch (_) {}
+          }
+        }
+      });
+    }
+
+    function jtRender(query) {
+      var list = jtList();
+      var input = jtInput();
+      if (!list || !input || !titles) return;
+
+      var res = filterJobTitles(titles, query, JOB_TITLE_MAX_VISIBLE);
+      // `Other` is appended unconditionally, so it stays reachable even when the
+      // query matches nothing — which is exactly when a visitor needs it.
+      jt.options = res.visible.concat([JOB_TITLE_OTHER]);
+
+      var html = jt.options.map(function (t, i) {
+        return '<li class="jurnii-option' + (t === JOB_TITLE_OTHER ? ' is-other' : '') + '"'
+          + ' id="jurnii-jt-opt-' + i + '" role="option" aria-selected="false"'
+          + ' data-title="' + escapeHtml(t) + '">' + escapeHtml(t) + '</li>';
+      }).join('');
+      var hidden = res.total - res.visible.length;
+      if (hidden > 0) {
+        html += '<li class="jurnii-option-more" role="presentation">'
+          + hidden + ' more — keep typing to narrow the list</li>';
+      }
+      list.innerHTML = html;
+      list.hidden = false;
+      jt.open = true;
+      input.setAttribute('aria-expanded', 'true');
+      jt.index = -1;
+      input.removeAttribute('aria-activedescendant');
+
+      var status = q('jobtitle-status');
+      if (status) {
+        status.textContent = res.total === 0
+          ? 'No matching titles — choose Other to type your own.'
+          : res.total + (res.total === 1 ? ' title' : ' titles') + ' available.';
+      }
+
+      Array.prototype.forEach.call(list.querySelectorAll('[role="option"]'), function (n, i) {
+        // mousedown, not click: blur would otherwise close the list and remove the
+        // node before the click ever lands on it.
+        n.addEventListener('mousedown', function (e) { e.preventDefault(); jtCommit(i); });
+      });
+    }
+
+    function jtCommit(i) {
+      var title = jt.options[i];
+      if (title === undefined) return;
+      var input = jtInput();
+      vals.jobTitle = title;
+      jt.committed = title;
+      if (input) input.value = title;
+      jtClose();
+      syncJobTitleOther({ focus: title === JOB_TITLE_OTHER });
+      persist();
+    }
+
+    /**
+     * Show or hide the free-text field to match the committed title.
+     *
+     * Called from `restore()` too. `restore` only assigns `.value`/`.checked`, so a
+     * resumed session that had chosen `Other` would otherwise show a combobox reading
+     * "Other" above a still-hidden text field holding the visitor's real title.
+     */
+    function syncJobTitleOther(o) {
+      var group = q('jobtitle-other-group');
+      var other = field('jobTitleOther');
+      if (!group || !other) return;
+      var on = String(vals.jobTitle || '').trim() === JOB_TITLE_OTHER;
+      group.hidden = !on;
+      if (on) {
+        other.setAttribute('required', 'required');
+        if (o && o.focus && typeof other.focus === 'function') {
+          try { other.focus(); } catch (_) {}
+        }
+      } else {
+        other.removeAttribute('required');
+        // Cleared on the way out so a stale free-text title cannot be submitted
+        // alongside a governed one.
+        if (other.value) other.value = '';
+        vals.jobTitleOther = '';
+      }
+    }
+
+    function jtKeydown(e) {
+      var input = jtInput();
+      if (!input || input.getAttribute('role') !== 'combobox') return;
+
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (!jt.open) {
+          jtEnsureTitles().then(function (t) {
+            if (!t) return;
+            jtRender(input.value);
+            jtHighlight(e.key === 'ArrowDown' ? 0 : jt.options.length - 1);
+          });
+          return;
+        }
+        jtHighlight(jt.index + (e.key === 'ArrowDown' ? 1 : -1));
+        return;
+      }
+      if (!jt.open) return;
+
+      if (e.key === 'Home' || e.key === 'End') {
+        e.preventDefault();
+        jtHighlight(e.key === 'Home' ? 0 : jt.options.length - 1);
+        return;
+      }
+      if (e.key === 'Enter') {
+        // preventDefault whether or not something is highlighted: Enter inside an open
+        // listbox must never reach a surrounding form and submit it.
+        e.preventDefault();
+        if (jt.index >= 0) jtCommit(jt.index);
+        else jtClose();
+        return;
+      }
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        // The site modal also closes on Escape. The first press belongs to the
+        // listbox; only a second one should close the booking form.
+        e.stopPropagation();
+        jtClose();
+        // Restore the last committed title, so Escape means "cancel this edit".
+        if (jt.committed) { input.value = jt.committed; vals.jobTitle = jt.committed; }
+        return;
+      }
+      if (e.key === 'Tab') {
+        // NOT prevented — Tab must still move focus. It commits the highlight on the
+        // way out, which is the ARIA-recommended behaviour for a combobox.
+        if (jt.index >= 0) jtCommit(jt.index);
+        else jtClose();
+      }
+    }
+
+    function bindJobTitle() {
+      var input = jtInput();
+      if (!input) return;
+
+      input.addEventListener('focus', function () {
+        jtEnsureTitles().then(function (t) { if (t && !jt.open) jtRender(input.value); });
+      });
+      input.addEventListener('input', function (e) {
+        vals.jobTitle = e.target.value;
+        persist();
+        jtEnsureTitles().then(function (t) { if (t) jtRender(e.target.value); });
+      });
+      input.addEventListener('keydown', jtKeydown);
+      input.addEventListener('blur', function () {
+        // Snap to the governed casing when the typed text is an exact match, so
+        // "head of product" reaches the server as "Head of Product".
+        var typed = String(input.value || '').trim();
+        if (titles && typed) {
+          var exact = titles.filter(function (t) { return t.toLowerCase() === typed.toLowerCase(); })[0];
+          if (exact) { input.value = exact; vals.jobTitle = exact; jt.committed = exact; persist(); }
+        }
+        jtClose();
+        syncJobTitleOther();
+      });
+
+      var other = field('jobTitleOther');
+      if (other) {
+        other.addEventListener('input', function (e) { vals.jobTitleOther = e.target.value; persist(); });
+      }
+      // The return path out of `Other`. Typing over the word works too, but an
+      // explicit affordance is what makes it discoverable.
+      var clear = q('jobtitle-clear');
+      if (clear) {
+        clear.addEventListener('click', function (e) {
+          e.preventDefault();
+          vals.jobTitle = '';
+          vals.jobTitleOther = '';
+          jt.committed = '';
+          if (input) { input.value = ''; try { input.focus(); } catch (_) {} }
+          syncJobTitleOther();
+          persist();
+        });
+      }
+    }
+
     function bind() {
-      ['firstName', 'lastName', 'email', 'company', 'jobTitle', 'nationalNumber'].forEach(function (name) {
+      ['firstName', 'lastName', 'email', 'company', 'nationalNumber'].forEach(function (name) {
         var el = field(name);
         if (el) el.addEventListener('input', function (e) { vals[name] = e.target.value; persist(); });
       });
@@ -886,8 +1378,24 @@
       if (consent) consent.addEventListener('change', function (e) { vals.marketingConsent = !!e.target.checked; persist(); });
       var country = field('countryIso2');
       if (country) country.addEventListener('change', function (e) { vals.countryIso2 = e.target.value; persist(); });
-      var interest = field('productInterest');
-      if (interest) interest.addEventListener('change', function (e) { vals.productInterest = e.target.value; persist(); });
+
+      bindJobTitle();
+
+      // Push/splice rather than re-reading the DOM, so `productInterests` preserves the
+      // order the visitor ticked. The first entry is the one the Zoho worker uses to
+      // resolve a product Deal, so that order is load-bearing, not cosmetic.
+      fields('productInterests').forEach(function (cb) {
+        cb.addEventListener('change', function (e) {
+          var value = e.target.value;          // the canonical value, never the label
+          var at = vals.productInterests.indexOf(value);
+          if (e.target.checked) { if (at === -1) vals.productInterests.push(value); }
+          else if (at !== -1) vals.productInterests.splice(at, 1);
+          persist();
+        });
+      });
+
+      var leadSource = field('leadSource');
+      if (leadSource) leadSource.addEventListener('change', function (e) { vals.leadSource = e.target.value; persist(); });
 
       var n1 = q('next-1'); if (n1) n1.addEventListener('click', submitPage1);
       var n2 = q('next-2'); if (n2) n2.addEventListener('click', submitPage2);
@@ -938,16 +1446,42 @@
     function restore() {
       var snap = loadSnapshot();
       if (!snap) return;
-      if (snap.values) Object.assign(vals, snap.values);
+      var saved = snap.values || {};
+      Object.assign(vals, saved);
+
+      // A snapshot written by the previous single-select build carries a scalar
+      // `productInterest` and no array. Migrate it rather than dropping it: the TTL is
+      // two hours, so a visitor mid-flow when the deploy lands would otherwise lose
+      // their choice. Tested against `saved`, not the merged `vals` — the seed already
+      // holds an empty array, so `vals.productInterests` is never not-an-array.
+      if (!Array.isArray(saved.productInterests)) {
+        vals.productInterests = productsForSubmit(saved.productInterest);
+      }
+      delete vals.productInterest;
+
       journeyId = snap.journey_id || null;
       journeyEmail = snap.journey_email || null;
       token = snap.token || null;
+
+      // The multi-value fields FIRST: the generic loop below writes `.value`, which
+      // would stringify the array into the first checkbox's value attribute.
+      var checked = vals.productInterests || [];
+      fields('productInterests').forEach(function (cb) {
+        cb.checked = checked.indexOf(cb.value) !== -1;
+      });
+
       Object.keys(vals).forEach(function (name) {
+        if (name === 'productInterests') return;
         var el = field(name);
         if (!el) return;
         if (el.type === 'checkbox') el.checked = !!vals[name];
         else if (vals[name] !== undefined && vals[name] !== null) el.value = vals[name];
       });
+
+      // `restore` only assigns values; without this a resumed `Other` session shows a
+      // combobox reading "Other" above a hidden field holding the real title.
+      jt.committed = String(vals.jobTitle || '').trim();
+      syncJobTitleOther();
       if (token && journeyId && Number(snap.step) >= 3) {
         showStep(3);
         scheduler.load();
@@ -1048,10 +1582,22 @@
       notice(null);
       if (!countries) { notice(COPY.generic); return Promise.resolve(false); }
 
+      // `Other` is a UI sentinel; the title that counts is whatever it revealed.
+      var jobTitle = effectiveJobTitle(vals);
       var ok = true;
+      var problem = 'company_required';
       if (!String(vals.company || '').trim()) { markInvalid('company'); ok = false; }
-      if (!String(vals.jobTitle || '').trim()) { markInvalid('jobTitle'); ok = false; }
-      if (!ok) { notice(COPY.company_required); return Promise.resolve(false); }
+      if (!jobTitle) {
+        if (String(vals.jobTitle || '').trim() === JOB_TITLE_OTHER) {
+          markInvalid('jobTitleOther');
+          problem = 'job_title_other_required';
+        } else {
+          markInvalid('jobTitle');
+          problem = 'job_title_required';
+        }
+        ok = false;
+      }
+      if (!ok) { notice(COPY[problem]); return Promise.resolve(false); }
 
       // The SHARED normaliser, so the client shows what the server will derive.
       var phone = countries.normalizePhone({
@@ -1066,14 +1612,22 @@
 
       var body = {
         company: String(vals.company || '').trim(),
-        jobTitle: String(vals.jobTitle || '').trim(),
+        // ONE title string. No `isOther` flag and no Contact Role: the server decides
+        // which titles may enter the governed picklist, from its own live snapshot.
+        jobTitle: jobTitle,
         countryIso2: vals.countryIso2,
         dialCode: phone.dialCode,
         nationalNumber: phone.nationalNumber,
         e164: phone.e164
       };
-      var product = productForSubmit(vals.productInterest);
-      if (product !== undefined) body.productInterest = product;
+      // A NEW plural key. Reusing `productInterest` with an array value would 400
+      // against a still-cached copy of the previous endpoint, so a rolling deploy in
+      // either order stays safe.
+      var products = productsForSubmit(vals.productInterests);
+      if (products.length) body.productInterests = products;
+      // Internal route only, and the server honours it only for a journey whose
+      // stored placement is `internal-booking`.
+      if (internal && vals.leadSource) body.leadSource = vals.leadSource;
 
       setLoading('next-2', true);
       // A failed save must NOT advance: the calendar never opens on unsaved data.
@@ -1566,6 +2120,22 @@
     return win.JURNII_BOOKING_EMBEDDED === true;
   }
 
+  /**
+   * True on the internal `/admin-form` route, which shows the extra Lead Source field.
+   *
+   * This is PRESENTATION ONLY and is not a security boundary — the page is served
+   * unauthenticated by design (a low-discovery convenience route, `noindex`, unlinked).
+   * The server does not trust this flag: it honours a submitted `leadSource` only for a
+   * journey whose stored `form_placement` is `internal-booking`, which is written on
+   * page 1 and never read back from a page-2 body. That check is where a real
+   * authentication gate would later attach, without the form changing.
+   */
+  function resolveInternal(container, opts) {
+    if (opts && typeof opts.internal === 'boolean') return opts.internal;
+    if (container && container.getAttribute && container.getAttribute('data-internal') === '1') return true;
+    return false;
+  }
+
   /* =======================================================================
      The module's own modal — inline/legacy placements ONLY.
      ======================================================================= */
@@ -1704,9 +2274,15 @@
       classifyBooking: classifyBooking,
       classifyStatus: classifyStatus,
       nextPollDelay: nextPollDelay,
-      productForSubmit: productForSubmit,
+      productsForSubmit: productsForSubmit,
+      PRODUCT_OPTIONS: PRODUCT_OPTIONS,
+      filterJobTitles: filterJobTitles,
+      effectiveJobTitle: effectiveJobTitle,
+      JOB_TITLE_OTHER: JOB_TITLE_OTHER,
+      JOB_TITLE_MAX_VISIBLE: JOB_TITLE_MAX_VISIBLE,
       manageActions: manageActions,
       resolveEmbedded: resolveEmbedded,
+      resolveInternal: resolveInternal,
       readPlacement: readPlacement,
       bootstrapPlan: bootstrapPlan,
       bucketSlotsByLocalDay: bucketSlotsByLocalDay,

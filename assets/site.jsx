@@ -862,6 +862,8 @@ window.PageChrome = PageChrome;
 // ---------- Demo Modal ----------
 (function () {
   let modalEl = null;
+  // The element that opened the modal, so focus can go back where it came from.
+  let lastTrigger = null;
 
   // The one shared booking implementation (booking/assets/booking-form.js).
   const BOOKING_SRC = '/booking/assets/booking-form.js';
@@ -886,34 +888,37 @@ window.PageChrome = PageChrome;
     if (onFail) s.addEventListener('error', onFail);
   }
 
+  /**
+   * Backdrop + ONE surface.
+   *
+   * This used to build a white `.demo-modal-dialog` card with its own header and close
+   * button, and then mount `.jurnii-booking-container` — itself a padded, bordered card
+   * — inside it. Two nested surfaces, two close affordances, and the widget's 40px of
+   * padding sitting inside another 24/28px. `.demo-modal-surface` is now a transparent
+   * positioning/scroll container only: the booking card IS the visible dialog, and it
+   * paints its own single close button (`showCloseButton` below).
+   */
   function buildModal() {
     const el = document.createElement('div');
     el.id = 'demo-modal';
     el.innerHTML = [
     '<div class="demo-modal-backdrop"></div>',
-    '<div class="demo-modal-dialog" role="dialog" aria-modal="true" aria-label="Book a demo">',
-    '<div class="demo-modal-head">',
-    '<div class="demo-modal-title">',
-    '<b>Book a demo</b>',
-    '<span>3 quick steps &middot; a specialist confirms your slot</span>',
-    '</div>',
-    '<button class="demo-modal-close" aria-label="Close"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>',
-    '</div>',
-    '<div class="demo-modal-body is-form" style="padding:24px 28px 28px"><div class="container-narrow" id="demo-modal-mount" style="padding:0"></div></div>',
+    '<div class="demo-modal-surface" role="dialog" aria-modal="true" aria-label="Book a demo" tabindex="-1">',
+    '<div id="demo-modal-mount"></div>',
     '</div>'].
     join('');
     document.body.appendChild(el);
     el.querySelector('.demo-modal-backdrop').addEventListener('click', closeModal);
-    el.querySelector('.demo-modal-close').addEventListener('click', closeModal);
-    document.addEventListener('keydown', function (e) {if (e.key === 'Escape') closeModal();});
     ensureBooking(function () {
-      // `onClose` is also how the module detects that a host owns the modal, so it
-      // paints no close button of its own inside .demo-modal-body.
+      // `onClose` tells the module a host owns the modal; `showCloseButton` tells it to
+      // paint the ONE close control, anchored inside the booking card itself.
       window.JurniiBooking.render(el.querySelector('#demo-modal-mount'), {
         onClose: closeModal,
+        showCloseButton: true,
         formPlacement: 'site-demo-modal',
         ctaId: 'book-a-demo'
       });
+      if (el.classList.contains('open')) focusIntoModal();
     }, function () {
       const mount = el.querySelector('#demo-modal-mount');
       if (mount) mount.innerHTML = '<p style="color:var(--muted-foreground);font-size:14px">Booking is temporarily unavailable. Please email <a href="mailto:hello@jurnii.io">hello@jurnii.io</a> and we will find a slot.</p>';
@@ -921,17 +926,55 @@ window.PageChrome = PageChrome;
     return el;
   }
 
+  const FOCUSABLE = 'input:not([type="hidden"]):not([disabled]),select:not([disabled]),textarea:not([disabled]),button:not([disabled]),a[href]';
+
+  /**
+   * Move focus into the dialog on open. Prefer the first real field so a keyboard or
+   * screen-reader user starts where the form does; fall back to the surface itself
+   * (which is focusable via tabindex="-1") when the widget has not painted yet.
+   */
+  function focusIntoModal() {
+    if (!modalEl) return;
+    const first = modalEl.querySelector(FOCUSABLE);
+    const target = first || modalEl.querySelector('.demo-modal-surface');
+    if (target && typeof target.focus === 'function') {
+      try {target.focus({ preventScroll: true });} catch (_) {target.focus();}
+    }
+  }
+
+  function isOpen() {
+    return Boolean(modalEl && modalEl.classList.contains('open'));
+  }
+
   function openModal() {
+    // Remembered BEFORE the modal takes focus, so closing returns the visitor to the
+    // CTA they pressed rather than dumping them at the top of the document.
+    lastTrigger = document.activeElement;
     if (!modalEl) modalEl = buildModal();
     modalEl.classList.add('open');
     document.body.style.overflow = 'hidden';
+    focusIntoModal();
   }
 
   function closeModal() {
     if (!modalEl) return;
     modalEl.classList.remove('open');
     document.body.style.overflow = '';
+    // The dialog is only visibility-hidden, so without this the focus ring stays on an
+    // invisible control inside it.
+    if (lastTrigger && typeof lastTrigger.focus === 'function' && document.contains(lastTrigger)) {
+      try {lastTrigger.focus({ preventScroll: true });} catch (_) {lastTrigger.focus();}
+    }
+    lastTrigger = null;
   }
+
+  // Registered once at module scope rather than inside buildModal, and gated on `open`,
+  // so it cannot fire before the modal exists and cannot act while it is closed. The
+  // Job Title combobox stops propagation on its own Escape, so the first press closes
+  // the listbox and only a second one closes the modal.
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && isOpen()) closeModal();
+  });
 
   window.openDemoModal = openModal;
 

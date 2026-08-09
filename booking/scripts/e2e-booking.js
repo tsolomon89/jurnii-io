@@ -145,6 +145,7 @@ async function snapshot(journeyId) {
               j.zoho_account_id, j.zoho_deal_id, j.zoho_meeting_id,
               j.zoho_manual_review_task_id, j.google_event_id, j.google_calendar_id,
               j.slot_start_utc, j.slot_end_utc,
+              j.product_interests, j.lead_source, j.job_title_raw,
               (SELECT json_agg(json_build_object(
                         'op', op, 'state', state, 'f', failure_count, 'max', max_failures,
                         'next', next_retry_at, 'err', last_error_code,
@@ -478,7 +479,7 @@ async function main() {
     // P2 — Page 1, and the mismatch tripwire
     const p1 = await request('POST', '/api/v1/submissions/start', {
       email, firstName: 'E2E', lastName: 'Verifier', company: 'Jurnii E2E Ltd',
-      jobTitleRaw: 'Automation', countryIso2: 'GB', productInterest: 'Jurnii 360',
+      jobTitleRaw: 'Head of Product', countryIso2: 'GB',
     });
     if (p1.status !== 200 || !p1.json || !p1.json.journeyId) {
       throw new Abort(1, `Page 1 failed: ${p1.status} ${p1.body.slice(0, 300)}`);
@@ -497,16 +498,32 @@ async function main() {
     }
     pass('db: journey row committed', `booking_status=${seen.booking_status}`);
 
-    // P3 — Page 2 arms the outbox
+    // P3 — Page 2 arms the outbox.
+    //
+    // `Head of Product` is deliberately a LIVE Job_Title picklist value, so this
+    // exercises the governed-title path end to end: the Zoho worker should write both
+    // `Job_Title` and `Job_Title_Raw`, and processLead should then resolve
+    // `Contact_Role1` from the picklist.
+    //
+    // A single product, also deliberately: two or more create two or more Product Deals,
+    // and `processContact` defers activation to Manual Review when a Contact has more
+    // than one driver Deal (HARD RULE 7). The E2E must exercise the activating path.
     const p2 = await request('PATCH', `/api/v1/submissions/${journeyId}`, {
-      company: 'Jurnii E2E Ltd', jobTitle: 'Automation', countryIso2: 'GB',
-      dialCode: '+44', nationalNumber: '7700900123', productInterest: 'Jurnii 360',
+      company: 'Jurnii E2E Ltd', jobTitle: 'Head of Product', countryIso2: 'GB',
+      dialCode: '+44', nationalNumber: '7700900123', productInterests: ['Jurnii 360'],
     }, { Authorization: `Bearer ${flowToken}` });
     if (p2.status !== 200 || !p2.json || p2.json.step !== 2) {
       throw new Abort(1, `Page 2 failed: ${p2.status} ${p2.body.slice(0, 300)}`);
     }
     const token = p2.json.token || flowToken;
     snap = await snapshot(journeyId);
+    if (Array.isArray(snap.product_interests) && snap.product_interests.length === 1
+        && snap.product_interests[0] === 'Jurnii 360') {
+      pass('db: Page 2 persisted the product array');
+    } else {
+      fail('db: Page 2 persisted the product array',
+        `product_interests=${JSON.stringify(snap.product_interests)} — migration 0004 applied?`);
+    }
     const armed = (snap.ops || []).some((o) => o.op === 'zoho_identity_resolve');
     if (snap.zoho_status === 'pending' && armed) pass('db: Page 2 armed zoho_identity_resolve');
     else fail('db: Page 2 armed zoho_identity_resolve', `zoho_status=${snap.zoho_status}, ops=[${renderOps(snap)}]`);

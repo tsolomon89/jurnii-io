@@ -172,25 +172,68 @@ test('render() is the shared entry point and returns a live instance', async () 
   assert.strictEqual(el.getAttribute('data-jurnii-mounted'), '1');
 });
 
-test('embedded mode opens no modal of its own and paints no second close button', async () => {
+test('embedded mode opens no modal of its own, and paints no close button unless asked', async () => {
   const { win } = makeWindow();
   const JB = freshFactory()(win, { bootstrap: false });
   const el = win.document.createElement('div');
   win.document.body.appendChild(el);
 
-  // Exactly the site.jsx call: a host modal supplies onClose.
+  // A host modal supplies onClose. Without `showCloseButton` it is claiming the close
+  // control for itself, so the widget must paint none.
   JB.render(el, { onClose() {} });
   await drain();
 
   assert.strictEqual(win.JURNII_BOOKING_EMBEDDED, true, 'a host modal must mark the page embedded');
   assert.strictEqual(el.querySelector('.jurnii-close-btn'), null,
-    'the site modal already has .demo-modal-close; a second close button must not appear');
+    'a host that did not ask for a close button must not get one');
   assert.strictEqual(win.document.querySelector('.jurnii-modal-overlay'), null,
     'the module must not create its own overlay in embedded mode');
 
   // And its own modal opener becomes inert, so one CTA click cannot open two modals.
   assert.strictEqual(JB.openModal(), null);
   assert.strictEqual(win.document.querySelector('.jurnii-modal-overlay'), null);
+});
+
+test('an embedded host may delegate the ONE close button to the widget', async () => {
+  const { win } = makeWindow();
+  const JB = freshFactory()(win, { bootstrap: false });
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+
+  // Exactly the site.jsx call now that #demo-modal has no chrome of its own.
+  const closes = [];
+  JB.render(el, { onClose() { closes.push(1); }, showCloseButton: true });
+  await drain();
+
+  const buttons = el.querySelectorAll('.jurnii-close-btn');
+  assert.strictEqual(buttons.length, 1, 'exactly one close control, painted inside the card');
+  assert.strictEqual(buttons[0].getAttribute('aria-label'), 'Close');
+  // It is inside the booking card, not floating in the host's chrome.
+  assert.ok(buttons[0].closest('.jurnii-booking-container'),
+    'the close button belongs to the card that is now the dialog');
+
+  buttons[0].dispatchEvent(new win.Event('click', { bubbles: true }));
+  assert.deepStrictEqual(closes, [1], 'the close button must call the host onClose');
+
+  // Delegating the button must not resurrect the module's own overlay.
+  assert.strictEqual(win.document.querySelector('.jurnii-modal-overlay'), null);
+});
+
+test('the booking card is the only visible surface — no second wrapper card', async () => {
+  const { win } = makeWindow();
+  const JB = freshFactory()(win, { bootstrap: false });
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+  JB.render(el, { onClose() {}, showCloseButton: true });
+  await drain();
+
+  assert.strictEqual(el.querySelectorAll('.jurnii-booking-container').length, 1);
+  // The widget's root must be the FIRST element in the mount, with no padded wrapper
+  // interposed between the host mount point and the card.
+  assert.strictEqual(el.firstElementChild.className, 'jurnii-booking-container');
+  for (const dead of ['.demo-modal-dialog', '.demo-modal-head', '.demo-modal-body']) {
+    assert.strictEqual(el.querySelector(dead), null, dead + ' must not be re-introduced');
+  }
 });
 
 test('the module still owns a modal for non-embedded (legacy/inline) hosts', async () => {
@@ -323,15 +366,20 @@ test('a phone that fails the shared normaliser is refused client-side with autho
   assert.match(el.querySelector('[data-role="notice"]').textContent, /too short/i);
 });
 
-test('"Not sure yet" omits productInterest rather than sending a value the server would 400', async () => {
+test('an empty product selection omits the key rather than sending a value the server would 400', async () => {
   const { win } = makeWindow();
   const JB = freshFactory()(win, { bootstrap: false });
-  const p = JB.internals.productForSubmit;
-  // canonicalProduct('Not sure yet') is null by design, and the handler rejects a
-  // supplied-but-non-canonical product, so sending it would 400 a valid choice.
-  assert.strictEqual(p('Not sure yet'), undefined);
-  assert.strictEqual(p(''), undefined);
-  assert.strictEqual(p('Jurnii UX'), 'Jurnii UX');
+  const p = JB.internals.productsForSubmit;
+  assert.deepStrictEqual(p([]), []);
+  assert.deepStrictEqual(p(undefined), []);
+  // The previous build's "no product" sentinel, still dropped so a two-hour-old
+  // snapshot cannot resurrect it as a value the endpoint rejects.
+  assert.deepStrictEqual(p('Not sure yet'), []);
+  assert.deepStrictEqual(p(['Jurnii UX', 'Not sure yet']), ['Jurnii UX']);
+  // A scalar migrates, order is preserved, and duplicates collapse.
+  assert.deepStrictEqual(p('Jurnii UX'), ['Jurnii UX']);
+  assert.deepStrictEqual(p(['Partnership', 'Jurnii UX']), ['Partnership', 'Jurnii UX']);
+  assert.deepStrictEqual(p(['Jurnii UX', 'jurnii ux', ' Jurnii UX ']), ['Jurnii UX']);
 
   const el = win.document.createElement('div');
   win.document.body.appendChild(el);
@@ -341,12 +389,575 @@ test('"Not sure yet" omits productInterest rather than sending a value the serve
   ]);
   const inst = JB.render(el, {});
   await drain();
-  inst._setValues({ company: 'A', jobTitle: 'B', countryIso2: 'GB', nationalNumber: '7123456789', productInterest: 'Not sure yet' });
+  inst._setValues({ company: 'A', jobTitle: 'B', countryIso2: 'GB', nationalNumber: '7123456789', productInterests: [] });
   inst._setJourney(JID, 'flow-2');
   await inst._submitPage2();
   await drain();
   const patch = calls.find((c) => c.method === 'PATCH');
+  assert.strictEqual('productInterests' in patch.body, false);
   assert.strictEqual('productInterest' in patch.body, false);
+});
+
+/* ===================================================================== *
+ * 3b. Product Interest — multi-select
+ * ===================================================================== */
+
+test('the product control is a checkbox group offering all four canonical products', async () => {
+  const { win } = makeWindow();
+  const JB = freshFactory()(win, { bootstrap: false });
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+  JB.render(el, {});
+  await drain();
+
+  const boxes = el.querySelectorAll('[data-field="productInterests"]');
+  assert.strictEqual(boxes.length, 4, 'four products, one checkbox each');
+  assert.deepStrictEqual([...boxes].map((b) => b.value),
+    ['Jurnii UX', 'Jurnii 360', 'Jurnii Cortex', 'Partnership']);
+  assert.deepStrictEqual([...boxes].map((b) => b.type), ['checkbox', 'checkbox', 'checkbox', 'checkbox']);
+  // Partnership is canonical in live Zoho but was never offered by the old select.
+  assert.ok([...boxes].some((b) => b.value === 'Partnership'), 'Partnership must be offered');
+  // And the pseudo-product is gone: an untouched group already means "no product".
+  assert.ok(!el.innerHTML.includes('value="Not sure yet"'));
+  assert.strictEqual(el.querySelector('select[data-field="productInterest"]'), null,
+    'the scalar select must be gone');
+});
+
+test('multiple products submit as an array, in the order they were ticked', async () => {
+  const { win } = makeWindow();
+  const JB = freshFactory()(win, { bootstrap: false });
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+  const calls = stubFetch(win, [
+    ['PATCH', R.page2[0], { status: 200, body: { token: 'flow-2' } }],
+    ['GET', R.availability[0], okAvailability()],
+  ]);
+  const inst = JB.render(el, {});
+  await drain();
+
+  // Tick through the DOM, so the change handlers are what build the array.
+  const tick = (value) => {
+    const box = [...el.querySelectorAll('[data-field="productInterests"]')].find((b) => b.value === value);
+    box.checked = true;
+    box.dispatchEvent(new win.Event('change', { bubbles: true }));
+  };
+  tick('Partnership');
+  tick('Jurnii UX');
+  assert.deepStrictEqual(inst._values.productInterests, ['Partnership', 'Jurnii UX'],
+    'selection order is preserved — the first entry resolves the product Deal');
+
+  inst._setValues({ company: 'A', jobTitle: 'Head of Product', countryIso2: 'GB', nationalNumber: '7123456789' });
+  inst._setJourney(JID, 'flow-2');
+  await inst._submitPage2();
+  await drain();
+  const patch = calls.find((c) => c.method === 'PATCH');
+  assert.deepStrictEqual(patch.body.productInterests, ['Partnership', 'Jurnii UX']);
+});
+
+test('unticking a product removes exactly that product', async () => {
+  const { win } = makeWindow();
+  const JB = freshFactory()(win, { bootstrap: false });
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+  const inst = JB.render(el, {});
+  await drain();
+
+  const boxes = [...el.querySelectorAll('[data-field="productInterests"]')];
+  const set = (value, on) => {
+    const box = boxes.find((b) => b.value === value);
+    box.checked = on;
+    box.dispatchEvent(new win.Event('change', { bubbles: true }));
+  };
+  set('Jurnii UX', true);
+  set('Jurnii 360', true);
+  set('Partnership', true);
+  set('Jurnii 360', false);
+  assert.deepStrictEqual(inst._values.productInterests, ['Jurnii UX', 'Partnership']);
+});
+
+test('the marketing label is never submitted as the CRM value', async () => {
+  const { win } = makeWindow();
+  const JB = freshFactory()(win, { bootstrap: false });
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+  const calls = stubFetch(win, [
+    ['PATCH', R.page2[0], { status: 200, body: { token: 'flow-2' } }],
+    ['GET', R.availability[0], okAvailability()],
+  ]);
+  const inst = JB.render(el, {});
+  await drain();
+
+  // The labels are visible and long; the values are the four canonical strings.
+  assert.match(el.textContent, /User Experience Benchmarking/);
+  const box = [...el.querySelectorAll('[data-field="productInterests"]')].find((b) => b.value === 'Jurnii UX');
+  box.checked = true;
+  box.dispatchEvent(new win.Event('change', { bubbles: true }));
+
+  inst._setValues({ company: 'A', jobTitle: 'Head of Product', countryIso2: 'GB', nationalNumber: '7123456789' });
+  inst._setJourney(JID, 'flow-2');
+  await inst._submitPage2();
+  await drain();
+
+  const patch = calls.find((c) => c.method === 'PATCH');
+  assert.deepStrictEqual(patch.body.productInterests, ['Jurnii UX']);
+  const wire = JSON.stringify(patch.body);
+  assert.ok(!wire.includes('—'), 'no en-dash: a label reached the wire');
+  for (const label of JB.internals.PRODUCT_OPTIONS.map((p) => p.label)) {
+    assert.ok(!wire.includes(label), `the label "${label}" must never be submitted`);
+  }
+});
+
+test('a snapshot from the old single-select build migrates to the array', async () => {
+  const { win } = makeWindow();
+  const JB = freshFactory()(win, { bootstrap: false });
+  // Exactly the shape the previous build persisted.
+  JB.internals.saveSnapshot({
+    journey_id: JID,
+    token: 'flow-2',
+    step: 2,
+    values: { company: 'Acme', jobTitle: 'Head of Product', countryIso2: 'GB',
+      nationalNumber: '7123456789', productInterest: 'Jurnii 360' },
+  });
+
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+  const inst = JB.render(el, {});
+  await drain();
+
+  assert.deepStrictEqual(inst._values.productInterests, ['Jurnii 360'],
+    'a mid-flow visitor must not lose their choice across the deploy');
+  const box = [...el.querySelectorAll('[data-field="productInterests"]')].find((b) => b.value === 'Jurnii 360');
+  assert.strictEqual(box.checked, true, 'and it must be visibly ticked');
+  // The array must not have been stringified into a checkbox value attribute.
+  for (const b of el.querySelectorAll('[data-field="productInterests"]')) {
+    assert.ok(!b.value.includes(','), 'restore() stringified the array into a value');
+  }
+});
+
+/* ===================================================================== *
+ * 3c. Job Title — governed autocomplete
+ * ===================================================================== */
+
+/** Install the generated title list on a jsdom window, as the lazy <script> would. */
+function withTitles(win) {
+  win.JurniiBookingJobTitles = require('../config/job-titles.js');
+  return win.JurniiBookingJobTitles.TITLES;
+}
+
+const openTitles = async (win, el) => {
+  const input = el.querySelector('[data-field="jobTitle"]');
+  input.dispatchEvent(new win.Event('focus', { bubbles: true }));
+  await drain();
+  return input;
+};
+
+test('filterJobTitles matches any substring, case-insensitively, prefix-first', () => {
+  const { win } = makeWindow();
+  const JB = freshFactory()(win, { bootstrap: false });
+  const f = JB.internals.filterJobTitles;
+  const list = ['Head of Product', 'Deputy Head of CRM', 'Chief Data Officer', 'Product Manager'];
+
+  assert.deepStrictEqual(f(list, 'head of', 50).visible, ['Head of Product', 'Deputy Head of CRM'],
+    'a prefix match outranks a mid-string one');
+  assert.deepStrictEqual(f(list, 'HEAD OF', 50).visible, ['Head of Product', 'Deputy Head of CRM'],
+    'matching is case-insensitive');
+  assert.deepStrictEqual(f(list, 'data', 50).visible, ['Chief Data Officer'],
+    'any substring matches, not just a prefix');
+  assert.deepStrictEqual(f(list, 'zzz', 50).visible, []);
+  assert.strictEqual(f(list, '', 50).visible.length, 4, 'an empty query offers everything');
+
+  // The cap is what keeps 415 options from rendering; `total` drives the "+N more".
+  const many = f(list, '', 2);
+  assert.strictEqual(many.visible.length, 2);
+  assert.strictEqual(many.total, 4);
+});
+
+test('no options are rendered or fetched until the field is focused', async () => {
+  const { win } = makeWindow();
+  const JB = freshFactory()(win, { bootstrap: false });
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+  JB.render(el, {});
+  await drain();
+
+  const list = el.querySelector('[data-role="jobtitle-listbox"]');
+  assert.ok(list, 'the listbox element exists');
+  assert.strictEqual(list.hidden, true, 'but is hidden');
+  assert.strictEqual(list.children.length, 0, 'and empty — 415 nodes must not be painted eagerly');
+  assert.strictEqual(win.document.querySelector('script[data-jurnii-booking-job-titles]'), null,
+    'the title file is not even fetched before the field is used');
+});
+
+test('focusing the field opens a capped listbox with correct combobox ARIA', async () => {
+  const { win } = makeWindow();
+  withTitles(win);
+  const JB = freshFactory()(win, { bootstrap: false });
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+  JB.render(el, {});
+  await drain();
+
+  const input = await openTitles(win, el);
+  assert.strictEqual(input.getAttribute('role'), 'combobox');
+  assert.strictEqual(input.getAttribute('aria-expanded'), 'true');
+  assert.strictEqual(input.getAttribute('aria-autocomplete'), 'list');
+  assert.strictEqual(input.getAttribute('autocomplete'), 'off', 'the browser must not overlay its own list');
+
+  const list = el.querySelector('[data-role="jobtitle-listbox"]');
+  assert.strictEqual(list.hidden, false);
+  assert.strictEqual(list.getAttribute('role'), 'listbox');
+  assert.strictEqual(input.getAttribute('aria-controls'), list.id);
+
+  const options = list.querySelectorAll('[role="option"]');
+  assert.strictEqual(options.length, JB.internals.JOB_TITLE_MAX_VISIBLE + 1,
+    'capped at MAX_VISIBLE, plus the Other sentinel');
+  assert.strictEqual(options[options.length - 1].getAttribute('data-title'), 'Other',
+    'Other is always the final option');
+  assert.ok(list.querySelector('[role="presentation"]'), 'and a "+N more" hint is shown');
+});
+
+test('typing filters the list, and Other stays reachable from a zero-match query', async () => {
+  const { win } = makeWindow();
+  withTitles(win);
+  const JB = freshFactory()(win, { bootstrap: false });
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+  JB.render(el, {});
+  await drain();
+
+  const input = await openTitles(win, el);
+  input.value = 'chief data';
+  input.dispatchEvent(new win.Event('input', { bubbles: true }));
+  await drain();
+
+  const titlesOf = () => [...el.querySelectorAll('[data-role="jobtitle-listbox"] [role="option"]')]
+    .map((o) => o.getAttribute('data-title'));
+  assert.ok(titlesOf().includes('Chief Data Officer'));
+  assert.ok(titlesOf().length < 20, 'the list narrows as you type');
+
+  input.value = 'zzzz no such title';
+  input.dispatchEvent(new win.Event('input', { bubbles: true }));
+  await drain();
+  assert.deepStrictEqual(titlesOf(), ['Other'],
+    'Other must remain reachable exactly when nothing matches');
+  assert.match(el.querySelector('[data-role="jobtitle-status"]').textContent, /No matching titles/);
+});
+
+test('ArrowDown, ArrowUp and Enter select a title from the keyboard', async () => {
+  const { win } = makeWindow();
+  withTitles(win);
+  const JB = freshFactory()(win, { bootstrap: false });
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+  const inst = JB.render(el, {});
+  await drain();
+
+  const input = await openTitles(win, el);
+  input.value = 'chief data';
+  input.dispatchEvent(new win.Event('input', { bubbles: true }));
+  await drain();
+
+  const key = (k) => {
+    const e = new win.KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true });
+    input.dispatchEvent(e);
+    return e;
+  };
+  key('ArrowDown');
+  await drain();
+  const list = el.querySelector('[data-role="jobtitle-listbox"]');
+  const first = list.querySelector('[role="option"]');
+  assert.strictEqual(input.getAttribute('aria-activedescendant'), first.id,
+    'the active option is tracked on the input, not by moving focus');
+  assert.strictEqual(first.getAttribute('aria-selected'), 'true');
+
+  // Down then Up returns to the same option.
+  key('ArrowDown');
+  key('ArrowUp');
+  assert.strictEqual(input.getAttribute('aria-activedescendant'), first.id);
+
+  const enter = key('Enter');
+  assert.strictEqual(enter.defaultPrevented, true, 'Enter must not reach a surrounding form');
+  assert.strictEqual(input.value, 'Chief Data Officer');
+  assert.strictEqual(inst._values.jobTitle, 'Chief Data Officer');
+  assert.strictEqual(list.hidden, true, 'committing closes the listbox');
+  assert.strictEqual(input.getAttribute('aria-expanded'), 'false');
+});
+
+test('ArrowDown wraps at the end of the list', async () => {
+  const { win } = makeWindow();
+  withTitles(win);
+  const JB = freshFactory()(win, { bootstrap: false });
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+  JB.render(el, {});
+  await drain();
+
+  const input = await openTitles(win, el);
+  input.value = 'chief data officer';    // one match + Other
+  input.dispatchEvent(new win.Event('input', { bubbles: true }));
+  await drain();
+
+  const ids = [...el.querySelectorAll('[data-role="jobtitle-listbox"] [role="option"]')].map((o) => o.id);
+  const key = (k) => input.dispatchEvent(new win.KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true }));
+  key('ArrowDown');
+  key('ArrowDown');
+  assert.strictEqual(input.getAttribute('aria-activedescendant'), ids[ids.length - 1]);
+  key('ArrowDown');
+  assert.strictEqual(input.getAttribute('aria-activedescendant'), ids[0], 'wraps to the first');
+  key('ArrowUp');
+  assert.strictEqual(input.getAttribute('aria-activedescendant'), ids[ids.length - 1], 'and back');
+});
+
+test('Escape closes the listbox first and does not reach the host modal', async () => {
+  const { win } = makeWindow();
+  withTitles(win);
+  const JB = freshFactory()(win, { bootstrap: false });
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+  JB.render(el, {});
+  await drain();
+
+  // The site modal listens on document; the first Escape must not reach it.
+  let reachedDocument = 0;
+  win.document.addEventListener('keydown', (e) => { if (e.key === 'Escape') reachedDocument++; });
+
+  const input = await openTitles(win, el);
+  input.value = 'chief';
+  input.dispatchEvent(new win.Event('input', { bubbles: true }));
+  await drain();
+  input.dispatchEvent(new win.KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+
+  assert.strictEqual(el.querySelector('[data-role="jobtitle-listbox"]').hidden, true);
+  assert.strictEqual(reachedDocument, 0, 'the first Escape belongs to the listbox');
+
+  // With the listbox closed, a second Escape passes through to close the modal.
+  input.dispatchEvent(new win.KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+  assert.strictEqual(reachedDocument, 1);
+});
+
+test('Tab commits the highlighted title without swallowing the keypress', async () => {
+  const { win } = makeWindow();
+  withTitles(win);
+  const JB = freshFactory()(win, { bootstrap: false });
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+  const inst = JB.render(el, {});
+  await drain();
+
+  const input = await openTitles(win, el);
+  input.value = 'chief data officer';
+  input.dispatchEvent(new win.Event('input', { bubbles: true }));
+  await drain();
+  input.dispatchEvent(new win.KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true }));
+
+  const tab = new win.KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
+  input.dispatchEvent(tab);
+  assert.strictEqual(tab.defaultPrevented, false, 'Tab must still move focus');
+  assert.strictEqual(inst._values.jobTitle, 'Chief Data Officer');
+  assert.strictEqual(el.querySelector('[data-role="jobtitle-listbox"]').hidden, true);
+});
+
+test('the form grid collapses to one column on a phone', () => {
+  const css = fs.readFileSync(path.join(ROOT, 'booking', 'assets', 'booking-form.css'), 'utf8');
+  assert.match(css.replace(/\s+/g, ' '),
+    /@media \(max-width: 640px\) \{ \.jurnii-form-grid \{ grid-template-columns: 1fr/,
+    'without this the right-hand column runs off a 390px viewport');
+
+  // `span 2` does NOT stay inside a one-column grid — it creates an implicit second
+  // column sized by grid-auto-columns, which resurrected the two-column layout at every
+  // mobile width even with the media query above in place. `1 / -1` spans whatever the
+  // explicit grid actually has.
+  assert.ok(!/\.jurnii-form-group\.full-width\s*\{[^}]*span 2/.test(css),
+    'full-width must use `grid-column: 1 / -1`, never `span 2`');
+  assert.match(css, /\.jurnii-form-group\.full-width\s*\{\s*grid-column:\s*1 \/ -1/);
+});
+
+test('the stylesheet makes the hidden attribute actually hide', () => {
+  // jsdom reports `.hidden === true` regardless of CSS, so the DOM assertions in this
+  // file cannot catch this: the UA rule `[hidden] { display: none }` loses to ANY author
+  // `display`, and `.jurnii-form-group` sets `display: flex`. The Other group therefore
+  // rendered permanently in a real browser while every unit test passed.
+  const css = fs.readFileSync(path.join(ROOT, 'booking', 'assets', 'booking-form.css'), 'utf8');
+  assert.match(css, /\.jurnii-booking-container \[hidden\]\s*\{\s*display:\s*none\s*!important/,
+    'conditional fields rely on [hidden]; it must beat the author display rules');
+});
+
+test('choosing Other reveals a required free-text field, and returning hides it', async () => {
+  const { win } = makeWindow();
+  withTitles(win);
+  const JB = freshFactory()(win, { bootstrap: false });
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+  const inst = JB.render(el, {});
+  await drain();
+
+  const group = el.querySelector('[data-role="jobtitle-other-group"]');
+  const other = el.querySelector('[data-field="jobTitleOther"]');
+  assert.strictEqual(group.hidden, true, 'hidden until Other is chosen');
+  assert.strictEqual(other.hasAttribute('required'), false);
+
+  const input = await openTitles(win, el);
+  input.value = 'zzz no match';
+  input.dispatchEvent(new win.Event('input', { bubbles: true }));
+  await drain();
+  const otherOption = el.querySelector('[data-role="jobtitle-listbox"] [data-title="Other"]');
+  otherOption.dispatchEvent(new win.MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+
+  assert.strictEqual(inst._values.jobTitle, 'Other');
+  assert.strictEqual(group.hidden, false, 'the free-text field is revealed');
+  assert.strictEqual(other.hasAttribute('required'), true);
+
+  // Back to a governed title: the field hides and its value is cleared, so a stale
+  // free-text title can never travel alongside a governed one.
+  other.value = 'Head of Widgets';
+  other.dispatchEvent(new win.Event('input', { bubbles: true }));
+  assert.strictEqual(inst._values.jobTitleOther, 'Head of Widgets');
+
+  input.value = 'chief data officer';
+  input.dispatchEvent(new win.Event('input', { bubbles: true }));
+  await drain();
+  input.dispatchEvent(new win.KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true }));
+  input.dispatchEvent(new win.KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+
+  assert.strictEqual(inst._values.jobTitle, 'Chief Data Officer');
+  assert.strictEqual(group.hidden, true);
+  assert.strictEqual(other.hasAttribute('required'), false);
+  assert.strictEqual(inst._values.jobTitleOther, '');
+});
+
+test('the "choose from the list instead" affordance returns from Other', async () => {
+  const { win } = makeWindow();
+  withTitles(win);
+  const JB = freshFactory()(win, { bootstrap: false });
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+  const inst = JB.render(el, {});
+  await drain();
+
+  inst._setValues({ jobTitle: 'Other', jobTitleOther: 'Head of Widgets' });
+  el.querySelector('[data-role="jobtitle-clear"]').dispatchEvent(
+    new win.MouseEvent('click', { bubbles: true, cancelable: true }));
+
+  assert.strictEqual(inst._values.jobTitle, '');
+  assert.strictEqual(inst._values.jobTitleOther, '');
+  assert.strictEqual(el.querySelector('[data-role="jobtitle-other-group"]').hidden, true);
+  assert.strictEqual(el.querySelector('[data-field="jobTitle"]').value, '');
+});
+
+test('effectiveJobTitle resolves the Other sentinel and never submits the word "Other"', () => {
+  const { win } = makeWindow();
+  const JB = freshFactory()(win, { bootstrap: false });
+  const f = JB.internals.effectiveJobTitle;
+  assert.strictEqual(f({ jobTitle: 'Head of Product' }), 'Head of Product');
+  assert.strictEqual(f({ jobTitle: 'Other', jobTitleOther: '  Head of Widgets  ' }), 'Head of Widgets');
+  assert.strictEqual(f({ jobTitle: 'Other', jobTitleOther: '' }), '', 'an empty Other is not a title');
+  assert.strictEqual(f({}), '');
+});
+
+test('an Other title is submitted as the typed text, with no sentinel or role', async () => {
+  const { win } = makeWindow();
+  withTitles(win);
+  const JB = freshFactory()(win, { bootstrap: false });
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+  const calls = stubFetch(win, [
+    ['PATCH', R.page2[0], { status: 200, body: { token: 'flow-2' } }],
+    ['GET', R.availability[0], okAvailability()],
+  ]);
+  const inst = JB.render(el, {});
+  await drain();
+
+  inst._setValues({ company: 'Acme', jobTitle: 'Other', jobTitleOther: 'Head of Widgets',
+    countryIso2: 'GB', nationalNumber: '7123456789' });
+  inst._setJourney(JID, 'flow-2');
+  await inst._submitPage2();
+  await drain();
+
+  const patch = calls.find((c) => c.method === 'PATCH');
+  assert.strictEqual(patch.body.jobTitle, 'Head of Widgets');
+  assert.strictEqual('jobTitleOther' in patch.body, false, 'one title string on the wire');
+  assert.strictEqual('isOther' in patch.body, false);
+  // Role resolution is Zoho's, not the browser's.
+  const wire = JSON.stringify(patch.body);
+  for (const role of ['Decision Maker', 'Influencer', 'End User', 'Contact_Role']) {
+    assert.ok(!wire.includes(role), `the browser must never submit ${role}`);
+  }
+});
+
+test('choosing Other and typing nothing is refused client-side', async () => {
+  const { win } = makeWindow();
+  withTitles(win);
+  const JB = freshFactory()(win, { bootstrap: false });
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+  const calls = stubFetch(win, [['PATCH', R.page2[0], { status: 200, body: {} }]]);
+  const inst = JB.render(el, {});
+  await drain();
+
+  inst._setValues({ company: 'Acme', jobTitle: 'Other', jobTitleOther: '   ',
+    countryIso2: 'GB', nationalNumber: '7123456789' });
+  inst._setJourney(JID, 'flow-2');
+  const ok = await inst._submitPage2();
+
+  assert.strictEqual(ok, false);
+  assert.strictEqual(calls.length, 0, 'no request for a title we already know is empty');
+  assert.ok(el.querySelector('[data-field="jobTitleOther"]').classList.contains('error'));
+});
+
+test('a resumed Other session shows the free-text field, not a hidden one', async () => {
+  const { win } = makeWindow();
+  withTitles(win);
+  const JB = freshFactory()(win, { bootstrap: false });
+  JB.internals.saveSnapshot({
+    journey_id: JID,
+    token: 'flow-2',
+    step: 2,
+    values: { company: 'Acme', jobTitle: 'Other', jobTitleOther: 'Head of Widgets',
+      countryIso2: 'GB', nationalNumber: '7123456789', productInterests: [] },
+  });
+
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+  JB.render(el, {});
+  await drain();
+
+  // restore() only assigns values; without an explicit visibility sync the visitor
+  // sees a combobox reading "Other" above a hidden field holding their real title.
+  assert.strictEqual(el.querySelector('[data-role="jobtitle-other-group"]').hidden, false);
+  assert.strictEqual(el.querySelector('[data-field="jobTitleOther"]').value, 'Head of Widgets');
+  assert.strictEqual(el.querySelector('[data-field="jobTitle"]').value, 'Other');
+});
+
+test('an unavailable title list degrades to a plain input rather than blocking booking', async () => {
+  const { win } = makeWindow();
+  const JB = freshFactory()(win, { bootstrap: false });
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+  const calls = stubFetch(win, [
+    ['PATCH', R.page2[0], { status: 200, body: { token: 'flow-2' } }],
+    ['GET', R.availability[0], okAvailability()],
+  ]);
+  const inst = JB.render(el, {});
+  await drain();
+
+  // No JurniiBookingJobTitles on the window: simulate the <script> failing to load.
+  const input = el.querySelector('[data-field="jobTitle"]');
+  input.dispatchEvent(new win.Event('focus', { bubbles: true }));
+  const script = win.document.querySelector('script[data-jurnii-booking-job-titles]');
+  assert.ok(script, 'a fetch was attempted');
+  script.dispatchEvent(new win.Event('error'));
+  await drain();
+
+  assert.strictEqual(input.hasAttribute('role'), false, 'combobox semantics are removed');
+  assert.strictEqual(input.getAttribute('aria-expanded'), null);
+  assert.strictEqual(el.querySelector('[data-role="jobtitle-listbox"]').hidden, true);
+
+  // And the visitor can still type a title and book.
+  inst._setValues({ company: 'Acme', jobTitle: 'Head of Widgets', countryIso2: 'GB', nationalNumber: '7123456789' });
+  inst._setJourney(JID, 'flow-2');
+  await inst._submitPage2();
+  await drain();
+  assert.strictEqual(calls.find((c) => c.method === 'PATCH').body.jobTitle, 'Head of Widgets');
 });
 
 test('first-touch attribution is captured once and replayed from the snapshot, not re-read at submit', async () => {
@@ -1015,22 +1626,246 @@ test('site.jsx loads the shared module by an absolute path and marks the page em
   assert.ok(flagAt > -1 && appendAt > -1 && flagAt < appendAt, 'the flag must precede injection');
 });
 
+/** Comments name the removed chrome to explain why it is gone; scan code only. */
+const stripComments = (s) => s
+  .replace(/\/\*[\s\S]*?\*\//g, '')
+  .split('\n').filter((l) => !l.trim().startsWith('//')).join('\n');
+
+test('#demo-modal is a backdrop plus ONE transparent surface, with no wrapper card', () => {
+  const raw = fs.readFileSync(path.join(ROOT, 'assets', 'site.jsx'), 'utf8');
+  const src = stripComments(raw);
+
+  // The chrome that produced the second white card and the duplicate close control.
+  for (const dead of ['demo-modal-dialog', 'demo-modal-head', 'demo-modal-title', 'demo-modal-close']) {
+    assert.ok(!src.includes(dead),
+      dead + ' is back in site.jsx — the booking card must be the only visible surface');
+  }
+  assert.match(src, /class="demo-modal-backdrop"/, 'the backdrop is retained');
+  assert.match(src, /class="demo-modal-surface"[^>]*role="dialog"[^>]*aria-modal="true"/,
+    'the surface carries the dialog semantics the removed card used to');
+  assert.match(src, /id="demo-modal-mount"/);
+  // The widget paints the single close button, so the host must ask for it.
+  assert.match(src, /showCloseButton:\s*true/,
+    'without this the modal would have no close control at all');
+});
+
+test('#demo-modal preserves close, Escape, backdrop, scroll lock and focus restoration', () => {
+  const src = fs.readFileSync(path.join(ROOT, 'assets', 'site.jsx'), 'utf8');
+  assert.match(src, /\.demo-modal-backdrop'\)\.addEventListener\('click', closeModal\)/,
+    'backdrop click still closes');
+  assert.match(src, /e\.key === 'Escape' && isOpen\(\)/,
+    'Escape still closes, and only while open');
+  assert.match(src, /document\.body\.style\.overflow = 'hidden'/, 'scroll lock on open');
+  assert.match(src, /document\.body\.style\.overflow = ''/, 'scroll lock released on close');
+  // Focus placement and restoration, neither of which existed before.
+  assert.match(src, /lastTrigger = document\.activeElement/,
+    'the opening CTA must be remembered before focus moves');
+  assert.match(src, /function focusIntoModal/, 'focus must move into the dialog on open');
+  assert.match(src, /lastTrigger\.focus/, 'focus must return to the CTA on close');
+});
+
+test('the demo-modal stylesheet drops the wrapper card and keeps the backdrop', () => {
+  const css = stripComments(fs.readFileSync(path.join(ROOT, 'assets', 'site.css'), 'utf8'));
+  for (const dead of ['.demo-modal-dialog', '.demo-modal-head', '.demo-modal-title', '.demo-modal-close']) {
+    assert.ok(!css.includes(dead), dead + ' rules are dead once the chrome is gone');
+  }
+  assert.match(css, /\.demo-modal-backdrop\s*\{/);
+  assert.match(css, /\.demo-modal-surface\s*\{/);
+  // The surface must not paint a card of its own: that is the whole defect.
+  const surface = css.slice(css.indexOf('.demo-modal-surface {'));
+  const rule = surface.slice(0, surface.indexOf('}'));
+  for (const prop of ['background:', 'border:', 'border-radius:', 'box-shadow:']) {
+    assert.ok(!rule.includes(prop), '.demo-modal-surface must stay transparent, found ' + prop);
+  }
+});
+
 test('index.html loads the booking stylesheet explicitly', () => {
   const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
   assert.match(html, /<link rel="stylesheet" href="\/booking\/assets\/booking-form\.css">/,
     'nothing @imports it, so it must be linked');
 });
 
-test('the build declares every booking runtime file and the manage page', () => {
+test('the build declares every booking runtime file and both plain pages', () => {
   const cfg = fs.readFileSync(path.join(ROOT, 'vite.config.js'), 'utf8');
-  for (const rel of ['booking/assets/booking-form.js', 'booking/assets/booking-form.css', 'booking/config/countries.js']) {
+  for (const rel of [
+    'booking/assets/booking-form.js', 'booking/assets/booking-form.css',
+    'booking/config/countries.js', 'booking/config/job-titles.js',
+    'booking/config/lead-sources.js',
+  ]) {
     assert.ok(cfg.includes(rel), rel + ' must be copied into dist');
   }
-  assert.match(cfg, /dist\/manage\.html/, 'manage.html must be emitted');
+  assert.match(cfg, /'manage\.html', 'admin-form\.html'/, 'both plain pages must be emitted');
   // A vanished source file must fail the build, not ship a 404.
   assert.match(cfg, /required booking file missing/);
   assert.strictEqual(/'booking-form\.js',/.test(cfg), false,
     'the root assets/booking-form.js copy must be gone from the asset list');
+});
+
+/* ===================================================================== *
+ * 9. The internal /admin-form route
+ * ===================================================================== */
+
+test('/admin-form resolves ahead of the SPA fallback', () => {
+  const vercel = JSON.parse(fs.readFileSync(path.join(ROOT, 'vercel.json'), 'utf8'));
+  const rewrites = vercel.rewrites || [];
+  const admin = rewrites.findIndex((r) => r.source === '/admin-form');
+  const spa = rewrites.findIndex((r) => r.destination === '/index.html');
+  assert.ok(admin > -1, 'the extensionless /admin-form must be mapped');
+  assert.strictEqual(rewrites[admin].destination, '/admin-form.html');
+  assert.ok(admin < spa, 'it must come BEFORE the catch-all, or the SPA swallows it');
+});
+
+test('admin-form.html is unindexable and unlinked', () => {
+  const html = fs.readFileSync(path.join(ROOT, 'admin-form.html'), 'utf8');
+  assert.match(html, /<meta name="robots" content="noindex, nofollow">/);
+  assert.match(html, /<meta name="referrer" content="no-referrer">/);
+
+  // Nothing on the public site may point at it: the route's only protection is that
+  // it is not discoverable.
+  for (const file of ['assets/site.jsx', 'index.html', 'manage.html']) {
+    const src = fs.readFileSync(path.join(ROOT, file), 'utf8');
+    assert.ok(!src.includes('admin-form'),
+      `${file} references admin-form — it must not be linked from the public site`);
+  }
+});
+
+test('/admin-form cannot appear in the generated sitemap', () => {
+  // The sitemap is derived solely from the content manifest (markdown under content/),
+  // so a physical HTML page is structurally excluded rather than filtered out.
+  const sitemap = fs.readFileSync(
+    path.join(ROOT, 'src', 'content-engine', 'utils', 'sitemap.ts'), 'utf8');
+  assert.match(sitemap, /getAllContent\('www'\)/);
+  assert.ok(!sitemap.includes('admin-form'));
+  assert.ok(!/readdir|\.html/.test(sitemap),
+    'the sitemap must not enumerate files, or a plain page could leak into it');
+});
+
+test('admin-form.html exposes no credentials and links only deployed paths', () => {
+  const html = fs.readFileSync(path.join(ROOT, 'admin-form.html'), 'utf8');
+  // A server secret in browser code is the failure mode this route must not have.
+  for (const secret of ['BOOKING_ADMIN_SECRET', 'CRON_SECRET', 'ZOHO_CLIENT_SECRET',
+    'ZOHO_REFRESH_TOKEN', 'JWT_SECRET', 'DATABASE_URL']) {
+    assert.ok(!html.includes(secret), `${secret} must never appear in browser code`);
+  }
+  const refs = (html.match(/(?:href|src)="(\/[^"]+)"/g) || []).map((m) => m.replace(/.*="|"$/g, ''));
+  const emitted = [
+    '/assets/global.css', '/assets/site.css', '/assets/jurnii-icon-light.svg',
+    '/assets/jurnii-light-full.svg', '/assets/fonts/Geist-VariableFont_wght.woff2',
+    '/booking/assets/booking-form.css', '/booking/assets/booking-form.js',
+  ];
+  for (const ref of refs) {
+    if (ref === '/') continue;
+    assert.ok(emitted.includes(ref), ref + ' is referenced but not in the emitted set');
+  }
+});
+
+test('the internal container mounts the same form with a Lead Source field', async () => {
+  const { win } = makeWindow(
+    '<div id="jurnii-booking-form-inline" data-internal="1" '
+    + 'data-form-placement="internal-booking" data-cta-id="admin-form"></div>');
+  win.JurniiBookingLeadSources = require('../config/lead-sources.js');
+  freshFactory()(win);
+  await drain();
+
+  const el = win.document.getElementById('jurnii-booking-form-inline');
+  assert.ok(el.querySelector('[data-jurnii-booking-root]'), 'the shared form mounts');
+  const sel = el.querySelector('[data-field="leadSource"]');
+  assert.ok(sel, 'the internal route adds Lead Source');
+
+  const options = [...sel.options];
+  assert.strictEqual(options[0].value, '', 'the default option sends no value');
+  const values = options.slice(1).map((o) => o.value);
+  const labels = options.slice(1).map((o) => o.textContent);
+  assert.ok(values.includes('Website'));
+  // Value and label are separate: five live options display differently from the value
+  // Zoho stores, and submitting the label would be rejected.
+  assert.ok(values.includes('Trade Show'));
+  assert.ok(labels.includes('Event'));
+  assert.ok(!values.includes('Event'), 'the display label must never be a submitted value');
+  // Options binned by Zoho are silently discarded on write, so they are not offered.
+  assert.ok(!values.includes('Cold Call'));
+});
+
+test('the PUBLIC form has no Lead Source field at all', async () => {
+  const { win } = makeWindow();
+  win.JurniiBookingLeadSources = require('../config/lead-sources.js');
+  const JB = freshFactory()(win, { bootstrap: false });
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+  JB.render(el, { formPlacement: 'site-demo-modal' });
+  await drain();
+  assert.strictEqual(el.querySelector('[data-field="leadSource"]'), null);
+});
+
+test('resolveInternal reads the option or the container attribute, defaulting to false', () => {
+  const { win } = makeWindow('<div id="x" data-internal="1"></div>');
+  const JB = freshFactory()(win, { bootstrap: false });
+  const r = JB.internals.resolveInternal;
+  const el = win.document.getElementById('x');
+  assert.strictEqual(r(el, {}), true);
+  assert.strictEqual(r(el, { internal: false }), false, 'an explicit option wins');
+  assert.strictEqual(r(win.document.createElement('div'), {}), false);
+  assert.strictEqual(r(null, {}), false);
+});
+
+test('an internal submission sends the selected Lead Source and the placement marker', async () => {
+  const { win } = makeWindow(
+    '<div id="jurnii-booking-form-inline" data-internal="1" '
+    + 'data-form-placement="internal-booking" data-cta-id="admin-form"></div>');
+  win.JurniiBookingLeadSources = require('../config/lead-sources.js');
+  const calls = stubFetch(win, [
+    ['POST', R.start[0], { status: 200, body: { journeyId: JID, token: 'flow-1' } }],
+    ['PATCH', R.page2[0], { status: 200, body: { token: 'flow-2' } }],
+    ['GET', R.availability[0], okAvailability()],
+  ]);
+  freshFactory()(win);
+  await drain();
+
+  const el = win.document.getElementById('jurnii-booking-form-inline');
+  const set = (name, value) => {
+    const f = el.querySelector(`[data-field="${name}"]`);
+    f.value = value;
+    f.dispatchEvent(new win.Event(f.tagName === 'SELECT' ? 'change' : 'input', { bubbles: true }));
+  };
+  set('firstName', 'Alex'); set('lastName', 'Mercer'); set('email', 'alex@acme.com');
+  el.querySelector('[data-role="next-1"]').click();
+  await drain();
+
+  set('company', 'Acme'); set('jobTitle', 'Head of Product'); set('nationalNumber', '7123456789');
+  set('leadSource', 'Trade Show');
+  el.querySelector('[data-role="next-2"]').click();
+  await drain();
+
+  const start = calls.find((c) => c.method === 'POST');
+  assert.strictEqual(start.body.formPlacement, 'internal-booking',
+    'placement is recorded on page 1 — it is what the server gates Lead Source on');
+  assert.strictEqual(start.body.ctaId, 'admin-form');
+
+  const patch = calls.find((c) => c.method === 'PATCH');
+  assert.strictEqual(patch.body.leadSource, 'Trade Show', 'the stored value, not the label');
+  assert.notStrictEqual(patch.body.leadSource, 'Event');
+});
+
+test('a public submission never carries a Lead Source, even if one is set', async () => {
+  const { win } = makeWindow();
+  const JB = freshFactory()(win, { bootstrap: false });
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+  const calls = stubFetch(win, [
+    ['PATCH', R.page2[0], { status: 200, body: { token: 'flow-2' } }],
+    ['GET', R.availability[0], okAvailability()],
+  ]);
+  const inst = JB.render(el, { formPlacement: 'site-demo-modal' });
+  await drain();
+
+  // Even with a value forced into the instance, a non-internal render omits the key.
+  inst._setValues({ company: 'Acme', jobTitle: 'Head of Product', countryIso2: 'GB',
+    nationalNumber: '7123456789', leadSource: 'Trade Show' });
+  inst._setJourney(JID, 'flow-2');
+  await inst._submitPage2();
+  await drain();
+
+  assert.strictEqual('leadSource' in calls.find((c) => c.method === 'PATCH').body, false);
 });
 
 test('manage.html survives the SPA fallback and links only deployed paths', () => {
@@ -1072,9 +1907,12 @@ test('the generated build output contains the booking runtime and the manage rou
   }
   for (const rel of [
     'manage.html',
+    'admin-form.html',
     'booking/assets/booking-form.js',
     'booking/assets/booking-form.css',
     'booking/config/countries.js',
+    'booking/config/job-titles.js',
+    'booking/config/lead-sources.js',
   ]) {
     assert.ok(fs.existsSync(path.join(dist, rel)), 'dist/' + rel + ' should exist');
   }
@@ -1093,8 +1931,8 @@ test('the generated build output contains the booking runtime and the manage rou
   const bundled = fs.readFileSync(path.join(dist, 'assets', cssName), 'utf8');
   assert.ok(bundled.includes('.jurnii-booking-container'), 'the booking CSS must be in the SPA bundle');
 
-  // Every absolute local reference in either page must resolve to an emitted file.
-  for (const page of ['index.html', 'manage.html']) {
+  // Every absolute local reference in each plain page must resolve to an emitted file.
+  for (const page of ['index.html', 'manage.html', 'admin-form.html']) {
     const html = fs.readFileSync(path.join(dist, page), 'utf8');
     const refs = (html.match(/(?:href|src)="(\/[^"]*)"/g) || [])
       .map((m) => m.replace(/^(?:href|src)="/, '').replace(/"$/, ''))

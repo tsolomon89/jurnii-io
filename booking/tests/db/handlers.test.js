@@ -880,6 +880,340 @@ test('expiry: no transaction is held across the Google call', { skip }, async ()
 });
 
 // --------------------------------------------------------------------------
+// Google is the OTHER half of availability, and was never exercised
+//
+// Every availability test above stubs `checkFreeBusy` to return `[]`, so the Google
+// conflict branch and the FreeBusy-failure 503 had no coverage at all: the suite proved
+// that Postgres holds are subtracted and said nothing about whether a real calendar
+// event removes a slot. These close that.
+// --------------------------------------------------------------------------
+
+test('availability withholds a slot Google reports as busy', { skip }, async () => {
+  const busyAt = futureSlot(34);
+  forbidZoho();
+  // NO Postgres hold — this must fail on Google's word alone.
+  stubGoogle({
+    checkFreeBusy: async () => [{
+      start: busyAt.toISOString(),
+      end: new Date(busyAt.getTime() + 1800000).toISOString(),
+    }],
+  });
+
+  const res = mockRes();
+  await loadHandler('availability.js')({
+    method: 'GET', headers: {},
+    query: { timeMin: new Date(busyAt.getTime() - 7200000).toISOString(),
+             timeMax: new Date(busyAt.getTime() + 7200000).toISOString() },
+  }, res);
+
+  assert.equal(res.statusCode, 200);
+  const offered = res.body.slots.map((s) => s.start);
+  assert.ok(!offered.includes(busyAt.toISOString()), 'the busy slot is withheld');
+  // The buffered predicate, identical to the one holds use — the two sources cannot
+  // disagree about what "taken" means.
+  assert.ok(!offered.includes(new Date(busyAt.getTime() + 1800000).toISOString()));
+  assert.ok(!offered.includes(new Date(busyAt.getTime() - 1800000).toISOString()));
+  assert.ok(offered.includes(new Date(busyAt.getTime() + 3600000).toISOString()),
+    'exactly 60 minutes away is still offerable');
+});
+
+test('availability returns 503 and NO slots when Google FreeBusy fails', { skip }, async () => {
+  forbidZoho();
+  const calls = stubGoogle({
+    checkFreeBusy: async () => { throw new Error('freebusy transport failure'); },
+  });
+
+  const res = mockRes();
+  await loadHandler('availability.js')({ method: 'GET', headers: {}, query: {} }, res);
+
+  assert.equal(res.statusCode, 503);
+  assert.equal(res.body.code, 'availability_unavailable');
+  // THE POINT OF THIS TEST. The working-hour grid is generated AFTER the Google call,
+  // so a refactor that moved generation earlier and returned it on failure would ship
+  // "every working hour is free" to visitors and double-book the calendar.
+  assert.equal(res.body.slots, undefined,
+    'a Google failure must never fall back to generated working-hour slots');
+  assert.equal(calls.filter((c) => c.name === 'checkFreeBusy').length, 1,
+    'it failed at FreeBusy, not before it');
+});
+
+test('availability and bookings resolve the SAME canonical calendar', { skip }, async () => {
+  const id = await seedJourney();
+  const slot = futureSlot(35);
+  forbidZoho();
+
+  const calls = stubGoogle({
+    checkFreeBusy: async () => [],
+    // `insertEvent` returns a DISCRIMINATED UNION, not a bare event. Returning the raw
+    // event left `inserted.kind` undefined, which the handler reads as neither created
+    // nor duplicate nor rejected — the uncertain path — so this test asserted 200
+    // against a guaranteed 202 and could never pass. Every other insertEvent stub in
+    // this file already returns the union.
+    insertEvent: async (_cal, e) => ({
+      kind: 'created',
+      event: {
+        id: e.eventId, status: 'confirmed',
+        start: { dateTime: e.start }, end: { dateTime: e.end },
+        extendedProperties: { private: { journeyId: e.journeyId, attempt: String(e.attempt) } },
+      },
+    }),
+  });
+
+  // 1. the read path
+  const availRes = mockRes();
+  await loadHandler('availability.js')({
+    method: 'GET', headers: {},
+    query: { timeMin: new Date(slot.getTime() - 3600000).toISOString(),
+             timeMax: new Date(slot.getTime() + 3600000).toISOString() },
+  }, availRes);
+  assert.equal(availRes.statusCode, 200);
+
+  // 2. the write path, through to events.insert
+  const bookRes = mockRes();
+  await loadHandler('bookings/index.js')({
+    method: 'POST',
+    headers: { authorization: `Bearer ${signFlowToken({ journeyId: id, email: 'x', step: 2 })}`, host: 'jurnii.io' },
+    body: { slotStart: slot.toISOString() },
+  }, bookRes);
+  assert.equal(bookRes.statusCode, 200);
+
+  // Every Google call takes the calendar id as its first argument.
+  const ids = calls.map((c) => c.args[0]);
+  assert.equal(calls.filter((c) => c.name === 'checkFreeBusy').length, 2,
+    'one FreeBusy for availability, one re-check before insert');
+  assert.equal(calls.filter((c) => c.name === 'insertEvent').length, 1);
+  assert.equal(new Set(ids).size, 1,
+    'reading availability and writing the event must not address different calendars');
+  assert.equal(ids[0], process.env.GOOGLE_CALENDAR_ID);
+
+  // Canonical, not `primary` — the real client refuses anything else, so assert the
+  // value would survive it rather than trusting the stub.
+  const realGoogle = require(GPATH);
+  assert.doesNotThrow(() => realGoogle.requireCalendarId(ids[0]));
+  assert.notEqual(ids[0], 'primary');
+
+  // And the id the reservation namespace is bound to is the same one, persisted by R2 —
+  // so a later config change cannot silently move an in-flight booking.
+  const row = await db.withTransaction((tx) => J.get(tx, id));
+  assert.equal(row.google_calendar_id, process.env.GOOGLE_CALENDAR_ID);
+  assert.equal(row.host_calendar_key, process.env.BOOKING_CALENDAR_KEY);
+});
+
+test('two concurrent visitors cannot both reserve the same slot', { skip }, async () => {
+  const a = await seedJourney();
+  const b = await seedJourney();
+  const slot = futureSlot(36);
+  forbidZoho();
+
+  const calls = stubGoogle({
+    checkFreeBusy: async () => [],
+    insertEvent: async (_cal, e) => ({
+      id: e.eventId, status: 'confirmed',
+      start: { dateTime: e.start }, end: { dateTime: e.end },
+    }),
+  });
+  // Loaded ONCE and invoked twice, so both requests share these stubs.
+  const handler = loadHandler('bookings/index.js');
+  const post = (id) => {
+    const res = mockRes();
+    return handler({
+      method: 'POST',
+      headers: { authorization: `Bearer ${signFlowToken({ journeyId: id, email: 'x', step: 2 })}`, host: 'jurnii.io' },
+      body: { slotStart: slot.toISOString() },
+    }, res).then(() => res);
+  };
+
+  const [ra, rb] = await Promise.all([post(a), post(b)]);
+
+  // Assert on the MULTISET of outcomes — which journey wins is a genuine race and
+  // asserting on identity would make this flaky by construction.
+  const statuses = [ra.statusCode, rb.statusCode].sort();
+  const loser = [ra, rb].find((r) => r.statusCode === 409);
+  const winner = [ra, rb].find((r) => r.statusCode !== 409);
+  assert.ok(loser, `expected one 409, got ${JSON.stringify(statuses)}`);
+  assert.equal(loser.body.code, 'SLOT_TAKEN');
+  assert.ok([200, 202].includes(winner.statusCode),
+    `the winner should confirm or go pending, got ${winner.statusCode}`);
+
+  // The exclusion constraint is what actually enforces this, so check the store, not
+  // just the responses.
+  assert.ok(calls.filter((c) => c.name === 'insertEvent').length <= 1,
+    'a losing request must never reach events.insert');
+  const { rows } = await db.query(
+    `SELECT journey_id, status FROM booking_slot_reservations
+      WHERE host_calendar_key = $1 AND slot_start_utc = $2 AND status IN ('pending','confirmed')`,
+    ['jurnii_local', slot.toISOString()]
+  );
+  assert.equal(rows.length, 1, 'exactly one live reservation survives for that slot');
+});
+
+// --------------------------------------------------------------------------
+// Page 2 — multi-select products and the internal Lead Source (§3, §6)
+// --------------------------------------------------------------------------
+
+function page2(id, body, step = 1) {
+  const handler = loadHandler('submissions/[id].js');
+  const res = mockRes();
+  return handler({
+    method: 'PATCH',
+    headers: { authorization: `Bearer ${signFlowToken({ journeyId: id, email: 'x', step })}` },
+    query: { id }, body,
+  }, res).then(() => res);
+}
+
+const PAGE2_BASE = {
+  company: 'Acme Ltd', jobTitle: 'Head of Product',
+  countryIso2: 'GB', dialCode: '+44', nationalNumber: '07123 456789',
+};
+
+test('Page 2 persists every selected product, in order', { skip }, async () => {
+  forbidZoho(); stubGoogle();
+  const id = await seedJourney({ step: 1 });
+  const res = await page2(id, { ...PAGE2_BASE, productInterests: ['Partnership', 'Jurnii UX'] });
+
+  assert.equal(res.statusCode, 200);
+  const row = await db.withTransaction((tx) => J.get(tx, id));
+  assert.deepEqual(row.product_interests, ['Partnership', 'Jurnii UX'],
+    'selection order survives the round trip — the first entry resolves the Deal');
+});
+
+test('Page 2 still accepts the old scalar product form', { skip }, async () => {
+  // Transitional: a browser holding a snapshot from the single-select build. The
+  // progress TTL is two hours, so this can be removed in the next release.
+  forbidZoho(); stubGoogle();
+  const id = await seedJourney({ step: 1 });
+  const res = await page2(id, { ...PAGE2_BASE, productInterest: 'Jurnii 360' });
+
+  assert.equal(res.statusCode, 200);
+  const row = await db.withTransaction((tx) => J.get(tx, id));
+  assert.deepEqual(row.product_interests, ['Jurnii 360']);
+});
+
+test('Page 2 canonicalizes and deduplicates the product array', { skip }, async () => {
+  forbidZoho(); stubGoogle();
+  const id = await seedJourney({ step: 1 });
+  const res = await page2(id, {
+    ...PAGE2_BASE,
+    productInterests: ['jurnii ux', 'Cortex / Growth', 'Jurnii UX', '  ', 'Jurnii Cortex'],
+  });
+
+  assert.equal(res.statusCode, 200);
+  const row = await db.withTransaction((tx) => J.get(tx, id));
+  assert.deepEqual(row.product_interests, ['Jurnii UX', 'Jurnii Cortex']);
+});
+
+test('Page 2 rejects an unknown product without mutating the row', { skip }, async () => {
+  forbidZoho(); stubGoogle();
+  const id = await seedJourney({ step: 1 });
+  const res = await page2(id, { ...PAGE2_BASE, productInterests: ['Jurnii UX', 'Jurnii Telepathy'] });
+
+  assert.equal(res.statusCode, 400);
+  const row = await db.withTransaction((tx) => J.get(tx, id));
+  assert.deepEqual(row.product_interests, [], 'nothing was written');
+  assert.equal(row.zoho_status, 'not_started', 'and nothing was activated');
+});
+
+test('Page 2 rejects a user-facing product LABEL as a value', { skip }, async () => {
+  forbidZoho(); stubGoogle();
+  const id = await seedJourney({ step: 1 });
+  const res = await page2(id, {
+    ...PAGE2_BASE, productInterests: ['Jurnii UX — User Experience Benchmarking'],
+  });
+  assert.equal(res.statusCode, 400, 'marketing copy must never reach the CRM as a value');
+});
+
+test('Page 2 accepts an empty product selection', { skip }, async () => {
+  forbidZoho(); stubGoogle();
+  const id = await seedJourney({ step: 1 });
+  const res = await page2(id, { ...PAGE2_BASE, productInterests: [] });
+
+  assert.equal(res.statusCode, 200);
+  const row = await db.withTransaction((tx) => J.get(tx, id));
+  assert.deepEqual(row.product_interests, []);
+});
+
+test('a journey written before migration 0004 is still readable and resolvable', { skip }, async () => {
+  // The legacy scalar column is retained and back-filled; `productList` also falls back
+  // to it directly, so rows that predate the array keep working through the worker.
+  const { productList, primaryProduct } = require('../../api/_utils/products');
+  const id = await seedJourney({ step: 2, product_interest: 'Jurnii 360' });
+  await db.query('UPDATE booking_journeys SET product_interests = \'{}\' WHERE journey_id = $1', [id]);
+
+  const row = await db.withTransaction((tx) => J.get(tx, id));
+  assert.equal(row.product_interest, 'Jurnii 360');
+  assert.deepEqual(row.product_interests, []);
+  assert.deepEqual(productList(row), ['Jurnii 360']);
+  assert.equal(primaryProduct(row), 'Jurnii 360', 'it resolves exactly the Deal it always did');
+});
+
+test('the product array cannot hold duplicates or blanks, even by direct SQL', { skip }, async () => {
+  const id = await seedJourney({ step: 1 });
+  for (const bad of ["ARRAY['Jurnii UX','Jurnii UX']", "ARRAY['Jurnii UX','']"]) {
+    await assert.rejects(
+      db.query(`UPDATE booking_journeys SET product_interests = ${bad} WHERE journey_id = $1`, [id]),
+      /bj_product_interests_clean/,
+      `${bad} should violate the CHECK constraint`);
+  }
+});
+
+test('Lead Source persists for an internal-booking journey', { skip }, async () => {
+  forbidZoho(); stubGoogle();
+  const id = await seedJourney({ step: 1, form_placement: 'internal-booking' });
+  const res = await page2(id, { ...PAGE2_BASE, leadSource: 'Trade Show' });
+
+  assert.equal(res.statusCode, 200);
+  const row = await db.withTransaction((tx) => J.get(tx, id));
+  assert.equal(row.lead_source, 'Trade Show');
+});
+
+test('a PUBLIC caller cannot spoof Lead Source', { skip }, async () => {
+  // The gate is the journey's STORED form_placement, written on page 1 — never a claim
+  // made in this request body. Adding `leadSource` to an ordinary page-2 call is a
+  // no-op, so the Zoho worker falls back to the configured public default.
+  forbidZoho(); stubGoogle();
+  const id = await seedJourney({ step: 1, form_placement: 'site-demo-modal' });
+  const res = await page2(id, { ...PAGE2_BASE, leadSource: 'Trade Show' });
+
+  assert.equal(res.statusCode, 200, 'the booking still succeeds — the field is ignored, not fatal');
+  const row = await db.withTransaction((tx) => J.get(tx, id));
+  assert.equal(row.lead_source, null, 'NULL means "use the configured default"');
+});
+
+test('a journey with no placement at all cannot carry a Lead Source', { skip }, async () => {
+  forbidZoho(); stubGoogle();
+  const id = await seedJourney({ step: 1 });
+  await page2(id, { ...PAGE2_BASE, leadSource: 'Trade Show' });
+  const row = await db.withTransaction((tx) => J.get(tx, id));
+  assert.equal(row.lead_source, null);
+});
+
+test('an internal journey rejects a Lead Source that is not a live picklist value', { skip }, async () => {
+  forbidZoho(); stubGoogle();
+  const id = await seedJourney({ step: 1, form_placement: 'internal-booking' });
+
+  // "Event" is what Zoho DISPLAYS for `Trade Show`; the stored value is what must be
+  // submitted, so the label is rejected rather than written.
+  for (const bad of ['Event', 'Import', 'Cold Call', 'Definitely Not A Source']) {
+    const res = await page2(id, { ...PAGE2_BASE, leadSource: bad });
+    assert.equal(res.statusCode, 400, `${bad} should be refused`);
+    assert.equal(res.body.reason, 'lead_source_invalid');
+  }
+  const row = await db.withTransaction((tx) => J.get(tx, id));
+  assert.equal(row.lead_source, null);
+});
+
+test('R1_page2Commit refuses a column outside the page-2 allow-list', { skip }, async () => {
+  // Keys are interpolated into the SET clause, so the allow-list — not the caller's
+  // discipline — is what keeps booking truth out of reach of the page-2 path.
+  const id = await seedJourney({ step: 1 });
+  await assert.rejects(
+    db.withTransaction((tx) => J.R1_page2Commit(tx, id, {
+      company: 'Acme', booking_status: 'confirmed',
+    })),
+    /not permitted on the page-2 path/);
+});
+
+// --------------------------------------------------------------------------
 // No handler creates CRM records
 // --------------------------------------------------------------------------
 

@@ -5,6 +5,9 @@ const { fail, methodNotAllowed, log } = require('../../../lib/http');
 const { requireFlow, manageUrlFor } = require('../../../lib/auth');
 const dispatch = require('../../../lib/dispatch');
 const { verifyEventOwnership } = require('../../../lib/ownership');
+const {
+  meetingTitleFor, productsLabel, contactFullName, sanitizeTitlePart,
+} = require('../../../api/_utils/meeting-title');
 const S = require('../../../config/slots');
 const G = require('../../../integrations/google');
 const { calendarFingerprint } = require('../../../lib/fingerprint');
@@ -150,10 +153,26 @@ module.exports = async function handler(req, res) {
     return res.status(202).json({ status: 'booking_pending', bookingId: journeyId, pollAfterMs: 3000 });
   }
 
+  /**
+   * The title is the persisted one, built at page-2 commit from the journey snapshot —
+   * so it needs no Zoho Account resolution and this path never waits on the CRM. The
+   * Zoho Meeting later reads the SAME column, which is what makes the calendar invite
+   * and the CRM record carry a byte-identical title.
+   *
+   * ATTENDEE-FACING. No CRM record ids, no pipeline state, no internal codes: the only
+   * identifier here is the journey id, which the visitor already holds as their booking
+   * reference and in their manage link.
+   */
   const inserted = await G.insertEvent(calendarId, {
     eventId: candidateId,
-    summary: 'Jurnii Product Demo Meeting',
-    description: `Product demonstration and technical overview of Jurnii.\n\nManage or cancel this meeting: ${manageUrl}`,
+    summary: meetingTitleFor(journey),
+    description: [
+      `Contact: ${contactFullName(journey)}`,
+      `Company: ${sanitizeTitlePart(journey.company)}`,
+      `Products: ${productsLabel(journey)}`,
+      `Booking Reference: ${journeyId}`,
+      `Manage or cancel: ${manageUrl}`,
+    ].join('\n'),
     start: slot.start.toISOString(),
     end: slot.end.toISOString(),
     attendees: [{ email: journey.email }],

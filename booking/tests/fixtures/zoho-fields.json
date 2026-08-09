@@ -643,5 +643,3045 @@
       "Sub_Total",
       "Tax"
     ]
+  },
+  "picklists": {
+    "Leads": {
+      "Job_Title": [
+        {
+          "value": "Acquisition Manager",
+          "label": "Acquisition Manager",
+          "used": true
+        },
+        {
+          "value": "Analytics Engineer",
+          "label": "Analytics Engineer",
+          "used": true
+        },
+        {
+          "value": "Attribution Manager",
+          "label": "Attribution Manager",
+          "used": true
+        },
+        {
+          "value": "Behavioural Analyst",
+          "label": "Behavioural Analyst",
+          "used": true
+        },
+        {
+          "value": "Betting Operations Manager",
+          "label": "Betting Operations Manager",
+          "used": true
+        },
+        {
+          "value": "BI Analyst",
+          "label": "BI Analyst",
+          "used": true
+        },
+        {
+          "value": "BI Developer",
+          "label": "BI Developer",
+          "used": true
+        },
+        {
+          "value": "BI Manager",
+          "label": "BI Manager",
+          "used": true
+        },
+        {
+          "value": "Bonus Manager",
+          "label": "Bonus Manager",
+          "used": true
+        },
+        {
+          "value": "Brand Manager",
+          "label": "Brand Manager",
+          "used": true
+        },
+        {
+          "value": "Campaign Manager",
+          "label": "Campaign Manager",
+          "used": true
+        },
+        {
+          "value": "Campaign Strategy Manager",
+          "label": "Campaign Strategy Manager",
+          "used": true
+        },
+        {
+          "value": "Casino Director",
+          "label": "Casino Director",
+          "used": true
+        },
+        {
+          "value": "Casino Manager",
+          "label": "Casino Manager",
+          "used": true
+        },
+        {
+          "value": "Casino Product Manager",
+          "label": "Casino Product Manager",
+          "used": true
+        },
+        {
+          "value": "Chief Commercial Officer",
+          "label": "Chief Commercial Officer",
+          "used": true
+        },
+        {
+          "value": "Chief Customer Officer",
+          "label": "Chief Customer Officer",
+          "used": true
+        },
+        {
+          "value": "Chief Data Officer",
+          "label": "Chief Data Officer",
+          "used": true
+        },
+        {
+          "value": "Chief Financial Officer",
+          "label": "Chief Financial Officer",
+          "used": true
+        },
+        {
+          "value": "Chief Marketing Officer",
+          "label": "Chief Marketing Officer",
+          "used": true
+        },
+        {
+          "value": "Chief Product Officer",
+          "label": "Chief Product Officer",
+          "used": true
+        },
+        {
+          "value": "Commercial Analyst",
+          "label": "Commercial Analyst",
+          "used": true
+        },
+        {
+          "value": "Commercial Director",
+          "label": "Commercial Director",
+          "used": true
+        },
+        {
+          "value": "Commercial Finance Manager",
+          "label": "Commercial Finance Manager",
+          "used": true
+        },
+        {
+          "value": "Competitor Intelligence Analyst",
+          "label": "Competitor Intelligence Analyst",
+          "used": true
+        },
+        {
+          "value": "Compliance Manager",
+          "label": "Compliance Manager",
+          "used": true
+        },
+        {
+          "value": "Country Manager",
+          "label": "Country Manager",
+          "used": true
+        },
+        {
+          "value": "Creative Director",
+          "label": "Creative Director",
+          "used": true
+        },
+        {
+          "value": "Creative Lead",
+          "label": "Creative Lead",
+          "used": true
+        },
+        {
+          "value": "CRM Director",
+          "label": "CRM Director",
+          "used": true
+        },
+        {
+          "value": "CRM Manager",
+          "label": "CRM Manager",
+          "used": true
+        },
+        {
+          "value": "CRO Director",
+          "label": "CRO Director",
+          "used": true
+        },
+        {
+          "value": "CRO Manager",
+          "label": "CRO Manager",
+          "used": true
+        },
+        {
+          "value": "Customer Experience Director",
+          "label": "Customer Experience Director",
+          "used": true
+        },
+        {
+          "value": "Customer Journey Manager",
+          "label": "Customer Journey Manager",
+          "used": true
+        },
+        {
+          "value": "Customer Operations Manager",
+          "label": "Customer Operations Manager",
+          "used": true
+        },
+        {
+          "value": "CX Manager",
+          "label": "CX Manager",
+          "used": true
+        },
+        {
+          "value": "Data Analyst",
+          "label": "Data Analyst",
+          "used": true
+        },
+        {
+          "value": "Data Director",
+          "label": "Data Director",
+          "used": true
+        },
+        {
+          "value": "Data Layer Specialist",
+          "label": "Data Layer Specialist",
+          "used": true
+        },
+        {
+          "value": "Data Visualisation Analyst",
+          "label": "Data Visualisation Analyst",
+          "used": true
+        },
+        {
+          "value": "Design Director",
+          "label": "Design Director",
+          "used": true
+        },
+        {
+          "value": "Design Systems Engineer",
+          "label": "Design Systems Engineer",
+          "used": true
+        },
+        {
+          "value": "Design Systems Lead",
+          "label": "Design Systems Lead",
+          "used": true
+        },
+        {
+          "value": "Digital Analyst",
+          "label": "Digital Analyst",
+          "used": true
+        },
+        {
+          "value": "Digital Director",
+          "label": "Digital Director",
+          "used": true
+        },
+        {
+          "value": "Digital Experience Director",
+          "label": "Digital Experience Director",
+          "used": true
+        },
+        {
+          "value": "Digital Product Manager",
+          "label": "Digital Product Manager",
+          "used": true
+        },
+        {
+          "value": "Engineering Manager",
+          "label": "Engineering Manager",
+          "used": true
+        },
+        {
+          "value": "Experience Researcher",
+          "label": "Experience Researcher",
+          "used": true
+        },
+        {
+          "value": "Experimentation Lead",
+          "label": "Experimentation Lead",
+          "used": true
+        },
+        {
+          "value": "Experimentation Manager",
+          "label": "Experimentation Manager",
+          "used": true
+        },
+        {
+          "value": "Finance Business Partner",
+          "label": "Finance Business Partner",
+          "used": true
+        },
+        {
+          "value": "FP&A Director",
+          "label": "FP&A Director",
+          "used": true
+        },
+        {
+          "value": "FP&A Manager",
+          "label": "FP&A Manager",
+          "used": true
+        },
+        {
+          "value": "Frontend Developer",
+          "label": "Frontend Developer",
+          "used": true
+        },
+        {
+          "value": "Frontend Lead",
+          "label": "Frontend Lead",
+          "used": true
+        },
+        {
+          "value": "Gaming Director",
+          "label": "Gaming Director",
+          "used": true
+        },
+        {
+          "value": "Gaming Product Manager",
+          "label": "Gaming Product Manager",
+          "used": true
+        },
+        {
+          "value": "General Manager",
+          "label": "General Manager",
+          "used": true
+        },
+        {
+          "value": "Go-to-Market Manager",
+          "label": "Go-to-Market Manager",
+          "used": true
+        },
+        {
+          "value": "Growth Director",
+          "label": "Growth Director",
+          "used": true
+        },
+        {
+          "value": "Head of Analytics",
+          "label": "Head of Analytics",
+          "used": true
+        },
+        {
+          "value": "Head of BI",
+          "label": "Head of BI",
+          "used": true
+        },
+        {
+          "value": "Head of Brand",
+          "label": "Head of Brand",
+          "used": true
+        },
+        {
+          "value": "Head of Casino",
+          "label": "Head of Casino",
+          "used": true
+        },
+        {
+          "value": "Head of Commercial",
+          "label": "Head of Commercial",
+          "used": true
+        },
+        {
+          "value": "Head of CRM",
+          "label": "Head of CRM",
+          "used": true
+        },
+        {
+          "value": "Head of CRO",
+          "label": "Head of CRO",
+          "used": true
+        },
+        {
+          "value": "Head of CX",
+          "label": "Head of CX",
+          "used": true
+        },
+        {
+          "value": "Head of Design",
+          "label": "Head of Design",
+          "used": true
+        },
+        {
+          "value": "Head of Digital",
+          "label": "Head of Digital",
+          "used": true
+        },
+        {
+          "value": "Head of Digital Product",
+          "label": "Head of Digital Product",
+          "used": true
+        },
+        {
+          "value": "Head of Gaming",
+          "label": "Head of Gaming",
+          "used": true
+        },
+        {
+          "value": "Head of Growth",
+          "label": "Head of Growth",
+          "used": true
+        },
+        {
+          "value": "Head of Marketing",
+          "label": "Head of Marketing",
+          "used": true
+        },
+        {
+          "value": "Head of Operations",
+          "label": "Head of Operations",
+          "used": true
+        },
+        {
+          "value": "Head of Product",
+          "label": "Head of Product",
+          "used": true
+        },
+        {
+          "value": "Head of Product Design",
+          "label": "Head of Product Design",
+          "used": true
+        },
+        {
+          "value": "Head of Promotions",
+          "label": "Head of Promotions",
+          "used": true
+        },
+        {
+          "value": "Head of Proposition",
+          "label": "Head of Proposition",
+          "used": true
+        },
+        {
+          "value": "Head of Research",
+          "label": "Head of Research",
+          "used": true
+        },
+        {
+          "value": "Head of Retention",
+          "label": "Head of Retention",
+          "used": true
+        },
+        {
+          "value": "Head of Sportsbook",
+          "label": "Head of Sportsbook",
+          "used": true
+        },
+        {
+          "value": "Head of UX",
+          "label": "Head of UX",
+          "used": true
+        },
+        {
+          "value": "Head of VIP",
+          "label": "Head of VIP",
+          "used": true
+        },
+        {
+          "value": "Head Trader",
+          "label": "Head Trader",
+          "used": true
+        },
+        {
+          "value": "Insight Manager",
+          "label": "Insight Manager",
+          "used": true
+        },
+        {
+          "value": "Interaction Designer",
+          "label": "Interaction Designer",
+          "used": true
+        },
+        {
+          "value": "Legal Counsel",
+          "label": "Legal Counsel",
+          "used": true
+        },
+        {
+          "value": "Lifecycle Director",
+          "label": "Lifecycle Director",
+          "used": true
+        },
+        {
+          "value": "Lifecycle Manager",
+          "label": "Lifecycle Manager",
+          "used": true
+        },
+        {
+          "value": "Lifecycle Marketing Manager",
+          "label": "Lifecycle Marketing Manager",
+          "used": true
+        },
+        {
+          "value": "Live Casino Manager",
+          "label": "Live Casino Manager",
+          "used": true
+        },
+        {
+          "value": "Market Analyst",
+          "label": "Market Analyst",
+          "used": true
+        },
+        {
+          "value": "Market Manager",
+          "label": "Market Manager",
+          "used": true
+        },
+        {
+          "value": "Marketing Analyst",
+          "label": "Marketing Analyst",
+          "used": true
+        },
+        {
+          "value": "Marketing Director",
+          "label": "Marketing Director",
+          "used": true
+        },
+        {
+          "value": "Marketing Manager",
+          "label": "Marketing Manager",
+          "used": true
+        },
+        {
+          "value": "Marketing Operations Manager",
+          "label": "Marketing Operations Manager",
+          "used": true
+        },
+        {
+          "value": "Offer Manager",
+          "label": "Offer Manager",
+          "used": true
+        },
+        {
+          "value": "Optimisation Manager",
+          "label": "Optimisation Manager",
+          "used": true
+        },
+        {
+          "value": "Paid Search Manager",
+          "label": "Paid Search Manager",
+          "used": true
+        },
+        {
+          "value": "Paid Social Manager",
+          "label": "Paid Social Manager",
+          "used": true
+        },
+        {
+          "value": "Performance Marketing Director",
+          "label": "Performance Marketing Director",
+          "used": true
+        },
+        {
+          "value": "Performance Marketing Manager",
+          "label": "Performance Marketing Manager",
+          "used": true
+        },
+        {
+          "value": "Player Engagement Manager",
+          "label": "Player Engagement Manager",
+          "used": true
+        },
+        {
+          "value": "Player Operations Manager",
+          "label": "Player Operations Manager",
+          "used": true
+        },
+        {
+          "value": "Player Protection Lead",
+          "label": "Player Protection Lead",
+          "used": true
+        },
+        {
+          "value": "Player Value Manager",
+          "label": "Player Value Manager",
+          "used": true
+        },
+        {
+          "value": "Pricing Analyst",
+          "label": "Pricing Analyst",
+          "used": true
+        },
+        {
+          "value": "Product Analyst",
+          "label": "Product Analyst",
+          "used": true
+        },
+        {
+          "value": "Product Design Director",
+          "label": "Product Design Director",
+          "used": true
+        },
+        {
+          "value": "Product Designer",
+          "label": "Product Designer",
+          "used": true
+        },
+        {
+          "value": "Product Director",
+          "label": "Product Director",
+          "used": true
+        },
+        {
+          "value": "Product Insights Manager",
+          "label": "Product Insights Manager",
+          "used": true
+        },
+        {
+          "value": "Product Manager",
+          "label": "Product Manager",
+          "used": true
+        },
+        {
+          "value": "Product Marketing Manager",
+          "label": "Product Marketing Manager",
+          "used": true
+        },
+        {
+          "value": "Product Operations Director",
+          "label": "Product Operations Director",
+          "used": true
+        },
+        {
+          "value": "Product Operations Manager",
+          "label": "Product Operations Manager",
+          "used": true
+        },
+        {
+          "value": "Product Owner",
+          "label": "Product Owner",
+          "used": true
+        },
+        {
+          "value": "Promotions Director",
+          "label": "Promotions Director",
+          "used": true
+        },
+        {
+          "value": "Promotions Manager",
+          "label": "Promotions Manager",
+          "used": true
+        },
+        {
+          "value": "Proposition Director",
+          "label": "Proposition Director",
+          "used": true
+        },
+        {
+          "value": "Proposition Manager",
+          "label": "Proposition Manager",
+          "used": true
+        },
+        {
+          "value": "Regional Director",
+          "label": "Regional Director",
+          "used": true
+        },
+        {
+          "value": "Regulatory Affairs Manager",
+          "label": "Regulatory Affairs Manager",
+          "used": true
+        },
+        {
+          "value": "Responsible Gambling Manager",
+          "label": "Responsible Gambling Manager",
+          "used": true
+        },
+        {
+          "value": "Retention Manager",
+          "label": "Retention Manager",
+          "used": true
+        },
+        {
+          "value": "Revenue Director",
+          "label": "Revenue Director",
+          "used": true
+        },
+        {
+          "value": "Safer Gambling Analyst",
+          "label": "Safer Gambling Analyst",
+          "used": true
+        },
+        {
+          "value": "Safer Gambling Lead",
+          "label": "Safer Gambling Lead",
+          "used": true
+        },
+        {
+          "value": "Senior Product Manager",
+          "label": "Senior Product Manager",
+          "used": true
+        },
+        {
+          "value": "Senior UX Researcher",
+          "label": "Senior UX Researcher",
+          "used": true
+        },
+        {
+          "value": "Sportsbook Director",
+          "label": "Sportsbook Director",
+          "used": true
+        },
+        {
+          "value": "Sportsbook Trading Manager",
+          "label": "Sportsbook Trading Manager",
+          "used": true
+        },
+        {
+          "value": "Tagging Specialist",
+          "label": "Tagging Specialist",
+          "used": true
+        },
+        {
+          "value": "Tracking Specialist",
+          "label": "Tracking Specialist",
+          "used": true
+        },
+        {
+          "value": "Trading Manager",
+          "label": "Trading Manager",
+          "used": true
+        },
+        {
+          "value": "UI Designer",
+          "label": "UI Designer",
+          "used": true
+        },
+        {
+          "value": "User Research Lead",
+          "label": "User Research Lead",
+          "used": true
+        },
+        {
+          "value": "User Researcher",
+          "label": "User Researcher",
+          "used": true
+        },
+        {
+          "value": "UX Analyst",
+          "label": "UX Analyst",
+          "used": true
+        },
+        {
+          "value": "UX Designer",
+          "label": "UX Designer",
+          "used": true
+        },
+        {
+          "value": "UX Director",
+          "label": "UX Director",
+          "used": true
+        },
+        {
+          "value": "UX Researcher",
+          "label": "UX Researcher",
+          "used": true
+        },
+        {
+          "value": "VIP Manager",
+          "label": "VIP Manager",
+          "used": true
+        },
+        {
+          "value": "Voice of Customer Manager",
+          "label": "Voice of Customer Manager",
+          "used": true
+        },
+        {
+          "value": "VP Customer Experience",
+          "label": "VP Customer Experience",
+          "used": true
+        },
+        {
+          "value": "VP Growth",
+          "label": "VP Growth",
+          "used": true
+        },
+        {
+          "value": "VP Product",
+          "label": "VP Product",
+          "used": true
+        },
+        {
+          "value": "Web Analyst",
+          "label": "Web Analyst",
+          "used": true
+        },
+        {
+          "value": "Web Developer",
+          "label": "Web Developer",
+          "used": true
+        },
+        {
+          "value": "Website Manager",
+          "label": "Website Manager",
+          "used": true
+        }
+      ],
+      "Lead_Source": [
+        {
+          "value": "Advertisement",
+          "label": "Import",
+          "used": true
+        },
+        {
+          "value": "Employee Referral",
+          "label": "Employee Referral",
+          "used": true
+        },
+        {
+          "value": "External Referral",
+          "label": "External Referral",
+          "used": true
+        },
+        {
+          "value": "Trade Show",
+          "label": "Event",
+          "used": true
+        },
+        {
+          "value": "Facebook",
+          "label": "Facebook",
+          "used": true
+        },
+        {
+          "value": "Twitter",
+          "label": "X (Twitter)",
+          "used": true
+        },
+        {
+          "value": "Linkedin",
+          "label": "Linkedin",
+          "used": true
+        },
+        {
+          "value": "Apollo",
+          "label": "Apollo",
+          "used": true
+        },
+        {
+          "value": "Clay",
+          "label": "Clay",
+          "used": true
+        },
+        {
+          "value": "Website",
+          "label": "Website",
+          "used": true
+        },
+        {
+          "value": "Cold Call",
+          "label": "Cold Call",
+          "used": false
+        },
+        {
+          "value": "Partner",
+          "label": "Partner",
+          "used": false
+        },
+        {
+          "value": "Public Relations",
+          "label": "Public Relations",
+          "used": false
+        },
+        {
+          "value": "Seminar Partner",
+          "label": "Seminar Partner",
+          "used": false
+        },
+        {
+          "value": "OnlineStore",
+          "label": "Online Store",
+          "used": false
+        },
+        {
+          "value": "Chat",
+          "label": "Chat",
+          "used": false
+        },
+        {
+          "value": "Sales Mail Alias",
+          "label": "Sales Email Alias",
+          "used": false
+        },
+        {
+          "value": "Seminar-Internal",
+          "label": "Seminar Internal",
+          "used": false
+        },
+        {
+          "value": "Web Download",
+          "label": "Web Download",
+          "used": false
+        },
+        {
+          "value": "Web Research",
+          "label": "Web Research",
+          "used": false
+        }
+      ],
+      "Product_Interest": [
+        {
+          "value": "Jurnii 360",
+          "label": "Jurnii 360",
+          "used": true
+        },
+        {
+          "value": "Jurnii UX",
+          "label": "Jurnii UX",
+          "used": true
+        },
+        {
+          "value": "Jurnii Cortex",
+          "label": "Jurnii Cortex",
+          "used": true
+        },
+        {
+          "value": "Partnership",
+          "label": "Partnership",
+          "used": true
+        }
+      ],
+      "Country": [
+        {
+          "value": "Afghanistan",
+          "label": "Afghanistan",
+          "used": true
+        },
+        {
+          "value": "Aland Islands",
+          "label": "Aland Islands",
+          "used": true
+        },
+        {
+          "value": "Albania",
+          "label": "Albania",
+          "used": true
+        },
+        {
+          "value": "Algeria",
+          "label": "Algeria",
+          "used": true
+        },
+        {
+          "value": "American Samoa",
+          "label": "American Samoa",
+          "used": true
+        },
+        {
+          "value": "Andorra",
+          "label": "Andorra",
+          "used": true
+        },
+        {
+          "value": "Angola",
+          "label": "Angola",
+          "used": true
+        },
+        {
+          "value": "Anguilla",
+          "label": "Anguilla",
+          "used": true
+        },
+        {
+          "value": "Antarctica",
+          "label": "Antarctica",
+          "used": true
+        },
+        {
+          "value": "Antigua and Barbuda",
+          "label": "Antigua and Barbuda",
+          "used": true
+        },
+        {
+          "value": "Argentina",
+          "label": "Argentina",
+          "used": true
+        },
+        {
+          "value": "Armenia",
+          "label": "Armenia",
+          "used": true
+        },
+        {
+          "value": "Aruba",
+          "label": "Aruba",
+          "used": true
+        },
+        {
+          "value": "Australia",
+          "label": "Australia",
+          "used": true
+        },
+        {
+          "value": "Austria",
+          "label": "Austria",
+          "used": true
+        },
+        {
+          "value": "Azerbaijan",
+          "label": "Azerbaijan",
+          "used": true
+        },
+        {
+          "value": "Bahamas",
+          "label": "Bahamas",
+          "used": true
+        },
+        {
+          "value": "Bahrain",
+          "label": "Bahrain",
+          "used": true
+        },
+        {
+          "value": "Bangladesh",
+          "label": "Bangladesh",
+          "used": true
+        },
+        {
+          "value": "Barbados",
+          "label": "Barbados",
+          "used": true
+        },
+        {
+          "value": "Belarus",
+          "label": "Belarus",
+          "used": true
+        },
+        {
+          "value": "Belgium",
+          "label": "Belgium",
+          "used": true
+        },
+        {
+          "value": "Belize",
+          "label": "Belize",
+          "used": true
+        },
+        {
+          "value": "Benin",
+          "label": "Benin",
+          "used": true
+        },
+        {
+          "value": "Bermuda",
+          "label": "Bermuda",
+          "used": true
+        },
+        {
+          "value": "Bhutan",
+          "label": "Bhutan",
+          "used": true
+        },
+        {
+          "value": "Bolivia",
+          "label": "Bolivia",
+          "used": true
+        },
+        {
+          "value": "Bonaire, Sint Eustatius and Saba",
+          "label": "Bonaire, Sint Eustatius and Saba",
+          "used": true
+        },
+        {
+          "value": "Bosnia and Herzegovina",
+          "label": "Bosnia and Herzegovina",
+          "used": true
+        },
+        {
+          "value": "Botswana",
+          "label": "Botswana",
+          "used": true
+        },
+        {
+          "value": "Bouvet Island",
+          "label": "Bouvet Island",
+          "used": true
+        },
+        {
+          "value": "Brazil",
+          "label": "Brazil",
+          "used": true
+        },
+        {
+          "value": "British Indian Ocean Territory",
+          "label": "British Indian Ocean Territory",
+          "used": true
+        },
+        {
+          "value": "Brunei",
+          "label": "Brunei",
+          "used": true
+        },
+        {
+          "value": "Bulgaria",
+          "label": "Bulgaria",
+          "used": true
+        },
+        {
+          "value": "Burkina Faso",
+          "label": "Burkina Faso",
+          "used": true
+        },
+        {
+          "value": "Burundi",
+          "label": "Burundi",
+          "used": true
+        },
+        {
+          "value": "Cambodia",
+          "label": "Cambodia",
+          "used": true
+        },
+        {
+          "value": "Cameroon",
+          "label": "Cameroon",
+          "used": true
+        },
+        {
+          "value": "Canada",
+          "label": "Canada",
+          "used": true
+        },
+        {
+          "value": "Cape Verde",
+          "label": "Cape Verde",
+          "used": true
+        },
+        {
+          "value": "Cayman Islands",
+          "label": "Cayman Islands",
+          "used": true
+        },
+        {
+          "value": "Central African Republic",
+          "label": "Central African Republic",
+          "used": true
+        },
+        {
+          "value": "Chad",
+          "label": "Chad",
+          "used": true
+        },
+        {
+          "value": "Chile",
+          "label": "Chile",
+          "used": true
+        },
+        {
+          "value": "China",
+          "label": "China",
+          "used": true
+        },
+        {
+          "value": "Christmas Island",
+          "label": "Christmas Island",
+          "used": true
+        },
+        {
+          "value": "Cocos (Keeling) Islands",
+          "label": "Cocos (Keeling) Islands",
+          "used": true
+        },
+        {
+          "value": "Colombia",
+          "label": "Colombia",
+          "used": true
+        },
+        {
+          "value": "Comoros",
+          "label": "Comoros",
+          "used": true
+        },
+        {
+          "value": "Cook Islands",
+          "label": "Cook Islands",
+          "used": true
+        },
+        {
+          "value": "Costa Rica",
+          "label": "Costa Rica",
+          "used": true
+        },
+        {
+          "value": "Cote D'Ivoire (Ivory Coast)",
+          "label": "Cote D'Ivoire (Ivory Coast)",
+          "used": true
+        },
+        {
+          "value": "Croatia",
+          "label": "Croatia",
+          "used": true
+        },
+        {
+          "value": "Cuba",
+          "label": "Cuba",
+          "used": true
+        },
+        {
+          "value": "Curaçao",
+          "label": "Curaçao",
+          "used": true
+        },
+        {
+          "value": "Cyprus",
+          "label": "Cyprus",
+          "used": true
+        },
+        {
+          "value": "Czech Republic",
+          "label": "Czech Republic",
+          "used": true
+        },
+        {
+          "value": "Democratic Republic of the Congo",
+          "label": "Democratic Republic of the Congo",
+          "used": true
+        },
+        {
+          "value": "Denmark",
+          "label": "Denmark",
+          "used": true
+        },
+        {
+          "value": "Djibouti",
+          "label": "Djibouti",
+          "used": true
+        },
+        {
+          "value": "Dominica",
+          "label": "Dominica",
+          "used": true
+        },
+        {
+          "value": "Dominican Republic",
+          "label": "Dominican Republic",
+          "used": true
+        },
+        {
+          "value": "Ecuador",
+          "label": "Ecuador",
+          "used": true
+        },
+        {
+          "value": "Egypt",
+          "label": "Egypt",
+          "used": true
+        },
+        {
+          "value": "El Salvador",
+          "label": "El Salvador",
+          "used": true
+        },
+        {
+          "value": "Equatorial Guinea",
+          "label": "Equatorial Guinea",
+          "used": true
+        },
+        {
+          "value": "Eritrea",
+          "label": "Eritrea",
+          "used": true
+        },
+        {
+          "value": "Estonia",
+          "label": "Estonia",
+          "used": true
+        },
+        {
+          "value": "Eswatini",
+          "label": "Eswatini",
+          "used": true
+        },
+        {
+          "value": "Ethiopia",
+          "label": "Ethiopia",
+          "used": true
+        },
+        {
+          "value": "Falkland Islands",
+          "label": "Falkland Islands",
+          "used": true
+        },
+        {
+          "value": "Faroe Islands",
+          "label": "Faroe Islands",
+          "used": true
+        },
+        {
+          "value": "Fiji Islands",
+          "label": "Fiji Islands",
+          "used": true
+        },
+        {
+          "value": "Finland",
+          "label": "Finland",
+          "used": true
+        },
+        {
+          "value": "France",
+          "label": "France",
+          "used": true
+        },
+        {
+          "value": "French Guiana",
+          "label": "French Guiana",
+          "used": true
+        },
+        {
+          "value": "French Southern Territories",
+          "label": "French Southern Territories",
+          "used": true
+        },
+        {
+          "value": "Gabon",
+          "label": "Gabon",
+          "used": true
+        },
+        {
+          "value": "Gambia",
+          "label": "Gambia",
+          "used": true
+        },
+        {
+          "value": "Georgia",
+          "label": "Georgia",
+          "used": true
+        },
+        {
+          "value": "Germany",
+          "label": "Germany",
+          "used": true
+        },
+        {
+          "value": "Ghana",
+          "label": "Ghana",
+          "used": true
+        },
+        {
+          "value": "Gibraltar",
+          "label": "Gibraltar",
+          "used": true
+        },
+        {
+          "value": "Greece",
+          "label": "Greece",
+          "used": true
+        },
+        {
+          "value": "Greenland",
+          "label": "Greenland",
+          "used": true
+        },
+        {
+          "value": "Grenada",
+          "label": "Grenada",
+          "used": true
+        },
+        {
+          "value": "Guadeloupe",
+          "label": "Guadeloupe",
+          "used": true
+        },
+        {
+          "value": "Guam",
+          "label": "Guam",
+          "used": true
+        },
+        {
+          "value": "Guatemala",
+          "label": "Guatemala",
+          "used": true
+        },
+        {
+          "value": "Guernsey and Alderney",
+          "label": "Guernsey and Alderney",
+          "used": true
+        },
+        {
+          "value": "Guinea",
+          "label": "Guinea",
+          "used": true
+        },
+        {
+          "value": "Guinea-Bissau",
+          "label": "Guinea-Bissau",
+          "used": true
+        },
+        {
+          "value": "Guyana",
+          "label": "Guyana",
+          "used": true
+        },
+        {
+          "value": "Haiti",
+          "label": "Haiti",
+          "used": true
+        },
+        {
+          "value": "Heard Island and McDonald Islands",
+          "label": "Heard Island and McDonald Islands",
+          "used": true
+        },
+        {
+          "value": "Honduras",
+          "label": "Honduras",
+          "used": true
+        },
+        {
+          "value": "Hong Kong S.A.R.",
+          "label": "Hong Kong S.A.R.",
+          "used": true
+        },
+        {
+          "value": "Hungary",
+          "label": "Hungary",
+          "used": true
+        },
+        {
+          "value": "Iceland",
+          "label": "Iceland",
+          "used": true
+        },
+        {
+          "value": "India",
+          "label": "India",
+          "used": true
+        },
+        {
+          "value": "Indonesia",
+          "label": "Indonesia",
+          "used": true
+        },
+        {
+          "value": "Iran",
+          "label": "Iran",
+          "used": true
+        },
+        {
+          "value": "Iraq",
+          "label": "Iraq",
+          "used": true
+        },
+        {
+          "value": "Ireland",
+          "label": "Ireland",
+          "used": true
+        },
+        {
+          "value": "Isle of Man",
+          "label": "Isle of Man",
+          "used": true
+        },
+        {
+          "value": "Israel",
+          "label": "Israel",
+          "used": true
+        },
+        {
+          "value": "Italy",
+          "label": "Italy",
+          "used": true
+        },
+        {
+          "value": "Jamaica",
+          "label": "Jamaica",
+          "used": true
+        },
+        {
+          "value": "Japan",
+          "label": "Japan",
+          "used": true
+        },
+        {
+          "value": "Jersey",
+          "label": "Jersey",
+          "used": true
+        },
+        {
+          "value": "Jordan",
+          "label": "Jordan",
+          "used": true
+        },
+        {
+          "value": "Kazakhstan",
+          "label": "Kazakhstan",
+          "used": true
+        },
+        {
+          "value": "Kenya",
+          "label": "Kenya",
+          "used": true
+        },
+        {
+          "value": "Kiribati",
+          "label": "Kiribati",
+          "used": true
+        },
+        {
+          "value": "Kosovo",
+          "label": "Kosovo",
+          "used": true
+        },
+        {
+          "value": "Kuwait",
+          "label": "Kuwait",
+          "used": true
+        },
+        {
+          "value": "Kyrgyzstan",
+          "label": "Kyrgyzstan",
+          "used": true
+        },
+        {
+          "value": "Laos",
+          "label": "Laos",
+          "used": true
+        },
+        {
+          "value": "Latvia",
+          "label": "Latvia",
+          "used": true
+        },
+        {
+          "value": "Lebanon",
+          "label": "Lebanon",
+          "used": true
+        },
+        {
+          "value": "Lesotho",
+          "label": "Lesotho",
+          "used": true
+        },
+        {
+          "value": "Liberia",
+          "label": "Liberia",
+          "used": true
+        },
+        {
+          "value": "Libya",
+          "label": "Libya",
+          "used": true
+        },
+        {
+          "value": "Liechtenstein",
+          "label": "Liechtenstein",
+          "used": true
+        },
+        {
+          "value": "Lithuania",
+          "label": "Lithuania",
+          "used": true
+        },
+        {
+          "value": "Luxembourg",
+          "label": "Luxembourg",
+          "used": true
+        },
+        {
+          "value": "Macau S.A.R.",
+          "label": "Macau S.A.R.",
+          "used": true
+        },
+        {
+          "value": "Madagascar",
+          "label": "Madagascar",
+          "used": true
+        },
+        {
+          "value": "Malawi",
+          "label": "Malawi",
+          "used": true
+        },
+        {
+          "value": "Malaysia",
+          "label": "Malaysia",
+          "used": true
+        },
+        {
+          "value": "Maldives",
+          "label": "Maldives",
+          "used": true
+        },
+        {
+          "value": "Mali",
+          "label": "Mali",
+          "used": true
+        },
+        {
+          "value": "Malta",
+          "label": "Malta",
+          "used": true
+        },
+        {
+          "value": "Marshall Islands",
+          "label": "Marshall Islands",
+          "used": true
+        },
+        {
+          "value": "Martinique",
+          "label": "Martinique",
+          "used": true
+        },
+        {
+          "value": "Mauritania",
+          "label": "Mauritania",
+          "used": true
+        },
+        {
+          "value": "Mauritius",
+          "label": "Mauritius",
+          "used": true
+        },
+        {
+          "value": "Mayotte",
+          "label": "Mayotte",
+          "used": true
+        },
+        {
+          "value": "Mexico",
+          "label": "Mexico",
+          "used": true
+        },
+        {
+          "value": "Micronesia",
+          "label": "Micronesia",
+          "used": true
+        },
+        {
+          "value": "Moldova",
+          "label": "Moldova",
+          "used": true
+        },
+        {
+          "value": "Monaco",
+          "label": "Monaco",
+          "used": true
+        },
+        {
+          "value": "Mongolia",
+          "label": "Mongolia",
+          "used": true
+        },
+        {
+          "value": "Montenegro",
+          "label": "Montenegro",
+          "used": true
+        },
+        {
+          "value": "Montserrat",
+          "label": "Montserrat",
+          "used": true
+        },
+        {
+          "value": "Morocco",
+          "label": "Morocco",
+          "used": true
+        },
+        {
+          "value": "Mozambique",
+          "label": "Mozambique",
+          "used": true
+        },
+        {
+          "value": "Myanmar",
+          "label": "Myanmar",
+          "used": true
+        },
+        {
+          "value": "Namibia",
+          "label": "Namibia",
+          "used": true
+        },
+        {
+          "value": "Nauru",
+          "label": "Nauru",
+          "used": true
+        },
+        {
+          "value": "Nepal",
+          "label": "Nepal",
+          "used": true
+        },
+        {
+          "value": "Netherlands",
+          "label": "Netherlands",
+          "used": true
+        },
+        {
+          "value": "New Caledonia",
+          "label": "New Caledonia",
+          "used": true
+        },
+        {
+          "value": "New Zealand",
+          "label": "New Zealand",
+          "used": true
+        },
+        {
+          "value": "Nicaragua",
+          "label": "Nicaragua",
+          "used": true
+        },
+        {
+          "value": "Niger",
+          "label": "Niger",
+          "used": true
+        },
+        {
+          "value": "Nigeria",
+          "label": "Nigeria",
+          "used": true
+        },
+        {
+          "value": "Niue",
+          "label": "Niue",
+          "used": true
+        },
+        {
+          "value": "Norfolk Island",
+          "label": "Norfolk Island",
+          "used": true
+        },
+        {
+          "value": "North Korea",
+          "label": "North Korea",
+          "used": true
+        },
+        {
+          "value": "North Macedonia",
+          "label": "North Macedonia",
+          "used": true
+        },
+        {
+          "value": "Northern Mariana Islands",
+          "label": "Northern Mariana Islands",
+          "used": true
+        },
+        {
+          "value": "Norway",
+          "label": "Norway",
+          "used": true
+        },
+        {
+          "value": "Oman",
+          "label": "Oman",
+          "used": true
+        },
+        {
+          "value": "Pakistan",
+          "label": "Pakistan",
+          "used": true
+        },
+        {
+          "value": "Palau",
+          "label": "Palau",
+          "used": true
+        },
+        {
+          "value": "Palestine",
+          "label": "Palestine",
+          "used": true
+        },
+        {
+          "value": "Panama",
+          "label": "Panama",
+          "used": true
+        },
+        {
+          "value": "Papua New Guinea",
+          "label": "Papua New Guinea",
+          "used": true
+        },
+        {
+          "value": "Paraguay",
+          "label": "Paraguay",
+          "used": true
+        },
+        {
+          "value": "Peru",
+          "label": "Peru",
+          "used": true
+        },
+        {
+          "value": "Philippines",
+          "label": "Philippines",
+          "used": true
+        },
+        {
+          "value": "Pitcairn Island",
+          "label": "Pitcairn Island",
+          "used": true
+        },
+        {
+          "value": "Poland",
+          "label": "Poland",
+          "used": true
+        },
+        {
+          "value": "Portugal",
+          "label": "Portugal",
+          "used": true
+        },
+        {
+          "value": "Puerto Rico",
+          "label": "Puerto Rico",
+          "used": true
+        },
+        {
+          "value": "Qatar",
+          "label": "Qatar",
+          "used": true
+        },
+        {
+          "value": "Republic of the Congo",
+          "label": "Republic of the Congo",
+          "used": true
+        },
+        {
+          "value": "Reunion",
+          "label": "Reunion",
+          "used": true
+        },
+        {
+          "value": "Romania",
+          "label": "Romania",
+          "used": true
+        },
+        {
+          "value": "Russia",
+          "label": "Russia",
+          "used": true
+        },
+        {
+          "value": "Rwanda",
+          "label": "Rwanda",
+          "used": true
+        },
+        {
+          "value": "Saint Helena, Ascension and Tristan da Cunha",
+          "label": "Saint Helena, Ascension and Tristan da Cunha",
+          "used": true
+        },
+        {
+          "value": "Saint Kitts and Nevis",
+          "label": "Saint Kitts and Nevis",
+          "used": true
+        },
+        {
+          "value": "Saint Lucia",
+          "label": "Saint Lucia",
+          "used": true
+        },
+        {
+          "value": "Saint Pierre and Miquelon",
+          "label": "Saint Pierre and Miquelon",
+          "used": true
+        },
+        {
+          "value": "Saint Vincent and The Grenadines",
+          "label": "Saint Vincent and The Grenadines",
+          "used": true
+        },
+        {
+          "value": "Saint-Barthelemy",
+          "label": "Saint-Barthelemy",
+          "used": true
+        },
+        {
+          "value": "Saint-Martin (French part)",
+          "label": "Saint-Martin (French part)",
+          "used": true
+        },
+        {
+          "value": "Samoa",
+          "label": "Samoa",
+          "used": true
+        },
+        {
+          "value": "San Marino",
+          "label": "San Marino",
+          "used": true
+        },
+        {
+          "value": "Sao Tome and Principe",
+          "label": "Sao Tome and Principe",
+          "used": true
+        },
+        {
+          "value": "Saudi Arabia",
+          "label": "Saudi Arabia",
+          "used": true
+        },
+        {
+          "value": "Senegal",
+          "label": "Senegal",
+          "used": true
+        },
+        {
+          "value": "Serbia",
+          "label": "Serbia",
+          "used": true
+        },
+        {
+          "value": "Seychelles",
+          "label": "Seychelles",
+          "used": true
+        },
+        {
+          "value": "Sierra Leone",
+          "label": "Sierra Leone",
+          "used": true
+        },
+        {
+          "value": "Singapore",
+          "label": "Singapore",
+          "used": true
+        },
+        {
+          "value": "Sint Maarten (Dutch part)",
+          "label": "Sint Maarten (Dutch part)",
+          "used": true
+        },
+        {
+          "value": "Slovakia",
+          "label": "Slovakia",
+          "used": true
+        },
+        {
+          "value": "Slovenia",
+          "label": "Slovenia",
+          "used": true
+        },
+        {
+          "value": "Solomon Islands",
+          "label": "Solomon Islands",
+          "used": true
+        },
+        {
+          "value": "Somalia",
+          "label": "Somalia",
+          "used": true
+        },
+        {
+          "value": "South Africa",
+          "label": "South Africa",
+          "used": true
+        },
+        {
+          "value": "South Georgia",
+          "label": "South Georgia",
+          "used": true
+        },
+        {
+          "value": "South Korea",
+          "label": "South Korea",
+          "used": true
+        },
+        {
+          "value": "South Sudan",
+          "label": "South Sudan",
+          "used": true
+        },
+        {
+          "value": "Spain",
+          "label": "Spain",
+          "used": true
+        },
+        {
+          "value": "Sri Lanka",
+          "label": "Sri Lanka",
+          "used": true
+        },
+        {
+          "value": "Sudan",
+          "label": "Sudan",
+          "used": true
+        },
+        {
+          "value": "Suriname",
+          "label": "Suriname",
+          "used": true
+        },
+        {
+          "value": "Svalbard and Jan Mayen Islands",
+          "label": "Svalbard and Jan Mayen Islands",
+          "used": true
+        },
+        {
+          "value": "Sweden",
+          "label": "Sweden",
+          "used": true
+        },
+        {
+          "value": "Switzerland",
+          "label": "Switzerland",
+          "used": true
+        },
+        {
+          "value": "Syria",
+          "label": "Syria",
+          "used": true
+        },
+        {
+          "value": "Taiwan",
+          "label": "Taiwan",
+          "used": true
+        },
+        {
+          "value": "Tajikistan",
+          "label": "Tajikistan",
+          "used": true
+        },
+        {
+          "value": "Tanzania",
+          "label": "Tanzania",
+          "used": true
+        },
+        {
+          "value": "Thailand",
+          "label": "Thailand",
+          "used": true
+        },
+        {
+          "value": "Timor-Leste",
+          "label": "Timor-Leste",
+          "used": true
+        },
+        {
+          "value": "Togo",
+          "label": "Togo",
+          "used": true
+        },
+        {
+          "value": "Tokelau",
+          "label": "Tokelau",
+          "used": true
+        },
+        {
+          "value": "Tonga",
+          "label": "Tonga",
+          "used": true
+        },
+        {
+          "value": "Trinidad and Tobago",
+          "label": "Trinidad and Tobago",
+          "used": true
+        },
+        {
+          "value": "Tunisia",
+          "label": "Tunisia",
+          "used": true
+        },
+        {
+          "value": "Türkiye",
+          "label": "Türkiye",
+          "used": true
+        },
+        {
+          "value": "Turkmenistan",
+          "label": "Turkmenistan",
+          "used": true
+        },
+        {
+          "value": "Turks and Caicos Islands",
+          "label": "Turks and Caicos Islands",
+          "used": true
+        },
+        {
+          "value": "Tuvalu",
+          "label": "Tuvalu",
+          "used": true
+        },
+        {
+          "value": "Uganda",
+          "label": "Uganda",
+          "used": true
+        },
+        {
+          "value": "Ukraine",
+          "label": "Ukraine",
+          "used": true
+        },
+        {
+          "value": "United Arab Emirates",
+          "label": "United Arab Emirates",
+          "used": true
+        },
+        {
+          "value": "United Kingdom",
+          "label": "United Kingdom",
+          "used": true
+        },
+        {
+          "value": "United States",
+          "label": "United States",
+          "used": true
+        },
+        {
+          "value": "Uruguay",
+          "label": "Uruguay",
+          "used": true
+        },
+        {
+          "value": "Uzbekistan",
+          "label": "Uzbekistan",
+          "used": true
+        },
+        {
+          "value": "Vanuatu",
+          "label": "Vanuatu",
+          "used": true
+        },
+        {
+          "value": "Vatican City State (Holy See)",
+          "label": "Vatican City State (Holy See)",
+          "used": true
+        },
+        {
+          "value": "Venezuela",
+          "label": "Venezuela",
+          "used": true
+        },
+        {
+          "value": "Vietnam",
+          "label": "Vietnam",
+          "used": true
+        },
+        {
+          "value": "Virgin Islands (British)",
+          "label": "Virgin Islands (British)",
+          "used": true
+        },
+        {
+          "value": "Wallis and Futuna Islands",
+          "label": "Wallis and Futuna Islands",
+          "used": true
+        },
+        {
+          "value": "Western Sahara",
+          "label": "Western Sahara",
+          "used": true
+        },
+        {
+          "value": "Yemen",
+          "label": "Yemen",
+          "used": true
+        },
+        {
+          "value": "Zambia",
+          "label": "Zambia",
+          "used": true
+        },
+        {
+          "value": "Zimbabwe",
+          "label": "Zimbabwe",
+          "used": true
+        }
+      ],
+      "Contact_Role1": [
+        {
+          "value": "Decision Maker",
+          "label": "Decision Maker",
+          "used": true
+        },
+        {
+          "value": "Influencer",
+          "label": "Influencer",
+          "used": true
+        },
+        {
+          "value": "End User",
+          "label": "End User",
+          "used": true
+        }
+      ]
+    },
+    "Contacts": {
+      "Job_Title": [
+        {
+          "value": "Acquisition Manager",
+          "label": "Acquisition Manager",
+          "used": true
+        },
+        {
+          "value": "Analytics Engineer",
+          "label": "Analytics Engineer",
+          "used": true
+        },
+        {
+          "value": "Attribution Manager",
+          "label": "Attribution Manager",
+          "used": true
+        },
+        {
+          "value": "Behavioural Analyst",
+          "label": "Behavioural Analyst",
+          "used": true
+        },
+        {
+          "value": "Betting Operations Manager",
+          "label": "Betting Operations Manager",
+          "used": true
+        },
+        {
+          "value": "BI Analyst",
+          "label": "BI Analyst",
+          "used": true
+        },
+        {
+          "value": "BI Developer",
+          "label": "BI Developer",
+          "used": true
+        },
+        {
+          "value": "BI Manager",
+          "label": "BI Manager",
+          "used": true
+        },
+        {
+          "value": "Bonus Manager",
+          "label": "Bonus Manager",
+          "used": true
+        },
+        {
+          "value": "Brand Manager",
+          "label": "Brand Manager",
+          "used": true
+        },
+        {
+          "value": "Campaign Manager",
+          "label": "Campaign Manager",
+          "used": true
+        },
+        {
+          "value": "Campaign Strategy Manager",
+          "label": "Campaign Strategy Manager",
+          "used": true
+        },
+        {
+          "value": "Casino Director",
+          "label": "Casino Director",
+          "used": true
+        },
+        {
+          "value": "Casino Manager",
+          "label": "Casino Manager",
+          "used": true
+        },
+        {
+          "value": "Casino Product Manager",
+          "label": "Casino Product Manager",
+          "used": true
+        },
+        {
+          "value": "Chief Commercial Officer",
+          "label": "Chief Commercial Officer",
+          "used": true
+        },
+        {
+          "value": "Chief Customer Officer",
+          "label": "Chief Customer Officer",
+          "used": true
+        },
+        {
+          "value": "Chief Data Officer",
+          "label": "Chief Data Officer",
+          "used": true
+        },
+        {
+          "value": "Chief Financial Officer",
+          "label": "Chief Financial Officer",
+          "used": true
+        },
+        {
+          "value": "Chief Marketing Officer",
+          "label": "Chief Marketing Officer",
+          "used": true
+        },
+        {
+          "value": "Chief Product Officer",
+          "label": "Chief Product Officer",
+          "used": true
+        },
+        {
+          "value": "Commercial Analyst",
+          "label": "Commercial Analyst",
+          "used": true
+        },
+        {
+          "value": "Commercial Director",
+          "label": "Commercial Director",
+          "used": true
+        },
+        {
+          "value": "Commercial Finance Manager",
+          "label": "Commercial Finance Manager",
+          "used": true
+        },
+        {
+          "value": "Competitor Intelligence Analyst",
+          "label": "Competitor Intelligence Analyst",
+          "used": true
+        },
+        {
+          "value": "Compliance Manager",
+          "label": "Compliance Manager",
+          "used": true
+        },
+        {
+          "value": "Country Manager",
+          "label": "Country Manager",
+          "used": true
+        },
+        {
+          "value": "Creative Director",
+          "label": "Creative Director",
+          "used": true
+        },
+        {
+          "value": "Creative Lead",
+          "label": "Creative Lead",
+          "used": true
+        },
+        {
+          "value": "CRM Director",
+          "label": "CRM Director",
+          "used": true
+        },
+        {
+          "value": "CRM Manager",
+          "label": "CRM Manager",
+          "used": true
+        },
+        {
+          "value": "CRO Director",
+          "label": "CRO Director",
+          "used": true
+        },
+        {
+          "value": "CRO Manager",
+          "label": "CRO Manager",
+          "used": true
+        },
+        {
+          "value": "Customer Experience Director",
+          "label": "Customer Experience Director",
+          "used": true
+        },
+        {
+          "value": "Customer Journey Manager",
+          "label": "Customer Journey Manager",
+          "used": true
+        },
+        {
+          "value": "Customer Operations Manager",
+          "label": "Customer Operations Manager",
+          "used": true
+        },
+        {
+          "value": "CX Manager",
+          "label": "CX Manager",
+          "used": true
+        },
+        {
+          "value": "Data Analyst",
+          "label": "Data Analyst",
+          "used": true
+        },
+        {
+          "value": "Data Director",
+          "label": "Data Director",
+          "used": true
+        },
+        {
+          "value": "Data Layer Specialist",
+          "label": "Data Layer Specialist",
+          "used": true
+        },
+        {
+          "value": "Data Visualisation Analyst",
+          "label": "Data Visualisation Analyst",
+          "used": true
+        },
+        {
+          "value": "Design Director",
+          "label": "Design Director",
+          "used": true
+        },
+        {
+          "value": "Design Systems Engineer",
+          "label": "Design Systems Engineer",
+          "used": true
+        },
+        {
+          "value": "Design Systems Lead",
+          "label": "Design Systems Lead",
+          "used": true
+        },
+        {
+          "value": "Digital Analyst",
+          "label": "Digital Analyst",
+          "used": true
+        },
+        {
+          "value": "Digital Director",
+          "label": "Digital Director",
+          "used": true
+        },
+        {
+          "value": "Digital Experience Director",
+          "label": "Digital Experience Director",
+          "used": true
+        },
+        {
+          "value": "Digital Product Manager",
+          "label": "Digital Product Manager",
+          "used": true
+        },
+        {
+          "value": "Engineering Manager",
+          "label": "Engineering Manager",
+          "used": true
+        },
+        {
+          "value": "Experience Researcher",
+          "label": "Experience Researcher",
+          "used": true
+        },
+        {
+          "value": "Experimentation Lead",
+          "label": "Experimentation Lead",
+          "used": true
+        },
+        {
+          "value": "Experimentation Manager",
+          "label": "Experimentation Manager",
+          "used": true
+        },
+        {
+          "value": "Finance Business Partner",
+          "label": "Finance Business Partner",
+          "used": true
+        },
+        {
+          "value": "FP&A Director",
+          "label": "FP&A Director",
+          "used": true
+        },
+        {
+          "value": "FP&A Manager",
+          "label": "FP&A Manager",
+          "used": true
+        },
+        {
+          "value": "Frontend Developer",
+          "label": "Frontend Developer",
+          "used": true
+        },
+        {
+          "value": "Frontend Lead",
+          "label": "Frontend Lead",
+          "used": true
+        },
+        {
+          "value": "Gaming Director",
+          "label": "Gaming Director",
+          "used": true
+        },
+        {
+          "value": "Gaming Product Manager",
+          "label": "Gaming Product Manager",
+          "used": true
+        },
+        {
+          "value": "General Manager",
+          "label": "General Manager",
+          "used": true
+        },
+        {
+          "value": "Go-to-Market Manager",
+          "label": "Go-to-Market Manager",
+          "used": true
+        },
+        {
+          "value": "Growth Director",
+          "label": "Growth Director",
+          "used": true
+        },
+        {
+          "value": "Head of Analytics",
+          "label": "Head of Analytics",
+          "used": true
+        },
+        {
+          "value": "Head of BI",
+          "label": "Head of BI",
+          "used": true
+        },
+        {
+          "value": "Head of Brand",
+          "label": "Head of Brand",
+          "used": true
+        },
+        {
+          "value": "Head of Casino",
+          "label": "Head of Casino",
+          "used": true
+        },
+        {
+          "value": "Head of Commercial",
+          "label": "Head of Commercial",
+          "used": true
+        },
+        {
+          "value": "Head of CRM",
+          "label": "Head of CRM",
+          "used": true
+        },
+        {
+          "value": "Head of CRO",
+          "label": "Head of CRO",
+          "used": true
+        },
+        {
+          "value": "Head of CX",
+          "label": "Head of CX",
+          "used": true
+        },
+        {
+          "value": "Head of Design",
+          "label": "Head of Design",
+          "used": true
+        },
+        {
+          "value": "Head of Digital",
+          "label": "Head of Digital",
+          "used": true
+        },
+        {
+          "value": "Head of Digital Product",
+          "label": "Head of Digital Product",
+          "used": true
+        },
+        {
+          "value": "Head of Gaming",
+          "label": "Head of Gaming",
+          "used": true
+        },
+        {
+          "value": "Head of Growth",
+          "label": "Head of Growth",
+          "used": true
+        },
+        {
+          "value": "Head of Marketing",
+          "label": "Head of Marketing",
+          "used": true
+        },
+        {
+          "value": "Head of Operations",
+          "label": "Head of Operations",
+          "used": true
+        },
+        {
+          "value": "Head of Product",
+          "label": "Head of Product",
+          "used": true
+        },
+        {
+          "value": "Head of Product Design",
+          "label": "Head of Product Design",
+          "used": true
+        },
+        {
+          "value": "Head of Promotions",
+          "label": "Head of Promotions",
+          "used": true
+        },
+        {
+          "value": "Head of Proposition",
+          "label": "Head of Proposition",
+          "used": true
+        },
+        {
+          "value": "Head of Research",
+          "label": "Head of Research",
+          "used": true
+        },
+        {
+          "value": "Head of Retention",
+          "label": "Head of Retention",
+          "used": true
+        },
+        {
+          "value": "Head of Sportsbook",
+          "label": "Head of Sportsbook",
+          "used": true
+        },
+        {
+          "value": "Head of UX",
+          "label": "Head of UX",
+          "used": true
+        },
+        {
+          "value": "Head of VIP",
+          "label": "Head of VIP",
+          "used": true
+        },
+        {
+          "value": "Head Trader",
+          "label": "Head Trader",
+          "used": true
+        },
+        {
+          "value": "Insight Manager",
+          "label": "Insight Manager",
+          "used": true
+        },
+        {
+          "value": "Interaction Designer",
+          "label": "Interaction Designer",
+          "used": true
+        },
+        {
+          "value": "Legal Counsel",
+          "label": "Legal Counsel",
+          "used": true
+        },
+        {
+          "value": "Lifecycle Director",
+          "label": "Lifecycle Director",
+          "used": true
+        },
+        {
+          "value": "Lifecycle Manager",
+          "label": "Lifecycle Manager",
+          "used": true
+        },
+        {
+          "value": "Lifecycle Marketing Manager",
+          "label": "Lifecycle Marketing Manager",
+          "used": true
+        },
+        {
+          "value": "Live Casino Manager",
+          "label": "Live Casino Manager",
+          "used": true
+        },
+        {
+          "value": "Market Analyst",
+          "label": "Market Analyst",
+          "used": true
+        },
+        {
+          "value": "Market Manager",
+          "label": "Market Manager",
+          "used": true
+        },
+        {
+          "value": "Marketing Analyst",
+          "label": "Marketing Analyst",
+          "used": true
+        },
+        {
+          "value": "Marketing Director",
+          "label": "Marketing Director",
+          "used": true
+        },
+        {
+          "value": "Marketing Manager",
+          "label": "Marketing Manager",
+          "used": true
+        },
+        {
+          "value": "Marketing Operations Manager",
+          "label": "Marketing Operations Manager",
+          "used": true
+        },
+        {
+          "value": "Offer Manager",
+          "label": "Offer Manager",
+          "used": true
+        },
+        {
+          "value": "Optimisation Manager",
+          "label": "Optimisation Manager",
+          "used": true
+        },
+        {
+          "value": "Paid Search Manager",
+          "label": "Paid Search Manager",
+          "used": true
+        },
+        {
+          "value": "Paid Social Manager",
+          "label": "Paid Social Manager",
+          "used": true
+        },
+        {
+          "value": "Performance Marketing Director",
+          "label": "Performance Marketing Director",
+          "used": true
+        },
+        {
+          "value": "Performance Marketing Manager",
+          "label": "Performance Marketing Manager",
+          "used": true
+        },
+        {
+          "value": "Player Engagement Manager",
+          "label": "Player Engagement Manager",
+          "used": true
+        },
+        {
+          "value": "Player Operations Manager",
+          "label": "Player Operations Manager",
+          "used": true
+        },
+        {
+          "value": "Player Protection Lead",
+          "label": "Player Protection Lead",
+          "used": true
+        },
+        {
+          "value": "Player Value Manager",
+          "label": "Player Value Manager",
+          "used": true
+        },
+        {
+          "value": "Pricing Analyst",
+          "label": "Pricing Analyst",
+          "used": true
+        },
+        {
+          "value": "Product Analyst",
+          "label": "Product Analyst",
+          "used": true
+        },
+        {
+          "value": "Product Design Director",
+          "label": "Product Design Director",
+          "used": true
+        },
+        {
+          "value": "Product Designer",
+          "label": "Product Designer",
+          "used": true
+        },
+        {
+          "value": "Product Director",
+          "label": "Product Director",
+          "used": true
+        },
+        {
+          "value": "Product Insights Manager",
+          "label": "Product Insights Manager",
+          "used": true
+        },
+        {
+          "value": "Product Manager",
+          "label": "Product Manager",
+          "used": true
+        },
+        {
+          "value": "Product Marketing Manager",
+          "label": "Product Marketing Manager",
+          "used": true
+        },
+        {
+          "value": "Product Operations Director",
+          "label": "Product Operations Director",
+          "used": true
+        },
+        {
+          "value": "Product Operations Manager",
+          "label": "Product Operations Manager",
+          "used": true
+        },
+        {
+          "value": "Product Owner",
+          "label": "Product Owner",
+          "used": true
+        },
+        {
+          "value": "Promotions Director",
+          "label": "Promotions Director",
+          "used": true
+        },
+        {
+          "value": "Promotions Manager",
+          "label": "Promotions Manager",
+          "used": true
+        },
+        {
+          "value": "Proposition Director",
+          "label": "Proposition Director",
+          "used": true
+        },
+        {
+          "value": "Proposition Manager",
+          "label": "Proposition Manager",
+          "used": true
+        },
+        {
+          "value": "Regional Director",
+          "label": "Regional Director",
+          "used": true
+        },
+        {
+          "value": "Regulatory Affairs Manager",
+          "label": "Regulatory Affairs Manager",
+          "used": true
+        },
+        {
+          "value": "Responsible Gambling Manager",
+          "label": "Responsible Gambling Manager",
+          "used": true
+        },
+        {
+          "value": "Retention Manager",
+          "label": "Retention Manager",
+          "used": true
+        },
+        {
+          "value": "Revenue Director",
+          "label": "Revenue Director",
+          "used": true
+        },
+        {
+          "value": "Safer Gambling Analyst",
+          "label": "Safer Gambling Analyst",
+          "used": true
+        },
+        {
+          "value": "Safer Gambling Lead",
+          "label": "Safer Gambling Lead",
+          "used": true
+        },
+        {
+          "value": "Senior Product Manager",
+          "label": "Senior Product Manager",
+          "used": true
+        },
+        {
+          "value": "Senior UX Researcher",
+          "label": "Senior UX Researcher",
+          "used": true
+        },
+        {
+          "value": "Sportsbook Director",
+          "label": "Sportsbook Director",
+          "used": true
+        },
+        {
+          "value": "Sportsbook Trading Manager",
+          "label": "Sportsbook Trading Manager",
+          "used": true
+        },
+        {
+          "value": "Tagging Specialist",
+          "label": "Tagging Specialist",
+          "used": true
+        },
+        {
+          "value": "Tracking Specialist",
+          "label": "Tracking Specialist",
+          "used": true
+        },
+        {
+          "value": "Trading Manager",
+          "label": "Trading Manager",
+          "used": true
+        },
+        {
+          "value": "UI Designer",
+          "label": "UI Designer",
+          "used": true
+        },
+        {
+          "value": "User Research Lead",
+          "label": "User Research Lead",
+          "used": true
+        },
+        {
+          "value": "User Researcher",
+          "label": "User Researcher",
+          "used": true
+        },
+        {
+          "value": "UX Analyst",
+          "label": "UX Analyst",
+          "used": true
+        },
+        {
+          "value": "UX Designer",
+          "label": "UX Designer",
+          "used": true
+        },
+        {
+          "value": "UX Director",
+          "label": "UX Director",
+          "used": true
+        },
+        {
+          "value": "UX Researcher",
+          "label": "UX Researcher",
+          "used": true
+        },
+        {
+          "value": "VIP Manager",
+          "label": "VIP Manager",
+          "used": true
+        },
+        {
+          "value": "Voice of Customer Manager",
+          "label": "Voice of Customer Manager",
+          "used": true
+        },
+        {
+          "value": "VP Customer Experience",
+          "label": "VP Customer Experience",
+          "used": true
+        },
+        {
+          "value": "VP Growth",
+          "label": "VP Growth",
+          "used": true
+        },
+        {
+          "value": "VP Product",
+          "label": "VP Product",
+          "used": true
+        },
+        {
+          "value": "Web Analyst",
+          "label": "Web Analyst",
+          "used": true
+        },
+        {
+          "value": "Web Developer",
+          "label": "Web Developer",
+          "used": true
+        },
+        {
+          "value": "Website Manager",
+          "label": "Website Manager",
+          "used": true
+        }
+      ],
+      "Lead_Source": [
+        {
+          "value": "Advertisement",
+          "label": "Import",
+          "used": true
+        },
+        {
+          "value": "Employee Referral",
+          "label": "Employee Referral",
+          "used": true
+        },
+        {
+          "value": "External Referral",
+          "label": "External Referral",
+          "used": true
+        },
+        {
+          "value": "Trade Show",
+          "label": "Event",
+          "used": true
+        },
+        {
+          "value": "Facebook",
+          "label": "Facebook",
+          "used": true
+        },
+        {
+          "value": "Twitter",
+          "label": "X (Twitter)",
+          "used": true
+        },
+        {
+          "value": "Linkedin",
+          "label": "Linkedin",
+          "used": true
+        },
+        {
+          "value": "Apollo",
+          "label": "Apollo",
+          "used": true
+        },
+        {
+          "value": "Clay",
+          "label": "Clay",
+          "used": true
+        },
+        {
+          "value": "Website",
+          "label": "Website",
+          "used": true
+        },
+        {
+          "value": "Cold Call",
+          "label": "Cold Call",
+          "used": false
+        },
+        {
+          "value": "Partner",
+          "label": "Partner",
+          "used": false
+        },
+        {
+          "value": "Public Relations",
+          "label": "Public Relations",
+          "used": false
+        },
+        {
+          "value": "Seminar Partner",
+          "label": "Seminar Partner",
+          "used": false
+        },
+        {
+          "value": "OnlineStore",
+          "label": "Online Store",
+          "used": false
+        },
+        {
+          "value": "Chat",
+          "label": "Chat",
+          "used": false
+        },
+        {
+          "value": "Sales Mail Alias",
+          "label": "Sales Email Alias",
+          "used": false
+        },
+        {
+          "value": "Seminar-Internal",
+          "label": "Seminar Internal",
+          "used": false
+        },
+        {
+          "value": "Web Download",
+          "label": "Web Download",
+          "used": false
+        },
+        {
+          "value": "Web Research",
+          "label": "Web Research",
+          "used": false
+        }
+      ]
+    }
+  },
+  "lengths": {
+    "Leads": {
+      "Job_Title_Raw": 120,
+      "Phone": 30
+    },
+    "Contacts": {
+      "Job_Title_Raw": 120,
+      "Phone": 50
+    }
   }
 }

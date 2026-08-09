@@ -7,7 +7,7 @@ const dispatch = require('../../../lib/dispatch');
 const V = require('../../../lib/validate');
 const db = require('../../../db');
 const J = require('../../../db/queries/journeys');
-const { canonicalProduct } = require('../../_utils/products');
+const { canonicalProductList, canonicalLeadSource } = require('../../_utils/products');
 
 /**
  * Page 2 — PATCH /api/v1/submissions/{journeyId}
@@ -22,6 +22,10 @@ const { canonicalProduct } = require('../../_utils/products');
  * disagreement, rather than concatenating a dial code onto a domestic number and
  * producing `+4407123456789`. Country is never inferred from the dial code (spec §6).
  */
+
+/** The `form_placement` that may carry a per-journey Lead Source. See below. */
+const INTERNAL_PLACEMENT = 'internal-booking';
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'PATCH' && req.method !== 'POST') return methodNotAllowed(res, ['PATCH', 'POST']);
 
@@ -47,13 +51,53 @@ module.exports = async function handler(req, res) {
     return fail(res, 400, 'validation', 'Please check your phone number.', { reason: phone.reason });
   }
 
-  const product = body.product || body.productInterest || body.product_interest;
-  const canonical = product ? canonicalProduct(product) : null;
-  if (product && !canonical) return fail(res, 400, 'validation', 'Please select a product from the list.');
+  /**
+   * Product Interest is multi-valued. `productInterests` is what the current form
+   * sends; the singular keys are accepted transitionally so a browser still holding a
+   * snapshot from the previous single-select build succeeds. The progress snapshot's
+   * TTL is two hours, so the singular keys can be removed in the next release.
+   *
+   * `canonicalProductList` strips blanks, canonicalizes, deduplicates and reports
+   * anything unrecognised — including a user-facing LABEL, which is not a canonical key
+   * and so can never be written to the CRM as a value.
+   */
+  const rawProducts = body.productInterests || body.product_interests
+    || body.product || body.productInterest || body.product_interest;
+  const productResult = canonicalProductList(rawProducts);
+  if (!productResult.ok) {
+    return fail(res, 400, 'validation', 'Please select a product from the list.');
+  }
+
+  /**
+   * Lead Source — INTERNAL BOOKINGS ONLY.
+   *
+   * The value is honoured only when the journey's STORED `form_placement` (written on
+   * page 1 and never read back from this body) is `internal-booking`, and only when it
+   * is an exact active picklist value from live metadata. An ordinary public caller who
+   * adds `leadSource` to a page-2 request therefore changes nothing.
+   *
+   * This is a coherence guard, not access control: `/admin-form` is served
+   * unauthenticated by design. It is also exactly where an authentication check would
+   * attach later, without the form or this contract changing.
+   */
+  let leadSource = null;
+  const requestedLeadSource = body.leadSource || body.lead_source;
+  if (requestedLeadSource) {
+    const journey = await db.withTransaction((tx) => J.get(tx, journeyId));
+    if (journey && journey.form_placement === INTERNAL_PLACEMENT) {
+      leadSource = canonicalLeadSource(requestedLeadSource);
+      if (!leadSource) {
+        return fail(res, 400, 'validation', 'Please choose a lead source from the list.',
+          { reason: 'lead_source_invalid' });
+      }
+    } else {
+      log({ evt: 'submissions.page2.lead_source_ignored', journeyId });
+    }
+  }
 
   try {
     const runnable = new Set();
-    const row = await db.withTransaction((tx) => J.R1_page2Commit(tx, journeyId, {
+    const fields = {
       company,
       job_title_raw: V.truncate(body.jobTitle || body.job_title, V.LIMITS.job_title_raw),
       country_iso2: phone.country_iso2,
@@ -61,8 +105,15 @@ module.exports = async function handler(req, res) {
       phone_dial_code: phone.phone_dial_code,
       phone_national_number: phone.phone_national_number,
       phone_e164: phone.phone_e164,
-      product_interest: canonical,
-    }), { collectRunnable: runnable });
+      // Always an array — the column is NOT NULL, and an empty selection is `{}`.
+      product_interests: productResult.products,
+    };
+    // Only written when it survived the placement + picklist checks above, so a public
+    // journey's NULL (meaning "use the configured default") is never overwritten.
+    if (leadSource) fields.lead_source = leadSource;
+
+    const row = await db.withTransaction((tx) => J.R1_page2Commit(tx, journeyId, fields),
+      { collectRunnable: runnable });
 
     log({ evt: 'submissions.page2', journeyId, step: 2, zohoStatus: row.zoho_status });
 

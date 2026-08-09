@@ -44,6 +44,12 @@ const BOOKING_RUNTIME = [
   'booking/assets/booking-form.js',
   'booking/assets/booking-form.css',
   'booking/config/countries.js',
+  // Generated, lazily fetched by the form. `job-titles.js` feeds the Job Title
+  // autocomplete; `lead-sources.js` feeds the internal /admin-form Lead Source field.
+  // Neither carries CRM credentials, and neither gates the booking flow — but both are
+  // fetched by absolute path at runtime, so a missing file is a 404, not a build error.
+  'booking/config/job-titles.js',
+  'booking/config/lead-sources.js',
 ];
 
 function copyDir(src, dest) {
@@ -117,11 +123,17 @@ function copyRuntimeAssets() {
       // before applying rewrites, so a file at dist/manage.html is served directly
       // and the `/(.*)` → /index.html fallback never sees the request. Every emailed
       // manage link (PUBLIC_BASE_URL + /manage.html?token=…&id=…) depends on it.
-      const manageSrc = path.join(root, 'manage.html');
-      if (!fs.existsSync(manageSrc)) {
-        throw new Error('copy-runtime-assets: manage.html is missing — emailed manage links would 404');
+      //
+      // admin-form.html is the same shape: a plain page outside the SPA, reached at
+      // /admin-form via an explicit rewrite in vercel.json. It is noindex and unlinked,
+      // and being a physical file it can never enter the generated sitemap.
+      for (const page of ['manage.html', 'admin-form.html']) {
+        const src = path.join(root, page);
+        if (!fs.existsSync(src)) {
+          throw new Error(`copy-runtime-assets: ${page} is missing — the route would 404`);
+        }
+        fs.copyFileSync(src, path.join(root, 'dist', page));
       }
-      fs.copyFileSync(manageSrc, path.join(root, 'dist/manage.html'));
     },
   };
 }

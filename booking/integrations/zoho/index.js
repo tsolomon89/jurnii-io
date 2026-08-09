@@ -352,23 +352,48 @@ async function updateEvent(eventId, eventData, { triggersEnabled = false } = {})
  * …)`, so a Lead id in the Contact position silently mis-routes.
  */
 function buildMeetingPayload({
-  journeyId, startIso, endIso, contactId, leadId, dealId, meetLink, product, manageUrl, extraFields = {},
+  journeyId, title, startIso, endIso, contactId, leadId, dealId,
+  meetLink, products = [], manageUrl, extraFields = {},
 }) {
   const linkAtCreate = Boolean(dealId && contactId);
   const payload = {
-    Event_Title: 'Jurnii Product Demo Meeting',
+    // The journey's persisted title — byte-identical to the Google Calendar summary.
+    Event_Title: title,
     Start_DateTime: formatZohoDateTime(startIso),
     End_DateTime: formatZohoDateTime(endIso),
     Ext_Calendar_Booking_ID: journeyId,          // re-sent explicitly, never cleared
+    /**
+     * A confirmed booking is an UPCOMING demo, and these three say so in the vocabulary
+     * `handleMeetingEvent` actually reads. All are live-valid picklist values.
+     *
+     * `Meeting_Task_Status: 'Working'` also closes a latent bug: the Deluge writes
+     * `Meeting_Task_Status = 'New'` when it finds the field blank, and `'New'` is NOT a
+     * live value for that field. Setting it here means that write never happens.
+     */
     Meeting_Task_Stage: 'Demo Booking',
+    Meeting_Task_State: 'Open',
+    Meeting_Task_Status: 'Working',
     Description: [
       meetLink ? `Google Meet Link: ${meetLink}` : null,
       `Booking Reference: ${journeyId}`,
-      `Product: ${product || 'Not specified'}`,
-      manageUrl ? `Manage link: ${manageUrl}` : null,
+      `Products: ${products.length ? products.join(' + ') : 'Product Discovery'}`,
+      manageUrl ? `Manage or cancel: ${manageUrl}` : null,
     ].filter(Boolean).join('\n'),
     ...extraFields,
   };
+  /**
+   * `Meeting_Task_Contract_Products` is a multiselectpicklist (json_type jsonarray), so
+   * it takes an ARRAY of canonical names — never a comma-joined string, which is what
+   * the Description carries and what Zoho would reject.
+   *
+   * OMITTED, not sent as `[]`, when nothing was selected. Omission is provably safe: it
+   * is byte-for-byte the behaviour this field has always had. `[]` is only probably
+   * safe, and `INVALID_DATA` is classified TERMINAL — a wrong guess would not retry, it
+   * would escalate the journey and leave the booking with no Meeting at all. Both read
+   * identically downstream: the Deluge guards the field with `if(!isNull(rawProds))`.
+   * Same discipline as `Who_Id`/`What_Id` below.
+   */
+  if (products.length) payload.Meeting_Task_Contract_Products = products;
   const person = contactId || leadId;
   if (person) payload.Who_Id = { id: person };
   if (linkAtCreate) {

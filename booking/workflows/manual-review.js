@@ -84,7 +84,7 @@ async function reconcileTask(claim) {
     const description = [
       `Booking reference: ${journeyId}`,
       snap.emailNormalized ? `Email: ${snap.emailNormalized}` : null,
-      snap.productInterest ? `Product: ${snap.productInterest}` : null,
+      snap.productInterests.length ? `Product: ${snap.productInterests.join(', ')}` : null,
       '',
       ...blocks,
     ].filter((l) => l !== null).join('\n');

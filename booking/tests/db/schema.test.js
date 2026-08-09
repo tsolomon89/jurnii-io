@@ -465,3 +465,38 @@ test('#100 resumeOp re-arms the same cycle and preserves the create latch', { sk
     /resumeOp_forbidden_for_op/
   );
 });
+
+// ---------------------------------------------------------------------------
+// Migration 0005 — the meeting title and Deal anchor columns
+// ---------------------------------------------------------------------------
+
+test('0005 added meeting_title and meeting_anchor_product as nullable text', { skip }, async () => {
+  const res = await db.query(
+    `SELECT column_name, data_type, is_nullable, column_default
+       FROM information_schema.columns
+      WHERE table_name = 'booking_journeys'
+        AND column_name IN ('meeting_title', 'meeting_anchor_product')
+      ORDER BY column_name`);
+  assert.deepEqual(res.rows.map((r) => r.column_name),
+    ['meeting_anchor_product', 'meeting_title'],
+    'run `node booking/db/migrate.js` — migration 0005 has not been applied');
+  for (const r of res.rows) {
+    assert.equal(r.data_type, 'text');
+    // Nullable with no default, so every row predating the migration reads as NULL and
+    // takes `meetingTitleFor`'s runtime fallback rather than a fabricated title.
+    assert.equal(r.is_nullable, 'YES', `${r.column_name} must be nullable`);
+    assert.equal(r.column_default, null, `${r.column_name} must have no default`);
+  }
+});
+
+test('the database refuses a title longer than the live Event_Title field', { skip }, async () => {
+  const id = await newJourney();
+  // The builder already budgets against 255. This is the backstop for a direct SQL
+  // write: an over-long Event_Title is INVALID_DATA at Zoho, which is terminal.
+  await assert.rejects(
+    () => db.query('UPDATE booking_journeys SET meeting_title = $2 WHERE journey_id = $1',
+      [id, 'x'.repeat(256)]),
+    /bj_meeting_title_len/);
+  await db.query('UPDATE booking_journeys SET meeting_title = $2 WHERE journey_id = $1',
+    [id, 'x'.repeat(255)]);
+});

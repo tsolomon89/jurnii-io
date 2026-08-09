@@ -38,11 +38,17 @@ const realEvent = {
 };
 let calls;
 function stubZoho({ existingMeeting = null, deal = { status: 'none' }, contact = { id: 'C1' } } = {}) {
-  calls = { search: 0, create: [], update: [] };
+  // `resolve` records the PRODUCT each Deal lookup asked for. `meetingCreate` and
+  // `dealReconcile` run in separate passes and must ask for the same one: a divergence
+  // would defeat `alreadyLinked` and fire WF007 a second time against a second Deal.
+  calls = { search: 0, create: [], update: [], resolve: [] };
   Z.searchEventByExternalId = async () => { calls.search += 1; return existingMeeting; };
   Z.createEventSuppressed = async (payload) => { calls.create.push(payload); return { ok: true, id: 'MEET1' }; };
   Z.updateEvent = async (id, data, opts) => { calls.update.push({ id, data, opts }); return { ok: true, id }; };
-  Z.resolveProductDeal = async () => deal;
+  Z.resolveProductDeal = async (accountId, product) => {
+    calls.resolve.push({ accountId, product });
+    return deal;
+  };
   Z.getContact = async () => contact;
 }
 function restoreZoho() { Object.assign(Z, realEvent); }
@@ -61,11 +67,19 @@ async function seedJourney(over = {}) {
               google_meet_url='https://meet.example/x', slot_start_utc=now()+interval '3 days',
               slot_end_utc=now()+interval '3 days 30 minutes', product_interest='Jurnii 360',
               zoho_status=$3, zoho_record_id=$4, zoho_contact_id=$5, zoho_account_id=$6,
-              lead_terminal_update_state=$7
+              lead_terminal_update_state=$7,
+              company=$8, product_interests=$9,
+              meeting_title=$10, meeting_anchor_product=$11
          WHERE journey_id=$1`,
       [id, `ev-${local}`, over.zoho_status || 'record_saved', over.zoho_record_id || null,
         over.zoho_contact_id || null, over.zoho_account_id || null,
-        over.lead_terminal_update_state || 'not_sent']);
+        over.lead_terminal_update_state || 'not_sent',
+        over.company || 'BetCo',
+        // Default `{}` keeps the LEGACY shape: only the scalar `product_interest` is
+        // set, exactly as every row written before migration 0004.
+        over.product_interests || [],
+        over.meeting_title === undefined ? null : over.meeting_title,
+        over.meeting_anchor_product === undefined ? null : over.meeting_anchor_product]);
     await O.ensureOp(tx, id, 'zoho_meeting_create');
   });
   return id;
@@ -386,3 +400,172 @@ test('create_meeting_only revives a create op that never attempted, and refuses 
     const r2 = await db.withTransaction((tx) => O.reviveMeetingCreateForRepair(tx, id));
     assert.strictEqual(r2.revived, false, 'an uncertain create is never revived');
   });
+
+// ---------------------------------------------------------------------------
+// The Meeting's title, product scope and Deal anchor
+// ---------------------------------------------------------------------------
+
+test('the Meeting carries the persisted title verbatim', { skip }, async () => {
+  const title = 'Jurnii | BetCo - Sarah | Jurnii UX';
+  const id = await seedJourney({
+    zoho_contact_id: 'C1', zoho_account_id: 'A1',
+    meeting_title: title, product_interests: ['Jurnii UX'], meeting_anchor_product: 'Jurnii UX',
+  });
+  stubZoho({ deal: { status: 'one', deal: { id: 'D1' } } });
+  const ops = require('../../workflows/zoho-ops');
+
+  await ops.meetingCreate(await claim(id, 'zoho_meeting_create'));
+  const payload = calls.create[0];
+  assert.strictEqual(payload.Event_Title, title,
+    'the Zoho Event must carry the SAME string the calendar invite did');
+  assert.strictEqual(payload.Event_Title, (await row(id)).meeting_title);
+  restoreZoho();
+});
+
+test('a Meeting for a pre-0005 row still gets a real title', { skip }, async () => {
+  // meeting_title is NULL on every row that committed page 2 before the migration.
+  // `meetingTitleFor` rebuilds one from the frozen snapshot rather than sending null.
+  const id = await seedJourney({ zoho_contact_id: 'C1', zoho_account_id: 'A1' });
+  stubZoho();
+  const ops = require('../../workflows/zoho-ops');
+  await ops.meetingCreate(await claim(id, 'zoho_meeting_create'));
+
+  assert.strictEqual((await row(id)).meeting_title, null, 'the fallback is NOT written back');
+  const title = calls.create[0].Event_Title;
+  assert.ok(title && title.length > 0, 'a null Event_Title would be a blank meeting in the CRM');
+  assert.strictEqual(title, 'Jurnii | BetCo - M | Jurnii 360',
+    'built from company + first name + the legacy scalar product');
+  restoreZoho();
+});
+
+test('the Meeting carries the full product scope as a multiselect array', { skip }, async () => {
+  const id = await seedJourney({
+    zoho_contact_id: 'C1', zoho_account_id: 'A1',
+    product_interests: ['Jurnii Cortex', 'Jurnii UX'], meeting_anchor_product: 'Jurnii UX',
+  });
+  stubZoho({ deal: { status: 'one', deal: { id: 'D1' } } });
+  const ops = require('../../workflows/zoho-ops');
+  await ops.meetingCreate(await claim(id, 'zoho_meeting_create'));
+
+  const p = calls.create[0];
+  // ONE meeting, not one per product — the scope travels in the field, not in extra Events.
+  assert.strictEqual(calls.create.length, 1, 'one Meeting per booking, whatever the product count');
+  assert.deepStrictEqual(p.Meeting_Task_Contract_Products, ['Jurnii UX', 'Jurnii Cortex'],
+    'canonical order, as an array — a comma-joined string is INVALID_DATA and terminal');
+  assert.strictEqual(p.Meeting_Task_Stage, 'Demo Booking');
+  assert.strictEqual(p.Meeting_Task_State, 'Open');
+  assert.strictEqual(p.Meeting_Task_Status, 'Working');
+  assert.strictEqual(p.Ext_Calendar_Booking_ID, id);
+  restoreZoho();
+});
+
+test('a product-less booking omits the products field entirely', { skip }, async () => {
+  const id = await seedJourney({ zoho_contact_id: 'C1', zoho_account_id: 'A1' });
+  await db.query('UPDATE booking_journeys SET product_interest = NULL WHERE journey_id = $1', [id]);
+  stubZoho();
+  const ops = require('../../workflows/zoho-ops');
+  await ops.meetingCreate(await claim(id, 'zoho_meeting_create'));
+
+  const p = calls.create[0];
+  assert.strictEqual('Meeting_Task_Contract_Products' in p, false);
+  assert.ok(p.Event_Title.endsWith('| Product Discovery'));
+  assert.strictEqual(/not sure yet/i.test(JSON.stringify(p)), false);
+  restoreZoho();
+});
+
+test('both passes resolve the Deal from the SAME product', { skip }, async () => {
+  // The anchor determinism guarantee. A divergence here would leave `alreadyLinked`
+  // unable to short-circuit and, with automation armed, fire WF007 against a second Deal.
+  const id = await seedJourney({
+    zoho_contact_id: 'C1', zoho_account_id: 'A1',
+    product_interests: ['Partnership', 'Jurnii Cortex'],   // tick order says Partnership
+    meeting_anchor_product: 'Jurnii Cortex',               // canonical order prefers B2B
+  });
+  stubZoho({ deal: { status: 'one', deal: { id: 'D1' } } });
+  const ops = require('../../workflows/zoho-ops');
+
+  await ops.meetingCreate(await claim(id, 'zoho_meeting_create'));
+  await ops.dealReconcile(await claim(id, 'zoho_deal_reconcile'));
+
+  assert.strictEqual(calls.resolve.length, 2, 'one lookup at create, one at the retro-link');
+  assert.strictEqual(calls.resolve[0].product, 'Jurnii Cortex',
+    'the B2B Deal anchors the Meeting even though Partnership was ticked first');
+  assert.strictEqual(calls.resolve[1].product, calls.resolve[0].product,
+    'the retro-link MUST target the Deal the Meeting was created against');
+  restoreZoho();
+});
+
+test('a pre-0005 multi-product row keeps its old tick-order anchor', { skip }, async () => {
+  // The no-flip guarantee for journeys in flight across the deploy: a NULL anchor falls
+  // back to primaryProduct, so the answer is exactly what it was before this change.
+  const id = await seedJourney({
+    zoho_contact_id: 'C1', zoho_account_id: 'A1',
+    product_interests: ['Partnership', 'Jurnii Cortex'],   // meeting_anchor_product stays NULL
+  });
+  stubZoho({ deal: { status: 'one', deal: { id: 'D1' } } });
+  const ops = require('../../workflows/zoho-ops');
+
+  await ops.meetingCreate(await claim(id, 'zoho_meeting_create'));
+  await ops.dealReconcile(await claim(id, 'zoho_deal_reconcile'));
+
+  assert.strictEqual(calls.resolve[0].product, 'Partnership', 'tick order, as before 0005');
+  assert.strictEqual(calls.resolve[1].product, 'Partnership');
+  restoreZoho();
+});
+
+test('a single-product row anchors identically with or without the new column', { skip }, async () => {
+  const ops = require('../../workflows/zoho-ops');
+  for (const anchor of [undefined, 'Jurnii 360']) {
+    const id = await seedJourney({
+      zoho_contact_id: 'C1', zoho_account_id: 'A1',
+      product_interests: ['Jurnii 360'], meeting_anchor_product: anchor,
+    });
+    stubZoho({ deal: { status: 'one', deal: { id: 'D1' } } });
+    await ops.meetingCreate(await claim(id, 'zoho_meeting_create'));
+    assert.strictEqual(calls.resolve[0].product, 'Jurnii 360',
+      `single-product anchoring must not change (column ${anchor ? 'set' : 'NULL'})`);
+    restoreZoho();
+  }
+});
+
+test('a retry creates no second Meeting and does not restate the title', { skip }, async () => {
+  const title = 'Jurnii | BetCo - Sarah | Jurnii UX';
+  const id = await seedJourney({
+    zoho_contact_id: 'C1', zoho_account_id: 'A1',
+    meeting_title: title, product_interests: ['Jurnii UX'], meeting_anchor_product: 'Jurnii UX',
+  });
+  stubZoho({ deal: { status: 'one', deal: { id: 'D1' } } });
+  const ops = require('../../workflows/zoho-ops');
+
+  await ops.meetingCreate(await claim(id, 'zoho_meeting_create'));
+  await ops.meetingCreate(await claim(id, 'zoho_meeting_create'));
+  assert.strictEqual(calls.create.length, 1, 'the journey already holds a meeting id');
+  assert.strictEqual(calls.create[0].Event_Title, title);
+  restoreZoho();
+});
+
+test('a reschedule moves the times and never the title', { skip }, async () => {
+  const title = 'Jurnii | BetCo - Sarah | Jurnii UX';
+  const id = await seedJourney({
+    zoho_contact_id: 'C1', zoho_account_id: 'A1',
+    meeting_title: title, product_interests: ['Jurnii UX'], meeting_anchor_product: 'Jurnii UX',
+  });
+  stubZoho();
+  const ops = require('../../workflows/zoho-ops');
+  await db.withTransaction((tx) => J.patchZoho(tx, id, { zoho_meeting_id: 'MEET1' }));
+  await db.withTransaction(async (tx) => {
+    await tx.query(
+      `UPDATE booking_journeys SET reschedule_intent_state='completed',
+              slot_start_utc=now()+interval '5 days', slot_end_utc=now()+interval '5 days 30 minutes'
+         WHERE journey_id=$1`, [id]);
+    await O.ensureOp(tx, id, 'zoho_reschedule_propagate');
+  });
+
+  await ops.reschedulePropagate(await claim(id, 'zoho_reschedule_propagate'));
+  assert.strictEqual(calls.update.length, 1);
+  assert.deepStrictEqual(Object.keys(calls.update[0].data).sort(),
+    ['End_DateTime', 'Ext_Calendar_Booking_ID', 'Start_DateTime'],
+    'the reschedule write carries times and the correlation key — nothing else');
+  assert.strictEqual((await row(id)).meeting_title, title, 'the stored title is untouched');
+  restoreZoho();
+});

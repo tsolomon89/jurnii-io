@@ -50,6 +50,15 @@
   overflow: hidden;
 }
 
+/* The `hidden` attribute must actually hide.
+   The UA stylesheet's `[hidden] { display: none }` is weaker than ANY author `display`
+   rule, and `.jurnii-form-group` sets `display: flex` — so the Job Title "Other" group
+   rendered permanently despite carrying `hidden`. Scoped to the widget and forced,
+   because every conditional field here relies on the attribute. */
+.jurnii-booking-container [hidden] {
+  display: none !important;
+}
+
 /* Background grid indicator matching Jurnii visual identity */
 .jurnii-booking-container::before {
   content: "";
@@ -197,14 +206,29 @@
   margin-bottom: 28px;
 }
 
+/* One column on a phone. The grid had no breakpoint at all, so the right-hand column —
+   Job Title and Phone number — ran off the viewport and the page scrolled sideways.
+   640px matches the scheduler's existing collapse point. */
+@media (max-width: 640px) {
+  .jurnii-form-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
 .jurnii-form-group {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
+/* `1 / -1`, not `span 2`: it spans whatever the explicit grid actually has.
+   `span 2` in a one-column grid does not stay in that column — it CREATES an implicit
+   second one, sized by grid-auto-columns (min-content). That silently resurrected the
+   two-column layout at every mobile width, overflowing the viewport, even though the
+   media query below had already collapsed grid-template-columns to `1fr`. */
 .jurnii-form-group.full-width {
-  grid-column: span 2;
+  grid-column: 1 / -1;
 }
 
 .jurnii-label {
@@ -329,6 +353,113 @@
   color: var(--concrete-300);
   line-height: 1.5;
 }
+
+/* --- Field hints, shared by the combobox status line and the product group --- */
+.jurnii-field-hint {
+  font-size: 12px;
+  color: var(--concrete-400);
+  line-height: 1.5;
+  margin: 6px 0 0;
+  min-height: 1em;
+}
+
+.jurnii-linklike {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: var(--jurnii-300);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.jurnii-linklike:hover { color: var(--jurnii-200); }
+
+/* --- Job Title combobox ---
+   The listbox is absolutely positioned so opening it never reflows the form grid;
+   `.jurnii-combobox` is the containing block. */
+.jurnii-combobox {
+  position: relative;
+}
+
+.jurnii-listbox {
+  position: absolute;
+  z-index: 20;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin: 4px 0 0;
+  padding: 4px;
+  list-style: none;
+  max-height: 260px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--concrete-900);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.6);
+}
+
+.jurnii-listbox[hidden] { display: none; }
+
+.jurnii-option {
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--concrete-100);
+  cursor: pointer;
+}
+
+/* `.active` follows aria-activedescendant, which is keyboard-driven; :hover covers
+   the pointer. Both must look the same or the two modes disagree about "current". */
+.jurnii-option.active,
+.jurnii-option:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.jurnii-option.is-other {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 4px;
+  padding-top: 10px;
+  color: var(--concrete-300);
+  font-style: italic;
+}
+
+.jurnii-option-more {
+  padding: 8px 10px;
+  font-size: 12px;
+  color: var(--concrete-400);
+  cursor: default;
+}
+
+/* --- Product Interest checkbox group --- */
+.jurnii-checkbox-group {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;   /* fieldsets default to min-content, which breaks the grid cell */
+}
+
+.jurnii-checkbox-group legend {
+  padding: 0;
+  margin-bottom: 10px;
+}
+
+.jurnii-checkbox-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 8px 0;
+  cursor: pointer;
+}
+
+.jurnii-checkbox-label {
+  font-size: 14px;
+  color: var(--concrete-200);
+  line-height: 1.4;
+}
+
+.jurnii-checkbox-option:hover .jurnii-checkbox-label { color: var(--concrete-50); }
 
 /* Action Rows */
 .jurnii-form-actions {

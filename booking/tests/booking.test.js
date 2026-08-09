@@ -158,6 +158,123 @@ test('mergeMultiSelect dedups and preserves order (existing first)', () => {
   assert.deepStrictEqual(products.mergeMultiSelect(['a'], ['a', 'c']), ['a', 'c']);
 });
 
+// ---------------------------------------------------------------------------
+// canonicalProductList — the page-2 product contract (§3)
+// ---------------------------------------------------------------------------
+
+test('canonicalProductList canonicalizes an array and preserves selection order', () => {
+  const r = products.canonicalProductList(['Partnership', 'jurnii ux', 'Cortex / Growth']);
+  assert.strictEqual(r.ok, true);
+  assert.deepStrictEqual(r.products, ['Partnership', 'Jurnii UX', 'Jurnii Cortex']);
+});
+
+test('canonicalProductList still accepts the old scalar form', () => {
+  // Transitional: a browser holding a snapshot from the single-select build sends this.
+  const r = products.canonicalProductList('Jurnii 360');
+  assert.strictEqual(r.ok, true);
+  assert.deepStrictEqual(r.products, ['Jurnii 360']);
+});
+
+test('canonicalProductList deduplicates on the canonical value, not the input string', () => {
+  const r = products.canonicalProductList(['Jurnii Cortex', 'Cortex / Growth', 'jurnii cortex']);
+  assert.deepStrictEqual(r.products, ['Jurnii Cortex'], 'three spellings, one product');
+});
+
+test('canonicalProductList strips blanks without treating them as errors', () => {
+  const r = products.canonicalProductList(['', '   ', 'Jurnii UX', null, undefined]);
+  assert.strictEqual(r.ok, true);
+  assert.deepStrictEqual(r.products, ['Jurnii UX']);
+});
+
+test('canonicalProductList rejects a malformed body rather than coercing it', () => {
+  // An object or array here means the caller sent something structurally wrong;
+  // String()-ing it would produce "[object Object]" and a confusing 400.
+  const r = products.canonicalProductList([{ value: 'Jurnii UX' }]);
+  assert.strictEqual(r.ok, false);
+  assert.deepStrictEqual(r.products, []);
+});
+
+test('canonicalProductList rejects an unknown product rather than dropping it', () => {
+  const r = products.canonicalProductList(['Jurnii UX', 'Jurnii Telepathy']);
+  assert.strictEqual(r.ok, false);
+  assert.deepStrictEqual(r.rejected, ['Jurnii Telepathy']);
+});
+
+test('canonicalProductList never accepts a user-facing LABEL as a CRM value', () => {
+  // The form shows this text; the value it submits is `Jurnii UX`. If the label ever
+  // reached the endpoint it would be marketing copy written into the CRM.
+  const r = products.canonicalProductList(['Jurnii UX — User Experience Benchmarking']);
+  assert.strictEqual(r.ok, false);
+  assert.deepStrictEqual(r.products, []);
+});
+
+test('canonicalProductList treats "Not sure yet" as no product, not as an error', () => {
+  const r = products.canonicalProductList(['Not sure yet']);
+  assert.strictEqual(r.ok, true, 'the old sentinel must not 400 a returning browser');
+  assert.deepStrictEqual(r.products, []);
+  assert.deepStrictEqual(products.canonicalProductList([]).products, []);
+  assert.deepStrictEqual(products.canonicalProductList(undefined).products, []);
+});
+
+test('productList and primaryProduct read the array, falling back to the legacy scalar', () => {
+  assert.deepStrictEqual(products.productList({ product_interests: ['Jurnii UX', 'Partnership'] }),
+    ['Jurnii UX', 'Partnership']);
+  // A row written before migration 0004.
+  assert.deepStrictEqual(products.productList({ product_interest: 'Jurnii 360' }), ['Jurnii 360']);
+  assert.deepStrictEqual(products.productList({}), []);
+
+  // First-selected resolves the single Deal a Meeting can link to.
+  assert.strictEqual(products.primaryProduct({ product_interests: ['Partnership', 'Jurnii UX'] }),
+    'Partnership');
+  assert.strictEqual(products.primaryProduct({ product_interest: 'Jurnii 360' }), 'Jurnii 360',
+    'a pre-0004 row resolves exactly the Deal it always did');
+  assert.strictEqual(products.primaryProduct({}), null);
+});
+
+// ---------------------------------------------------------------------------
+// governedTitle / canonicalLeadSource — gated on live picklist metadata (§2, §6)
+// ---------------------------------------------------------------------------
+
+test('governedTitle matches case-insensitively and returns Zoho’s casing', () => {
+  assert.strictEqual(products.governedTitle('Head of Product'), 'Head of Product');
+  assert.strictEqual(products.governedTitle('head of product'), 'Head of Product');
+  assert.strictEqual(products.governedTitle('  HEAD OF PRODUCT  '), 'Head of Product');
+});
+
+test('governedTitle returns null for anything not in the live picklist', () => {
+  // Including persona titles that are real but not governed — most of the 415 are not.
+  assert.strictEqual(products.governedTitle('Chief Revenue Officer'), null);
+  assert.strictEqual(products.governedTitle('Head of Widgets'), null);
+  assert.strictEqual(products.governedTitle('Other'), null, 'the UI sentinel is not a title');
+  assert.strictEqual(products.governedTitle(''), null);
+  assert.strictEqual(products.governedTitle(null), null);
+  assert.strictEqual(products.governedTitle('-None-'), null, 'the empty sentinel is not writable');
+});
+
+test('governedTitle resolves against the same picklist on Leads and Contacts', () => {
+  assert.strictEqual(products.governedTitle('Head of Product', 'Contacts'), 'Head of Product');
+  assert.strictEqual(products.governedTitle('Head of Widgets', 'Contacts'), null);
+});
+
+test('canonicalLeadSource accepts the stored value and rejects the display label', () => {
+  assert.strictEqual(products.canonicalLeadSource('Website'), 'Website');
+  assert.strictEqual(products.canonicalLeadSource('trade show'), 'Trade Show');
+  // "Event" is what Zoho DISPLAYS for `Trade Show`. Accepting it would write a value
+  // the picklist does not contain.
+  assert.strictEqual(products.canonicalLeadSource('Event'), null);
+  assert.strictEqual(products.canonicalLeadSource('Import'), null);
+  assert.strictEqual(products.canonicalLeadSource('X (Twitter)'), null);
+});
+
+test('canonicalLeadSource rejects values sitting in Zoho’s unused bin', () => {
+  // They exist on the field but a write to one is silently discarded.
+  for (const binned of ['Cold Call', 'Partner', 'Web Research', 'Chat', 'Seminar Partner']) {
+    assert.strictEqual(products.canonicalLeadSource(binned), null, `${binned} must not be accepted`);
+  }
+  assert.strictEqual(products.canonicalLeadSource('Definitely Not A Source'), null);
+  assert.strictEqual(products.canonicalLeadSource(''), null);
+});
+
 test('isBusinessEmail accepts work domains (incl. subdomains) and rejects free/personal/disposable', () => {
   assert.strictEqual(isBusinessEmail('alex@acme.com'), true);
   assert.strictEqual(isBusinessEmail('alex@mail.acme.co.uk'), true); // work subdomain

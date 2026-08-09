@@ -13,7 +13,10 @@ const LIMITS = {
   last_name: 80,
   email: 254,
   company: 200,
-  job_title_raw: 160,
+  // 120 because that is the live `Job_Title_Raw` field length on BOTH Leads and
+  // Contacts (pinned in tests/fixtures/zoho-fields.json under `lengths`). It was 160,
+  // so a long title passed validation here and was truncated or rejected by Zoho.
+  job_title_raw: 120,
   phone_national_number: 20,
   product_interest: 120,
   source_page: 128,

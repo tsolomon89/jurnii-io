@@ -34,6 +34,10 @@
   ],
   "rewrites": [
     {
+      "source": "/admin-form",
+      "destination": "/admin-form.html"
+    },
+    {
       "source": "/((?!api/).*)",
       "destination": "/index.html"
     }

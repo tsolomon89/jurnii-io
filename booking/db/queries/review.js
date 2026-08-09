@@ -1,6 +1,7 @@
 'use strict';
 
 const { ensureOp } = require('./ops');
+const { productList } = require('../../api/_utils/products');
 
 /**
  * The reason-occurrence ledger — the single source of review truth (§4.1).
@@ -246,7 +247,7 @@ async function reviewSnapshot(tx, journeyId) {
     `SELECT manual_review_version, manual_review_applied_version,
             manual_review_closed_version, manual_review_reasons_applied,
             zoho_manual_review_task_id, zoho_contact_id, email_normalized,
-            product_interest, zoho_record_id, zoho_record_type
+            product_interest, product_interests, zoho_record_id, zoho_record_type
        FROM booking_journeys WHERE journey_id = $1`,
     [journeyId]
   );
@@ -276,7 +277,10 @@ async function reviewSnapshot(tx, journeyId) {
     taskId: row.zoho_manual_review_task_id,
     contactId: row.zoho_contact_id,
     emailNormalized: row.email_normalized,
-    productInterest: row.product_interest,
+    // Every selected product, so the Manual Review Task an operator reads shows the
+    // whole selection rather than one of several. `productList` tolerates a pre-0004
+    // row that carries only the legacy scalar.
+    productInterests: productList(row),
     recordId: row.zoho_record_id,
     recordType: row.zoho_record_type,
     pending,

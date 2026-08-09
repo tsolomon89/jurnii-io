@@ -160,9 +160,14 @@ Deluge will not let it delete. Read §7a of `docs/runbook.md` before pointing it
   time, the Zoho Meeting is created **person-linked** (Contact or Lead, no `What_Id`) and confirms; it is
   then **retro-linked** once the final Contact is explicitly discovered — Contact and Deal applied
   together in one triggers-enabled PUT, never `What_Id` over a Lead `Who_Id`.
-- The one custom **field** the flow writes is `Job_Title_Raw` (on Leads + Contacts) — never the governed
-  `Job_Title` picklist. Reconciliation is the standard Deluge automation (`processLead` on Lead
-  conversion); the website invokes none and reimplements none.
+- The flow writes `Job_Title_Raw` (on Leads + Contacts) **always**, and the governed `Job_Title`
+  picklist **only on an exact match** against the live-metadata snapshot in
+  `booking/config/zoho-picklists.js`. It never invents a picklist value: the live list is a curated
+  154-value subset of the 415 persona titles, and an unknown value in a picklist field makes the
+  whole update `INVALID_DATA`. Role resolution stays in Deluge (`processLead` / `processContact` /
+  `processDeal`), which reads `Job_Title` first and falls back to `Job_Title_Raw`. *Corrected
+  2026-08-09: this previously said `Job_Title` was never written, which left every booking-sourced
+  Lead with a blank `Contact_Role1`.*
 - `Ext_Calendar_Booking_ID` is the Meeting correlation key and **must be removed from the Tier-2 field
   deletion batch** before cutover (§13 of the plan).
 

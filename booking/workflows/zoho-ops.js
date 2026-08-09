@@ -7,6 +7,11 @@ const ZS = require('../db/queries/zoho-state');
 const O = require('../db/queries/ops');
 const RV = require('../db/queries/review');
 const { zohoEventOwned } = require('../lib/ownership');
+const {
+  governedTitle, productList, primaryProduct, orderedProducts, mergeMultiSelect,
+} = require('../api/_utils/products');
+const { meetingTitleFor } = require('../api/_utils/meeting-title');
+const { manageUrlFor } = require('../lib/auth');
 const { activationStateForLink, retroLinkTriggersEnabled } = require('../lib/meeting-automation');
 const { log } = require('../lib/http');
 
@@ -38,6 +43,38 @@ const LEAD_SOURCE = process.env.ZOHO_LEAD_SOURCE || 'Website';
  */
 const CONSENT_FIELD = { Leads: 'Contact_Marketing_Consent', Contacts: 'Marketing_Consent' };
 
+/**
+ * The ONE product whose Deal this journey's Meeting anchors to via `What_Id`.
+ *
+ * `meeting_anchor_product` is derived at page-2 commit in canonical order, whose last
+ * entry is Partnership — so a mixed booking anchors on a B2B Deal.
+ *
+ * A row written before migration 0005 has NULL and deliberately keeps the OLD
+ * tick-order answer. `meetingCreate` and `dealReconcile` run in separate passes; if a
+ * journey created its Meeting under one rule and reconciled under the other,
+ * `alreadyLinked` would not short-circuit and a triggers-enabled PUT would fire WF007
+ * again against a different Deal. Falling back to `primaryProduct` rather than to the
+ * new rule is what makes this deploy no-regression for every journey in flight.
+ */
+function meetingAnchor(j) {
+  return j.meeting_anchor_product || primaryProduct(j);
+}
+
+/**
+ * The manage URL for a CRM-facing Description, or null.
+ *
+ * `manageUrlFor` normally derives its host from the request; the worker has no request,
+ * which is why this line has never actually appeared on a Meeting. `publicBaseUrl`
+ * already tolerates a null `req` when `PUBLIC_BASE_URL` is set, so passing null is
+ * sound — but ONLY then. Without it the helper would fall back to `https://jurnii.io`,
+ * and a preview deployment would write a production-looking link, signed with the
+ * preview's secret, into a production CRM record. No host, no line.
+ */
+function workerManageUrl(j) {
+  if (!process.env.PUBLIC_BASE_URL) return null;
+  return manageUrlFor(null, { journeyId: j.journey_id, email: j.email_normalized });
+}
+
 function classify(err) {
   if (err instanceof Z.ZohoError) {
     if (err.terminal) return { kind: 'terminal', code: err.code, retryAfter: null };
@@ -47,17 +84,42 @@ function classify(err) {
 }
 
 /** The full data-load payload, sent SUPPRESSED so no conversion is initiated. */
-function dataLoadPayload(j, { includeCompany = true, module = 'Leads' } = {}) {
+function dataLoadPayload(j, { includeCompany = true, module = 'Leads', existingProducts = null } = {}) {
   const p = {
     First_Name: j.first_name,
     Last_Name: j.last_name,
     Email: j.email,
-    Lead_Source: LEAD_SOURCE,
+    /**
+     * The journey's own Lead Source, else the configured public default.
+     *
+     * Only an internal `/admin-form` booking carries one: the page-2 endpoint accepts
+     * `leadSource` solely for a journey whose stored `form_placement` is
+     * `internal-booking`, and validates it against live picklist metadata. A public
+     * booking therefore always reads `ZOHO_LEAD_SOURCE` exactly as before.
+     */
+    Lead_Source: j.lead_source || LEAD_SOURCE,
   };
   const isLead = module === 'Leads';
   if (includeCompany && j.company) p.Company = j.company;
   if (j.phone_e164) p.Phone = j.phone_e164;
-  if (j.job_title_raw) p[process.env.ZOHO_LEAD_JOBTITLE_RAW_FIELD || 'Job_Title_Raw'] = j.job_title_raw;
+  if (j.job_title_raw) {
+    p[process.env.ZOHO_LEAD_JOBTITLE_RAW_FIELD || 'Job_Title_Raw'] = j.job_title_raw;
+    /**
+     * The GOVERNED picklist, written only on an exact match against live metadata.
+     *
+     * `processLead.deluge` resolves `Contact_Role1` from `Job_Title`, not from
+     * `Job_Title_Raw` — so while this field went unwritten, every booking-sourced Lead
+     * reached conversion with a blank Contact Role and never met the activation gate.
+     * Writing it here is what makes the EXISTING Deluge mapping fire.
+     *
+     * `governedTitle` returns null for the ~260 persona titles that are not live
+     * picklist values, and for any `Other` free text. Omitting the key is essential
+     * rather than tidy: an unknown value in a picklist field makes the whole update
+     * INVALID_DATA, which would void the phone, company and consent in the same map.
+     */
+    const governed = governedTitle(j.job_title_raw, module);
+    if (governed) p.Job_Title = governed;
+  }
   /**
    * `Country` and `Product_Interest` are LEAD-ONLY api_names — neither exists on
    * Contacts (live metadata 2026-08-02: Contacts has `Mailing_Country`, and product
@@ -70,11 +132,21 @@ function dataLoadPayload(j, { includeCompany = true, module = 'Leads' } = {}) {
    * Latent until now only because every journey so far created a new Lead.
    *
    * Product_Interest is a multiselectpicklist (jsonarray) on Leads: a bare string is
-   * rejected with INVALID_DATA (expected_data_type: jsonarray), so it is sent as a
-   * single-element array of the already-canonical value.
+   * rejected with INVALID_DATA (expected_data_type: jsonarray), so the whole selection
+   * is sent as an array of already-canonical values.
+   *
+   * A Zoho multiselect write REPLACES. `existingProducts` is the record's current
+   * value, read by the caller on the one path that updates an existing Lead, so a
+   * returning visitor's earlier product interests are preserved rather than clobbered.
+   * It is null on the create path (nothing to preserve) and whenever the read failed,
+   * in which case this degrades to the previous replace behaviour rather than blocking
+   * the write.
    */
   if (isLead && j.country_name) p.Country = j.country_name;
-  if (isLead && j.product_interest) p.Product_Interest = [j.product_interest];
+  if (isLead) {
+    const products = productList(j);
+    if (products.length) p.Product_Interest = mergeMultiSelect(existingProducts, products);
+  }
   /**
    * Marketing consent — WRITE-TRUE-ONLY.
    *
@@ -252,6 +324,24 @@ async function leadTerminalUpdate(claim) {
     return { kind: 'parked_precondition', errorCode: 'already_attempted' };
   }
 
+  /**
+   * Best-effort enrichment read, BEFORE the latch.
+   *
+   * A Zoho multiselect write replaces, so preserving a returning visitor's existing
+   * `Product_Interest` requires reading it first. Ordering is the whole point: the
+   * latch below permits exactly one send ever, so a read that failed AFTER it would
+   * burn the only allowed write. Here, a failure costs nothing — `existingProducts`
+   * stays null and the payload degrades to a plain replace, which is what this code
+   * did before the merge existed.
+   */
+  let existingProducts = null;
+  try {
+    const lead = await Z.getLead(j.zoho_record_id);
+    if (lead && lead.Product_Interest) existingProducts = lead.Product_Interest;
+  } catch (err) {
+    log({ evt: 'zoho.lead_update.enrichment_read_failed', journeyId, code: classify(err).code });
+  }
+
   try {
     // Committed BEFORE the request leaves. If the process dies here the command
     // executes zero times and we conservatively never retry.
@@ -261,7 +351,7 @@ async function leadTerminalUpdate(claim) {
   }
 
   try {
-    await Z.updateLeadWorkflowEnabled(j.zoho_record_id, dataLoadPayload(j));
+    await Z.updateLeadWorkflowEnabled(j.zoho_record_id, dataLoadPayload(j, { existingProducts }));
     await db.withTransaction((tx) => ZS.Z5_leadUpdateAccepted(tx, journeyId));
     log({ evt: 'zoho.lead_update.accepted', journeyId });
     return { kind: 'progress', recorded: true };
@@ -420,14 +510,18 @@ async function meetingCreate(claim) {
 
     // A Deal is linked at create ONLY when the final Contact is already known.
     let dealId = null;
-    if (j.zoho_contact_id && j.zoho_account_id && j.product_interest) {
-      const resolved = await Z.resolveProductDeal(j.zoho_account_id, j.product_interest);
+    // A Meeting links to ONE Deal (`What_Id`), so one product resolves it. The FULL
+    // selected scope travels separately in `Meeting_Task_Contract_Products`.
+    const anchor = meetingAnchor(j);
+    if (j.zoho_contact_id && j.zoho_account_id && anchor) {
+      const resolved = await Z.resolveProductDeal(j.zoho_account_id, anchor);
       if (resolved.status === 'one') dealId = resolved.deal.id;
     }
 
     await db.withTransaction((tx) => O.incrementCreateAttempts(tx, journeyId, 'zoho_meeting_create'));
     const payload = Z.buildMeetingPayload({
       journeyId,
+      title: meetingTitleFor(j),
       startIso: j.slot_start_utc, endIso: j.slot_end_utc,
       contactId: j.zoho_contact_id,
       // Only an UNCONVERTED Lead is addressable. Once the terminal update is accepted
@@ -436,7 +530,10 @@ async function meetingCreate(claim) {
         ? null : j.zoho_record_id,
       dealId,
       meetLink: j.google_meet_url,
-      product: j.product_interest,
+      // Every selected product, canonical and ordered — this is the Meeting's structured
+      // product scope, not just the one that resolved a Deal.
+      products: orderedProducts(j),
+      manageUrl: workerManageUrl(j),
     });
     const result = await Z.createEventSuppressed(payload);
     const meetingId = result.ok ? result.id : result.duplicateId;
@@ -491,7 +588,11 @@ async function dealReconcile(claim) {
       return { kind: 'no_progress', errorCode: 'awaiting_account' };
     }
 
-    const resolved = await Z.resolveProductDeal(accountId, j.product_interest);
+    // The SAME anchor as at Meeting create — the retro-link must resolve the same Deal
+    // the Meeting was (or would have been) linked to. A different answer here would
+    // defeat `alreadyLinked` below and, with automation armed, fire WF007 a second time
+    // against a second Deal.
+    const resolved = await Z.resolveProductDeal(accountId, meetingAnchor(j));
     if (resolved.status === 'many') {
       await db.withTransaction((tx) => ZS.Z10_escalate(tx, journeyId,
         { op: 'zoho_deal_reconcile', code: 'duplicate_product_deal' }));

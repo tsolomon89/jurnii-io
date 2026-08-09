@@ -86,17 +86,19 @@ test('the Deal reminder mirror writes Demo_Reminder_Send_At and nothing else', {
 
 const WRITTEN = {
   // booking/workflows/zoho-ops.js -> dataLoadPayload + buildMeetingPayload
+  // `Job_Title` is written only on an exact live-picklist match; `Job_Title_Raw` always.
   Leads: ['First_Name', 'Last_Name', 'Email', 'Lead_Source', 'Company', 'Phone',
-    'Country', 'Job_Title_Raw', 'Product_Interest', 'Contact_Marketing_Consent'],
+    'Country', 'Job_Title', 'Job_Title_Raw', 'Product_Interest', 'Contact_Marketing_Consent'],
   // the post-conversion Contact update, and processLead's step-5 enrichment
   // NB: no Country, no Product_Interest, no Personal_Phone — see the lead-only test below.
   Contacts: ['First_Name', 'Last_Name', 'Email', 'Lead_Source', 'Phone',
-    'Job_Title_Raw', 'Marketing_Consent', 'Stage', 'State',
+    'Job_Title', 'Job_Title_Raw', 'Marketing_Consent', 'Stage', 'State',
     'Status', 'Contact_Role1', 'Account_Name'],
   Events: ['Ext_Calendar_Booking_ID', 'Start_DateTime', 'End_DateTime', 'Who_Id',
     'What_Id', 'Description', 'Event_Title', 'Meeting_Task_Stage',
-    'Meeting_Task_Status', 'Meeting_Task_Pipeline', 'Meeting_Task_Opportunity',
-    'Reminder_Send_At'],
+    'Meeting_Task_State', 'Meeting_Task_Status', 'Meeting_Task_Lost_Reasons',
+    'Meeting_Task_Contract_Products', 'Meeting_Task_Pipeline',
+    'Meeting_Task_Opportunity', 'Reminder_Send_At'],
   Deals: ['Deal_Name', 'Deal_Key', 'Deal_Product', 'Deal_Product_Key', 'Account_Name',
     'Contact_Name', 'Opportunity_State', 'Opportunity_Status', 'Stage', 'Pipeline',
     'Closing_Date', 'Lead_Source', 'Demo_Reminder_Send_At'],
@@ -179,6 +181,196 @@ test('no field the booking chain writes sits in the Unused Fields bin', () => {
     + '    now being silently discarded — restore it or stop writing it;\n'
     + '  · a MISSING entry means the Zoho layout was fixed — delete it from\n'
     + '    KNOWN_UNUSED_BUT_WRITTEN so the debt does not linger in the test.');
+});
+
+// ---------------------------------------------------------------------------
+// Contact_Role resolution must accept the RAW title, not only the picklist
+//
+// The booking backend writes `Job_Title` only when the visitor's title is one of the
+// ~154 live picklist values; the other ~260 governed persona titles and every "Other"
+// free text travel in `Job_Title_Raw` alone. All three functions that resolve a role
+// must therefore fall back to it, or those visitors reach conversion with a blank
+// `Contact_Role1` and never meet the activation gate — which is exactly what happened
+// to every booking-sourced Lead before 2026-08-08.
+// ---------------------------------------------------------------------------
+
+const ROLE_RESOLVERS = ['processLead.deluge', 'processContact.deluge', 'processDeal.deluge'];
+
+for (const fn of ROLE_RESOLVERS) {
+  test(`${fn} resolves Contact_Role from Job_Title_Raw when the picklist is blank`, { skip: noDeluge }, () => {
+    const src = fs.readFileSync(path.join(DELUGE_DIR, fn), 'utf8');
+    const code = src.split('\n').filter((l) => !l.trim().startsWith('//')).join('\n');
+
+    assert.ok(/Job_Title_Raw/.test(code), `${fn} never reads Job_Title_Raw`);
+    // The gate must admit a raw-only title: `picklist != "" || raw != ""`.
+    assert.ok(/!=\s*""\s*\|\|\s*\w*[Rr]aw\w*\s*!=\s*""/.test(code),
+      `${fn} still gates role resolution on the picklist alone`);
+    // And the lookup key must come from the raw title when the picklist is blank.
+    assert.ok(/titleKey|tKeyLoop/.test(code) && /if\(\s*\w*[Jj]ob\w*\s*!=\s*"",/.test(code),
+      `${fn} does not select the lookup key by path`);
+  });
+
+  test(`${fn} does not default an unmatched RAW title to Decision Maker`, { skip: noDeluge }, () => {
+    const src = fs.readFileSync(path.join(DELUGE_DIR, fn), 'utf8');
+    const code = src.split('\n').filter((l) => !l.trim().startsWith('//')).join('\n');
+    // The seed is path-dependent: "Decision Maker" for a curated picklist value whose map
+    // entry is missing, "" for arbitrary visitor free text. Guessing on free text would
+    // silently inflate the highest-value segment with every unrecognised title typed.
+    assert.match(code, /=\s*if\(\s*\w+\s*!=\s*"",\s*"Decision Maker",\s*""\s*\)/,
+      `${fn} must seed the role by path, not unconditionally`);
+    // All three role lists must actually be consulted. `dmTitles` was declared and never
+    // read in processContact and processDeal, which was harmless only while the default
+    // was unconditionally "Decision Maker" — with a blank raw default it would have
+    // dropped every raw Decision-Maker title.
+    for (const list of ['dmTitles', 'euTitles', 'infTitles']) {
+      assert.ok(new RegExp(`${list}\\.contains\\(`).test(code),
+        `${fn} declares ${list} but never reads it`);
+    }
+  });
+}
+
+test('multi-product bookings defer activation to a human, and that is deliberate', { skip: noDeluge }, () => {
+  // The form can now send up to four products, and processLead fans out one Product Deal
+  // per product. processContact applies HARD RULE 7 — one active automated sequence per
+  // Contact — and raises a Manual Review instead of the Activation Task when a Contact
+  // has more than one driver Deal.
+  //
+  // That branch was unreachable from the booking flow while the form was single-select.
+  // It is now on the ordinary happy path, so it is pinned here: it fails safely to a
+  // human, and neither side may be "fixed" to auto-pick a driver Deal without an
+  // explicit decision (see booking/docs/architecture.md).
+  const src = fs.readFileSync(path.join(DELUGE_DIR, 'processContact.deluge'), 'utf8');
+  const code = src.split('\n').filter((l) => !l.trim().startsWith('//')).join('\n');
+
+  assert.match(code, /driverDealIds\.size\(\)\s*>\s*1/,
+    'the multi-driver guard is gone — a multi-product Contact would auto-pick a Deal');
+  assert.match(code, /multi_product_sequence_ambiguous/,
+    'the multi-driver branch must raise a Manual Review, not fail silently');
+
+  // And the form must still be capable of producing that state, i.e. multi-select is real.
+  const form = fs.readFileSync(
+    path.join(__dirname, '..', 'assets', 'booking-form.js'), 'utf8');
+  assert.match(form, /data-field="productInterests"/,
+    'if the form went back to single-select, this whole interaction is moot');
+});
+
+// ---------------------------------------------------------------------------
+// The metadata boundary — this codebase reads Zoho metadata and never creates it
+//
+// `booking/docs/implementation-notes.md` states the rule: nothing here may create a
+// module, field, layout, PICKLIST VALUE, workflow or scope. It matters most for
+// `Job_Title`, whose live picklist is a curated 154-value subset of the 415 persona
+// titles: the tempting "fix" for a title that will not write is to add it as an option,
+// which would silently take governance of the list away from the CRM owners.
+// ---------------------------------------------------------------------------
+
+const FORBIDDEN_METADATA_CALLS = [
+  'createFields', 'createGlobalPicklist', 'replacePicklistValues',
+  'updateGlobalPicklist', 'deleteCustomField', 'createModules',
+];
+
+test('no booking code creates or alters Zoho metadata', () => {
+  const BOOKING = path.join(__dirname, '..');
+  const SKIP = new Set(['node_modules', 'tests', '.git']);
+  const walk = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+    if (SKIP.has(e.name)) return [];
+    const p = path.join(dir, e.name);
+    return e.isDirectory() ? walk(p) : (/\.(js|mjs|cjs)$/.test(e.name) ? [p] : []);
+  });
+
+  const offenders = [];
+  for (const file of walk(BOOKING)) {
+    // Comments are stripped: the boundary is documented by name in several files, and a
+    // naive search would forbid explaining the rule it enforces.
+    const code = fs.readFileSync(file, 'utf8')
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .split('\n').filter((l) => !l.trim().startsWith('//') && !l.trim().startsWith('*')).join('\n');
+    for (const call of FORBIDDEN_METADATA_CALLS) {
+      if (code.includes(call)) offenders.push(`${path.relative(BOOKING, file)}: ${call}`);
+    }
+  }
+  assert.deepStrictEqual(offenders, [],
+    'booking code must never create Zoho metadata. If a value will not write, the answer '
+    + 'is to report it and stop — not to add the picklist option.');
+});
+
+test('the governed picklist snapshot agrees with the field-name fixture', () => {
+  // Two artifacts, one generator run: the runtime file the handlers require, and the
+  // fixture the offline tests read. They must not be able to drift apart.
+  const runtime = require('../config/zoho-picklists');
+  assert.ok(snapshot.picklists, 'the fixture has no `picklists` — re-run zoho-field-snapshot.js');
+  for (const [module, fieldsOf] of Object.entries(snapshot.picklists)) {
+    for (const [fieldName, values] of Object.entries(fieldsOf)) {
+      const active = values.filter((v) => v.used).map((v) => v.value);
+      assert.deepStrictEqual(runtime.valuesFor(module, fieldName), active,
+        `${module}.${fieldName} differs between the runtime config and the fixture`);
+    }
+  }
+});
+
+// ---------------------------------------------------------------------------
+// The Meeting's structured booking state
+//
+// These need `Events` in the fixture's `picklists`/`lengths`, which arrives with the
+// next credentialed run of zoho-field-snapshot.js (the script now asks for it). Until
+// then they SKIP rather than fail: the offline suite has no network, and a hard-coded
+// table asserting against itself would prove nothing. The api_names themselves are
+// already pinned unconditionally by WRITTEN.Events above, and by the Unused-bin test.
+// ---------------------------------------------------------------------------
+
+const noEventPicklists = (snapshot.picklists || {}).Events
+  ? false : 'fixture has no Events picklists — re-run booking/scripts/zoho-field-snapshot.js';
+const noEventLengths = (snapshot.lengths || {}).Events
+  ? false : 'fixture has no Events lengths — re-run booking/scripts/zoho-field-snapshot.js';
+
+const activeValues = (module, field) =>
+  ((snapshot.picklists[module] || {})[field] || []).filter((v) => v.used).map((v) => v.value);
+
+test('Meeting_Task_Contract_Products offers exactly the canonical products',
+  { skip: noEventPicklists }, () => {
+    // The decisive one. This field is a multiselect, so a value that has drifted out of
+    // the active set is accepted with code SUCCESS and DISCARDED — the Meeting would
+    // look fine and carry no product scope at all.
+    const { PRODUCT_CANONICAL } = require('../api/_utils/products');
+    assert.deepStrictEqual(
+      new Set(activeValues('Events', 'Meeting_Task_Contract_Products')),
+      new Set(Object.values(PRODUCT_CANONICAL)),
+      'the products we send must be character-identical to the live active options');
+  });
+
+test('the booking writes only live-valid Meeting_Task values', { skip: noEventPicklists }, () => {
+  const stage = activeValues('Events', 'Meeting_Task_Stage');
+  assert.ok(stage.includes('Demo Booking'), 'the value buildMeetingPayload sends');
+  // `Demo Confirmation` is a Contact/Deal stage. It is NOT a Meeting_Task_Stage option,
+  // so the Meeting stays at `Demo Booking` and the Contact transition is the Deluge's.
+  assert.equal(stage.includes('Demo Confirmation'), false,
+    'if this now exists, revisit the Meeting stage rather than assuming it is writable');
+
+  assert.ok(activeValues('Events', 'Meeting_Task_State').includes('Open'));
+
+  const status = activeValues('Events', 'Meeting_Task_Status');
+  assert.ok(status.includes('Working'), 'the value buildMeetingPayload sends');
+  // handleMeetingEvent.deluge writes 'New' into a blank Meeting_Task_Status, and 'New'
+  // is not an option — which is exactly why the payload sets a valid value at create.
+  assert.equal(status.includes('New'), false,
+    'the Deluge writes `New` into a blank; if it became valid, that write is no longer a bug');
+});
+
+test('EVENT_TITLE_MAX matches the live Event_Title length', { skip: noEventLengths }, () => {
+  const { EVENT_TITLE_MAX } = require('../api/_utils/meeting-title');
+  assert.strictEqual(EVENT_TITLE_MAX, snapshot.lengths.Events.Event_Title,
+    'the title builder budgets a long company against this number');
+});
+
+test('the local job_title_raw limit does not exceed the live field length', () => {
+  // A local cap above the Zoho length silently truncates (or rejects) at the CRM.
+  const { LIMITS } = require('../lib/validate');
+  const live = (snapshot.lengths.Leads || {}).Job_Title_Raw;
+  assert.ok(live, 'the fixture has no Leads.Job_Title_Raw length');
+  assert.ok(LIMITS.job_title_raw <= live,
+    `LIMITS.job_title_raw (${LIMITS.job_title_raw}) exceeds the live length (${live})`);
+  assert.strictEqual((snapshot.lengths.Contacts || {}).Job_Title_Raw, live,
+    'the two modules must agree, or the Contact path would truncate differently');
 });
 
 test('the subform exemption is still justified', () => {

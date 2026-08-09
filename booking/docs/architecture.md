@@ -113,17 +113,51 @@ automation — Zoho reconciles the graph after the fact, and it is read **once**
   (which converts + builds the graph asynchronously). The response does **not** wait for it. Retry-safe:
   if a prior successful save already converted the Lead, the replay makes **no second update**; if the
   Lead has since disappeared, **one** email-recovery lookup (no sleep) confirms the person.
-- **Contact path:** the Contact is updated in place with `trigger:[]` (additive `Product_Interest`). No
-  Account read, no Deal resolution.
+- **Contact path:** the Contact is updated in place with `trigger:[]`. No Account read, no Deal
+  resolution. It carries **no** `Product_Interest` at all — that api_name does not exist on Contacts
+  (product interest lives in the `Products_Linked` junction `processLead` populates), and sending it
+  made the entire update `INVALID_DATA`. *Corrected 2026-08-08: this line previously claimed the
+  Contact path wrote `Product_Interest` additively.*
 - **A failed direct save stays an error** (invalid fields → `400`; a rejected Zoho write → retryable
   `502`). Success is never reported for unsaved data. Product interest is optional and never gates
   advancing to the calendar.
 
 ## Product / Deal rules
 
-- Form Product Interest maps to a canonical Zoho product (`Jurnii UX` / `Jurnii 360` / `Jurnii Cortex`
-  / `Partnership`; `Cortex / Growth` → `Jurnii Cortex`). `Product_Interest` is written **additively**
-  (deduplicated union), never a bare replace. The canonical product travels on the step-2 token.
+- Product Interest is **multi-select** (2026-08-08). The form offers all four canonical Zoho products —
+  `Jurnii UX` / `Jurnii 360` / `Jurnii Cortex` / `Partnership` — as a checkbox group whose visible
+  labels are structurally separate from the submitted values, and the page-2 endpoint canonicalizes,
+  deduplicates and rejects anything that is not a live picklist value (`Cortex / Growth` →
+  `Jurnii Cortex` is retained as a legacy input spelling). Selections persist to
+  `booking_journeys.product_interests text[]` **in the order they were ticked**, and the whole array is
+  sent to the Lead's `Product_Interest` multiselect.
+- On an update to an **existing** Lead the array is written **additively** (deduplicated union with the
+  record's current value), never a bare replace — Zoho multiselect writes replace, so a returning
+  visitor would otherwise lose the interests already recorded against them. The enrichment read happens
+  **before** the at-most-once send latch and degrades to a plain replace if it fails, so it can never
+  consume the single permitted workflow-enabled write.
+- The **first** selected product is the one that resolves a Deal, because a Meeting links to exactly one
+  record via `What_Id`. With a single selection this is identical to the pre-multi-select behaviour.
+
+> **Multi-product bookings defer sequence activation to a human. This is by design, and the
+> multi-select made it reachable.**
+>
+> `processLead` fans out **one Product Deal per resolved product**, so a visitor who ticks two boxes
+> gets two Deals. `processContact` then applies HARD RULE 7 — one active automated sequence per
+> Contact — and, on finding more than one driver Deal, raises a
+> `multi_product_sequence_ambiguous` Manual Review **instead of** the Sequence Activation Task
+> (`processContact.deluge`, the `driverDealIds.size() > 1` branch).
+>
+> Before the multi-select the form could only ever send one product, so that branch was
+> unreachable from the booking flow. It is now reachable from the ordinary happy path. Nothing
+> breaks — it fails safely to a human, which is what the rule is for, and a genuinely two-product
+> prospect does need a person to choose which Deal drives the sequence. But it is a real change in
+> operational load: expect a Manual Review for every multi-product booking. Neither side was
+> altered to paper over it, because the alternatives are worse — sending only the first product
+> would discard what the visitor told us, and auto-picking a driver Deal would break HARD RULE 7.
+>
+> If that load proves unacceptable, the decision belongs in Deluge (e.g. a documented precedence
+> order over driver Deals), not in the form.
 - A Product Deal is **never required to book**. At booking, if a product was selected **and** exactly
   one matching open Deal already exists, the meeting is linked to it (`What_Id` + `$se_module='Deals'`);
   otherwise the meeting is **person-linked** and confirms anyway. Products/Deals are never fabricated by

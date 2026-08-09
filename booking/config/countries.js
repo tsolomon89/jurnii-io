@@ -92,13 +92,24 @@
     var national = digitsOnly(opts.nationalNumber);
     if (!national) return { ok: false, reason: 'phone_missing' };
 
+    var ccDigits = country.dialCode.slice(1);
+
+    // The international dial-out prefix, e.g. a pasted "00447123456789". Stripped
+    // FIRST, and only when the country code immediately following it is the SELECTED
+    // country's — so it can never fire on a domestic number that merely happens to
+    // start with two zeros. Without this the trunk strip below removes one zero and
+    // the remainder ("0447123456789") is neither domestic nor international, so a
+    // perfectly interpretable paste was rejected as too long.
+    if (national.indexOf('00' + ccDigits) === 0) {
+      national = national.slice(2 + ccDigits.length);
+    }
+
     // Strip the domestic trunk prefix before concatenating. Without this, a UK
     // visitor typing "07123 456789" yields "+4407123456789".
     if (country.trunkPrefix && national.indexOf(country.trunkPrefix) === 0) {
       national = national.slice(country.trunkPrefix.length);
     }
     // A visitor may paste the full international form into the national field.
-    var ccDigits = country.dialCode.slice(1);
     if (national.length > country.maxDigits && national.indexOf(ccDigits) === 0) {
       national = national.slice(ccDigits.length);
       if (country.trunkPrefix && national.indexOf(country.trunkPrefix) === 0) {

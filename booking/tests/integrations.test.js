@@ -259,7 +259,10 @@ test('every data-load write is suppressed; only the terminal Lead update runs wo
 });
 
 test('#11/#37 a Deal is linked only together with the final Contact', () => {
-  const base = { journeyId: 'j1', startIso: '2026-12-01T13:00:00Z', endIso: '2026-12-01T13:30:00Z' };
+  const base = {
+    journeyId: 'j1', title: 'Jurnii | BetCo - Sarah | Jurnii UX',
+    startIso: '2026-12-01T13:00:00Z', endIso: '2026-12-01T13:30:00Z',
+  };
 
   // Lead person + known Deal -> person-linked ONLY. What_Id over a Lead Who_Id
   // silently mis-routes routeContactSequence.
@@ -300,6 +303,78 @@ test('#11/#37 a Deal is linked only together with the final Contact', () => {
   for (const p of [leadWithDeal, contactWithDeal, contactOnly, noPerson]) {
     assert.equal(p.Ext_Calendar_Booking_ID, 'j1');
   }
+});
+
+// ---------------------------------------------------------------------------
+// The Meeting's title and structured booking state
+// ---------------------------------------------------------------------------
+
+const MEETING_BASE = {
+  journeyId: 'j1', title: 'Jurnii | BetCo - Sarah | Jurnii UX',
+  startIso: '2026-12-01T13:00:00Z', endIso: '2026-12-01T13:30:00Z',
+};
+
+test('Event_Title is the caller\'s title, never a constant of its own', () => {
+  // The builder must not invent or default a title: a fallback here would be a second
+  // place the meeting name is decided, which is exactly what this change removes.
+  for (const title of ['Jurnii | BetCo - Sarah | Jurnii UX', 'Jurnii | Product Discovery']) {
+    assert.equal(Z.buildMeetingPayload({ ...MEETING_BASE, title }).Event_Title, title);
+  }
+});
+
+test('a confirmed booking is an upcoming demo: Demo Booking / Open / Working', () => {
+  const p = Z.buildMeetingPayload(MEETING_BASE);
+  assert.equal(p.Meeting_Task_Stage, 'Demo Booking');
+  assert.equal(p.Meeting_Task_State, 'Open');
+  // Not 'New' — that is not a live value for this field, and setting a valid one here
+  // stops handleMeetingEvent writing the invalid one into a blank.
+  assert.equal(p.Meeting_Task_Status, 'Working');
+});
+
+test('Meeting_Task_Contract_Products is a real multiselect array, never a joined string', () => {
+  const products = ['Jurnii UX', 'Jurnii Cortex'];
+  const p = Z.buildMeetingPayload({ ...MEETING_BASE, products });
+
+  assert.ok(Array.isArray(p.Meeting_Task_Contract_Products), 'must be an Array');
+  assert.notEqual(typeof p.Meeting_Task_Contract_Products, 'string',
+    'a comma-joined string is INVALID_DATA on a jsonarray field, and terminal');
+  assert.deepEqual(p.Meeting_Task_Contract_Products, products);
+
+  // The human-readable Description carries the same scope in prose. The two must not be
+  // confused for one another: only the field drives automation.
+  assert.ok(p.Description.includes('Products: Jurnii UX + Jurnii Cortex'));
+});
+
+test('no selected product OMITS the field rather than sending an empty array', () => {
+  for (const products of [[], undefined]) {
+    const p = Z.buildMeetingPayload({ ...MEETING_BASE, products });
+    assert.equal('Meeting_Task_Contract_Products' in p, false,
+      'omission is provably safe; [] is only probably safe, and a wrong guess is terminal');
+    assert.ok(p.Description.includes('Products: Product Discovery'));
+  }
+});
+
+test('"Not sure yet" never reaches Zoho in any field', () => {
+  // The canonicalizer drops it upstream, so it can only arrive here through a bug. This
+  // asserts the whole serialized payload, not one field.
+  const p = Z.buildMeetingPayload({ ...MEETING_BASE, products: ['Jurnii UX'] });
+  assert.equal(/not sure yet/i.test(JSON.stringify(p)), false);
+});
+
+test('the manage link appears only when the worker could build one', () => {
+  const withUrl = Z.buildMeetingPayload({ ...MEETING_BASE, manageUrl: 'https://jurnii.io/manage.html?token=t&id=j1' });
+  assert.ok(withUrl.Description.includes('Manage or cancel: https://jurnii.io/manage.html?token=t&id=j1'));
+
+  // Without PUBLIC_BASE_URL the worker passes null rather than guess a host — a
+  // preview-signed link on a production record would be worse than no link.
+  const without = Z.buildMeetingPayload(MEETING_BASE);
+  assert.equal(/manage/i.test(without.Description), false);
+});
+
+test('the Description always carries the Meet link and the booking reference', () => {
+  const p = Z.buildMeetingPayload({ ...MEETING_BASE, meetLink: 'https://meet.google.com/abc-defg-hij' });
+  assert.ok(p.Description.includes('Google Meet Link: https://meet.google.com/abc-defg-hij'));
+  assert.ok(p.Description.includes('Booking Reference: j1'));
 });
 
 test('readConversion tolerates every shape, and unconverted Leads are the only candidates', () => {

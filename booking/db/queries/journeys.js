@@ -2,6 +2,8 @@
 
 const { ConflictError, isSlotTaken } = require('../errors');
 const { emailDomain } = require('../../api/_utils/email');
+const { anchorProduct } = require('../../api/_utils/products');
+const { buildMeetingTitle, productsLabel } = require('../../api/_utils/meeting-title');
 const R = require('./reservations');
 const O = require('./ops');
 const RV = require('./review');
@@ -147,10 +149,65 @@ async function upsertPage1(tx, journeyId, fields) {
   return res.rowCount ? res.rows[0] : null;
 }
 
+/**
+ * The columns page 2 may write. Keys are interpolated straight into the SET clause
+ * below, so this list — not the caller's discipline — is what stops an unexpected key
+ * reaching the SQL. `patchZoho` and `patchGoogle` already work this way; page 2 did not,
+ * and this pass adds keys to it, which is the moment to close the gap.
+ *
+ * Note what is ABSENT and must stay absent: `booking_status`, `google_event_id`,
+ * `slot_*`, `intent_version`, `form_step` and every reservation column. Page 2 records
+ * what the visitor typed; it can never move booking truth.
+ */
+const PAGE2_COLUMNS = new Set([
+  'company', 'job_title_raw',
+  'country_iso2', 'country_name',
+  'phone_dial_code', 'phone_national_number', 'phone_e164',
+  'product_interests', 'lead_source',
+]);
+
 /** R1 — Page-2 commit: journey fields + `zoho_status='pending'` + identity resolve. */
 async function R1_page2Commit(tx, journeyId, fields) {
   const cols = Object.keys(fields);
-  const assignments = cols.map((c, i) => `${c} = $${i + 2}`).join(', ');
+  const illegal = cols.filter((c) => !PAGE2_COLUMNS.has(c));
+  if (illegal.length) {
+    throw new Error(`R1_page2Commit: column not permitted on the page-2 path: ${illegal.join(', ')}`);
+  }
+
+  /**
+   * `meeting_title` and `meeting_anchor_product` are DERIVED here, exactly as
+   * `upsertPage1` derives `email_domain` — and for the same reason. A client-supplied
+   * title would decide what a visitor sees in their calendar invite and what a rep sees
+   * in the CRM; a client-supplied anchor would decide which Deal the automation
+   * advances. Neither is the caller's to state.
+   *
+   * Because neither column is in `PAGE2_COLUMNS`, the check above has already THROWN if
+   * the caller named one, which is stronger than silently stripping it.
+   *
+   * The title needs the MERGED snapshot: `first_name` was written on page 1, `company`
+   * and `product_interests` arrive in this patch. `getForUpdate` locks the row so the
+   * merged view is exactly what the UPDATE below writes on top of.
+   *
+   * Recomputed on every page-2 commit, so a corrected company or a changed selection
+   * produces the corrected title. That can never rewrite a title a live calendar event
+   * is already using: the WHERE clause below admits only `draft`/`reserved`/
+   * `booking_failed`, all of which precede confirmation.
+   */
+  const current = await getForUpdate(tx, journeyId);
+  if (!current) throw new ConflictError('wrong_step');
+  const merged = { ...current, ...fields };
+  const derived = {
+    ...fields,
+    meeting_title: buildMeetingTitle({
+      company: merged.company,
+      firstName: merged.first_name,
+      products: productsLabel(merged),
+    }),
+    meeting_anchor_product: anchorProduct(merged),
+  };
+
+  const setCols = Object.keys(derived);
+  const assignments = setCols.map((c, i) => `${c} = $${i + 2}`).join(', ');
   const res = await tx.query(
     `UPDATE booking_journeys SET ${assignments},
        form_step = GREATEST(form_step, 2),
@@ -159,7 +216,7 @@ async function R1_page2Commit(tx, journeyId, fields) {
        updated_at = now()
      WHERE journey_id = $1 AND booking_status IN ('draft','reserved','booking_failed')
      RETURNING *`,
-    [journeyId, ...cols.map((c) => fields[c])]
+    [journeyId, ...setCols.map((c) => derived[c])]
   );
   if (!res.rowCount) throw new ConflictError('wrong_step');
   await O.ensureOp(tx, journeyId, 'zoho_identity_resolve');
@@ -502,6 +559,7 @@ async function T4_conversionUndiscovered(tx, journeyId) {
 module.exports = {
   GOOGLE_COLUMNS,
   ZOHO_COLUMNS,
+  PAGE2_COLUMNS,
   get,
   getForUpdate,
   patchGoogle,

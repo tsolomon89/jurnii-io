@@ -8,6 +8,7 @@ const O = require('../db/queries/ops');
 const B = require('../db/queries/bindings');
 const RV = require('../db/queries/review');
 const { verifyEventOwnership } = require('../lib/ownership');
+const { primaryProduct } = require('../api/_utils/products');
 
 /**
  * The fifteen operator actions (§4.10).
@@ -232,10 +233,12 @@ async function verify(request) {
       }
 
       // Best-known Deal, informational only. Absence is legitimate.
+      // The first-selected product, matching what the worker resolves against.
       let dealId = journey.zoho_deal_id || null;
-      if (!dealId && journey.zoho_account_id && journey.product_interest) {
+      const primary = primaryProduct(journey);
+      if (!dealId && journey.zoho_account_id && primary) {
         try {
-          const resolved = await Z.resolveProductDeal(journey.zoho_account_id, journey.product_interest);
+          const resolved = await Z.resolveProductDeal(journey.zoho_account_id, primary);
           if (resolved.status === 'one') dealId = resolved.deal.id;
         } catch (_) { /* the worker reconciles under its own deadline */ }
       }

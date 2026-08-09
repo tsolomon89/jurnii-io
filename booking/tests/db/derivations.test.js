@@ -118,4 +118,118 @@ test('an email with no domain stores NULL, not an empty string', { skip }, async
   assert.strictEqual(row.email_domain, null);
 });
 
+// ---------------------------------------------------------------------------
+// R1 — the meeting title and the Deal anchor
+//
+// Both are derived on the same principle as email_domain above. A client-supplied title
+// would decide what the visitor sees in their calendar invite and what a rep sees in the
+// CRM; a client-supplied anchor would decide which Deal the automation advances.
+// ---------------------------------------------------------------------------
+
+const page2 = (over = {}) => ({
+  company: 'BetCo',
+  country_iso2: 'GB', country_name: 'United Kingdom',
+  phone_dial_code: '+44', phone_national_number: '7123456789', phone_e164: '+447123456789',
+  product_interests: ['Jurnii UX'],
+  ...over,
+});
+
+/** A page-1 journey with a known first name, then a page-2 commit. */
+async function committed(p2, p1 = {}) {
+  const { id } = await fresh(page1({ first_name: 'Sarah', last_name: 'Chen', ...p1 }));
+  const row = await db.withTransaction((tx) => J.R1_page2Commit(tx, id, page2(p2)));
+  return { id, row };
+}
+
+test('R1 derives the title from the MERGED page-1 + page-2 snapshot', { skip }, async () => {
+  // `first_name` was written on page 1; `company` and the products arrive in this patch.
+  // A builder that saw only the patch would produce "Jurnii | BetCo | Jurnii UX".
+  const { row } = await committed();
+  assert.strictEqual(row.meeting_title, 'Jurnii | BetCo - Sarah | Jurnii UX');
+});
+
+test('R1 derives the title for every product shape', { skip }, async () => {
+  const cases = [
+    [['Jurnii UX', 'Jurnii Cortex'], 'Jurnii | BetCo - Sarah | Jurnii UX + Jurnii Cortex'],
+    [['Jurnii Cortex', 'Jurnii UX'], 'Jurnii | BetCo - Sarah | Jurnii UX + Jurnii Cortex'],
+    [['Partnership'], 'Jurnii | BetCo - Sarah | Partnership'],
+    [[], 'Jurnii | BetCo - Sarah | Product Discovery'],
+  ];
+  for (const [product_interests, expected] of cases) {
+    const { row } = await committed({ product_interests });
+    assert.strictEqual(row.meeting_title, expected, JSON.stringify(product_interests));
+  }
+});
+
+test('R1 derives the Deal anchor in canonical order, preferring B2B', { skip }, async () => {
+  const one = await committed({ product_interests: ['Jurnii UX'] });
+  assert.strictEqual(one.row.meeting_anchor_product, 'Jurnii UX');
+
+  // Tick order says Partnership; canonical order says the B2B Deal is the anchor.
+  const mixed = await committed({ product_interests: ['Partnership', 'Jurnii Cortex'] });
+  assert.strictEqual(mixed.row.meeting_anchor_product, 'Jurnii Cortex');
+  assert.deepStrictEqual(mixed.row.product_interests, ['Partnership', 'Jurnii Cortex'],
+    'the stored tick order is never reordered — it is load-bearing for primaryProduct');
+
+  const none = await committed({ product_interests: [] });
+  assert.strictEqual(none.row.meeting_anchor_product, null);
+});
+
+test('a single-product journey anchors exactly as it did before', { skip }, async () => {
+  // The no-op guarantee, against real Postgres rather than in the abstract.
+  const { primaryProduct } = require('../../api/_utils/products');
+  for (const p of ['Jurnii UX', 'Jurnii 360', 'Jurnii Cortex', 'Partnership']) {
+    const { row } = await committed({ product_interests: [p] });
+    assert.strictEqual(row.meeting_anchor_product, primaryProduct(row), `single product: ${p}`);
+  }
+});
+
+test('a client-supplied meeting title is REFUSED, not ignored', { skip }, async () => {
+  const { id } = await fresh(page1());
+  await assert.rejects(
+    () => db.withTransaction((tx) => J.R1_page2Commit(tx, id,
+      page2({ meeting_title: 'Jurnii | Attacker - Eve | Jurnii UX' }))),
+    /column not permitted on the page-2 path: meeting_title/,
+    'the column is absent from PAGE2_COLUMNS, so the guard throws rather than stripping');
+
+  await assert.rejects(
+    () => db.withTransaction((tx) => J.R1_page2Commit(tx, id,
+      page2({ meeting_anchor_product: 'Partnership' }))),
+    /column not permitted on the page-2 path: meeting_anchor_product/);
+});
+
+test('a corrected page-2 submission recomputes both derived values', { skip }, async () => {
+  const { id, row } = await committed();
+  assert.strictEqual(row.meeting_title, 'Jurnii | BetCo - Sarah | Jurnii UX');
+
+  // Safe by construction: R1 admits only draft/reserved/booking_failed, all of which
+  // precede confirmation, so this can never retitle a live calendar event.
+  const again = await db.withTransaction((tx) => J.R1_page2Commit(tx, id,
+    page2({ company: 'BetCo Group', product_interests: ['Partnership', 'Jurnii 360'] })));
+  assert.strictEqual(again.meeting_title, 'Jurnii | BetCo Group - Sarah | Jurnii 360 + Partnership');
+  assert.strictEqual(again.meeting_anchor_product, 'Jurnii 360');
+});
+
+test('the title is sanitised and fits the live Event_Title length', { skip }, async () => {
+  const { row } = await committed({ company: `  Bet\n\tCo   Ltd ` });
+  assert.strictEqual(row.meeting_title, 'Jurnii | Bet Co Ltd - Sarah | Jurnii UX');
+
+  const long = await committed({ company: 'C'.repeat(200) });
+  assert.ok(long.row.meeting_title.length <= 255, 'the CHECK constraint would reject a longer one');
+  assert.ok(long.row.meeting_title.endsWith(' - Sarah | Jurnii UX'),
+    'the company absorbs the truncation, never the contact or the products');
+});
+
+test('no Google or Zoho step can rewrite the title', { skip }, async () => {
+  // The guarantee behind "a reschedule changes the times, not the title". Structural:
+  // the allow-lists cannot name the column, so `buildSet` throws before any SQL runs.
+  const { id } = await fresh(page1());
+  await assert.rejects(
+    () => db.withTransaction((tx) => J.patchGoogle(tx, id, { meeting_title: 'x' })),
+    /google_step_may_not_write:meeting_title/);
+  await assert.rejects(
+    () => db.withTransaction((tx) => J.patchZoho(tx, id, { meeting_anchor_product: 'Partnership' })),
+    /zoho_step_may_not_write:meeting_anchor_product/);
+});
+
 test.after(async () => { await db.close().catch(() => {}); });
