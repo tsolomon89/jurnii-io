@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ContentItem } from '../content-engine/types';
 import { resolveSurface } from '../routing/surface-utils';
 
@@ -46,6 +46,48 @@ export const SharedSubdomainLayout: React.FC<SharedSubdomainLayoutProps> = ({
 }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const isLibrarySubdomain = typeof window !== 'undefined' && resolveSurface(window.location.hostname).role === 'library';
+  const layoutRef = useRef<HTMLDivElement>(null);
+
+  /**
+   * The pinned sidebar has to stop below the site nav, which is itself sticky —
+   * parked at the top of the viewport it would slide under that blurred bar and
+   * take the wordmark with it. The nav's height is intrinsic, and some surfaces
+   * render the library without one at all, so it is measured rather than written
+   * down, and re-measured when it reflows.
+   */
+  useEffect(() => {
+    const layout = layoutRef.current;
+    if (!layout) return;
+
+    const nav = document.querySelector('header.nav');
+    if (!nav) {
+      layout.style.setProperty('--library-sticky-top', '0px');
+      return;
+    }
+
+    const sync = () => layout.style.setProperty('--library-sticky-top', `${Math.round(nav.getBoundingClientRect().height)}px`);
+    sync();
+
+    const observer = new ResizeObserver(sync);
+    observer.observe(nav);
+    return () => observer.disconnect();
+  }, []);
+
+  /**
+   * The archive is a scroll box on desktop now, so the entry for the post being
+   * read can open below its fold — a highlight the reader cannot see is no signal
+   * at all. Centre it in the box, moving that box alone rather than page scroll.
+   * The guard covers mobile, where the list still runs at full height.
+   */
+  useEffect(() => {
+    if (!currentSlug) return;
+    const list = layoutRef.current?.querySelector<HTMLElement>('.library-nav-list');
+    const active = list?.querySelector<HTMLElement>('.library-nav-item.is-active');
+    if (!list || !active || list.scrollHeight <= list.clientHeight) return;
+
+    const offset = active.getBoundingClientRect().top - list.getBoundingClientRect().top;
+    list.scrollTop += offset - (list.clientHeight - active.getBoundingClientRect().height) / 2;
+  }, [currentSlug]);
 
   const getItemHref = (slug: string) => {
     return isLibrarySubdomain ? `/${slug}` : `/library/${slug}`;
@@ -60,7 +102,7 @@ export const SharedSubdomainLayout: React.FC<SharedSubdomainLayoutProps> = ({
   );
 
   return (
-    <div className="library-layout">
+    <div className="library-layout" ref={layoutRef}>
       {/* Mobile top bar */}
       <div className="library-mobile-bar">
         <a href={getHomeHref()} style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
@@ -85,7 +127,7 @@ export const SharedSubdomainLayout: React.FC<SharedSubdomainLayoutProps> = ({
 
       {/* Sidebar navigation */}
       <aside className={`library-sidebar ${mobileOpen ? '' : 'mobile-hidden'}`}>
-        <div style={{ marginBottom: '32px' }}>
+        <div className="library-sidebar-head">
           <a href={getHomeHref()} style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', marginBottom: '8px' }}>
             <span style={{ color: 'var(--jurnii-400)', fontFamily: 'var(--font-mono)', fontWeight: 'bold', fontSize: '24px' }}>Jurnii</span>
             <span className="pill" style={{ background: 'var(--concrete-950)', color: 'var(--jurnii-200)', borderColor: 'var(--white-a-10)' }}>
@@ -99,7 +141,7 @@ export const SharedSubdomainLayout: React.FC<SharedSubdomainLayoutProps> = ({
 
         {/* Category Filter Pills */}
         {categories.length > 0 && (
-          <div style={{ marginBottom: '32px' }}>
+          <div className="library-sidebar-filters">
             <div className="eyebrow" style={{ marginBottom: '12px' }}>Research Domains</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
               <CategoryPill href={getHomeHref()} label="All" active={!activeCategory} onSelect={onSelectCategory && (() => onSelectCategory(undefined))} />
@@ -117,36 +159,29 @@ export const SharedSubdomainLayout: React.FC<SharedSubdomainLayoutProps> = ({
         )}
 
         {/* Publications Archive */}
-        <nav>
-          <div className="eyebrow" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', width: '100%' }}>
+        <nav className="library-nav">
+          <div className="eyebrow library-nav-head">
             <span>Publications</span>
-            <span style={{ background: 'var(--white-a-6)', padding: '2px 8px', borderRadius: '99px', fontSize: '10px' }}>{libraryItems.length}</span>
+            <span className="library-nav-count">{libraryItems.length}</span>
           </div>
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <ul className="library-nav-list">
             {libraryItems.map((item) => {
               const isActive = item.slug === currentSlug;
               return (
                 <li key={item.slug}>
                   <a
                     href={getItemHref(item.slug)}
-                    style={{
-                      display: 'block', padding: '10px 14px', borderRadius: '12px', textDecoration: 'none', transition: 'all 150ms ease',
-                      background: isActive ? 'rgba(var(--jurnii-300-rgb), 0.1)' : 'transparent',
-                      border: isActive ? '1px solid rgba(var(--jurnii-300-rgb), 0.2)' : '1px solid transparent',
-                    }}
-                    onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.background = 'var(--white-a-6)'; }}
-                    onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
+                    aria-current={isActive ? 'page' : undefined}
+                    className={`library-nav-item${isActive ? ' is-active' : ''}`}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
-                      <span style={{ fontWeight: isActive ? '600' : '500', color: isActive ? 'var(--jurnii-200)' : 'var(--foreground)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {item.meta.title}
-                      </span>
+                    <div className="library-nav-item-row">
+                      <span className="library-nav-title">{item.meta.title}</span>
                       {item.meta.medium && (
                         <span className="library-nav-medium">{item.meta.medium}</span>
                       )}
                     </div>
                     {item.meta.date && (
-                      <div style={{ fontSize: '11px', color: 'var(--muted-foreground)', marginTop: '4px', fontFamily: 'var(--font-mono)' }}>{item.meta.date}</div>
+                      <div className="library-nav-date">{item.meta.date}</div>
                     )}
                   </a>
                 </li>

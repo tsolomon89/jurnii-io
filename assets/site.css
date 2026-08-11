@@ -1548,13 +1548,49 @@ html.js-gsap .pbt-row.is-in, .pbt-row.is-in { opacity: 1; transform: translateY(
 
 
 /* ---------- Library & Document Layout ---------- */
-.library-layout { display: flex; flex-direction: column; min-height: 100vh; font-family: var(--font-sans); }
+/* Where the pinned sidebar has to stop. The site nav is sticky, so the sidebar
+   parks below it rather than at the top of the viewport; the layout measures the
+   nav and overwrites this, and 0 is the right answer on surfaces without one. */
+.library-layout { --library-sticky-top: 0px; display: flex; flex-direction: column; min-height: 100vh; font-family: var(--font-sans); }
 @media (min-width: 768px) { .library-layout { flex-direction: row; } }
 
 .library-sidebar { width: 100%; border-right: 1px solid var(--border); padding: var(--spacing-6); flex-shrink: 0; background: var(--sidebar-background); color: var(--sidebar-foreground); }
-@media (min-width: 768px) { .library-sidebar { width: 320px; } }
 .library-sidebar.mobile-hidden { display: none; }
-@media (min-width: 768px) { .library-sidebar.mobile-hidden { display: block; } }
+
+/* The archive is long enough to set the page height on its own, which left a short
+   article scrolling past a column of links it had already passed. On desktop the
+   sidebar is pinned to the viewport and the list scrolls inside it, so the selected
+   post's content is what determines page length. `align-self: flex-start` is what
+   makes the sticky work: without it the sidebar stretches to the row's full height
+   and has nothing to slide against. Mobile keeps the stacked drawer untouched. */
+@media (min-width: 768px) {
+  .library-sidebar,
+  .library-sidebar.mobile-hidden {
+    display: flex;
+    flex-direction: column;
+    width: 320px;
+    position: sticky;
+    top: var(--library-sticky-top);
+    align-self: flex-start;
+    height: calc(100vh - var(--library-sticky-top));
+    height: calc(100dvh - var(--library-sticky-top));
+    overflow-y: auto;
+  }
+}
+
+/* Everything above the archive keeps its natural height; only the list gives way. */
+.library-sidebar-head, .library-sidebar-filters { margin-bottom: 32px; flex-shrink: 0; }
+.library-nav { display: flex; flex-direction: column; min-height: 0; }
+.library-nav-head { display: flex; justify-content: space-between; width: 100%; margin-bottom: 12px; flex-shrink: 0; }
+.library-nav-count { background: var(--white-a-6); padding: 2px 8px; border-radius: 99px; font-size: 10px; }
+.library-nav-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+@media (min-width: 768px) {
+  .library-nav { flex: 1; }
+  /* The gutter keeps the scrollbar off the item borders. min-height is the escape
+     hatch for a short window: rather than collapse the list to nothing, the sidebar
+     itself starts scrolling. */
+  .library-nav-list { flex: 1; min-height: 96px; overflow-y: auto; padding-right: 4px; margin-right: -4px; overscroll-behavior: contain; scrollbar-width: thin; }
+}
 
 /* min-width:0 lets the flex item shrink past its content's min-content width, so a
    wide data table scrolls inside its own `overflow-x` box instead of widening the page. */
@@ -1567,7 +1603,27 @@ html.js-gsap .pbt-row.is-in, .pbt-row.is-in { opacity: 1; transform: translateY(
    on the light sidebar and the dark one without needing a per-theme variant. */
 .library-domain-pill { cursor: pointer; text-decoration: none; background: transparent; color: var(--muted-foreground); transition: color 150ms ease, background 150ms ease, border-color 150ms ease; }
 .library-domain-pill:hover { color: var(--foreground); border-color: var(--jurnii-500); }
-.library-domain-pill.is-active { background: var(--concrete-950); color: var(--jurnii-200); border-color: var(--white-a-10); }
+
+/* Archive entries. Same resting and hover treatment they have always had; the
+   selected one now shares the pill's chip below rather than approximating it. */
+.library-nav-item { display: block; padding: 10px 14px; border: 1px solid transparent; border-radius: 12px; background: transparent; color: var(--foreground); text-decoration: none; transition: color 150ms ease, background 150ms ease, border-color 150ms ease; }
+.library-nav-item:hover { background: var(--white-a-6); }
+.library-nav-item-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.library-nav-title { color: inherit; font-weight: var(--fw-medium); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.library-nav-date { margin-top: 4px; font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); }
+
+/* One selected treatment for the Library, declared once. The selected pill and the
+   selected archive entry are the same state to a reader, so they read from the same
+   block — a later change to the chip cannot drift between them. Ordered after the
+   hover rules so an equal-specificity :hover does not undo the selection. */
+.library-domain-pill.is-active,
+.library-nav-item.is-active { background: var(--concrete-950); color: var(--jurnii-200); border-color: var(--white-a-10); }
+
+.library-nav-item.is-active .library-nav-title { font-weight: var(--fw-semibold); }
+/* The chip is dark in every theme, so the entry's secondary text takes the lift the
+   badge below already gets on a dark panel instead of staying at its light-theme tone. */
+.library-nav-item.is-active .library-nav-date { color: var(--concrete-300); }
+.library-nav-item.is-active .library-nav-medium { color: var(--jurnii-300); }
 
 /* Medium badge on each archive entry, in the same green as the cards' "Read
    Monograph" link — including its lift to a brighter tone once the panel behind
