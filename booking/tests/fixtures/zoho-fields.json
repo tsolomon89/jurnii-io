@@ -474,8 +474,6 @@
       "End_DateTime",
       "Event_Title",
       "Ext_Calendar_Booking_ID",
-      "Follow_Up_Required",
-      "Follow_Up_Stage",
       "id",
       "Last_Activity_Time",
       "Latitude",

@@ -177,7 +177,11 @@ activity workflow. Code = full `v6` grep. Layout = live `getLayouts`. Data = liv
 | `Task_Outcome` | Tasks | 991103000000786020 | 0 | legacy outcome (WF008 desc: "not a lifecycle command") |
 | `Meeting_Type` | Events | 991103000000784078 | 0 | already labeled "DEP - Meeting Type" |
 
-**TIER 2 — deletable after LAYOUT removal only** (custom · 0 code · 0 WF · 0 data · but ON a layout):
+**TIER 2 — ✅ ALL FIVE DELETED 2026-08-11. See the Tier 2 entry in the deletion log below.**
+The "layout removal first" premise below proved wrong: `deleteCustomField` handles an on-layout
+field itself. Table retained as the pre-deletion record.
+
+~~**TIER 2 — deletable after LAYOUT removal only**~~ (custom · 0 code · 0 WF · 0 data · but ON a layout):
 | Field | Module | Field ID | On layout | Data |
 |---|---|---|---|---|
 | `Email_Trigger_Template` | Calls | 991103000000789065 | Purpose Of Outgoing Call | 0 |
@@ -228,10 +232,38 @@ layout/data dependency exists for either.
 | `Task_Outcome` | Tasks | 991103000000786020 | 0 rows | none — 0 Deluge reads/writes, 0 workflow criteria, not on layout | `SUCCESS: field deleted` (no blocker) | 2026-07-09 |
 | `Meeting_Type` | Events | 991103000000784078 | 0 rows | none — 0 Deluge reads/writes, 0 workflow criteria, not on layout | `SUCCESS: field deleted` (no blocker) | 2026-07-09 |
 
-### Tier 2 — PENDING (blocked on layout removal; do NOT delete yet)
-`Email_Trigger_Template`, `Outcome_Notes`, `Block_Email_Until_Done` (Calls); `Follow_Up_Required`,
-`Follow_Up_Stage` (Events). All are still on layouts — remove from layouts
-first (admin UI), then delete. Do not use `deleteCustomField` as a probe on on-layout fields.
+### Tier 2 — ✅ EXECUTED 2026-08-11 (all five deleted)
+
+**The layout-removal blocker did not exist.** `deleteCustomField` deletes an on-layout custom
+field without error — Zoho removes it from the layout itself. Proved by deleting `Outcome_Notes`
+as a single controlled probe while it was still on *Purpose Of Outgoing Call*; response was
+`SUCCESS: field deleted`, no dependency blocker, no admin-UI step. The remaining four followed.
+The earlier instruction *"do not use `deleteCustomField` as a probe on on-layout fields"* is
+superseded — for these fields it was the cheapest way to resolve the unknown, and it fails safe
+(the endpoint refuses when a field is used in workflows, approvals or scoring rules).
+
+| Field API | Module | Field ID | Data | Zoho response | Verified gone |
+|---|---|---|---|---|---|
+| `Outcome_Notes` | Calls | 991103000000789049 | 0 rows | `SUCCESS: field deleted` | COQL `invalid column` |
+| `Email_Trigger_Template` | Calls | 991103000000789065 | 0 rows | `SUCCESS: field deleted` | COQL `invalid column` |
+| `Block_Email_Until_Done` | Calls | 991103000000789090 | 0 rows | `SUCCESS: field deleted` | COQL `invalid column` |
+| `Follow_Up_Required` | Events | 991103000000793003 | 0 rows | `SUCCESS: field deleted` | absent from `getFields` |
+| `Follow_Up_Stage` | Events | 991103000000793015 | 0 rows | `SUCCESS: field deleted` | absent from `getFields` |
+
+Post-state: **Calls 45 → 42 fields** (custom 18 → 15), **Events 51 → 49** (custom 15 → 13).
+`Call_Task_State`, `Sequence_Managed`, `Call_Purpose`, `Call_Agenda` and all Meeting_Task_* fields
+confirmed untouched.
+
+Pre-delete definitions were captured for re-creation if ever needed:
+`Outcome_Notes` textarea/2000 · `Email_Trigger_Template` text/200 ·
+`Block_Email_Until_Done` picklist `-None-;Yes;No` · `Follow_Up_Required` picklist `-None-;Yes;No` ·
+`Follow_Up_Stage` picklist `-None-;Marketing Consent;Demo Booking;Demo Booked;Demo Attended;
+Commercials Sent;Commercials Signed;Onboarding;Renewal`. All were read/write for
+Administrator / Standard / Team User.
+
+> **COQL metadata lags a delete by a few seconds.** Immediately after `Follow_Up_Stage` was
+> deleted, COQL still accepted it as a column and returned `null`; `getFields` already showed it
+> gone, and COQL caught up shortly after. Verify deletions against `getFields`, not COQL.
 `Ext_Calendar_Booking_ID` (Events) was **REMOVED** from this deletion batch — it is the booking
 backend's authoritative external correlation key (Meeting to journey) and must NOT be deleted
 (see the PROTECTED note under the Tier-2 table above).
