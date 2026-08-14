@@ -16,10 +16,17 @@
  *     write report `BLOCKED` and say what they would have needed.
  *
  *   · IT REFUSES TO TOUCH A CALENDAR IT WAS NOT EXPLICITLY POINTED AT.
- *     `VERIFY_CALENDAR_ID` must be set and must NOT equal `GOOGLE_CALENDAR_ID`,
- *     unless `--i-understand-this-is-the-configured-calendar` is also passed. The
- *     plan forbids modifying a Production calendar, and a booking calendar with
- *     real invitees is exactly the wrong place to insert disposable events.
+ *     `VERIFY_CALENDAR_ID` must be set and must NOT equal ANY configured host
+ *     calendar, unless `--i-understand-this-is-the-configured-calendar` is also
+ *     passed. The plan forbids modifying a Production calendar, and a booking
+ *     calendar with real invitees is exactly the wrong place to insert disposable
+ *     events. The check is set membership, not equality against one variable —
+ *     with several hosts, comparing against one would let the disposable writes
+ *     land on host 2 or host 3 unnoticed.
+ *
+ *     Separately, every CONFIGURED host calendar is checked read-only: canonical
+ *     address, reachable with writer/owner access, and bound to its host key in
+ *     `booking_calendars`. A configured but inaccessible calendar FAILS.
  *
  *   · IT CREATES NO ZOHO METADATA. No module, field, layout, picklist value,
  *     workflow, validation rule, blueprint, OAuth scope or connection. The
@@ -54,6 +61,8 @@ const crypto = require('crypto');
 
 const G = require('../integrations/google');
 const Z = require('../integrations/zoho');
+const HC = require('../config/host-calendars');
+const { calendarFingerprint } = require('../lib/fingerprint');
 
 /* ===================================================================== */
 
@@ -243,6 +252,103 @@ async function verifyDatabase() {
 }
 
 /* ===================================================================== *
+ * Host calendars — every configured host, before any disposable write
+ * ===================================================================== */
+
+/**
+ * One configured host calendar must satisfy FOUR things, and all four are per-calendar:
+ * the address is canonical, the internal key exists and is well-formed, the OAuth identity
+ * can actually reach it with sufficient access, and `booking_calendars` binds the key to
+ * exactly that calendar.
+ *
+ * A configured-but-inaccessible calendar FAILS. It would otherwise sit in the host list
+ * looking available while every terminal absence verdict on it was impossible — the
+ * recovery ladder could only ever reach T1, never G3.
+ *
+ * An entirely unconfigured host (Marlon, pending his Calendar ID) is reported as BLOCKED,
+ * not failed: the others must be verifiable without him.
+ */
+async function verifyHostCalendars(G_) {
+  const publicKey = HC.publicHostKey();
+  if (!publicKey) {
+    fail(G_, 'public-host', 'BOOKING_PUBLIC_HOST is not set — the public booking host must be explicit');
+  } else if (!HC.resolveHost(publicKey)) {
+    fail(G_, 'public-host', `BOOKING_PUBLIC_HOST=${publicKey} does not resolve: ${HC.describeHost(publicKey).problem}`);
+  } else {
+    pass(G_, 'public-host', `${publicKey} — the site form books this calendar`);
+  }
+
+  try {
+    HC.configuredHosts();
+    pass(G_, 'host-collisions', 'no two hosts share a calendar or a host_calendar_key');
+  } catch (err) {
+    fail(G_, 'host-collisions', err.message);
+  }
+
+  let db = null;
+  try { db = require('../db'); } catch (_) { /* registry check reports below */ }
+
+  for (const h of HC.HOSTS) {
+    const id = `host:${h.key}`;
+    const d = HC.describeHost(h.key);
+    if (!d.configured) {
+      if (d.problem === 'not_configured') {
+        block(G_, id, `no calendar id configured yet (${HC.envVarName(h.key, 'ID')})`);
+      } else {
+        fail(G_, id, d.problem);
+      }
+      continue;
+    }
+
+    try {
+      G.requireCalendarId(d.googleCalendarId);
+    } catch (err) {
+      fail(G_, id, `${err.message} (aliases split the reservation namespace)`);
+      continue;
+    }
+
+    // Access. Same probe the recovery ladder depends on, so the roles mean the same thing.
+    let probe;
+    try {
+      probe = await G.probeEventAccess(d.googleCalendarId);
+    } catch (err) {
+      fail(G_, id, `access probe threw: ${err.message}`);
+      continue;
+    }
+    if (!probe.confirmed) {
+      fail(G_, id, `accessRole=${probe.role || 'unreadable'}${probe.error ? ' (' + probe.error + ')' : ''} — ` +
+        'the backend identity needs "Make changes to events" (writer or owner) on this calendar');
+      continue;
+    }
+    if (probe.role === 'writerWithoutPrivateAccess') {
+      warn(G_, id, 'writerWithoutPrivateAccess is treated as UNCONFIRMED — extendedProperties.private may be unreadable');
+    }
+
+    // Registration. R2's own pre-check compares exactly this, so a mismatch here is a
+    // 503 calendar_misconfigured on every booking against this host.
+    if (!db || !db.isConfigured || !db.isConfigured()) {
+      block(G_, `${id}:registered`, 'DATABASE_URL not set — registry binding unverified');
+      continue;
+    }
+    try {
+      const reg = await db.query(
+        'SELECT canonical_fingerprint FROM booking_calendars WHERE host_calendar_key = $1',
+        [d.hostCalendarKey]
+      );
+      if (!reg.rowCount) {
+        fail(G_, `${id}:registered`, `${d.hostCalendarKey} is not registered — run npm run register-calendar`);
+      } else if (reg.rows[0].canonical_fingerprint !== calendarFingerprint(d.googleCalendarId)) {
+        fail(G_, `${id}:registered`, `${d.hostCalendarKey} is registered against a DIFFERENT calendar`);
+      } else {
+        pass(G_, id, `${probe.role} on ${d.hostCalendarKey} — access and registry agree`);
+      }
+    } catch (err) {
+      fail(G_, `${id}:registered`, err.message);
+    }
+  }
+}
+
+/* ===================================================================== *
  * Google — the recovery design's load-bearing assumptions
  * ===================================================================== */
 
@@ -252,16 +358,27 @@ async function verifyGoogle() {
     if (!process.env[k]) return block(G_, 'credentials', `${k} is not set`);
   }
 
+  await verifyHostCalendars(G_);
+
   const target = process.env.VERIFY_CALENDAR_ID;
-  const configured = process.env.GOOGLE_CALENDAR_ID;
   if (!target) {
     return block(G_, 'test-calendar',
-      'VERIFY_CALENDAR_ID is not set. Point it at a DISPOSABLE calendar — never the booking calendar.');
+      'VERIFY_CALENDAR_ID is not set. Point it at a DISPOSABLE calendar — never a booking calendar.');
   }
-  if (target === configured && !CALENDAR_OVERRIDE) {
+  /**
+   * SET membership, not equality against one variable.
+   *
+   * With three host calendars, comparing against a single configured id would let
+   * VERIFY_CALENDAR_ID equal host 2 or host 3 and pass — and the disposable-write probes
+   * below create and cancel a real event.
+   */
+  const bookingAddresses = new Set(
+    HC.configuredHosts().map((h) => h.googleCalendarId.trim().toLowerCase())
+  );
+  if (bookingAddresses.has(String(target).trim().toLowerCase()) && !CALENDAR_OVERRIDE) {
     return fail(G_, 'test-calendar',
-      'VERIFY_CALENDAR_ID equals GOOGLE_CALENDAR_ID. Refusing: the plan forbids modifying the ' +
-      'configured (Production) calendar. Use a separate calendar, or pass ' +
+      'VERIFY_CALENDAR_ID is one of the configured host booking calendars. Refusing: the plan ' +
+      'forbids modifying a live booking calendar. Use a separate calendar, or pass ' +
       '--i-understand-this-is-the-configured-calendar to override.');
   }
   try {

@@ -17,7 +17,11 @@ admin UI in this implementation, so the operator interface is this document plus
 
 | Variable | Local | Preview | Production | Kind |
 |---|---|---|---|---|
-| `BOOKING_CALENDAR_KEY` | `jurnii_local` | `jurnii_preview` | `jurnii_prod` | stable identifier |
+| `BOOKING_PUBLIC_HOST` | `fraser` | `fraser` | `fraser` | stable identifier |
+| `BOOKING_HOST_FRASER_CALENDAR_KEY` | `fraser_local` | `fraser_preview` | `fraser_prod` | stable identifier |
+| `BOOKING_HOST_MARLON_CALENDAR_KEY` | `marlon_local` | `marlon_preview` | `marlon_prod` | stable identifier |
+| `BOOKING_HOST_TIMOTHY_CALENDAR_KEY` | `timothy_local` | `timothy_preview` | `timothy_prod` | stable identifier |
+| `BOOKING_HOST_<HOST>_CALENDAR_ID` | per host | per host | per host | configuration |
 | `RESOLUTION_FINGERPRINT_HMAC_KEY_ID` | `local-v1` | `preview-v1` | `production-v1` | stable identifier |
 | `BOOKING_CALENDAR_HMAC_KEY` | generated | generated | generated | **secret** |
 | `BOOKING_ADMIN_SECRET` | generated | generated | generated | **secret** |
@@ -297,26 +301,70 @@ zero, confirm the fix is present rather than assuming a data explanation.
 
 ## 4. Calendar registration
 
-Run **once per environment, before it accepts bookings**. Bookings are refused with
-`503 calendar_misconfigured` until it has.
+Run **once per environment, before it accepts bookings**, and again whenever a host is
+added or re-pointed. Bookings are refused with `503 calendar_misconfigured` until the
+host they resolve to is registered.
 
 ```bash
 cd booking
-npm run register-calendar            # idempotent; safe to re-run
+npm run register-calendar             # every configured host; idempotent, safe to re-run
 node db/register-calendar.js --verify # verify only, writes nothing
+node db/register-calendar.js --host=timothy   # one host
 ```
 
-Expected: `[register-calendar] ok  host_calendar_key=jurnii_preview fingerprint=1f785d0a…`
+Expected, one line per host plus the skips:
+
+```
+[register-calendar] ok  host=fraser host_calendar_key=fraser_preview fingerprint=1f785d0a…
+[register-calendar] ok  host=timothy host_calendar_key=timothy_preview fingerprint=9c02be41…
+[register-calendar] skipped host=marlon (no calendar id configured yet)
+[register-calendar] public host=fraser
+```
+
+Each host is its own transaction, so a failure part-way leaves the earlier hosts
+registered and a re-run resumes — the same property `db/migrate.js` has.
 
 | Failure | Meaning |
 |---|---|
-| `calendar_config_invalid` | `GOOGLE_CALENDAR_ID` is `primary`, lacks an `@`, `BOOKING_CALENDAR_KEY` fails `^[a-z0-9_]{4,32}$`, or `BOOKING_CALENDAR_HMAC_KEY` is unset. Fix the configuration. |
+| `calendar_config_invalid` | Reported per host: a `CALENDAR_ID` that is `primary` or lacks an `@`, a `CALENDAR_KEY` failing `^[a-z0-9_]{4,32}$`, one of the pair set without the other, `BOOKING_CALENDAR_HMAC_KEY` unset, or `BOOKING_PUBLIC_HOST` unset or naming a host that does not resolve. Fix the configuration. |
+| `host_calendar_id_collision` | Two hosts are configured with the **same** calendar address. Two keys for one calendar split the reservation namespace. |
+| `host_calendar_key_collision` | Two hosts share a `host_calendar_key`. A hold on one would block the other. |
 | `calendar_key_bound_elsewhere` | This key is already registered against a **different** calendar. **Do not force it.** Re-pointing a key orphans every reservation held under it. |
 | `calendar_bound_to_other_key` | This calendar already has a different key. Two keys for one calendar split the reservation namespace and let two journeys hold the same slot. |
 
 An alias is rejected because `primary` and `demos@jurnii.io` denote the same calendar;
 accepting both would create two independent reservation namespaces and defeat the
 overlap constraint entirely.
+
+A host with **neither** variable set is skipped, not failed — that is the pending-Marlon
+case, and Fraser and Timothy must be registrable without him. A host with only one of the
+two set is an error, because a typo must not look like "not set up yet".
+
+### Adding a host later
+
+1. Add `{ key, label }` to `HOSTS` in `booking/config/host-calendars.js` (Fraser, Marlon
+   and Timothy are already there — for Marlon, skip to step 2).
+2. Set `BOOKING_HOST_<HOST>_CALENDAR_ID` and `BOOKING_HOST_<HOST>_CALENDAR_KEY` in that
+   environment.
+3. Grant the backend Google identity writer/owner on that calendar (§7).
+4. `npm run register-calendar`.
+
+No handler, migration or frontend change. The internal form picks the host up from
+`GET /api/v1/booking-hosts` on the next load.
+
+### Which calendar a request uses
+
+```
+new booking      journey.selected_host_key -> config -> {host_calendar_key, google_calendar_id}
+existing booking journey.google_calendar_id / host_calendar_key, as persisted by R2
+```
+
+`booking/lib/booking-host.js` is the only place that decides, and both `GET /availability`
+and `POST /bookings` call it — which is what stops a visitor being shown one host's free
+slots and booked onto another's. Once `booking_status` leaves `draft`/`booking_failed`,
+the persisted pair wins permanently, and `bj_guard()` raises
+`invariant_host_calendar_immutable_after_booking` if anything tries to move it after
+`google_event_id` is set.
 
 ---
 
@@ -553,7 +601,7 @@ Read these before running it against Production:
 
 - **It cannot use a disposable calendar.** It goes through `/api/v1/bookings`, so the event
   lands on the configured booking calendar. It is cancelled at cleanup. If that is not
-  acceptable, run it against a Preview deployment pointed at a separate `GOOGLE_CALENDAR_ID`.
+  acceptable, run it against a Preview deployment whose host calendars are separate.
 - **Deluge creates records it cannot delete.** The workflow-enabled Lead update starts
   `processLead`, which creates a Contact, an Account and a Deal. Those ids are printed under
   `CREATED BY ZOHO DELUGE` for manual removal — never deleted automatically, because an

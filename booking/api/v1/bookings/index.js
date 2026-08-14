@@ -5,6 +5,7 @@ const { fail, methodNotAllowed, log } = require('../../../lib/http');
 const { requireFlow, manageUrlFor } = require('../../../lib/auth');
 const dispatch = require('../../../lib/dispatch');
 const { verifyEventOwnership } = require('../../../lib/ownership');
+const { resolveJourneyHost } = require('../../../lib/booking-host');
 const {
   meetingTitleFor, productsLabel, contactFullName, sanitizeTitlePart,
 } = require('../../../api/_utils/meeting-title');
@@ -35,12 +36,6 @@ module.exports = async function handler(req, res) {
   const auth = requireFlow(req, { minStep: 2 });
   if (!auth.ok) return fail(res, auth.status, auth.code, 'Unauthorized');
   const journeyId = auth.claims.journeyId;
-
-  const calendarId = process.env.GOOGLE_CALENDAR_ID;
-  const calendarKey = process.env.BOOKING_CALENDAR_KEY;
-  if (!calendarId || !calendarKey) {
-    return fail(res, 503, 'calendar_misconfigured', 'Booking is temporarily unavailable.');
-  }
 
   // ---- step 0: the re-entry guard. ORDER IS SIGNIFICANT (§5.2). -------------
   const journey = await db.withTransaction((tx) => J.get(tx, journeyId));
@@ -82,6 +77,26 @@ module.exports = async function handler(req, res) {
     return fail(res, 409, 'already_booked', 'You already have a booking.');
   }
   if (guard.kind !== 'may_attempt') return fail(res, 409, 'wrong_step', 'This booking cannot be changed.');
+
+  /**
+   * ---- which calendar: resolved from the JOURNEY, never the environment ----
+   *
+   * The same `resolveJourneyHost` that answered `GET /availability` for this journey, so
+   * the calendar whose free slots the visitor was shown is by construction the calendar
+   * the event is created on. Before a booking exists this is the selected host (the
+   * operator's choice on an internal placement, or the server-assigned public default);
+   * afterwards it is the persisted pair, which is why a retry cannot migrate a booking.
+   *
+   * Deliberately AFTER the re-entry guard: a journey already flagged `needs_attention` or
+   * mid-recovery must still get its 409/202, not a 503 about configuration.
+   */
+  const host = resolveJourneyHost(journey);
+  if (!host) {
+    log({ evt: 'bookings.host_unresolved', journeyId, selected: journey.selected_host_key || null });
+    return fail(res, 503, 'calendar_misconfigured', 'Booking is temporarily unavailable.');
+  }
+  const calendarId = host.googleCalendarId;
+  const calendarKey = host.hostCalendarKey;
 
   // ---- calendar registry pre-check: fail closed BEFORE arming anything -----
   try {

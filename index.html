@@ -8,6 +8,9 @@
 <link rel="icon" href="/assets/jurnii-icon-light.svg">
 <link rel="preconnect" href="https://unpkg.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<!-- No `crossorigin`: the tag container is fetched non-anonymously, so the attribute
+     would warm a second connection this page never uses. -->
+<link rel="preconnect" href="https://www.googletagmanager.com">
 <link rel="preload" href="/assets/fonts/Geist-VariableFont_wght.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/global.css">
 <link rel="stylesheet" href="/assets/fonts-mono.css" media="print" onload="this.media='all'">
@@ -20,8 +23,58 @@
 <!-- The shared booking widget's styles. Every selector is .jurnii-* scoped, so this
      is safe to load globally, and it must be loaded explicitly: nothing @imports it. -->
 <link rel="stylesheet" href="/booking/assets/booking-form.css">
+<!--
+  Google Tag Manager.
+
+  Placed at the END of <head>, not the top. Google asks for "as high as possible", but
+  this page's whole CWV posture is CSS-first — every third-party script already sits at
+  the end of <body>. Bottom-of-head keeps stylesheet discovery untouched while still
+  initialising the container before any body script runs, which is also the correct slot
+  for a Consent Mode default block if one is added later.
+
+  No GA4 tag may fire on All Pages. This is one index.html serving 165 routes, and page
+  identity is not resolved until the content engine's routing effect runs — long after
+  this executes. Every page instead pushes `page_context_ready` exactly once, and the
+  pageview fires on that. See src/analytics/page-context.ts and the fallback below.
+-->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PGVJ4K9T');</script>
+<!--
+  The vendor adapter, loaded synchronously here so it is listening before anything can
+  emit. It is the only file that names dataLayer; the booking widget and the CTA
+  handler both dispatch plain CustomEvents and know nothing about tag vendors.
+-->
+<script src="/assets/analytics-bridge.js"></script>
+<!--
+  Failsafe pageview. ContentEngineApp is what normally pushes page_context_ready, but it
+  cannot run until unpkg React and Babel Standalone have downloaded and compiled — and
+  the mount loop below tolerates that never happening. Without this, a CDN outage would
+  register as zero traffic rather than as degraded traffic.
+-->
+<script>
+(function () {
+  window.dataLayer = window.dataLayer || [];
+  setTimeout(function () {
+    for (var i = 0; i < window.dataLayer.length; i++) {
+      if (window.dataLayer[i] && window.dataLayer[i].event === 'page_context_ready') return;
+    }
+    window.dataLayer.push({
+      event: 'page_context_ready',
+      page_type: 'unknown',
+      page_title: document.title,
+      page_location: window.location.origin + window.location.pathname,
+      canonical_path: window.location.pathname
+    });
+  }, 4000);
+})();
+</script>
 </head>
 <body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PGVJ4K9T"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div id="root"></div>
 <script src="https://unpkg.com/lucide@1.25.0/dist/umd/lucide.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>

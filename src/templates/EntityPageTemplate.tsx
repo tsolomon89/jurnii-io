@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { EntityPageModel } from '../content-engine/types';
 import { Prose } from '../components/Prose';
+import { ctaAttrs } from '../analytics/cta';
 
 // Page Sections (formerly Legacy Blocks)
 import { OutcomeStrip } from '../components/page-sections/OutcomeStrip';
@@ -76,11 +77,15 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
             <p className="page-hero-lede">{data.description}</p>
             <div className="hero-cta-row">
               {data.primaryCta ? (
-                <a href={data.primaryCta.href} className="btn primary lg">
+                <a
+                  href={data.primaryCta.href}
+                  className="btn primary lg"
+                  {...ctaAttrs(data.primaryCta.href, 'entity-hero-primary')}
+                >
                   {data.primaryCta.label} <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" />
                 </a>
               ) : (
-                <a href="/contact-us" className="btn primary lg">
+                <a href="/contact-us" className="btn primary lg" data-cta-action="demo" data-cta-id="entity-hero-primary">
                   Book a demo <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" />
                 </a>
               )}
@@ -114,7 +119,7 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
             <h1 className="h1-page">{data.title}</h1>
             <p className="page-hero-lede">{data.description}</p>
             <div className="hero-cta-row" style={{ marginTop: 8 }}>
-              <a href="/contact-us" className="btn primary lg">
+              <a href="/contact-us" className="btn primary lg" data-cta-action="demo" data-cta-id="entity-hero-usecase">
                 Book a demo <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" />
               </a>
               <a href={`/${data.section}`} className="btn ghost lg">
@@ -134,7 +139,7 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
             <h1 className="h1-page">{data.title}</h1>
             <p className="page-hero-lede">{data.description}</p>
             <div className="hero-cta-row">
-              <a href="/contact-us" className="btn primary lg">
+              <a href="/contact-us" className="btn primary lg" data-cta-action="demo" data-cta-id="entity-hero-static">
                 Book a demo <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" />
               </a>
               <a href="#overview" className="btn ghost lg">

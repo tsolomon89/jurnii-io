@@ -91,7 +91,7 @@ const PriceBoostTable = () => {
       </div>
 
       <div className="pbt-fade">
-        <a className="pbt-more" href="/contact-us">
+        <a className="pbt-more" href="/contact-us" data-cta-action="demo" data-cta-id="price-boost-teaser">
           <span className="pbt-more-count">840+</span> more promotions tracked today
         </a>
       </div>

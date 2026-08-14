@@ -164,7 +164,7 @@ test('an internal journey sends its own Lead Source, on both modules', () => {
 
 test('every offered Lead Source is an ACTIVE live picklist value', () => {
   // The five options whose display differs from their stored value are the trap: showing
-  // "Event" but submitting "Event" would be INVALID_DATA — the value is `Trade Show`.
+  // "Trade Show / Event" but submitting the label would be INVALID_DATA — the value is `Trade Show`.
   const sources = require('../config/lead-sources').LEAD_SOURCES;
   const live = PICKLISTS.valuesFor('Leads', 'Lead_Source');
   assert.ok(sources.length > 0);
@@ -172,7 +172,7 @@ test('every offered Lead Source is an ACTIVE live picklist value', () => {
     assert.ok(live.includes(s.value), `${s.value} is not an active Lead_Source option`);
   }
   const byValue = Object.fromEntries(sources.map((s) => [s.value, s.label]));
-  assert.strictEqual(byValue['Trade Show'], 'Event');
+  assert.strictEqual(byValue['Trade Show'], 'Trade Show / Event');
   assert.strictEqual(byValue.Advertisement, 'Import');
   assert.strictEqual(byValue.Twitter, 'X (Twitter)');
   // And the values Zoho keeps in its unused bin must never be offered.

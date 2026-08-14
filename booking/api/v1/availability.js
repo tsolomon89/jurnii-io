@@ -5,6 +5,10 @@ const S = require('../../config/slots');
 const G = require('../../integrations/google');
 const db = require('../../db');
 const R = require('../../db/queries/reservations');
+const J = require('../../db/queries/journeys');
+const HC = require('../../config/host-calendars');
+const { journeyContext } = require('../../lib/auth');
+const { resolveJourneyHost } = require('../../lib/booking-host');
 
 /**
  * GET /api/v1/availability
@@ -19,15 +23,58 @@ const R = require('../../db/queries/reservations');
  * double booking that only surfaces at `events.insert`. The old handler returned
  * `500` with `error.message` attached, which both leaked internals and left the
  * calendar silently empty.
+ *
+ * WHICH CALENDAR (multi-host)
+ *
+ * The Authorization header is OPTIONAL and carries three distinct meanings:
+ *
+ *   absent          -> the configured public host. Preserves the anonymous public
+ *                      contract; the site's own form now sends its token, but an
+ *                      unauthenticated caller still gets Fraser's calendar.
+ *   valid token     -> the journey's host, via the SAME resolver `POST /bookings` uses.
+ *                      A confirmed booking resolves to its PERSISTED calendar, so the
+ *                      manage page's reschedule scheduler cannot drift onto whatever the
+ *                      public default happens to be today.
+ *   present but bad -> 401, and no Google call at all.
+ *
+ * That last case is the one worth stating plainly: an expired token must NOT quietly
+ * downgrade to public-host availability. The visitor would be shown one calendar's free
+ * slots and then book against another — precisely the divergence the shared resolver
+ * exists to prevent. Once a request claims journey context, that context resolves or the
+ * request fails.
+ *
+ * The response carries `{slots}` and nothing else. No calendar id, no host key: the
+ * browser never needs to know which calendar answered, and the server is authoritative
+ * about which one will receive the event.
  */
 module.exports = async function handler(req, res) {
   if (req.method !== 'GET') return methodNotAllowed(res, ['GET']);
 
-  const calendarId = process.env.GOOGLE_CALENDAR_ID;
-  const calendarKey = process.env.BOOKING_CALENDAR_KEY;
-  if (!calendarId || !calendarKey) {
-    return fail(res, 503, 'calendar_misconfigured', 'Booking is temporarily unavailable.');
+  const ctx = journeyContext(req);
+  if (ctx.kind === 'invalid') return fail(res, ctx.status, ctx.code, 'Unauthorized');
+
+  let host = null;
+  if (ctx.kind === 'journey') {
+    let journey;
+    try {
+      journey = await db.withTransaction((tx) => J.get(tx, ctx.claims.journeyId));
+    } catch (err) {
+      log({ evt: 'availability.store_unavailable', code: err.code || 'unknown' });
+      return fail(res, 503, 'availability_unavailable', 'We could not load availability. Please try again.');
+    }
+    if (!journey) return fail(res, 404, 'journey_not_found', 'Booking not found.');
+    host = resolveJourneyHost(journey);
+    if (!host) {
+      log({ evt: 'availability.calendar_misconfigured', journeyId: journey.journey_id });
+    }
+  } else {
+    host = HC.publicHost();
+    if (!host) log({ evt: 'availability.public_host_misconfigured' });
   }
+  if (!host) return fail(res, 503, 'calendar_misconfigured', 'Booking is temporarily unavailable.');
+
+  const calendarId = host.googleCalendarId;
+  const calendarKey = host.hostCalendarKey;
 
   const now = new Date();
   const noticeFloor = new Date(now.getTime() + S.minNoticeMs());

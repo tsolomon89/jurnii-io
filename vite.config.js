@@ -69,6 +69,10 @@ function copyRuntimeAssets() {
     closeBundle() {
       const files = [
         'headline-split.js',
+        // The vendor adapter. manage.html and admin-form.html load it by <script src>
+        // at this stable path, so it must survive as an unhashed file — without it the
+        // booking widget's CustomEvents are dispatched to nobody.
+        'analytics-bridge.js',
         'fonts-mono.css',
         'global.css',
         'site.css',

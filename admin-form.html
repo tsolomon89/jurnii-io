@@ -15,20 +15,30 @@
   What that means for what may live here:
     · it exposes NO CRM records and reads NO CRM data;
     · it holds NO credentials or server secrets — the Lead Source options come from a
-      generated static file whose values were captured from Zoho at build time;
+      generated static file whose values were captured from Zoho at build time, and the
+      Booking host options come from /api/v1/booking-hosts, which returns opaque host
+      keys and labels only. A Google Calendar id never reaches this page;
     · the additional fields it submits go through the ordinary booking backend, which
-      validates them against the same authoritative Zoho configuration.
+      validates them against the same authoritative configuration;
+    · it loads the Google Tag Manager container, so third-party tag code runs here with
+      full page access. Nothing above changes — there are still no credentials and no CRM
+      data on the page — but the container is a surface an operator must keep in mind
+      when deciding what may be added to this form.
 
   Stronger access control can be added later without rebuilding the form: the server
-  honours a submitted `leadSource` only for a journey whose stored `form_placement` is
-  `internal-booking`, and that check in booking/api/v1/submissions/[id].js is where an
-  authentication gate would attach.
+  honours a submitted `leadSource` or `bookingHost` only for a journey whose stored
+  `form_placement` is `internal-booking`, and that check in
+  booking/api/v1/submissions/[id].js is where an authentication gate would attach.
+  Note the two are gated alike but required differently — an internal booking MUST name a
+  host (400 booking_host_required), because inheriting the public one would create a real
+  booking on a calendar no operator chose.
 -->
 <meta name="robots" content="noindex, nofollow">
 <meta name="googlebot" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
 <link rel="icon" href="/assets/jurnii-icon-light.svg">
 <link rel="preconnect" href="https://unpkg.com" crossorigin>
+<link rel="preconnect" href="https://www.googletagmanager.com">
 <link rel="preload" href="/assets/fonts/Geist-VariableFont_wght.woff2" as="font" type="font/woff2" crossorigin>
 <!--
   A plain page outside the SPA, exactly like manage.html. Vercel resolves the filesystem
@@ -55,8 +65,31 @@
     margin: 0 0 24px;
   }
 </style>
+<!--
+  This page is outside the SPA, so its identity is fully known here and the pageview can
+  fire immediately. Pushed BEFORE the container so the very first event carries it.
+-->
+<script>
+window.dataLayer = window.dataLayer || [];
+window.dataLayer.push({
+  event: 'page_context_ready',
+  page_type: 'admin-form',
+  page_title: document.title,
+  page_location: window.location.origin + window.location.pathname,
+  canonical_path: window.location.pathname,
+  surface: 'www'
+});
+</script>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PGVJ4K9T');</script>
 </head>
 <body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PGVJ4K9T"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <main class="admin-shell">
   <div class="admin-brand">
     <a href="/" aria-label="Jurnii home"><img src="/assets/jurnii-light-full.svg" alt="Jurnii"></a>
@@ -73,6 +106,8 @@
        data-cta-id="admin-form"></div>
 </main>
 <script src="https://unpkg.com/lucide@1.25.0/dist/umd/lucide.min.js"></script>
+<!-- Before the widget: the widget dispatches its first events during mount. -->
+<script src="/assets/analytics-bridge.js"></script>
 <script src="/booking/assets/booking-form.js"></script>
 </body>
 </html>

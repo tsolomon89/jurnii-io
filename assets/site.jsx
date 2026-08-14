@@ -510,7 +510,7 @@ const Nav = ({ active = '' }) => {
             <i data-lucide={themeIcon} style={{ width: 16, height: 16 }} />
           </button>
           <a href="https://app.jurnii.io" className="btn ghost sm desktop-only">Log in</a>
-          <a href="/contact-us" className="btn primary sm">Book a demo</a>
+          <a href="/contact-us" className="btn primary sm" data-cta-action="demo" data-cta-id="nav-primary">Book a demo</a>
           <button className="icon-btn nav-mobile-toggle" onClick={() => setMobileOpen(true)} aria-label="Open menu">
             <i data-lucide="menu" style={{ width: 18, height: 18 }} />
           </button>
@@ -543,7 +543,7 @@ const Nav = ({ active = '' }) => {
           <button className="btn ghost theme-toggle" onClick={cycleTheme}>
             <i data-lucide={themeIcon} style={{ width: 14, height: 14 }} /> Theme: {theme}
           </button>
-          <a href="/contact-us" className="btn accent">Book a demo</a>
+          <a href="/contact-us" className="btn accent" data-cta-action="demo" data-cta-id="nav-mobile">Book a demo</a>
         </div>
       </div>
     </header>);
@@ -558,7 +558,7 @@ const DemoCTA = ({ heading, sub }) =>
       <h2>{heading || 'See what your competitors are doing — before they do it to you.'}</h2>
       <p>{sub || 'A 45-minute demo, with sample intelligence for your real competitor set. No boilerplate deck, no sales pressure.'}</p>
       <div className="actions">
-        <a className="btn accent lg" href="/contact-us">Book a demo <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" /></a>
+        <a className="btn accent lg" href="/contact-us" data-cta-action="demo" data-cta-id="demo-band">Book a demo <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" /></a>
         <a className="btn ghost-on-dark lg" href="/library">Read the research</a>
       </div>
       <div className="demo-cta-sub">
@@ -639,7 +639,7 @@ window.Footer = Footer;
 
 // ---------- Sticky mobile CTA ----------
 const StickyDemoCTA = () =>
-<a href="/contact-us" className="sticky-demo-cta">
+<a href="/contact-us" className="sticky-demo-cta" data-cta-action="demo" data-cta-id="sticky-mobile">
     <div className="label">
       Book a demo
       <span>45 min · Zoom or in-person</span>
@@ -862,6 +862,9 @@ window.PageChrome = PageChrome;
 // ---------- Demo Modal ----------
 (function () {
   let modalEl = null;
+  // Which CTA is being opened, and which one the mounted widget was told about.
+  let pendingCtaId = null;
+  let mountedCtaId = null;
   // The element that opened the modal, so focus can go back where it came from.
   let lastTrigger = null;
 
@@ -910,14 +913,7 @@ window.PageChrome = PageChrome;
     document.body.appendChild(el);
     el.querySelector('.demo-modal-backdrop').addEventListener('click', closeModal);
     ensureBooking(function () {
-      // `onClose` tells the module a host owns the modal; `showCloseButton` tells it to
-      // paint the ONE close control, anchored inside the booking card itself.
-      window.JurniiBooking.render(el.querySelector('#demo-modal-mount'), {
-        onClose: closeModal,
-        showCloseButton: true,
-        formPlacement: 'site-demo-modal',
-        ctaId: 'book-a-demo'
-      });
+      mountBooking(el);
       if (el.classList.contains('open')) focusIntoModal();
     }, function () {
       const mount = el.querySelector('#demo-modal-mount');
@@ -946,11 +942,43 @@ window.PageChrome = PageChrome;
     return Boolean(modalEl && modalEl.classList.contains('open'));
   }
 
-  function openModal() {
+  /**
+   * Mount the widget, telling it which CTA produced this open.
+   *
+   * `ctaId` reaches the backend and is stored on the journey as `cta_id`, alongside
+   * `form_placement`. Emitting the same value to the tag layer is what lets a GA4 report
+   * and a CRM query be joined on the button a visitor actually pressed — previously
+   * every CTA on the site submitted the constant `book-a-demo`, so neither side could
+   * tell the nav button from the pricing table.
+   */
+  function mountBooking(el) {
+    // `onClose` tells the module a host owns the modal; `showCloseButton` tells it to
+    // paint the ONE close control, anchored inside the booking card itself.
+    window.JurniiBooking.render(el.querySelector('#demo-modal-mount'), {
+      onClose: closeModal,
+      showCloseButton: true,
+      formPlacement: 'site-demo-modal',
+      ctaId: pendingCtaId || 'book-a-demo'
+    });
+    mountedCtaId = pendingCtaId || 'book-a-demo';
+  }
+
+  function openModal(ctaId) {
     // Remembered BEFORE the modal takes focus, so closing returns the visitor to the
     // CTA they pressed rather than dumping them at the top of the document.
     lastTrigger = document.activeElement;
-    if (!modalEl) modalEl = buildModal();
+    pendingCtaId = ctaId || pendingCtaId || 'book-a-demo';
+
+    if (!modalEl) {
+      modalEl = buildModal();
+    } else if (pendingCtaId !== mountedCtaId && window.JurniiBooking) {
+      // Opened from a different button than last time. Re-mount so the attribution is
+      // the CTA they just pressed rather than the one from a previous open. `render`
+      // destroys the prior instance for this container, and the widget's own progress
+      // snapshot repopulates the fields, so a part-filled form is not lost.
+      mountBooking(modalEl);
+    }
+
     modalEl.classList.add('open');
     document.body.style.overflow = 'hidden';
     focusIntoModal();
@@ -978,13 +1006,71 @@ window.PageChrome = PageChrome;
 
   window.openDemoModal = openModal;
 
+  /**
+   * Does this link mean "open the booking form"?
+   *
+   * The original test compared the label against one exact sentence, case-sensitively,
+   * and required href === '/contact-us'. Roughly three dozen CTAs failed it — `Book a Demo` with a capital D
+   * from content frontmatter, `Book a scoping call`, `Get a custom quote` — and every
+   * one of them navigated to /contact-us, which is fifteen lines of markdown with no
+   * booking form on it. They were dead ends.
+   *
+   * The attribute is now the real signal. The label test is kept as a safety net so a
+   * CTA that has not been stamped yet degrades to "opens the modal with a vague id"
+   * rather than to "silently goes nowhere". `Contact` links deliberately fail both:
+   * /contact-us does offer email addresses, so that is a real destination.
+   */
+  function demoIntent(link) {
+    if (link.getAttribute('data-cta-action') === 'demo') return true;
+    if (link.getAttribute('href') !== '/contact-us') return false;
+    return (/^(book|get|request|schedule|talk)\b/i).test(link.textContent.trim());
+  }
+
+  function ctaLocation(link) {
+    if (link.closest('.sticky-demo-cta') || link.classList.contains('sticky-demo-cta')) return 'sticky';
+    if (link.closest('footer')) return 'footer';
+    if (link.closest('nav')) return 'nav';
+    if (link.closest('.demo-cta')) return 'demo-band';
+    return 'body';
+  }
+
+  function ctaIdFor(link) {
+    const explicit = link.getAttribute('data-cta-id');
+    if (explicit) return explicit;
+    // Make the gap legible in reporting rather than silently bucketing everything
+    // together, which is the failure this whole change exists to fix.
+    const slug = link.textContent.trim().toLowerCase().
+    replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
+    return 'unstamped-' + (slug || 'cta');
+  }
+
+  /** Vendor-neutral, exactly like the booking widget. assets/analytics-bridge.js listens. */
+  function emitCta(link, intercepted) {
+    try {
+      window.dispatchEvent(new CustomEvent('jurnii:cta', { detail: {
+        event: 'cta_click',
+        cta_id: ctaIdFor(link),
+        cta_label: link.textContent.trim().slice(0, 100),
+        cta_location: ctaLocation(link),
+        cta_href: link.getAttribute('href') || '',
+        intercepted: !!intercepted
+      } }));
+    } catch (_) {/* analytics must never break a click */}
+  }
+
   document.addEventListener('click', function (e) {
     const link = e.target.closest('a');
     if (!link) return;
-    const txt = link.textContent.trim();
-    if (txt.startsWith('Book a demo') && link.getAttribute('href') === '/contact-us') {
+
+    if (demoIntent(link)) {
       e.preventDefault();
-      openModal();
+      emitCta(link, true);
+      openModal(ctaIdFor(link));
+      return;
     }
+
+    // A /contact-us link that is NOT a booking CTA still ends a visitor's journey on a
+    // page with no form. Reported rather than ignored, so the leak stays measurable.
+    if (link.getAttribute('href') === '/contact-us') emitCta(link, false);
   });
 })();

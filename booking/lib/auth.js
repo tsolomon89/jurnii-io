@@ -96,6 +96,37 @@ function requireFlowOrManage(req, { journeyId, minStep = 2 } = {}) {
   return { ok: true, claims: c };
 }
 
+/**
+ * OPTIONAL journey context, for `GET /availability` — the one endpoint that serves both
+ * anonymous public callers and journey-bound ones.
+ *
+ * Returns one of THREE outcomes, and the distinction is the whole point:
+ *
+ *   {kind:'anonymous'}          no Authorization header at all
+ *   {kind:'journey', claims}    a valid flow or manage token
+ *   {kind:'invalid', status,code} a header that is present but bad, expired or the
+ *                                 wrong purpose
+ *
+ * `requireFlowOrManage` collapses the first and third into one `401`, which would make
+ * anonymous availability impossible; a plain boolean would collapse them the other way,
+ * which is worse — a caller whose token just expired would be silently served the PUBLIC
+ * host's availability and then be unable to book it. Once a request claims journey
+ * context, that context must resolve or the request must fail. Absence is a different
+ * statement from invalidity.
+ */
+function journeyContext(req, { minStep = 2 } = {}) {
+  if (!bearer(req)) return { kind: 'anonymous' };
+  const v = verifyToken(req);
+  if (!v.ok) return { kind: 'invalid', status: v.status, code: v.code };
+  const c = v.claims;
+  if (c.purpose === 'flow') {
+    if (!c.step || c.step < minStep) return { kind: 'invalid', status: 409, code: 'not_ready' };
+  } else if (c.purpose !== 'manage') {
+    return { kind: 'invalid', status: 403, code: 'forbidden' };
+  }
+  return { kind: 'journey', claims: c };
+}
+
 function signFlowToken({ journeyId, email, step }) {
   return jwt.sign({ purpose: 'flow', journeyId, email, step }, jwtSecret(), { expiresIn: FLOW_TOKEN_TTL });
 }
@@ -164,6 +195,7 @@ module.exports = {
   requireFlow,
   requireManage,
   requireFlowOrManage,
+  journeyContext,
   signFlowToken,
   signManageToken,
   manageUrlFor,

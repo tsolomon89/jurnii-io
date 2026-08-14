@@ -42,7 +42,7 @@ const CHECK = process.argv.includes('--check');
  *   Leads/Contacts.Lead_Source — the internal form offers these and the server validates
  *                                against them. `display_value` differs from
  *                                `actual_value` for five of them (Advertisement shows as
- *                                "Import", Trade Show as "Event", Twitter as
+ *                                "Import", Trade Show as "Trade Show / Event", Twitter as
  *                                "X (Twitter)"), so BOTH are captured: we show the
  *                                display and submit the actual.
  *   Leads.Product_Interest     — pins the four canonical products.
@@ -229,7 +229,7 @@ function renderLeadSources(picklists) {
     .map((v) => `    { value: ${JSON.stringify(v.value)}, label: ${JSON.stringify(v.label)} }`)
     .join(',\n');
 
-  return `${HEADER('The ACTIVE Leads.Lead_Source options offered by the internal booking form.\n *\n * `label` is Zoho\'s display_value and `value` is its actual_value; five options differ\n * (Advertisement shows as "Import", Trade Show as "Event", Twitter as "X (Twitter)").\n * The form shows the label and submits the value — a label must never reach the CRM.')}
+  return `${HEADER('The ACTIVE Leads.Lead_Source options offered by the internal booking form.\n *\n * `label` is Zoho\'s display_value and `value` is its actual_value; five options differ\n * (Advertisement shows as "Import", Trade Show as "Trade Show / Event", Twitter as "X (Twitter)").\n * The form shows the label and submits the value — a label must never reach the CRM.')}
 (function (root, factory) {
   var api = factory();
   if (typeof module === 'object' && module.exports) module.exports = api;

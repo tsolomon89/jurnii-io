@@ -14,8 +14,12 @@ const { log } = require('../lib/http');
  *
  * Every call uses the PERSISTED `google_calendar_id` and `google_event_candidate_id` /
  * `google_event_id` from the journey row, never environment configuration, so changing
- * `GOOGLE_CALENDAR_ID` mid-flight cannot orphan a booking or point recovery at the
- * wrong calendar.
+ * the configured host calendars mid-flight cannot orphan a booking or point recovery at
+ * the wrong calendar.
+ *
+ * With three host calendars this stopped being merely tidy and became load-bearing: the
+ * calendar now genuinely varies per journey, and re-resolving it here would send recovery
+ * to whichever host the public default happens to name today.
  */
 
 function watchHours() { return Number(process.env.GOOGLE_WATCH_MAX_HOURS || 24); }

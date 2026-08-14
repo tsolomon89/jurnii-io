@@ -641,8 +641,8 @@ Grouped by family for readability. All 58 are unused by Deluge, unreferenced els
 | Account Suppression Reason | `Account_Suppression_Reason` | picklist |  |
 | Automation Suppressed | `Automation_Suppressed` | boolean | Never `true` on any Account. Note `Deals.Automation_Suppressed` **is** read by automation — only the Accounts copy is idle. |
 | Company Size Band | `Company_Size_Band` | picklist |  |
-| Contract Renewal URL | `Contract_Renewal_URL` | website |  |
-| Contract URL | `Contract_URL` | website |  |
+| Contract Renewal URL | `Contract_Renewal_URL` | website | ❌ **DO NOT DELETE** — live email merge field `${!Contacts.Account_Name.Contract_Renewal_URL}`, used by the renewal templates (24 uses). See §11. |
+| Contract URL | `Contract_URL` | website | ❌ **DO NOT DELETE** — live email merge field `${!Contacts.Account_Name.Contract_URL}` (27 uses). Verified live in template *Commercial Agreement - Proposal and Terms*, last used 2026-07-20. See §11. |
 | Industry Validation | `Industry_Validation` | picklist |  |
 | Lost Reasons | `Lost_Reasons` | picklist | Account-level loss reason. `rollupAccountState` writes `Accounts.State` but never a reason. Deals has its own `Lost_Reasons`, which *is* used. |
 
@@ -942,3 +942,226 @@ came back byte-identical, so no picklist drift rode along. Post-refresh: `--chec
 Remaining items are unchanged from §10.3 and all sit outside the Meetings/Tasks/Calls scope:
 the ten write-only mirrors (keep), `Call_Purpose` still in the Unused Fields bin, the native
 layout-hygiene list, and the unactioned Accounts / Deals / Quotes / Products candidates in §7.2.
+
+---
+
+## 11. Phantom remediation — 2026-08-11
+
+Code changes made against the §5 phantom set. **Not yet published to Zoho** — the repo must not be
+committed ahead of the org (all 17 deployed functions currently match it).
+
+| # | Change | File | Result |
+| --- | --- | --- | --- |
+| 1 | `Primary_Contact` → `Deal_Primary_Contact`, **rewritten to single-lookup semantics** | `processDeal.deluge` | The old code read and wrote a **List** — `Deal_Primary_Contact` is a single `lookup` (`jsonobject`). A straight rename would have written a List to a scalar field. Now matches the read pattern in `createManualReview` / `handleMeetingEvent` / `applyQuoteLifecycle` |
+| 2 | `Role_AOR` → `Contact_AOR` (read + write); variable renamed `leadRoleAOR` → `leadContactAOR` | `processLead.deluge` | Field exists on both Leads and Contacts |
+| 3 | Removed the six-field Deal stage-completion block **and** the `dealPcDates` computation that fed only it | `processDeal.deluge` | −85 lines. `finalOppStage`, `finalRank`, `stagesList`, `primaryContactIdsList` all became dead with it and were removed |
+| 4 | Removed both `Product_Interest_Staging` reads | `_util_collectProductEvidence.deluge`, `processDeal.deluge` | Always null; `Products_Linked` feeds the same accumulators immediately below each site |
+| 5 | Removed the `Contact_Source_Class` write | `processLead.deluge` | The source class is recorded on the Account (`Account_Source_Class`), written from the same `importedRecordType` |
+| 6 | Removed the `Profile_Completion_Status` write **and its `updateRecord` call** | `handleEmailEvent.deluge` | Was a whole no-op API round-trip. The Data Repair task on the same branch is the actionable signal |
+
+Net: **50 insertions, 104 deletions** across four functions.
+
+### 11.1 Verification run
+
+- **Phantom re-scan, all 39 `.deluge` files:** only `Call_Purpose_Detail` remains (blocked, §11.2).
+  `Accounts` (convertLead API key) and `Onboarding` / `Renewal` (local Map keys) are known
+  non-field false positives.
+- **Brace/paren balance vs `HEAD`**, string literals stripped: unchanged on all four files
+  (`processDeal`, `handleEmailEvent`, `collectProductEvidence` balanced at `(0,0)`; `processLead`
+  carries a pre-existing `(0,1)` paren artefact present in `HEAD` too).
+- **No dangling references** to any removed variable — `dealPcDates` survives only inside an
+  explanatory comment; `stagesList` / `cUpd` elsewhere are unrelated variables in other functions.
+- **booking suite 414/414**, snapshot `--check` clean.
+
+### 11.2 Blocked — `Call_Purpose_Detail`
+
+Repointing it to `Call_Purpose` is **not** a rename. Beyond the field being in the Unused Fields
+bin (§9.4), the vocabulary does not match: the code writes `Data Completion`, `Book Demo`,
+`Confirm Attendance`, `Post-Demo Follow-Up`, `Commercial Discussion`, `Onboarding`, `Renewal`, but
+live `Call_Purpose` accepts only `-None-`, `Prospecting`, `Administrative`, `Negotiation`, `Demo`,
+`Project`, `Support`. Writing an out-of-set picklist value is discarded the same way an unknown
+api_name is. Options: add the seven values **and** restore the field to the Calls layout, or drop
+the write (the Call `Subject` already encodes stage + attempt, and the `Description` states the
+contract). Left unchanged pending that decision.
+
+### 11.3 Email-template screen (§7.2 correction)
+
+Every merge field used across all 42 templates, extracted from the drafts and spot-checked live:
+
+```
+${!org.company_name}                          102    ${!users.website}                        47
+${!Contacts.Account_Name.Account_Name}         94    ${!Contacts.Account_Name.Contract_URL}   27
+${!Contacts.First_Name}                        86    ${!…Contract_Renewal_URL}                24
+${!users.first_name}                           83    ${!userSignature}                        83
+```
+
+Only **two** are custom CRM fields, and both were on the §7.2 Accounts shortlist:
+`Accounts.Contract_URL` and `Accounts.Contract_Renewal_URL` — now marked do-not-delete. Confirmed
+against the live template *Commercial Agreement - Proposal and Terms* (id `991103000001475003`,
+last used 2026-07-20), whose body contains `${!Contacts.Account_Name.Contract_URL}`.
+
+**No other §7.2 candidate is referenced by any template.** The rest of the shortlist is unaffected.
+Both fields are empty in live data, which is why they read as dead — populating them is a separate
+gap, since the proposal and renewal emails currently merge an empty link.
+
+---
+
+## 12. Canonical-model revision — 2026-08-11 (supersedes parts of §11)
+
+A canonical-model review over §11 found that fixing phantom *names* was necessary but not
+sufficient: several **live** fields are duplicated, wrongly owned, or already represented elsewhere.
+The governing plan is `whats-the-plan-for-expressive-sprout.md`. **Nothing is published.**
+
+### 12.1 §11 corrections
+
+| §11 row | Correction |
+| --- | --- |
+| 1 — `Primary_Contact` → `Deal_Primary_Contact` | **Reversed.** The write is now removed entirely, not repointed. `Contact_Name` is the canonical controlling Deal Contact (12+ readers). `Deal_Primary_Contact` is read in exactly 3 places, each falling straight back to `Contact_Name`, and — because its only write was the phantom — has never held a value on any Deal. Repointing would have persisted duplicate state. It is scheduled for retirement. |
+| 2 — `Role_AOR` → `Contact_AOR` | **Held.** The repoint is correct as a name, but `Contact_AOR` has no code reader and no template reference anywhere; conversion is its only writer. Kept for now (the field owner retains it) with the open question recorded in-code. |
+| 3 — Deal `*_Completed_At` block | **Extended.** Also removed the orphans it left: `contactStageMap`, `contactDatesMap` and the per-Contact `cDates` build — eight `Contact_Completed_*_At` reads per Contact per reconcile, feeding nothing. `everRTPviaContact` retained. |
+| 4, 5, 6 | Unchanged and correct. |
+
+### 12.2 New defects fixed
+
+- **D1 (high — sent a wrong email).** `routeContactSequence:1058` wrote `{"Status":"Cancelled"}` to a
+  Task. `Cancelled` is not a live `Tasks.Status` option, so the write was discarded and the line set
+  no `Task_Status` — the stop-gate at `sendScheduledEmailFromTask:32` never tripped and a
+  **superseded Scheduled Send still fired its email on Due_Date**. Now writes
+  `Deferred` + `Task_Status=Closed`, matching the already-corrected sibling at
+  `handleTaskCompletion:506`. Idempotent via the existing guard.
+- **D4.** `processAccount:151` wrote an invalid `Reason_For_Loss__s` value on duplicate silencing.
+  Removed rather than substituted: an auto-silenced duplicate is a data artefact, not a commercial
+  loss, and recording it as one would corrupt loss reporting and feed `processDeal`'s
+  `hasLossReason` viability guard a non-commercial signal.
+- **F2.** `Call_Purpose_Detail` write and its `purposeMap` deleted. Deliberately **not** repointed to
+  `Call_Purpose`: Stage, Pipeline and Status already encode call purpose, the Call Subject carries
+  `<Stage> Call <n>`, and `Call_Purpose` is both bin-resident and vocabulary-incompatible.
+
+### 12.3 The model inversion (not yet fixed — Wave 3)
+
+`Call_Task_Stage` has **3 writes, 0 reads**. `Task_Stage` has **5 writes, 0 reads**. All behaviour
+reads `Calls.Sequence_Stage` and `Tasks.Task_Sequence_Stage`. The canonical fields are write-only
+mirrors while the duplicates drive the logic. `Events.Meeting_Task_Stage` (2 reads, 1 write, no
+duplicate) is already correct and is the model to copy.
+
+The canonical stage family stores legacy values behind renamed display labels
+(`Demo Booked`→"Demo Confirmation", `Commercials Sent`→"Proposal Preparation",
+`Renewall`→"Renewal") and round-trips in display space, so both fields already accept the same eight
+strings — **consolidation needs no value translation**.
+
+`Tasks.Blocks_Sequence`: **9 writes, 0 reads.** Blocking is fully derived at
+`routeContactSequence:363/1397` from `Task_Sequence_Managed` + `Task_Type` + `Status` +
+`Task_Status`. The behaviour is required; the persisted field is not.
+
+`Contacts.Sequence_Stage` is **not** a stage — it is the next-Activity-type cursor
+(`Call`/`Email`/`Meeting`/`Task`). **D2** remains open: the code clears it by writing the literal
+`"None"`, which is not a live option, so the cursor never clears. `Sequence_Step` *does* have a
+`None` option, which is why the same idiom works there and masked the bug. The correct clearing form
+needs a live write/read-back to establish.
+
+### 12.4 Verification
+
+- **Phantom api_names in v6: 0.**
+- **Picklist validator** (module-attributed): only D2 remains; every other literal write matches
+  live options.
+- **Brace/paren balance** unchanged vs `HEAD` on all six edited files.
+- **Zero dangling references** to any removed identifier.
+- **booking suite: 456 pass / 3 fail — the 3 are pre-existing** failures in unrelated in-progress
+  frontend work (`admin-form.html`, `manage.html`, build output), not caused by these changes.
+
+### 12.5 Unrelated live change found
+
+Zoho's display label for the `Trade Show` Lead Source was renamed **"Event" → "Trade Show / Event"**.
+This drifts `zoho-fields.json` and `config/lead-sources.js`. Regenerating them is correct against
+live but breaks two tests and three doc comments that hard-code `"Event"`
+(`zoho-payload.test.js:167`, `booking.test.js:262`, `db/handlers.test.js:1229`,
+`zoho-field-snapshot.js:45,232`). The regeneration was **reverted** to keep this change set clean —
+decide whether the rename was intended (update the tests) or accidental (revert it in Zoho).
+
+---
+
+## 13. State reconciliation and corrections — 2026-08-11
+
+The Zoho **MCP servers are disconnected**. All live evidence below was gathered read-only through
+the repository's own Zoho REST client (`booking/integrations/zoho`, `requestZoho`), the same path
+`zoho-field-snapshot.js` uses. Two settings endpoints are outside that client's scopes
+(`/settings/functions`, `/settings/automation/*` → 400/404), so the deployed-function and
+workflow-rule comparison rests on the MCP enumeration taken earlier today (17 functions, all
+matching `v6/` by name).
+
+### 13.1 Delta table
+
+| Approved change | Repository state | Live Zoho state | Correction applied |
+| --- | --- | --- | --- |
+| Delete 5 dead activity fields | n/a | **Deleted** (Calls 45→42, Events 51→49) | none — complete |
+| Phantom removals (`Contact_Source_Class`, `Profile_Completion_Status`, `Product_Interest_Staging`) | code refs removed | **All three ABSENT live** on every module — no field migration needed | Stale comments in 5 files corrected so none is described as required |
+| `Primary_Contact` → `Deal_Primary_Contact` | write removed, not repointed | `Deal_Primary_Contact` custom lookup, **empty** | none — correct |
+| Duplicate-Deal loss reason | write had been **removed** | `Reason_For_Loss__s` is **native** (`custom_field=false`), empty; `Lost_Reasons` is custom, **populated**, and already defines `Duplicate / Test Record` | **Repointed to `Lost_Reasons`** — the value exists there by design. Removal was wrong |
+| `Call_Purpose_Detail` removal | removed with `purposeMap` | `Call_Purpose`/`Call_Agenda` remain binned | none — correct |
+| D1 superseded Scheduled Send | `Deferred` + `Task_Status=Closed` | — | none — correct |
+| Task stage migration (~153 Tasks) | not started | **Not needed**: 132 Tasks have both fields, **0 disagree**, **0** have `Task_Sequence_Stage` set with `Task_Stage` blank | Migration cancelled — copy is a no-op |
+| `Quoted_Items` treated as suspect | — | **Native subform** (`data_type=subform`, `json_type=jsonarray`, `custom_field=false`) returning real Product lookups | **Retained**; removed from all deletion consideration |
+| Lead Source `Trade Show` | tests asserted label `"Event"` | actual_value `Trade Show`, **display_value `Trade Show / Event`** | 2 assertions + 4 doc comments updated; snapshot regenerated |
+| `Next_Comm_Follow_Up_Date` / WF010d | dormant | **empty** live, no writer | disposition below |
+| `Commercials_Status`, `Commercial_Outcome` | zero functional refs (comments only) | both **empty** live | disposition below |
+
+### 13.2 `Quoted_Items` — confirmed native, retained
+
+`data_type=subform`, `json_type=jsonarray`, `custom_field=false`. A live Quote
+(`991103000002921009`, Grand_Total 5981.75) returns one structured line carrying a real Product
+lookup (`Jurnii UX`, `Product_Code: JUX`, id `991103000002158001`) plus `Quantity`, `List_Price`,
+`Net_Total`, `Total`, `Discount`, `Tax`, `Line_Tax`, and the custom subform fields
+`Quoted_Item_Pricing_Tier`, `Quoted_Item_Plan_Brands`, `Quoted_Item_Frequency`. Totals reconcile
+(`Sub_Total == Grand_Total == Net_Total`).
+
+**Why it appears in the unused-field bin:** the bin for Quotes is exactly
+`Sub_Total, Discount, Tax, Adjustment, Grand_Total, Quoted_Items` — the entire native
+inventory/computed block. These are rendered by the inventory section rather than as ordinary
+layout fields, so `type=unused` lists them. It is a metadata artefact, not a bin placement, and
+must not be read as "deletable".
+
+### 13.3 Loss reasons — resolved
+
+`Reason_For_Loss__s` is **Zoho-native** standard loss reporting (10 stock values, empty in this org).
+`Lost_Reasons` is the **custom v6 scoped command** (13 values) and is the populated one. Its option
+list contains reconciliation outcomes — `Invalid / Bad Data`, `Duplicate / Test Record` — that the
+native field deliberately lacks. They are therefore **not competing commands**: the native field is
+reporting-only and unused, the custom field is the automation authority. `processAccount` now writes
+`Lost_Reasons = "Duplicate / Test Record"`. Nothing is written to the native field, nothing is
+mapped lossily, and both fields keep their existing values.
+
+### 13.4 Live population (read-only probe)
+
+Empty: `Next_Comm_Follow_Up_Date`, `Commercials_Status`, `Commercial_Outcome`,
+`Reason_For_Loss__s`, `Contract_URL`, `Contract_Renewal_URL`, `Account_Source_Class`; Calls module
+has **0 records**. Populated: `Lost_Reasons`, `Contacts.Contact_AOR`, `Tasks.Task_Stage`,
+`Blocks_Sequence` (216 `Yes` / 3 `No`), `Task_Pipeline`/`Task_Opportunity` (182 of 219 Tasks, mixed
+`MQL`/`SQL`/`FTP`/`RTP` — consistent with point-in-time capture rather than a live mirror).
+
+### 13.5 Corrected `Sequence_Stage` map (module-qualified)
+
+The earlier map conflated two modules. Correctly:
+
+| Module | Reads | Writes |
+| --- | --- | --- |
+| **Calls** (may migrate to `Call_Task_Stage`) | `handleCallOutcome:76` (`call`), `:236` (`ec`), `routeContactSequence:1508` (`ec`) | `handleCallOutcome:187` (`rescheduledCall`), `:262` (`rescheduledUpdate`), `routeContactSequence:1538` (`callMap`) |
+| **Contacts — DO NOT TOUCH** (next-Activity cursor) | `handleCallOutcome:86` (`contact`), `routeContactSequence:228` (`contact`) | `handleTaskCompletion:542` (`cRe`), `:800` (`cUpd`), `routeContactSequence:1190` (`cUpd`) |
+
+### 13.6 Verification
+
+Phantom api_names **0**; picklist validator clean except D2; brace/paren balance unchanged vs `HEAD`
+on all six edited functions; snapshot `--check` clean; **booking suite 478/478 green**.
+
+### 13.7 Unresolved
+
+- **D2** — `Contacts.Sequence_Stage` is still cleared by writing the literal `"None"`, which is not a
+  live option. Left untouched per the instruction not to alter the Contact cursor; the correct
+  clearing form still needs a controlled write/read-back.
+- **Contract URL population** — both fields are empty with no writer. Retained (live templates
+  reference them); the population process is still missing, so proposal and renewal emails currently
+  merge an empty link.
+- **Deployed-function / workflow-rule parity** — cannot be re-verified while the MCP is down.
+- **Field retirements** (`Sequence_Stage`, `Task_Sequence_Stage`, `Blocks_Sequence`,
+  `Deal_Primary_Contact`, `Next_Comm_Follow_Up_Date`, `Commercials_Status`, `Commercial_Outcome`,
+  `Account_Source_Class`) — none performed. Each needs the report/view/layout dependency check that
+  no available API exposes.

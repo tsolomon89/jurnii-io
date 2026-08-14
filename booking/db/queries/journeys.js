@@ -163,7 +163,10 @@ const PAGE2_COLUMNS = new Set([
   'company', 'job_title_raw',
   'country_iso2', 'country_name',
   'phone_dial_code', 'phone_national_number', 'phone_e164',
-  'product_interests', 'lead_source',
+  // `selected_host_key` is intake context — which host the journey ASKED for. The Google
+  // truth columns `host_calendar_key`/`google_calendar_id` stay out of this set, so page 2
+  // still cannot move a booking between calendars; only R2 writes those.
+  'product_interests', 'lead_source', 'selected_host_key',
 ]);
 
 /** R1 — Page-2 commit: journey fields + `zoho_status='pending'` + identity resolve. */

@@ -1,4 +1,5 @@
 import React from 'react';
+import { ctaAttrs } from '../../analytics/cta';
 
 export const CTABand = ({ heading, sub, primary, secondary }: any) => {
   return (
@@ -11,12 +12,20 @@ export const CTABand = ({ heading, sub, primary, secondary }: any) => {
           </div>
           <div className="hero-cta-row">
             {primary && (
-              <a href={primary.href} className="btn primary lg">
+              <a
+                href={primary.href}
+                className="btn primary lg"
+                {...ctaAttrs(primary.href, 'cta-band-primary')}
+              >
                 {primary.label}
               </a>
             )}
             {secondary && (
-              <a href={secondary.href} className="btn ghost lg">
+              <a
+                href={secondary.href}
+                className="btn ghost lg"
+                {...ctaAttrs(secondary.href, 'cta-band-secondary')}
+              >
                 {secondary.label}
               </a>
             )}

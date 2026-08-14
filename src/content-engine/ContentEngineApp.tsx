@@ -19,25 +19,13 @@ import { GeneralPageTemplate } from '../templates/GeneralPageTemplate';
 import { SharedSubdomainLayout } from '../templates/SharedSubdomainLayout';
 
 import { processHeadings } from './utils/rich-page-data';
-import { resolveSurface } from '../routing/surface-utils';
+import { resolveSurface, SURFACES } from '../routing/surface-utils';
+import { resolveAliasPath } from '../routing/alias.js';
+import { pushPageContext, pushEvent } from '../analytics/page-context.js';
 
 interface ContentEngineAppProps {
   initialPath?: string;
 }
-
-const ALIAS_MAP: Record<string, string> = {
-  '360': 'products/jurnii-360',
-  'jurnii-360': 'products/jurnii-360',
-  'ux': 'products/jurnii-ux',
-  'jurnii-ux': 'products/jurnii-ux',
-  'mmm': 'products/jurnii-mmm',
-  'jurnii-mmm': 'products/jurnii-mmm',
-  'contact': 'contact-us',
-  'book': 'contact-us',
-  'resources': 'library',
-  'resources.html': 'library',
-  'resource': 'library',
-};
 
 
 const PageChromeWrapper: React.FC<{ active?: string; children: React.ReactNode }> = ({ active = 'home', children }) => {
@@ -64,6 +52,14 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
     if (category) url.searchParams.set('cat', category);
     else url.searchParams.delete('cat');
     window.history.pushState({ cat: category ?? null }, '', url);
+
+    // A filter is not a navigation. GA4's "page changes based on browser history
+    // events" must stay OFF for this property, or every pill click would be counted as
+    // a second view of the library index. This event is what replaces it.
+    pushEvent('filter_apply', {
+      filter_scope: 'library',
+      filter_value: category ?? '(all)',
+    });
   }, []);
 
   useEffect(() => {
@@ -90,18 +86,41 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
       }
     }
     
-    const cleanPath = rawPath.replace(/^\//, '').replace(/\/$/, '').replace(/\.html$/, '');
-    const lastSeg = cleanPath.split('/').pop() || '';
-    const resolvedPath = ALIAS_MAP[cleanPath] || ALIAS_MAP[lastSeg] || cleanPath;
+    const resolvedPath = resolveAliasPath(rawPath);
     const parts = resolvedPath.split('/').filter(Boolean);
     const hostSurface = resolveSurface(typeof window !== 'undefined' ? window.location.hostname : '');
     const isLibrarySubdomain = hostSurface.role === 'library';
+
+    /**
+     * Announce the page to the tag layer, and give the document its own title.
+     *
+     * This is the only place the site knows what page it is on, so it is the only place
+     * that can answer the question. It runs at each exit of this effect rather than in
+     * the render pass, because the pageview must fire once identity is settled — not on
+     * every re-render.
+     */
+    const search = typeof window !== 'undefined' ? window.location.search : '';
+    const announce = (ctx: Record<string, unknown>) =>
+      pushPageContext({
+        pathname: rawPath,
+        search,
+        surface: hostSurface.role,
+        default_title: hostSurface.defaultTitle,
+        description: hostSurface.defaultDescription,
+        ...ctx,
+      });
 
     // 1. Root / homepage
     if (parts.length === 0) {
       if (isLibrarySubdomain) {
         const libraryItems = getAllContent('library');
         setRenderState({ type: 'library-index', data: { items: libraryItems } });
+        announce({
+          page_type: 'library-index',
+          page_title: hostSurface.defaultTitle,
+          description: hostSurface.defaultDescription,
+          content_group: 'resources',
+        });
       } else {
         const item = getByPath(['www', 'pages', 'about']);
         if (item) {
@@ -114,6 +133,15 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
             bodyHtml: item.bodyHtml || '',
           };
           setRenderState({ type: 'page', data: genModel });
+          announce({
+            page_type: 'page',
+            page_title: item.meta.title,
+            description: item.meta.description,
+            content_slug: item.slug,
+            content_category: item.meta.category,
+            content_group: 'home',
+            template: 'GeneralPageTemplate',
+          });
         }
       }
       setLoading(false);
@@ -124,6 +152,17 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
     if (parts.length === 1 && parts[0] === 'library') {
       const libraryItems = getAllContent('library');
       setRenderState({ type: 'library-index', data: { items: libraryItems } });
+      announce({
+        page_type: 'library-index',
+        // Not hostSurface.defaultTitle here: on the www host that is the HOMEPAGE title,
+        // which would leave /library reporting as the front page.
+        page_title: SURFACES.library.defaultTitle,
+        description: SURFACES.library.defaultDescription,
+        content_group: 'resources',
+        // The filter is reported as a dimension rather than left on page_location, so
+        // the index stays one row instead of one row per category.
+        content_filter: new URLSearchParams(search).get('cat') || undefined,
+      });
       setLoading(false);
       return;
     }
@@ -143,6 +182,14 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
             items,
             sectionPath: item.slug,
           },
+        });
+        announce({
+          page_type: 'directory',
+          page_title: item.meta.title || item.slug.toUpperCase(),
+          description: item.meta.description,
+          content_section: item.slug,
+          content_group: item.slug,
+          template: 'EntityDirectoryTemplate',
         });
       } else {
         const p = item.path.replace(/\\/g, '/');
@@ -171,6 +218,18 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
             type: pres.format === 'paper' ? 'paper' : 'article',
             data: { model: edModel, libraryItems },
           });
+          announce({
+            page_type: pres.format === 'paper' ? 'paper' : 'article',
+            page_title: item.meta.title,
+            description: item.meta.description || item.meta.excerpt,
+            content_section: 'library',
+            content_slug: item.slug,
+            content_category: item.meta.category,
+            content_medium: item.meta.medium,
+            content_author: item.meta.author,
+            content_group: 'resources',
+            template: pres.templateClass,
+          });
         } else if (p.includes('/content/www/pages/')) {
           const genModel: GeneralPageModel = {
             slug: item.slug,
@@ -181,11 +240,30 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
             bodyHtml: item.bodyHtml || '',
           };
           setRenderState({ type: 'page', data: genModel });
+          announce({
+            page_type: 'page',
+            page_title: item.meta.title,
+            description: item.meta.description,
+            content_slug: item.slug,
+            content_category: item.meta.category,
+            content_group: 'home',
+            template: 'GeneralPageTemplate',
+          });
         } else {
           // Entity page (product, feature, solution, use-case)
           const matchedSection = (item.section || [...parts].reverse().find((seg) => ['products', 'features', 'solutions', 'use-cases'].includes(seg)) || 'features') as EntityType;
           const richData: EntityPageModel = resolveRichPageData(item, matchedSection);
           setRenderState({ type: 'entity', data: richData });
+          announce({
+            page_type: 'entity',
+            page_title: item.meta.title,
+            description: item.meta.description,
+            content_section: matchedSection,
+            content_slug: item.slug,
+            content_category: item.meta.category,
+            content_group: matchedSection,
+            template: 'EntityPageTemplate',
+          });
         }
       }
       setLoading(false);
@@ -193,6 +271,8 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
     }
 
     setRenderState({ type: 'not-found' });
+    // A 404 must still register, or the alias fallback's dead ends are invisible.
+    announce({ page_type: 'not-found', page_title: 'Page not found' });
     setLoading(false);
   }, [initialPath]);
 

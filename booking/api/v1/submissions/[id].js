@@ -8,6 +8,7 @@ const V = require('../../../lib/validate');
 const db = require('../../../db');
 const J = require('../../../db/queries/journeys');
 const { canonicalProductList, canonicalLeadSource } = require('../../_utils/products');
+const HC = require('../../../config/host-calendars');
 
 /**
  * Page 2 — PATCH /api/v1/submissions/{journeyId}
@@ -69,6 +70,20 @@ module.exports = async function handler(req, res) {
   }
 
   /**
+   * ONE read, serving both internal-only gates below.
+   *
+   * It is now unconditional because the booking host must be decided on EVERY page-2
+   * commit, public or internal, and only the stored `form_placement` says which this is.
+   * That replaces the previous read rather than adding one: Lead Source used to perform
+   * exactly this query, just conditionally.
+   */
+  // Matches what R1_page2Commit would have raised for a missing row, so an unknown
+  // journey answers identically whether it is caught here or there.
+  const journey = await db.withTransaction((tx) => J.get(tx, journeyId));
+  if (!journey) return fail(res, 409, 'wrong_step', 'This booking has already progressed.');
+  const isInternal = journey.form_placement === INTERNAL_PLACEMENT;
+
+  /**
    * Lead Source — INTERNAL BOOKINGS ONLY.
    *
    * The value is honoured only when the journey's STORED `form_placement` (written on
@@ -83,8 +98,7 @@ module.exports = async function handler(req, res) {
   let leadSource = null;
   const requestedLeadSource = body.leadSource || body.lead_source;
   if (requestedLeadSource) {
-    const journey = await db.withTransaction((tx) => J.get(tx, journeyId));
-    if (journey && journey.form_placement === INTERNAL_PLACEMENT) {
+    if (isInternal) {
       leadSource = canonicalLeadSource(requestedLeadSource);
       if (!leadSource) {
         return fail(res, 400, 'validation', 'Please choose a lead source from the list.',
@@ -92,6 +106,47 @@ module.exports = async function handler(req, res) {
       }
     } else {
       log({ evt: 'submissions.page2.lead_source_ignored', journeyId });
+    }
+  }
+
+  /**
+   * BOOKING HOST — the same trust model as Lead Source, but the two surfaces get
+   * deliberately DIFFERENT semantics:
+   *
+   *   public   the server CHOOSES the host (BOOKING_PUBLIC_HOST); a submitted
+   *            `bookingHost` is ignored and logged, so a hand-crafted public request
+   *            carrying `{"bookingHost":"timothy"}` changes nothing.
+   *   internal the operator MUST choose; there is no implicit default.
+   *
+   * An internal booking never inherits the public host. If the host selector failed to
+   * populate — a `/booking-hosts` fetch that 503'd, a stale cached form, a hand-rolled
+   * request — the correct outcome is a refusal, not a real booking on Fraser's calendar
+   * that no operator decided to make.
+   *
+   * `resolveHost` returns null for an unknown key AND for a configured-but-blank one, so
+   * Marlon is rejected here until his Calendar ID is supplied. It is never quietly
+   * downgraded to the default: silently booking the wrong person is worse than refusing.
+   */
+  let selectedHostKey;
+  const requestedHost = body.bookingHost || body.booking_host;
+  if (isInternal) {
+    if (!requestedHost) {
+      return fail(res, 400, 'validation', 'Please choose a booking host.',
+        { reason: 'booking_host_required' });
+    }
+    const host = HC.resolveHost(requestedHost);
+    if (!host) {
+      log({ evt: 'submissions.page2.booking_host_unavailable', journeyId });
+      return fail(res, 400, 'validation', 'That booking host is not available. Please choose another.',
+        { reason: 'booking_host_invalid' });
+    }
+    selectedHostKey = host.hostKey;
+  } else {
+    if (requestedHost) log({ evt: 'submissions.page2.booking_host_ignored', journeyId });
+    selectedHostKey = HC.publicHostKey();
+    if (!selectedHostKey) {
+      log({ evt: 'submissions.page2.public_host_misconfigured', journeyId });
+      return fail(res, 503, 'calendar_misconfigured', 'Booking is temporarily unavailable.');
     }
   }
 
@@ -111,6 +166,12 @@ module.exports = async function handler(req, res) {
     // Only written when it survived the placement + picklist checks above, so a public
     // journey's NULL (meaning "use the configured default") is never overwritten.
     if (leadSource) fields.lead_source = leadSource;
+    /**
+     * Written on EVERY commit, unlike lead_source. The public default is server-ASSIGNED
+     * rather than inferred from NULL, so a later change of `BOOKING_PUBLIC_HOST` cannot
+     * retroactively move a journey that is already in flight between page 2 and booking.
+     */
+    fields.selected_host_key = selectedHostKey;
 
     const row = await db.withTransaction((tx) => J.R1_page2Commit(tx, journeyId, fields),
       { collectRunnable: runnable });

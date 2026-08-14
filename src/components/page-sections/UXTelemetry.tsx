@@ -431,7 +431,7 @@ const UXTelemetry = () => {
               <h4>Benchmark your platform against 300+ competitors</h4>
               <p>Get a comprehensive, automated audit mapping your direct user-experience friction and speed indices against market leaders.</p>
             </div>
-            <a href="/contact-us" className="btn accent lg">Explore the full intelligence suite <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" /></a>
+            <a href="/contact-us" className="btn accent lg" data-cta-action="demo" data-cta-id="ux-telemetry-band">Explore the full intelligence suite <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" /></a>
           </div>
         </div>
       </div>

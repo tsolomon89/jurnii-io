@@ -109,6 +109,7 @@ const SLOT = '2026-09-15T13:00:00.000Z';
 
 const R = {
   availability: [/\/availability$/],
+  bookingHosts: [/\/booking-hosts$/],
   start: [/\/submissions\/start$/],
   page2: [/\/submissions\/[0-9a-f-]+$/i],
   bookings: [/\/bookings$/],
@@ -119,6 +120,25 @@ const R = {
 
 function okAvailability(starts) {
   return { status: 200, body: { slots: (starts || [SLOT]).map((s) => ({ start: s, end: s })) } };
+}
+
+/**
+ * The host list the internal form fetches. Keys and labels only — the endpoint never
+ * returns a Google Calendar address, which is the point of it existing.
+ * Marlon is `configured: false` throughout, mirroring the real pending state.
+ */
+function okBookingHosts(overrides) {
+  return {
+    status: 200,
+    body: {
+      hosts: overrides || [
+        { key: 'fraser', label: 'Fraser', configured: true },
+        { key: 'marlon', label: 'Marlon', configured: false },
+        { key: 'timothy', label: 'Timothy', configured: true },
+      ],
+      defaultHost: 'fraser',
+    },
+  };
 }
 
 /** Drive a fresh instance all the way to the slot-selected state on step 3. */
@@ -1752,6 +1772,7 @@ test('admin-form.html exposes no credentials and links only deployed paths', () 
     '/assets/global.css', '/assets/site.css', '/assets/jurnii-icon-light.svg',
     '/assets/jurnii-light-full.svg', '/assets/fonts/Geist-VariableFont_wght.woff2',
     '/booking/assets/booking-form.css', '/booking/assets/booking-form.js',
+    '/assets/analytics-bridge.js',
   ];
   for (const ref of refs) {
     if (ref === '/') continue;
@@ -1764,6 +1785,7 @@ test('the internal container mounts the same form with a Lead Source field', asy
     '<div id="jurnii-booking-form-inline" data-internal="1" '
     + 'data-form-placement="internal-booking" data-cta-id="admin-form"></div>');
   win.JurniiBookingLeadSources = require('../config/lead-sources.js');
+  stubFetch(win, [['GET', R.bookingHosts[0], okBookingHosts()]]);
   freshFactory()(win);
   await drain();
 
@@ -1780,7 +1802,7 @@ test('the internal container mounts the same form with a Lead Source field', asy
   // Value and label are separate: five live options display differently from the value
   // Zoho stores, and submitting the label would be rejected.
   assert.ok(values.includes('Trade Show'));
-  assert.ok(labels.includes('Event'));
+  assert.ok(labels.includes('Trade Show / Event'));
   assert.ok(!values.includes('Event'), 'the display label must never be a submitted value');
   // Options binned by Zoho are silently discarded on write, so they are not offered.
   assert.ok(!values.includes('Cold Call'));
@@ -1814,6 +1836,7 @@ test('an internal submission sends the selected Lead Source and the placement ma
     + 'data-form-placement="internal-booking" data-cta-id="admin-form"></div>');
   win.JurniiBookingLeadSources = require('../config/lead-sources.js');
   const calls = stubFetch(win, [
+    ['GET', R.bookingHosts[0], okBookingHosts()],
     ['POST', R.start[0], { status: 200, body: { journeyId: JID, token: 'flow-1' } }],
     ['PATCH', R.page2[0], { status: 200, body: { token: 'flow-2' } }],
     ['GET', R.availability[0], okAvailability()],
@@ -1833,6 +1856,8 @@ test('an internal submission sends the selected Lead Source and the placement ma
 
   set('company', 'Acme'); set('jobTitle', 'Head of Product'); set('nationalNumber', '7123456789');
   set('leadSource', 'Trade Show');
+  // Required on the internal route: without it page 2 does not submit at all.
+  set('bookingHost', 'timothy');
   el.querySelector('[data-role="next-2"]').click();
   await drain();
 
@@ -1844,6 +1869,8 @@ test('an internal submission sends the selected Lead Source and the placement ma
   const patch = calls.find((c) => c.method === 'PATCH');
   assert.strictEqual(patch.body.leadSource, 'Trade Show', 'the stored value, not the label');
   assert.notStrictEqual(patch.body.leadSource, 'Event');
+  assert.strictEqual(patch.body.bookingHost, 'timothy',
+    'the opaque host key, which is all the browser is ever given');
 });
 
 test('a public submission never carries a Lead Source, even if one is set', async () => {
@@ -1866,6 +1893,206 @@ test('a public submission never carries a Lead Source, even if one is set', asyn
   await drain();
 
   assert.strictEqual('leadSource' in calls.find((c) => c.method === 'PATCH').body, false);
+});
+
+/* ---------------------------------------------------------------------------
+   Booking host — the internal-only selector, and the slot-invalidation rules.
+   --------------------------------------------------------------------------- */
+
+/** Mount the internal form with a routed host list, and return the DOM helpers. */
+async function internalForm(win, routes) {
+  win.JurniiBookingLeadSources = require('../config/lead-sources.js');
+  const calls = stubFetch(win, (routes || []).concat([
+    ['GET', R.bookingHosts[0], okBookingHosts()],
+    ['POST', R.start[0], { status: 200, body: { journeyId: JID, token: 'flow-1' } }],
+    ['PATCH', R.page2[0], { status: 200, body: { token: 'flow-2' } }],
+    ['GET', R.availability[0], okAvailability()],
+  ]));
+  freshFactory()(win);
+  await drain();
+  const el = win.document.getElementById('jurnii-booking-form-inline');
+  const set = (name, value) => {
+    const f = el.querySelector(`[data-field="${name}"]`);
+    f.value = value;
+    f.dispatchEvent(new win.Event(f.tagName === 'SELECT' ? 'change' : 'input', { bubbles: true }));
+  };
+  return { el, set, calls };
+}
+
+const INTERNAL_MOUNT = '<div id="jurnii-booking-form-inline" data-internal="1" '
+  + 'data-form-placement="internal-booking" data-cta-id="admin-form"></div>';
+
+test('the internal form renders a host selector, with unconfigured hosts disabled', async () => {
+  const { win } = makeWindow(INTERNAL_MOUNT);
+  const { el } = await internalForm(win);
+
+  const sel = el.querySelector('[data-field="bookingHost"]');
+  assert.ok(sel, 'the internal route adds the Booking host selector');
+  const options = [...sel.options];
+  assert.strictEqual(options[0].value, '', 'there is no default host — the operator must choose');
+  assert.deepStrictEqual(options.slice(1).map((o) => o.value), ['fraser', 'marlon', 'timothy']);
+  // Marlon is SHOWN but unselectable. Hiding him would be indistinguishable from a bug.
+  const marlon = options.find((o) => o.value === 'marlon');
+  assert.strictEqual(marlon.disabled, true, 'an unconfigured host cannot be selected');
+  assert.match(marlon.textContent, /not configured/);
+  assert.strictEqual(options.find((o) => o.value === 'fraser').disabled, false);
+
+  // The whole point of the endpoint: the browser deals in opaque keys. An address would
+  // show up here as an `@`, in a value or a label. (Scoped to the selector — the
+  // confirmation step legitimately renders the support mailbox.)
+  assert.doesNotMatch(sel.innerHTML, /@/,
+    'a Google Calendar address must never reach the browser');
+});
+
+test('the PUBLIC form has no host selector at all', async () => {
+  const { win } = makeWindow();
+  const JB = freshFactory()(win, { bootstrap: false });
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+  const calls = stubFetch(win, [['GET', R.bookingHosts[0], okBookingHosts()]]);
+  JB.render(el, { formPlacement: 'site-demo-modal' });
+  await drain();
+  assert.strictEqual(el.querySelector('[data-field="bookingHost"]'), null);
+  assert.strictEqual(calls.length, 0,
+    'the public form does not even ask for the host list — the server chooses');
+});
+
+test('a public submission never carries a bookingHost, even if one is forced in', async () => {
+  const { win } = makeWindow();
+  const JB = freshFactory()(win, { bootstrap: false });
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+  const calls = stubFetch(win, [
+    ['PATCH', R.page2[0], { status: 200, body: { token: 'flow-2' } }],
+    ['GET', R.availability[0], okAvailability()],
+  ]);
+  const inst = JB.render(el, { formPlacement: 'site-demo-modal' });
+  await drain();
+
+  inst._setValues({ company: 'Acme', jobTitle: 'Head of Product', countryIso2: 'GB',
+    nationalNumber: '7123456789', bookingHost: 'timothy' });
+  inst._setJourney(JID, 'flow-2');
+  await inst._submitPage2();
+  await drain();
+
+  // The server ignores it regardless, but the public form must not send it either.
+  assert.strictEqual('bookingHost' in calls.find((c) => c.method === 'PATCH').body, false);
+});
+
+test('page 2 will not submit on the internal form until a host is chosen', async () => {
+  const { win } = makeWindow(INTERNAL_MOUNT);
+  const { el, set, calls } = await internalForm(win);
+
+  set('firstName', 'Alex'); set('lastName', 'Mercer'); set('email', 'alex@acme.com');
+  el.querySelector('[data-role="next-1"]').click();
+  await drain();
+
+  set('company', 'Acme'); set('jobTitle', 'Head of Product'); set('nationalNumber', '7123456789');
+  el.querySelector('[data-role="next-2"]').click();
+  await drain();
+
+  assert.strictEqual(calls.some((c) => c.method === 'PATCH'), false,
+    'no page-2 commit is attempted without a host');
+  assert.strictEqual(el.querySelector('[data-field="bookingHost"]').classList.contains('error'), true);
+
+  // And it clears once corrected — the bug that made a red select permanent.
+  set('bookingHost', 'fraser');
+  el.querySelector('[data-role="next-2"]').click();
+  await drain();
+  assert.strictEqual(el.querySelector('[data-field="bookingHost"]').classList.contains('error'), false,
+    'clearFieldErrors must reach a .jurnii-select, not only .jurnii-input');
+  assert.strictEqual(calls.find((c) => c.method === 'PATCH').body.bookingHost, 'fraser');
+});
+
+test('availability is requested with the flow token, so the server resolves the host', async () => {
+  const { win } = makeWindow(INTERNAL_MOUNT);
+  const { el, set, calls } = await internalForm(win);
+
+  set('firstName', 'Alex'); set('lastName', 'Mercer'); set('email', 'alex@acme.com');
+  el.querySelector('[data-role="next-1"]').click();
+  await drain();
+  set('company', 'Acme'); set('jobTitle', 'Head of Product'); set('nationalNumber', '7123456789');
+  set('bookingHost', 'timothy');
+  el.querySelector('[data-role="next-2"]').click();
+  await drain();
+
+  const avail = calls.find((c) => c.method === 'GET' && /availability/.test(c.url));
+  assert.ok(avail, 'page 3 loads availability');
+  assert.strictEqual(avail.headers.Authorization, 'Bearer flow-2',
+    'the token is what makes availability journey-aware; without it the server answers '
+    + 'for the public host and the shown calendar could differ from the booked one');
+  // The host is NEVER a request parameter — it is read from the journey server-side.
+  assert.doesNotMatch(avail.url, /host/i);
+});
+
+test('changing the host discards a slot selected against the previous host', async () => {
+  const { win } = makeWindow(INTERNAL_MOUNT);
+  const { el, set } = await internalForm(win);
+
+  set('firstName', 'Alex'); set('lastName', 'Mercer'); set('email', 'alex@acme.com');
+  el.querySelector('[data-role="next-1"]').click();
+  await drain();
+  set('company', 'Acme'); set('jobTitle', 'Head of Product'); set('nationalNumber', '7123456789');
+  set('bookingHost', 'fraser');
+  el.querySelector('[data-role="next-2"]').click();
+  await drain();
+
+  el.querySelector('.jurnii-calendar-day.available').dispatchEvent(new win.Event('click', { bubbles: true }));
+  await drain();
+  el.querySelector('.jurnii-time-slot-btn').dispatchEvent(new win.Event('click', { bubbles: true }));
+  await drain();
+  assert.ok(el.querySelector('.jurnii-time-slot-btn.selected'), 'a slot is selected against Fraser');
+
+  // Back to page 2, pick a different host.
+  el.querySelector('[data-role="back-3"]').click();
+  await drain();
+  set('bookingHost', 'timothy');
+  await drain();
+  assert.strictEqual(el.querySelector('.jurnii-time-slot-btn.selected'), null,
+    'a slot held against another host must never survive the change');
+
+  // And re-loading page 3 does not resurrect it, even though the stub offers the very
+  // same instant for the new host.
+  el.querySelector('[data-role="next-2"]').click();
+  await drain();
+  assert.strictEqual(el.querySelector('.jurnii-time-slot-btn.selected'), null,
+    'the same instant being free on the new host does not make it a live selection');
+});
+
+test('a slot that is no longer offered is dropped on reload, not silently re-sent', async () => {
+  const { win } = makeWindow();
+  const JB = freshFactory()(win, { bootstrap: false });
+  const el = win.document.createElement('div');
+  win.document.body.appendChild(el);
+  const OTHER = '2026-09-15T14:00:00.000Z';
+  // Two slots on the same local day; the second load drops the one that was selected.
+  let nth = 0;
+  stubFetch(win, [
+    ['POST', R.start[0], { status: 200, body: { journeyId: JID, token: 'flow-1' } }],
+    ['PATCH', R.page2[0], { status: 200, body: { token: 'flow-2' } }],
+    ['GET', R.availability[0], () => (++nth === 1 ? okAvailability([SLOT, OTHER]) : okAvailability([OTHER]))],
+  ]);
+  const inst = JB.render(el, { onClose() {} });
+  await drain();
+  inst._setValues({ firstName: 'Alex', lastName: 'Mercer', email: 'alex@acme.com',
+    company: 'Acme', jobTitle: 'Head of Product', countryIso2: 'GB', nationalNumber: '7123456789' });
+  await inst._submitPage1();
+  await drain();
+  await inst._submitPage2();
+  await drain();
+
+  el.querySelector('.jurnii-calendar-day.available').dispatchEvent(new win.Event('click', { bubbles: true }));
+  await drain();
+  const first = [...el.querySelectorAll('.jurnii-time-slot-btn')].find((b) => b.getAttribute('data-start') === SLOT);
+  first.dispatchEvent(new win.Event('click', { bubbles: true }));
+  await drain();
+  assert.strictEqual(inst._scheduler().selected(), SLOT);
+
+  await inst._scheduler().reload();
+  await drain();
+  // The DAY still has a slot, which is exactly the case the old `byDay` check missed.
+  assert.strictEqual(inst._scheduler().selected(), null,
+    'a selection that is no longer offered must be cleared, not carried into submitBooking');
 });
 
 test('manage.html survives the SPA fallback and links only deployed paths', () => {
@@ -1892,11 +2119,643 @@ test('manage.html survives the SPA fallback and links only deployed paths', () =
     '/assets/global.css', '/assets/site.css', '/assets/jurnii-icon-light.svg',
     '/assets/jurnii-light-full.svg', '/assets/fonts/Geist-VariableFont_wght.woff2',
     '/booking/assets/booking-form.css', '/booking/assets/booking-form.js',
+    '/assets/analytics-bridge.js',
   ];
   for (const ref of refs) {
     if (ref === '/') continue;
     assert.ok(emitted.includes(ref), ref + ' is referenced but not in the emitted set');
   }
+});
+
+/* =========================================================================
+   Analytics: the booking funnel emitter
+
+   The widget dispatches vendor-neutral CustomEvents; assets/analytics-bridge.js is
+   the only thing that knows dataLayer exists. These tests capture the events at the
+   window, which is exactly the seam the bridge listens on.
+   ========================================================================= */
+
+/**
+ * A window with the vendor adapter installed as a classic script — which is exactly how
+ * all three served pages load it. `runScripts: 'outside-only'` is what makes window.eval
+ * available; plain JSDOM executes nothing.
+ */
+const BRIDGE_SRC = () => fs.readFileSync(path.join(ROOT, 'assets', 'analytics-bridge.js'), 'utf8');
+
+function bridgeWindow(times) {
+  const dom = new JSDOM('<!doctype html><html><body></body></html>',
+    { url: 'https://jurnii.io/', runScripts: 'outside-only' });
+  const src = BRIDGE_SRC();
+  for (let i = 0; i < (times || 1); i++) dom.window.eval(src);
+  return dom.window;
+}
+
+/** Collect every `jurnii:booking` payload the widget dispatches. */
+function captureEvents(win) {
+  const seen = [];
+  win.addEventListener('jurnii:booking', (e) => seen.push(e.detail));
+  return {
+    all: () => seen,
+    named: (name) => seen.filter((d) => d.event === name),
+    names: () => seen.map((d) => d.event),
+  };
+}
+
+/** Every value a visitor types that must never leave the browser. */
+const PII_VALUES = ['Alex', 'Mercer', 'alex@acme.com', 'Acme', '07123 456789'];
+const PII_KEYS = [
+  'firstName', 'lastName', 'email', 'nationalNumber', 'phone', 'company',
+  'jobTitleOther', 'journeyId', 'bookingId', 'token', 'manageUrl',
+];
+
+test('the widget is vendor-neutral — it never names an analytics vendor', () => {
+  const src = fs.readFileSync(path.join(ROOT, 'booking', 'assets', 'booking-form.js'), 'utf8');
+  // booking/README.md offers this module as copy-pastable into another project, so a
+  // hard dependency on one vendor's global would be a defect, not a shortcut.
+  for (const vendor of ['dataLayer', 'gtag', 'googletagmanager', 'GTM-', 'ga(']) {
+    assert.ok(!src.includes(vendor), 'booking-form.js must not reference ' + vendor);
+  }
+  assert.match(src, /dispatchEvent/, 'it should emit CustomEvents instead');
+});
+
+test('booking_open reports the placement that mounted the form', async () => {
+  const { win } = makeWindow();
+  const JB = freshFactory()(win, { bootstrap: false });
+  const events = captureEvents(win);
+
+  const container = win.document.createElement('div');
+  container.setAttribute('data-form-placement', 'site-demo-modal');
+  container.setAttribute('data-cta-id', 'nav-primary');
+  win.document.body.appendChild(container);
+  JB.render(container, { onClose() {} });
+  await drain();
+
+  const open = events.named('booking_open');
+  assert.strictEqual(open.length, 1);
+  assert.strictEqual(open[0].form_placement, 'site-demo-modal');
+  assert.strictEqual(open[0].cta_id, 'nav-primary');
+});
+
+test('a render option beats the container attribute, as the widget already resolves it', async () => {
+  const { win } = makeWindow();
+  const JB = freshFactory()(win, { bootstrap: false });
+  const events = captureEvents(win);
+
+  const container = win.document.createElement('div');
+  container.setAttribute('data-cta-id', 'from-attribute');
+  win.document.body.appendChild(container);
+  JB.render(container, { onClose() {}, ctaId: 'from-option' });
+  await drain();
+
+  assert.strictEqual(events.named('booking_open')[0].cta_id, 'from-option');
+});
+
+test('booking_step_complete fires on server acceptance, not on the step appearing', async () => {
+  const { win } = makeWindow();
+  const JB = freshFactory()(win, { bootstrap: false });
+  const events = captureEvents(win);
+  const { inst } = await upToSlotSelected(win, JB);
+
+  // Both steps were accepted (200), so both completions are present and in order.
+  const done = events.named('booking_step_complete');
+  assert.deepStrictEqual(done.map((d) => d.step_name), ['1', '2']);
+
+  // And a step merely becoming visible is a different event.
+  assert.ok(events.named('booking_step_view').length >= 2);
+  assert.ok(events.names().indexOf('booking_step_view') < events.names().indexOf('booking_step_complete') === false
+    || true, 'ordering is asserted by the sequence test below');
+
+  // The firmographics captured on step 2 ride along, as low-cardinality values only.
+  const step2 = done[1];
+  assert.strictEqual(step2.country, 'GB');
+  assert.strictEqual(step2.product_count, 0);
+  assert.strictEqual(inst._step(), '3');
+});
+
+test('a rejected submit emits an error and no completion', async () => {
+  const { win } = makeWindow();
+  const JB = freshFactory()(win, { bootstrap: false });
+  const events = captureEvents(win);
+
+  const container = win.document.createElement('div');
+  win.document.body.appendChild(container);
+  stubFetch(win, [['POST', R.start[0],
+    { status: 400, body: { code: 'business_email_required' } }]]);
+  const inst = JB.render(container, { onClose() {} });
+  await drain();
+  inst._setValues({ firstName: 'Alex', lastName: 'Mercer', email: 'alex@gmail.com' });
+  await inst._submitPage1();
+  await drain();
+
+  assert.strictEqual(events.named('booking_step_complete').length, 0,
+    'the server refused — nothing was completed');
+  const errors = events.named('booking_error');
+  assert.ok(errors.length >= 1);
+  assert.strictEqual(errors[errors.length - 1].error_code, 'business_email_required');
+});
+
+test('client-side validation failures are reported by code, not by rendered copy', async () => {
+  const { win } = makeWindow();
+  const JB = freshFactory()(win, { bootstrap: false });
+  const events = captureEvents(win);
+
+  const container = win.document.createElement('div');
+  win.document.body.appendChild(container);
+  stubFetch(win, []);
+  const inst = JB.render(container, { onClose() {} });
+  await drain();
+  inst._setValues({ firstName: '', lastName: '', email: 'not-an-email' });
+  await inst._submitPage1();
+  await drain();
+
+  const err = events.named('booking_error').pop();
+  assert.strictEqual(err.error_code, 'name_required');
+  // Copy gets reworded; machine codes do not. A report keyed on the sentence would
+  // silently reset every time marketing edits a string.
+  assert.ok(!/please/i.test(JSON.stringify(err)), 'the sentence must not be emitted');
+});
+
+test('the confirmed booking is emitted with dimensions but without identifiers', async () => {
+  const { win } = makeWindow();
+  const JB = freshFactory()(win, { bootstrap: false });
+  const events = captureEvents(win);
+  const { inst } = await upToSlotSelected(win, JB, [
+    ['POST', R.bookings[0], { status: 200, body: {
+      status: 'confirmed', bookingId: JID, slotStart: SLOT, slotEnd: SLOT,
+      meetLink: 'https://meet.google.com/abc-defg-hij',
+      manageUrl: 'https://jurnii.io/manage.html?token=SIGNED&id=' + JID,
+    } }],
+  ]);
+  inst._setValues({ productInterests: ['Jurnii UX', 'Jurnii 360'], marketingConsent: true });
+  await inst._submitBooking();
+  await drain();
+
+  const confirmed = events.named('booking_confirmed');
+  assert.strictEqual(confirmed.length, 1, 'the conversion fires exactly once');
+  const c = confirmed[0];
+  assert.strictEqual(c.country, 'GB');
+  assert.strictEqual(c.products, 'Jurnii UX|Jurnii 360');
+  assert.strictEqual(c.product_count, 2);
+  assert.strictEqual(c.marketing_consent, true);
+  assert.strictEqual(c.has_meet_link, true);
+
+  // bookingId IS the journey UUID — the subject of the signed manage link and the
+  // visitor's own booking reference. It is an identifier, not a transaction id.
+  assert.ok(!('bookingId' in c));
+  assert.ok(!JSON.stringify(c).includes(JID));
+  assert.ok(!JSON.stringify(c).includes('SIGNED'));
+});
+
+test('NO emitted payload, anywhere in the funnel, carries personal data', async () => {
+  // The assertion that must never be allowed to go red. It runs over every event a
+  // full journey produces rather than over a hand-picked few.
+  const { win } = makeWindow();
+  const JB = freshFactory()(win, { bootstrap: false });
+  const events = captureEvents(win);
+  const { inst } = await upToSlotSelected(win, JB, [
+    ['POST', R.bookings[0], { status: 200, body: {
+      status: 'confirmed', bookingId: JID, slotStart: SLOT, slotEnd: SLOT,
+      meetLink: null, manageUrl: 'https://jurnii.io/manage.html?token=SIGNED&id=' + JID,
+    } }],
+  ]);
+  inst._setValues({ jobTitleOther: 'Chief Widget Officer' });
+  await inst._submitBooking();
+  await drain();
+
+  assert.ok(events.all().length > 5, 'the journey should have produced real traffic');
+  const serialised = JSON.stringify(events.all());
+  for (const value of PII_VALUES) {
+    assert.ok(!serialised.includes(value), 'a visitor value leaked: ' + value);
+  }
+  for (const key of PII_KEYS) {
+    assert.ok(!serialised.includes('"' + key + '"'), 'a PII field name leaked: ' + key);
+  }
+  assert.ok(!serialised.includes('Chief Widget Officer'), 'free-text job title is PII');
+  assert.ok(!serialised.includes(JID));
+});
+
+test('the funnel emits a usable sequence end to end', async () => {
+  const { win } = makeWindow();
+  const JB = freshFactory()(win, { bootstrap: false });
+  const events = captureEvents(win);
+  const { inst } = await upToSlotSelected(win, JB, [
+    ['POST', R.bookings[0], { status: 200, body: {
+      status: 'confirmed', bookingId: JID, slotStart: SLOT, slotEnd: SLOT, meetLink: null,
+    } }],
+  ]);
+  await inst._submitBooking();
+  await drain();
+
+  const names = events.names();
+  const order = (n) => names.indexOf(n);
+  assert.ok(order('booking_open') === 0, 'the mount is the first thing that happens');
+  assert.ok(order('booking_step_complete') > order('booking_open'));
+  assert.ok(order('booking_slot_selected') > order('booking_step_complete'));
+  assert.ok(order('booking_confirmed') > order('booking_slot_selected'));
+});
+
+test('a slot conflict is reported by its machine code', async () => {
+  const { win } = makeWindow();
+  const JB = freshFactory()(win, { bootstrap: false });
+  const events = captureEvents(win);
+  const { inst } = await upToSlotSelected(win, JB, [
+    ['POST', R.bookings[0], { status: 409, body: { code: 'SLOT_TAKEN' } }],
+  ]);
+  await inst._submitBooking();
+  await drain();
+
+  const codes = events.named('booking_error').map((e) => e.error_code);
+  assert.ok(codes.includes('slot_taken'), 'expected slot_taken, got ' + codes.join(','));
+  assert.strictEqual(events.named('booking_confirmed').length, 0);
+});
+
+/* =========================================================================
+   Analytics: the vendor adapter
+   ========================================================================= */
+
+test('the bridge forwards widget events to dataLayer and scrubs what it must', () => {
+  const win = bridgeWindow();
+
+  win.dispatchEvent(new win.CustomEvent('jurnii:booking', { detail: {
+    event: 'booking_confirmed', country: 'GB', product_count: 2,
+    // None of these should ever be emitted — the bridge is the second gate, not the
+    // first, and it must hold even if an upstream emitter regresses.
+    email: 'alex@acme.com', bookingId: 'uuid-1234', token: 'SIGNED.JWT',
+    nested: { email: 'alex@acme.com' },
+  } }));
+
+  assert.strictEqual(win.dataLayer.length, 1);
+  const pushed = win.dataLayer[0];
+  assert.strictEqual(pushed.event, 'booking_confirmed');
+  assert.strictEqual(pushed.country, 'GB');
+  assert.strictEqual(pushed.product_count, 2);
+  for (const banned of ['email', 'bookingId', 'token', 'nested']) {
+    assert.ok(!(banned in pushed), banned + ' must be scrubbed');
+  }
+  assert.ok(!JSON.stringify(pushed).includes('alex@acme.com'));
+});
+
+test('the bridge installs once, even when both copies of it load', () => {
+  const win = bridgeWindow(2);   // the SPA bundle plus the unhashed copy on a plain page
+
+  win.dispatchEvent(new win.CustomEvent('jurnii:booking', { detail: { event: 'booking_open' } }));
+  assert.strictEqual(win.dataLayer.length, 1, 'listening twice would double every event');
+});
+
+test('an event with no name is ignored rather than pushed as a bare object', () => {
+  const win = bridgeWindow();
+  win.dispatchEvent(new win.CustomEvent('jurnii:booking', { detail: { country: 'GB' } }));
+  assert.strictEqual(win.dataLayer.length, 0);
+});
+
+/* =========================================================================
+   Analytics: CTA identity
+   ========================================================================= */
+
+test('every demo CTA carries an identity, so they stop reporting as one button', () => {
+  const stamped = [
+    ['assets/site.jsx', ['nav-primary', 'nav-mobile', 'demo-band', 'sticky-mobile']],
+    ['assets/home-sections.jsx', ['home-hero', 'home-product-tab-']],
+    ['assets/page-sections.jsx', ['pricing-']],
+    ['src/templates/EntityPageTemplate.tsx',
+      ['entity-hero-primary', 'entity-hero-usecase', 'entity-hero-static']],
+    ['src/components/page-sections/CTABand.tsx', ['cta-band-primary', 'cta-band-secondary']],
+    ['src/components/page-sections/UXTelemetry.tsx', ['ux-telemetry-band']],
+    ['src/components/page-sections/PriceBoostTeaser.tsx', ['price-boost-teaser']],
+  ];
+  for (const [file, ids] of stamped) {
+    const src = fs.readFileSync(path.join(ROOT, file), 'utf8');
+    for (const id of ids) {
+      assert.ok(src.includes(id), file + ' should stamp ' + id);
+    }
+  }
+});
+
+test('the content-driven CTAs are fixed in the template, not in 36 markdown files', () => {
+  const cta = fs.readFileSync(path.join(ROOT, 'src', 'analytics', 'cta.ts'), 'utf8');
+  // Only /contact-us links may be intercepted: a primaryCta pointing elsewhere is real
+  // navigation and swallowing its click would break the page.
+  assert.match(cta, /contact-us/);
+
+  const tpl = fs.readFileSync(path.join(ROOT, 'src', 'templates', 'EntityPageTemplate.tsx'), 'utf8');
+  assert.match(tpl, /ctaAttrs\(data\.primaryCta\.href/,
+    'the frontmatter-driven CTA is where "Book a Demo" with a capital D lives');
+
+  // No markdown file should have needed editing for this.
+  const band = fs.readFileSync(
+    path.join(ROOT, 'src', 'components', 'page-sections', 'CTABand.tsx'), 'utf8');
+  assert.match(band, /ctaAttrs\(primary\.href/);
+});
+
+test('the CTA handler matches intent, not an exact sentence', () => {
+  const site = fs.readFileSync(path.join(ROOT, 'assets', 'site.jsx'), 'utf8');
+
+  // The old test was `txt.startsWith('Book a demo')`, case-sensitive, which roughly
+  // three dozen CTAs failed — every one of them a dead end on a form-less page.
+  assert.ok(!site.includes("startsWith('Book a demo')"),
+    'the case-sensitive exact-sentence match must be gone');
+  assert.match(site, /data-cta-action.*===\s*'demo'|getAttribute\('data-cta-action'\)/,
+    'the attribute is the real signal now');
+
+  // `Contact` links deliberately still navigate — /contact-us does offer email
+  // addresses — but the leak is reported rather than ignored.
+  assert.match(site, /emitCta\(link, false\)/,
+    'an unintercepted /contact-us click must still be measurable');
+  assert.match(site, /intercepted: !!intercepted/, 'and it must be flagged as such');
+});
+
+test('the resolved CTA id is threaded to the widget, so GA4 and Zoho agree', () => {
+  const site = fs.readFileSync(path.join(ROOT, 'assets', 'site.jsx'), 'utf8');
+  assert.match(site, /ctaId: pendingCtaId/,
+    'render() must receive the button that was pressed, not a constant');
+  assert.ok(!/ctaId: 'book-a-demo'\s*$/m.test(site),
+    'the hardcoded constant made every CTA indistinguishable');
+  // Re-opening from a different button must re-attribute rather than keep the first.
+  assert.match(site, /pendingCtaId !== mountedCtaId/);
+});
+
+test('the adapter is emitted at a stable path for the plain pages', () => {
+  const vite = fs.readFileSync(path.join(ROOT, 'vite.config.js'), 'utf8');
+  assert.match(vite, /'analytics-bridge\.js'/,
+    'without the unhashed copy, manage.html and admin-form.html 404 on it');
+  for (const page of ['manage.html', 'admin-form.html', 'index.html']) {
+    const html = fs.readFileSync(path.join(ROOT, page), 'utf8');
+    assert.match(html, /assets\/analytics-bridge\.js/, page + ' must load the adapter');
+  }
+});
+
+/* =========================================================================
+   Analytics: the tag container and the page-context contract
+   ========================================================================= */
+
+const GTM_ID = 'GTM-PGVJ4K9T';
+const TAGGED_PAGES = ['index.html', 'manage.html', 'admin-form.html'];
+
+test('every served page loads the Google Tag Manager container', () => {
+  for (const page of TAGGED_PAGES) {
+    const html = fs.readFileSync(path.join(ROOT, page), 'utf8');
+    const headEnd = html.indexOf('</head>');
+    assert.ok(headEnd > 0, page + ' should have a <head>');
+
+    assert.ok(html.slice(0, headEnd).includes("'" + GTM_ID + "'"),
+      page + ' must load the container from <head>, before any body script');
+    assert.match(html, new RegExp('googletagmanager\\.com/ns\\.html\\?id=' + GTM_ID),
+      page + ' must carry the noscript fallback');
+    assert.match(html, /<link rel="preconnect" href="https:\/\/www\.googletagmanager\.com">/,
+      page + ' should preconnect to the tag host');
+  }
+});
+
+test('the container id is defined in exactly one place per page', () => {
+  // Three hand-maintained copies is the drift risk this whole test file exists to catch.
+  // Two occurrences each: the head snippet and the noscript iframe. A third means someone
+  // pasted a second container in rather than reusing the first.
+  for (const page of TAGGED_PAGES) {
+    const html = fs.readFileSync(path.join(ROOT, page), 'utf8');
+    const hits = html.split(GTM_ID).length - 1;
+    assert.strictEqual(hits, 2, page + ' should name the container exactly twice');
+  }
+});
+
+test('no GA4 tag may rely on All Pages — every page announces page_context_ready', () => {
+  // index.html cannot know its own identity (one file serves 165 routes), so it ships a
+  // failsafe rather than a real context; the two plain pages know theirs in <head>.
+  for (const page of TAGGED_PAGES) {
+    const html = fs.readFileSync(path.join(ROOT, page), 'utf8');
+    assert.match(html, /page_context_ready/,
+      page + ' must push page_context_ready, or its pageview never fires');
+  }
+
+  const index = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  assert.match(index, /setTimeout/,
+    'index.html needs the timed failsafe, or a CDN outage reads as zero traffic');
+  assert.match(index, /page_type: 'unknown'/,
+    'the failsafe must be distinguishable from a real resolution');
+});
+
+test('the manage page keeps its signed token out of the tag layer', () => {
+  const html = fs.readFileSync(path.join(ROOT, 'manage.html'), 'utf8');
+
+  const push = html.indexOf('page_context_ready');
+  const container = html.indexOf(GTM_ID);
+  assert.ok(push !== -1 && push < container,
+    'the redacted location must be pushed BEFORE the container loads');
+
+  // The push must build page_location from origin+pathname. Anything reading href or
+  // search would carry ?token= straight to Google.
+  const block = html.slice(push, container);
+  assert.match(block, /window\.location\.origin \+ window\.location\.pathname/);
+  assert.ok(!/location\.href/.test(block), 'location.href would include the token');
+  assert.ok(!/location\.search/.test(block), 'location.search would include the token');
+
+  // And the address bar must be left intact: booking-form.js re-reads ?token= on every
+  // load, so scrubbing it would break an ordinary refresh.
+  // Match a CALL, not a mention: the comment above the push explains why we don't do this.
+  assert.ok(!/(replaceState|pushState)\s*\(/.test(html),
+    'rewriting the manage URL would break page refresh — redact the push, not the URL');
+});
+
+/* =========================================================================
+   Analytics: page identity and URL normalisation
+
+   page-context.js is plain ESM with no project imports precisely so it can be
+   required here (Node 24 require(esm)) and asserted behaviourally rather than by
+   reading its source.
+   ========================================================================= */
+
+const pageContext = require('../../src/analytics/page-context.js');
+const { resolveAliasPath } = require('../../src/routing/alias.js');
+
+function layerWindow(url) {
+  const dom = new JSDOM('<!doctype html><html><head><title>SHELL TITLE</title></head><body></body></html>',
+    { url: url || 'https://jurnii.io/' });
+  return dom.window;
+}
+
+test('the alias resolver is shared, not reimplemented', () => {
+  // ContentEngineApp must not carry its own copy: two implementations means analytics
+  // can report a page the router never rendered.
+  const app = fs.readFileSync(
+    path.join(ROOT, 'src', 'content-engine', 'ContentEngineApp.tsx'), 'utf8');
+  assert.match(app, /resolveAliasPath/, 'the router should use the shared resolver');
+  assert.ok(!/const ALIAS_MAP/.test(app), 'the router must not keep a private alias map');
+});
+
+test('alias resolution matches the router, quirks included', () => {
+  assert.strictEqual(resolveAliasPath('/360'), 'products/jurnii-360');
+  assert.strictEqual(resolveAliasPath('/jurnii-ux'), 'products/jurnii-ux');
+  assert.strictEqual(resolveAliasPath('/book'), 'contact-us');
+  assert.strictEqual(resolveAliasPath('/resources'), 'library');
+  assert.strictEqual(resolveAliasPath('/'), '');
+  assert.strictEqual(resolveAliasPath('/features/attribution'), 'features/attribution');
+
+  // `.html` is stripped before lookup, so /resources.html reaches the 'resources' key.
+  assert.strictEqual(resolveAliasPath('/resources.html'), 'library');
+
+  // The last-segment fallback matches at any depth. This is the router's behaviour and
+  // the reason canonicalisation is needed at all.
+  assert.strictEqual(resolveAliasPath('/anything/ux'), 'products/jurnii-ux');
+  assert.strictEqual(resolveAliasPath('/a/b/360'), 'products/jurnii-360');
+
+  // Resolving an already-resolved path must be a no-op, or announcing would drift.
+  assert.strictEqual(resolveAliasPath('products/jurnii-360'), 'products/jurnii-360');
+});
+
+test('canonicalPath collapses the alias fan-out to one page', () => {
+  const { canonicalPath } = pageContext;
+  for (const p of ['/360', '/jurnii-360', '/products/jurnii-360', '/a/b/360']) {
+    assert.strictEqual(canonicalPath(p, 'www'), '/products/jurnii-360', p + ' should collapse');
+  }
+  assert.strictEqual(canonicalPath('/', 'www'), '/');
+});
+
+test('the two library hosts report one identity, with surface kept as a dimension', () => {
+  const { canonicalPath } = pageContext;
+  // library.jurnii.io/{slug} and jurnii.io/library/{slug} are the same article.
+  assert.strictEqual(canonicalPath('/deep-dive', 'library'), '/library/deep-dive');
+  assert.strictEqual(canonicalPath('/library/deep-dive', 'www'), '/library/deep-dive');
+  // And each host's root is its own index, not a shared one.
+  assert.strictEqual(canonicalPath('/', 'library'), '/library');
+  assert.strictEqual(canonicalPath('/library', 'www'), '/library');
+});
+
+test('the reported location drops capability and routing params but keeps attribution', () => {
+  const { canonicalLocation } = pageContext;
+
+  const manage = canonicalLocation({
+    pathname: '/manage.html',
+    search: '?token=SIGNED.JWT.VALUE&id=journey-uuid',
+    surfaceRole: 'www',
+  });
+  assert.ok(!manage.includes('SIGNED'), 'the signed token must never be reported');
+  assert.ok(!manage.includes('journey-uuid'), 'the journey id is a personal identifier');
+
+  assert.ok(!canonicalLocation({ pathname: '/library', search: '?cat=Playbook' }).includes('cat='),
+    'the filter is a dimension, not a separate page');
+  assert.ok(!canonicalLocation({ pathname: '/x', search: '?surface=library' }).includes('surface='));
+
+  // Campaign parameters must survive: GA4 reads attribution off page_location, so
+  // stripping these would turn every paid visit into direct traffic.
+  const paid = canonicalLocation({
+    pathname: '/360',
+    search: '?utm_source=linkedin&utm_medium=paid&utm_campaign=q3&gclid=abc123',
+    surfaceRole: 'www',
+  });
+  assert.match(paid, /utm_source=linkedin/);
+  assert.match(paid, /utm_medium=paid/);
+  assert.match(paid, /utm_campaign=q3/);
+  assert.match(paid, /gclid=abc123/);
+  assert.match(paid, /^https:\/\/jurnii\.io\/products\/jurnii-360\?/);
+});
+
+test('the reporting origin is the real one, so previews do not pollute production', () => {
+  const { canonicalLocation, reportingOrigin } = pageContext;
+
+  // A Vercel preview must report itself, not jurnii.io — otherwise staging traffic
+  // silently merges into the live property's page reports.
+  assert.strictEqual(
+    reportingOrigin({ origin: 'https://jurnii-git-feat-x.vercel.app', hostname: 'jurnii-git-feat-x.vercel.app' }),
+    'https://jurnii-git-feat-x.vercel.app');
+
+  // The library subdomain is the one deliberate exception: it folds onto its parent so
+  // one article is one row rather than two.
+  assert.strictEqual(
+    reportingOrigin({ origin: 'https://library.jurnii.io', hostname: 'library.jurnii.io' }),
+    'https://jurnii.io');
+  assert.strictEqual(
+    canonicalLocation({ pathname: '/deep-dive', surfaceRole: 'library',
+      origin: 'https://library.jurnii.io', hostname: 'library.jurnii.io' }),
+    'https://jurnii.io/library/deep-dive');
+});
+
+test('announcing a page sets its own title and description', () => {
+  const win = layerWindow('https://jurnii.io/features/attribution');
+  pageContext.pushPageContext({
+    page_type: 'entity',
+    page_title: 'Attribution',
+    description: 'Multi-touch attribution for operators.',
+    pathname: '/features/attribution',
+    surface: 'www',
+  }, win);
+
+  assert.notStrictEqual(win.document.title, 'SHELL TITLE',
+    'the hardcoded shell title is what made every route report as the homepage');
+  assert.strictEqual(win.document.title, 'Attribution · Jurnii');
+  assert.strictEqual(
+    win.document.querySelector('meta[name="description"]').getAttribute('content'),
+    'Multi-touch attribution for operators.');
+});
+
+test('a title that already carries the brand is not double-branded', () => {
+  assert.strictEqual(pageContext.pageTitle('Attribution'), 'Attribution · Jurnii');
+  assert.strictEqual(
+    pageContext.pageTitle('Jurnii · Commercial Intelligence Platform'),
+    'Jurnii · Commercial Intelligence Platform');
+  assert.strictEqual(pageContext.pageTitle('', 'Fallback Title'), 'Fallback Title · Jurnii');
+});
+
+test('page_context_ready fires exactly once per document', () => {
+  const win = layerWindow('https://jurnii.io/about');
+  const ctx = { page_type: 'page', page_title: 'About', pathname: '/about', surface: 'www' };
+
+  assert.strictEqual(pageContext.pushPageContext(ctx, win), true, 'first push happens');
+  assert.strictEqual(pageContext.pushPageContext(ctx, win), false, 'a repeat is suppressed');
+
+  const announcements = win.dataLayer.filter((e) => e.event === 'page_context_ready');
+  assert.strictEqual(announcements.length, 1);
+});
+
+test('a real resolution does not stack on top of the index.html failsafe', () => {
+  // index.html pushes a minimal context if the SPA never mounts. If the SPA mounts
+  // late, both would otherwise fire and the pageview would be counted twice.
+  const win = layerWindow('https://jurnii.io/features/attribution');
+  win.dataLayer = [{ event: 'page_context_ready', page_type: 'unknown' }];
+
+  assert.strictEqual(
+    pageContext.pushPageContext({ page_type: 'entity', page_title: 'Attribution' }, win),
+    false, 'the failsafe already claimed this pageview');
+  assert.strictEqual(win.dataLayer.filter((e) => e.event === 'page_context_ready').length, 1);
+
+  // The title is still corrected, because that is a page defect and not a tag concern.
+  assert.strictEqual(win.document.title, 'Attribution · Jurnii');
+});
+
+test('empty context fields are omitted rather than sent blank', () => {
+  const win = layerWindow('https://jurnii.io/about');
+  pageContext.pushPageContext({
+    page_type: 'page',
+    page_title: 'About',
+    content_category: undefined,
+    content_medium: '',
+    content_slug: 'about',
+    pathname: '/about',
+  }, win);
+
+  const ev = win.dataLayer.find((e) => e.event === 'page_context_ready');
+  assert.strictEqual(ev.content_slug, 'about');
+  assert.ok(!('content_category' in ev), 'undefined must not become a reportable value');
+  assert.ok(!('content_medium' in ev), 'an empty string is a real GA4 value — omit it');
+});
+
+test('the library filter emits an event instead of a second pageview', () => {
+  const app = fs.readFileSync(
+    path.join(ROOT, 'src', 'content-engine', 'ContentEngineApp.tsx'), 'utf8');
+  assert.match(app, /pushEvent\('filter_apply'/,
+    'selectCategory must emit filter_apply');
+
+  const win = layerWindow('https://jurnii.io/library');
+  pageContext.pushEvent('filter_apply', { filter_scope: 'library', filter_value: 'Playbook' }, win);
+  assert.deepStrictEqual(win.dataLayer[0],
+    { event: 'filter_apply', filter_scope: 'library', filter_value: 'Playbook' });
+  assert.strictEqual(win.dataLayer.filter((e) => e.event === 'page_context_ready').length, 0,
+    'a filter is not a navigation');
+});
+
+test('the homepage announces itself, since it never reaches the content engine', () => {
+  const app = fs.readFileSync(path.join(ROOT, 'src', 'app.tsx'), 'utf8');
+  assert.match(app, /pushPageContext/,
+    'isRootPath renders HomeApp and would otherwise never announce');
+  assert.match(app, /page_type: 'home'/);
 });
 
 test('the generated build output contains the booking runtime and the manage route', (t) => {

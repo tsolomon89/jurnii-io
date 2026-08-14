@@ -2,6 +2,7 @@
 
 const crypto = require('crypto');
 const { google } = require('googleapis');
+const { isCanonicalCalendarId } = require('../../lib/calendar-id');
 
 /**
  * Google Calendar integration.
@@ -52,14 +53,20 @@ function getCalendar() {
   return google.calendar({ version: 'v3', auth: getGoogleAuth() });
 }
 
-/** Assert a caller passed a real, non-alias calendar id. */
+/**
+ * Assert a caller passed a real, non-alias calendar id.
+ *
+ * The predicate itself lives in lib/calendar-id.js so that config/host-calendars.js and
+ * db/register-calendar.js apply the SAME rule without loading googleapis. Behaviour and
+ * both error codes are unchanged: an alias would address a different namespace than the
+ * one the reservation was taken against, so the exclusion constraint could not protect
+ * the slot.
+ */
 function requireCalendarId(calendarId) {
   if (!calendarId || typeof calendarId !== 'string') {
     throw new ConfigError('calendar_id_required');
   }
-  if (calendarId.toLowerCase() === 'primary' || !calendarId.includes('@')) {
-    // An alias would address a different namespace than the one the reservation was
-    // taken against, so the exclusion constraint could not protect the slot.
+  if (!isCanonicalCalendarId(calendarId)) {
     throw new ConfigError('calendar_id_must_be_canonical');
   }
   return calendarId;

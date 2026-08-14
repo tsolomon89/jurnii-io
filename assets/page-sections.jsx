@@ -124,7 +124,7 @@ const PricingSection = ({ heading, sub, withFooter = true }) =>
             </div>
             <p className="plan-note">{p.note}</p>
             <ul className="plan-feat">{p.features.map((f) => <li key={f}>{f}</li>)}</ul>
-            <a href="/contact-us" className={`btn ${p.ctaVariant} lg`} style={{ justifyContent: 'center' }}>{p.cta}</a>
+            <a href="/contact-us" className={`btn ${p.ctaVariant} lg`} style={{ justifyContent: 'center' }} data-cta-action="demo" data-cta-id={`pricing-${String(p.name || 'plan').toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}>{p.cta}</a>
           </div>
       )}
       </div>

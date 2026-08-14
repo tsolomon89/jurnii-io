@@ -259,7 +259,7 @@ test('governedTitle resolves against the same picklist on Leads and Contacts', (
 test('canonicalLeadSource accepts the stored value and rejects the display label', () => {
   assert.strictEqual(products.canonicalLeadSource('Website'), 'Website');
   assert.strictEqual(products.canonicalLeadSource('trade show'), 'Trade Show');
-  // "Event" is what Zoho DISPLAYS for `Trade Show`. Accepting it would write a value
+  // Zoho DISPLAYS `Trade Show` as "Trade Show / Event". Accepting a label would write a value
   // the picklist does not contain.
   assert.strictEqual(products.canonicalLeadSource('Event'), null);
   assert.strictEqual(products.canonicalLeadSource('Import'), null);

@@ -40,11 +40,30 @@ const { track, purgeTracked } = require('./_fixtures');
 const skip = db.isConfigured() ? false : 'DATABASE_URL not set';
 
 process.env.JWT_SECRET ||= 'handler-test-secret';
-process.env.BOOKING_CALENDAR_KEY ||= 'jurnii_local';
 process.env.BOOKING_CALENDAR_HMAC_KEY ||= 'handler-test-hmac';
-process.env.GOOGLE_CALENDAR_ID ||= 'demos-local@jurnii.io';
 process.env.HOST_TIMEZONE ||= 'Europe/London';
 process.env.MIN_NOTICE_MS ||= '3600000';          // 1h, so fixture slots are bookable
+
+/**
+ * TWO host calendars, because one cannot demonstrate isolation.
+ *
+ * Fraser deliberately reuses the addresses the single-calendar suite already used
+ * (`demos-local@jurnii.io` / `jurnii_local`), so every existing assertion about "the
+ * booking calendar" still describes the public default and keeps its meaning. Timothy is
+ * the second namespace: the same instant must be bookable on both, and never twice on one.
+ *
+ * Marlon is left unconfigured throughout — the pending-Calendar-ID case must be exercised,
+ * not assumed.
+ */
+process.env.BOOKING_PUBLIC_HOST ||= 'fraser';
+process.env.BOOKING_HOST_FRASER_CALENDAR_ID ||= 'demos-local@jurnii.io';
+process.env.BOOKING_HOST_FRASER_CALENDAR_KEY ||= 'jurnii_local';
+process.env.BOOKING_HOST_TIMOTHY_CALENDAR_ID ||= 'timothy-local@jurnii.io';
+process.env.BOOKING_HOST_TIMOTHY_CALENDAR_KEY ||= 'timothy_local';
+
+const HC = require('../../config/host-calendars');
+const FRASER = HC.resolveHost('fraser');
+const TIMOTHY = HC.resolveHost('timothy');
 
 const { signFlowToken, signManageToken } = require('../../lib/auth');
 const { calendarFingerprint } = require('../../lib/fingerprint');
@@ -157,11 +176,13 @@ async function seedJourney({ step = 2, ...overrides } = {}) {
 }
 
 async function registerCalendar() {
-  await db.withTransaction((tx) => tx.query(
-    `INSERT INTO booking_calendars (host_calendar_key, canonical_fingerprint)
-     VALUES ($1, $2) ON CONFLICT DO NOTHING`,
-    ['jurnii_local', calendarFingerprint(process.env.GOOGLE_CALENDAR_ID)]
-  ));
+  for (const h of HC.configuredHosts()) {
+    await db.withTransaction((tx) => tx.query(
+      `INSERT INTO booking_calendars (host_calendar_key, canonical_fingerprint)
+       VALUES ($1, $2) ON CONFLICT DO NOTHING`,
+      [h.hostCalendarKey, calendarFingerprint(h.googleCalendarId)]
+    ));
+  }
 }
 
 test.before(async () => { if (!skip) await registerCalendar(); });
@@ -982,9 +1003,14 @@ test('availability and bookings resolve the SAME canonical calendar', { skip }, 
   assert.equal(calls.filter((c) => c.name === 'checkFreeBusy').length, 2,
     'one FreeBusy for availability, one re-check before insert');
   assert.equal(calls.filter((c) => c.name === 'insertEvent').length, 1);
+  // With several hosts configured, "one id overall" is no longer the invariant — the
+  // invariant is that THIS journey's availability read and event write addressed the SAME
+  // calendar, and that it is the journey's resolved host. A browser must never be shown
+  // one host's free slots and have its event created on another's.
   assert.equal(new Set(ids).size, 1,
     'reading availability and writing the event must not address different calendars');
-  assert.equal(ids[0], process.env.GOOGLE_CALENDAR_ID);
+  assert.equal(ids[0], FRASER.googleCalendarId,
+    'a journey with no explicit selection uses the configured public host');
 
   // Canonical, not `primary` — the real client refuses anything else, so assert the
   // value would survive it rather than trusting the stub.
@@ -995,8 +1021,8 @@ test('availability and bookings resolve the SAME canonical calendar', { skip }, 
   // And the id the reservation namespace is bound to is the same one, persisted by R2 —
   // so a later config change cannot silently move an in-flight booking.
   const row = await db.withTransaction((tx) => J.get(tx, id));
-  assert.equal(row.google_calendar_id, process.env.GOOGLE_CALENDAR_ID);
-  assert.equal(row.host_calendar_key, process.env.BOOKING_CALENDAR_KEY);
+  assert.equal(row.google_calendar_id, FRASER.googleCalendarId);
+  assert.equal(row.host_calendar_key, FRASER.hostCalendarKey);
 });
 
 test('two concurrent visitors cannot both reserve the same slot', { skip }, async () => {
@@ -1039,12 +1065,14 @@ test('two concurrent visitors cannot both reserve the same slot', { skip }, asyn
   // just the responses.
   assert.ok(calls.filter((c) => c.name === 'insertEvent').length <= 1,
     'a losing request must never reach events.insert');
+  // Scoped to ONE host_calendar_key: the constraint is per namespace, so "one live
+  // reservation for that instant" is only true within a single host.
   const { rows } = await db.query(
     `SELECT journey_id, status FROM booking_slot_reservations
       WHERE host_calendar_key = $1 AND slot_start_utc = $2 AND status IN ('pending','confirmed')`,
-    ['jurnii_local', slot.toISOString()]
+    [FRASER.hostCalendarKey, slot.toISOString()]
   );
-  assert.equal(rows.length, 1, 'exactly one live reservation survives for that slot');
+  assert.equal(rows.length, 1, 'exactly one live reservation survives for that slot on that host');
 });
 
 // --------------------------------------------------------------------------
@@ -1065,6 +1093,13 @@ const PAGE2_BASE = {
   company: 'Acme Ltd', jobTitle: 'Head of Product',
   countryIso2: 'GB', dialCode: '+44', nationalNumber: '07123 456789',
 };
+
+/**
+ * The internal form must always name a host, so the Lead Source tests below — which are
+ * about a different field entirely — carry one. That requirement is asserted directly in
+ * "an internal journey must NAME a host" further down.
+ */
+const PAGE2_INTERNAL = { ...PAGE2_BASE, bookingHost: 'fraser' };
 
 test('Page 2 persists every selected product, in order', { skip }, async () => {
   forbidZoho(); stubGoogle();
@@ -1159,7 +1194,7 @@ test('the product array cannot hold duplicates or blanks, even by direct SQL', {
 test('Lead Source persists for an internal-booking journey', { skip }, async () => {
   forbidZoho(); stubGoogle();
   const id = await seedJourney({ step: 1, form_placement: 'internal-booking' });
-  const res = await page2(id, { ...PAGE2_BASE, leadSource: 'Trade Show' });
+  const res = await page2(id, { ...PAGE2_INTERNAL, leadSource: 'Trade Show' });
 
   assert.equal(res.statusCode, 200);
   const row = await db.withTransaction((tx) => J.get(tx, id));
@@ -1191,15 +1226,277 @@ test('an internal journey rejects a Lead Source that is not a live picklist valu
   forbidZoho(); stubGoogle();
   const id = await seedJourney({ step: 1, form_placement: 'internal-booking' });
 
-  // "Event" is what Zoho DISPLAYS for `Trade Show`; the stored value is what must be
+  // Zoho DISPLAYS `Trade Show` as "Trade Show / Event"; the stored value is what must be
   // submitted, so the label is rejected rather than written.
   for (const bad of ['Event', 'Import', 'Cold Call', 'Definitely Not A Source']) {
-    const res = await page2(id, { ...PAGE2_BASE, leadSource: bad });
+    const res = await page2(id, { ...PAGE2_INTERNAL, leadSource: bad });
     assert.equal(res.statusCode, 400, `${bad} should be refused`);
     assert.equal(res.body.reason, 'lead_source_invalid');
   }
   const row = await db.withTransaction((tx) => J.get(tx, id));
   assert.equal(row.lead_source, null);
+});
+
+// --------------------------------------------------------------------------
+// Booking host — public assignment, internal selection, and isolation
+// --------------------------------------------------------------------------
+
+/** Drive page 2 then POST /bookings, returning the booking response and the row. */
+async function bookAs(id, slot, page2Body) {
+  const p2 = await page2(id, page2Body);
+  assert.equal(p2.statusCode, 200, `page 2 should commit, got ${p2.statusCode} ${JSON.stringify(p2.body)}`);
+  const calls = stubGoogle({
+    checkFreeBusy: async () => [],
+    insertEvent: async (_cal, opts) => ({
+      kind: 'created',
+      event: {
+        id: opts.eventId, hangoutLink: 'https://meet.google.com/abc-defg-hij',
+        extendedProperties: { private: { journeyId: id, attempt: '1' } },
+      },
+    }),
+  });
+  const res = mockRes();
+  await loadHandler('bookings/index.js')({
+    method: 'POST',
+    headers: { authorization: `Bearer ${signFlowToken({ journeyId: id, email: 'x', step: 2 })}`, host: 'jurnii.io' },
+    body: { slotStart: slot.toISOString() },
+  }, res);
+  const row = await db.withTransaction((tx) => J.get(tx, id));
+  return { res, row, calls };
+}
+
+test('a PUBLIC journey is assigned the configured host and cannot override it', { skip }, async () => {
+  // The whole public-safety property in one test: the server ASSIGNS, and a
+  // hand-crafted `bookingHost` in the body changes nothing.
+  forbidZoho(); stubGoogle();
+  const id = await seedJourney({ step: 1, form_placement: 'site-demo-modal' });
+  const res = await page2(id, { ...PAGE2_BASE, bookingHost: 'timothy' });
+
+  assert.equal(res.statusCode, 200, 'the booking still succeeds — the field is ignored, not fatal');
+  const row = await db.withTransaction((tx) => J.get(tx, id));
+  assert.equal(row.selected_host_key, 'fraser',
+    'a public request must NOT redirect the booking away from the public host');
+});
+
+test('a journey with no placement at all is assigned the public host', { skip }, async () => {
+  forbidZoho(); stubGoogle();
+  const id = await seedJourney({ step: 1 });
+  await page2(id, { ...PAGE2_BASE, bookingHost: 'timothy' });
+  const row = await db.withTransaction((tx) => J.get(tx, id));
+  assert.equal(row.selected_host_key, 'fraser');
+});
+
+test('an internal journey must NAME a host — it never inherits the public one', { skip }, async () => {
+  // The failure this prevents: the host selector fails to populate (a 503 from
+  // /booking-hosts, a stale cached form) and a real booking lands on Fraser's calendar
+  // that no operator chose. Refusing is the correct outcome.
+  forbidZoho(); stubGoogle();
+  const id = await seedJourney({ step: 1, form_placement: 'internal-booking' });
+  const res = await page2(id, PAGE2_BASE);
+
+  assert.equal(res.statusCode, 400);
+  assert.equal(res.body.reason, 'booking_host_required');
+  const row = await db.withTransaction((tx) => J.get(tx, id));
+  assert.equal(row.selected_host_key, null, 'and nothing was persisted — least of all Fraser');
+});
+
+test('an internal journey rejects an unknown or unconfigured host', { skip }, async () => {
+  forbidZoho(); stubGoogle();
+  const id = await seedJourney({ step: 1, form_placement: 'internal-booking' });
+
+  // `marlon` is a REAL host that simply has no Calendar ID yet. It must fail exactly as
+  // a nonsense value does — never silently fall back to the public host.
+  for (const bad of ['marlon', 'nobody', 'fraser@jurnii.io', '']) {
+    const res = await page2(id, { ...PAGE2_BASE, bookingHost: bad });
+    assert.equal(res.statusCode, 400, `${bad} should be refused`);
+    assert.ok(['booking_host_invalid', 'booking_host_required'].includes(res.body.reason),
+      `${bad} gave ${res.body.reason}`);
+  }
+  const row = await db.withTransaction((tx) => J.get(tx, id));
+  assert.equal(row.selected_host_key, null);
+});
+
+test('a raw calendar address is never accepted as a host identifier', { skip }, async () => {
+  forbidZoho(); stubGoogle();
+  const id = await seedJourney({ step: 1, form_placement: 'internal-booking' });
+  for (const bad of [TIMOTHY.googleCalendarId, TIMOTHY.hostCalendarKey, 'primary']) {
+    const res = await page2(id, { ...PAGE2_BASE, bookingHost: bad });
+    assert.equal(res.statusCode, 400, `${bad} must not be usable as a host identifier`);
+  }
+});
+
+test('the selected host decides availability AND the booking calendar', { skip }, async () => {
+  forbidZoho();
+  const id = await seedJourney({ step: 1, form_placement: 'internal-booking' });
+  const slot = futureSlot(40);
+  const { res, row, calls } = await bookAs(id, slot, { ...PAGE2_BASE, bookingHost: 'timothy' });
+
+  assert.equal(res.statusCode, 200);
+  const ids = calls.map((c) => c.args[0]);
+  assert.equal(new Set(ids).size, 1, 'one calendar for the whole attempt');
+  assert.equal(ids[0], TIMOTHY.googleCalendarId, 'FreeBusy and events.insert both hit Timothy');
+  assert.equal(row.google_calendar_id, TIMOTHY.googleCalendarId);
+  assert.equal(row.host_calendar_key, TIMOTHY.hostCalendarKey);
+  assert.equal(row.selected_host_key, 'timothy');
+
+  // The reservation lives in Timothy's namespace, not the public one.
+  const { rows } = await db.query(
+    `SELECT host_calendar_key FROM booking_slot_reservations
+      WHERE journey_id = $1 AND status IN ('pending','confirmed')`, [id]);
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].host_calendar_key, TIMOTHY.hostCalendarKey);
+});
+
+test('the same instant is bookable on Fraser and on Timothy independently', { skip }, async () => {
+  // Per-host reservation namespaces, which `bsr_no_cross_journey_overlap` already gives
+  // us: the EXCLUDE carries `host_calendar_key WITH =`, so a hold on one host cannot
+  // block the other. Two different people can be booked at 15:00.
+  forbidZoho();
+  const slot = futureSlot(41);
+  const a = await seedJourney({ step: 1, form_placement: 'internal-booking' });
+  const b = await seedJourney({ step: 1, form_placement: 'internal-booking' });
+
+  const first = await bookAs(a, slot, { ...PAGE2_INTERNAL });
+  assert.equal(first.res.statusCode, 200, 'Fraser takes the slot');
+  const second = await bookAs(b, slot, { ...PAGE2_BASE, bookingHost: 'timothy' });
+  assert.equal(second.res.statusCode, 200, 'Timothy is a separate namespace and is unaffected');
+
+  assert.equal(first.row.host_calendar_key, FRASER.hostCalendarKey);
+  assert.equal(second.row.host_calendar_key, TIMOTHY.hostCalendarKey);
+
+  const { rows } = await db.query(
+    `SELECT host_calendar_key FROM booking_slot_reservations
+      WHERE slot_start_utc = $1 AND status IN ('pending','confirmed')
+      ORDER BY host_calendar_key`, [slot.toISOString()]);
+  assert.deepEqual(rows.map((r) => r.host_calendar_key).sort(),
+    [FRASER.hostCalendarKey, TIMOTHY.hostCalendarKey].sort(),
+    'one live hold per host at the same instant');
+});
+
+test('the same instant cannot be double-booked on ONE host', { skip }, async () => {
+  // The other half of isolation: adding hosts must not weaken the guarantee within one.
+  forbidZoho();
+  const slot = futureSlot(42);
+  const a = await seedJourney({ step: 1, form_placement: 'internal-booking' });
+  const b = await seedJourney({ step: 1, form_placement: 'internal-booking' });
+
+  const first = await bookAs(a, slot, { ...PAGE2_BASE, bookingHost: 'timothy' });
+  assert.equal(first.res.statusCode, 200);
+  const second = await bookAs(b, slot, { ...PAGE2_BASE, bookingHost: 'timothy' });
+  assert.equal(second.res.statusCode, 409);
+  assert.equal(second.res.body.code, 'SLOT_TAKEN');
+});
+
+test('a confirmed booking keeps its calendar when the public default moves', { skip }, async () => {
+  // A booking must never silently migrate between hosts. Reschedule, cancel and every
+  // recovery path read the PERSISTED calendar, so re-pointing BOOKING_PUBLIC_HOST after
+  // the fact must not reach an existing booking.
+  forbidZoho();
+  const id = await seedJourney({ step: 1, form_placement: 'internal-booking' });
+  const slot = futureSlot(43);
+  const { res, row } = await bookAs(id, slot, { ...PAGE2_BASE, bookingHost: 'timothy' });
+  assert.equal(res.statusCode, 200);
+
+  const previous = process.env.BOOKING_PUBLIC_HOST;
+  process.env.BOOKING_PUBLIC_HOST = 'fraser';
+  try {
+    const { resolveJourneyHost } = require('../../lib/booking-host');
+    const resolved = resolveJourneyHost(row);
+    assert.equal(resolved.source, 'persisted');
+    assert.equal(resolved.googleCalendarId, TIMOTHY.googleCalendarId);
+    assert.equal(resolved.hostCalendarKey, TIMOTHY.hostCalendarKey);
+  } finally {
+    process.env.BOOKING_PUBLIC_HOST = previous;
+  }
+});
+
+test('the database refuses to move a booking between hosts after the event exists', { skip }, async () => {
+  // bj_guard, added in 0006 — belt-and-braces behind R2's own WHERE clause.
+  forbidZoho();
+  const id = await seedJourney({ step: 1, form_placement: 'internal-booking' });
+  const { res } = await bookAs(id, futureSlot(44), { ...PAGE2_BASE, bookingHost: 'timothy' });
+  assert.equal(res.statusCode, 200);
+
+  await assert.rejects(
+    db.withTransaction((tx) => tx.query(
+      'UPDATE booking_journeys SET host_calendar_key = $2 WHERE journey_id = $1',
+      [id, FRASER.hostCalendarKey])),
+    /invariant_host_calendar_immutable_after_booking/);
+
+  await assert.rejects(
+    db.withTransaction((tx) => tx.query(
+      'UPDATE booking_journeys SET google_calendar_id = $2 WHERE journey_id = $1',
+      [id, FRASER.googleCalendarId])),
+    /invariant_google_calendar_immutable_after_booking/);
+
+  // The retention scrub must still be able to null the address while keeping the key.
+  await db.withTransaction((tx) => tx.query(
+    'UPDATE booking_journeys SET google_calendar_id = NULL WHERE journey_id = $1', [id]));
+  const row = await db.withTransaction((tx) => J.get(tx, id));
+  assert.equal(row.google_calendar_id, null);
+  assert.equal(row.host_calendar_key, TIMOTHY.hostCalendarKey);
+});
+
+// --------------------------------------------------------------------------
+// Availability — journey-aware, and failing closed on a bad credential
+// --------------------------------------------------------------------------
+
+function availability(headers = {}) {
+  const res = mockRes();
+  return loadHandler('availability.js')({ method: 'GET', headers, query: {} }, res).then(() => res);
+}
+
+test('anonymous availability answers for the configured public host', { skip }, async () => {
+  const calls = stubGoogle({ checkFreeBusy: async () => [] });
+  const res = await availability();
+  assert.equal(res.statusCode, 200);
+  assert.equal(calls.find((c) => c.name === 'checkFreeBusy').args[0], FRASER.googleCalendarId);
+});
+
+test('availability with a flow token answers for THAT journey host', { skip }, async () => {
+  forbidZoho(); stubGoogle();
+  const id = await seedJourney({ step: 1, form_placement: 'internal-booking' });
+  assert.equal((await page2(id, { ...PAGE2_BASE, bookingHost: 'timothy' })).statusCode, 200);
+
+  const calls = stubGoogle({ checkFreeBusy: async () => [] });
+  const res = await availability({
+    authorization: `Bearer ${signFlowToken({ journeyId: id, email: 'x', step: 2 })}`,
+  });
+  assert.equal(res.statusCode, 200);
+  assert.equal(calls.find((c) => c.name === 'checkFreeBusy').args[0], TIMOTHY.googleCalendarId,
+    'the browser cannot be shown one host and book another');
+});
+
+test('an invalid or expired token is 401 — NEVER a quiet downgrade to the public host', { skip }, async () => {
+  // This is the dangerous case. Serving public-host slots to a caller whose token just
+  // expired would show one calendar's availability and book against another.
+  const calls = stubGoogle({ checkFreeBusy: async () => [] });
+  for (const bad of ['not-a-jwt', `${signFlowToken({ journeyId: nextId(), email: 'x', step: 2 })}x`]) {
+    const res = await availability({ authorization: `Bearer ${bad}` });
+    assert.equal(res.statusCode, 401, 'a supplied credential that does not verify must fail');
+  }
+  assert.equal(calls.length, 0, 'and Google is never consulted at all');
+});
+
+test('a manage token reschedules against the calendar the booking is already on', { skip }, async () => {
+  forbidZoho();
+  const id = await seedJourney({ step: 1, form_placement: 'internal-booking' });
+  const { res: booked } = await bookAs(id, futureSlot(45), { ...PAGE2_BASE, bookingHost: 'timothy' });
+  assert.equal(booked.statusCode, 200);
+
+  const previous = process.env.BOOKING_PUBLIC_HOST;
+  process.env.BOOKING_PUBLIC_HOST = 'fraser';
+  try {
+    const calls = stubGoogle({ checkFreeBusy: async () => [] });
+    const res = await availability({
+      authorization: `Bearer ${signManageToken({ journeyId: id, email: 'x' })}`,
+    });
+    assert.equal(res.statusCode, 200);
+    assert.equal(calls.find((c) => c.name === 'checkFreeBusy').args[0], TIMOTHY.googleCalendarId,
+      'the manage page must not drift onto whatever the public default is today');
+  } finally {
+    process.env.BOOKING_PUBLIC_HOST = previous;
+  }
 });
 
 test('R1_page2Commit refuses a column outside the page-2 allow-list', { skip }, async () => {

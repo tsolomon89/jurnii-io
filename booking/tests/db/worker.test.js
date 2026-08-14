@@ -30,7 +30,8 @@ process.env.BOOKING_ADMIN_SECRET ||= 'admin-test-secret';
 process.env.RESOLUTION_FINGERPRINT_HMAC_KEY_ID ||= 'test-v1';
 process.env.RESOLUTION_FINGERPRINT_HMAC_KEY ||= 'worker-test-fingerprint-key';
 process.env.BOOKING_CALENDAR_HMAC_KEY ||= 'worker-test-hmac';
-process.env.GOOGLE_CALENDAR_ID ||= 'demos-local@jurnii.io';
+// The worker reads the PERSISTED `journey.google_calendar_id`, never configuration, so
+// these fixtures need no host-calendar env at all — `CAL` below is written onto the row.
 
 const GPATH = require.resolve('../../integrations/google/index.js');
 const ZPATH = require.resolve('../../integrations/zoho/index.js');

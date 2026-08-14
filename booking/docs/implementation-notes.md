@@ -481,7 +481,8 @@ other environment:
 
 | Variable | Local value | Kind |
 |---|---|---|
-| `BOOKING_CALENDAR_KEY` | `jurnii_local` | stable identifier, **not** a secret |
+| `BOOKING_PUBLIC_HOST` | `fraser` | stable identifier, **not** a secret |
+| `BOOKING_HOST_<HOST>_CALENDAR_KEY` | `fraser_local` | stable identifier, **not** a secret |
 | `RESOLUTION_FINGERPRINT_HMAC_KEY_ID` | `local-v1` | stable identifier, **not** a secret |
 | `BOOKING_CALENDAR_HMAC_KEY` | generated, 32 bytes | secret |
 | `BOOKING_ADMIN_SECRET` | generated, 32 bytes | secret |

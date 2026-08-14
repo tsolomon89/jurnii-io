@@ -110,10 +110,13 @@ Host-page globals, all optional: `JURNII_BOOKING_EMBEDDED`, `JURNII_BOOKING_CANC
    `PUBLIC_BASE_URL` so the emailed manage link points at it. If your host has an SPA catch-all rewrite,
    confirm a real file still wins — otherwise every manage link lands on your home page.
 5. **Env:** copy `.env.example` → set `DATABASE_URL` + `DATABASE_URL_UNPOOLED`, `JWT_SECRET`, `ZOHO_*`,
-   `GOOGLE_*`, `HOST_TIMEZONE`, `PUBLIC_BASE_URL`, `BOOKING_CALENDAR_KEY` + `BOOKING_CALENDAR_HMAC_KEY`,
+   `GOOGLE_*`, `HOST_TIMEZONE`, `PUBLIC_BASE_URL`, `BOOKING_PUBLIC_HOST` +
+   `BOOKING_HOST_<HOST>_CALENDAR_ID`/`_CALENDAR_KEY` per host + `BOOKING_CALENDAR_HMAC_KEY`,
    `CRON_SECRET`, `BOOKING_ADMIN_SECRET`, `RESOLUTION_FINGERPRINT_HMAC_KEY(_ID)`.
-6. **Migrate + register:** `npm run migrate`, then `npm run register-calendar` per environment. Bookings
-   are refused with `503 calendar_misconfigured` until the calendar pair is registered.
+   One Google OAuth identity serves every host calendar — do **not** add per-host credentials.
+6. **Migrate + register:** `npm run migrate`, then `npm run register-calendar` per environment — it
+   registers every configured host and skips those with no Calendar ID yet. Bookings are refused with
+   `503 calendar_misconfigured` until the host they resolve to is registered.
 7. **Dependencies:** add `@neondatabase/serverless`, `googleapis`, `jsonwebtoken` and `pg` to the host
    `package.json` (`npm install`).
 8. **Vercel config:** merge `vercel.snippet.json` (60s `maxDuration` headroom for Zoho token refresh on

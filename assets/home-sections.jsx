@@ -41,7 +41,7 @@ const Hero = () => {
           <h1 className="display" data-no-split="1" style={{ width: '100%', fontWeight: 600, fontSize: '52px' }}>Compete on <span className="ink-muted">experience.</span><br />win on <span className="ink-green">intelligence.</span></h1>
           <p className="lede">Jurnii automates UX benchmarking and competitor proposition tracking at scale — turning manual research and reactive analytics into structured, near-real-time intelligence for iGaming operators.</p>
           <div className="hero-ctas">
-            <a href="/contact-us" className="btn primary lg">Book a demo <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" /></a>
+            <a href="/contact-us" className="btn primary lg" data-cta-action="demo" data-cta-id="home-hero">Book a demo <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" /></a>
             <a href="#products" className="btn ghost lg">See the platform</a>
           </div>
           <div className="hero-stats">
@@ -369,7 +369,7 @@ const ProductTabs = () => {
                 {tab.features.map((f, i) => <li key={i}><i data-lucide="check" style={{ width: 18, height: 18 }} />{f}</li>)}
               </ul>
               <div className="actions">
-                <a className="btn primary" href="/contact-us">Book a demo <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" /></a>
+                <a className="btn primary" href="/contact-us" data-cta-action="demo" data-cta-id={`home-product-tab-${tab.id}`}>Book a demo <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" /></a>
                 <a className="btn ghost" href={tab.detail}>Learn More</a>
               </div>
             </div>

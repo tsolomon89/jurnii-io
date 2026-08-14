@@ -104,6 +104,9 @@
     job_title_other_required: 'Please tell us your job title.',
     product_invalid: 'Please choose from the listed products.',
     lead_source_invalid: 'That lead source is not available. Please choose another.',
+    booking_host_required: 'Please choose a booking host.',
+    booking_host_invalid: 'That booking host is not available. Please choose another.',
+    session_expired: 'Your session expired. Please enter your details again.',
     country_unknown: 'Please choose your country.',
     country_dial_mismatch: 'That dialling code does not match the country you selected.',
     phone_missing: 'Please enter your phone number.',
@@ -136,6 +139,93 @@
 
   function copy(key) {
     return (key && COPY[key]) || COPY.generic;
+  }
+
+  /* =======================================================================
+     Analytics emission — deliberately vendor-neutral.
+
+     This module is meant to be copy-pasted into another project (README §"Install"),
+     so it must not know that Google Tag Manager, or any particular analytics vendor,
+     exists. It dispatches a plain DOM CustomEvent and lets the host decide. In this
+     repo `assets/analytics-bridge.js` is the adapter that forwards it on.
+
+     WHAT MAY BE EMITTED, AND WHAT MAY NOT
+
+     Only low-cardinality, non-identifying values: country, products, step, outcome
+     code, placement. Never firstName, lastName, email, nationalNumber, company or
+     jobTitleOther — and never journeyId or bookingId, which are the same UUID: it is
+     the subject of the signed manage link and the visitor's own booking reference, so
+     it is a personal identifier rather than a transaction id. The server draws this
+     same line in db/queries/retention.js, which nulls PII and keeps only the
+     analytics_* booleans. A test asserts no emitted payload crosses it.
+     ======================================================================= */
+
+  /**
+   * Every visitor-facing string is authored once in COPY, so a reverse map turns any
+   * rendered notice back into its machine code — no third argument threaded through
+   * the ~30 notice() call sites, and no risk of a caller inventing a code that does
+   * not exist.
+   *
+   * `slot_malformed` and `slot_unaligned` share one string on purpose (two server
+   * reasons, one thing to tell the visitor). First-wins collapses them, which is the
+   * granularity a report wants anyway.
+   */
+  var CODE_BY_COPY = (function () {
+    var map = {};
+    for (var key in COPY) {
+      if (Object.prototype.hasOwnProperty.call(COPY, key) && !map[COPY[key]]) {
+        map[COPY[key]] = key;
+      }
+    }
+    return map;
+  })();
+
+  function emit(name, detail) {
+    if (!win || typeof win.dispatchEvent !== 'function') return;
+
+    var payload = { event: name };
+    if (detail) {
+      for (var k in detail) {
+        if (Object.prototype.hasOwnProperty.call(detail, k) &&
+            detail[k] !== undefined && detail[k] !== null && detail[k] !== '') {
+          payload[k] = detail[k];
+        }
+      }
+    }
+
+    var ev;
+    try {
+      ev = new win.CustomEvent('jurnii:booking', { detail: payload });
+    } catch (e) {
+      // Engines where CustomEvent is not constructible.
+      if (!win.document || !win.document.createEvent) return;
+      ev = win.document.createEvent('CustomEvent');
+      ev.initCustomEvent('jurnii:booking', false, false, payload);
+    }
+    win.dispatchEvent(ev);
+  }
+
+  /** Whole days from now to an ISO instant. A useful funnel dimension; not identifying. */
+  function daysUntil(iso) {
+    var t = Date.parse(iso);
+    if (isNaN(t)) return undefined;
+    return Math.max(0, Math.round((t - Date.now()) / 86400000));
+  }
+
+  /** The safe subset of the form's own values. Everything omitted here is PII. */
+  function analyticsDims(vals) {
+    var v = vals || {};
+    var products = v.productInterests || [];
+    return {
+      country: v.countryIso2 || undefined,
+      products: products.length ? products.join('|') : undefined,
+      product_count: products.length,
+      marketing_consent: v.marketingConsent === true,
+      // The free-text title itself is PII; whether they had to type one is not.
+      job_title_other: v.jobTitle === 'Other',
+      lead_source: v.leadSource || undefined,
+      booking_host: v.bookingHost || undefined
+    };
   }
 
   /* =======================================================================
@@ -625,6 +715,7 @@
       + '<input type="tel" class="jurnii-input" id="jurnii-phone" data-field="nationalNumber" autocomplete="tel-national" placeholder="e.g. 7123 456789" required></div>'
       + productMarkup()
       + (o && o.internal ? leadSourceMarkup() : '')
+      + (o && o.internal ? bookingHostMarkup() : '')
       + '</div>'
       + '<div class="jurnii-form-actions split">'
       + '<button type="button" class="btn ghost-on-dark sm" data-role="back-2">&larr; Back</button>'
@@ -760,6 +851,34 @@
       + '</div>';
   }
 
+  /**
+   * Booking host — INTERNAL ROUTE ONLY (`/admin-form`), and REQUIRED there.
+   *
+   * On page 2 rather than page 3 because the host decides which calendar page 3 queries:
+   * page 1 establishes the journey, page 2 the booking context, page 3 reads availability.
+   * The selection is durably on the journey before any slot is shown.
+   *
+   * Options are fetched from `/booking-hosts` at runtime rather than baked in, for the
+   * same reason as the country and Lead Source selects — but here there is a second
+   * reason: whether a host is available depends on SERVER configuration (Marlon has no
+   * Calendar ID yet), which a static file cannot know. The browser only ever sees opaque
+   * keys and labels; a Google Calendar id never reaches it.
+   *
+   * There is deliberately NO default selection. The public form's host is chosen by the
+   * server; an operator's must be chosen by the operator, and the server refuses an
+   * internal page-2 commit that names no host.
+   */
+  function bookingHostMarkup() {
+    return ''
+      + '<div class="jurnii-form-group full-width">'
+      + '<label class="jurnii-label" for="jurnii-booking-host">Booking host / Calendar (internal) *</label>'
+      + '<select class="jurnii-select" id="jurnii-booking-host" data-field="bookingHost" required>'
+      + '<option value="" selected>Select a host&hellip;</option>'
+      + '</select>'
+      + '<p class="jurnii-field-hint">Availability and the calendar invite both use this person&rsquo;s calendar.</p>'
+      + '</div>';
+  }
+
   function schedulerMarkup() {
     return ''
       + '<div class="jurnii-scheduler-container">'
@@ -843,18 +962,40 @@
     var selectedStart = null;
     var month = new Date();
     month.setDate(1);
+    // Which host the CURRENT `slots` belong to, so a change can invalidate them.
+    var loadedHostKey = null;
 
     var q = function (role) { return root.querySelector('[data-role="' + role + '"]'); };
+    var authToken = function () { return hooks && hooks.authToken ? hooks.authToken() : null; };
+    var hostKey = function () { return hooks && hooks.hostKey ? hooks.hostKey() : null; };
 
     function load() {
       var grid = q('cal-grid');
       if (grid) grid.innerHTML = '';
       var panel = q('slots');
       if (panel) panel.innerHTML = '<div class="jurnii-slots-empty">Loading available times&hellip;</div>';
-      return request('GET', '/availability').then(function (res) {
+      var requestedHost = hostKey();
+      /**
+       * The token is what makes availability journey-aware. The server resolves the host
+       * from the journey — not from anything this request could name — so the calendar
+       * whose slots are shown is by construction the calendar the event lands on. An
+       * anonymous request still gets the public host, which is why the public form is
+       * unchanged in behaviour.
+       */
+      return request('GET', '/availability', null, authToken()).then(function (res) {
         if (res.status !== 200) {
           slots = []; byDay = {};
+          // A stale selection must not survive a failed load either: it would be a slot
+          // from a host we can no longer confirm.
+          selectedDay = null; selectedStart = null; loadedHostKey = null;
           renderMonth();
+          if (res.status === 401 && hooks && hooks.onAuthLost) {
+            // The flow token expired. Availability now fails closed rather than quietly
+            // serving the public host's slots, so retrying would loop on 401 — restart
+            // the journey instead of showing an error the visitor cannot clear.
+            hooks.onAuthLost();
+            return false;
+          }
           // 503 availability_unavailable is explicit and retryable — never a
           // silently all-disabled calendar, which is what the old form showed.
           renderSlotsError();
@@ -865,7 +1006,21 @@
         // Open on the first month that actually has a slot.
         var days = Object.keys(byDay).sort();
         if (days.length) { month = fromLocalDateKey(days[0]); month.setDate(1); }
+        /**
+         * Two independent reasons to drop the selection, and BOTH are needed.
+         *
+         * A different host means the slot belonged to somebody else's calendar, even if
+         * the same instant happens to be free on this one. And whatever the host, a
+         * selected start that is no longer offered must go: clearing only when the whole
+         * DAY vanishes left a stale `selectedStart` alive whenever the day still had any
+         * other slot, which `submitBooking` would then send.
+         */
+        if (loadedHostKey !== requestedHost) { selectedDay = null; selectedStart = null; }
+        loadedHostKey = requestedHost;
         if (selectedDay && !byDay[selectedDay]) { selectedDay = null; selectedStart = null; }
+        if (selectedStart && !slots.some(function (s) { return s.start === selectedStart; })) {
+          selectedStart = null;
+        }
         renderMonth();
         renderSlots();
         return true;
@@ -1005,6 +1160,20 @@
     // module opens a modal of its own, and is consulted in `render` and `bootstrap`.
     var data = readPlacement(container, opts);
     var internal = resolveInternal(container, opts);
+
+    /**
+     * The same three values the server stores as form_placement / cta_id /
+     * form_variant. Emitting them under matching names is what lets a GA4 report and a
+     * CRM query be joined on the button a visitor actually pressed.
+     */
+    function placementDims() {
+      return {
+        form_placement: data.formPlacement || undefined,
+        cta_id: data.ctaId || undefined,
+        form_variant: data.formVariant || undefined
+      };
+    }
+
     var countries = null;
     var poller = null;
     var destroyed = false;
@@ -1012,7 +1181,7 @@
     var vals = {
       firstName: '', lastName: '', email: '', marketingConsent: false,
       company: '', jobTitle: '', jobTitleOther: '', countryIso2: 'GB',
-      nationalNumber: '', productInterests: [], leadSource: ''
+      nationalNumber: '', productInterests: [], leadSource: '', bookingHost: ''
     };
     var journeyId = null;
     var journeyEmail = null;
@@ -1039,12 +1208,25 @@
         + (tone === 'info'
           ? 'color:#0b6b3a;background:rgba(16,185,129,0.10);border:1px solid rgba(16,185,129,0.25);'
           : 'color:#ff5252;background:rgba(255,82,82,0.1);border:1px solid rgba(255,82,82,0.2);');
+
+      // The machine code, never the rendered sentence: copy gets reworded, reports
+      // should not break when it does.
+      emit('booking_error', {
+        step_name: activeStepName(),
+        error_code: CODE_BY_COPY[msg] || 'unmapped',
+        tone: tone || 'error'
+      });
     }
 
     function clearFieldErrors() {
-      Array.prototype.forEach.call(root.querySelectorAll('.jurnii-input.error'), function (el) {
-        el.classList.remove('error');
-      });
+      // `.jurnii-select` as well as `.jurnii-input`: markInvalid() adds `.error` to
+      // whatever [data-field] matches, so a select marked invalid was previously never
+      // cleared and stayed red for the rest of the session. Country had this latent bug;
+      // the required host selector would have hit it on every corrected submission.
+      Array.prototype.forEach.call(
+        root.querySelectorAll('.jurnii-input.error, .jurnii-select.error'), function (el) {
+          el.classList.remove('error');
+        });
     }
     function markInvalid(name) {
       var el = field(name);
@@ -1064,6 +1246,11 @@
         else if (idx < numeric) el.classList.add('completed');
       });
       icons();
+
+      // A step becoming VISIBLE. Not the same as the server having accepted it — see
+      // booking_step_complete, emitted only from the submit success branches. Counting
+      // these as completions is the usual way a funnel ends up over-reported.
+      emit('booking_step_view', { step_name: String(step), step_number: Number(step) || undefined });
     }
 
     function setLoading(role, on) {
@@ -1095,7 +1282,44 @@
       bind();
       restore();
       icons();
-      if (internal) populateLeadSources();
+      if (internal) { populateLeadSources(); populateBookingHosts(); }
+    }
+
+    /**
+     * INTERNAL ROUTE ONLY. Unlike Lead Source, failure here is NOT silently safe: with no
+     * options the operator cannot choose a host, and the server refuses an internal
+     * page-2 commit that names none. That refusal is the correct outcome — a booking on
+     * the public host that nobody chose would be worse — so the failure is surfaced.
+     *
+     * An unconfigured host (Marlon, until his Calendar ID is supplied) is rendered but
+     * DISABLED. Hiding him would be indistinguishable from a bug; showing him greyed out
+     * says "known, not yet available". The server refuses him either way.
+     */
+    function populateBookingHosts() {
+      var pending;
+      // `request` turns a rejected fetch into `{status:0}`, but a host with no `fetch` at
+      // all throws synchronously — and a failure to list hosts must never stop the rest
+      // of the form from mounting.
+      try { pending = request('GET', '/booking-hosts'); } catch (_) { return; }
+      pending.then(function (res) {
+        if (destroyed || !root) return;
+        var sel = field('bookingHost');
+        if (!sel) return;
+        var hosts = (res.status === 200 && res.data && res.data.hosts) || [];
+        if (!hosts.length) {
+          sel.innerHTML = '<option value="">Unavailable &mdash; reload to try again</option>';
+          return;
+        }
+        sel.innerHTML = '<option value="">Select a host&hellip;</option>'
+          + hosts.map(function (h) {
+            // `h.key` is an opaque identifier (`fraser`), never a calendar address.
+            return '<option value="' + escapeHtml(h.key) + '"'
+              + (h.configured ? '' : ' disabled')
+              + (h.configured && h.key === vals.bookingHost ? ' selected' : '') + '>'
+              + escapeHtml(h.label) + (h.configured ? '' : ' (not configured)')
+              + '</option>';
+          }).join('');
+      });
     }
 
     /**
@@ -1397,6 +1621,18 @@
       var leadSource = field('leadSource');
       if (leadSource) leadSource.addEventListener('change', function (e) { vals.leadSource = e.target.value; persist(); });
 
+      var bookingHost = field('bookingHost');
+      if (bookingHost) {
+        bookingHost.addEventListener('change', function (e) {
+          vals.bookingHost = e.target.value;
+          persist();
+          // A slot picked against the previous host is meaningless now, and must not
+          // survive to `submitBooking`. The scheduler drops it again on the next load
+          // for the same reason; this clears the visible selection immediately.
+          if (scheduler) scheduler.clearSelection();
+        });
+      }
+
       var n1 = q('next-1'); if (n1) n1.addEventListener('click', submitPage1);
       var n2 = q('next-2'); if (n2) n2.addEventListener('click', submitPage2);
       var b2 = q('back-2'); if (b2) b2.addEventListener('click', function (e) { e.preventDefault(); showStep(1); });
@@ -1415,7 +1651,20 @@
       }
 
       scheduler = createScheduler(root, {
-        onSelect: function () { notice(null); }
+        onSelect: function (start) {
+          notice(null);
+          if (start) emit('booking_slot_selected', { lead_time_days: daysUntil(start) });
+        },
+        // The flow token makes availability journey-aware; the host key lets the
+        // scheduler notice that its cached slots belong to a different calendar.
+        authToken: function () { return token; },
+        hostKey: function () { return vals.bookingHost || null; },
+        onAuthLost: function () {
+          clearSnapshot();
+          resetJourney();
+          showStep(1);
+          notice(COPY.session_expired);
+        }
       });
     }
 
@@ -1441,6 +1690,18 @@
       var active = root && root.querySelector('.jurnii-form-step.active');
       var s = active && active.getAttribute('data-step');
       return Number(s) || 1;
+    }
+
+    /**
+     * The RAW `data-step` value, for analytics only.
+     *
+     * Deliberately not currentStepNumber(): that coerces `pending`, `confirmed` and
+     * `attention` to 1, because the snapshot needs a resumable step. A funnel report
+     * needs the opposite — those three are exactly the states worth distinguishing.
+     */
+    function activeStepName() {
+      var active = root && root.querySelector('.jurnii-form-step.active');
+      return (active && active.getAttribute('data-step')) || null;
     }
 
     function restore() {
@@ -1553,6 +1814,11 @@
             token = res.data.token;
             journeyId = res.data.journeyId || journeyId;
             journeyEmail = email;
+            // Emitted here, on the 200 — not from showStep. The server has accepted.
+            emit('booking_step_complete', {
+              step_name: '1', step_number: 1,
+              marketing_consent: vals.marketingConsent === true
+            });
             showStep(2);
             persist();
             return true;
@@ -1597,6 +1863,14 @@
         }
         ok = false;
       }
+      // Required on the internal route only. The public form has no host field and the
+      // server assigns the configured public host; an internal booking must never
+      // inherit it, so this mirrors a check the server enforces independently.
+      if (internal && !String(vals.bookingHost || '').trim()) {
+        markInvalid('bookingHost');
+        problem = 'booking_host_required';
+        ok = false;
+      }
       if (!ok) { notice(COPY[problem]); return Promise.resolve(false); }
 
       // The SHARED normaliser, so the client shows what the server will derive.
@@ -1628,19 +1902,35 @@
       // Internal route only, and the server honours it only for a journey whose
       // stored placement is `internal-booking`.
       if (internal && vals.leadSource) body.leadSource = vals.leadSource;
+      // Likewise gated server-side. An opaque host key (`fraser`), never a calendar
+      // address — the browser is never given one to send.
+      if (internal && vals.bookingHost) body.bookingHost = vals.bookingHost;
 
       setLoading('next-2', true);
       // A failed save must NOT advance: the calendar never opens on unsaved data.
       return request('PATCH', '/submissions/' + encodeURIComponent(journeyId), body, token).then(function (res) {
         if (res.status === 200) {
           token = res.data.token || token;
+          // The point the visitor has committed real firmographics — the strongest
+          // micro-conversion this funnel has before the booking itself.
+          emit('booking_step_complete', Object.assign(
+            { step_name: '2', step_number: 2 }, analyticsDims(vals)));
           showStep(3);
           persist();
           return scheduler.load();
         }
         if (res.status === 400) {
           var reason = res.data && res.data.reason;
-          markInvalid(reason === 'country_unknown' ? 'countryIso2' : 'nationalNumber');
+          // Route the reason to the field it is about. Previously anything that was not
+          // `country_unknown` reddened the phone input, so a rejected Lead Source — and
+          // now a missing or unavailable host — pointed at the wrong control.
+          var FIELD_FOR_REASON = {
+            country_unknown: 'countryIso2',
+            lead_source_invalid: 'leadSource',
+            booking_host_required: 'bookingHost',
+            booking_host_invalid: 'bookingHost'
+          };
+          markInvalid(FIELD_FOR_REASON[reason] || 'nationalNumber');
           notice(copy(reason));
           return false;
         }
@@ -1763,6 +2053,14 @@
       if (mUrl && manage && manageRow) { manage.href = mUrl; manageRow.style.display = ''; }
       else if (manageRow) { manageRow.style.display = 'none'; }
 
+      // The conversion. `bookingId` is deliberately absent: it is the journey UUID,
+      // which is the subject of the signed manage link and therefore a personal
+      // identifier, not a transaction id that may be sent to a third party.
+      emit('booking_confirmed', Object.assign({
+        lead_time_days: daysUntil(payload.slotStart),
+        has_meet_link: !!payload.meetLink
+      }, analyticsDims(vals), placementDims()));
+
       showStep('confirmed');
       if (typeof opts.onConfirmed === 'function') opts.onConfirmed(payload);
     }
@@ -1771,6 +2069,7 @@
       stopPolling();
       var support = q('support-link');
       if (support) { support.textContent = supportEmail(); support.href = 'mailto:' + supportEmail(); }
+      emit('booking_needs_attention', placementDims());
       showStep('attention');
     }
 
@@ -1830,6 +2129,11 @@
         + (tone === 'info'
           ? 'color:#0b6b3a;background:rgba(16,185,129,0.10);border:1px solid rgba(16,185,129,0.25);'
           : 'color:#ff5252;background:rgba(255,82,82,0.1);border:1px solid rgba(255,82,82,0.2);');
+
+      emit('manage_error', {
+        error_code: CODE_BY_COPY[msg] || 'unmapped',
+        tone: tone || 'error'
+      });
     }
 
     function showStep(step) {
@@ -1837,6 +2141,7 @@
         el.classList.toggle('active', el.getAttribute('data-step') === step);
       });
       icons();
+      emit('manage_step_view', { step_name: String(step) });
     }
 
     function setLoading(role, on) {
@@ -1858,6 +2163,9 @@
       var m = q('result-msg');
       if (t) t.textContent = title;
       if (m) m.textContent = msg;
+      // Both terminal manage outcomes route through here, and CODE_BY_COPY separates
+      // them: reschedule_done vs cancel_done.
+      emit('manage_complete', { outcome_code: CODE_BY_COPY[msg] || 'unmapped' });
       showStep('result');
     }
 
@@ -1897,7 +2205,20 @@
       var cancel = q('cancel');
       if (cancel) cancel.addEventListener('click', submitCancel);
 
-      scheduler = createScheduler(root, { onSelect: function () { notice(null); } });
+      /**
+       * The manage token, so a reschedule reads availability from the calendar this
+       * booking is ALREADY on. Without it the request would be anonymous and answered
+       * from the public host — a confirmed booking on another host would then be offered
+       * the wrong calendar's free slots. No `hostKey`: an existing booking's host is the
+       * persisted one, which the server resolves and the browser must not influence.
+       */
+      scheduler = createScheduler(root, {
+        onSelect: function (start) {
+          notice(null);
+          if (start) emit('manage_slot_selected', { lead_time_days: daysUntil(start) });
+        },
+        authToken: function () { return token; }
+      });
       icons();
       return refreshStatus();
     }
@@ -2198,6 +2519,17 @@
     container.setAttribute('data-jurnii-mounted', '1');
     var inst = isManage ? createManage(container, opts) : createBooking(container, opts);
     instances.push({ container: container, instance: inst });
+
+    // The top of the funnel: the form is on screen. Emitted after construction so a
+    // widget that fails to build does not report as an opened form.
+    if (!isManage) {
+      var p = readPlacement(container, opts);
+      emit('booking_open', {
+        form_placement: p.formPlacement || undefined,
+        cta_id: p.ctaId || undefined,
+        form_variant: p.formVariant || undefined
+      });
+    }
     return inst;
   }
 
@@ -2285,6 +2617,7 @@
       resolveInternal: resolveInternal,
       readPlacement: readPlacement,
       bootstrapPlan: bootstrapPlan,
+      bookingHostMarkup: bookingHostMarkup,
       bucketSlotsByLocalDay: bucketSlotsByLocalDay,
       localDateKey: localDateKey,
       fromLocalDateKey: fromLocalDateKey,

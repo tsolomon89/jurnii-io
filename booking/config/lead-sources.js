@@ -9,7 +9,7 @@
  * The ACTIVE Leads.Lead_Source options offered by the internal booking form.
  *
  * `label` is Zoho's display_value and `value` is its actual_value; five options differ
- * (Advertisement shows as "Import", Trade Show as "Event", Twitter as "X (Twitter)").
+ * (Advertisement shows as "Import", Trade Show as "Trade Show / Event", Twitter as "X (Twitter)").
  * The form shows the label and submits the value — a label must never reach the CRM.
  */
 (function (root, factory) {
@@ -23,7 +23,7 @@
     { value: "Advertisement", label: "Import" },
     { value: "Employee Referral", label: "Employee Referral" },
     { value: "External Referral", label: "External Referral" },
-    { value: "Trade Show", label: "Event" },
+    { value: "Trade Show", label: "Trade Show / Event" },
     { value: "Facebook", label: "Facebook" },
     { value: "Twitter", label: "X (Twitter)" },
     { value: "Linkedin", label: "Linkedin" },
