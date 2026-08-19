@@ -4,10 +4,20 @@ A self-contained progressive **booking form** (frontend widget) + **serverless b
 website visitor into a Zoho CRM record and a Google Calendar / Google Meet booking. Everything the
 feature needs lives in this folder so it can be copied into another project.
 
+- **CRM semantics — the authority:** [`../zoho-functions/docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../zoho-functions/docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)
+  — outranks everything below on what an Account, Deal, Contact, Product and Quote *mean*
 - **As built — deviations, defects, decisions:** [`docs/implementation-notes.md`](docs/implementation-notes.md)
 - **Operations:** [`docs/runbook.md`](docs/runbook.md)
-- **Design & behaviour:** [`docs/architecture.md`](docs/architecture.md)
+- **Design & behaviour:** [`docs/architecture.md`](docs/architecture.md) — ⚠ its Deal-linking section is
+  **known drift**: it argues multi-product bookings must defer activation to a human, which the
+  authoritative model prohibits. See the second banner at the top of that file.
 - ~~`docs/IMPLEMENTATION_EVIDENCE.md`~~ — **superseded**, kept as the record of the pre-rewrite design
+
+> **Deal resolution is changing.** `integrations/zoho/index.js` `resolveProductDeal` currently picks a
+> Meeting's `What_Id` by substring-matching a Product name inside `Deal_Name`. Under the approved model
+> an Account has one Deal and Products are Quotes, so this becomes "the Account's Deal". **This change
+> must ship before the Deluge Deal-naming change**, or every booking resolves `status:'none'` and
+> Meetings are created with no `What_Id`.
 
 ## What's in here
 

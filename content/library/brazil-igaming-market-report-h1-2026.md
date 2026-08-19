@@ -1,14 +1,28 @@
 ---
-title: "The Brazil iGaming Market Report, H1 2026"
-subtitle: "Scale, shared infrastructure, and the experience contest in the first full year of regulation"
-date: "2026-08-03"
-medium: "Market Report"
-category: "Market Report"
-author: "Jurnii Intelligence"
-description: "Scale, shared infrastructure, and the experience contest in the first full year of Brazilian regulation: 17.7M bettors, the UX benchmark, PIX depth, and the World Cup window."
-excerpt: "When the engine is shared and every player holds five accounts, the first-deposit journey becomes the contest. A data-led read of the Brazilian market in H1 2026."
-tags: ["iGaming", "Market Intelligence", "Brazil", "UX Benchmarking", "Regulation"]
+title: 'The Brazil iGaming Market Report, H1 2026'
+subtitle: >-
+  Scale, shared infrastructure, and the experience contest in the first full
+  year of regulation
+date: '2026-08-03'
+medium: Market Report
+category: Market Report
+author: Jurnii Intelligence
+description: >-
+  Scale, shared infrastructure, and the experience contest in the first full
+  year of Brazilian regulation: 17.7M bettors, the UX benchmark, PIX depth, and
+  the World Cup window.
+excerpt: >-
+  When the engine is shared and every player holds five accounts, the
+  first-deposit journey becomes the contest. A data-led read of the Brazilian
+  market in H1 2026.
+tags:
+  - iGaming
+  - Market Intelligence
+  - Brazil
+  - UX Benchmarking
+  - Regulation
 isIndexable: true
+coverImage: /assets/library/brazil-igaming-market-report-h1-2026/cover.png
 ---
 
 # The Brazil iGaming Market Report, H1 2026

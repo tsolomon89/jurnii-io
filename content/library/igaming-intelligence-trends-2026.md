@@ -1,9 +1,11 @@
 ---
-title: "iGaming Intelligence Trends: 2026 Outlook"
+title: 'iGaming Intelligence Trends: 2026 Outlook'
 description: >-
-  Where the smart operators are putting commercial intelligence budget — and where they're cutting back.
+  Where the smart operators are putting commercial intelligence budget — and
+  where they're cutting back.
 excerpt: >-
-  Where the smart operators are putting commercial intelligence budget — and where they're cutting back.
+  Where the smart operators are putting commercial intelligence budget — and
+  where they're cutting back.
 date: '2026-01-15'
 medium: Article
 category: Market Intelligence
@@ -12,9 +14,13 @@ tags:
   - Market Intelligence
   - iGaming
   - Intelligence
-productRefs: [jurnii-360, jurnii-ux, cortex]
+productRefs:
+  - jurnii-360
+  - jurnii-ux
+  - cortex
 authorImage: /assets/library/authors/mitch-vidler.png
 isIndexable: true
+coverImage: /assets/library/igaming-intelligence-trends-2026/cover.png
 ---
 
 # iGaming Intelligence Trends: 2026 Outlook

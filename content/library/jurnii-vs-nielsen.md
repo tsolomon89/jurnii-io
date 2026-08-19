@@ -1,9 +1,11 @@
 ---
-title: "Jurnii vs Nielsen MMM: what iGaming operators need to know"
+title: 'Jurnii vs Nielsen MMM: what iGaming operators need to know'
 description: >-
-  Nielsen is the FMCG gold standard. The variables that move iGaming aren't in the model.
+  Nielsen is the FMCG gold standard. The variables that move iGaming aren't in
+  the model.
 excerpt: >-
-  Nielsen is the FMCG gold standard. The variables that move iGaming aren't in the model.
+  Nielsen is the FMCG gold standard. The variables that move iGaming aren't in
+  the model.
 date: '2026-04-15'
 medium: Article
 category: Competitive Analysis
@@ -12,8 +14,10 @@ tags:
   - Competitive Analysis
   - iGaming
   - Intelligence
-productRefs: [cortex]
+productRefs:
+  - cortex
 isIndexable: true
+coverImage: /assets/library/jurnii-vs-nielsen/cover.png
 ---
 
 # Jurnii vs Nielsen MMM: what iGaming operators need to know

@@ -1,14 +1,27 @@
 ---
-title: "The Europe iGaming Market Report, H1 2026"
-subtitle: "The rising compliance floor and the journey execution that separates operators above it"
-date: "2026-08-03"
-medium: "Market Report"
-category: "Market Report"
-author: "Jurnii Intelligence"
-description: "The rising compliance floor across six European markets, and the journey execution that separates operators above it: digital-ID onboarding, payment breadth, and the leading-a-poor-market paradox."
-excerpt: "Regulatory maturity levelled the basics and moved differentiation upstairs. A data-led read of six European markets in H1 2026."
-tags: ["iGaming", "Market Intelligence", "Europe", "UX Benchmarking", "Regulation"]
+title: 'The Europe iGaming Market Report, H1 2026'
+subtitle: >-
+  The rising compliance floor and the journey execution that separates operators
+  above it
+date: '2026-08-03'
+medium: Market Report
+category: Market Report
+author: Jurnii Intelligence
+description: >-
+  The rising compliance floor across six European markets, and the journey
+  execution that separates operators above it: digital-ID onboarding, payment
+  breadth, and the leading-a-poor-market paradox.
+excerpt: >-
+  Regulatory maturity levelled the basics and moved differentiation upstairs. A
+  data-led read of six European markets in H1 2026.
+tags:
+  - iGaming
+  - Market Intelligence
+  - Europe
+  - UX Benchmarking
+  - Regulation
 isIndexable: true
+coverImage: /assets/library/europe-igaming-market-report-h1-2026/cover.png
 ---
 
 # The Europe iGaming Market Report, H1 2026

@@ -1,9 +1,11 @@
 ---
-title: "Jurnii UX vs traditional UX agencies: speed, depth, and commercial weight"
+title: 'Jurnii UX vs traditional UX agencies: speed, depth, and commercial weight'
 description: >-
-  Agencies do qualitative work brilliantly. They don't scale, and they don't carry NGR weight.
+  Agencies do qualitative work brilliantly. They don't scale, and they don't
+  carry NGR weight.
 excerpt: >-
-  Agencies do qualitative work brilliantly. They don't scale, and they don't carry NGR weight.
+  Agencies do qualitative work brilliantly. They don't scale, and they don't
+  carry NGR weight.
 date: '2026-03-15'
 medium: Article
 category: Competitive Analysis
@@ -12,9 +14,11 @@ tags:
   - Competitive Analysis
   - iGaming
   - Intelligence
-productRefs: [jurnii-ux]
+productRefs:
+  - jurnii-ux
 authorImage: /assets/library/authors/fraser-dunk.jpg
 isIndexable: true
+coverImage: /assets/library/jurnii-vs-ux-agencies/cover.png
 ---
 
 # Jurnii UX vs traditional UX agencies: speed, depth, and commercial weight

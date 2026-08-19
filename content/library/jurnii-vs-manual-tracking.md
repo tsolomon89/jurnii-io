@@ -1,9 +1,11 @@
 ---
-title: "Jurnii 360 vs manual competitor tracking: the real cost"
+title: 'Jurnii 360 vs manual competitor tracking: the real cost'
 description: >-
-  Two analysts, three spreadsheets, and a quarterly report. We costed it. The number is bigger than you think.
+  Two analysts, three spreadsheets, and a quarterly report. We costed it. The
+  number is bigger than you think.
 excerpt: >-
-  Two analysts, three spreadsheets, and a quarterly report. We costed it. The number is bigger than you think.
+  Two analysts, three spreadsheets, and a quarterly report. We costed it. The
+  number is bigger than you think.
 date: '2026-03-15'
 medium: Article
 category: Competitive Analysis
@@ -12,9 +14,11 @@ tags:
   - Competitive Analysis
   - iGaming
   - Intelligence
-productRefs: [jurnii-360]
+productRefs:
+  - jurnii-360
 authorImage: /assets/library/authors/fraser-dunk.jpg
 isIndexable: true
+coverImage: /assets/library/jurnii-vs-manual-tracking/cover.png
 ---
 
 # Jurnii 360 vs manual competitor tracking: the real cost

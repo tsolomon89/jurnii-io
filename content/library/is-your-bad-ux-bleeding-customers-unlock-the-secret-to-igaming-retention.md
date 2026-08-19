@@ -18,7 +18,7 @@ tags:
   - iGaming
   - Intelligence
 coverImage: >-
-  /assets/library/is-your-bad-ux-bleeding-customers-unlock-the-secret-to-igaming-retention/cover.webp
+  /assets/library/is-your-bad-ux-bleeding-customers-unlock-the-secret-to-igaming-retention/cover.png
 isIndexable: true
 sourceUrl: >-
   https://www.jurnii.io/post/is-your-bad-ux-bleeding-customers-unlock-the-secret-to-igaming-retention

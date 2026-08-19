@@ -18,7 +18,7 @@ tags:
   - iGaming
   - Intelligence
 coverImage: >-
-  /assets/library/unlock-faster-cx-insights-with-vibe-coding-for-human-ai-collaboration/cover.webp
+  /assets/library/unlock-faster-cx-insights-with-vibe-coding-for-human-ai-collaboration/cover.png
 isIndexable: true
 sourceUrl: >-
   https://www.jurnii.io/post/unlock-faster-cx-insights-with-vibe-coding-for-human-ai-collaboration

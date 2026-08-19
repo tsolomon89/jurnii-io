@@ -1,3 +1,10 @@
+> ⚠ **Scope: WEBSITE CONTENT taxonomy only — this is not the CRM commercial model.**
+> Where this file says "commercial ontology" it means the website content grammar in
+> `.agents/context/commercial-ontology-guide/`. Zoho CRM semantics are governed by
+> `zoho-functions/docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`.
+
+---
+
 # Rule: Content and Ontology Strictness
 
 **When generating or evaluating content, you must adhere to these rules:**

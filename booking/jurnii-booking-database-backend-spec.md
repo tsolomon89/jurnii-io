@@ -1,3 +1,18 @@
+> # ⚠ TERMINOLOGY CORRECTION — the boundary is right, the entity name is wrong
+>
+> Every occurrence of "Product Deal" / "Account × Product Deal logic" in this spec appears inside a
+> **boundary clause** — "Node must not duplicate this", "the website never fabricates this". Those
+> boundary clauses are **correct and unchanged**: Zoho owns Account→Deal and Product→Quote logic; Node
+> does not.
+>
+> Only the entity name is wrong. Read "Product Deal" as "the Account's Deal" throughout. The spec's
+> authority over booking scope is unaffected, and the §-number references cited from `docs/runbook.md`
+> remain valid.
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../zoho-functions/docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # Specification — Jurnii Database-First Booking Backend
 
 **Status:** Planning specification  

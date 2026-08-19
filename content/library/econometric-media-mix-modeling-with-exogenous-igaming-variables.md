@@ -1,14 +1,23 @@
 ---
 title: Econometric Media Mix Modeling with Exogenous iGaming Variables
-subtitle: Incorporating Bonus Mechanics, Sporting Calendars, and Regulatory Shocks
+subtitle: 'Incorporating Bonus Mechanics, Sporting Calendars, and Regulatory Shocks'
 date: '2026-06-01'
 medium: Paper
 category: Econometrics
 author: Timothy Solomon
-tags: [MMM, Econometrics, iGaming, Marketing]
-productRefs: [jurnii-mmm]
-featureRefs: [market-trends]
-solutionRefs: [attribution]
+tags:
+  - MMM
+  - Econometrics
+  - iGaming
+  - Marketing
+productRefs:
+  - jurnii-mmm
+featureRefs:
+  - market-trends
+solutionRefs:
+  - attribution
+coverImage: >-
+  /assets/library/econometric-media-mix-modeling-with-exogenous-igaming-variables/cover.png
 ---
 
 # Abstract

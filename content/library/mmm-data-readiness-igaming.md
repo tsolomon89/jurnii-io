@@ -1,9 +1,11 @@
 ---
 title: Is your data ready for MMM? A self-assessment for iGaming operators
 description: >-
-  A 12-point checklist. Most operators fail two or three before contracts are signed — here's how to fix them first.
+  A 12-point checklist. Most operators fail two or three before contracts are
+  signed — here's how to fix them first.
 excerpt: >-
-  A 12-point checklist. Most operators fail two or three before contracts are signed — here's how to fix them first.
+  A 12-point checklist. Most operators fail two or three before contracts are
+  signed — here's how to fix them first.
 date: '2026-02-15'
 medium: Article
 category: Playbook
@@ -12,8 +14,10 @@ tags:
   - Playbook
   - iGaming
   - Intelligence
-productRefs: [cortex]
+productRefs:
+  - cortex
 isIndexable: true
+coverImage: /assets/library/mmm-data-readiness-igaming/cover.png
 ---
 
 # Is your data ready for MMM? A self-assessment for iGaming operators

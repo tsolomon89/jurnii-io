@@ -1,0 +1,202 @@
+---
+title: "Cross-Channel Attribution: Reconciling Affiliate, Paid Media, and Brand Spend"
+description: "Reconcile cross-channel attribution in iGaming. Uncover affiliate cannibalisation, eliminate duplicate CPA payouts, and optimise blended marketing efficiency."
+excerpt: "How commercial operators eliminate duplicate CPA payouts and measure true incremental revenue across affiliate, paid, and brand channels."
+date: '2027-02-09'
+medium: Article
+category: Commercial Strategy
+author: "Fraser Dunk"
+tags:
+  - "Cross-Channel Attribution"
+  - "Affiliate Marketing"
+  - "Marketing Mix Modelling"
+  - "iGaming"
+coverImage: /assets/library/cross-channel-attribution-reconciling-affiliate-paid-and-brand-spend/cover.png
+isIndexable: true
+productRefs:
+  - "jurnii-mmm"
+solutionRefs:
+  - "cross-channel-attribution"
+---
+
+Digital gaming operators allocate hundreds of millions annually across a fragmented acquisition marketing mix. In any given week, an operator deploys capital across performance search ads, programmatic display networks, paid social campaigns, affiliate revenue-share partnerships, television broadcasts, podcast sponsorships, and pitch-side sports stadium signage.
+
+Despite the scale of this capital deployment, measuring how these disparate channels interact to produce a funded player registration is plagued by structural attribution errors. Individual acquisition channels do not operate in isolation; they interact continuously across the player lifecycle.
+
+When marketing teams evaluate performance through channel-specific dashboards or siloed agency reports, a severe commercial failure mode occurs: **the attribution overlap crisis**. Performance search agencies claim credit for converting branded keywords; affiliate aggregators claim CPA bounties for last-minute voucher code clicks; and brand media agencies claim that television awareness drove the entire cohort. When finance reconciles total attributed conversions against actual bank deposits, the attributed numbers exceed reality by 150% to 200%.
+
+To eliminate duplicate commission payouts and establish commercial truth, operators must deploy [cross-channel attribution solutions](/solutions/cross-channel-attribution). By combining econometric modelling with unified channel reconciliation in [Jurnii Cortex](/products/jurnii-mmm), operators isolate true incremental lift and optimise their blended marketing efficiency.
+
+## The Structural Mechanics of Channel Cannibalisation
+
+In the iGaming sector, channel cannibalisation is particularly acute between brand paid search, affiliate aggregators, and top-of-funnel brand advertising:
+
+```
++-----------------------------------------------------------------------------+
+|               The Cross-Channel Cannibalisation Dilemma                     |
++-----------------------------------------------------------------------------+
+|                                                                             |
+|  SCENARIO: Multi-Channel Customer Acquisition Path                          |
+|                                                                             |
+|  1. Brand Sponsorship: Bettor watches football club sponsored by Operator.  |
+|  2. Organic Search: Bettor searches "Operator Welcome Offer" on mobile.     |
+|  3. Affiliate Aggregator: Bettor clicks affiliate comparison site link.     |
+|  4. Paid Search Interception: Bettor clicks brand PPC ad to reach register. |
+|                                                                             |
+|  -------------------------------------------------------------------------  |
+|  UNRECONCILED ATTRIBUTION CLAIMS:                                           |
+|  - Brand Agency Claims:      100% Attribution (£150 Value)                  |
+|  - Affiliate Demands:        £80 CPA Bounty Claim                           |
+|  - Google Paid Search Claims: 1 Conversion (£25 Ad Spend)                   |
+|                                                                             |
+|  TOTAL ATTRIBUTED COST: £255 for a £50 Initial Deposit                      |
+|                                                                             |
+|  RECONCILED ECONOMETRIC REALITY (JURNII CORTEX):                            |
+|  - True Incremental Driver: Brand Sponsorship + Organic Search (85%)        |
+|  - Affiliate Incremental Lift: 5% (Late-stage navigation click)             |
+|  - Paid Search Lift: 10% (Defensive protection against competitor bidding)  |
+|                                                                             |
++-----------------------------------------------------------------------------+
+```
+
+### 1. The Affiliate Coupon Interception
+
+Affiliate marketing is an essential acquisition pillar in regulated gaming. However, many affiliate partners specialize in "cookie dropping" and late-stage intent interception. When a bettor who has already decided to register searches for a promotional code on Google, the affiliate site provides a generic link, setting a 30-day tracking cookie and claiming an £80 to £120 CPA on a player the operator had already acquired.
+
+### 2. Brand Paid Search Waste
+
+When competitors bid aggressively on your brand keywords, bidding defensively on your own trademark is necessary. However, without cross-channel modelling, paid search teams over-spend on brand keywords during heavy TV campaign flights, artificially taking credit for demand generated by broadcast media.
+
+### 3. Upper-Funnel Undervaluation
+
+Because podcast sponsorships, pitch-side stadium LED boards, and television advertisements do not generate direct clickable hyperlinks on mobile devices, traditional attribution tools assign them zero commercial value. CFOs review these reports, conclude that brand marketing is unproductive, and cut top-of-funnel budgets, only to watch total organic registration volume collapse three months later.
+
+## The Econometric Architecture of Cross-Channel Attribution
+
+Jurnii Cortex resolves cross-channel attribution by integrating high-frequency transaction data into a multi-variable econometric engine:
+
+```
++-----------------------------------------------------------------------------+
+|             Econometric Cross-Channel Attribution Architecture              |
++-----------------------------------------------------------------------------+
+|                                                                             |
+|  STAGE 1: UNIFIED EXPENDITURE & CONVERSION INGESTION                        |
+|  - Ingest spend, impressions, and clicks across Paid Search, Social, TV,    |
+|    Audio, Affiliates, Influencer, and CRM channels.                         |
+|                                                                             |
+|  -------------------------------------------------------------------------  |
+|  STAGE 2: NON-LINEAR DECAY & INTERACTION MODELLING                          |
+|  - Compute channel-specific adstock decay rates ($\lambda$)                 |
+|  - Model channel cross-elasticity and interaction synergy coefficients      |
+|                                                                             |
+|  -------------------------------------------------------------------------  |
+|  STAGE 3: INCREMENTAL LIFT ISOLATION                                        |
+|  - Subtract baseline organic demand and external sporting tournament noise  |
+|  - Isolate true marginal CPA (mCPA) and marginal ROAS (mROAS) per channel   |
+|                                                                             |
+|  -------------------------------------------------------------------------  |
+|  STAGE 4: UNIFIED COMMERCIAL ALLOCATION                                      |
+|  - Reconcile affiliate commission tiers against incremental value created   |
+|  - Export optimised budget distribution models for C-level leadership       |
+|                                                                             |
++-----------------------------------------------------------------------------+
+```
+
+### 1. Channel Interaction Coefficients
+
+Channels do not operate in a vacuum; they reinforce one another. A television advertisement increases the click-through rate (CTR) of a paid social ad by 30%. [Jurnii Cortex](/products/jurnii-mmm) calculates interaction synergy coefficients, ensuring upper-funnel channels receive proper credit for lifting middle-funnel conversion efficiency.
+
+### 2. Marginal Return on Ad Spend (mROAS)
+
+Average CAC is a misleading metric. If an affiliate channel has an average CPA of £60, but acquiring the next 500 players costs £140 each due to channel saturation, expanding spend in that channel is commercially irresponsible. Econometric modelling calculates marginal CPA and marginal ROAS, identifying the exact saturation ceiling of each channel.
+
+### 3. Exogenous Baseline Isolation
+
+By controlling for external factors (such as major sports events, seasonality, and competitor bonus changes), the model ensures that an influx of organic depositors during the Cheltenham Festival or Super Bowl is not falsely attributed to paid marketing campaigns.
+
+## Practical Commercial Value: Auditing the Acquisition Mix
+
+Implementing cross-channel attribution within [Jurnii Cortex](/products/jurnii-mmm) delivers three immediate commercial gains:
+
+```
++-----------------------------------------------------------------------------+
+|               Cross-Channel Optimization Commercial Dividends                |
++-----------------------------------------------------------------------------+
+|                                                                             |
+|  1. ELIMINATING UNJUSTIFIED CPA COMMISSIONS                                 |
+|     - Restructure affiliate deals: Shift low-intent coupon interceptors from|
+|       flat CPA to tiered rev-share tied to verified incremental value.      |
+|                                                                             |
+|  2. OPTIMISING PAID SEARCH THRESHOLDS                                       |
+|     - Calibrate defensive brand keyword bidding to maintain 85% impression  |
+|       share without over-bidding during heavy TV broadcast windows.         |
+|                                                                             |
+|  3. EVIDENCE-BASED MEDIA MIX REALLOCATION                                   |
+|     - Reallocate 15-30% of marketing budget from saturated channels into    |
+|       high-yield, under-invested top-of-funnel channels.                    |
+|                                                                             |
++-----------------------------------------------------------------------------+
+```
+
+### Case Study: Rebalancing a Multi-Brand European Portfolio
+
+A European iGaming group operating four regional casino brands spent £18M annually across digital acquisition channels. Internal BI dashboards reported that 52% of all FTDs came from affiliate partners, while TV and programmatic display generated less than 8% of conversions.
+
+A cross-channel econometric attribution audit revealed:
+- **Affiliate Over-Credit**: 40% of affiliate-attributed conversions were organic brand searchers who clicked an affiliate aggregator link within 10 minutes of account creation.
+- **TV Media Under-Valuation**: Television campaigns generated a 3.4x higher incremental lift in direct brand search volume than previously recorded.
+- **Paid Social Saturation**: Paid social spend had passed its saturation inflection point; the marginal CPA on Facebook/Instagram was £195 compared to a £65 average.
+
+**Strategic Action**: The operator renegotiated affiliate terms with coupon aggregators, capped paid social spend at the saturation threshold, and reallocated £3.2M into targeted sports sponsorships and podcast media.
+
+**Financial Result**: Total First Time Depositors increased by 28% year-on-year, while total blended customer acquisition cost fell by 22%, saving £3.9M in marketing overhead.
+
+## Cross-Channel Budget Reconciliation in Jurnii Cortex
+
+Within [Jurnii Cortex](/products/jurnii-mmm), cross-channel attribution is visualized through unified spend and incrementality Gantt views:
+
+```
++-----------------------------------------------------------------------------+
+|               Cross-Channel Budget Reconciliation Matrix                    |
++-----------------------------------------------------------------------------+
+|                                                                             |
+|  CHANNEL CATEGORY       LAST-CLICK BI METRIC     CORTEX TRUE INCREMENTAL LIFT|
+|  -------------------------------------------------------------------------  |
+|  Brand Search PPC       Over-credited by 65%     Pure organic cannibalization|
+|  Affiliate Aggregators  Over-credited by 40%     Late-stage coupon tax       |
+|  Sports Podcast / Audio Under-credited by 70%    2.8x higher true mROAS      |
+|  Linear / Connected TV  Under-credited by 85%    Major baseline demand driver|
+|                                                                             |
++-----------------------------------------------------------------------------+
+```
+
+## The Affiliate Incrementality Audit: Isolating Value
+
+Affiliate aggregators frequently claim credit for high-intent organic searchers who click affiliate links immediately prior to registration.
+
+Jurnii Cortex deploys causal incrementality models to separate genuine discovery from coupon interception:
+
+```
++-----------------------------------------------------------------------------+
+|               Affiliate Incrementality Audit Framework                      |
++-----------------------------------------------------------------------------+
+|                                                                             |
+|  AFFILIATE CATEGORY     LAST-CLICK SHARE    TRUE INCREMENTAL SHARE          |
+|  -------------------------------------------------------------------------  |
+|  Odds Comparison Portals 38% of Signups     34% Incremental (High Value)    |
+|  Coupon & Promo Code Agg 42% of Signups     8% Incremental (Late Intercept) |
+|  Niche Sports Blogs      20% of Signups     22% Incremental (Net-New Demand)|
+|                                                                             |
++-----------------------------------------------------------------------------+
+```
+
+Restructuring affiliate contracts based on true incremental yield saves operators millions in unearned CPA commissions.
+
+## Aligning Marketing, Finance, and Commercial Leadership
+
+Cross-channel attribution is not merely an analytics tool; it is a governance framework that bridges marketing strategy with financial accountability. In a $17.1M marketing budget deployment, Cortex demonstrated a +46% improvement in attribution accuracy and reallocated $4.85M in capital from saturated channels to high-yield brand media.
+
+When Chief Marketing Officers and Chief Financial Officers operate from a single, econometrically verified source of truth, capital allocation debates transition from subjective arguments into data-backed growth strategies that compound Net Gaming Revenue.
+
+To explore how Jurnii Cortex reconciles cross-channel attribution across sportsbooks and casino operations, explore our [cross-channel attribution solution page](/solutions/cross-channel-attribution) or schedule a consultation with our econometric analytics team through [Jurnii Cortex](/products/jurnii-mmm).
+

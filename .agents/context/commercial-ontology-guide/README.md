@@ -1,3 +1,11 @@
+> ⚠ **This is the WEBSITE content ontology** (Products / Features / Solutions / Use Cases /
+> page grammar). **It is NOT the Zoho CRM commercial model.** For Account / Deal / Contact /
+> Product / Quote semantics and cardinality, the authority is
+> `zoho-functions/docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`.
+> The two use overlapping words for different things; do not cross-apply them.
+
+---
+
 # Commercial Ontology Framework — Agent & Operator Guide
 
 > **Purpose**: A unified reference for human operators and AI agents to audit, build, and align any website and CRM to a deterministic commercial ontology.

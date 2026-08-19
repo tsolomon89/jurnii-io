@@ -15,7 +15,7 @@ tags:
   - Market Intelligence
   - iGaming
   - Intelligence
-coverImage: /assets/library/what-does-customer-experience-mean-to-jurnii/cover.avif
+coverImage: /assets/library/what-does-customer-experience-mean-to-jurnii/cover.png
 isIndexable: true
 sourceUrl: 'https://www.jurnii.io/post/what-does-customer-experience-mean-to-jurnii'
 ---

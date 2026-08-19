@@ -1,3 +1,16 @@
+> # 📁 HISTORICAL — superseded by `V6_BOOKING_REMEDIATION_PLAN.md`
+>
+> Dated 2026-08-10. Its successor already claims supersession; this banner makes it mutual.
+>
+> Findings F1–F6 are preserved as evidence. **The F1 severity claim is retracted** by its successor's
+> correction C1. Its open question at L333–334 (how often a two-product Contact gets
+> `[multi_product_sequence_ambiguous]` and never activates) is **moot under the approved model** —
+> Product count never blocks activation (authority §5.4).
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../zoho-functions/docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # v6 + Booking — deep-dive findings and open questions
 
 Date: 2026-08-10 · Scope: `zoho-functions/v6/**` (38 Deluge functions, ~11,900 lines) and the

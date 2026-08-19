@@ -1,0 +1,64 @@
+---
+description: Authoritative Jurnii commercial model and Zoho safety rules. Applies to all CRM automation and booking work.
+globs: zoho-functions/**,booking/**
+alwaysApply: true
+---
+
+# Jurnii commercial model — authoritative
+
+Full authority: `zoho-functions/docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`
+Full agent guide: `CLAUDE.md` at the repository root.
+
+## The ontology
+
+```
+Lead -> Contact/Opportunity      Account -> Deal      Product -> Quote
+
+one Account -> ZERO OR ONE persistent Deal
+one Deal    -> many Contact opportunities, many Quotes
+```
+
+- Products enter the model as **Quotes** under the one Deal — never as additional Deals.
+- **Opportunity authority is on the CONTACT.** The Deal's `Stage`, `Opportunity_Stage`,
+  `Opportunity_State` and `Opportunity_Status` are derived roll-ups, not an independent lifecycle.
+- Activity snapshots (all nine are kept): `*_Task_Stage` ← Contact, `*_Task_Opportunity` ← Contact,
+  `*_Task_Pipeline` ← Deal.
+- Several Products or Quotes under a Deal do **not** make a Contact's sequence ambiguous.
+
+## 🚨 The code does not implement this yet
+
+`zoho-functions/v6/` implements a superseded model: `Deal = Account × Product`,
+`Deal_Key = accountKey::productKey`.
+
+**Every `.deluge` header comment describes that superseded model.** They are accurate about what runs
+today and wrong about the target. Do not conform new code to them, and do not "fix" code to match a
+document unless that document is the authority above.
+
+Sealed, do not implement from — and do not execute:
+- `zoho-functions/docs/v6/zoho_v6_refactor_spec_pack/` (esp. `08_coding_agent_prompt.md`)
+- `zoho-functions/.agents/skills/zoho-crm-deluge-refactoring/SKILL.md`
+- `zoho-functions/.agents/workflows/deluge-refactor-workflow.md`
+- `zoho-functions/.agents/rules/deluge-rules.md`
+
+## Zoho safety — non-negotiable
+
+- **Read-only by default.** COQL `SELECT`, `GET`, `getFields`, `getWorkflowRules`. Nothing else.
+- **Never publish a Deluge function.** The owner republishes by hand from the Zoho console.
+- **Never commit a `.deluge` edit until the owner confirms it is published.** Seven files are currently
+  uncommitted and unpublished.
+- **Never create, update, delete or toggle** a workflow rule, field, picklist or record without an
+  explicit instruction naming that exact change.
+- **`SUCCESS` proves nothing — read the record back.** An api_name that does not exist can void the
+  entire `updateRecord` map; an off-layout field silently discards only its own key.
+- **Picklists round-trip in display space**, including in COQL `where` clauses. `Task_Stage` stores
+  `Renewall` and every surface returns `Renewal`.
+- `Contacts.Contact_Role1` is the Contact-record field. `Contact_Role` is the `Contact_Roles` junction
+  field — querying it on Contacts returns blank for every record.
+
+## Booking
+
+`booking/integrations/zoho/index.js` `resolveProductDeal` matches Deals by substring of `Deal_Name`.
+Under the approved model that becomes "the Account's Deal". **It must ship before the Deluge
+Deal-naming change**, or every booking lookup returns `status:'none'`.
+
+Node **never creates a Deal** — that is owned by Deluge.

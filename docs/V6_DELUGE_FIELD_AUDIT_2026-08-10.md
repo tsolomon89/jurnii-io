@@ -1,3 +1,21 @@
+> # 📁 HISTORICAL — field evidence current, architectural framing superseded
+>
+> **Field evidence in this audit remains valid as of 2026-08-10 and is actively used.** It is still the
+> best reader/writer map in the repository and it directly feeds the field-use contract.
+>
+> **Its architectural framing is superseded.** Where it records `Deal_Key`, `Deal_Product` and
+> `Deal_Product_Key` as canonical Deal fields, read those as *observed writers under the superseded
+> Product-Deal implementation*, not as approved design.
+>
+> Two later corrections apply: 5 custom activity fields were deleted live on 2026-08-11 (after this
+> audit was written), and its phantom-field conclusion is narrowed by
+> `V6_FIELD_VALIDATION_ADVERSARIAL_2026-08-15.md`. Superseded framing only — **do not rewrite the
+> evidence**.
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../zoho-functions/docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # v6 Deluge — Field Requirement Audit
 
 **Date:** 2026-08-10  
@@ -1165,3 +1183,352 @@ on all six edited functions; snapshot `--check` clean; **booking suite 478/478 g
   `Deal_Primary_Contact`, `Next_Comm_Follow_Up_Date`, `Commercials_Status`, `Commercial_Outcome`,
   `Account_Source_Class`) — none performed. Each needs the report/view/layout dependency check that
   no available API exposes.
+
+---
+
+## 14. Proof: the six Deal `Contract_*_Plan_*` mirrors are reproducible from Quotes
+
+The owner's retirement decision for these six was conditional on proving the information lives in the
+Quote system. It does — exactly, and the Deal copy is strictly *lossier*.
+
+**Betsson Group - Jurnii UX** (`991103000002868007`), 5 related Quotes:
+
+| | brands | ACV | type | start | end |
+| --- | --- | --- | --- | --- | --- |
+| Deal `Contract_Initial_*` | 5 | 6700 | **null** | 2025-11-03 | 2026-11-03 |
+| Quote *(Acquisition)*, Closed Won, signed 2026-07-21 | 5 | 6700 | **Flex** | 2025-11-03 | 2026-11-03 |
+| Deal `Contract_Current_*` | 31 | 45570 | **null** | 2026-05-25 | 2027-05-25 |
+| Quote *(Expansion)*, Closed Won, signed 2026-07-21 | 31 | 45570 | **Fixed** | 2026-05-25 | 2027-05-25 |
+
+**Neatplay - Jurnii UX** (`991103000002880040`) reproduces the same pattern: Initial matches the
+Acquisition Closed-Won Quote (20 / 23350 / 2025-05-23), Current matches the Renewal Closed-Won Quote
+(20 / 23350 / 2026-05-23).
+
+**The derivation rule, confirmed on live data:**
+- `Contract_Initial_*` = the **earliest** Closed-Won Quote on the Deal, ordered by `Contract_Date_Start`
+- `Contract_Current_*` = the **latest** Closed-Won Quote on the same ordering
+
+Every input survives on the Quote: `Quote_Plan_Brands`, `Quote_Plan_Type`, `Quote_Product`,
+`Contract_ACV`, `Contract_Date_Start/End`, `Contract_Signed_Date`, plus the structured
+`Quoted_Items` lines.
+
+**The mirror is lossy, which strengthens the case.** Across every Deal sampled,
+`Contract_*_Plan_Type` is `null` and `Contract_*_Plan_Products` is `[]` on the Deal, while the source
+Quote carries `Flex`/`Fixed` and `Quote_Product = Jurnii UX`. Retiring the six loses nothing and
+removes a mirror that already disagrees with its source by omission.
+
+Scope note: this covers only the six `*_Plan_Products` / `*_Plan_Type` / `*_Plan_Brands` mirrors.
+`Contract_Initial_ACV`, `Contract_Current_ACV` and the contract date fields are **not** in the
+retirement set — they are read by `processDeal` and populated.
+
+---
+
+## 15. Final validation audit — 2026-08-15
+
+Six-agent read-only audit of the 36-field Contact/Activity/Deal sequence family: four parallel
+evidence passes (module-qualified code map, live metadata + full 219-Task cross-tabulation, non-code
+dependency sweep, semantic/historical analysis), an adversarial reviewer tasked with *refuting* each
+retirement, then synthesis. 1.09M subagent tokens, 0 errors. No field was deleted; no record touched.
+
+Full deliverables: [`V6_FIELD_VALIDATION_MATRIX_2026-08-15.md`](V6_FIELD_VALIDATION_MATRIX_2026-08-15.md)
+and [`V6_FIELD_VALIDATION_ADVERSARIAL_2026-08-15.md`](V6_FIELD_VALIDATION_ADVERSARIAL_2026-08-15.md).
+
+### 15.1 Outcome — 2 of 36 fields retire
+
+| Verdict | n |
+| --- | ---: |
+| Keep as required automation control | 19 |
+| Keep as historical context | 8 (all owner-settled) |
+| Keep as canonical semantic field | 6 |
+| Rewire, then retire | 1 — `Tasks.Blocks_Sequence` |
+| Retire as unused helper | 1 — `Deals.Deal_Primary_Contact` |
+| Requires owner decision | 1 — `Events.Reminder_Send_At` |
+| Rename label only | 1 — `Contacts.Sequence_Stage` |
+
+The owner's settled KEEPs closed 7 of the 9 candidates the evidence pass had raised. The drift here
+is in **implementation and naming, not in the semantic model**.
+
+### 15.2 Three corrections to earlier sections of this document
+
+**§13.5 / §12.3 were wrong that `Calls.Sequence_Stage` is the retirable duplicate.** It has 3 readers
+gating real branches; `Call_Task_Stage` has 0 readers, 0 records and stores the *legacy* vocabulary.
+The migration direction in §12.3 was backwards. Both now KEEP — `Call_Task_Stage` by owner decision
+as historical context, `Sequence_Stage` as a required automation control.
+
+**`Task_Sequence_Stage` and `Task_Stage` are NOT duplicates.** `Task_Sequence_Stage` is the sequence
+stage a Task blocks at — **blank means "unscoped: block at every Stage"**, which is the semantics of
+aux/Manual-Review Tasks and why it is empty on 87 of them. `Task_Stage` is the *Deal's*
+`Opportunity_Stage` frozen at Task creation, and is the sole stage record on 18 aux Tasks. Different
+owner, different fact, different lifecycle. The §13 "0 disagreements" figure compared two fields that
+agree by coincidence of the 132 rows where both happen to be set.
+
+**§13's workflow-criteria clearance was incomplete.** It read only
+`execute_when.details.criteria` and missed `conditions[].criteria_details.criteria` on active rules.
+Four further fields are hard workflow-config blockers:
+
+| Rule | Criteria |
+| --- | --- |
+| WFC-SchedEmail (Tasks) | `Task_Sequence_Managed == true AND Status == "Not Started" AND Task_Type == "Scheduled Send"` |
+| WF006 (Calls) | `Call_Task_State != EMPTY AND Sequence_Managed == "Yes"` |
+
+### 15.3 Mandatory ordering — writes first, publish, verify, only then delete
+
+`handleMeetingEvent.deluge:429-433` and `processLead.deluge:521-524` both record a production
+incident in which an unknown api_name **voided the entire Deluge `updateRecord` map**, taking
+supported keys down with it — that is how every demo reminder was lost. The reconciliation with
+`zoho-field-admin-semantics` is: *exists-but-off-layout* → that key is silently discarded;
+*does not exist* → the whole map is voided. **Deleting a field converts the first case into the
+second.** Deleting `Blocks_Sequence` before its 6 writes are removed would stop `createAuxTask` and
+`createManualReview` creating **any** Task.
+
+### 15.4 `Blocks_Sequence` — retire, but not for the reason assumed
+
+It is exactly reproduced on all 219 Tasks by `NOT(Task_Type=='Sequence Activation' AND
+Status=='Deferred')`, and is 98.6% degenerate (216 `Yes` / 3 `No`). But the adversarial pass
+**refuted "reproducible" as the justification** — a perfect fit over a 3-record positive class is not
+proof about the writer. The valid justification is *zero readers plus verified zero non-code
+consumers*.
+
+Retiring it is **behaviour-improving, not neutral**: it is never cleared on completion (4
+Completed/Closed/Won Tasks still carry `Yes`), and one live managed Task (`991103000002920013`,
+`Status=Deferred`) would block its Contact's cadence permanently under a stored read. The runtime
+predicate is strictly safer than the stored column.
+
+### 15.5 The most important operational finding
+
+**`Contacts.Sequence_Activated_At` is populated on 0 of 647 Contacts** — and it is the one field in
+the family whose entire purpose is preserving a fact that cannot be reconstructed (single writer,
+set-once, deliberately preserved through disable/re-enable). Zero population means **the activation
+engine has never run to completion in this org**. That is not a field problem and it outranks every
+retirement in this document.
+
+Corroborating: `Contacts.Sequence_Type` 0/647, `Tasks.Task_Sequence_Type` 0/219, and all five
+`Meeting_Task_*` fields 0/155 despite the booking app declaring it writes three of them.
+
+### 15.6 Latent defect to fix before Calls has records
+
+`Calls.Sequence_Stage` carries **both naming generations as distinct storable values** (`Demo Booked`
+*and* `Demo Confirmation`, etc. — 12 members). It is the field the supersede guard string-compares
+against `Contacts.Stage`. Nothing enforces which vocabulary is written. Calls has 0 records, so this
+is latent — **remove the 4 legacy options before the first Call record exists**, or a legitimate Call
+will be silently cancelled as superseded.
+
+Related: **do not "fix" the value-space split with a bulk actual-space migration.** Writing
+`"Renewal"` / `"Demo Confirmation"` into `Task_Stage` would write values that are not members of its
+actual set and corrupt 132 rows.
+
+### 15.7 Still unverifiable
+
+Zoho Reports / Dashboards / Analytics have no reachable REST surface (`400 INVALID_REQUEST`), and
+`/settings/functions` returns HTTP 500 on both v6 and v7. **Every "no non-code consumer" claim is
+conditional on a manual console check.** If that check cannot be performed, both retirement rows
+downgrade to *Unverified dependency, do not delete*.
+
+---
+
+## 16. Owner rulings applied + revised publish order — 2026-08-15
+
+### 16.1 Retention rule now governing every verdict
+
+> A field stays only when it supports demonstrated automation, bookkeeping, reporting, user
+> operation, historical context we intend to report on, or an independent business fact in the CRM
+> ontology. A possible future use is not enough. **Zero Deluge readers does not establish redundancy**
+> when the field deliberately preserves reporting or historical context.
+
+### 16.2 Matrix corrections
+
+The published tally disagreed with its own rows in three places and double-classified one field.
+Recounted from the rows: canonical **6** (not 5), automation control **18** (not 19), historical
+context **9** (not 7). `Events.Reminder_Send_At` was listed as both *Keep as historical context*
+(row) and *Requires owner decision* (tally).
+
+Owner ruling: **`Events.Reminder_Send_At` → Retire as unused helper.** No current per-Meeting audit
+requirement; `Deals.Demo_Reminder_Send_At` + WF010c own reminder scheduling. Final: **3 retirements,
+0 rows awaiting an owner call.**
+
+Naming note: the keep-list names `Contacts.Sequence_Status`; **no such field exists live.** The
+Contact work-status field is `Contacts.Status` (`Open`→`New` / `Working` / `Closed`), which is kept.
+
+### 16.3 Label renames — no api_name change, no code change, no migration
+
+| Field | New label |
+| --- | --- |
+| `Contacts.Sequence_Stage` | **Next Activity Type** |
+| `Calls.Sequence_Stage` | Sequence Scope Stage |
+| `Tasks.Task_Sequence_Stage` | Sequence Scope Stage |
+| `Contacts.Sequence_Step` | Sequence Attempt (Contact Cursor) |
+| `Events.Meeting_Task_Opportunity` | *fix the double space* |
+
+The `Call_Task_*` / `Meeting_Task_*` / `Task_*` cross-module family is **retained as the intended
+naming convention** — the earlier suggestion to drop "Task" is withdrawn; any broader label redesign
+is a separate owner review.
+
+Document prominently, do not migrate: native **`Deals.Stage` is used as Opportunity Type**
+(MQL/SQL/FTP/RTP) while **`Deals.Opportunity_Stage`** carries the eight-stage commercial progression.
+Eight call sites read `deal.get("Stage")` meaning Opportunity Type.
+
+### 16.4 Field-level semantic rules to record
+
+- **Blank `Task_Sequence_Stage` means "unscoped — the Task blocks at every Stage."** That is the
+  semantics of aux / Manual-Review Tasks (`createAuxTask` never populates it), and it is exactly why
+  `Task_Stage` *looks* like a duplicate when it is not.
+- `Task_Stage` / `Call_Task_Stage` / `Meeting_Task_Stage` = **Deal context as of when the Activity was
+  raised** — a deliberate historical snapshot, never to be re-derived from the current Deal.
+- `Calls.Sequence_Stage` / `Tasks.Task_Sequence_Stage` = the **stage scope** used by sequence routing
+  and supersession. Different owner, different lifecycle. **Never migrate between the two families.**
+
+### 16.5 Revised publish order
+
+Field deletion is **always last**. An absent api_name can void an entire `updateRecord` map (§15.3).
+
+| Wave | Contents | Gate |
+| --- | --- | --- |
+| **1 — safety** | D1 superseded Scheduled Send fix (`routeContactSequence`) | no email sends on a superseded Task |
+| **2 — phantom + dead code** *(already coded, uncommitted)* | `processDeal`, `processLead`, `processAccount`, `handleEmailEvent`, `_util_collectProductEvidence`, `routeContactSequence` | 0 phantoms; picklist scan clean; booking suite green |
+| **3 — label renames** | 5 labels in Setup | cosmetic; no code |
+| **4 — writer removal** | Remove `Blocks_Sequence` (6 writes), `Reminder_Send_At` (1 write + booking `WRITTEN.Events` contract), simplify 3 `Deal_Primary_Contact` readers to `Contact_Name`, retire the commercial follow-up path (`sendCommercialFollowUp`, `commercial:followup_due`, WF010d **rule first**), remove the 6 Deal `Contract_*_Plan_*` writers | publish, then exercise every create/update path and **read back the whole map** to prove supported keys still land |
+| **5 — layout removal** | Remove the retiring fields from layouts | after wave 4 verified |
+| **6 — field deletion** | Only fields whose manual console check (§17 checklist) is complete | re-run phantom + picklist scans |
+
+`Calls.Sequence_Stage` picklist cleanup (strip the 4 legacy options) is **independent** and must
+happen **before the first live Call exists** — Calls currently has 0 records.
+
+### 16.6 Files and functions affected
+
+| File | Change |
+| --- | --- |
+| `activity/routeContactSequence.deluge` | D1 fix ✅; `Call_Purpose_Detail`+`purposeMap` removed ✅; `Blocks_Sequence` writes ×2; `commercial:followup_due` branch |
+| `processDeal.deluge` | phantom block + orphans removed ✅; 6 `Contract_*_Plan_*` writers |
+| `processLead.deluge` | `Contact_Source_Class` removed ✅; `Contact_AOR` repoint ✅ |
+| `processAccount.deluge` | loss reason repointed to `Lost_Reasons` ✅ |
+| `activity/handleEmailEvent.deluge` | `Profile_Completion_Status` removed ✅ |
+| `activity/_util_collectProductEvidence.deluge` | `Product_Interest_Staging` read removed ✅ |
+| `processContact.deluge` | `Blocks_Sequence` writes ×2 |
+| `activity/createAuxTask.deluge`, `createManualReview.deluge`, `sendSequencedEmail.deluge` | `Blocks_Sequence` writes |
+| `activity/handleMeetingEvent.deluge` | `Reminder_Send_At` write |
+| `activity/createManualReview.deluge`, `handleMeetingEvent.deluge`, `_util_applyQuoteLifecycle.deluge` | collapse `Deal_Primary_Contact` reads to `Contact_Name` |
+| `activity/sendCommercialFollowUp.deluge` | delete after WF010d |
+| `booking/tests/zoho-field-names.test.js` | drop `Reminder_Send_At` from `WRITTEN.Events` |
+
+✅ = already coded, uncommitted, **unpublished**.
+
+### 16.6 Lead import-adapter surface
+
+The 27 Lead `Acquisition_*` / `Expansion_*` / `Renewal_*` fields are **kept for this publish** —
+`normalizeToProductQuoteTuples` consumes them. They are an **import-adapter surface, not rep-facing
+CRM state**: hide them from ordinary layouts, and audit the importer separately before proposing
+retirement.
+
+---
+
+## 17. Diagnoses — 2026-08-15 (corrects §15.5)
+
+Five-agent read-only diagnosis, 542k tokens, 0 errors. Full briefing:
+[`V6_DIAGNOSIS_BRIEFING_2026-08-15.md`](V6_DIAGNOSIS_BRIEFING_2026-08-15.md). Every conclusion is
+filed as **CONFIRMED FACT / INFERRED CAUSE / OWNER DECISION / UNRESOLVED**.
+
+### 17.1 §15.5 was wrong — the activation engine is not broken
+
+§15.5 stated as fact that "the activation engine has never run to completion in this org." **That was
+an inference presented as a fact, and the inference was wrong.**
+
+**CONFIRMED:** `Task_Sequence_Type` is **never written by any code** — it is rep-input-only by design
+(`processContact.deluge:492-494`: *"The Task is ALWAYS created with Task_Sequence_Type blank so the
+rep explicitly selects Email/Call/Manual"*). All 132 Activation Tasks are in their as-created state:
+`Task_State=Open` ×132, `Task_Status=New` ×132, zero `ActivationCommand|` markers, `Modified_Time ==
+Created_Time` on every one. **No Task in the entire org has ever been edited by a rep.**
+
+So `Sequence_Activated_At` 0/647, `Sequence_Type` 0/647 and `Task_Sequence_Type` 0/219 are **three
+views of one fact — no rep has ever completed an Activation Task — not three defects.** The engine
+stopped exactly where it is designed to stop: at the human decision point.
+
+Excluded by evidence: eligibility never satisfied (91 Contacts match the gate, 81 have a Task);
+field off-layout (both are on the Contacts Standard layout, writable); invalid api_name or value;
+`updateRecord` map voided (`cUpd` always carries `Stage`, and the commit at `:1233` is
+unconditional); duplicate guard halting execution (it fired correctly on exactly the 3 duplicates).
+Zero function-execution failures org-wide.
+
+**INFERRED (medium confidence) — a genuine second defect:** WF008's `last_executed_time` is
+2026-07-20, yet 132 Tasks were created after it. The 2026-08-14 E2E trace shows WF001a → WF001c →
+WF001b2 all firing, then Tasks created at **chain depth 3** and WF008 never firing. This does **not**
+explain the missing stamps (a create-time WF008 run would only log `activation_awaiting_commit`),
+but it means anything relying on WF008 firing for Deluge-created Tasks is unreliable.
+
+### 17.2 The Meeting 0/155 is a survivorship artifact, not a defect
+
+**CONFIRMED:** the 155 surviving Events are **not the population these fields target**. All 155 were
+created by one user, 134 inside a 3-second window on 2026-07-29. Across all 155:
+`Ext_Calendar_Booking_ID` 0, `What_Id` 0, `$se_module` 0, `Who_Id` 0. Titles are a personal work
+calendar (`OOO`, `dinner Fis`, `Estate Agency Visit`).
+
+**Every Meeting the booking app ever created has been deleted** — all 10 journeys carrying a
+`zoho_meeting_id` appear in `/crm/v6/Events/deleted`, purged in a single bulk action at
+**2026-08-10T10:18:04 by Timothy Solomon**.
+
+WF007 *does* run on the survivors and correctly exits at `handleMeetingEvent.deluge:38`
+(`skip_no_related_deal`) because `$se_module != "Deals"` on all 155. Every run is a designed no-op.
+
+Additionally `BOOKING_MEETING_AUTOMATION_ENABLED="false"`, so WF007 never fires on a booking Event
+at all — three of the fields would stay null **by configuration, not defect**.
+
+**Live loose end:** `booking_journey_ops` row `fd75c529 / zoho_deal_reconcile` is still `pending`
+(`deal_not_visible_yet`, updated 2026-08-15), polling to retro-link an Event deleted on 2026-08-10.
+
+### 17.3 Three writers contradict the create-time snapshot semantics
+
+Of 11 writers of the nine Activity context fields, **8 are create-time, 3 are updates on an existing
+Activity**:
+
+| | Writer | Problem |
+| --- | --- | --- |
+| **V1** | `handleMeetingEvent.deluge:401-402` | Re-stamps `Meeting_Task_Pipeline`/`_Opportunity` from the Deal's **current** values, **unguarded**, on every triggers-enabled save. The neighbouring `:422` guards `Meeting_Task_Stage` with `== ""` — internally inconsistent |
+| **V2** | `handleCallOutcome.deluge:268-270` | Overwrites all three `Call_Task_*` fields on a **pre-existing** Call that already carries its own snapshot. Unconditional |
+| **V3** | `sendSequencedEmail.deluge:400-402` | Stamps at **send** time from a live Deal re-read — in practice the first stamp, but unguarded and `dueOffsetDays` stale |
+
+V1 and V2 have **zero live footprint** (Calls has 0 records; no Event has entered the write path), so
+this is fixable before it corrupts anything. Fix = add the same `== ""` write-once guard `:422` uses.
+
+Live data is currently fully compliant: `Task_Opportunity` 182/182 populated with **33 differing**
+from the Deal's current Stage (owner's figure re-verified exactly), `Task_Stage` 6 differing,
+`Task_Pipeline` 0 differing; 32 of the 33 have `Deals.Modified_Time` after the Task's
+`Created_Time`, and **0 of 182 Tasks were ever edited after creation**.
+
+### 17.4 `Quoted_Items` — correct, no repair needed
+
+`data_type: subform`, `json_type: jsonarray`, `custom_field: false`, `system_mandatory: true`.
+`Product_Name` is a genuine lookup → Products. **All 125 live Quotes read individually reconcile on
+four independent identities** (Σ line.Total == Sub_Total; Σ Discount; Σ Tax; Sub_Total − Discount +
+Tax + Adjustment == Grand_Total) — **125/125, zero exceptions**. **0 of 125 lines lack a Product
+lookup.** `Sub_Total`/`Grand_Total` are read-only formulas and cannot be spoofed.
+
+Caveat: every Quote has exactly one line, so the identities are proven only for the single-line case.
+
+### 17.5 WF020 / WF021 — a pure trigger swap
+
+**CONFIRMED:** both rules invoke **the same function through the same action node**
+(`handleQuoteStageChange`, id `991103000001581241`). It is not dark code — it runs today via WF020.
+The cutover needs **no code change and no rebinding**.
+
+WF020 (`field_update` on `Quote_Stage`) cannot see four events: Quote creation; `Deal_Name` A→B;
+`Deal_Name` cleared; line-item/`Contract_ACV` repricing without a stage change. The adapter's core
+feature — the two-Deal reassignment handshake — keys entirely off `Deal_Name` changing and is
+therefore **unreachable from WF020**.
+
+Zero drift today (`Quote_Last_Deal_ID` 125/125 correct; `Deal.Amount` matches on 21/21 Deals with an
+open priced Quote) — but **no human has ever created, moved or repriced a Quote in this org**, so
+that measures zero exposure, not zero risk.
+
+**Recommended:** deactivate WF020 **first**, then activate WF021 — never both active, since both run
+the same action against an additive Expansion ACV bump behind a check-then-act guard. **Blocking
+pre-req:** resolve what `repeat:false` means on WF021; if it is once-per-record it would be a
+regression against WF020.
+
+**Also confirmed: WF004 does not exist.** Three repo documents assert it is active as part of the
+pre-cutover safety net — one third of that documented net is already gone.
+
+### 17.6 Corrections to repository documentation
+
+`FLOW_REFERENCE.md:25`, `jurnii_zoho_quote_product_contract_spec_v2.md:36` and
+`AUDIT_01_ARCHITECTURE_E2E_QUOTE.md:74` all assert WF004 exists and is active. It does not.
+`handleQuoteStageChange.deluge:6` and `zoho-functions/README.md:92` describe the post-cutover state
+as already achieved. It is not.

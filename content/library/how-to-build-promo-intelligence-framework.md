@@ -1,9 +1,11 @@
 ---
 title: How to build a competitor promotion intelligence framework
 description: >-
-  A practical seven-step framework, with the data points and review cadence we'd use ourselves.
+  A practical seven-step framework, with the data points and review cadence we'd
+  use ourselves.
 excerpt: >-
-  A practical seven-step framework, with the data points and review cadence we'd use ourselves.
+  A practical seven-step framework, with the data points and review cadence we'd
+  use ourselves.
 date: '2026-04-15'
 medium: Article
 category: Playbook
@@ -12,9 +14,11 @@ tags:
   - Playbook
   - iGaming
   - Intelligence
-productRefs: [jurnii-360]
+productRefs:
+  - jurnii-360
 authorImage: /assets/library/authors/fraser-dunk.jpg
 isIndexable: true
+coverImage: /assets/library/how-to-build-promo-intelligence-framework/cover.png
 ---
 
 # How to build a competitor promotion intelligence framework

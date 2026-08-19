@@ -1,0 +1,1121 @@
+[
+  {
+    "sequenceNumber": 1,
+    "status": "validated",
+    "classification": "feature",
+    "parentProduct": "jurnii-360",
+    "sourceRoute": "/features/competitor-promotions",
+    "articleFilePath": "content/library/competitor-promotions-intelligence-framework.md",
+    "slug": "competitor-promotions-intelligence-framework",
+    "onPageTitle": "Competitor Promotions Intelligence: Systematising Real-Time Proposition Tracking in iGaming",
+    "seoTitle": "Competitor Promotions Intelligence Framework | Jurnii",
+    "primarySearchQuery": "competitor promotions intelligence igaming",
+    "searchIntent": "Commercial leaders seeking structured frameworks to track rival bonus mechanics, wagering requirements, and seasonal campaign launches.",
+    "uniqueThesis": "Unstructured promotional tracking creates margin dilution; systematic proposition benchmarking protects player share without escalating bonus liability.",
+    "primaryAudience": "Chief Commercial Officers, Heads of CRM, and Marketing Directors in sports betting and casino operations.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/05 · Product Messaging 35dbbc1fb42481d3b4ddfce531fdf117.md",
+      ".agents/context/brand-guide/00-jurnii-overview.md"
+    ],
+    "externalSources": [
+      "UKGC Guidance on Promotional Terms and Wagering Requirements"
+    ],
+    "publishDate": "2026-08-18",
+    "plannedInternalLinks": [
+      "/features/competitor-promotions",
+      "/products/jurnii-360",
+      "/library/the-generosity-equation-optimizing-igaming-promotional-spend-without-diluting-margins"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 2,
+    "status": "validated",
+    "classification": "feature",
+    "parentProduct": "jurnii-360",
+    "sourceRoute": "/features/competitor-positioning",
+    "articleFilePath": "content/library/evaluating-competitor-positioning-in-commoditised-igaming.md",
+    "slug": "evaluating-competitor-positioning-in-commoditised-igaming",
+    "onPageTitle": "Evaluating Competitor Positioning in Commoditised iGaming Markets",
+    "seoTitle": "Competitor Positioning in iGaming Markets | Jurnii",
+    "primarySearchQuery": "competitor positioning igaming",
+    "searchIntent": "Strategic operators looking to differentiate when game libraries, odds feeds, and regulatory constraints are identical.",
+    "uniqueThesis": "In a commoditised tech stack environment, market positioning is defined by speed of interaction, clarity of proposition, and friction-free player journeys.",
+    "primaryAudience": "Chief Marketing Officers and Brand Directors.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/02 · Market Context & Category Definition 35dbbc1fb42481b29bc7ec4dc14b726f.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2026-08-25",
+    "plannedInternalLinks": [
+      "/features/competitor-positioning",
+      "/products/jurnii-360"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 3,
+    "status": "validated",
+    "classification": "feature",
+    "parentProduct": "jurnii-360",
+    "sourceRoute": "/features/competitor-comparison",
+    "articleFilePath": "content/library/matrix-methodologies-for-igaming-competitor-comparison.md",
+    "slug": "matrix-methodologies-for-igaming-competitor-comparison",
+    "onPageTitle": "Matrix Methodologies for High-Velocity iGaming Competitor Comparison",
+    "seoTitle": "iGaming Competitor Comparison Methodologies | Jurnii",
+    "primarySearchQuery": "igaming competitor comparison matrix",
+    "searchIntent": "Commercial analysts seeking objective scoring matrices across deposit friction, odds depth, and promotional value.",
+    "uniqueThesis": "Subjective competitive reviews fail because they evaluate aesthetics rather than transactional velocity; structured matrices link friction directly to revenue leakage.",
+    "primaryAudience": "Commercial Analysts and Product Strategists.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/00-jurnii-overview.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2026-09-01",
+    "plannedInternalLinks": [
+      "/features/competitor-comparison",
+      "/products/jurnii-360"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 4,
+    "status": "validated",
+    "classification": "feature",
+    "parentProduct": "jurnii-360",
+    "sourceRoute": "/features/competitor-analysis",
+    "articleFilePath": "content/library/the-architecture-of-modern-competitor-analysis-in-digital-gaming.md",
+    "slug": "the-architecture-of-modern-competitor-analysis-in-digital-gaming",
+    "onPageTitle": "The Architecture of Modern Competitor Analysis in Digital Gaming",
+    "seoTitle": "Competitor Analysis Architecture in iGaming | Jurnii",
+    "primarySearchQuery": "competitor analysis digital gaming",
+    "searchIntent": "Operators wanting to replace manual screenshot audits with automated proposition intelligence units.",
+    "uniqueThesis": "Point-in-time competitive audits expire within 48 hours; always-on intelligence infrastructure is required to intercept rival promotional shifts.",
+    "primaryAudience": "Chief Executive Officers and Heads of Strategy.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/02 · Market Context & Category Definition 35dbbc1fb42481b29bc7ec4dc14b726f.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2026-09-08",
+    "plannedInternalLinks": [
+      "/features/competitor-analysis",
+      "/products/jurnii-360"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 5,
+    "status": "validated",
+    "classification": "feature",
+    "parentProduct": "jurnii-360",
+    "sourceRoute": "/features/competitor-offer-feed",
+    "articleFilePath": "content/library/engineering-a-real-time-competitor-offer-feed-for-trading-teams.md",
+    "slug": "engineering-a-real-time-competitor-offer-feed-for-trading-teams",
+    "onPageTitle": "Engineering a Real-Time Competitor Offer Feed for iGaming Trading Teams",
+    "seoTitle": "Real-Time Competitor Offer Feed in iGaming | Jurnii",
+    "primarySearchQuery": "competitor offer feed igaming",
+    "searchIntent": "Trading and CRM desks seeking live alerts on rival flash odds, enhanced terms, and seasonal bonus campaigns.",
+    "uniqueThesis": "Real-time offer feeds allow trading desks to counter competitor bonus attacks within minutes rather than discovering margin leakage days later.",
+    "primaryAudience": "Trading Directors, Heads of CRM, and Yield Managers.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/05 · Product Messaging 35dbbc1fb42481d3b4ddfce531fdf117.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2026-09-15",
+    "plannedInternalLinks": [
+      "/features/competitor-offer-feed",
+      "/products/jurnii-360"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 6,
+    "status": "validated",
+    "classification": "feature",
+    "parentProduct": "jurnii-360",
+    "sourceRoute": "/features/competitor-live-feed",
+    "articleFilePath": "content/library/monitoring-live-market-dynamics-with-automated-event-feeds.md",
+    "slug": "monitoring-live-market-dynamics-with-automated-event-feeds",
+    "onPageTitle": "Monitoring Live Market Dynamics with Automated iGaming Event Feeds",
+    "seoTitle": "Live Market Event Feeds in iGaming | Jurnii",
+    "primarySearchQuery": "live competitor event feed sports betting",
+    "searchIntent": "Sportsbook and casino operators looking to track in-play promotional surges and major sporting event proposition shifts.",
+    "uniqueThesis": "Major sporting events compress player acquisition windows into hours; live event telemetry enables surgical promotional counter-measures.",
+    "primaryAudience": "Head of Sportsbook, Trading Desks, and Operations Directors.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/05 · Product Messaging 35dbbc1fb42481d3b4ddfce531fdf117.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2026-09-22",
+    "plannedInternalLinks": [
+      "/features/competitor-live-feed",
+      "/products/jurnii-360"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 7,
+    "status": "validated",
+    "classification": "feature",
+    "parentProduct": "jurnii-360",
+    "sourceRoute": "/features/competitor-alerts",
+    "articleFilePath": "content/library/operationalising-competitor-alerts-for-proactive-margin-defense.md",
+    "slug": "operationalising-competitor-alerts-for-proactive-margin-defense",
+    "onPageTitle": "Operationalising Competitor Alerts for Proactive Margin Defense in iGaming",
+    "seoTitle": "Competitor Alerts for Margin Defense | Jurnii",
+    "primarySearchQuery": "competitor alerts igaming margin defense",
+    "searchIntent": "Commercial teams wanting automated anomaly detection when competitors shift terms, generosity, or acquisition funnels.",
+    "uniqueThesis": "Automated alert thresholds convert passive market noise into operational triggers, protecting player retention before defection occurs.",
+    "primaryAudience": "Commercial Directors and Operations Managers.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/05 · Product Messaging 35dbbc1fb42481d3b4ddfce531fdf117.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2026-09-29",
+    "plannedInternalLinks": [
+      "/features/competitor-alerts",
+      "/products/jurnii-360"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 8,
+    "status": "validated",
+    "classification": "feature",
+    "parentProduct": "jurnii-360",
+    "sourceRoute": "/features/competitor-ai-insights",
+    "articleFilePath": "content/library/synthesising-competitor-intelligence-with-domain-specific-ai.md",
+    "slug": "synthesising-competitor-intelligence-with-domain-specific-ai",
+    "onPageTitle": "Synthesising Competitor Intelligence with Domain-Specific AI in iGaming",
+    "seoTitle": "Domain-Specific AI Competitor Intelligence | Jurnii",
+    "primarySearchQuery": "domain specific ai competitor intelligence",
+    "searchIntent": "Executives seeking board-ready summaries of rival promotional positioning without manual report synthesis.",
+    "uniqueThesis": "Generic LLMs lack regulatory and mathematical context; domain-trained intelligence models extract commercial intent and fiscal impact reliably.",
+    "primaryAudience": "Chief Technology Officers and C-Level Commercial Strategists.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/00-jurnii-overview.md",
+      ".agents/context/brand-guide/02 · Market Context & Category Definition 35dbbc1fb42481b29bc7ec4dc14b726f.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2026-10-06",
+    "plannedInternalLinks": [
+      "/features/competitor-ai-insights",
+      "/products/jurnii-360"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 9,
+    "status": "validated",
+    "classification": "feature",
+    "parentProduct": "jurnii-ux",
+    "sourceRoute": "/features/brand-meta-scoring",
+    "articleFilePath": "content/library/brand-meta-scoring-unifying-ux-and-perception-metrics.md",
+    "slug": "brand-meta-scoring-unifying-ux-and-perception-metrics",
+    "onPageTitle": "Brand Meta Scoring: Unifying Usability, Performance, and Perception Metrics",
+    "seoTitle": "Brand Meta Scoring in Digital Gaming | Jurnii",
+    "primarySearchQuery": "brand meta scoring ux metrics",
+    "searchIntent": "Digital product teams looking for a unified quantitative score combining technical speed, journey friction, and brand sentiment.",
+    "uniqueThesis": "Fragmented UX metrics obscure commercial risk; composite meta-scoring aligns cross-functional engineering, design, and marketing teams around unified ROI goals.",
+    "primaryAudience": "Chief Product Officers and VP User Experience.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/00-jurnii-overview.md",
+      ".agents/context/brand-guide/05 · Product Messaging 35dbbc1fb42481d3b4ddfce531fdf117.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2026-10-13",
+    "plannedInternalLinks": [
+      "/features/brand-meta-scoring",
+      "/products/jurnii-ux"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 10,
+    "status": "validated",
+    "classification": "feature",
+    "parentProduct": "jurnii-ux",
+    "sourceRoute": "/features/brand-market-trends",
+    "articleFilePath": "content/library/tracking-macro-design-and-usability-trends-across-tier-1-operators.md",
+    "slug": "tracking-macro-design-and-usability-trends-across-tier-1-operators",
+    "onPageTitle": "Tracking Macro Design and Usability Trends Across Tier-1 iGaming Operators",
+    "seoTitle": "iGaming Usability and Design Trends | Jurnii",
+    "primarySearchQuery": "igaming usability and design trends",
+    "searchIntent": "Product managers tracking how leading operators evolve lobby navigation, search UX, and registration workflows.",
+    "uniqueThesis": "Player interaction mental models are established by market leaders; failing to align with regional UX conventions silently increases cognitive abandonment.",
+    "primaryAudience": "Design Directors and Senior Product Managers.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/05 · Product Messaging 35dbbc1fb42481d3b4ddfce531fdf117.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2026-10-20",
+    "plannedInternalLinks": [
+      "/features/brand-market-trends",
+      "/products/jurnii-ux"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 11,
+    "status": "validated",
+    "classification": "feature",
+    "parentProduct": "jurnii-ux",
+    "sourceRoute": "/features/brand-design-themes",
+    "articleFilePath": "content/library/deconstructing-brand-design-themes-in-sportsbook-and-casino-interfaces.md",
+    "slug": "deconstructing-brand-design-themes-in-sportsbook-and-casino-interfaces",
+    "onPageTitle": "Deconstructing Brand Design Themes in Sportsbook and Casino Interfaces",
+    "seoTitle": "Brand Design Themes in iGaming UI | Jurnii",
+    "primarySearchQuery": "brand design themes igaming ui",
+    "searchIntent": "UI/UX designers and brand managers seeking structured approaches to visual hierarchy, component density, and dark mode execution.",
+    "uniqueThesis": "Visual design in gaming is not decorative styling; information density, contrast ratios, and layout stability dictate player transaction throughput.",
+    "primaryAudience": "Lead UI/UX Designers and Frontend Architects.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/08 · Visual Identity Guidelines 35dbbc1fb424816580d0d59cef4e08d7.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2026-10-27",
+    "plannedInternalLinks": [
+      "/features/brand-design-themes",
+      "/products/jurnii-ux"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 12,
+    "status": "validated",
+    "classification": "feature",
+    "parentProduct": "jurnii-ux",
+    "sourceRoute": "/features/brand-promotion-analysis",
+    "articleFilePath": "content/library/quantitative-brand-promotion-analysis-measuring-generosity-vs-yield.md",
+    "slug": "quantitative-brand-promotion-analysis-measuring-generosity-vs-yield",
+    "onPageTitle": "Quantitative Brand Promotion Analysis: Measuring Generosity Against Platform Yield",
+    "seoTitle": "Brand Promotion Analysis in iGaming | Jurnii",
+    "primarySearchQuery": "brand promotion analysis igaming yield",
+    "searchIntent": "Marketing and finance leads analyzing whether aggressive bonus promotions translate into sustainable customer retention.",
+    "uniqueThesis": "Excessive bonus generosity attracts low-LTV bonus hunters; calibrating promotional richness against UX journey maturity maximizes NGR retention.",
+    "primaryAudience": "Chief Financial Officers and Heads of Performance Marketing.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/05 · Product Messaging 35dbbc1fb42481d3b4ddfce531fdf117.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2026-11-03",
+    "plannedInternalLinks": [
+      "/features/brand-promotion-analysis",
+      "/products/jurnii-ux"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 13,
+    "status": "validated",
+    "classification": "feature",
+    "parentProduct": "jurnii-ux",
+    "sourceRoute": "/features/brand-performance",
+    "articleFilePath": "content/library/technical-speed-benchmarking-why-millisecond-latency-dictates-conversion.md",
+    "slug": "technical-speed-benchmarking-why-millisecond-latency-dictates-conversion",
+    "onPageTitle": "Technical Speed Benchmarking: Why Millisecond Latency Dictates iGaming Conversion",
+    "seoTitle": "Technical Speed Benchmarking in iGaming | Jurnii",
+    "primarySearchQuery": "technical speed benchmarking igaming latency",
+    "searchIntent": "Engineering leads and CPOs auditing how Core Web Vitals, API latency, and hybrid webview rendering affect player deposit velocity.",
+    "uniqueThesis": "Front-end latency is an invisible margin leak; sub-second transactional speed directly protects First Time Deposit completion rates.",
+    "primaryAudience": "Chief Technology Officers and VP Engineering.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/00-jurnii-overview.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2026-11-10",
+    "plannedInternalLinks": [
+      "/features/brand-performance",
+      "/products/jurnii-ux",
+      "/library/the-12-second-cost-how-front-end-performance-directly-controls-igaming-ngr"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 14,
+    "status": "validated",
+    "classification": "feature",
+    "parentProduct": "jurnii-ux",
+    "sourceRoute": "/features/brand-usability",
+    "articleFilePath": "content/library/systematising-usability-heuristics-in-complex-betting-interfaces.md",
+    "slug": "systematising-usability-heuristics-in-complex-betting-interfaces",
+    "onPageTitle": "Systematising Usability Heuristics in Complex Sports Betting and Casino Interfaces",
+    "seoTitle": "Usability Heuristics in Betting Interfaces | Jurnii",
+    "primarySearchQuery": "usability heuristics betting interfaces",
+    "searchIntent": "UX researchers and product managers applying Nielsen-Norman usability principles to multi-market betslips and live casino lobbies.",
+    "uniqueThesis": "Standard software heuristics fail in real-time gambling environments; domain-specific evaluation matrices identify catastrophic cognitive load points.",
+    "primaryAudience": "Heads of Product, UX Directors, and CRO Specialists.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/05 · Product Messaging 35dbbc1fb42481d3b4ddfce531fdf117.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2026-11-17",
+    "plannedInternalLinks": [
+      "/features/brand-usability",
+      "/products/jurnii-ux"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 15,
+    "status": "validated",
+    "classification": "feature",
+    "parentProduct": "jurnii-ux",
+    "sourceRoute": "/features/brand-perception",
+    "articleFilePath": "content/library/measuring-brand-perception-and-trust-in-regulated-online-gaming.md",
+    "slug": "measuring-brand-perception-and-trust-in-regulated-online-gaming",
+    "onPageTitle": "Measuring Brand Perception and Trust Signals in Regulated Online Gaming",
+    "seoTitle": "Brand Perception and Trust in iGaming | Jurnii",
+    "primarySearchQuery": "brand perception trust online gaming",
+    "searchIntent": "Brand marketers and compliance directors quantifying customer sentiment, regulatory safety cues, and reputation dynamics.",
+    "uniqueThesis": "Player trust in online gaming is built on transactional transparency and swift payment feedback, directly impacting long-term player retention.",
+    "primaryAudience": "Chief Marketing Officers and VP Corporate Communications.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/01 · Brand Foundation 35dbbc1fb42481ac9d84de13e4c79327.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2026-11-24",
+    "plannedInternalLinks": [
+      "/features/brand-perception",
+      "/products/jurnii-ux"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 16,
+    "status": "validated",
+    "classification": "feature",
+    "parentProduct": "jurnii-ux",
+    "sourceRoute": "/features/brand-recommendations",
+    "articleFilePath": "content/library/from-audit-findings-to-engineering-sprints-prioritising-ux-recommendations.md",
+    "slug": "from-audit-findings-to-engineering-sprints-prioritising-ux-recommendations",
+    "onPageTitle": "From Audit Findings to Engineering Sprints: Prioritising Commercial UX Recommendations",
+    "seoTitle": "Prioritising Commercial UX Recommendations | Jurnii",
+    "primarySearchQuery": "prioritising ux recommendations engineering sprint",
+    "searchIntent": "Product owners and scrum masters translating qualitative UX review feedback into commercially weighted Jira tickets.",
+    "uniqueThesis": "UX audits stall without commercial weighting; ranking recommendations by estimated revenue impact ensures engineering prioritises conversion blockers.",
+    "primaryAudience": "Chief Product Officers and Technical Product Managers.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/00-jurnii-overview.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2026-12-01",
+    "plannedInternalLinks": [
+      "/features/brand-recommendations",
+      "/products/jurnii-ux",
+      "/library/from-audit-to-interface-a-framework-for-implementing-70-ux-recommendations"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 17,
+    "status": "validated",
+    "classification": "solution",
+    "parentProduct": "jurnii-360",
+    "sourceRoute": "/solutions/competition-discovery",
+    "articleFilePath": "content/library/automated-competition-discovery-mapping-the-full-operator-landscape.md",
+    "slug": "automated-competition-discovery-mapping-the-full-operator-landscape",
+    "onPageTitle": "Automated Competition Discovery: Mapping the Full Operator Landscape in New Markets",
+    "seoTitle": "Automated Competition Discovery in iGaming | Jurnii",
+    "primarySearchQuery": "automated competition discovery igaming",
+    "searchIntent": "Expansion teams and operators entering newly regulated jurisdictions looking to discover and monitor emerging competitors.",
+    "uniqueThesis": "Entering new markets with legacy competitor assumptions results in acquisition blind spots; automated discovery tracks nimble local challenger brands.",
+    "primaryAudience": "Heads of Market Expansion and Strategy Directors.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/05 · Product Messaging 35dbbc1fb42481d3b4ddfce531fdf117.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2026-12-08",
+    "plannedInternalLinks": [
+      "/solutions/competition-discovery",
+      "/products/jurnii-360"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 18,
+    "status": "validated",
+    "classification": "solution",
+    "parentProduct": "jurnii-360",
+    "sourceRoute": "/solutions/competition-offers",
+    "articleFilePath": "content/library/strategic-benchmarking-of-competitor-offers-and-bonus-terms.md",
+    "slug": "strategic-benchmarking-of-competitor-offers-and-bonus-terms",
+    "onPageTitle": "Strategic Benchmarking of Competitor Offers, Wagering Rules, and Bonus Terms",
+    "seoTitle": "Benchmarking Competitor Offers and Terms | Jurnii",
+    "primarySearchQuery": "benchmarking competitor offers bonus terms",
+    "searchIntent": "Commercial managers optimizing bonus terms, wagering caps, and free spin packages against market averages.",
+    "uniqueThesis": "Blindly matching headline bonus amounts destroys operator profitability; matching structural turnover conditions captures sustainable player volume.",
+    "primaryAudience": "Commercial Directors and Acquisition Marketing Managers.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/05 · Product Messaging 35dbbc1fb42481d3b4ddfce531fdf117.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2026-12-15",
+    "plannedInternalLinks": [
+      "/solutions/competition-offers",
+      "/products/jurnii-360"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 19,
+    "status": "validated",
+    "classification": "solution",
+    "parentProduct": "jurnii-360",
+    "sourceRoute": "/solutions/competition-pricing",
+    "articleFilePath": "content/library/pricing-intelligence-in-sports-betting-overround-margin-analysis.md",
+    "slug": "pricing-intelligence-in-sports-betting-overround-margin-analysis",
+    "onPageTitle": "Pricing Intelligence in Sports Betting: Analyzing Margin Overrounds and Value Perception",
+    "seoTitle": "Sports Betting Pricing and Margin Analysis | Jurnii",
+    "primarySearchQuery": "sports betting pricing overround margin intelligence",
+    "searchIntent": "Trading leads and pricing analysts comparing bookmaker overrounds and payout percentages across major football leagues and racing.",
+    "uniqueThesis": "Tightening pricing margins alone does not drive turnover without clear on-page value communication; pricing and UX clarity must be synchronized.",
+    "primaryAudience": "Heads of Trading, Sportsbook Directors, and Pricing Analysts.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/05 · Product Messaging 35dbbc1fb42481d3b4ddfce531fdf117.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2026-12-22",
+    "plannedInternalLinks": [
+      "/solutions/competition-pricing",
+      "/products/jurnii-360"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 20,
+    "status": "validated",
+    "classification": "solution",
+    "parentProduct": "jurnii-360",
+    "sourceRoute": "/solutions/competition-positioning",
+    "articleFilePath": "content/library/competitive-positioning-frameworks-for-challenger-igaming-brands.md",
+    "slug": "competitive-positioning-frameworks-for-challenger-igaming-brands",
+    "onPageTitle": "Competitive Positioning Frameworks for Challenger iGaming and Sportsbook Brands",
+    "seoTitle": "iGaming Challenger Brand Positioning | Jurnii",
+    "primarySearchQuery": "challenger igaming brand positioning strategy",
+    "searchIntent": "Mid-tier and challenger operators seeking differentiated positioning against Tier-1 multi-brand conglomerates.",
+    "uniqueThesis": "Challenger operators cannot win an acquisition spend war; they win by carving out distinct speed, transparency, and niche category dominance.",
+    "primaryAudience": "Chief Executive Officers and Brand Marketing Directors.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/02 · Market Context & Category Definition 35dbbc1fb42481b29bc7ec4dc14b726f.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2026-12-29",
+    "plannedInternalLinks": [
+      "/solutions/competition-positioning",
+      "/products/jurnii-360"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 21,
+    "status": "validated",
+    "classification": "solution",
+    "parentProduct": "jurnii-ux",
+    "sourceRoute": "/solutions/user-interface-benchmarking",
+    "articleFilePath": "content/library/objective-user-interface-benchmarking-in-regulated-digital-gaming.md",
+    "slug": "objective-user-interface-benchmarking-in-regulated-digital-gaming",
+    "onPageTitle": "Objective User Interface Benchmarking: Removing Subjectivity from Design Reviews",
+    "seoTitle": "User Interface Benchmarking in iGaming | Jurnii",
+    "primarySearchQuery": "user interface benchmarking digital gaming",
+    "searchIntent": "Design leaders seeking empirical frameworks to benchmark UI components, typographic scale, and visual density against competitors.",
+    "uniqueThesis": "Design reviews that rely on executive opinion create inconsistent interfaces; empirical UI benchmarking proves which patterns maximize bet placement.",
+    "primaryAudience": "VP Product Design and Creative Directors.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/00-jurnii-overview.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2027-01-05",
+    "plannedInternalLinks": [
+      "/solutions/user-interface-benchmarking",
+      "/products/jurnii-ux"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 22,
+    "status": "validated",
+    "classification": "solution",
+    "parentProduct": "jurnii-ux",
+    "sourceRoute": "/solutions/user-experience-benchmarking",
+    "articleFilePath": "content/library/the-definitive-guide-to-user-experience-benchmarking-in-igaming.md",
+    "slug": "the-definitive-guide-to-user-experience-benchmarking-in-igaming",
+    "onPageTitle": "The Definitive Guide to Continuous User Experience Benchmarking in iGaming",
+    "seoTitle": "Continuous UX Benchmarking in iGaming | Jurnii",
+    "primarySearchQuery": "user experience benchmarking igaming guide",
+    "searchIntent": "Product executives looking for structured UX benchmarking frameworks across the 4 key dimensions: Journey, Usability, Performance, and Perception.",
+    "uniqueThesis": "UX benchmarking must operate as continuous commercial infrastructure rather than periodic agency audit snapshots.",
+    "primaryAudience": "Chief Product Officers and Heads of Digital Experience.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/00-jurnii-overview.md",
+      ".agents/context/brand-guide/05 · Product Messaging 35dbbc1fb42481d3b4ddfce531fdf117.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2027-01-12",
+    "plannedInternalLinks": [
+      "/solutions/user-experience-benchmarking",
+      "/products/jurnii-ux"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 23,
+    "status": "validated",
+    "classification": "solution",
+    "parentProduct": "jurnii-ux",
+    "sourceRoute": "/solutions/customer-journey-benchmarking",
+    "articleFilePath": "content/library/customer-journey-benchmarking-identifying-friction-in-core-gaming-funnels.md",
+    "slug": "customer-journey-benchmarking-identifying-friction-in-core-gaming-funnels",
+    "onPageTitle": "Customer Journey Benchmarking: Eliminating Friction in Core iGaming Funnels",
+    "seoTitle": "Customer Journey Benchmarking in iGaming | Jurnii",
+    "primarySearchQuery": "customer journey benchmarking igaming funnels",
+    "searchIntent": "CRO teams and product managers auditing step-by-step registration, KYC verification, deposit, and cash-out funnels.",
+    "uniqueThesis": "Friction points in gaming are sequential multipliers; a 2-second delay during verification compounds with deposit friction to destroy FTD conversions.",
+    "primaryAudience": "Heads of CRO, Product Managers, and Conversion Specialists.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/05 · Product Messaging 35dbbc1fb42481d3b4ddfce531fdf117.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2027-01-19",
+    "plannedInternalLinks": [
+      "/solutions/customer-journey-benchmarking",
+      "/products/jurnii-ux",
+      "/library/mapping-the-friction-points-a-masterclass-in-igaming-transactional-ux"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 24,
+    "status": "validated",
+    "classification": "solution",
+    "parentProduct": "jurnii-ux",
+    "sourceRoute": "/solutions/market-positioning-benchmarking",
+    "articleFilePath": "content/library/market-positioning-benchmarking-aligning-product-speed-with-brand-promise.md",
+    "slug": "market-positioning-benchmarking-aligning-product-speed-with-brand-promise",
+    "onPageTitle": "Market Positioning Benchmarking: Aligning Product Speed with Brand Promise",
+    "seoTitle": "Market Positioning Benchmarking | Jurnii",
+    "primarySearchQuery": "market positioning benchmarking igaming",
+    "searchIntent": "Executive teams evaluating whether their digital product experience matches their premium marketing positioning.",
+    "uniqueThesis": "Marketing campaigns promise premium sophistication, but slow technical execution breaks player trust; benchmarking aligns brand claims with product reality.",
+    "primaryAudience": "Chief Marketing Officers and Chief Operating Officers.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/01 · Brand Foundation 35dbbc1fb42481ac9d84de13e4c79327.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2027-01-26",
+    "plannedInternalLinks": [
+      "/solutions/market-positioning-benchmarking",
+      "/products/jurnii-ux"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 25,
+    "status": "validated",
+    "classification": "solution",
+    "parentProduct": "jurnii-mmm",
+    "sourceRoute": "/solutions/marketing-roi-attribution",
+    "articleFilePath": "content/library/proving-marketing-roi-attribution-in-privacy-restricted-igaming.md",
+    "slug": "proving-marketing-roi-attribution-in-privacy-restricted-igaming",
+    "onPageTitle": "Proving Marketing ROI Attribution in Privacy-Restricted Digital Gaming",
+    "seoTitle": "Marketing ROI Attribution in iGaming | Jurnii",
+    "primarySearchQuery": "marketing roi attribution igaming privacy",
+    "searchIntent": "Finance and marketing leads evaluating how to measure true acquisition incrementality without third-party cookies.",
+    "uniqueThesis": "Last-touch attribution overvalues brand search and retargeting; causal econometric modeling isolates true promotional incrementality.",
+    "primaryAudience": "Chief Financial Officers and Performance Marketing Directors.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/00-jurnii-overview.md",
+      ".agents/context/brand-guide/05 · Product Messaging 35dbbc1fb42481d3b4ddfce531fdf117.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2027-02-02",
+    "plannedInternalLinks": [
+      "/solutions/marketing-roi-attribution",
+      "/products/jurnii-mmm"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 26,
+    "status": "validated",
+    "classification": "solution",
+    "parentProduct": "jurnii-mmm",
+    "sourceRoute": "/solutions/cross-channel-attribution",
+    "articleFilePath": "content/library/cross-channel-attribution-reconciling-affiliate-paid-and-brand-spend.md",
+    "slug": "cross-channel-attribution-reconciling-affiliate-paid-and-brand-spend",
+    "onPageTitle": "Cross-Channel Attribution: Reconciling Affiliate, Paid Media, and Brand Spend",
+    "seoTitle": "Cross-Channel Attribution in iGaming | Jurnii",
+    "primarySearchQuery": "cross channel attribution igaming spend",
+    "searchIntent": "Media planners wanting to eliminate attribution overlap between affiliate networks, PPC, programmatic, and sponsorship channels.",
+    "uniqueThesis": "Channel cannibalization drains millions in marketing budget; holistic cross-channel modeling exposes double-counted conversions.",
+    "primaryAudience": "Heads of Media, Affiliate Directors, and CMOs.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/05 · Product Messaging 35dbbc1fb42481d3b4ddfce531fdf117.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2027-02-09",
+    "plannedInternalLinks": [
+      "/solutions/cross-channel-attribution",
+      "/products/jurnii-mmm"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 27,
+    "status": "validated",
+    "classification": "solution",
+    "parentProduct": "jurnii-mmm",
+    "sourceRoute": "/solutions/marketing-mix-modeling-attribution",
+    "articleFilePath": "content/library/marketing-mix-modelling-with-exogenous-competitor-and-regulatory-variables.md",
+    "slug": "marketing-mix-modelling-with-exogenous-competitor-and-regulatory-variables",
+    "onPageTitle": "Marketing Mix Modelling with Exogenous Competitor and Regulatory Variables",
+    "seoTitle": "Marketing Mix Modelling with Exogenous Variables | Jurnii",
+    "primarySearchQuery": "marketing mix modelling igaming exogenous variables",
+    "searchIntent": "Data scientists and econometricians seeking to incorporate competitor promotion noise and sports calendar schedules into MMM models.",
+    "uniqueThesis": "Internal-only MMM models misattribute revenue fluctuations; injecting competitor promotional richness and match calendars reveals true media coefficients.",
+    "primaryAudience": "Chief Data Officers, Econometricians, and VP Analytics.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/00-jurnii-overview.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2027-02-16",
+    "plannedInternalLinks": [
+      "/solutions/marketing-mix-modeling-attribution",
+      "/products/jurnii-mmm",
+      "/library/the-missing-variable-in-mmm-accounting-for-competitor-noise-in-marketing-attribution"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 28,
+    "status": "validated",
+    "classification": "solution",
+    "parentProduct": "jurnii-mmm",
+    "sourceRoute": "/solutions/market-growth-attribution",
+    "articleFilePath": "content/library/market-growth-attribution-isolating-organic-tailwind-from-marketing-yield.md",
+    "slug": "market-growth-attribution-isolating-organic-tailwind-from-marketing-yield",
+    "onPageTitle": "Market Growth Attribution: Isolating Macro Industry Tailwinds from Marketing Yield",
+    "seoTitle": "Market Growth Attribution in Digital Gaming | Jurnii",
+    "primarySearchQuery": "market growth attribution igaming tailwinds",
+    "searchIntent": "Commercial strategists seeking to separate organic regulatory/macro market growth from actual campaign efficiency.",
+    "uniqueThesis": "Operators frequently confuse market expansion with marketing effectiveness; baseline decomposition provides truthful organic vs paid incrementality.",
+    "primaryAudience": "Chief Strategy Officers and C-Level Executives.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/02 · Market Context & Category Definition 35dbbc1fb42481b29bc7ec4dc14b726f.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2027-02-23",
+    "plannedInternalLinks": [
+      "/solutions/market-growth-attribution",
+      "/products/jurnii-mmm"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 29,
+    "status": "validated",
+    "classification": "solution",
+    "parentProduct": "jurnii-ux",
+    "sourceRoute": "/solutions/conversion-rate-optimization",
+    "articleFilePath": "content/library/hypothesis-driven-conversion-rate-optimisation-for-sportsbooks-and-casinos.md",
+    "slug": "hypothesis-driven-conversion-rate-optimisation-for-sportsbooks-and-casinos",
+    "onPageTitle": "Hypothesis-Driven Conversion Rate Optimisation for Sportsbooks and Casinos",
+    "seoTitle": "iGaming Conversion Rate Optimisation | Jurnii",
+    "primarySearchQuery": "conversion rate optimisation igaming hypothesis",
+    "searchIntent": "CRO leads structuring rigorous A/B testing programs to lift registration-to-deposit conversion rates.",
+    "uniqueThesis": "Most iGaming A/B tests produce inconclusive results because hypotheses lack behavioral baseline data; diagnostic benchmarking guarantees statistical uplift.",
+    "primaryAudience": "Heads of Growth and Optimization Engineers.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/00-jurnii-overview.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2027-03-02",
+    "plannedInternalLinks": [
+      "/solutions/conversion-rate-optimization",
+      "/products/jurnii-ux",
+      "/library/hypothesis-driven-cro-why-most-igaming-ab-tests-fail-and-how-to-fix-them"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 30,
+    "status": "validated",
+    "classification": "solution",
+    "parentProduct": "jurnii-ux",
+    "sourceRoute": "/solutions/life-time-value-optimization",
+    "articleFilePath": "content/library/lifetime-value-optimisation-protecting-vip-and-high-velocity-player-yield.md",
+    "slug": "lifetime-value-optimisation-protecting-vip-and-high-velocity-player-yield",
+    "onPageTitle": "Lifetime Value Optimisation: Protecting VIP and High-Velocity Player Yield",
+    "seoTitle": "Lifetime Value Optimisation in iGaming | Jurnii",
+    "primarySearchQuery": "lifetime value optimisation igaming vip retention",
+    "searchIntent": "Retention and CRM teams developing strategies to increase player longevity and lifetime NGR.",
+    "uniqueThesis": "High-value VIP players multi-home across 3-5 apps; removing subtle withdrawal and deposit friction prevents silent VIP defection.",
+    "primaryAudience": "Heads of VIP, CRM Directors, and Commercial Officers.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/02 · Market Context & Category Definition 35dbbc1fb42481b29bc7ec4dc14b726f.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2027-03-09",
+    "plannedInternalLinks": [
+      "/solutions/life-time-value-optimization",
+      "/products/jurnii-ux",
+      "/library/vip-retention-in-the-friction-age-why-high-value-players-churn-silently"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 31,
+    "status": "validated",
+    "classification": "solution",
+    "parentProduct": "jurnii-ux",
+    "sourceRoute": "/solutions/churn-rate-optimization",
+    "articleFilePath": "content/library/churn-rate-optimisation-preempting-player-attrition-with-ux-telemetry.md",
+    "slug": "churn-rate-optimisation-preempting-player-attrition-with-ux-telemetry",
+    "onPageTitle": "Churn Rate Optimisation: Preempting Player Attrition with UX Telemetry",
+    "seoTitle": "Churn Rate Optimisation in Digital Gaming | Jurnii",
+    "primarySearchQuery": "churn rate optimisation igaming telemetry",
+    "searchIntent": "Retention managers and data teams looking to identify pre-churn behavioral markers before players defect to rivals.",
+    "uniqueThesis": "Reacting after a player stops depositing is too late; tracking UX friction signals (e.g. repeated tap errors, slow betslips) identifies churn risk days earlier.",
+    "primaryAudience": "Retention Managers and Product Analytics Leads.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/02 · Market Context & Category Definition 35dbbc1fb42481b29bc7ec4dc14b726f.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2027-03-16",
+    "plannedInternalLinks": [
+      "/solutions/churn-rate-optimization",
+      "/products/jurnii-ux"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 32,
+    "status": "validated",
+    "classification": "solution",
+    "parentProduct": "jurnii-ux",
+    "sourceRoute": "/solutions/customer-acquisition-cost-optimization",
+    "articleFilePath": "content/library/reducing-customer-acquisition-cost-by-optimising-onboarding-funnel-yield.md",
+    "slug": "reducing-customer-acquisition-cost-by-optimising-onboarding-funnel-yield",
+    "onPageTitle": "Reducing Customer Acquisition Cost by Optimising Onboarding Funnel Yield",
+    "seoTitle": "Reducing Customer Acquisition Cost in iGaming | Jurnii",
+    "primarySearchQuery": "reducing customer acquisition cost igaming onboarding",
+    "searchIntent": "Marketing directors and CFOs seeking to lower effective blended CAC in highly competitive media channels.",
+    "uniqueThesis": "Rising media CPMs cannot be controlled, but onboarding conversion can; doubling landing-to-FTD conversion cuts blended CAC by 50% immediately.",
+    "primaryAudience": "Chief Marketing Officers and Acquisition Leads.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/02 · Market Context & Category Definition 35dbbc1fb42481b29bc7ec4dc14b726f.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2027-03-23",
+    "plannedInternalLinks": [
+      "/solutions/customer-acquisition-cost-optimization",
+      "/products/jurnii-ux"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 33,
+    "status": "validated",
+    "classification": "use-case",
+    "parentProduct": "jurnii-360",
+    "sourceRoute": "/use-cases/cmo",
+    "articleFilePath": "content/library/the-cmos-operating-system-for-igaming-market-intelligence.md",
+    "slug": "the-cmos-operating-system-for-igaming-market-intelligence",
+    "onPageTitle": "The Chief Marketing Officer's Operating System for Real-Time iGaming Market Intelligence",
+    "seoTitle": "CMO Operating System for iGaming Intelligence | Jurnii",
+    "primarySearchQuery": "cmo igaming market intelligence operating system",
+    "searchIntent": "Chief Marketing Officers seeking executive reporting systems to monitor competitors, marketing ROI, and brand perception.",
+    "uniqueThesis": "CMOs who rely on quarterly agency snapshots lose market share to agile rivals; an automated intelligence layer gives marketing leadership daily tactical control.",
+    "primaryAudience": "Chief Marketing Officers and Marketing Vice Presidents.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/04 · Ideal Customer Profiles 35dbbc1fb4248162b08cd9e26c2ff03e.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2027-03-30",
+    "plannedInternalLinks": [
+      "/use-cases/cmo",
+      "/products/jurnii-360"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 34,
+    "status": "validated",
+    "classification": "use-case",
+    "parentProduct": "jurnii-ux",
+    "sourceRoute": "/use-cases/coo",
+    "articleFilePath": "content/library/the-coos-guide-to-operational-efficiency-in-multi-brand-gaming-platforms.md",
+    "slug": "the-coos-guide-to-operational-efficiency-in-multi-brand-gaming-platforms",
+    "onPageTitle": "The Chief Operating Officer's Guide to Operational Efficiency in Multi-Brand Gaming Platforms",
+    "seoTitle": "COO Multi-Brand Gaming Operational Efficiency | Jurnii",
+    "primarySearchQuery": "coo multi brand gaming operational efficiency",
+    "searchIntent": "Chief Operating Officers managing shared technology platforms and customer support across multiple regulated brand properties.",
+    "uniqueThesis": "Managing multi-brand portfolios creates operational bloat; automated benchmarking establishes unified operational standards across every brand property.",
+    "primaryAudience": "Chief Operating Officers and General Managers.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/04 · Ideal Customer Profiles 35dbbc1fb4248162b08cd9e26c2ff03e.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2027-04-06",
+    "plannedInternalLinks": [
+      "/use-cases/coo",
+      "/products/jurnii-ux"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 35,
+    "status": "validated",
+    "classification": "use-case",
+    "parentProduct": "jurnii-360",
+    "sourceRoute": "/use-cases/cco",
+    "articleFilePath": "content/library/the-ccos-playbook-for-protecting-commercial-yield-in-regulated-betting.md",
+    "slug": "the-ccos-playbook-for-protecting-commercial-yield-in-regulated-betting",
+    "onPageTitle": "The Chief Commercial Officer's Playbook for Protecting Commercial Yield in Regulated Betting",
+    "seoTitle": "CCO Playbook for Commercial Yield in Betting | Jurnii",
+    "primarySearchQuery": "cco commercial yield playbook regulated betting",
+    "searchIntent": "Chief Commercial Officers managing top-line NGR, gross margins, bonus liability, and partner revenue shares.",
+    "uniqueThesis": "Commercial yield is eroded when promotional spend operates without competitive context; real-time proposition tracking protects gross margin integrity.",
+    "primaryAudience": "Chief Commercial Officers and Commercial Directors.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/04 · Ideal Customer Profiles 35dbbc1fb4248162b08cd9e26c2ff03e.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2027-04-13",
+    "plannedInternalLinks": [
+      "/use-cases/cco",
+      "/products/jurnii-360"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 36,
+    "status": "validated",
+    "classification": "use-case",
+    "parentProduct": "jurnii-ux",
+    "sourceRoute": "/use-cases/smb",
+    "articleFilePath": "content/library/how-challenger-and-smb-gaming-operators-outmanoeuvre-market-incumbents.md",
+    "slug": "how-challenger-and-smb-gaming-operators-outmanoeuvre-market-incumbents",
+    "onPageTitle": "How Challenger and SMB Gaming Operators Outmanoeuvre Market Incumbents",
+    "seoTitle": "SMB Gaming Operators Outmanoeuvring Incumbents | Jurnii",
+    "primarySearchQuery": "smb gaming operator competitive strategy",
+    "searchIntent": "Founders and managing directors of boutique or single-market casino and sportsbook operations.",
+    "uniqueThesis": "SMB operators cannot outspend Tier-1 operators on media; they win on agility by spotting and exploiting UX and proposition gaps before incumbents notice.",
+    "primaryAudience": "Managing Directors, Founders, and Heads of Growth at Challenger Operators.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/04 · Ideal Customer Profiles 35dbbc1fb4248162b08cd9e26c2ff03e.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2027-04-20",
+    "plannedInternalLinks": [
+      "/use-cases/smb",
+      "/products/jurnii-ux"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 37,
+    "status": "validated",
+    "classification": "use-case",
+    "parentProduct": "jurnii-ux",
+    "sourceRoute": "/use-cases/midmarket",
+    "articleFilePath": "content/library/scaling-digital-maturity-and-conversion-velocity-for-mid-market-operators.md",
+    "slug": "scaling-digital-maturity-and-conversion-velocity-for-mid-market-operators",
+    "onPageTitle": "Scaling Digital Maturity and Conversion Velocity for Mid-Market iGaming Operators",
+    "seoTitle": "Scaling Mid-Market iGaming Digital Maturity | Jurnii",
+    "primarySearchQuery": "scaling mid market igaming digital maturity",
+    "searchIntent": "Mid-market operators scaling from single-jurisdiction to multi-jurisdiction footprints.",
+    "uniqueThesis": "Scaling into new markets creates severe coordination friction; standardized benchmarking frameworks maintain conversion velocity across fragmented operations.",
+    "primaryAudience": "General Managers and Operations Directors at Mid-Market Gaming Groups.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/04 · Ideal Customer Profiles 35dbbc1fb4248162b08cd9e26c2ff03e.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2027-04-27",
+    "plannedInternalLinks": [
+      "/use-cases/midmarket",
+      "/products/jurnii-ux"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 38,
+    "status": "validated",
+    "classification": "use-case",
+    "parentProduct": "jurnii-ux",
+    "sourceRoute": "/use-cases/enterprise",
+    "articleFilePath": "content/library/enterprise-intelligence-infrastructure-for-global-multi-brand-operators.md",
+    "slug": "enterprise-intelligence-infrastructure-for-global-multi-brand-operators",
+    "onPageTitle": "Enterprise Intelligence Infrastructure for Global Multi-Brand iGaming Groups",
+    "seoTitle": "Enterprise Intelligence for Multi-Brand Groups | Jurnii",
+    "primarySearchQuery": "enterprise intelligence global multi brand igaming",
+    "searchIntent": "Enterprise executive boards managing dozens of brand skins and multi-jurisdictional licensing entities.",
+    "uniqueThesis": "Enterprise scale fails without unified intelligence; automated longitudinal benchmarking creates structural transparency across distributed business units.",
+    "primaryAudience": "Enterprise C-Suite, Board Directors, and VP Global Strategy.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/04 · Ideal Customer Profiles 35dbbc1fb4248162b08cd9e26c2ff03e.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2027-05-04",
+    "plannedInternalLinks": [
+      "/use-cases/enterprise",
+      "/products/jurnii-ux",
+      "/products/jurnii-360"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 39,
+    "status": "validated",
+    "classification": "use-case",
+    "parentProduct": "jurnii-mmm",
+    "sourceRoute": "/use-cases/marketing",
+    "articleFilePath": "content/library/data-driven-marketing-management-in-high-cac-sports-betting-markets.md",
+    "slug": "data-driven-marketing-management-in-high-cac-sports-betting-markets",
+    "onPageTitle": "Data-Driven Marketing Management in High-CAC Sports Betting and Casino Markets",
+    "seoTitle": "Data-Driven Marketing in High-CAC Gaming | Jurnii",
+    "primarySearchQuery": "data driven marketing high cac sports betting",
+    "searchIntent": "Marketing managers optimizing budget allocation across digital, broadcast, affiliate, and in-app retention channels.",
+    "uniqueThesis": "Optimizing individual channels in isolation causes media budget exhaustion; unifying competitive intelligence with MMM ensures media spend generates incremental NGR.",
+    "primaryAudience": "Marketing Directors and User Acquisition Leads.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/04 · Ideal Customer Profiles 35dbbc1fb4248162b08cd9e26c2ff03e.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2027-05-11",
+    "plannedInternalLinks": [
+      "/use-cases/marketing",
+      "/products/jurnii-mmm"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 40,
+    "status": "validated",
+    "classification": "use-case",
+    "parentProduct": "jurnii-360",
+    "sourceRoute": "/use-cases/commercial",
+    "articleFilePath": "content/library/commercial-desk-playbooks-synchronising-pricing-promotions-and-margins.md",
+    "slug": "commercial-desk-playbooks-synchronising-pricing-promotions-and-margins",
+    "onPageTitle": "Commercial Desk Playbooks: Synchronising Pricing, Promotions, and Net Gaming Revenue",
+    "seoTitle": "Commercial Desk Playbooks for iGaming Margin | Jurnii",
+    "primarySearchQuery": "commercial desk playbooks pricing promotions margin",
+    "searchIntent": "Commercial and trading desk analysts executing seasonal campaigns, major tournament pricing, and VIP bonus tiers.",
+    "uniqueThesis": "Commercial trading desks need real-time radar data to balance competitive attractiveness against strict gross gaming revenue targets.",
+    "primaryAudience": "Commercial Strategy Leads and Yield Optimisation Analysts.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/04 · Ideal Customer Profiles 35dbbc1fb4248162b08cd9e26c2ff03e.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2027-05-18",
+    "plannedInternalLinks": [
+      "/use-cases/commercial",
+      "/products/jurnii-360"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 41,
+    "status": "validated",
+    "classification": "use-case",
+    "parentProduct": "jurnii-ux",
+    "sourceRoute": "/use-cases/product",
+    "articleFilePath": "content/library/product-sprint-prioritisation-aligning-ux-backlogs-with-commercial-roi.md",
+    "slug": "product-sprint-prioritisation-aligning-ux-backlogs-with-commercial-roi",
+    "onPageTitle": "Product Sprint Prioritisation: Aligning UX Backlogs with Net Gaming Revenue",
+    "seoTitle": "Product Sprint Prioritisation in iGaming | Jurnii",
+    "primarySearchQuery": "product sprint prioritisation ux backlog ngr",
+    "searchIntent": "Product leads and engineering scrum teams deciding whether to build new features vs fixing existing transactional UX friction.",
+    "uniqueThesis": "Building new game features on high-friction registration or deposit flows wastes engineering capacity; repairing checkout friction delivers immediate commercial ROI.",
+    "primaryAudience": "Heads of Product, Lead Product Managers, and Engineering Leads.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/04 · Ideal Customer Profiles 35dbbc1fb4248162b08cd9e26c2ff03e.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2027-05-25",
+    "plannedInternalLinks": [
+      "/use-cases/product",
+      "/products/jurnii-ux"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 42,
+    "status": "validated",
+    "classification": "use-case",
+    "parentProduct": "jurnii-ux",
+    "sourceRoute": "/use-cases/igaming",
+    "articleFilePath": "content/library/the-igaming-intelligence-imperative-competing-on-experience-in-2026.md",
+    "slug": "the-igaming-intelligence-imperative-competing-on-experience-in-2026",
+    "onPageTitle": "The iGaming Intelligence Imperative: Competing on Experience in Regulated Markets",
+    "seoTitle": "The iGaming Intelligence Imperative | Jurnii",
+    "primarySearchQuery": "igaming intelligence imperative digital experience",
+    "searchIntent": "Gaming executives looking for the comprehensive strategic overview on why digital experience is the last defensible competitive advantage.",
+    "uniqueThesis": "When platform technology, payment rails, and content catalogs are commoditised, frictionless customer experience and real-time intelligence are the sole drivers of sustainable enterprise value.",
+    "primaryAudience": "Executive Leadership, Board Members, and Industry Stakeholders.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/00-jurnii-overview.md",
+      ".agents/context/brand-guide/01 · Brand Foundation 35dbbc1fb42481ac9d84de13e4c79327.md",
+      ".agents/context/brand-guide/02 · Market Context & Category Definition 35dbbc1fb42481b29bc7ec4dc14b726f.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2027-06-01",
+    "plannedInternalLinks": [
+      "/use-cases/igaming",
+      "/products/jurnii-ux",
+      "/products/jurnii-360",
+      "/products/jurnii-mmm"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 43,
+    "status": "validated",
+    "classification": "use-case",
+    "parentProduct": "jurnii-ux",
+    "sourceRoute": "/use-cases/ecommerce",
+    "articleFilePath": "content/library/applying-igaming-transactional-velocity-to-high-volume-ecommerce.md",
+    "slug": "applying-igaming-transactional-velocity-to-high-volume-ecommerce",
+    "onPageTitle": "Applying High-Velocity Gaming UX Principles to High-Volume eCommerce Platforms",
+    "seoTitle": "High-Velocity Gaming UX in eCommerce | Jurnii",
+    "primarySearchQuery": "high velocity gaming ux ecommerce conversion",
+    "searchIntent": "eCommerce executives and checkout optimization leads looking to adopt real-time transaction heuristics from online gaming.",
+    "uniqueThesis": "Gaming platforms handle real-time monetary commitments with zero latency tolerance; eCommerce brands that adopt gaming transaction heuristics substantially lift cart checkout velocity.",
+    "primaryAudience": "Chief Digital Officers and VP eCommerce.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/04 · Ideal Customer Profiles 35dbbc1fb4248162b08cd9e26c2ff03e.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2027-06-08",
+    "plannedInternalLinks": [
+      "/use-cases/ecommerce",
+      "/products/jurnii-ux"
+    ],
+    "validationResult": "passed"
+  },
+  {
+    "sequenceNumber": 44,
+    "status": "validated",
+    "classification": "use-case",
+    "parentProduct": "jurnii-ux",
+    "sourceRoute": "/use-cases/fintech",
+    "articleFilePath": "content/library/fintech-onboarding-and-kyc-friction-lessons-from-real-time-digital-gaming.md",
+    "slug": "fintech-onboarding-and-kyc-friction-lessons-from-real-time-digital-gaming",
+    "onPageTitle": "FinTech Onboarding and Verification Friction: Lessons from Real-Time Digital Gaming",
+    "seoTitle": "FinTech Onboarding Friction Lessons | Jurnii",
+    "primarySearchQuery": "fintech onboarding kyc friction lessons digital gaming",
+    "searchIntent": "Fintech product leaders optimizing biometric KYC, identity verification, and initial funding workflows.",
+    "uniqueThesis": "Regulated gambling operators have mastered instant compliance verification under extreme player impatience; FinTech portals can eliminate onboarding drop-off by deploying gaming KYC heuristics.",
+    "primaryAudience": "Chief Product Officers and Heads of Growth at FinTech & Neobank platforms.",
+    "principalContextSources": [
+      ".agents/context/brand-guide/04 · Ideal Customer Profiles 35dbbc1fb4248162b08cd9e26c2ff03e.md"
+    ],
+    "externalSources": [],
+    "publishDate": "2027-06-15",
+    "plannedInternalLinks": [
+      "/use-cases/fintech",
+      "/products/jurnii-ux"
+    ],
+    "validationResult": "passed"
+  }
+]

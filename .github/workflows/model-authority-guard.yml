@@ -1,0 +1,104 @@
+# Fails if the commercial-model reconciliation is silently undone.
+#
+# This is the only mechanical protection the repo has against the authority being deleted, a sealed
+# specification losing its banner, or an agent entry point disappearing. It runs on documentation
+# only — it does not test behaviour and does not touch Zoho.
+name: Model authority guard
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Authority and companion artifacts must exist
+        run: |
+          set -e
+          required=(
+            "zoho-functions/docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md"
+            "zoho-functions/docs/v6/V6_DOCUMENTATION_AUTHORITY_MAP.md"
+            "zoho-functions/docs/v6/V6_FIELD_USE_CONTRACT.md"
+            "zoho-functions/docs/v6/V6_CONFLICT_LEDGER.md"
+            "zoho-functions/docs/v6/V6_RESIDUAL_SEARCH_REPORT.md"
+            "zoho-functions/docs/v6/V6_CRUD_PLAN.md"
+            "CLAUDE.md"
+            "AGENTS.md"
+          )
+          fail=0
+          for f in "${required[@]}"; do
+            if [ ! -f "$f" ]; then echo "::error file=$f::MISSING — required by the model reconciliation"; fail=1; fi
+          done
+          exit $fail
+
+      - name: Sealed specifications must keep their SUPERSEDED banner
+        run: |
+          set -e
+          fail=0
+          for f in zoho-functions/docs/v6/zoho_v6_refactor_spec_pack/*.md; do
+            case "$(basename "$f")" in SUPERSEDED.md) continue;; esac
+            if ! grep -q "SUPERSEDED" "$f"; then
+              echo "::error file=$f::lost its SUPERSEDED banner — this pack is sealed"
+              fail=1
+            fi
+          done
+          for f in \
+            "zoho-functions/.agents/skills/zoho-crm-deluge-refactoring/SKILL.md" \
+            "zoho-functions/.agents/workflows/deluge-refactor-workflow.md" \
+            "zoho-functions/.agents/rules/deluge-rules.md"; do
+            if [ -f "$f" ] && ! grep -qi "SUPERSEDED" "$f"; then
+              echo "::error file=$f::lost its SUPERSEDED banner — this describes a dead architecture"
+              fail=1
+            fi
+          done
+          exit $fail
+
+      - name: The refactoring skill must stay un-invokable
+        run: |
+          set -e
+          f="zoho-functions/.agents/skills/zoho-crm-deluge-refactoring/SKILL.md"
+          if [ -f "$f" ]; then
+            # A skill matches on its frontmatter description, so a body banner is not enough.
+            if ! head -5 "$f" | grep -q "SUPERSEDED — DO NOT INVOKE"; then
+              echo "::error file=$f::frontmatter 'description' must begin 'SUPERSEDED — DO NOT INVOKE'"
+              exit 1
+            fi
+          fi
+
+      - name: CLAUDE.md must still carry the model and the drift warning
+        run: |
+          set -e
+          fail=0
+          grep -q "one Account" CLAUDE.md || { echo "::error file=CLAUDE.md::lost the Account-Deal cardinality statement"; fail=1; }
+          grep -q "does NOT implement this yet" CLAUDE.md || { echo "::error file=CLAUDE.md::lost the 'code does not implement this' warning"; fail=1; }
+          grep -q "JURNII_AUTHORITATIVE_COMMERCIAL_MODEL" CLAUDE.md || { echo "::error file=CLAUDE.md::lost the authority link"; fail=1; }
+          exit $fail
+
+      - name: New Product-Deal assertions must not appear outside known files
+        run: |
+          set -e
+          # Files allowed to contain the prohibited pattern: the authority (which prohibits it),
+          # the reconciliation artifacts (which quote it), sealed history, and the code that still
+          # implements it. Anything else is a regression.
+          hits=$(grep -rlniE "Deal *= *Account *[x×] *Product" \
+                   --include="*.md" --include="*.mdc" --include="*.mermaid" . 2>/dev/null \
+                 | grep -v "^./zoho-functions/docs/v6/" \
+                 | grep -v "^./zoho-functions/.agents/" \
+                 | grep -v "^./docs/" \
+                 | grep -v "^./booking/docs/IMPLEMENTATION_EVIDENCE.md" \
+                 | grep -v "^./CLAUDE.md" \
+                 | grep -v "^./AGENTS.md" \
+                 | grep -v "^./zoho-functions/v6/CLAUDE.md" \
+                 | grep -v "^./booking/CLAUDE.md" \
+                 | grep -v "^./.cursor/rules/jurnii-crm-model.mdc" \
+                 | grep -v node_modules || true)
+          if [ -n "$hits" ]; then
+            echo "::error::New documentation asserts 'Deal = Account × Product'. That model is superseded."
+            echo "$hits"
+            exit 1
+          fi

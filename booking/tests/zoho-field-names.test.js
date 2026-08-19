@@ -229,7 +229,19 @@ for (const fn of ROLE_RESOLVERS) {
   });
 }
 
-test('multi-product bookings defer activation to a human, and that is deliberate', { skip: noDeluge }, () => {
+test('multi-product bookings defer activation to a human (current behaviour — SUPERSEDED, see authority §5.4)', { skip: noDeluge }, () => {
+  // ⚠ PINS CURRENT (SUPERSEDED) BEHAVIOUR.
+  //   Authority: zoho-functions/docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md §5.4 —
+  //   "Several Products or Quotes under the Deal do not make the Contact sequence ambiguous."
+  //
+  //   HARD RULE 7 (one active sequence per Contact) is CORRECT and survives. Deriving ambiguity
+  //   from the NUMBER OF PRODUCTS is the violation. Under the approved model this branch is
+  //   arithmetically unreachable — one Account has one Deal, so driverDealIds.size() is never > 1
+  //   and [multi_product_sequence_ambiguous] deletes itself.
+  //
+  //   THIS ASSERTION IS EXPECTED TO FAIL when the model is corrected. Invert it into the §14.13
+  //   guard — "a multi-product Contact activates normally" — do NOT delete it.
+  //
   // The form can now send up to four products, and processLead fans out one Product Deal
   // per product. processContact applies HARD RULE 7 — one active automated sequence per
   // Contact — and raises a Manual Review instead of the Activation Task when a Contact

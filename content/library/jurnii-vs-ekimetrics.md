@@ -1,9 +1,11 @@
 ---
-title: "Jurnii vs Ekimetrics: Which MMM is built for iGaming?"
+title: 'Jurnii vs Ekimetrics: Which MMM is built for iGaming?'
 description: >-
-  Ekimetrics is a serious MMM consultancy. Here's where the model fits — and where the iGaming gap opens.
+  Ekimetrics is a serious MMM consultancy. Here's where the model fits — and
+  where the iGaming gap opens.
 excerpt: >-
-  Ekimetrics is a serious MMM consultancy. Here's where the model fits — and where the iGaming gap opens.
+  Ekimetrics is a serious MMM consultancy. Here's where the model fits — and
+  where the iGaming gap opens.
 date: '2026-04-15'
 medium: Article
 category: Competitive Analysis
@@ -12,8 +14,10 @@ tags:
   - Competitive Analysis
   - iGaming
   - Intelligence
-productRefs: [cortex]
+productRefs:
+  - cortex
 isIndexable: true
+coverImage: /assets/library/jurnii-vs-ekimetrics/cover.png
 ---
 
 # Jurnii vs Ekimetrics: Which MMM is built for iGaming?

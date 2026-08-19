@@ -1,9 +1,15 @@
 ---
-title: "Flutter Completes LSE Delisting: What the Shift to New York Signals for iGaming Capital and Commercial Strategy"
+title: >-
+  Flutter Completes LSE Delisting: What the Shift to New York Signals for
+  iGaming Capital and Commercial Strategy
 description: >-
-  Flutter Entertainment has cancelled its London Stock Exchange listing to consolidate solely on the NYSE. Here is what the move reveals about capital allocation, market leadership, and commercial intelligence.
+  Flutter Entertainment has cancelled its London Stock Exchange listing to
+  consolidate solely on the NYSE. Here is what the move reveals about capital
+  allocation, market leadership, and commercial intelligence.
 excerpt: >-
-  Flutter Entertainment has cancelled its London Stock Exchange listing to consolidate solely on the NYSE. Here is what the move reveals about capital allocation, market leadership, and commercial intelligence.
+  Flutter Entertainment has cancelled its London Stock Exchange listing to
+  consolidate solely on the NYSE. Here is what the move reveals about capital
+  allocation, market leadership, and commercial intelligence.
 date: '2026-08-03'
 medium: Article
 category: Commercial Strategy
@@ -15,6 +21,7 @@ tags:
   - Market Intelligence
 authorImage: /assets/library/authors/fraser-dunk.jpg
 isIndexable: true
+coverImage: /assets/library/flutter-completes-lse-delisting/cover.png
 ---
 # Flutter Completes LSE Delisting: What the Shift to New York Signals for iGaming Capital and Commercial Strategy
 

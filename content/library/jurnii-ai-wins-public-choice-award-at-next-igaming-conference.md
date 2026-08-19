@@ -16,7 +16,7 @@ tags:
   - iGaming
   - Intelligence
 coverImage: >-
-  /assets/library/jurnii-ai-wins-public-choice-award-at-next-igaming-conference/cover.webp
+  /assets/library/jurnii-ai-wins-public-choice-award-at-next-igaming-conference/cover.png
 isIndexable: true
 sourceUrl: >-
   https://www.jurnii.io/post/jurnii-ai-wins-public-choice-award-at-next-igaming-conference

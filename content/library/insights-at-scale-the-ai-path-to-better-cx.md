@@ -17,7 +17,7 @@ tags:
   - Market Intelligence
   - iGaming
   - Intelligence
-coverImage: /assets/library/insights-at-scale-the-ai-path-to-better-cx/cover.webp
+coverImage: /assets/library/insights-at-scale-the-ai-path-to-better-cx/cover.png
 isIndexable: true
 sourceUrl: 'https://www.jurnii.io/post/insights-at-scale-the-ai-path-to-better-cx'
 ---

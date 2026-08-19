@@ -1,14 +1,24 @@
 ---
 title: The iGaming UX Benchmarking Framework
-description: Deconstructing player onboarding friction and conversion efficiency across European operators.
+description: >-
+  Deconstructing player onboarding friction and conversion efficiency across
+  European operators.
 date: '2026-05-15'
 medium: Article
 category: Product Strategy
 author: Timothy Solomon
-tags: [Benchmarking, UX, iGaming, Product]
-productRefs: [jurnii-ux]
-featureRefs: [brand-analysis]
-solutionRefs: [conversion-rate-optimization]
+tags:
+  - Benchmarking
+  - UX
+  - iGaming
+  - Product
+productRefs:
+  - jurnii-ux
+featureRefs:
+  - brand-analysis
+solutionRefs:
+  - conversion-rate-optimization
+coverImage: /assets/library/the-igaming-ux-benchmarking-framework/cover.png
 ---
 
 # The iGaming UX Benchmarking Framework

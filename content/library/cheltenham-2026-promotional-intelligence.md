@@ -1,9 +1,11 @@
 ---
-title: "Cheltenham 2026: Promotional Intelligence Report"
+title: 'Cheltenham 2026: Promotional Intelligence Report'
 description: >-
-  850+ promotions tracked across 20+ operators. Who blinked first, who held the line, and what it cost.
+  850+ promotions tracked across 20+ operators. Who blinked first, who held the
+  line, and what it cost.
 excerpt: >-
-  850+ promotions tracked across 20+ operators. Who blinked first, who held the line, and what it cost.
+  850+ promotions tracked across 20+ operators. Who blinked first, who held the
+  line, and what it cost.
 date: '2026-04-15'
 medium: Article
 category: Market Intelligence
@@ -12,9 +14,11 @@ tags:
   - Market Intelligence
   - iGaming
   - Intelligence
-productRefs: [jurnii-360]
+productRefs:
+  - jurnii-360
 authorImage: /assets/library/authors/mitch-vidler.png
 isIndexable: true
+coverImage: /assets/library/cheltenham-2026-promotional-intelligence/cover.png
 ---
 
 # Cheltenham 2026: Promotional Intelligence Report

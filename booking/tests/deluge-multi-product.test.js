@@ -1,6 +1,17 @@
 'use strict';
 
 /**
+ * ⚠ THIS FILE PINS CURRENT (SUPERSEDED) BEHAVIOUR.
+ *   Authority: zoho-functions/docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md
+ *
+ *   The approved model is one Account -> zero or one persistent Deal, with Products entering as
+ *   Quotes. Under it, the entire "remaining Product Deals" block these tests pin
+ *   (handleMeetingEvent.deluge ~458-596) is deleted — one Deal means no anchor-selection problem.
+ *
+ *   THESE ASSERTIONS ARE EXPECTED TO FAIL when the model is corrected. That failure is the
+ *   intended signal. Invert them into the §14 acceptance guards; do NOT delete them. There is
+ *   currently no test anywhere in the repo asserting the prohibited architecture is ABSENT.
+ *
  * §8 — reconciling the Product Deals a multi-product booking selected beyond its anchor.
  *
  * A Deal is Account x Product, but a Zoho Event has exactly ONE native `What_Id`. So a

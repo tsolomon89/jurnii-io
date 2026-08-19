@@ -1,5 +1,7 @@
 {
   "generatedFrom": "live Zoho metadata",
+  "generatedAt": "2026-08 (exact date unrecorded)",
+  "note": "Field EXISTENCE only. Presence here does NOT mean a field is approved or permanent - Deal_Product, Deal_Product_Key and Deal_Key are RETIRE/REDEFINE candidates. Authority: zoho-functions/docs/v6/V6_FIELD_USE_CONTRACT.md",
   "modules": {
     "Leads": [
       "Account_Key",
@@ -1817,8 +1819,8 @@
           "used": true
         },
         {
-          "value": "Curaçao",
-          "label": "Curaçao",
+          "value": "Cura\u00e7ao",
+          "label": "Cura\u00e7ao",
           "used": true
         },
         {
@@ -2672,8 +2674,8 @@
           "used": true
         },
         {
-          "value": "Türkiye",
-          "label": "Türkiye",
+          "value": "T\u00fcrkiye",
+          "label": "T\u00fcrkiye",
           "used": true
         },
         {

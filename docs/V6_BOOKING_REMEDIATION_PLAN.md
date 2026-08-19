@@ -1,3 +1,17 @@
+> # ⚠ ACTIVE — must be re-based onto the authoritative model
+>
+> This plan predates the authoritative model and is the closest existing artifact to a correction plan.
+> Its §2.7 activation fix (remove the "exactly one Product Deal" precondition) reaches the right
+> conclusion for one gate and is **retained** — but it does not retire the Product-scoped `Deal_Key`
+> composition, and its L134 `Deal_Key` lookup change must be re-scoped, not applied as written.
+>
+> Superseded as a whole by the v6 correction plan built on the authoritative model. Individual
+> corrections C1–C4 remain valid evidence.
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../zoho-functions/docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # v6 + Booking — verified state and corrective plan
 
 Date: 2026-08-10 · Supersedes the question set in

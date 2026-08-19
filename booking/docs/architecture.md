@@ -1,3 +1,24 @@
+> # ⚠ SECOND BANNER — the Deal-linking design below is KNOWN DRIFT
+>
+> This file's existing banner correctly marks the pre-rewrite sections out of date and the "As-built"
+> material authoritative. **This banner is narrower and applies inside the surviving As-built half.**
+>
+> The section arguing that **multi-product bookings must defer sequence activation to a human** — and
+> that auto-picking a driver Deal "would break HARD RULE 7" — is **inverted relative to the approved
+> model.** HARD RULE 7 (one sequence per Contact) is correct. Deriving ambiguity from the *number of
+> Products* is the violation: authority §5.4 states that several Products or Quotes under the Deal do
+> **not** make the Contact sequence ambiguous.
+>
+> Likewise "`processLead` fans out one Product Deal per resolved product" is current behaviour, not
+> target design.
+>
+> **What must not change:** the defensive rule that a Meeting links a Deal as `What_Id` only when that
+> Deal already exists. That is correct under either model.
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../../zoho-functions/docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # Jurnii Booking Integration Architecture
 
 > ## ⚠ Read "As-built" first

@@ -1,9 +1,11 @@
 ---
 title: How to run a UX audit for your sportsbook or casino
 description: >-
-  The five journeys to score, the friction points to look for, and how to weight findings by NGR impact.
+  The five journeys to score, the friction points to look for, and how to weight
+  findings by NGR impact.
 excerpt: >-
-  The five journeys to score, the friction points to look for, and how to weight findings by NGR impact.
+  The five journeys to score, the friction points to look for, and how to weight
+  findings by NGR impact.
 date: '2026-03-15'
 medium: Article
 category: Playbook
@@ -12,9 +14,11 @@ tags:
   - Playbook
   - iGaming
   - Intelligence
-productRefs: [jurnii-ux]
+productRefs:
+  - jurnii-ux
 authorImage: /assets/library/authors/fraser-dunk.jpg
 isIndexable: true
+coverImage: /assets/library/how-to-run-ux-audit-igaming/cover.png
 ---
 
 # How to run a UX audit for your sportsbook or casino

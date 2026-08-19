@@ -1,9 +1,11 @@
 ---
 title: How a Tier 1 European operator reduced promo waste by 23% in Q1
 description: >-
-  Inside the first 90 days: scoping, calibration, and the three reload offers we recommended cutting.
+  Inside the first 90 days: scoping, calibration, and the three reload offers we
+  recommended cutting.
 excerpt: >-
-  Inside the first 90 days: scoping, calibration, and the three reload offers we recommended cutting.
+  Inside the first 90 days: scoping, calibration, and the three reload offers we
+  recommended cutting.
 date: '2026-04-15'
 medium: Article
 category: Case Study
@@ -12,9 +14,11 @@ tags:
   - Case Study
   - iGaming
   - Intelligence
-productRefs: [jurnii-360]
+productRefs:
+  - jurnii-360
 authorImage: /assets/library/authors/mitch-vidler.png
 isIndexable: true
+coverImage: /assets/library/tier-1-operator-promo-waste-reduction/cover.png
 ---
 
 # How a Tier 1 European operator reduced promo waste by 23% in Q1

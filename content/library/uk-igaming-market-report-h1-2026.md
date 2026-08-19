@@ -1,14 +1,28 @@
 ---
-title: "The UK iGaming Market Report, H1 2026"
-subtitle: "Promotional intensity, margin discipline, and the experience layer in the first duty-compressed year"
-date: "2026-08-03"
-medium: "Market Report"
-category: "Market Report"
-author: "Jurnii Intelligence"
-description: "How the UK's 40% Remote Gaming Duty turned a spending contest into a precision contest: promotional voice, boost-versus-margin economics, and the experience layer across 21 brands in H1 2026."
-excerpt: "The 40% duty turned a spending contest into a precision contest. A data-led read of promotional voice, boost economics, and experience across the UK market."
-tags: ["iGaming", "Market Intelligence", "United Kingdom", "Promotional Intelligence", "UX Benchmarking"]
+title: 'The UK iGaming Market Report, H1 2026'
+subtitle: >-
+  Promotional intensity, margin discipline, and the experience layer in the
+  first duty-compressed year
+date: '2026-08-03'
+medium: Market Report
+category: Market Report
+author: Jurnii Intelligence
+description: >-
+  How the UK's 40% Remote Gaming Duty turned a spending contest into a precision
+  contest: promotional voice, boost-versus-margin economics, and the experience
+  layer across 21 brands in H1 2026.
+excerpt: >-
+  The 40% duty turned a spending contest into a precision contest. A data-led
+  read of promotional voice, boost economics, and experience across the UK
+  market.
+tags:
+  - iGaming
+  - Market Intelligence
+  - United Kingdom
+  - Promotional Intelligence
+  - UX Benchmarking
 isIndexable: true
+coverImage: /assets/library/uk-igaming-market-report-h1-2026/cover.png
 ---
 
 # The UK iGaming Market Report, H1 2026

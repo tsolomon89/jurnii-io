@@ -14,7 +14,7 @@ tags:
   - iGaming
   - Intelligence
 coverImage: >-
-  /assets/library/the-convergence-of-ux-and-cx-how-jurnii-delivers-a-unified-experience-solution/cover.jpg
+  /assets/library/the-convergence-of-ux-and-cx-how-jurnii-delivers-a-unified-experience-solution/cover.png
 isIndexable: true
 sourceUrl: >-
   https://www.jurnii.io/post/the-convergence-of-ux-and-cx-how-jurnii-delivers-a-unified-experience-solution

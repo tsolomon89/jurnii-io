@@ -15,7 +15,7 @@ tags:
   - Market Intelligence
   - iGaming
   - Intelligence
-coverImage: /assets/library/the-rise-of-ai-powered-service-agencies/cover.webp
+coverImage: /assets/library/the-rise-of-ai-powered-service-agencies/cover.png
 isIndexable: true
 sourceUrl: 'https://www.jurnii.io/post/the-rise-of-ai-powered-service-agencies'
 ---

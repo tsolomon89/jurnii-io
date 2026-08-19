@@ -1,5 +1,6 @@
 {
   "name": "jurnii-website",
+  "description": "Monorepo: marketing website + booking module (booking/) + Zoho CRM Deluge automation (zoho-functions/). Read CLAUDE.md before touching booking/ or zoho-functions/.",
   "private": true,
   "type": "module",
   "scripts": {
