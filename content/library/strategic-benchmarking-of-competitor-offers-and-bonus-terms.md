@@ -31,25 +31,11 @@ To protect commercial margins while driving sustainable growth, operators must d
 
 When operators design promotional campaigns in isolation from competitive intelligence, three systemic failure modes emerge:
 
-```
-+-----------------------------------------------------------------------------+
-|               The 3 Structural Failures of Uncalibrated Promotions          |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. THE BONUS HUNTER SUBSIDY TRAP                                           |
-|     - High headline generosity with loose terms attracts multi-homing       |
-|       syndicates who extract introductory value and defect immediately.     |
-|                                                                             |
-|  2. THE OVER-RESTRICTIVE CONVERSION COLLAPSE                                |
-|     - Operators inflate nominal bonus figures behind punitive 50x turnover  |
-|       barriers, causing high landing page drop-off and severe churn.        |
-|                                                                             |
-|  3. THE TIMING & CHANNEL MISMATCH                                           |
-|     - Deploying promotional incentives during periods of low competitive    |
-|       activity while running dry during peak rival marketing pushes.        |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **1. THE BONUS HUNTER SUBSIDY TRAP** | High headline generosity with loose terms attracts multi-homing syndicates who extract introductory value and defect immediately. |
+| **2. THE OVER-RESTRICTIVE CONVERSION COLLAPSE** | Operators inflate nominal bonus figures behind punitive 50x turnover barriers, causing high landing page drop-off and severe churn. |
+| **3. THE TIMING & CHANNEL MISMATCH** | Deploying promotional incentives during periods of low competitive activity while running dry during peak rival marketing pushes. |
 
 ### 1. The Bonus Hunter Subsidy Trap
 
@@ -73,28 +59,10 @@ Conversely, if the operator lacks promotional firepower on Friday afternoon when
 
 To achieve optimal commercial balance, promotional propositions must be engineered using the **Promo Richness Index** framework:
 
-```
-+-----------------------------------------------------------------------------+
-|                 Promo Richness Optimization Framework                       |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ CORE EQUATION ]                                                          |
-|                                                                             |
-|  Net Player Perceived Value = Nominal Generosity x Realisation Probability  |
-|                                                                             |
-|  Operator Expected Cost = Gross Bonus Value x (1 - Mathematical House Edge) |
-|                                                                             |
-|  =========================================================================  |
-|  [ GOAL: MAXIMISE PERCEIVED VALUE WHILE MINIMISING NET OPERATOR COST ]      |
-|                                                                             |
-|  STRATEGY A: High Nominal, High Friction (Low Perceived Value, High Churn)  |
-|  "£200 Bonus with 45x Wagering" -> Net Yield: Poor, Churn: 88%              |
-|                                                                             |
-|  STRATEGY B: Calibrated Nominal, Low Friction (High Perceived Value, High LTV)|
-|  "£50 Bonus with 10x Wagering + 50 Zero-Wagering Spins" -> Net Yield: High  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **CORE EQUATION** | Net Player Perceived Value = Nominal Generosity x Realisation Probability Operator Expected Cost = Gross Bonus Value x (1 - Mathematical House Edge) ========================================================================= |
+| **GOAL: MAXIMISE PERCEIVED VALUE WHILE MINIMISING NET OPERATOR COST** | STRATEGY A: High Nominal, High Friction (Low Perceived Value, High Churn) "£200 Bonus with 45x Wagering" -> Net Yield: Poor, Churn: 88% STRATEGY B: Calibrated Nominal, Low Friction (High Perceived Value, High LTV) "£50 Bonus with 10x Wagering + 50 Zero-Wagering Spins" -> Net Yield: High |
 
 ### The Power of Low-Wagering Precision
 
@@ -109,25 +77,12 @@ By lowering the nominal headline figure and slashing the wagering multiplier, an
 
 To maintain promotional superiority in a dynamic market, commercial teams execute a structured four-step optimization cycle within [Jurnii 360](/products/jurnii-360):
 
-```
-+-----------------------------------------------------------------------------+
-|               Continuous Promotional Optimization Cycle                     |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ STEP 1: CONTINUOUS MARKET INGESTION ]                                    |
-|  Track all competitor acquisition, reload, and VIP offers across 35+ MKs.   |
-|                                                                             |
-|  [ STEP 2: MATHEMATICAL DISSECTION ]                                        |
-|  Extract true expected value, turnover probability, and friction factors.   |
-|                                                                             |
-|  [ STEP 3: GAP & ANOMALY IDENTIFICATION ]                                   |
-|  Isolate competitor proposition weaknesses and unserved player segments.    |
-|                                                                             |
-|  [ STEP 4: PRECISION TACTICAL COUNTER-DEPLOYMENT ]                          |
-|  Deploy pre-calibrated promotional playbooks to capture defecting cohorts.  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **STEP 1: CONTINUOUS MARKET INGESTION** | Track all competitor acquisition, reload, and VIP offers across 35+ MKs. |
+| **STEP 2: MATHEMATICAL DISSECTION** | Extract true expected value, turnover probability, and friction factors. |
+| **STEP 3: GAP & ANOMALY IDENTIFICATION** | Isolate competitor proposition weaknesses and unserved player segments. |
+| **STEP 4: PRECISION TACTICAL COUNTER-DEPLOYMENT** | Deploy pre-calibrated promotional playbooks to capture defecting cohorts. |
 
 ### Step 1: Continuous Ingestion Across All Surfaces
 
@@ -176,25 +131,11 @@ Competitive promotional activity is an exogenous shock to your marketing perform
 
 Within [Jurnii 360](/products/jurnii-360), all competitive proposition data is pre-formatted for direct ingestion into econometric Marketing Mix Modelling within [Jurnii Cortex](/products/jurnii-mmm):
 
-```
-+-----------------------------------------------------------------------------+
-|               MMM-Ready Competitor Data Integration Pipeline                |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ COMPETITIVE PROPOSITION INGESTION ]                                      |
-|  - Real-time tracking of 1,000+ weekly offers across 35+ jurisdictions      |
-|  - Normalization of bonus ratios, stake caps, and turnover requirements     |
-|                                                                             |
-|  [ EXOGENOUS MARKET CONTEXT VARIABLES ]                                     |
-|  - Competitor Promo Richness Index time-series per market and vertical      |
-|  - Market-level promotional intensity and overround compression indices     |
-|                                                                             |
-|  [ ECONOMETRIC ATTRIBUTION IN JURNII CORTEX ]                               |
-|  - Isolate true internal marketing ROI from external competitor noise       |
-|  - Reconcile marketing expenditure against Net Gaming Revenue growth        |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **COMPETITIVE PROPOSITION INGESTION** | Real-time tracking of 1,000+ weekly offers across 35+ jurisdictions | Normalization of bonus ratios, stake caps, and turnover requirements |
+| **EXOGENOUS MARKET CONTEXT VARIABLES** | Competitor Promo Richness Index time-series per market and vertical | Market-level promotional intensity and overround compression indices |
+| **ECONOMETRIC ATTRIBUTION IN JURNII CORTEX** | Isolate true internal marketing ROI from external competitor noise | Reconcile marketing expenditure against Net Gaming Revenue growth |
 
 ## Transforming Promotions from an Expense into a Profit Engine
 

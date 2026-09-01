@@ -31,26 +31,11 @@ To determine true capital efficiency and avoid over-investing in non-incremental
 
 In any digital gaming market, top-line revenue growth is driven by three distinct structural forces:
 
-```
-+-----------------------------------------------------------------------------+
-|               The 3 Structural Drivers of iGaming Growth                    |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. MACRO REGULATORY & MARKET EXPANSION (ORGANIC TAILWIND)                  |
-|     - Legalization of online betting in new jurisdictions                   |
-|     - Natural expansion of digital payment rails (e.g. Pix adoption)        |
-|     - Demographic transition from retail land-based to mobile gaming        |
-|                                                                             |
-|  2. CALENDARED SPORTING SEASONALITY & LIQUIDITY                             |
-|     - Major tournament cycles (FIFA World Cup, UEFA Euros, Super Bowl)      |
-|     - High-density weekend fixture schedules and favorable public payouts   |
-|                                                                             |
-|  3. TRUE INCREMENTAL MARKETING YIELD                                        |
-|     - Conversions generated exclusively because an ad impression was served |
-|     - Net Gaming Revenue that would NOT have occurred without media spend   |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. MACRO REGULATORY & MARKET EXPANSION (ORGANIC TAILWIND)** | Legalization of online betting in new jurisdictions | Natural expansion of digital payment rails (e.g. Pix adoption); Demographic transition from retail land-based to mobile gaming |
+| **2. CALENDARED SPORTING SEASONALITY & LIQUIDITY** | Major tournament cycles (FIFA World Cup, UEFA Euros, Super Bowl) | High-density weekend fixture schedules and favorable public payouts |
+| **3. TRUE INCREMENTAL MARKETING YIELD** | Conversions generated exclusively because an ad impression was served | Net Gaming Revenue that would NOT have occurred without media spend |
 
 ### 1. Macro Regulatory and Market Expansion
 
@@ -68,27 +53,11 @@ True incremental yield represents the net revenue generated directly by marketin
 
 To separate organic market expansion from paid marketing yield, Jurnii Cortex applies time-series econometric decomposition:
 
-```
-+-----------------------------------------------------------------------------+
-|               Econometric Revenue Decomposition in Jurnii Cortex            |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  Total Net Revenue (Y_t) =                                                  |
-|                                                                             |
-|  [ BASELINE ORGANIC COMPONENT ]                                             |
-|  + Structural Market Trend (Longitudinal legalization growth curve)         |
-|  + Baseline Brand Equity (Unpaid direct traffic & organic search)           |
-|                                                                             |
-|  [ EXOGENOUS SPORTING & CALENDAR COMPONENT ]                                |
-|  + Sporting Calendar Index (Tournament density & fixture profiles)          |
-|  + Payday & Holiday Seasonality (Macro liquidity cycles)                    |
-|                                                                             |
-|  [ INCREMENTAL PAID MARKETING YIELD ]                                       |
-|  + Paid Performance Media (Search, Social, Display, Affiliates)             |
-|  + Brand Broadcast Media (TV, Radio, Stadium Signage, Sponsorships)        |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **BASELINE ORGANIC COMPONENT** | + Structural Market Trend (Longitudinal legalization growth curve) + Baseline Brand Equity (Unpaid direct traffic & organic search) |
+| **EXOGENOUS SPORTING & CALENDAR COMPONENT** | + Sporting Calendar Index (Tournament density & fixture profiles) + Payday & Holiday Seasonality (Macro liquidity cycles) |
+| **INCREMENTAL PAID MARKETING YIELD** | + Paid Performance Media (Search, Social, Display, Affiliates) + Brand Broadcast Media (TV, Radio, Stadium Signage, Sponsorships) |
 
 ### 1. Modeling the Structural Market Trend
 
@@ -106,25 +75,11 @@ With organic baselines and seasonality controlled for, the model measures the tr
 
 Separating market tailwinds from marketing yield protects operators from severe strategic mistakes:
 
-```
-+-----------------------------------------------------------------------------+
-|               Commercial Impact of Market Growth Attribution                |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. ELIMINATING BUDGET INFLATION IN EXPANDING MARKETS                       |
-|     - Prevent marketing teams from requesting 50% budget increases during   |
-|       organic adoption waves, protecting EBITDA margins.                    |
-|                                                                             |
-|  2. IDENTIFYING CHANNEL SATURATION BEFORE GROWTH SLOWS                      |
-|     - Pinpoint which acquisition channels are actually saturated, shifting |
-|       spend before customer acquisition costs spike uncontrollably.         |
-|                                                                             |
-|  3. ACCURATE LONG-TERM LTV & CAC FORECASTING                                |
-|     - Provide CFOs and investors with realistic unit economics unpolluted   |
-|       by temporary regulatory tailwinds.                                    |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **1. ELIMINATING BUDGET INFLATION IN EXPANDING MARKETS** | Prevent marketing teams from requesting 50% budget increases during organic adoption waves, protecting EBITDA margins. |
+| **2. IDENTIFYING CHANNEL SATURATION BEFORE GROWTH SLOWS** | Pinpoint which acquisition channels are actually saturated, shifting spend before customer acquisition costs spike uncontrollably. |
+| **3. ACCURATE LONG-TERM LTV & CAC FORECASTING** | Provide CFOs and investors with realistic unit economics unpolluted by temporary regulatory tailwinds. |
 
 ### Case Study: Navigating Market Maturation in Ontario
 
@@ -144,20 +99,12 @@ An econometric market growth attribution audit conducted via [Jurnii Cortex](/pr
 
 Within [Jurnii Cortex](/products/jurnii-mmm), market growth decomposition separates macro market expansion from internal marketing effectiveness:
 
-```
-+-----------------------------------------------------------------------------+
-|               Market Growth Decomposition Telemetry Matrix                  |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  GROWTH DRIVER                  ECONOMETRIC ISOLATION METHODOLOGY           |
-|  -------------------------------------------------------------------------  |
-|  Regulatory Legalization Shock  Synthetic Control & Causal Impact Modeling  |
-|  Macro Economic Seasonality     Fourier Series & Calendar Harmonic Filters  |
-|  Organic Category Adoption      Bass Diffusion Curve Fitting                |
-|  True Marketing Incrementality  Bayesian Adstock & Hill Saturation Estimates|
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **GROWTH DRIVER** | **ECONOMETRIC ISOLATION METHODOLOGY** |
+| --- | --- |
+| **Regulatory Legalization Shock** | Synthetic Control & Causal Impact Modeling |
+| **Macro Economic Seasonality** | Fourier Series & Calendar Harmonic Filters |
+| **Organic Category Adoption** | Bass Diffusion Curve Fitting |
+| **True Marketing Incrementality** | Bayesian Adstock & Hill Saturation Estimates |
 
 In live enterprise deployments managing over $17.1M in marketing budgets, this decomposition enables commercial teams to eliminate wasteful spending on saturated channels, successfully reallocating over $4.85M into genuine growth drivers.
 
@@ -165,21 +112,10 @@ In live enterprise deployments managing over $17.1M in marketing budgets, this d
 
 When a new jurisdiction legalizes online gaming, category adoption surges. In a recent state launch, Jurnii Cortex deployed synthetic control methods to isolate marketing impact:
 
-```
-+-----------------------------------------------------------------------------+
-|               Synthetic Control Market Decomposition Model                  |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  TOTAL YEAR 1 FTD VOLUME: 120,000 Registrations                             |
-|  - Organic Category Adoption Tailwind: 65,000 (54.2%)                       |
-|  - TV Sponsorship Brand Awareness Lift: 32,000 (26.7%)                      |
-|  - True Incremental Paid Digital Media: 23,000 (19.1%)                      |
-|                                                                             |
-|  STRATEGIC ACTION:                                                          |
-|  Trimmed $3.2M in saturated paid search; reallocated to CRM retention.      |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **TOTAL YEAR 1 FTD VOLUME** | 120,000 Registrations | Organic Category Adoption Tailwind: 65,000 (54.2%); TV Sponsorship Brand Awareness Lift: 32,000 (26.7%); True Incremental Paid Digital Media: 23,000 (19.1%) |
+| **STRATEGIC ACTION:** | Trimmed $3.2M in saturated paid search; reallocated to CRM retention. | Empirical benchmark verified |
 
 Isolating organic tailwinds prevents executive leadership from establishing unsustainable marketing spend baselines during market expansion waves.
 
@@ -187,22 +123,10 @@ Isolating organic tailwinds prevents executive leadership from establishing unsu
 
 Major international sports events (such as the FIFA World Cup or UEFA Champions League) create substantial organic demand surges:
 
-```
-+-----------------------------------------------------------------------------+
-|               Tournament Window Econometric Decomposition                   |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  TOTAL GROSS TURNOVER: £45.0M                                               |
-|  - Baseline Organic Demand: £18.5M (41.1%)                                  |
-|  - World Cup Exogenous Category Shock: £16.2M (36.0%)                       |
-|  - True Incremental Marketing Campaign Lift: £10.3M (22.9%)                 |
-|                                                                             |
-|  ECONOMETRIC INSIGHT:                                                       |
-|  Without Bayesian decomposition, marketing teams over-attribute organic     |
-|  tournament volume to digital ad spend, leading to inflated post-event CPAs.|
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **TOTAL GROSS TURNOVER** | £45.0M | Baseline Organic Demand: £18.5M (41.1%); World Cup Exogenous Category Shock: £16.2M (36.0%); True Incremental Marketing Campaign Lift: £10.3M (22.9%) |
+| **ECONOMETRIC INSIGHT:** | Without Bayesian decomposition, marketing teams over-attribute organic tournament volume to digital ad spend, leading to inflated post-event CPAs. | Empirical benchmark verified |
 
 Deploying [Jurnii Cortex](/products/jurnii-mmm) provides commercial leadership with the empirical precision required to allocate media budgets responsibly.
 

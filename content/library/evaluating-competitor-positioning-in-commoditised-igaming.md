@@ -31,33 +31,13 @@ Under these conditions, evaluating [competitor positioning](/features/competitor
 
 To conduct an objective evaluation of competitor positioning, commercial leaders must look beyond superficial marketing claims. Operators must evaluate positioning across five concrete operational vectors:
 
-```
-+-----------------------------------------------------------------------------+
-|               The Five Vectors of Modern iGaming Positioning                |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. VALUE PROPOSITION ARCHITECTURE                                          |
-|     - Margin philosophy (tight pricing vs recreational promotional depth)   |
-|     - Wagering transparency and bonus barrier calibration                   |
-|                                                                             |
-|  2. TRANSACTIONAL VELOCITY                                                  |
-|     - Instant payout processing (under 5 minutes) vs legacy 24-hour cycles  |
-|     - Minimal-click bet placement and frictionless biometric deposit flows  |
-|                                                                             |
-|  3. RECREATIONAL VS HIGH-VELOCITY COHORT TARGETING                          |
-|     - Gamified micro-rewards and social features for recreational players   |
-|     - Deep liquidity, high limits, and zero stake factoring for VIPs        |
-|                                                                             |
-|  4. PRODUCT BREADTH VS SPECIALISED DEPTH                                    |
-|     - Full-stack conglomerates (Sports, Casino, Poker, Bingo, Lottery)      |
-|     - Vertical specialists (e.g., dedicated live dealer or Bet Builder UX)  |
-|                                                                             |
-|  5. REGULATORY POSTURE & TRUST ARCHITECTURE                                 |
-|     - Proactive compliance transparency and frictionless safer gambling     |
-|     - Streamlined automated verification minimizing onboarding drop-off     |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. VALUE PROPOSITION ARCHITECTURE** | Margin philosophy (tight pricing vs recreational promotional depth) | Wagering transparency and bonus barrier calibration |
+| **2. TRANSACTIONAL VELOCITY** | Instant payout processing (under 5 minutes) vs legacy 24-hour cycles | Minimal-click bet placement and frictionless biometric deposit flows |
+| **3. RECREATIONAL VS HIGH-VELOCITY COHORT TARGETING** | Gamified micro-rewards and social features for recreational players | Deep liquidity, high limits, and zero stake factoring for VIPs |
+| **4. PRODUCT BREADTH VS SPECIALISED DEPTH** | Full-stack conglomerates (Sports, Casino, Poker, Bingo, Lottery) | Vertical specialists (e.g., dedicated live dealer or Bet Builder UX) |
+| **5. REGULATORY POSTURE & TRUST ARCHITECTURE** | Proactive compliance transparency and frictionless safer gambling | Streamlined automated verification minimizing onboarding drop-off |
 
 ### 1. Value Proposition Architecture
 
@@ -121,35 +101,22 @@ To eliminate subjectivity, operators must deploy structured positioning matrices
 
 An objective positioning framework measures competitors across quantifiable metrics rather than subjective aesthetic impressions:
 
-```
-+-----------------------------------------------------------------------------+
-|                Jurnii Objective Positioning Scoring Model                   |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ CORE DIMENSIONS ]                                                        |
-|                                                                             |
-|  1. Pricing Index (Overround Deviation vs Market Baseline)                  |
-|  2. Promo Richness Score (Generosity Ratio x Turnover Friction Factor)      |
-|  3. Journey Velocity Score (Onboarding Clicks + Verification Latency)       |
-|  4. Performance Vitals (Largest Contentful Paint + INP Responsiveness)      |
-|  5. Perception & Trust Rating (Transparency Index + User Friction Score)    |
-|                                                                             |
-|  =========================================================================  |
-|  [ COMPOSITE OUTPUT: COMPETITIVE POSITIONING QUADRANT ]                     |
-|                                                                             |
-|      High Generosity |                                                      |
-|                      |   Promotional Leaders     |   Balanced Conglomerates |
-|                      |   (High Generosity,       |   (High Generosity,      |
-|                      |    Standard Speed)        |    High Velocity)        |
-|                      |---------------------------+--------------------------|
-|                      |   Legacy Incumbents       |   Velocity Specialists   |
-|                      |   (Low Generosity,        |   (Targeted Value,       |
-|                      |    High Friction)         |    Sub-Second Speed)     |
-|       Low Generosity +------------------------------------------------------|
-|                             High Friction                 Low Friction      |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| Evaluation Dimension | Measurement Metric | Strategic Objective |
+|---|---|---|
+| **1. Pricing Index** | Overround deviation vs market baseline | Calibrate sportsbook margins against regional norms |
+| **2. Promo Richness Score** | Generosity ratio × turnover friction factor | Quantify true player value vs turnover difficulty |
+| **3. Journey Velocity Score** | Onboarding clicks + verification latency | Benchmark speed from registration to first deposit |
+| **4. Performance Vitals** | Largest Contentful Paint (LCP) + INP latency | Ensure sub-100ms interaction responsiveness |
+| **5. Perception & Trust Rating** | Fee transparency index + withdrawal friction | Measure player sentiment and compliance clarity |
+
+### Competitive Positioning Quadrant Matrix
+
+| Positioning Archetype | Generosity Level | Friction & Velocity Profile | Strategic Characteristics |
+|---|---|---|---|
+| **Promotional Leaders** | High Generosity | Standard Speed / Average Friction | Heavy upfront bonus spend; reliant on media volume |
+| **Balanced Conglomerates** | High Generosity | High Velocity / Low Friction | Scale leaders combining deep capital with polished UX |
+| **Legacy Incumbents** | Low Generosity | High Friction | Vulnerable to churn; dependent on legacy brand equity |
+| **Velocity Specialists** | Targeted Value | Sub-Second Speed / Zero Friction | Agile challengers winning on instant payouts and 1-tap UX |
 
 By plotting the competitive landscape along these mathematical axes within [Jurnii 360](/products/jurnii-360), leadership teams identify clear white space in the market:
 

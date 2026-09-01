@@ -34,29 +34,12 @@ By applying [iGaming transactional velocity solutions to ecommerce](/use-cases/e
 
 High-volume digital retailers can extract four profound architectural principles from gaming platforms:
 
-```
-+-----------------------------------------------------------------------------+
-|               4 Transactional Velocity Lessons from iGaming                 |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. IN-CONTEXT TRANSACTION DRAWERS OVER FULL-PAGE CHECKOUTS                 |
-|     - Gaming platforms never redirect users away from the live game lobby.  |
-|     - Deploying slide-out biometric checkout drawers lifts conversion 25%.  |
-|                                                                             |
-|  2. SUB-SECOND INTERACTION RESPONSIVENESS (INP < 100ms)                     |
-|     - Betting interfaces optimise every millisecond of betslip interaction. |
-|     - Eliminating JavaScript main-thread blocking restores instant response.|
-|                                                                             |
-|  3. AUTOMATED POSTCODE & SINGLE-TAP IDENTITY LOOKUPS                        |
-|     - Gaming platforms onboard and verify identity in under 45 seconds.     |
-|     - Replacing 14-field forms with address lookup cuts drop-off by 35%.    |
-|                                                                             |
-|  4. REAL-TIME CASHIER TELEMETRY & GATEWAY FALLBACKS                         |
-|     - Instant routing to alternative payment rails upon bank decline.       |
-|     - Preempting payment abandonment before the user closes the browser.    |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| # | Architectural Principle | iGaming Core Paradigm | Commercial & Conversion Impact |
+|---|---|---|---|
+| 1 | **In-Context Transaction Drawers** | Slide-out biometric overlay without leaving live game lobby | +25% checkout conversion lift |
+| 2 | **Sub-Second Responsiveness (INP < 100ms)** | Zero main-thread blocking; immediate tactile betslip feedback | Eliminates rage clicks and interaction drop-offs |
+| 3 | **Automated Postcode & Identity Lookups** | 1-tap address resolution replacing 14-field forms | -35% onboarding abandonment (<45s completion) |
+| 4 | **Real-Time Cashier Telemetry & Fallbacks** | Instant dynamic routing to alternative rails upon bank decline | Recovers 40%+ of failing transactions |
 
 ### 1. In-Context Transaction Drawers
 
@@ -78,95 +61,44 @@ When a card issuer declines a payment, legacy ecommerce checkouts display a gene
 
 To see the financial impact of adopting gaming velocity principles, consider a high-volume ecommerce brand processing £50M in annual online turnover:
 
-```
-+-----------------------------------------------------------------------------+
-|               Financial Impact of Checkout Velocity Optimization            |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  BASELINE ECOMMERCE STORE (Standard Shopify / Magento Stack):               |
-|  - Checkout Page Load Time (LCP):       3.2 Seconds                         |
-|  - Interaction Responsiveness (INP):    280 Milliseconds                    |
-|  - Checkout Funnel Completion Rate:     28.5%                               |
-|  - Annual Online Revenue:               £50,000,000                         |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  OPTIMISED HIGH-VELOCITY STORE (Jurnii UX Principles Applied):              |
-|  - In-Context Slide-Out Drawer LCP:     0.8 Seconds                         |
-|  - Interaction Responsiveness (INP):    45 Milliseconds                     |
-|  - Single-Tap Biometric Completion:     41.2%                               |
-|  - Annual Online Revenue:               £72,280,000                         |
-|                                                                             |
-|  COMMERCIAL VALUE: +£22.28M in Incremental Annual Revenue                   |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| Performance & Revenue Metric | Baseline Store (Standard Shopify / Magento) | Optimised High-Velocity Store (Jurnii UX) | Commercial Delta |
+|---|---|---|---|
+| **Checkout Load Time (LCP)** | 3.2 seconds | 0.8 seconds | -75% load latency |
+| **Interaction Responsiveness (INP)** | 280 ms | 45 ms | -84% interaction lag |
+| **Checkout Completion Rate** | 28.5% | 41.2% | +12.7 pp conversion lift |
+| **Annual Online Revenue** | £50,000,000 | £72,280,000 | **+£22.28M (+44.6% incremental revenue)** |
 
 ## The 4-Step Engineering Blueprint for Retail Leaders
 
 To transform an ecommerce checkout into a high-velocity conversion engine, retail engineering teams execute a structured four-stage implementation roadmap:
 
-```
-+-----------------------------------------------------------------------------+
-|             High-Velocity Ecommerce Engineering Blueprint                   |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ STEP 1: CONVERT TO IN-CONTEXT CASHIER DRAWERS ]                          |
-|  Replace full-page checkout redirects with persistent slide-out modals.     |
-|                                                                             |
-|  [ STEP 2: EMBED NATIVE BIOMETRIC PAYMENT APIS ]                            |
-|  Integrate Apple Pay, Google Pay, and one-click express payment buttons.    |
-|                                                                             |
-|  [ STEP 3: OPTIMISE CORE WEB VITALS TELEMETRY ]                             |
-|  Refactor third-party tracking scripts; achieve sub-100ms INP responsiveness|
-|                                                                             |
-|  [ STEP 4: DEPLOY REAL-TIME DECLINE REMEDIATION ]                           |
-|  Implement dynamic fallback prompts for issuer payment decline codes.       |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| Stage | Engineering Sprint | Implementation Focus | Conversion Deliverable |
+|---|---|---|---|
+| **Step 1** | In-Context Cashier Drawers | Replace full-page redirects with persistent slide-out modals | Preserves active shopping context |
+| **Step 2** | Native Biometric Payment APIs | Integrate Apple Pay, Google Pay & express one-click buttons | Single-touch mobile checkout |
+| **Step 3** | Core Web Vitals Telemetry | Refactor third-party scripts; isolate main-thread execution | Achieves sub-100ms INP responsiveness |
+| **Step 4** | Real-Time Decline Remediation | Implement dynamic fallback prompts for issuer decline codes | Recovers card decline drop-offs |
 
 ## Advanced Cart Recovery and Real-Time Interaction Telemetry
 
 In addition to streamlining the primary checkout drawer, high-velocity commerce architectures incorporate proactive interaction recovery:
 
-```
-+-----------------------------------------------------------------------------+
-|               High-Velocity Interaction Recovery Matrix                     |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ IN-SESSION ABANDONMENT DETECTION ]                                       |
-|  - Detect pointer exit intent and tab inactivity in real-time               |
-|  - Trigger contextual micro-incentives (e.g. free next-day express delivery)|
-|                                                                             |
-|  [ CROSS-DEVICE BASKET PERSISTENCE ]                                        |
-|  - Synchronize active cart state across mobile app, mobile web, and desktop |
-|  - Allow single-tap checkout resumption via instant SMS / push deep-links   |
-|                                                                             |
-|  [ BIOMETRIC EXPRESS PASS-THROUGH ]                                         |
-|  - Pre-authorize shipping addresses through Apple Pay and Google Wallet    |
-|  - Eliminate address input friction entirely for returning mobile customers|
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| Recovery Mechanism | Telemetry Trigger | Automated Conversion Action |
+|---|---|---|
+| **In-Session Abandonment Detection** | Pointer exit intent & tab inactivity in real-time | Contextual micro-incentives (e.g. free next-day express delivery) |
+| **Cross-Device Basket Persistence** | Cross-platform cart state desynchronization | Single-tap checkout resumption via instant SMS / push deep-links |
+| **Biometric Express Pass-Through** | Saved wallet profile recognition | Pre-authorized shipping addresses eliminating manual form entry |
 
 ## The Gaming-to-Retail UX Cross-Walk Matrix
 
 By applying gaming interaction heuristics to ecommerce checkout funnels, digital retailers achieve unprecedented transactional throughput:
 
-```
-+-----------------------------------------------------------------------------+
-|               Gaming UX to Retail Checkout Cross-Walk Matrix                |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  GAMING UX PARADIGM     RETAIL COMMERCE ANALOGUE    BENCHMARK TARGET        |
-|  -------------------------------------------------------------------------  |
-|  In-Betslip Deposit     1-Tap In-Context Cart Drawer < 8s Checkout Time     |
-|  Real-Time Odds Stream  Live Dynamic Stock Updates  0 Layout Shifts (CLS)   |
-|  Instant KYC Lookup     Automated Address Autocomplete < 40s Registration   |
-|  Open Banking Payout    Instant Automated Refund    < 3m Customer Settlement|
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| Gaming UX Paradigm | Retail Commerce Analogue | Benchmark Target |
+|---|---|---|
+| **In-Betslip Deposit** | 1-Tap In-Context Cart Drawer | < 8s total checkout duration |
+| **Real-Time Odds Stream** | Live Dynamic Stock & Inventory Updates | 0 Layout Shifts (CLS < 0.01) |
+| **Instant KYC Lookup** | Automated Address Autocomplete | < 40s registration completion |
+| **Open Banking Payout** | Instant Automated Customer Refund | < 3m settlement speed |
 
 Across 300+ analysed high-frequency platforms, adopting these gaming UX standards delivers a 22-38% lift in mobile checkout completion.
 
@@ -174,20 +106,12 @@ Across 300+ analysed high-frequency platforms, adopting these gaming UX standard
 
 High-volume retail ecommerce platforms can eliminate checkout abandonment by adopting the slide-out drawer pattern perfected in digital sportsbooks:
 
-```
-+-----------------------------------------------------------------------------+
-|               eCommerce Checkout vs Sportsbook Betslip Ergonomics           |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  TRADITIONAL RETAIL CHECKOUT        GAMING-INSPIRED CHECKOUT DRAWER         |
-|  -------------------------------------------------------------------------  |
-|  Navigates user to separate URL     In-context slide-out drawer overlay     |
-|  Requires manual address re-entry   Apple Pay / Google Wallet address sync  |
-|  Average completion time: 90s       Average completion time: 8s             |
-|  Mobile abandonment rate: 68%       Mobile abandonment rate: 24%            |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| Dimension / Interaction | Traditional Retail Checkout | Gaming-Inspired Checkout Drawer |
+|---|---|---|
+| **Navigation Flow** | Navigates user to separate URL | In-context slide-out drawer overlay |
+| **Address Handling** | Requires manual address re-entry | Apple Pay / Google Wallet address sync |
+| **Average Completion Time** | 90 seconds | 8 seconds |
+| **Mobile Abandonment Rate** | 68% | 24% |
 
 Adopting these real-time gaming heuristics unlocks substantial incremental revenue for digital retailers.
 
@@ -195,20 +119,12 @@ Adopting these real-time gaming heuristics unlocks substantial incremental reven
 
 Comparing digital gaming interaction speed with typical retail ecommerce funnels highlights clear opportunities for retail optimisation:
 
-```
-+-----------------------------------------------------------------------------+
-|               Retail eCommerce vs Digital Gaming Speed Metrics              |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  PERFORMANCE METRIC     STANDARD RETAIL STORE       HIGH-VELOCITY SPORTSBOOK|
-|  -------------------------------------------------------------------------  |
-|  Largest Contentful Paint 2.8 - 4.2 Seconds         0.9 - 1.3 Seconds       |
-|  Interaction to Next Paint 220 - 450 Milliseconds   45 - 85 Milliseconds    |
-|  Cumulative Layout Shift  0.18 - 0.35 (High Shift)  0.00 - 0.02 (Zero Shift)|
-|  Checkout Completion Time 60 - 90 Seconds           6 - 12 Seconds          |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| Performance Metric | Standard Retail Store | High-Velocity Sportsbook |
+|---|---|---|
+| **Largest Contentful Paint (LCP)** | 2.8 – 4.2 seconds | 0.9 – 1.3 seconds |
+| **Interaction to Next Paint (INP)** | 220 – 450 ms | 45 – 85 ms |
+| **Cumulative Layout Shift (CLS)** | 0.18 – 0.35 (High Shift) | 0.00 – 0.02 (Zero Shift) |
+| **Checkout Completion Time** | 60 – 90 seconds | 6 – 12 seconds |
 
 Adopting gaming performance standards unlocks substantial conversion gains for high-volume online retailers.
 

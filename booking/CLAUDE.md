@@ -15,28 +15,34 @@ one Account -> ZERO OR ONE persistent Deal
 Products enter as QUOTES under that one Deal, never as extra Deals
 ```
 
-**The Deluge code and this module both still implement the superseded `Deal = Account × Product`
-model.** Two places here assert it as *design intent* and are known drift:
+**The correction is IMPLEMENTED in this module's working tree but NOT PUBLISHED** (2026-08-19).
+`resolveProductDeal` and `pickProductDeal` now resolve **the Account's single Deal** and ignore the
+Product argument for selection. The two former drift entries are resolved:
 
-| Location | Claim | Reality |
+| Location | Was | Now |
 |---|---|---|
-| `docs/architecture.md` (Deal-linking section) | multi-product bookings **must** defer activation to a human; auto-picking a driver Deal *"would break HARD RULE 7"* | Inverted. HARD RULE 7 (one sequence per Contact) is correct; deriving ambiguity from **Product count** is the violation |
-| `tests/deluge-multi-product.test.js`, `tests/zoho-field-names.test.js:233-247` | assert the fan-out and `multi_product_sequence_ambiguous` **must remain** | They pin the prohibited model and are expected to fail when it is corrected. **Invert them; do not delete them** |
+| `tests/deluge-multi-product.test.js` | pinned the Product-Deal fan-out | **Inverted into absence guards** — asserts no `::` Deal_Key composition, no `createOrReuseProductDeal`/`pipelineForProductKey` caller, no per-Product reconcile, and that a duplicate Deal is never auto-merged |
+| `tests/zoho-field-names.test.js` | asserted `multi_product_sequence_ambiguous` and the `"Decision Maker"` seed must remain | **Inverted** — asserts a multi-product Contact activates normally, and that blank roles stay blank |
+| `docs/architecture.md` (Deal-linking) | multi-product bookings **must** defer activation to a human | ⚠ **STILL STALE.** HARD RULE 7 (one sequence per Contact) is correct; deriving ambiguity from **Product count** was the violation, and that derivation is now deleted |
 
-## ⚠ Cross-repo ordering constraint
+## ⚠ Cross-repo ordering constraint — SATISFIED, and it is now a JOINT publish
 
-`integrations/zoho/index.js` → `resolveProductDeal` picks a Meeting's `What_Id` by **substring-matching
-a Product name inside `Deal_Name`**, which depends on Deluge naming Deals `"<Account> - <Product>"`.
+`resolveProductDeal` used to pick a Meeting's `What_Id` by substring-matching a Product name inside
+`Deal_Name`, which depended on Deluge naming Deals `"<Account> - <Product>"`.
 
-Under the approved model that becomes "the Account's one Deal". **This change must ship BEFORE the
-Deluge Deal-naming change.** If Deluge goes first, every lookup returns `status:'none'` and two live
-paths degrade silently:
+The resolver has been corrected to "the Account's one Deal", so the **hazard has inverted**: it is the
+corrected resolver that now assumes one Deal per Account. Shipping it while 17 Accounts still hold 2–3
+Product Deals would return `status:'many'` for all of them. It therefore ships **inside the P1 window,
+after the Deluge set and after the P2 wipe removes the multi-Deal graph** — not before, and not alone.
 
-- `workflows/zoho-ops.js` creates the Meeting **with no `What_Id`**
-- the journey escalates to `product_unresolved`
+If only one side ships, both failure directions are silent:
 
-Same fix needed in `api/_utils/products.js` (`pickProductDeal`), `workflows/zoho-ops.js` and
-`workflows/operator-actions.js`.
+- Deluge first → old resolver returns `status:'none'`, Meetings get **no `What_Id`**
+- booking first → new resolver returns `status:'many'` on every multi-Deal Account
+
+Both call sites are corrected (`integrations/zoho/index.js`, `api/_utils/products.js`).
+`workflows/zoho-ops.js` and `workflows/operator-actions.js` consume them unchanged, so they needed no
+edit — verify that stays true if the return shape changes again.
 
 ## Boundaries
 

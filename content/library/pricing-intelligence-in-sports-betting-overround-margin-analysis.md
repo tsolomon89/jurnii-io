@@ -33,29 +33,13 @@ To establish optimal commercial balance, operators must implement dedicated [com
 
 To evaluate competitive pricing, one must examine the mathematics of sportsbook overrounds and casino game configurations:
 
-```
-+-----------------------------------------------------------------------------+
-|               The Mathematics of Sportsbook Overrounds & RTP                |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. SPORTSBOOK OVERROUND CALCULATION (3-WAY MATCH WINNER)                   |
-|                                                                             |
-|     Overround (%) = (1 / Odds_Home) + (1 / Odds_Draw) + (1 / Odds_Away)    |
-|                                                                             |
-|     Example: 2.10 (Home), 3.40 (Draw), 3.60 (Away)                          |
-|     Overround = (1/2.10) + (1/3.40) + (1/3.60) = 47.6% + 29.4% + 27.8%     |
-|     Total Book Margin = 104.8% (House Margin: 4.8%)                         |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  2. CASINO RTP BAND CALIBRATION                                             |
-|                                                                             |
-|     Modern game studios provide flexible RTP tiers (e.g. 96%, 94%, 92%, 88%)|
-|     - Tier 1: 96.2% RTP (Player Preferred, High Retention, Low Churn)      |
-|     - Tier 2: 94.1% RTP (Balanced Margin, Standard Market Convention)       |
-|     - Tier 3: 91.5% RTP (High Margin, Accelerated Churn Penalty)           |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Metric / Dimension** | **1. SPORTSBOOK OVERROUND CALCULATION (3-WAY MATCH WINNER)** | **Modern game studios provide flexible RTP tiers (e.g. 96%, 94%, 92%, 88%)** |
+|---|---|---|
+| **Example** | 2.10 (Home), 3.40 (Draw), 3.60 (Away) | - |
+| **Total Book Margin = 104.8% (House Margin** | 4.8%) | - |
+| **Tier 1** | - | 96.2% RTP (Player Preferred, High Retention, Low Churn) |
+| **Tier 2** | - | 94.1% RTP (Balanced Margin, Standard Market Convention) |
+| **Tier 3** | - | 91.5% RTP (High Margin, Accelerated Churn Penalty) |
 
 ### 1. The Dynamic Nature of Sports Overrounds
 
@@ -77,32 +61,21 @@ Mapping competitor RTP configurations across the top 100 casino titles reveals w
 
 An enterprise competitive pricing intelligence engine operates through a four-stage pipeline:
 
-```
-+-----------------------------------------------------------------------------+
-|             Enterprise Pricing Intelligence System Architecture             |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  STAGE 1: HIGH-FREQUENCY ODDS INGESTION                                     |
-|  - Real-time polling across pre-match and in-play sportsbook markets        |
-|  - Webhook ingestion of competitor odds feeds and margin updates            |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  STAGE 2: OVERROUND NORMALISATION & BENCHMARKING                            |
-|  - Conversion of fractional, decimal, and American odds into implied %      |
-|  - Calculation of theoretical margin spreads across 30+ sports             |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  STAGE 3: ANOMALY & FLASH ODDS DETECTION                                    |
-|  - Flags aggressive price concessions (e.g., rival slashes margin to 101%)  |
-|  - Identifies mispriced market outliers and arbitrage exposure              |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  STAGE 4: TRADING HUD & DYNAMIC RISK CALIBRATION                            |
-|  - Real-time overround comparison visualised directly in Jurnii 360         |
-|  - Automated recommendation triggers for sportsbook risk managers           |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Metric / Dimension** | **Baseline** | **- Flags aggressive price concessions (e.g., rival slashes margin to 101%)** |
+|---|---|---|
+| **STAGE 1** | HIGH-FREQUENCY ODDS INGESTION | - |
+| **Real-time polling across pre-match and in-play sportsbook markets** | - | - |
+| **Webhook ingestion of competitor odds feeds and margin updates** | - | - |
+| **STAGE 2** | - | OVERROUND NORMALISATION & BENCHMARKING |
+| **Conversion of fractional, decimal, and American odds into implied %** | - | - |
+| **Calculation of theoretical margin spreads across 30+ sports** | - | - |
+| **------------------------------------------------------------------------** | - | - |
+| **STAGE 3** | - | ANOMALY & FLASH ODDS DETECTION |
+| **Flags aggressive price concessions (e.g., rival slashes margin to 101%)** | - | - |
+| **Identifies mispriced market outliers and arbitrage exposure** | - | - |
+| **STAGE 4** | - | TRADING HUD & DYNAMIC RISK CALIBRATION |
+| **Real-time overround comparison visualised directly in Jurnii 360** | - | - |
+| **Automated recommendation triggers for sportsbook risk managers** | - | - |
 
 ### Stage 1: High-Frequency Odds Ingestion
 
@@ -124,27 +97,16 @@ Normalized price intelligence feeds directly into trading dashboards within [Jur
 
 Implementing structured pricing intelligence transforms trading operations from passive price-followers into dynamic yield managers:
 
-```
-+-----------------------------------------------------------------------------+
-|                  Dynamic Pricing Action Matrix for Trading                  |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  MARKET PRICING SCENARIO           CALCULATED TRADING RESPONSE              |
-|  -------------------------------------------------------------------------  |
-|  Competitor drops Premier League   Match tight pricing on Home Win while    |
-|  overround from 104% to 101.5%     widening margin on Draw/Away to balance  |
-|                                                                             |
-|  Competitor inflates niche Tennis  Tighten your own odds on niche tennis to |
-|  overround from 108% to 114%       capture price-sensitive tennis turnover |
-|                                                                             |
-|  Rivals lower Casino Slot RTP      Market "Highest Slot RTP Guaranteed" in  |
-|  to 92% tier across top titles     targeted CRM retention campaigns         |
-|                                                                             |
-|  Competitor launches Bet Builder   Deploy alternative extra-place concessions|
-|  odds boost with high margin       without taking single-leg price risk     |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **MARKET PRICING SCENARIO** | **CALCULATED TRADING RESPONSE** |
+| --- | --- |
+| **Competitor drops Premier League** | Match tight pricing on Home Win while |
+| **overround from 104% to 101.5%** | widening margin on Draw/Away to balance |
+| **Competitor inflates niche Tennis** | Tighten your own odds on niche tennis to |
+| **overround from 108% to 114%** | capture price-sensitive tennis turnover |
+| **Rivals lower Casino Slot RTP** | Market "Highest Slot RTP Guaranteed" in |
+| **to 92% tier across top titles** | targeted CRM retention campaigns |
+| **Competitor launches Bet Builder** | Deploy alternative extra-place concessions |
+| **odds boost with high margin** | without taking single-leg price risk |
 
 ### 1. Selective Margin Compression
 
@@ -164,26 +126,13 @@ In regulated markets where RTP disclosures are legally mandatory inside game pay
 
 Within [Jurnii 360](/products/jurnii-360), trading desks evaluate competitor margin progression across live events using the In-Play Overround Trajectory formula:
 
-```
-+-----------------------------------------------------------------------------+
-|               In-Play Overround Trajectory (IOT) Model                      |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  Formula:                                                                   |
-|  IOT(t) = SUM_{i=1}^n ( 1 / Decimal_Odds_{i,t} ) - 1.00                     |
-|                                                                             |
-|  Where:                                                                     |
-|  - Decimal_Odds_{i,t}: The decimal payout multiplier for selection i at     |
-|    match time t (e.g. 15th minute, 75th minute).                            |
-|  - Margin Delta: Delta_M = IOT_{competitor}(t) - IOT_{internal}(t)          |
-|                                                                             |
-|  Dynamic Margin Target Zones:                                               |
-|  - Pre-Match Tier-1 Football: 102.5% - 104.0% (High Volume / Low Hold)       |
-|  - In-Play Live Football:      106.0% - 108.5% (Dynamic Risk Buffer)        |
-|  - Derivative Props & Accumulators: 112.0% - 118.0% (High Yield Capture)    |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Evaluation Variable** | **Benchmark Standard / Impact** |
+|---|---|
+| **Decimal_Odds_{i,t}** | The decimal payout multiplier for selection i at |
+| **Margin Delta** | Delta_M = IOT_{competitor}(t) - IOT_{internal}(t) |
+| **Pre-Match Tier-1 Football** | 102.5% - 104.0% (High Volume / Low Hold) |
+| **In-Play Live Football** | 106.0% - 108.5% (Dynamic Risk Buffer) |
+| **Derivative Props & Accumulators** | 112.0% - 118.0% (High Yield Capture) |
 
 By tracking 1,000+ live event feeds weekly across 35+ regulated jurisdictions, Jurnii 360 saves trading teams 30+ hours per week, allowing risk managers to identify rival pricing anomalies and adjust books within minutes.
 

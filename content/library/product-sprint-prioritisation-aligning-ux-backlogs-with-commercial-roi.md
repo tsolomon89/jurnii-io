@@ -31,27 +31,9 @@ To establish commercial alignment, product teams must adopt [product sprint prio
 
 In digital gaming, traditional product prioritisation frameworks (such as RICE, MoSCoW, or Value vs Effort matrices) frequently fail due to four structural limitations:
 
-```
-+-----------------------------------------------------------------------------+
-|               Subjective Roadmaps vs Empirical Jurnii Prioritisation        |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  FAILURE MODE                  COMMERCIAL CONSEQUENCE                       |
-|  -------------------------------------------------------------------------  |
-|  1. Subjective Impact Guessing Product managers inflate score estimates     |
-|                                without empirical conversion proof.          |
-|                                                                             |
-|  2. The Shiny Feature Bias     Engineering prioritises flashy new features  |
-|                                while ignoring 30% onboarding funnel drop-off|
-|                                                                             |
-|  3. Disconnection from Revenue Sprint deliverables are evaluated by feature |
-|                                completion rather than Net Gaming Yield lift.|
-|                                                                             |
-|  4. Lack of Competitive ContextTeams waste months building custom components|
-|                                that rivals have solved with standard tokens.|
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **FAILURE MODE** | **COMMERCIAL CONSEQUENCE** |
+| --- | --- |
+| **2. The Shiny Feature Bias** | Engineering prioritises flashy new features while ignoring 30% onboarding funnel drop-off 3. Disconnection from Revenue Sprint deliverables are evaluated by feature completion rather than Net Gaming Yield lift. 4. Lack of Competitive ContextTeams waste months building custom components that rivals have solved with standard tokens. |
 
 ### 1. Subjective Impact Estimation
 
@@ -73,31 +55,21 @@ Internal teams frequently spend months debating bespoke UI patterns, unaware tha
 
 Jurnii UX establishes an objective, evidence-based prioritisation framework across four integrated stages:
 
-```
-+-----------------------------------------------------------------------------+
-|             Evidence-Based Sprint Prioritisation Architecture               |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  STAGE 1: CONTINUOUS PLATFORM TELEMETRY AUDITING                            |
-|  - Audit the 4 key dimensions: Journey, Usability, Performance, Perception  |
-|  - Identify exact heuristic defects and Core Web Vitals latency points      |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  STAGE 2: COMMERCIAL VALUE ATTRIBUTION & REVENUE MODELLING                  |
-|  - Map each identified defect to measured drop-off percentages              |
-|  - Calculate estimated Net Gaming Revenue recovery upon remediation         |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  STAGE 3: TECHNICAL COMPLEXITY & FEASIBILITY SCORING                        |
-|  - Differentiate quick-win token refactors from platform architecture shifts|
-|  - Evaluate engineering effort in developer-days vs expected financial lift |
-|                                                                             |
-|  STAGE 4: RANKED ACTIONABLE JIRA SPECIFICATION GENERATION                   |
-|  - Produce 70+ ranked backlog tickets with before/after visual specifications|
-|  - Deliver exact code diffs and CSS token definitions to development teams  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Metric / Dimension** | **Baseline** | **Optimised** |
+|---|---|---|
+| **STAGE 1** | CONTINUOUS PLATFORM TELEMETRY AUDITING | - |
+| **Audit the 4 key dimensions** | Journey, Usability, Performance, Perception | - |
+| **Identify exact heuristic defects and Core Web Vitals latency points** | - | - |
+| **STAGE 2** | - | COMMERCIAL VALUE ATTRIBUTION & REVENUE MODELLING |
+| **Map each identified defect to measured drop-off percentages** | - | - |
+| **Calculate estimated Net Gaming Revenue recovery upon remediation** | - | - |
+| **------------------------------------------------------------------------** | - | - |
+| **STAGE 3** | - | TECHNICAL COMPLEXITY & FEASIBILITY SCORING |
+| **Differentiate quick-win token refactors from platform architecture shifts** | - | - |
+| **Evaluate engineering effort in developer-days vs expected financial lift** | - | - |
+| **STAGE 4** | - | RANKED ACTIONABLE JIRA SPECIFICATION GENERATION |
+| **Produce 70+ ranked backlog tickets with before/after visual specifications** | - | - |
+| **Deliver exact code diffs and CSS token definitions to development teams** | - | - |
 
 ### Stage 1: Continuous Platform Auditing
 
@@ -125,67 +97,35 @@ Product managers receive fully articulated Jira/Linear specifications containing
 
 Deploying evidence-based sprint prioritisation transforms how product teams collaborate with executive leadership:
 
-```
-+-----------------------------------------------------------------------------+
-|               Product Management Strategic Decision Matrix                  |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  PRODUCT SCENARIO                  EVIDENCE-BASED PRODUCT ACTION            |
-|  -------------------------------------------------------------------------  |
-|  Executive requests complex new    Present Jurnii UX data showing deposit   |
-|  social betting feature            friction is causing £180k monthly loss;  |
-|                                    prioritise cashier fix in current sprint |
-|                                                                             |
-|  Engineering debates bespoke       Export pre-audited token specifications  |
-|  betslip layout architecture       from Jurnii UX, cutting dev time by 60%  |
-|                                                                             |
-|  Marketing reports declining FTD   Audit onboarding funnel telemetry;       |
-|  conversion across mobile ads      isolate 3.2s LCP delay; deploy critical  |
-|                                    CSS inline fix to restore sub-1.5s speed |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **PRODUCT SCENARIO** | **EVIDENCE-BASED PRODUCT ACTION** |
+| --- | --- |
+| **Executive requests complex new** | Present Jurnii UX data showing deposit |
+| **social betting feature** | friction is causing £180k monthly loss; prioritise cashier fix in current sprint |
+| **Engineering debates bespoke** | Export pre-audited token specifications |
+| **betslip layout architecture** | from Jurnii UX, cutting dev time by 60% |
+| **Marketing reports declining FTD** | Audit onboarding funnel telemetry; |
+| **conversion across mobile ads** | isolate 3.2s LCP delay; deploy critical CSS inline fix to restore sub-1.5s speed |
 
 ## The High-Yield Product Sprint Allocation Framework
 
 To balance ongoing conversion optimisation with long-term strategic feature development, high-performing gaming product organizations enforce a standardized sprint capacity allocation model:
 
-```
-+-----------------------------------------------------------------------------+
-|               High-Yield Sprint Capacity Allocation Model                   |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ 50% CAPACITY: CONVERSION & TRANSACTIONAL FRICTION REMEDIATION ]          |
-|  - Dedicated to P1/P2 Jurnii UX evidence-based recommendations.             |
-|  - Eliminating drop-off in Registration, KYC, Betslip, and Cashier funnels. |
-|                                                                             |
-|  [ 30% CAPACITY: STRATEGIC PRODUCT ROADMAP ]                                |
-|  - New betting vertical development (e.g. Bet Builders, Crash Games).       |
-|  - Long-term platform innovations and proprietary engagement mechanics.     |
-|                                                                             |
-|  [ 20% CAPACITY: TECHNICAL DEBT & COMPLIANCE MAINTENANCE ]                  |
-|  - Regulatory compliance updates (UKGC, AGCO, MGA safer gambling tools).    |
-|  - Security patches, API updates, and database indexing.                    |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **50% CAPACITY: CONVERSION & TRANSACTIONAL FRICTION REMEDIATION** | Dedicated to P1/P2 Jurnii UX evidence-based recommendations. | Eliminating drop-off in Registration, KYC, Betslip, and Cashier funnels. |
+| **30% CAPACITY: STRATEGIC PRODUCT ROADMAP** | New betting vertical development (e.g. Bet Builders, Crash Games). | Long-term platform innovations and proprietary engagement mechanics. |
+| **20% CAPACITY: TECHNICAL DEBT & COMPLIANCE MAINTENANCE** | Regulatory compliance updates (UKGC, AGCO, MGA safer gambling tools). | Security patches, API updates, and database indexing. |
 
 ## The 70+ Recommendations Architecture in Jurnii UX
 
 Within [Jurnii UX](/products/jurnii-ux), product sprint prioritisation is guided by 70+ commercially weighted recommendations delivered in minutes across four core categories:
 
-```
-+-----------------------------------------------------------------------------+
-|               70+ Commercially Weighted Recommendations Model               |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. JOURNEY BOTTLENECKS (25-30 P1/P2 recommendations for FTD lift)          |
-|  2. USABILITY HEURISTICS (20-25 recommendations for cognitive ease)         |
-|  3. PERFORMANCE VITALS (10-15 recommendations for sub-second speed)         |
-|  4. PERCEPTION & TRUST (10-12 recommendations for regulatory compliance)    |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **1. JOURNEY BOTTLENECKS (25-30 P1/P2 recommendations for FTD lift)** | - |
+| **2. USABILITY HEURISTICS (20-25 recommendations for cognitive ease)** | - |
+| **3. PERFORMANCE VITALS (10-15 recommendations for sub-second speed)** | - |
+| **4. PERCEPTION & TRUST (10-12 recommendations for regulatory compliance)** | - |
 
 Across 300+ analysed global brands, product teams utilizing Jurnii UX to prioritise sprints achieve 35% higher developer efficiency and eliminate critical conversion leakage within two release cycles.
 
@@ -193,22 +133,11 @@ Across 300+ analysed global brands, product teams utilizing Jurnii UX to priorit
 
 To ensure that engineering capacity produces maximum commercial yield, product leaders enforce a standardized sprint allocation model:
 
-```
-+-----------------------------------------------------------------------------+
-|               Product Sprint Capacity Allocation Model                      |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  - 50% CONVERSION & TRANSACTION FRICTION: High-ROI P1/P2 fixes in            |
-|    Registration, KYC, Betslip, and Cashier funnels.                         |
-|                                                                             |
-|  - 30% STRATEGIC ROADMAP: New betting verticals, innovative game mechanics,  |
-|    and proprietary gamification features.                                   |
-|                                                                             |
-|  - 20% TECHNICAL DEBT & COMPLIANCE: Security patches, regulatory updates,   |
-|    and database performance indexing.                                       |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Evaluation Variable** | **Benchmark Standard / Impact** |
+|---|---|
+| **50% CONVERSION & TRANSACTION FRICTION** | High-ROI P1/P2 fixes in |
+| **30% STRATEGIC ROADMAP** | New betting verticals, innovative game mechanics, |
+| **20% TECHNICAL DEBT & COMPLIANCE** | Security patches, regulatory updates, |
 
 This balanced model ensures that existing conversion leaks are systematically eliminated while long-term platform innovation continues to advance.
 

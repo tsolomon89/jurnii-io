@@ -29,30 +29,21 @@ To avoid cognitive friction and protect conversion rates, product and design tea
 
 Over the past decade, digital gaming interfaces have evolved through three distinct architectural eras:
 
-```
-+-----------------------------------------------------------------------------+
-|               The Three Architectural Eras of iGaming UX                    |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  ERA 1: DESKTOP PORTAL LEGACY (2010 - 2017)                                 |
-|  - Multi-column desktop grids crammed into early responsive mobile web      |
-|  - Heavy text links, nested accordion trees, and static banner ads          |
-|  - Manual document upload queues and 24-hour verification turnaround        |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  ERA 2: HYBRID MOBILE APP TRANSITION (2018 - 2023)                          |
-|  - Webviews wrapped in native iOS/Android shells                            |
-|  - Introduction of sticky bottom navigation bars and swipeable lobbies      |
-|  - Emergence of basic Bet Builder interfaces and single-click cash-out      |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  ERA 3: HIGH-VELOCITY TRANSACTIONAL UI (2024 - Present)                     |
-|  - Native component performance with sub-100ms INP responsiveness           |
-|  - Biometric authentication (FaceID, Apple Pay, Instant Pix deposits)       |
-|  - Micro-personalized lobbies, contextual search, and dynamic odds badges  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Metric / Dimension** | **ERA 1: DESKTOP PORTAL LEGACY (2010 - 2017)** | **ERA 2: HYBRID MOBILE APP TRANSITION (2018 - 2023)** |
+|---|---|---|
+| **ERA 1** | DESKTOP PORTAL LEGACY (2010 - 2017) | - |
+| **Multi-column desktop grids crammed into early responsive mobile web** | - | - |
+| **Heavy text links, nested accordion trees, and static banner ads** | - | - |
+| **Manual document upload queues and 24-hour verification turnaround** | - | - |
+| **ERA 2** | - | HYBRID MOBILE APP TRANSITION (2018 - 2023) |
+| **Webviews wrapped in native iOS/Android shells** | - | - |
+| **Introduction of sticky bottom navigation bars and swipeable lobbies** | - | - |
+| **Emergence of basic Bet Builder interfaces and single-click cash-out** | - | - |
+| **------------------------------------------------------------------------** | - | - |
+| **ERA 3** | - | HIGH-VELOCITY TRANSACTIONAL UI (2024 - Present) |
+| **Native component performance with sub-100ms INP responsiveness** | - | - |
+| **Biometric authentication (FaceID, Apple Pay, Instant Pix deposits)** | - | - |
+| **Micro-personalized lobbies, contextual search, and dynamic odds badges** | - | - |
 
 Operators that fail to transition from Era 2 to Era 3 experience gradual conversion decay. When modern bettors encounter legacy interfaces, cognitive fatigue sets in, prompting instant defection to faster competitors.
 
@@ -60,33 +51,13 @@ Operators that fail to transition from Era 2 to Era 3 experience gradual convers
 
 Continuous benchmarking across 300+ iGaming brands reveals five dominant macro design trends currently dominating tier-1 platforms:
 
-```
-+-----------------------------------------------------------------------------+
-|               5 Macro Design Trends Dominating Tier-1 UX                    |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. THE FLOATING CONTEXTUAL BETSLIP                                         |
-|     - Persistent, minimal overlay maintaining live odds visibility          |
-|     - Single-tap stake presets with real-time return calculations           |
-|                                                                             |
-|  2. TIKTOK / REELS-STYLE CASINO GAME DISCOVERY                              |
-|     - Vertical video previews of slot features and bonus rounds             |
-|     - Social proof badges ("240 players spinning right now")                |
-|                                                                             |
-|  3. CONTEXTUAL ACCORDION ONBOARDING                                         |
-|     - Single-screen progressive forms replacing multi-page redirects        |
-|     - Inline biometric and social identity auto-fill                        |
-|                                                                             |
-|  4. HIGH-DENSITY COMPACT DATA GRIDS                                         |
-|     - Clean tabular structures replacing oversized decorative cards         |
-|     - High contrast, dark-mode optimised typographic scales                 |
-|                                                                             |
-|  5. INSTANT OPEN-BANKING TRANSACTIONAL RAILS                                |
-|     - Biometric one-tap deposits embedded directly inside the betslip       |
-|     - Transparent real-time withdrawal progress trackers                    |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. THE FLOATING CONTEXTUAL BETSLIP** | Persistent, minimal overlay maintaining live odds visibility | Single-tap stake presets with real-time return calculations |
+| **2. TIKTOK / REELS-STYLE CASINO GAME DISCOVERY** | Vertical video previews of slot features and bonus rounds | Social proof badges ("240 players spinning right now") |
+| **3. CONTEXTUAL ACCORDION ONBOARDING** | Single-screen progressive forms replacing multi-page redirects | Inline biometric and social identity auto-fill |
+| **4. HIGH-DENSITY COMPACT DATA GRIDS** | Clean tabular structures replacing oversized decorative cards | High contrast, dark-mode optimised typographic scales |
+| **5. INSTANT OPEN-BANKING TRANSACTIONAL RAILS** | Biometric one-tap deposits embedded directly inside the betslip | Transparent real-time withdrawal progress trackers |
 
 ### 1. The Floating Contextual Betslip
 
@@ -130,24 +101,11 @@ Players accustomed to sub-second responses on Tier-1 platforms interpret minor d
 
 To ensure your product organization stays ahead of market movements, implement a structured benchmarking rhythm within [Jurnii UX](/products/jurnii-ux):
 
-```
-+-----------------------------------------------------------------------------+
-|               Systematic Trend Tracking Operating Rhythm                    |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ QUARTERLY MACRO BENCHMARK AUDIT ]                                        |
-|  - Audit top 10 market leaders across Journey, Usability, Performance       |
-|  - Identify emerging interface patterns entering mainstream adoption        |
-|                                                                             |
-|  [ SPRINT FEATURE EVALUATION ]                                              |
-|  - Compare proposed UI wireframes against tier-1 market benchmarks          |
-|  - Ensure new designs conform to regional cognitive interaction models      |
-|                                                                             |
-|  [ CONTINUOUS TELEMETRY MONITORING ]                                        |
-|  - Track competitor Core Web Vitals, LCP improvements, and code refactoring |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **QUARTERLY MACRO BENCHMARK AUDIT** | Audit top 10 market leaders across Journey, Usability, Performance | Identify emerging interface patterns entering mainstream adoption |
+| **SPRINT FEATURE EVALUATION** | Compare proposed UI wireframes against tier-1 market benchmarks | Ensure new designs conform to regional cognitive interaction models |
+| **CONTINUOUS TELEMETRY MONITORING** | Track competitor Core Web Vitals, LCP improvements, and code refactoring | Empirical benchmark verified |
 
 ### 1. Quarterly Macro Benchmark Audits
 
@@ -165,25 +123,11 @@ Monitor rival technical deployments. When a key competitor refactors their front
 
 To prevent design drift and maintain responsive velocity across multi-brand operations, leading operators translate macro trends into centralized CSS design tokens:
 
-```
-+-----------------------------------------------------------------------------+
-|               Macro Trend to Design Token Translation Matrix                |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  MACRO UX TREND                 DESIGN TOKEN IMPLEMENTATION                 |
-|  -------------------------------------------------------------------------  |
-|  Dark Mode Visual Ergonomics    --color-surface-base: #0c1017;             |
-|                                 --color-surface-elevated: #151b26;          |
-|                                 --color-border-subtle: rgba(255,255,255,0.08)|
-|                                                                             |
-|  Touch-Target Precision         --space-touch-target: 48px;                 |
-|                                 --radius-interactive: 8px;                  |
-|                                                                             |
-|  Sub-Second Micro-Transitions   --motion-duration-fast: 150ms;              |
-|                                 --motion-easing-standard: cubic-bezier(...) |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **MACRO UX TREND** | **DESIGN TOKEN IMPLEMENTATION** |
+| --- | --- |
+| **Dark Mode Visual Ergonomics** | --color-surface-base: #0c1017; --color-surface-elevated: #151b26; --color-border-subtle: rgba(255,255,255,0.08) |
+| **Touch-Target Precision** | --space-touch-target: 48px; --radius-interactive: 8px; |
+| **Sub-Second Micro-Transitions** | --motion-duration-fast: 150ms; --motion-easing-standard: cubic-bezier(...) |
 
 With benchmarks calibrated across 300+ analysed brands across the UK, EU, LATAM, and North America, Jurnii UX enables product teams to see what their customers see and maintain a continuous competitive edge.
 
@@ -193,27 +137,15 @@ Interface trends do not evolve uniformly across global gaming markets. What conv
 
 Jurnii UX benchmarks regional design patterns across 300+ analysed brands in four key regulatory regions:
 
-```
-+-----------------------------------------------------------------------------+
-|               Regional Interaction & Usability Nuance Matrix                |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  JURISDICTION     PRIMARY UX REQUIREMENT            COMMERCIAL SENSITIVITY  |
-|  -------------------------------------------------------------------------  |
-|  United Kingdom   Frictionless Safer Gambling Tools Strict deposit limit UI |
-|                   1-Tap Open Banking Payouts        Immediate settlement    |
-|                                                                             |
-|  Latin America    Lightweight Mobile 4G Bundles     Sub-1.2s LCP on low-tier|
-|                   Instant Local Rail (Pix) Checkout Single-tap mobile flow  |
-|                                                                             |
-|  North America    Same Game Parlay (SGP) Builder    Dynamic bet slip drawer |
-|                   Geofencing Friction Minimisation  Background location sync|
-|                                                                             |
-|  Continental EU   Strict Multi-Language Navigation  Localized KYC document  |
-|                   Clear Bonus Terms Presentation    Zero-wagering free spins|
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **JURISDICTION** | **PRIMARY UX REQUIREMENT** | **COMMERCIAL SENSITIVITY** |
+| --- | --- | --- |
+| **United Kingdom** | Frictionless Safer Gambling Tools Strict deposit limit UI | - |
+| **1-Tap Open Banking Payouts** | Immediate settlement | - |
+| **Latin America** | Lightweight Mobile 4G Bundles | Sub-1.2s LCP on low-tier Instant Local Rail (Pix) Checkout Single-tap mobile flow |
+| **North America** | Same Game Parlay (SGP) Builder | Dynamic bet slip drawer |
+| **Geofencing Friction Minimisation** | Background location sync | - |
+| **Continental EU** | Strict Multi-Language Navigation | Localized KYC document |
+| **Clear Bonus Terms Presentation** | Zero-wagering free spins | - |
 
 Understanding these regional design expectations ensures that international expansion teams avoid deploying inappropriate templates that alienate local bettors.
 

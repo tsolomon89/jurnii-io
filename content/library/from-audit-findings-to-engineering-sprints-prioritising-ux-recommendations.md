@@ -35,21 +35,13 @@ Many digital gaming organizations rely on generic prioritisation frameworks such
 
 While useful in broad corporate environments, these frameworks fail in digital gaming for three critical reasons:
 
-```
-+-----------------------------------------------------------------------------+
-|               Subjective Frameworks vs Jurnii Evidence Engine               |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  DIMENSION          GENERIC RICE / MOSCOW       JURNII EVIDENCE ENGINE      |
-|  -------------------------------------------------------------------------  |
-|  Impact Scoring     Subjective guess (1-5)      Quantified FTD & NGR delta  |
-|  Validation Source  Internal opinions           Empirical 300+ brand corpus |
-|  Effort Estimation  Isolated dev estimates      Pre-audited component specs |
-|  Cross-Functional   Contested departmental      Unified quantitative index  |
-|  Alignment          arguments                   linking UX directly to ROI  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **DIMENSION** | **GENERIC RICE / MOSCOW** | **JURNII EVIDENCE ENGINE** |
+| --- | --- | --- |
+| **Impact Scoring** | Subjective guess (1-5) | Quantified FTD & NGR delta |
+| **Validation Source** | Internal opinions | Empirical 300+ brand corpus |
+| **Effort Estimation** | Isolated dev estimates | Pre-audited component specs |
+| **Cross-Functional** | Contested departmental | Unified quantitative index |
+| **Alignment** | arguments | linking UX directly to ROI |
 
 ### 1. Subjective Confidence and Impact Inflation
 
@@ -67,32 +59,21 @@ Subjective backlogs favor large, flashy new features while undervaluing micro-op
 
 Jurnii generates prioritised engineering roadmaps through an automated, evidence-based intelligence pipeline:
 
-```
-+-----------------------------------------------------------------------------+
-|             Evidence-Based Recommendation Engine Architecture               |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  STAGE 1: MULTI-DIMENSIONAL PLATFORM AUDITING                               |
-|  - Continuous evaluation across Journey, Usability, Performance, Perception |
-|  - Identification of heuristic violations and Core Web Vitals bottlenecks   |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  STAGE 2: COMMERCIAL IMPACT ATTRIBUTION                                     |
-|  - Correlation with transactional drop-off rates and active player churn    |
-|  - Mathematical modelling of estimated NGR recovery per remediation          |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  STAGE 3: TECHNICAL COMPLEXITY & FEASIBILITY SCORING                        |
-|  - Front-end CSS/JS token refactor (Low Effort, High Velocity)             |
-|  - Gateway API / Core Architecture refactor (High Effort, High Value)       |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  STAGE 4: RANKED ACTIONABLE SPECIFICATION GENERATION                        |
-|  - 70+ ranked backlog tickets with before/after visual specs and code diffs |
-|  - Direct integration into Jira, Linear, and GitHub Projects                |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Metric / Dimension** | **Baseline** | **- Front-end CSS/JS token refactor (Low Effort, High Velocity)** |
+|---|---|---|
+| **STAGE 1** | MULTI-DIMENSIONAL PLATFORM AUDITING | - |
+| **Continuous evaluation across Journey, Usability, Performance, Perception** | - | - |
+| **Identification of heuristic violations and Core Web Vitals bottlenecks** | - | - |
+| **STAGE 2** | - | COMMERCIAL IMPACT ATTRIBUTION |
+| **Correlation with transactional drop-off rates and active player churn** | - | - |
+| **Mathematical modelling of estimated NGR recovery per remediation** | - | - |
+| **------------------------------------------------------------------------** | - | - |
+| **STAGE 3** | - | TECHNICAL COMPLEXITY & FEASIBILITY SCORING |
+| **Front-end CSS/JS token refactor (Low Effort, High Velocity)** | - | - |
+| **Gateway API / Core Architecture refactor (High Effort, High Value)** | - | - |
+| **STAGE 4** | - | RANKED ACTIONABLE SPECIFICATION GENERATION |
+| **70+ ranked backlog tickets with before/after visual specs and code diffs** | - | - |
+| **Direct integration into Jira, Linear, and GitHub Projects** | - | - |
 
 ### Stage 1: Multi-Dimensional Platform Auditing
 
@@ -120,31 +101,15 @@ The engine outputs a comprehensive dossier of ranked recommendations, complete w
 
 To understand the precision of evidence-based recommendations, consider this real-world ticket generated for a Tier-2 European sportsbook:
 
-```
-+-----------------------------------------------------------------------------+
-|                  Sample Jurnii Engineering Recommendation                   |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  TICKET ID: JRN-UX-042                                                      |
-|  CATEGORY: Journey Effectiveness / Deposit Flow                             |
-|  COMMERCIAL PRIORITY: P1 (High Yield Impact)                                |
-|  ESTIMATED ROI: +14% FTD Conversion Lift                                    |
-|                                                                             |
-|  ISSUE SUMMARY:                                                             |
-|  Cashier modal requires 4 sequential page loads to switch payment methods,  |
-|  causing 24% abandonment among mobile users on 4G connections.              |
-|                                                                             |
-|  EVIDENCE BASE:                                                             |
-|  Top 5 market competitors use single-screen accordion payment selectors     |
-|  with instant Apple Pay / Pix biometric triggers (Avg completion: 8.2s).    |
-|                                                                             |
-|  PROPOSED SPECIFICATION:                                                    |
-|  1. Consolidate payment selection into a single drawer UI.                  |
-|  2. Set Apple Pay / Google Pay as default active selector for mobile agents.|
-|  3. Display minimum deposit limits inline below each method card.           |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **TICKET ID: JRN-UX-042** | CATEGORY: Journey Effectiveness / Deposit Flow COMMERCIAL PRIORITY: P1 (High Yield Impact) ESTIMATED ROI: +14% FTD Conversion Lift |
+| **ISSUE SUMMARY:** | Cashier modal requires 4 sequential page loads to switch payment methods, causing 24% abandonment among mobile users on 4G connections. |
+| **EVIDENCE BASE:** | Top 5 market competitors use single-screen accordion payment selectors with instant Apple Pay / Pix biometric triggers (Avg completion: 8.2s). |
+| **PROPOSED SPECIFICATION:** | - |
+| **1. Consolidate payment selection into a single drawer UI.** | - |
+| **2. Set Apple Pay / Google Pay as default active selector for mobile agents.** | - |
+| **3. Display minimum deposit limits inline below each method card.** | - |
 
 By providing developers with precise architectural guidance and commercial context, engineering teams execute with clarity and speed.
 
@@ -152,19 +117,11 @@ By providing developers with precise architectural guidance and commercial conte
 
 To maintain continuous product improvement, integrate evidence-based recommendations into regular sprint planning:
 
-```
-+-----------------------------------------------------------------------------+
-|                    Evidence-Based Sprint Allocation Model                   |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ SPRINT ALLOCATION (100% CAPACITY) ]                                      |
-|                                                                             |
-|  - 50% High-Yield Transactional Fixes (P1/P2 Jurnii UX Recommendations)     |
-|  - 30% Strategic Feature Roadmap (New betting products, game verticals)    |
-|  - 20% Technical Maintenance & Compliance (Security patches, API updates)   |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Evaluation Variable** | **Benchmark Standard / Impact** |
+|---|---|
+| **Item** | 50% High-Yield Transactional Fixes (P1/P2 Jurnii UX Recommendations) |
+| **Item** | 30% Strategic Feature Roadmap (New betting products, game verticals) |
+| **Item** | 20% Technical Maintenance & Compliance (Security patches, API updates) |
 
 Allocating a mandatory 50% of sprint capacity to high-yield UX recommendations ensures that conversion friction is systematically eliminated while long-term strategic projects continue to advance.
 
@@ -172,29 +129,12 @@ Allocating a mandatory 50% of sprint capacity to high-yield UX recommendations e
 
 Within [Jurnii UX](/products/jurnii-ux), every automated platform audit delivers 70+ commercially weighted recommendations structured across the four foundational UX categories:
 
-```
-+-----------------------------------------------------------------------------+
-|               70+ Ranked Recommendation Categorization Model                |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. JOURNEY EFFECTIVENESS (25-30 Recommendations)                           |
-|     - Registration, KYC, Deposit, Betslip, and Withdrawal flow bottlenecks  |
-|     - Mapped directly to First Time Deposit and Net Gaming Revenue lift     |
-|                                                                             |
-|  2. USABILITY HEURISTICS (20-25 Recommendations)                            |
-|     - Error prevention, cognitive friction, and tap-target accuracy         |
-|     - Graded by severity (Critical P1, Tactical P2, Cosmetic P3)            |
-|                                                                             |
-|  3. PERFORMANCE VITALS (10-15 Recommendations)                              |
-|     - Core Web Vitals (LCP, INP, CLS), asset payloads, main thread delays  |
-|     - Concrete front-end code diffs and CSS token refactors                 |
-|                                                                             |
-|  4. PERCEPTION & TRUST (10-12 Recommendations)                              |
-|     - Regulatory compliance badges, terms clarity, safer gambling UX        |
-|     - Benchmark comparisons against 300+ analysed global brands             |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. JOURNEY EFFECTIVENESS (25-30 Recommendations)** | Registration, KYC, Deposit, Betslip, and Withdrawal flow bottlenecks | Mapped directly to First Time Deposit and Net Gaming Revenue lift |
+| **2. USABILITY HEURISTICS (20-25 Recommendations)** | Error prevention, cognitive friction, and tap-target accuracy | Graded by severity (Critical P1, Tactical P2, Cosmetic P3) |
+| **3. PERFORMANCE VITALS (10-15 Recommendations)** | Core Web Vitals (LCP, INP, CLS), asset payloads, main thread delays | Concrete front-end code diffs and CSS token refactors |
+| **4. PERCEPTION & TRUST (10-12 Recommendations)** | Regulatory compliance badges, terms clarity, safer gambling UX | Benchmark comparisons against 300+ analysed global brands |
 
 ## Automated Jira and Linear Ticket Dispatch Architecture
 

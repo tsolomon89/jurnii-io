@@ -31,33 +31,22 @@ To eliminate duplicate commission payouts and establish commercial truth, operat
 
 In the iGaming sector, channel cannibalisation is particularly acute between brand paid search, affiliate aggregators, and top-of-funnel brand advertising:
 
-```
-+-----------------------------------------------------------------------------+
-|               The Cross-Channel Cannibalisation Dilemma                     |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  SCENARIO: Multi-Channel Customer Acquisition Path                          |
-|                                                                             |
-|  1. Brand Sponsorship: Bettor watches football club sponsored by Operator.  |
-|  2. Organic Search: Bettor searches "Operator Welcome Offer" on mobile.     |
-|  3. Affiliate Aggregator: Bettor clicks affiliate comparison site link.     |
-|  4. Paid Search Interception: Bettor clicks brand PPC ad to reach register. |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  UNRECONCILED ATTRIBUTION CLAIMS:                                           |
-|  - Brand Agency Claims:      100% Attribution (£150 Value)                  |
-|  - Affiliate Demands:        £80 CPA Bounty Claim                           |
-|  - Google Paid Search Claims: 1 Conversion (£25 Ad Spend)                   |
-|                                                                             |
-|  TOTAL ATTRIBUTED COST: £255 for a £50 Initial Deposit                      |
-|                                                                             |
-|  RECONCILED ECONOMETRIC REALITY (JURNII CORTEX):                            |
-|  - True Incremental Driver: Brand Sponsorship + Organic Search (85%)        |
-|  - Affiliate Incremental Lift: 5% (Late-stage navigation click)             |
-|  - Paid Search Lift: 10% (Defensive protection against competitor bidding)  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Metric / Dimension** | **Baseline** | **UNRECONCILED ATTRIBUTION CLAIMS** |
+|---|---|---|
+| **SCENARIO** | Multi-Channel Customer Acquisition Path | - |
+| **1. Brand Sponsorship** | Bettor watches football club sponsored by Operator. | - |
+| **2. Organic Search** | Bettor searches "Operator Welcome Offer" on mobile. | - |
+| **3. Affiliate Aggregator** | Bettor clicks affiliate comparison site link. | - |
+| **4. Paid Search Interception** | Bettor clicks brand PPC ad to reach register. | - |
+| **UNRECONCILED ATTRIBUTION CLAIMS** | - | - |
+| **Brand Agency Claims** | - | 100% Attribution (£150 Value) |
+| **Affiliate Demands** | - | £80 CPA Bounty Claim |
+| **Google Paid Search Claims** | - | 1 Conversion (£25 Ad Spend) |
+| **TOTAL ATTRIBUTED COST** | - | £255 for a £50 Initial Deposit |
+| **RECONCILED ECONOMETRIC REALITY (JURNII CORTEX)** | - | - |
+| **True Incremental Driver** | - | Brand Sponsorship + Organic Search (85%) |
+| **Affiliate Incremental Lift** | - | 5% (Late-stage navigation click) |
+| **Paid Search Lift** | - | 10% (Defensive protection against competitor bidding) |
 
 ### 1. The Affiliate Coupon Interception
 
@@ -75,32 +64,20 @@ Because podcast sponsorships, pitch-side stadium LED boards, and television adve
 
 Jurnii Cortex resolves cross-channel attribution by integrating high-frequency transaction data into a multi-variable econometric engine:
 
-```
-+-----------------------------------------------------------------------------+
-|             Econometric Cross-Channel Attribution Architecture              |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  STAGE 1: UNIFIED EXPENDITURE & CONVERSION INGESTION                        |
-|  - Ingest spend, impressions, and clicks across Paid Search, Social, TV,    |
-|    Audio, Affiliates, Influencer, and CRM channels.                         |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  STAGE 2: NON-LINEAR DECAY & INTERACTION MODELLING                          |
-|  - Compute channel-specific adstock decay rates ($\lambda$)                 |
-|  - Model channel cross-elasticity and interaction synergy coefficients      |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  STAGE 3: INCREMENTAL LIFT ISOLATION                                        |
-|  - Subtract baseline organic demand and external sporting tournament noise  |
-|  - Isolate true marginal CPA (mCPA) and marginal ROAS (mROAS) per channel   |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  STAGE 4: UNIFIED COMMERCIAL ALLOCATION                                      |
-|  - Reconcile affiliate commission tiers against incremental value created   |
-|  - Export optimised budget distribution models for C-level leadership       |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Metric / Dimension** | **Baseline** | **- Compute channel-specific adstock decay rates ($\lambda$)** |
+|---|---|---|
+| **STAGE 1** | UNIFIED EXPENDITURE & CONVERSION INGESTION | - |
+| **Ingest spend, impressions, and clicks across Paid Search, Social, TV,** | - | - |
+| **STAGE 2** | - | NON-LINEAR DECAY & INTERACTION MODELLING |
+| **Compute channel-specific adstock decay rates ($\lambda$)** | - | - |
+| **Model channel cross-elasticity and interaction synergy coefficients** | - | - |
+| **------------------------------------------------------------------------** | - | - |
+| **STAGE 3** | - | INCREMENTAL LIFT ISOLATION |
+| **Subtract baseline organic demand and external sporting tournament noise** | - | - |
+| **Isolate true marginal CPA (mCPA) and marginal ROAS (mROAS) per channel** | - | - |
+| **STAGE 4** | - | UNIFIED COMMERCIAL ALLOCATION |
+| **Reconcile affiliate commission tiers against incremental value created** | - | - |
+| **Export optimised budget distribution models for C-level leadership** | - | - |
 
 ### 1. Channel Interaction Coefficients
 
@@ -118,25 +95,11 @@ By controlling for external factors (such as major sports events, seasonality, a
 
 Implementing cross-channel attribution within [Jurnii Cortex](/products/jurnii-mmm) delivers three immediate commercial gains:
 
-```
-+-----------------------------------------------------------------------------+
-|               Cross-Channel Optimization Commercial Dividends                |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. ELIMINATING UNJUSTIFIED CPA COMMISSIONS                                 |
-|     - Restructure affiliate deals: Shift low-intent coupon interceptors from|
-|       flat CPA to tiered rev-share tied to verified incremental value.      |
-|                                                                             |
-|  2. OPTIMISING PAID SEARCH THRESHOLDS                                       |
-|     - Calibrate defensive brand keyword bidding to maintain 85% impression  |
-|       share without over-bidding during heavy TV broadcast windows.         |
-|                                                                             |
-|  3. EVIDENCE-BASED MEDIA MIX REALLOCATION                                   |
-|     - Reallocate 15-30% of marketing budget from saturated channels into    |
-|       high-yield, under-invested top-of-funnel channels.                    |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **1. ELIMINATING UNJUSTIFIED CPA COMMISSIONS** | Restructure affiliate deals: Shift low-intent coupon interceptors from flat CPA to tiered rev-share tied to verified incremental value. |
+| **2. OPTIMISING PAID SEARCH THRESHOLDS** | Calibrate defensive brand keyword bidding to maintain 85% impression share without over-bidding during heavy TV broadcast windows. |
+| **3. EVIDENCE-BASED MEDIA MIX REALLOCATION** | Reallocate 15-30% of marketing budget from saturated channels into high-yield, under-invested top-of-funnel channels. |
 
 ### Case Study: Rebalancing a Multi-Brand European Portfolio
 
@@ -155,20 +118,12 @@ A cross-channel econometric attribution audit revealed:
 
 Within [Jurnii Cortex](/products/jurnii-mmm), cross-channel attribution is visualized through unified spend and incrementality Gantt views:
 
-```
-+-----------------------------------------------------------------------------+
-|               Cross-Channel Budget Reconciliation Matrix                    |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  CHANNEL CATEGORY       LAST-CLICK BI METRIC     CORTEX TRUE INCREMENTAL LIFT|
-|  -------------------------------------------------------------------------  |
-|  Brand Search PPC       Over-credited by 65%     Pure organic cannibalization|
-|  Affiliate Aggregators  Over-credited by 40%     Late-stage coupon tax       |
-|  Sports Podcast / Audio Under-credited by 70%    2.8x higher true mROAS      |
-|  Linear / Connected TV  Under-credited by 85%    Major baseline demand driver|
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **CHANNEL CATEGORY** | **LAST-CLICK BI METRIC** | **CORTEX TRUE INCREMENTAL LIFT** |
+| --- | --- | --- |
+| **Brand Search PPC** | Over-credited by 65% | Pure organic cannibalization |
+| **Affiliate Aggregators** | Over-credited by 40% | Late-stage coupon tax |
+| **Sports Podcast / Audio Under-credited by 70%** | 2.8x higher true mROAS | - |
+| **Linear / Connected TV** | Under-credited by 85% | Major baseline demand driver |
 
 ## The Affiliate Incrementality Audit: Isolating Value
 
@@ -176,19 +131,11 @@ Affiliate aggregators frequently claim credit for high-intent organic searchers 
 
 Jurnii Cortex deploys causal incrementality models to separate genuine discovery from coupon interception:
 
-```
-+-----------------------------------------------------------------------------+
-|               Affiliate Incrementality Audit Framework                      |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  AFFILIATE CATEGORY     LAST-CLICK SHARE    TRUE INCREMENTAL SHARE          |
-|  -------------------------------------------------------------------------  |
-|  Odds Comparison Portals 38% of Signups     34% Incremental (High Value)    |
-|  Coupon & Promo Code Agg 42% of Signups     8% Incremental (Late Intercept) |
-|  Niche Sports Blogs      20% of Signups     22% Incremental (Net-New Demand)|
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **AFFILIATE CATEGORY** | **LAST-CLICK SHARE** | **TRUE INCREMENTAL SHARE** |
+| --- | --- | --- |
+| **Odds Comparison Portals 38% of Signups** | 34% Incremental (High Value) | - |
+| **Coupon & Promo Code Agg 42% of Signups** | 8% Incremental (Late Intercept) | - |
+| **Niche Sports Blogs** | 20% of Signups | 22% Incremental (Net-New Demand) |
 
 Restructuring affiliate contracts based on true incremental yield saves operators millions in unearned CPA commissions.
 

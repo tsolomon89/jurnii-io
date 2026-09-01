@@ -29,36 +29,25 @@ To eliminate cross-functional misalignment, modern gaming organizations deploy [
 
 Jurnii evaluates digital gaming platforms across four foundational dimensions:
 
-```
-+-----------------------------------------------------------------------------+
-|                     The 4 Key Dimensions of Jurnii UX                       |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. JOURNEY EFFECTIVENESS (Weight: 30%)                                     |
-|     - Registration flow velocity and verification completion                |
-|     - First Time Deposit (FTD) conversion steps and payment options         |
-|     - Betslip transaction velocity and game launch latency                  |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  2. USABILITY HEURISTICS (Weight: 25%)                                      |
-|     - Information architecture, menu hierarchy, and discovery efficiency    |
-|     - Error prevention, inline validation clarity, and recovery prompts     |
-|     - Visual hierarchy, typography scaling, and tap-target precision        |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  3. TECHNICAL PERFORMANCE (Weight: 25%)                                     |
-|     - Largest Contentful Paint (LCP) under throttled 4G mobile networks     |
-|     - Interaction to Next Paint (INP) input responsiveness                  |
-|     - Cumulative Layout Shift (CLS) on dynamic odds tables                  |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  4. PERCEPTION & TRUST (Weight: 20%)                                        |
-|     - Regulatory compliance clarity and safer gambling tool access          |
-|     - Payment fee transparency and withdrawal condition prominence          |
-|     - Customer support responsiveness and security signal placement         |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Metric / Dimension** | **1. JOURNEY EFFECTIVENESS (Weight: 30%)** | **2. USABILITY HEURISTICS (Weight: 25%)** |
+|---|---|---|
+| **1. JOURNEY EFFECTIVENESS (Weight** | 30%) | - |
+| **Registration flow velocity and verification completion** | - | - |
+| **First Time Deposit (FTD) conversion steps and payment options** | - | - |
+| **Betslip transaction velocity and game launch latency** | - | - |
+| **2. USABILITY HEURISTICS (Weight** | - | 25%) |
+| **Information architecture, menu hierarchy, and discovery efficiency** | - | - |
+| **Error prevention, inline validation clarity, and recovery prompts** | - | - |
+| **Visual hierarchy, typography scaling, and tap-target precision** | - | - |
+| **------------------------------------------------------------------------** | - | - |
+| **3. TECHNICAL PERFORMANCE (Weight** | - | 25%) |
+| **Largest Contentful Paint (LCP) under throttled 4G mobile networks** | - | - |
+| **Interaction to Next Paint (INP) input responsiveness** | - | - |
+| **Cumulative Layout Shift (CLS) on dynamic odds tables** | - | - |
+| **4. PERCEPTION & TRUST (Weight** | - | 20%) |
+| **Regulatory compliance clarity and safer gambling tool access** | - | - |
+| **Payment fee transparency and withdrawal condition prominence** | - | - |
+| **Customer support responsiveness and security signal placement** | - | - |
 
 ### 1. Journey Effectiveness: Transactional Funnel Execution
 
@@ -93,23 +82,12 @@ In an industry where players deposit real funds, perceived platform integrity di
 
 To aggregate disparate qualitative heuristics and technical milliseconds into a meaningful executive metric, Jurnii applies a normalised weighted algorithm:
 
-```
-+-----------------------------------------------------------------------------+
-|                 Mathematical Meta Score Composition                         |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  Formula:                                                                   |
-|  Meta Score = (0.30 x Journey) + (0.25 x Usability) +                       |
-|               (0.25 x Performance) + (0.20 x Perception)                    |
-|                                                                             |
-|  Index Scale (0 to 100):                                                    |
-|  - 90 - 100: Market Leader (Sub-second speed, zero transactional friction)  |
-|  - 75 - 89:  Competitive Tier-1 (Strong execution; minor UX friction)      |
-|  - 60 - 74:  Mid-Market Standard (Noticeable conversion leakage)            |
-|  - < 60:     Critical Commercial Risk (Severe latency & drop-off)           |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Evaluation Variable** | **Benchmark Standard / Impact** |
+|---|---|
+| **90 - 100** | Market Leader (Sub-second speed, zero transactional friction) |
+| **75 - 89** | Competitive Tier-1 (Strong execution; minor UX friction) |
+| **60 - 74** | Mid-Market Standard (Noticeable conversion leakage) |
+| **< 60** | Critical Commercial Risk (Severe latency & drop-off) |
 
 Every audited platform receives a comprehensive 0 to 100 score, accompanied by granular scores across each of the 4 dimensions. This allows leadership to identify instantly whether an overall score of 68/100 is depressed by technical latency (Performance: 42/100) or onboarding friction (Journey: 51/100).
 
@@ -117,26 +95,11 @@ Every audited platform receives a comprehensive 0 to 100 score, accompanied by g
 
 Implementing Brand Meta Scoring within [Jurnii UX](/products/jurnii-ux) delivers three immediate organizational benefits:
 
-```
-+-----------------------------------------------------------------------------+
-|                Organizational Alignment via Meta Scoring                    |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  EXECUTIVE SPRINT ALIGNMENT                                                 |
-|  - Replaces subjective aesthetic debates with objective quantitative scores |
-|  - Links low sub-scores directly to financial metrics (FTD drop-off & NGR)  |
-|  - Generates 70+ ranked, commercially weighted engineering recommendations |
-|                                                                             |
-|  COMPETITIVE BENCHMARKING                                                   |
-|  - Ranks your platform against 300+ analysed iGaming brands since launch    |
-|  - Identifies competitor vulnerabilities across specific journey steps      |
-|                                                                             |
-|  BOARD-READY GOVERNANCE                                                     |
-|  - Provides C-level executives with a single longitudinal health index      |
-|  - Tracks digital maturity gains across multi-brand enterprise portfolios   |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **EXECUTIVE SPRINT ALIGNMENT** | Replaces subjective aesthetic debates with objective quantitative scores | Links low sub-scores directly to financial metrics (FTD drop-off & NGR); Generates 70+ ranked, commercially weighted engineering recommendations |
+| **COMPETITIVE BENCHMARKING** | Ranks your platform against 300+ analysed iGaming brands since launch | Identifies competitor vulnerabilities across specific journey steps |
+| **BOARD-READY GOVERNANCE** | Provides C-level executives with a single longitudinal health index | Tracks digital maturity gains across multi-brand enterprise portfolios |
 
 ### 1. Objective Engineering Prioritisation
 
@@ -156,33 +119,13 @@ Meta scoring provides group executives with a centralized governance dashboard, 
 
 Under the Journey Effectiveness dimension, Jurnii UX audits the five transactional journeys that govern player lifetime value:
 
-```
-+-----------------------------------------------------------------------------+
-|               The 5 Core Customer Journeys in Jurnii UX                     |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. REGISTRATION & ONBOARDING FUNNEL                                        |
-|     - Time-to-complete, form field count, postcode API lookup auto-complete |
-|     - Mobile keyboard optimisation and browser autofill support             |
-|                                                                             |
-|  2. ELECTRONIC KYC & IDENTITY VERIFICATION                                  |
-|     - Sub-second background database pass rate (Target: > 85%)              |
-|     - Guided client-side document capture with edge detection               |
-|                                                                             |
-|  3. FIRST TIME DEPOSIT (FTD) & CASHIER VELOCITY                             |
-|     - In-context slide-out cashier drawers with native biometric payments   |
-|     - Proactive decline resolution for card issuer error codes              |
-|                                                                             |
-|  4. BETSLIP INTERACTION & IN-PLAY WAGERING                                  |
-|     - Sub-100ms INP responsiveness, dynamic odds drift acceptance toggles   |
-|     - Clear stake limits and transparent accumulator return calculations    |
-|                                                                             |
-|  5. WITHDRAWAL & ACCOUNT MANAGEMENT                                         |
-|     - Real-time automated Open Banking settlement (< 3 minutes)             |
-|     - Transparent safer gambling tool visibility and self-exclusion controls|
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. REGISTRATION & ONBOARDING FUNNEL** | Time-to-complete, form field count, postcode API lookup auto-complete | Mobile keyboard optimisation and browser autofill support |
+| **2. ELECTRONIC KYC & IDENTITY VERIFICATION** | Sub-second background database pass rate (Target: > 85%) | Guided client-side document capture with edge detection |
+| **3. FIRST TIME DEPOSIT (FTD) & CASHIER VELOCITY** | In-context slide-out cashier drawers with native biometric payments | Proactive decline resolution for card issuer error codes |
+| **4. BETSLIP INTERACTION & IN-PLAY WAGERING** | Sub-100ms INP responsiveness, dynamic odds drift acceptance toggles | Clear stake limits and transparent accumulator return calculations |
+| **5. WITHDRAWAL & ACCOUNT MANAGEMENT** | Real-time automated Open Banking settlement (< 3 minutes) | Transparent safer gambling tool visibility and self-exclusion controls |
 
 ## Longitudinal Multi-Brand Governance: Multi-Skin Consistency
 
@@ -190,20 +133,12 @@ For enterprise gaming groups operating multiple regional skins, Brand Meta Scori
 
 When subsidiary brand teams build bespoke front-end features without central benchmarking, technical debt accumulates rapidly. One brand skin might implement a modern 1-tap cashier drawer, while another regional skin retains a legacy 4-step modal with a 3.4-second Largest Contentful Paint.
 
-```
-+-----------------------------------------------------------------------------+
-|               Multi-Brand Longitudinal Governance Matrix                    |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  BRAND SKIN             META SCORE (Q1)    META SCORE (Q4)    NGR IMPACT    |
-|  -------------------------------------------------------------------------  |
-|  UK Flagship Brand      72/100             89/100             +18% Lift     |
-|  Nordics Challenger     64/100             84/100             +26% Lift     |
-|  LATAM Expansion Skin   51/100             78/100             +42% Lift     |
-|  North America Portal   68/100             86/100             +21% Lift     |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **BRAND SKIN** | **META SCORE (Q1)** | **META SCORE (Q4)** | **NGR IMPACT** |
+| --- | --- | --- | --- |
+| **UK Flagship Brand** | 72/100 | 89/100 | +18% Lift |
+| **Nordics Challenger** | 64/100 | 84/100 | +26% Lift |
+| **LATAM Expansion Skin** | 51/100 | 78/100 | +42% Lift |
+| **North America Portal** | 68/100 | 86/100 | +21% Lift |
 
 By tracking Brand Meta Scores across all operating entities quarterly, group executives establish unified digital quality standards, ensuring every regional brand delivers the responsiveness and conversion velocity required to maximize group Net Gaming Revenue.
 

@@ -1,13 +1,19 @@
 # Jurnii — repository guide for AI agents
 
-This is a **monorepo** with three independent systems. Work out which one you are in before you touch
+This is a **monorepo** with four independent systems. Work out which one you are in before you touch
 anything.
 
 | Path | System | Language |
 |---|---|---|
 | `src/`, `content/`, `assets/`, `scripts/`, `api/` | Jurnii marketing **website** (Vite + TS) | TypeScript |
 | `booking/` | **Booking module** — form widget + serverless backend + Neon Postgres | Node / JS |
+| `integrations/lemlist-zoho/` | **Lemlist import** — daily one-directional import of LinkedIn outbound activity into Zoho as completed Tasks | Node / JS |
 | `zoho-functions/` | **Zoho CRM automation** — Deluge functions and workflow rules | Deluge |
+
+> ⚠ The two Node subsystems have **different CRM write permissions, scoped by directory**. `booking/`
+> creates no CRM records at all. `integrations/lemlist-zoho/` may create **Accounts and Contacts**
+> (suppressed) but **never a Deal or Quote**. Each states its own rule in its own `CLAUDE.md`; do not
+> reconcile them by weakening either.
 
 ---
 
@@ -43,16 +49,25 @@ one Contact  ->  many Activities
   `*_Task_Pipeline` ← the **Deal**'s relationship Pipeline when raised.
 - Several Products or Quotes under a Deal **do not** make a Contact's sequence ambiguous.
 
-## 🚨 The code does NOT implement this yet
+## 🚨 The code is CORRECTED but NOT PUBLISHED (2026-08-19)
 
-The `zoho-functions/v6/` Deluge code currently implements a **superseded** model:
+The working tree now implements the approved model. **The LIVE Zoho org still runs the superseded
+one:**
 
 ```
-Deal = Account × Product        Deal_Key = accountKey::productKey
+LIVE (published):   Deal = Account × Product     Deal_Key = accountKey::productKey
+WORKING TREE:       one Account -> one Deal      Deal_Key = Account_Key
 ```
 
-**If you are reading code, a code comment, or most documentation, you are reading the superseded
-model.** It is accurate about what runs today. It is **not** the target.
+**So the tree and the org disagree on purpose, and the direction of that disagreement is now the
+opposite of what it was.** A `.deluge` file is no longer a description of what runs — it is a
+description of what is *about to* run, pending the owner's P1 publish.
+
+- **Reading code to learn current LIVE behaviour is now WRONG.** Use `git show HEAD:<file>` for that,
+  or the live org.
+- Offline gates: `python zoho-functions/scripts/deluge-syntax-check.py` and
+  `python zoho-functions/scripts/deluge-field-scan.py` (both must be clean before publish).
+- Most *documentation* still describes the superseded model and remains accurate about the org.
 
 **Never "fix" code to match a document unless that document is the authority above.** In particular:
 
@@ -62,10 +77,10 @@ model.** It is accurate about what runs today. It is **not** the target.
 | `zoho-functions/.agents/skills/zoho-crm-deluge-refactoring/SKILL.md` | ⛔ **SEALED — do not invoke.** A loadable skill with a refactoring mandate, **two architectures out of date**, naming five Deluge functions that no longer exist |
 | `zoho-functions/.agents/workflows/deluge-refactor-workflow.md` | ⛔ **SEALED.** Declares a `/refactor-deluge` command over a dead five-function pipeline |
 | `zoho-functions/.agents/rules/deluge-rules.md` | ⛔ **SEALED.** Claims to "govern all Deluge development in this workspace". It does not — it is v3/v4-era |
-| `Deal = Account × Product` in any README or guide | current behaviour, known drift — **banner-flagged** |
-| `Deal = Account × Product` in a `.deluge` header comment | current behaviour — **UNBANNERED. Not one of the 38 `.deluge` files carries a drift banner or an authority pointer.** Treat every `.deluge` header as a description of today, never as target design. The 7 worst are listed in `zoho-functions/v6/CLAUDE.md` |
-| `[multi_product_sequence_ambiguous]`, `[quote_product_mismatch]`, `[duplicate_product_deal]` | review codes that **retire** with the correction |
-| `booking/tests/deluge-multi-product.test.js`, `zoho-field-names.test.js:233-247` | tests that **assert the prohibited model must remain**. They are expected to fail when it is corrected |
+| `Deal = Account × Product` in any README or guide | **live** behaviour, known drift — **banner-flagged** |
+| `Deal = Account × Product` in a `.deluge` header comment | ⚠ **now mostly CORRECTED in-tree.** The rewritten headers describe the approved model and say so. Any that still assert the Product-Deal model are stale comments on corrected code — fix the comment, do not "restore" the code |
+| `[multi_product_sequence_ambiguous]`, `[quote_product_mismatch]`, `[duplicate_product_deal]` | **RETIRED.** Removed from `_util_resolveManualReviewCode` and no longer raised anywhere. A guard test asserts their absence |
+| `booking/tests/deluge-multi-product.test.js`, `zoho-field-names.test.js` | ✅ **INVERTED** into absence guards, as those files instructed. They now fail if the prohibited model returns |
 
 ## Where the truth is
 

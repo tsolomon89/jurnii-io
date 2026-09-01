@@ -31,25 +31,12 @@ To maintain a competitive advantage, engineering and commercial leaders must imp
 
 Extensive testing across regulated gaming markets highlights a distinct threshold in player patience: **The 1.2-Second Penalty**.
 
-```
-+-----------------------------------------------------------------------------+
-|               The 1.2-Second Latency Drop-Off Curve                         |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  FTD Conversion Rate (%)                                                    |
-|      ^                                                                      |
-|  35% |---------\                                                            |
-|      |          \                                                           |
-|  25% |           \                                                          |
-|      |            \   [ CRITICAL DROP-OFF ZONE ]                            |
-|  15% |             \                                                        |
-|      |              \--------\                                              |
-|   5% |                        \-----------------------\                     |
-|      +------------------------------------------------------------>         |
-|      0.5s      1.0s      1.5s      2.0s      2.5s      3.0s+ (LCP Speed)    |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| Page Load Latency (LCP) | FTD Conversion Rate (%) | Performance Status & Impact |
+|---|---|---|
+| **0.5s – 1.0s** | 35.0% | **Optimal Zone**: Sub-second responsiveness, minimal drop-off |
+| **1.2s** | 28.0% | **Threshold**: Initial conversion penalty manifests |
+| **1.5s – 2.0s** | 15.0% | **Critical Drop-off**: Heavy registration and betslip abandonment |
+| **2.5s – 3.0s+** | < 5.0% | **Severe Friction**: Over 85% mobile bounce rate |
 
 When Largest Contentful Paint (LCP) exceeds 1.2 seconds under mobile network conditions, conversion metrics deteriorate rapidly:
 - **Registration Drop-Off**: Every 500ms increase in registration form load time increases user abandonment by 14%.
@@ -60,29 +47,12 @@ When Largest Contentful Paint (LCP) exceeds 1.2 seconds under mobile network con
 
 While standard e-commerce websites focus primarily on initial page load times, iGaming applications require specialized performance metrics that capture dynamic, high-frequency user interactions:
 
-```
-+-----------------------------------------------------------------------------+
-|                 iGaming Core Web Vitals Performance Matrix                  |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. LARGEST CONTENTFUL PAINT (LCP)                                          |
-|     - Target: < 1.8 seconds on 4G Mobile Connections                        |
-|     - Measures render speed of primary odds tables and hero banners         |
-|                                                                             |
-|  2. INTERACTION TO NEXT PAINT (INP)                                         |
-|     - Target: < 100 milliseconds                                            |
-|     - Measures latency between tapping an odds button and betslip update    |
-|                                                                             |
-|  3. CUMULATIVE LAYOUT SHIFT (CLS)                                           |
-|     - Target: < 0.05                                                        |
-|     - Prevents mis-clicks caused by jumping odds grids and banner swaps     |
-|                                                                             |
-|  4. TIME TO FIRST BYTE (TTFB) & WEBSOCKET TICK LATENCY                      |
-|     - Target: < 150 milliseconds TTFB; < 50ms WebSocket Broadcast           |
-|     - Dictates real-time price synchronization accuracy                     |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. LARGEST CONTENTFUL PAINT (LCP)** | Target: < 1.8 seconds on 4G Mobile Connections | Measures render speed of primary odds tables and hero banners |
+| **2. INTERACTION TO NEXT PAINT (INP)** | Target: < 100 milliseconds | Measures latency between tapping an odds button and betslip update |
+| **3. CUMULATIVE LAYOUT SHIFT (CLS)** | Target: < 0.05 | Prevents mis-clicks caused by jumping odds grids and banner swaps |
+| **4. TIME TO FIRST BYTE (TTFB) & WEBSOCKET TICK LATENCY** | Target: < 150 milliseconds TTFB; < 50ms WebSocket Broadcast | Dictates real-time price synchronization accuracy |
 
 ### 1. Largest Contentful Paint (LCP) in Dynamic Lobbies
 
@@ -106,25 +76,11 @@ Operators with CLS scores exceeding 0.1 experience elevated customer support dis
 
 Technical performance audits conducted via [Jurnii UX](/products/jurnii-ux) frequently identify three primary architectural bottlenecks:
 
-```
-+-----------------------------------------------------------------------------+
-|               Primary Architectural Performance Bottlenecks                 |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. THIRD-PARTY SCRIPT BLOAT                                                |
-|     - 15+ marketing pixels, attribution SDKs, and live chat widgets         |
-|     - Uncoordinated main-thread blocking JavaScript execution               |
-|                                                                             |
-|  2. UNTHROTTLED WEBSOCKET RE-RENDERING                                      |
-|     - High-frequency odds broadcasts triggering full React component trees  |
-|     - Excessive DOM mutations causing frame rate drops on mobile devices    |
-|                                                                             |
-|  3. UNOPTIMISED ASSET DELIVERY                                              |
-|     - Massive uncompressed PNG game thumbnails and non-variable fonts       |
-|     - Lack of edge-caching and asset preloading protocols                   |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. THIRD-PARTY SCRIPT BLOAT** | 15+ marketing pixels, attribution SDKs, and live chat widgets | Uncoordinated main-thread blocking JavaScript execution |
+| **2. UNTHROTTLED WEBSOCKET RE-RENDERING** | High-frequency odds broadcasts triggering full React component trees | Excessive DOM mutations causing frame rate drops on mobile devices |
+| **3. UNOPTIMISED ASSET DELIVERY** | Massive uncompressed PNG game thumbnails and non-variable fonts | Lack of edge-caching and asset preloading protocols |
 
 ### 1. Third-Party Script Contention
 
@@ -144,54 +100,22 @@ An online casino lobby displaying 500 game thumbnails can easily demand 50MB of 
 
 To bring your platform into top-decile performance benchmarks, execute this four-step engineering optimization plan:
 
-```
-+-----------------------------------------------------------------------------+
-|               Front-End Performance Engineering Playbook                    |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ ACTION 1: WEB WORKER TRACKING OFFLOAD ]                                  |
-|  Move marketing pixels and non-critical analytics to Web Workers (e.g.      |
-|  Partytown), freeing the browser main thread for transactional UI.          |
-|                                                                             |
-|  [ ACTION 2: DOMAIN-AWARE CODE SPLITTING ]                                  |
-|  Decompose the monolithic JavaScript bundle into lazy-loaded chunks:        |
-|  Load Sportsbook, Casino, and Account routes only when navigated to.        |
-|                                                                             |
-|  [ ACTION 3: PRE-RENDERED CRITICAL CSS & VARIABLE FONTS ]                  |
-|  Inline critical path CSS and preload variable fonts with `font-display:    |
-|  optional` to guarantee zero layout shift (CLS < 0.01).                     |
-|                                                                             |
-|  [ ACTION 4: FINE-GRAINED VIRTUALISATION ]                                  |
-|  Implement virtual scrolling across sports lists and casino lobbies,        |
-|  rendering only the 12 items currently in the user's mobile viewport.       |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **ACTION 1: WEB WORKER TRACKING OFFLOAD** | Move marketing pixels and non-critical analytics to Web Workers (e.g. Partytown), freeing the browser main thread for transactional UI. |
+| **ACTION 2: DOMAIN-AWARE CODE SPLITTING** | Decompose the monolithic JavaScript bundle into lazy-loaded chunks: Load Sportsbook, Casino, and Account routes only when navigated to. |
+| **ACTION 3: PRE-RENDERED CRITICAL CSS & VARIABLE FONTS** | Inline critical path CSS and preload variable fonts with `font-display: optional` to guarantee zero layout shift (CLS < 0.01). |
+| **ACTION 4: FINE-GRAINED VIRTUALISATION** | Implement virtual scrolling across sports lists and casino lobbies, rendering only the 12 items currently in the user's mobile viewport. |
 
 ## The Performance Dimension in Jurnii UX Audits
 
 Within [Jurnii UX](/products/jurnii-ux), the Performance category represents 25% of the overall Brand Meta Score, evaluating three critical technical vectors:
 
-```
-+-----------------------------------------------------------------------------+
-|               Performance Category Telemetry Breakdown                      |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. CORE WEB VITALS REAL-USER TELEMETRY (RUM)                              |
-|     - Largest Contentful Paint (LCP < 1.2s on mobile 4G networks)           |
-|     - Interaction to Next Paint (INP < 100ms during live in-play wagering)  |
-|     - Cumulative Layout Shift (CLS < 0.05 on dynamic odds updates)          |
-|                                                                             |
-|  2. MAIN THREAD EXECUTION & JAVASCRIPT BUDGET                               |
-|     - Total Blocking Time (TBT < 150ms) across registration and cashier funnels|
-|     - Third-party tracking script footprint and Web Worker offloading      |
-|                                                                             |
-|  3. ACCESSIBILITY & TECHNICAL SEO COMPLIANCE                                |
-|     - Semantic HTML structure, screen reader ARIA labels, meta robots tags  |
-|     - Sub-50ms TTFB (Time to First Byte) via global Edge CDN infrastructure |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. CORE WEB VITALS REAL-USER TELEMETRY (RUM)** | Largest Contentful Paint (LCP < 1.2s on mobile 4G networks) | Interaction to Next Paint (INP < 100ms during live in-play wagering); Cumulative Layout Shift (CLS < 0.05 on dynamic odds updates) |
+| **2. MAIN THREAD EXECUTION & JAVASCRIPT BUDGET** | Total Blocking Time (TBT < 150ms) across registration and cashier funnels | Third-party tracking script footprint and Web Worker offloading |
+| **3. ACCESSIBILITY & TECHNICAL SEO COMPLIANCE** | Semantic HTML structure, screen reader ARIA labels, meta robots tags | Sub-50ms TTFB (Time to First Byte) via global Edge CDN infrastructure |
 
 Across 300+ analysed global gaming brands, platforms achieving top-decile Performance scores consistently demonstrate 24% higher First Time Deposit conversion rates and 31% lower 30-day player churn.
 

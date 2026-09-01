@@ -455,31 +455,61 @@ function buildMeetingPayload({
  * never even attempted (`create_attempts` stayed 0) and the journey went to
  * `manual_review` with `meeting_create_failed`.
  *
- * `id` is always returned, so `Deal_Name` — the only field `resolveProductDeal`
- * matches on — is the complete requirement.
+ * `id` is always returned. `Deal_Name` and `Opportunity_State` are requested so the
+ * resolver can name candidates in a review and exclude Lost relationships without a
+ * second round trip.
  */
 async function getDealsForAccount(accountId) {
-  const res = await requestZoho('GET', `/crm/v6/Accounts/${accountId}/Deals?fields=Deal_Name`);
+  const res = await requestZoho('GET', `/crm/v6/Accounts/${accountId}/Deals?fields=Deal_Name,Opportunity_State`);
   return res && Array.isArray(res.data) ? res.data : [];
 }
 
 /**
- * Resolve the exact Product Deal for an Account.
- * `{ status: 'one'|'none'|'many', deal }` — 'many' is ambiguity, never a guess.
+ * Resolve THE Deal for an Account.
+ *
+ * WORK ITEM 4.1. Under the approved commercial model an Account has ZERO OR ONE
+ * persistent Deal, and a Product is a QUOTE under that Deal — never a Deal of its own.
+ * So there is nothing to select BY: the Account's Deal is simply the Account's Deal.
+ *
+ * What this used to do, and why it had to change: it substring-matched the canonical
+ * Product name inside `Deal_Name`. That only worked because Deals were named
+ * "<Account> - <Product>". Once Deluge names the single Deal after the Account,
+ * `Deal_Name` no longer contains any Product name, so EVERY lookup would have returned
+ * `status:'none'` and every Meeting would have been created with no `What_Id`. This is
+ * why the item must ship in the same window as the Deluge Deal-naming change — and why
+ * the earlier "booking first" ordering was withdrawn: shipped early, it would face 17
+ * Accounts still holding 2–3 Product Deals and resolve `many` for all of them.
+ *
+ * `canonicalProductName` is retained in the signature but is NO LONGER USED for
+ * selection. Every call site passes a product/anchor, and changing all of them plus
+ * this contract in one step would make the diff hard to review against the plan; the
+ * parameter is accepted, ignored for matching, and echoed back for logging. It should be
+ * dropped once the call sites are simplified.
+ *
+ * `{ status: 'one'|'none'|'many', deal, count, candidates }` — 'many' is ambiguity,
+ * never a guess. A `many` result must raise a visible review naming every candidate; it
+ * must never be resolved by picking one, because the Deal_Key UNIQUE constraint is not
+ * enforced live and a silent choice would hide a duplicate-Deal defect.
  */
 async function resolveProductDeal(accountId, canonicalProductName, { fetchDeals } = {}) {
-  if (!accountId || !canonicalProductName) return { status: 'none', deal: null };
+  if (!accountId) return { status: 'none', deal: null, count: 0, candidates: [] };
   // `fetchDeals` is an explicit seam so the matching rule can be unit-tested without
   // a network stub. Reassigning the module export would not work: the call below
   // resolves the module-local binding, not the exports object.
   const deals = await (fetchDeals || getDealsForAccount)(accountId);
-  const matches = deals.filter((d) => {
-    const name = (d.Deal_Name || '').toLowerCase();
-    return name.includes(String(canonicalProductName).toLowerCase());
-  });
-  if (matches.length === 1) return { status: 'one', deal: matches[0] };
-  if (matches.length > 1) return { status: 'many', deal: null };
-  return { status: 'none', deal: null };
+  const all = Array.isArray(deals) ? deals : [];
+  // A Lost relationship is not the Account's live Deal. Excluding it keeps a churned
+  // Account that later returns from resolving 'many' against its own history.
+  const open = all.filter((d) => (d.Opportunity_State || '') !== 'Lost');
+  const candidates = open.length ? open : all;
+  const ids = candidates.map((d) => d.id).filter(Boolean);
+  if (candidates.length === 1) {
+    return { status: 'one', deal: candidates[0], count: 1, candidates: ids };
+  }
+  if (candidates.length > 1) {
+    return { status: 'many', deal: null, count: candidates.length, candidates: ids };
+  }
+  return { status: 'none', deal: null, count: 0, candidates: [] };
 }
 
 // ---------------------------------------------------------------------------

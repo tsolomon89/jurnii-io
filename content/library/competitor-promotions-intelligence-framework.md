@@ -44,36 +44,12 @@ Operators who lack continuous tracking capabilities treat their promotional cale
 
 A scalable promotional intelligence architecture requires moving beyond casual monitoring. It demands a structured ingestion, normalisation, and scoring pipeline that converts raw external marketing executions into normalised data points.
 
-```
-+-----------------------------------------------------------------------------+
-|               iGaming Promotional Intelligence Architecture                 |
-+-----------------------------------------------------------------------------+
-|  1. INGESTION LAYER                                                         |
-|     - Multi-channel ingestion (Web, Mobile Web, Native iOS/Android, CRM)    |
-|     - Daily capture of splash headers, campaign landing pages, push copy    |
-+-----------------------------------------------------------------------------+
-                                     |
-                                     v
-+-----------------------------------------------------------------------------+
-|  2. NORMALISATION & TAXONOMY ENGINE                                         |
-|     - Classification: Acquisition, Retention, Reactivation, VIP             |
-|     - Term parsing: Wagering Multipliers, Caps, Time Limits, Minimum Odds   |
-+-----------------------------------------------------------------------------+
-                                     |
-                                     v
-+-----------------------------------------------------------------------------+
-|  3. QUANTITATIVE SCORING (PROMO RICHNESS INDEX)                             |
-|     - True Value Extraction (Nominal Bonus vs Mathematical Realisation)     |
-|     - Friction Indexing (Turnover Speed, Expiry Constraints, KYC Hurdles)   |
-+-----------------------------------------------------------------------------+
-                                     |
-                                     v
-+-----------------------------------------------------------------------------+
-|  4. COMMERCIAL DECISION ENGINE                                              |
-|     - Automated Alerts for Trading & CRM Desks                              |
-|     - Causal Input for Marketing Mix Modelling (MMM)                        |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. INGESTION LAYER** | Multi-channel ingestion (Web, Mobile Web, Native iOS/Android, CRM) | Daily capture of splash headers, campaign landing pages, push copy v |
+| **2. NORMALISATION & TAXONOMY ENGINE** | Classification: Acquisition, Retention, Reactivation, VIP | Term parsing: Wagering Multipliers, Caps, Time Limits, Minimum Odds v |
+| **3. QUANTITATIVE SCORING (PROMO RICHNESS INDEX)** | True Value Extraction (Nominal Bonus vs Mathematical Realisation) | Friction Indexing (Turnover Speed, Expiry Constraints, KYC Hurdles) v |
+| **4. COMMERCIAL DECISION ENGINE** | Automated Alerts for Trading & CRM Desks | Causal Input for Marketing Mix Modelling (MMM) |
 
 ### 1. Ingestion Across All Commercial Surfaces
 
@@ -121,26 +97,15 @@ When commercial teams evaluate market activity through the Promo Richness Index,
 
 Promotional intelligence provides commercial value only when it directly influences operational decisions. Forward-thinking operators integrate competitive data directly into three core workflows:
 
-```
-+-----------------------------------------------------------------------------+
-|                 Operational Workflows Powered by Jurnii 360                 |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ DAILY TRADING STANDUP ]  ---> Tactical Counter-Attacks                    |
-|                                  - Adjust match odds boosts in real-time    |
-|                                  - Match competitor insurance terms         |
-|                                                                             |
-|  [ WEEKLY CRM PLANNING ]   ---> Precision Cohort Deployment                 |
-|                                  - Calibrate retention reload generosity    |
-|                                  - Fill competitor proposition gaps         |
-|                                  - Prevent bonus hunting leakage            |
-|                                                                             |
-|  [ MONTHLY BOARD REVIEW ]  ---> Strategic Budget Optimization               |
-|                                  - Isolate external noise from CAC changes  |
-|                                  - Reconcile bonus spend against market ROI |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Evaluation Variable** | **Benchmark Standard / Impact** |
+|---|---|
+| **Item** | Adjust match odds boosts in real-time |
+| **Item** | Match competitor insurance terms |
+| **Item** | Calibrate retention reload generosity |
+| **Item** | Fill competitor proposition gaps |
+| **Item** | Prevent bonus hunting leakage |
+| **Item** | Isolate external noise from CAC changes |
+| **Item** | Reconcile bonus spend against market ROI |
 
 ### 1. The Daily Trading Standup: Tactical Counter-Attacks
 

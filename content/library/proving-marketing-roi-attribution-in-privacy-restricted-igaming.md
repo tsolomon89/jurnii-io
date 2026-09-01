@@ -33,31 +33,15 @@ To establish true commercial attribution and protect marketing efficiency, opera
 
 To understand why last-click attribution misallocates capital, examine the modern customer journey across digital gaming channels:
 
-```
-+-----------------------------------------------------------------------------+
-|               The Fallacy of Last-Click Attribution in iGaming              |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  REALITY OF THE MULTI-TOUCH PLAYER JOURNEY:                                 |
-|  1. Football Fan sees Pitch-side LED Board during Premier League Match     |
-|  2. Fan listens to Sports Podcast featuring Brand Sponsorship               |
-|  3. Fan views YouTube Highlight Video with Pre-Roll Ad                      |
-|  4. Fan searches for "Brand Name" on Google on Saturday Morning             |
-|  5. Fan clicks Paid Search Ad and completes Registration & Deposit (£50)    |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  LAST-CLICK ATTRIBUTION ASSIGNMENT:                                         |
-|  - Pitch-side LED Board:    0% Credit (£0 ROI Assigned)                     |
-|  - Podcast Sponsorship:     0% Credit (£0 ROI Assigned)                     |
-|  - YouTube Video Pre-Roll:  0% Credit (£0 ROI Assigned)                     |
-|  - Google Brand Paid Search: 100% Credit (Assigned all £50 NGR)              |
-|                                                                             |
-|  COMMERCIAL OUTCOME:                                                        |
-|  Leadership cuts top-of-funnel brand spend; brand search volume collapses   |
-|  3 months later due to dried up organic demand.                             |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Metric / Dimension** | **REALITY OF THE MULTI-TOUCH PLAYER JOURNEY** | **LAST-CLICK ATTRIBUTION ASSIGNMENT** |
+|---|---|---|
+| **REALITY OF THE MULTI-TOUCH PLAYER JOURNEY** | - | - |
+| **LAST-CLICK ATTRIBUTION ASSIGNMENT** | - | - |
+| **Pitch-side LED Board** | - | 0% Credit (£0 ROI Assigned) |
+| **Podcast Sponsorship** | - | 0% Credit (£0 ROI Assigned) |
+| **YouTube Video Pre-Roll** | - | 0% Credit (£0 ROI Assigned) |
+| **Google Brand Paid Search** | - | 100% Credit (Assigned all £50 NGR) |
+| **COMMERCIAL OUTCOME** | - | - |
 
 Under last-click logic, the channel that happened to intercept the user immediately before account creation receives 100% of the financial credit. 
 
@@ -67,30 +51,11 @@ In reality, the brand search ad was merely a transactional navigation link; the 
 
 Marketing Mix Modelling solves the attribution dilemma by discarding user-level tracking entirely. Instead, MMM applies advanced time-series econometrics, Bayesian statistical modelling, and machine learning to analyse the mathematical relationships between aggregated marketing investments and total business outcomes (FTDs, GGR, and NGR).
 
-```
-+-----------------------------------------------------------------------------+
-|               Modern Marketing Mix Modelling Architecture                   |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ AGGREGATED INPUT STREAMS ]                                               |
-|  - Paid Media Spend (Paid Search, Social, TV, Radio, Affiliate, Display)    |
-|  - Baseline Organic Demand (Direct traffic, brand equity)                   |
-|  - External Exogenous Factors (Sporting Calendar, Seasonality, Weather)     |
-|  - Competitor Intelligence Telemetry (Rival Promos, Overround Shifts)       |
-|                                                                             |
-|  =========================================================================  |
-|  [ ECONOMETRIC ESTIMATION ENGINE (JURNII CORTEX) ]                          |
-|  - Adstock Transformations (Carrying over residual brand awareness)        |
-|  - Diminishing Returns Curves (Hill equations capturing channel saturation) |
-|  - Competitor Interaction Coefficient Calibration                           |
-|                                                                             |
-|  =========================================================================  |
-|  [ COMMERCIAL OUTPUT: INCREMENTAL ROI & BUDGET OPTIMISATION ]               |
-|  - True Incremental CAC & Marginal Return on Ad Spend (mROAS) per channel  |
-|  - Prescriptive budget allocation simulator for C-level leadership          |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **AGGREGATED INPUT STREAMS** | Paid Media Spend (Paid Search, Social, TV, Radio, Affiliate, Display) | Baseline Organic Demand (Direct traffic, brand equity); External Exogenous Factors (Sporting Calendar, Seasonality, Weather); Competitor Intelligence Telemetry (Rival Promos, Overround Shifts) ========================================================================= |
+| **ECONOMETRIC ESTIMATION ENGINE (JURNII CORTEX)** | Adstock Transformations (Carrying over residual brand awareness) | Diminishing Returns Curves (Hill equations capturing channel saturation); Competitor Interaction Coefficient Calibration ========================================================================= |
+| **COMMERCIAL OUTPUT: INCREMENTAL ROI & BUDGET OPTIMISATION** | True Incremental CAC & Marginal Return on Ad Spend (mROAS) per channel | Prescriptive budget allocation simulator for C-level leadership |
 
 ### 1. Adstock Transformations: Accounting for Lagged Impact
 
@@ -118,25 +83,11 @@ This ensures that an increase in FTDs during the World Cup is properly attribute
 
 Implementing econometric marketing attribution delivers three structural commercial advantages:
 
-```
-+-----------------------------------------------------------------------------+
-|               Marketing Mix Modelling Commercial Impact                     |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. ELIMINATING BRAND SEARCH CANNIBALISATION                                |
-|     - Identify baseline organic search volume and reduce wasteful bidding   |
-|       on brand keywords that would have converted organically.              |
-|                                                                             |
-|  2. QUANTIFYING UPPER-FUNNEL MEDIA VALUE                                    |
-|     - Measure the true incremental FTD contribution of sports sponsorships, |
-|       connected TV, and digital out-of-home advertising.                    |
-|                                                                             |
-|  3. PRESCRIPTIVE CAPITAL ALLOCATION SIMULATION                              |
-|     - Run Monte Carlo simulations to model the exact revenue impact of      |
-|       reallocating £500,000 from Paid Social to Programmatic Audio.         |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **1. ELIMINATING BRAND SEARCH CANNIBALISATION** | Identify baseline organic search volume and reduce wasteful bidding on brand keywords that would have converted organically. |
+| **2. QUANTIFYING UPPER-FUNNEL MEDIA VALUE** | Measure the true incremental FTD contribution of sports sponsorships, connected TV, and digital out-of-home advertising. |
+| **3. PRESCRIPTIVE CAPITAL ALLOCATION SIMULATION** | Run Monte Carlo simulations to model the exact revenue impact of reallocating £500,000 from Paid Social to Programmatic Audio. |
 
 ### Case Study: Reallocating a £12M Annual Marketing Budget
 
@@ -155,39 +106,21 @@ An econometric Marketing Mix Modelling deployment via [Jurnii Cortex](/products/
 
 In one recent **$17.1M marketing budget engagement** in a tier-1 regulated market, Jurnii Cortex delivered transformative commercial improvements:
 
-```
-+-----------------------------------------------------------------------------+
-|               Jurnii Cortex Marketing Engagement Proof Points               |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  - +46% Lift in True Incrementality Attribution Accuracy                    |
-|  - 3x Improvement in Cross-Channel Marginal Media Efficiency                |
-|  - 40x Faster Scenario Planning & Board Budget Simulation Cycles            |
-|  - $4.85M Successfully Reallocated from Saturated PPC into High-Yield Media  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Evaluation Variable** | **Benchmark Standard / Impact** |
+|---|---|
+| **Item** | +46% Lift in True Incrementality Attribution Accuracy |
+| **Item** | 3x Improvement in Cross-Channel Marginal Media Efficiency |
+| **Item** | 40x Faster Scenario Planning & Board Budget Simulation Cycles |
+| **Item** | $4.85M Successfully Reallocated from Saturated PPC into High-Yield Media |
 
 ## Mathematical Derivations: Adstock Carryover & Saturation
 
 In [Jurnii Cortex](/products/jurnii-mmm), media channel efficiency is modeled through two non-linear transformations:
 
-```
-+-----------------------------------------------------------------------------+
-|               Econometric Adstock and Saturation Formulations               |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. GEOMETRIC ADSTOCK TRANSFORMATION:                                       |
-|     Adstock_{m,t} = Spend_{m,t} + lambda_m * Adstock_{m,t-1}                |
-|     - lambda_m in [0, 1] captures the weekly memory/decay rate of channel m |
-|                                                                             |
-|  2. HILL SATURATION CURVE:                                                  |
-|     Saturation(x) = x^alpha / ( K^alpha + x^alpha )                         |
-|     - alpha controls the shape of the S-curve                               |
-|     - K is the half-saturation spend threshold                              |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. GEOMETRIC ADSTOCK TRANSFORMATION:** | Adstock_{m,t} = Spend_{m,t} + lambda_m * Adstock_{m,t-1} | lambda_m in [0, 1] captures the weekly memory/decay rate of channel m |
+| **2. HILL SATURATION CURVE:** | Saturation(x) = x^alpha / ( K^alpha + x^alpha ) | alpha controls the shape of the S-curve; K is the half-saturation spend threshold |
 
 Applying these transformations prevents marketing teams from over-investing in saturated media channels, protecting gross gaming yield.
 

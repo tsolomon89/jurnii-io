@@ -154,7 +154,15 @@
       "Bash(node --env-file=.env.production.local ./__scratch_db1.cjs)",
       "Bash(rm -f ./__scratch_db1.cjs)",
       "Bash(node -e \"setTimeout\\(\\(\\)=>{},90000\\)\")",
-      "Bash(node --env-file=.env.production.local -e ' *)"
+      "Bash(node --env-file=.env.production.local -e ' *)",
+      "Bash(python \"C:/Users/Audna/AppData/Local/Temp/claude/c--Development-Projects-jurnii/f257f911-9dc6-4250-b485-41f4b5b7d20b/scratchpad/tombstone.py\" .)",
+      "Bash(python zoho-functions/scripts/deluge-syntax-check.py)",
+      "Bash(python zoho-functions/scripts/deluge-field-scan.py)",
+      "Bash(LEMLIST_API_KEY= node integrations/lemlist-zoho/scripts/spike.js)",
+      "Bash(LEMLIST_API_KEY=fake npm test)",
+      "Bash(LEMLIST_API_KEY= ZOHO_REFRESH_TOKEN= npm test)",
+      "Bash(grep -v '^\\\\S*: *//')",
+      "Bash(python - C:/Users/Audna/AppData/Local/Temp/claude/c--Development-Projects-jurnii/f257f911-9dc6-4250-b485-41f4b5b7d20b/scratchpad/crm-machine-map.html)"
     ],
     "additionalDirectories": [
       "\\tmp",

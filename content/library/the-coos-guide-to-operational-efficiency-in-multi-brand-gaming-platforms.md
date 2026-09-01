@@ -34,29 +34,12 @@ To eliminate operational waste and scale efficiently, COOs must implement struct
 
 A unified operational architecture empowers the COO across four core domains:
 
-```
-+-----------------------------------------------------------------------------+
-|               The 4 Operational Pillars of the iGaming COO Framework        |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. CENTRALIZED MULTI-BRAND DESIGN SYSTEM GOVERNANCE                        |
-|     - Shared tokenized component libraries across all regional skins        |
-|     - Instant global rollout of UI enhancements and compliance updates      |
-|                                                                             |
-|  2. TRANSACTIONAL FUNNEL STANDARDIZATION & LATENCY CONTROL                  |
-|     - Centralized payment orchestration (Open Banking, Apple Pay, Pix)      |
-|     - Continuous Core Web Vitals monitoring across all production domains   |
-|                                                                             |
-|  3. AUTOMATED COMPLIANCE & SAFER GAMBLING INTEGRATION                       |
-|     - Standardized verification APIs and mandatory disclosure placement     |
-|     - Automated audit trails for licensing inspections (UKGC, MGA, AGCO)    |
-|                                                                             |
-|  4. CUSTOMER SERVICE TICKET DEFLECTION                                      |
-|     - Eliminating the root causes of deposit failures and betslip disputes  |
-|     - Slashing tier-1 support ticket volume by over 40%                     |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. CENTRALIZED MULTI-BRAND DESIGN SYSTEM GOVERNANCE** | Shared tokenized component libraries across all regional skins | Instant global rollout of UI enhancements and compliance updates |
+| **2. TRANSACTIONAL FUNNEL STANDARDIZATION & LATENCY CONTROL** | Centralized payment orchestration (Open Banking, Apple Pay, Pix) | Continuous Core Web Vitals monitoring across all production domains |
+| **3. AUTOMATED COMPLIANCE & SAFER GAMBLING INTEGRATION** | Standardized verification APIs and mandatory disclosure placement | Automated audit trails for licensing inspections (UKGC, MGA, AGCO) |
+| **4. CUSTOMER SERVICE TICKET DEFLECTION** | Eliminating the root causes of deposit failures and betslip disputes | Slashing tier-1 support ticket volume by over 40% |
 
 ### 1. Centralized Design System Architecture
 
@@ -86,46 +69,26 @@ By auditing platforms with [Jurnii UX](/products/jurnii-ux) and implementing cle
 
 To maintain rigorous operational standards, COOs evaluate portfolio brands across a standardized operational scorecard:
 
-```
-+-----------------------------------------------------------------------------+
-|               Multi-Brand Operational Scorecard (Jurnii UX)                 |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  OPERATIONAL METRIC            LEGACY MULTI-BRAND     OPTIMISED JURNII STACK|
-|  -------------------------------------------------------------------------  |
-|  New Brand Skin Time-to-Market 6 - 9 Months           3 - 4 Weeks           |
-|  Global Compliance Rollout     8 - 12 Weeks           < 48 Hours            |
-|  Average Support Tickets / FTD 0.42 Tickets / User    0.11 Tickets / User   |
-|  Core Web Vitals Pass Rate     35% of Brand Skins     98% of Brand Skins    |
-|  Engineering Duplication Tax   55% Redundant Code     Zero (Shared Tokens)  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **OPERATIONAL METRIC** | **LEGACY MULTI-BRAND** | **OPTIMISED JURNII STACK** |
+| --- | --- | --- |
+| **New Brand Skin Time-to-Market 6 - 9 Months** | 3 - 4 Weeks | - |
+| **Global Compliance Rollout** | 8 - 12 Weeks | < 48 Hours |
+| **Average Support Tickets / FTD 0.42 Tickets / User** | 0.11 Tickets / User | - |
+| **Core Web Vitals Pass Rate** | 35% of Brand Skins | 98% of Brand Skins |
+| **Engineering Duplication Tax** | 55% Redundant Code | Zero (Shared Tokens) |
 
 ## Practical Executive Applications: The COO's Action Playbook
 
 Implementing a unified operational framework resolves major group-level challenges:
 
-```
-+-----------------------------------------------------------------------------+
-|                  COO Operational Challenge Resolution Matrix                |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  OPERATIONAL CHALLENGE             COO ACTION & RESOLUTION                  |
-|  -------------------------------------------------------------------------  |
-|  "M&A Acquisition brings new       Audit acquired codebase via Jurnii UX;   |
-|  legacy platform skin."            port visual theme to unified design      |
-|                                    tokens in 14 days, cutting tech debt.    |
-|                                                                             |
-|  "Customer support costs scaling   Analyze friction logs in Jurnii UX;      |
-|  linearly with revenue growth."    discover deposit decline errors; deploy  |
-|                                    instant fallback rails, cutting tickets. |
-|                                                                             |
-|  "Regulator demands urgent audit   Generate automated compliance proof      |
-|  of safer gambling visibility."    dossier across all portfolio domains.    |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **OPERATIONAL CHALLENGE** | **COO ACTION & RESOLUTION** |
+| --- | --- |
+| **"M&A Acquisition brings new** | Audit acquired codebase via Jurnii UX; |
+| **legacy platform skin."** | port visual theme to unified design tokens in 14 days, cutting tech debt. |
+| **"Customer support costs scaling** | Analyze friction logs in Jurnii UX; |
+| **linearly with revenue growth."** | discover deposit decline errors; deploy instant fallback rails, cutting tickets. |
+| **"Regulator demands urgent audit** | Generate automated compliance proof |
+| **of safer gambling visibility."** | dossier across all portfolio domains. |
 
 ## Managing Supplier Ecosystems and Technical Governance
 
@@ -133,44 +96,22 @@ Multi-brand gaming operators rely on complex networks of third-party software ve
 
 A central responsibility of the gaming COO is managing these external dependencies to prevent performance bottlenecks:
 
-```
-+-----------------------------------------------------------------------------+
-|               Vendor Dependency Governance Framework                        |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ PAYMENT GATEWAY ORCHESTRATION ]                                          |
-|  - Implement dynamic intelligent transaction routing across fallback rails  |
-|  - Benchmark gateway uptime, decline rates, and settlement speed in real-time|
-|                                                                             |
-|  [ CASINO GAME AGGREGATION & LOBBY SPEED ]                                  |
-|  - Lazy-load external game canvas scripts to prevent lobby render blocking  |
-|  - Audit studio payload sizes and enforce WebP/AVIF thumbnail standards     |
-|                                                                             |
-|  [ KYC & IDENTITY BUREAU INTEGRATION ]                                      |
-|  - Multi-tier electronic verification fallbacks ensuring continuous uptime  |
-|  - Prevent manual queue accumulation during high-volume sports tournaments  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **PAYMENT GATEWAY ORCHESTRATION** | Implement dynamic intelligent transaction routing across fallback rails | Benchmark gateway uptime, decline rates, and settlement speed in real-time |
+| **CASINO GAME AGGREGATION & LOBBY SPEED** | Lazy-load external game canvas scripts to prevent lobby render blocking | Audit studio payload sizes and enforce WebP/AVIF thumbnail standards |
+| **KYC & IDENTITY BUREAU INTEGRATION** | Multi-tier electronic verification fallbacks ensuring continuous uptime | Prevent manual queue accumulation during high-volume sports tournaments |
 
 ## The COO Operational Benchmarking Architecture
 
 Within [Jurnii UX](/products/jurnii-ux), multi-brand operational efficiency is governed through the four foundational audit dimensions:
 
-```
-+-----------------------------------------------------------------------------+
-|               COO Multi-Brand Operational Governance Matrix                 |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  AUDIT DIMENSION        OPERATIONAL TARGET          COMMERCIAL RESULT       |
-|  -------------------------------------------------------------------------  |
-|  Journey Effectiveness  < 45s Onboarding Flow       -38% Support Ticket Vol |
-|  Usability Heuristics   Unified CSS Token Hierarchy 4x Faster Feature Rollout|
-|  Performance Vitals     LCP < 1.2s Across All Skins +24% Payment Conversion |
-|  Perception & Trust     100% License Badge Audit    Zero Compliance Fines   |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **AUDIT DIMENSION** | **OPERATIONAL TARGET** | **COMMERCIAL RESULT** |
+| --- | --- | --- |
+| **Journey Effectiveness** | < 45s Onboarding Flow | -38% Support Ticket Vol |
+| **Usability Heuristics** | Unified CSS Token Hierarchy 4x Faster Feature Rollout | - |
+| **Performance Vitals** | LCP < 1.2s Across All Skins +24% Payment Conversion | - |
+| **Perception & Trust** | 100% License Badge Audit | Zero Compliance Fines |
 
 Across 300+ analysed global brands, COOs deploying Jurnii UX reduce multi-brand development maintenance costs by 45% while maintaining strict operational consistency across all licensed regional domains.
 
@@ -178,27 +119,16 @@ Across 300+ analysed global brands, COOs deploying Jurnii UX reduce multi-brand 
 
 Gaming COOs must coordinate an intricate ecosystem of third-party technology providers:
 
-```
-+-----------------------------------------------------------------------------+
-|               Third-Party Supplier Governance Architecture                  |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  VENDOR CATEGORY        MONITORING PROTOCOL         OPERATIONAL CONTINGENCY |
-|  -------------------------------------------------------------------------  |
-|  Player Account Mgt     Continuous API latency RUM  Dynamic fallback caches |
-|  (PAM Platform)         monitoring during tournaments                       |
-|                                                                             |
-|  Sports Odds Feeds      WebSocket frame rate audit  Isolate odds rendering  |
-|                         to prevent UI stutters      into Web Workers        |
-|                                                                             |
-|  Casino Aggregators     Thumbnail payload audits    Automated WebP/AVIF     |
-|                         to prevent lobby bloat      image optimisation      |
-|                                                                             |
-|  Payment Gateways       Real-time decline code      Automated fallback rail |
-|                         telemetry mapping           orchestration           |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **VENDOR CATEGORY** | **MONITORING PROTOCOL** | **OPERATIONAL CONTINGENCY** |
+| --- | --- | --- |
+| **Player Account Mgt** | Continuous API latency RUM | Dynamic fallback caches |
+| **(PAM Platform)** | monitoring during tournaments | - |
+| **Sports Odds Feeds** | WebSocket frame rate audit | Isolate odds rendering |
+| **to prevent UI stutters** | into Web Workers | - |
+| **Casino Aggregators** | Thumbnail payload audits | Automated WebP/AVIF |
+| **to prevent lobby bloat** | image optimisation | - |
+| **Payment Gateways** | Real-time decline code | Automated fallback rail |
+| **telemetry mapping** | orchestration | - |
 
 Establishing rigorous supplier governance ensures that external technical issues do not degrade player experience or conversion velocity.
 

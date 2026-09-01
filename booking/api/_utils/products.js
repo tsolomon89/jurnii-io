@@ -191,21 +191,28 @@ function mergeMultiSelect(existing, add) {
   return out;
 }
 
-// Given a list of Deal records for an Account and a canonical product name,
-// pick the single open Deal for that product. Pure — the network fetch lives in
-// zoho.resolveProductDeal. Returns { status: 'one'|'none'|'many', deal, count }.
+// Given a list of Deal records for an Account, pick the Account's single open Deal.
+// Pure — the network fetch lives in zoho.resolveProductDeal.
+// Returns { status: 'one'|'none'|'many', deal, count, candidates }.
+//
+// WORK ITEM 4.1. This used to select by Product identity, matching the canonical product
+// name against `Deal_Product.name` or `Deal_Product_Key`. Both of those fields are
+// scheduled for retirement and carry no value under the corrected model, where a Product
+// is a Quote under the one Deal rather than a Deal of its own. Selecting on a retiring
+// field would have started returning 'none' for everything the moment the field was
+// cleared — and reading a DELETED api_name is the failure mode that voids a whole
+// update map, so the reader has to go before the field does.
+//
+// Lost Deals are still excluded: a churned relationship is not the Account's live Deal.
+// `canonicalProductName` is accepted and ignored, matching zoho.resolveProductDeal.
 function pickProductDeal(deals, canonicalProductName) {
-  if (!Array.isArray(deals) || !canonicalProductName) return { status: 'none', deal: null, count: 0 };
-  const wantKey = normalizeProductKey(canonicalProductName);
-  const matches = deals.filter(d => {
-    if ((d.Opportunity_State || '') === 'Lost') return false;
-    const dpName = (d.Deal_Product && d.Deal_Product.name) ? d.Deal_Product.name : '';
-    const dpKey = d.Deal_Product_Key || '';
-    return normalizeProductKey(dpName) === wantKey || (dpKey && normalizeProductKey(dpKey) === wantKey);
-  });
-  if (matches.length === 1) return { status: 'one', deal: matches[0], count: 1 };
-  if (matches.length === 0) return { status: 'none', deal: null, count: 0 };
-  return { status: 'many', deal: null, count: matches.length };
+  if (!Array.isArray(deals)) return { status: 'none', deal: null, count: 0, candidates: [] };
+  const open = deals.filter(d => (d.Opportunity_State || '') !== 'Lost');
+  const candidates = open.length ? open : deals;
+  const ids = candidates.map(d => d.id).filter(Boolean);
+  if (candidates.length === 1) return { status: 'one', deal: candidates[0], count: 1, candidates: ids };
+  if (candidates.length === 0) return { status: 'none', deal: null, count: 0, candidates: [] };
+  return { status: 'many', deal: null, count: candidates.length, candidates: ids };
 }
 
 // Countries the form can produce (from the phone dial-code dropdown). Only these

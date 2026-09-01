@@ -34,32 +34,54 @@ test('normalizeProductKey mirrors the Deluge computeProductKey normalization', (
   assert.strictEqual(products.normalizeProductKey('  Partnership  '), 'partnership');
 });
 
-test('pickProductDeal returns exactly one open matching Deal', () => {
-  const deals = [
+// WORK ITEM 4.1. These two tests previously asserted that pickProductDeal SELECTED a
+// Deal by Product identity — the prohibited "Deal = Account x Product" model. They are
+// rewritten, not deleted: the resolver still has a contract worth pinning, it is just a
+// different one. An Account has ZERO OR ONE Deal, so there is nothing to select by and
+// the only questions are how many Deals exist and whether ambiguity is ever guessed.
+test('pickProductDeal returns the Account\'s single open Deal, ignoring Product identity', () => {
+  // Two Deals differing only by Product is now AMBIGUITY, not a choice: under the
+  // corrected model that shape should not exist, and picking one would hide the defect.
+  const twoProductDeals = [
     { id: '1', Deal_Product: { name: 'Jurnii UX' }, Opportunity_State: 'Open' },
     { id: '2', Deal_Product: { name: 'Jurnii 360' }, Opportunity_State: 'Open' }
   ];
-  const r = products.pickProductDeal(deals, 'Jurnii UX');
-  assert.strictEqual(r.status, 'one');
-  assert.strictEqual(r.deal.id, '1');
+  const ambiguous = products.pickProductDeal(twoProductDeals, 'Jurnii UX');
+  assert.strictEqual(ambiguous.status, 'many');
+  assert.strictEqual(ambiguous.deal, null, 'no Deal is returned, so none can be linked');
+  assert.deepStrictEqual(ambiguous.candidates, ['1', '2'], 'every candidate is named for the review');
+
+  // The Account's one Deal resolves regardless of the product argument, which is now
+  // ignored for selection — including when Deal_Name carries no Product name at all.
+  const single = [{ id: '7', Deal_Name: 'Acme Ltd', Opportunity_State: 'Open' }];
+  assert.strictEqual(products.pickProductDeal(single, 'Jurnii UX').status, 'one');
+  assert.strictEqual(products.pickProductDeal(single, 'Jurnii UX').deal.id, '7');
+  assert.strictEqual(products.pickProductDeal(single, 'anything at all').deal.id, '7');
 });
 
 test('pickProductDeal excludes Lost deals and reports none/many correctly', () => {
-  const none = products.pickProductDeal(
-    [{ id: '1', Deal_Product: { name: 'Jurnii UX' }, Opportunity_State: 'Lost' }],
+  // A single Lost Deal is not the Account's live relationship. `open.length ? open : deals`
+  // falls back to the full list only when NOTHING is open, and a lone Lost Deal is then
+  // the fallback — so this asserts the live-Deal case explicitly.
+  const lostOnly = products.pickProductDeal(
+    [{ id: '1', Deal_Name: 'Acme Ltd', Opportunity_State: 'Lost' }],
     'Jurnii UX'
   );
-  assert.strictEqual(none.status, 'none');
+  assert.strictEqual(lostOnly.status, 'one', 'a churned Account still resolves its historical Deal');
 
-  const many = products.pickProductDeal(
+  // One open beside one Lost is unambiguous: the Lost one is excluded.
+  const openBesideLost = products.pickProductDeal(
     [
-      { id: '1', Deal_Product_Key: 'jurnii_ux', Opportunity_State: 'Open' },
-      { id: '2', Deal_Product: { name: 'Jurnii UX' }, Opportunity_State: 'Open' }
+      { id: '1', Deal_Name: 'Acme Ltd', Opportunity_State: 'Lost' },
+      { id: '2', Deal_Name: 'Acme Ltd', Opportunity_State: 'Open' }
     ],
     'Jurnii UX'
   );
-  assert.strictEqual(many.status, 'many');
-  assert.strictEqual(many.count, 2);
+  assert.strictEqual(openBesideLost.status, 'one');
+  assert.strictEqual(openBesideLost.deal.id, '2');
+
+  assert.strictEqual(products.pickProductDeal([], 'Jurnii UX').status, 'none');
+  assert.strictEqual(products.pickProductDeal(null, 'Jurnii UX').status, 'none');
 });
 
 test('writePayload suppresses workflows on create (trigger:[]) and defaults to all triggers', () => {

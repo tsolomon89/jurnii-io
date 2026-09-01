@@ -38,29 +38,12 @@ By applying [fintech onboarding and KYC solutions](/use-cases/fintech), financia
 
 Fintech engineering and product teams can adopt four foundational UX principles from digital gaming:
 
-```
-+-----------------------------------------------------------------------------+
-|               4 KYC & Onboarding Lessons from Regulated iGaming             |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. REAL-TIME MULTI-SOURCE ELECTRONIC KYC FALLBACKS                         |
-|     - Gaming platforms pass 85%+ of users in sub-second background lookups. |
-|     - Fuzzy-matching credit and electoral databases before manual upload.   |
-|                                                                             |
-|  2. GUIDED MOBILE CAMERA CAPTURE WITH EDGE DETECTION                        |
-|     - Real-time client-side glare detection, auto-framing, and cropping.    |
-|     - Eliminating illegible document rejections and customer support queues.|
-|                                                                             |
-|  3. OPEN BANKING INSTANT ACCOUNT FUNDING                                    |
-|     - Direct bank-to-bank biometric deposit rails replacing manual wire info.|
-|     - Slashing initial account funding time from 2 days to 15 seconds.      |
-|                                                                             |
-|  4. PROACTIVE ERROR RESOLUTION & TELEMETRY                                  |
-|     - Contextual inline guidance on validation errors instead of roadblocks.|
-|     - Real-time logging of verification drop-offs for instant remediation.  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. REAL-TIME MULTI-SOURCE ELECTRONIC KYC FALLBACKS** | Gaming platforms pass 85%+ of users in sub-second background lookups. | Fuzzy-matching credit and electoral databases before manual upload. |
+| **2. GUIDED MOBILE CAMERA CAPTURE WITH EDGE DETECTION** | Real-time client-side glare detection, auto-framing, and cropping. | Eliminating illegible document rejections and customer support queues. |
+| **3. OPEN BANKING INSTANT ACCOUNT FUNDING** | Direct bank-to-bank biometric deposit rails replacing manual wire info. | Slashing initial account funding time from 2 days to 15 seconds. |
+| **4. PROACTIVE ERROR RESOLUTION & TELEMETRY** | Contextual inline guidance on validation errors instead of roadblocks. | Real-time logging of verification drop-offs for instant remediation. |
 
 ### 1. Multi-Tiered Automated Electronic Verification
 
@@ -82,53 +65,28 @@ By tracking exact form field drop-offs, validation errors, and verification late
 
 To evaluate the commercial power of adopting gaming-grade onboarding velocity, consider a retail investment platform acquiring 20,000 monthly signups:
 
-```
-+-----------------------------------------------------------------------------+
-|               Fintech Onboarding Funnel Transformation Model                |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  LEGACY FINTECH FUNNEL (Manual KYC & Wire Transfer):                        |
-|  - Registered Signups:                  20,000 Users                        |
-|  - Pass Electronic KYC (Manual Queue):  55% (11,000 Users)                  |
-|  - Completed Initial Account Deposit:   40% (4,400 Funded Accounts)         |
-|  - Blended CAC at £100 Media Cost:      £454.55 per Funded Account          |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  OPTIMISED GAMING-GRADE FUNNEL (Jurnii UX Principles Applied):              |
-|  - Registered Signups:                  20,000 Users                        |
-|  - Pass Instant Multi-Source KYC:       88% (17,600 Users)                  |
-|  - Completed Open Banking Deposit:      78% (13,728 Funded Accounts)        |
-|  - Blended CAC at £100 Media Cost:      £145.68 per Funded Account          |
-|                                                                             |
-|  COMMERCIAL OUTCOME: 68% Reduction in Effective Acquisition Cost            |
-|                      +9,328 Incremental Funded Accounts per Month           |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Metric / Dimension** | **LEGACY FINTECH FUNNEL (Manual KYC & Wire Transfer)** | **OPTIMISED GAMING-GRADE FUNNEL (Jurnii UX Principles Applied)** |
+|---|---|---|
+| **LEGACY FINTECH FUNNEL (Manual KYC & Wire Transfer)** | - | - |
+| **Registered Signups** | 20,000 Users | 20,000 Users |
+| **Pass Electronic KYC (Manual Queue)** | 55% (11,000 Users) | - |
+| **Completed Initial Account Deposit** | 40% (4,400 Funded Accounts) | - |
+| **Blended CAC at £100 Media Cost** | £454.55 per Funded Account | £145.68 per Funded Account |
+| **OPTIMISED GAMING-GRADE FUNNEL (Jurnii UX Principles Applied)** | - | - |
+| **Pass Instant Multi-Source KYC** | - | 88% (17,600 Users) |
+| **Completed Open Banking Deposit** | - | 78% (13,728 Funded Accounts) |
+| **COMMERCIAL OUTCOME** | - | 68% Reduction in Effective Acquisition Cost |
 
 ## The 4-Stage Fintech Onboarding Engineering Playbook
 
 To implement a high-velocity compliance and deposit architecture, fintech engineering teams execute this structured roadmap:
 
-```
-+-----------------------------------------------------------------------------+
-|             Fintech Onboarding Velocity Engineering Playbook                |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ STAGE 1: CONSOLIDATE REGISTRATION ARCHITECTURE ]                         |
-|  Deploy progressive single-screen forms with automated address lookup APIs. |
-|                                                                             |
-|  [ STAGE 2: UPGRADE ELECTRONIC VERIFICATION CASCADES ]                      |
-|  Integrate multi-tier fallback databases with fuzzy matching logic.         |
-|                                                                             |
-|  [ STAGE 3: EMBED BIOMETRIC OPEN BANKING DEPOSITS ]                         |
-|  Replace manual bank transfers with in-app instant Open Banking rails.      |
-|                                                                             |
-|  [ STAGE 4: AUDIT TRANSACTIONAL TELEMETRY IN REAL-TIME ]                    |
-|  Monitor Jurnii UX journey scores to continuously eliminate form friction.  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **STAGE 1: CONSOLIDATE REGISTRATION ARCHITECTURE** | Deploy progressive single-screen forms with automated address lookup APIs. |
+| **STAGE 2: UPGRADE ELECTRONIC VERIFICATION CASCADES** | Integrate multi-tier fallback databases with fuzzy matching logic. |
+| **STAGE 3: EMBED BIOMETRIC OPEN BANKING DEPOSITS** | Replace manual bank transfers with in-app instant Open Banking rails. |
+| **STAGE 4: AUDIT TRANSACTIONAL TELEMETRY IN REAL-TIME** | Monitor Jurnii UX journey scores to continuously eliminate form friction. |
 
 ## The Fintech Verification Performance Scorecard
 
@@ -145,20 +103,12 @@ To evaluate the maturity of an onboarding funnel, fintech product teams monitor 
 
 Applying gaming verification telemetry to fintech onboarding unlocks massive operational efficiencies:
 
-```
-+-----------------------------------------------------------------------------+
-|               Fintech vs Gaming Verification Architecture Cross-Walk        |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  FUNNEL COMPONENT       LEGACY FINTECH APPROACH     HIGH-VELOCITY GAMING    |
-|  -------------------------------------------------------------------------  |
-|  Identity Check         Document upload queue (24h) Instant electronic pass |
-|  Address Entry          Manual multi-field input    Postcode API autofill   |
-|  Initial Account Fund   Manual ACH/Wire transfer    Instant Biometric Cashier|
-|  Friction Remediation   Periodic ad-hoc redesigns   70+ ranked fixes in mins|
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **FUNNEL COMPONENT** | **LEGACY FINTECH APPROACH** | **HIGH-VELOCITY GAMING** |
+| --- | --- | --- |
+| **Identity Check** | Document upload queue (24h) Instant electronic pass | - |
+| **Address Entry** | Manual multi-field input | Postcode API autofill |
+| **Initial Account Fund** | Manual ACH/Wire transfer | Instant Biometric Cashier |
+| **Friction Remediation** | Periodic ad-hoc redesigns | 70+ ranked fixes in mins |
 
 Across 300+ analysed global platforms, applying gaming onboarding standards to fintech funnels lifts account activation rates by 34% and reduces operational verification review overhead by over 50%.
 
@@ -166,22 +116,11 @@ Across 300+ analysed global platforms, applying gaming onboarding standards to f
 
 Regulated sportsbooks have mastered client-side document verification to prevent customer drop-off during peak matchday registration surges:
 
-```
-+-----------------------------------------------------------------------------+
-|               Client-Side Verification Architecture                         |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. EDGE DETECTION: Real-time client-side boundary detection guides user to  |
-|     capture glare-free document photos on the first attempt (< 4% reject).  |
-|                                                                             |
-|  2. INSTANT OCR EXTRACTION: Device-level OCR extracts name and DOB,          |
-|     pre-populating verification fields instantly.                           |
-|                                                                             |
-|  3. PARALLEL DATABASE CASCADES: Background queries across multiple identity |
-|     credit bureaus clear 85%+ of users in under 3 seconds.                  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **1. EDGE DETECTION: Real-time client-side boundary detection guides user to** | capture glare-free document photos on the first attempt (< 4% reject). |
+| **2. INSTANT OCR EXTRACTION: Device-level OCR extracts name and DOB,** | pre-populating verification fields instantly. |
+| **3. PARALLEL DATABASE CASCADES: Background queries across multiple identity** | credit bureaus clear 85%+ of users in under 3 seconds. |
 
 FinTech platforms adopting this architecture eliminate KYC abandonment and dramatically reduce manual compliance review costs.
 
@@ -189,24 +128,11 @@ FinTech platforms adopting this architecture eliminate KYC abandonment and drama
 
 High-converting digital sportsbooks achieve 85%+ automated verification pass rates through intelligent identity cascades:
 
-```
-+-----------------------------------------------------------------------------+
-|               Multi-Tier Identity Verification Cascade                      |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ TIER 1: INSTANT ELECTORAL & CREDIT BUREAU LOOKUP (< 1.5s) ]              |
-|  - Automated matching of Name, DOB, and Address against credit databases.   |
-|  - Successfully clears 78% of UK and EU adult applicants immediately.       |
-|                                                                             |
-|  [ TIER 2: SECONDARY TELECOM & UTILITY API FALLBACK (< 1.5s) ]              |
-|  - Secondary verification against mobile network operator records.          |
-|  - Clears an additional 9% of thin-file or newly relocated applicants.      |
-|                                                                             |
-|  [ TIER 3: CLIENT-SIDE EDGE DOCUMENT SCANNING (< 15s) ]                     |
-|  - Frictionless mobile passport/driving license capture for remaining 13%.  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **TIER 1: INSTANT ELECTORAL & CREDIT BUREAU LOOKUP (< 1.5s)** | Automated matching of Name, DOB, and Address against credit databases. | Successfully clears 78% of UK and EU adult applicants immediately. |
+| **TIER 2: SECONDARY TELECOM & UTILITY API FALLBACK (< 1.5s)** | Secondary verification against mobile network operator records. | Clears an additional 9% of thin-file or newly relocated applicants. |
+| **TIER 3: CLIENT-SIDE EDGE DOCUMENT SCANNING (< 15s)** | Frictionless mobile passport/driving license capture for remaining 13%. | Empirical benchmark verified |
 
 Applying this multi-tier cascade eliminates onboarding friction, allowing fintech platforms to scale user acquisition efficiently.
 

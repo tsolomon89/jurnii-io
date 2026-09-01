@@ -31,27 +31,16 @@ A domain-trained [competitor AI insights](/features/competitor-ai-insights) plat
 
 To understand the limitations of off-the-shelf AI models, one must examine how general-purpose language models process iGaming data:
 
-```
-+-----------------------------------------------------------------------------+
-|               Generic LLMs vs Domain-Specific iGaming AI                    |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  DIMENSION          GENERIC LLMs (e.g. GPT-4)   DOMAIN-SPECIFIC AI (JURNII) |
-|  -------------------------------------------------------------------------  |
-|  Mathematical Context Interprets bonus numbers  Calculates True Expected    |
-|                     as literal cash value       Value (Promo Richness Index)|
-|                                                                             |
-|  Regulatory Acumen  Generic legal summaries;   Jurisdiction-specific        |
-|                     misses compliance nuances   compliance rule mapping     |
-|                                                                             |
-|  Transactional UX   Evaluates visual styling    Measures Core Web Vitals,   |
-|  Understanding      and decorative layout       LCP latency, and drop-off   |
-|                                                                             |
-|  Output Quality     Superficial executive       Actionable playbooks linked |
-|                     summaries and AI hype       directly to NGR and CAC     |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **DIMENSION** | **GENERIC LLMs (e.g. GPT-4)** | **DOMAIN-SPECIFIC AI (JURNII)** |
+| --- | --- | --- |
+| **Mathematical Context Interprets bonus numbers** | Calculates True Expected | - |
+| **as literal cash value** | Value (Promo Richness Index) | - |
+| **Regulatory Acumen** | Generic legal summaries; | Jurisdiction-specific |
+| **misses compliance nuances** | compliance rule mapping | - |
+| **Transactional UX** | Evaluates visual styling | Measures Core Web Vitals, |
+| **Understanding** | and decorative layout | LCP latency, and drop-off |
+| **Output Quality** | Superficial executive | Actionable playbooks linked |
+| **summaries and AI hype** | directly to NGR and CAC | - |
 
 ### 1. Inability to Compute Promotional Mathematics
 
@@ -73,34 +62,19 @@ When generic AI tools are asked to synthesize market trends, they default to rep
 
 A domain-specific AI engine operates through a specialized pipeline combining deterministic data normalisation, mathematical modeling, and structured retrieval-augmented generation (RAG):
 
-```
-+-----------------------------------------------------------------------------+
-|             Domain-Specific iGaming AI Processing Pipeline                  |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. STRUCTURED TELEMETRY INGESTION                                          |
-|     - Daily proposition feeds across 35+ global jurisdictions               |
-|     - Technical UX performance logs (LCP, INP, CLS, latency metrics)        |
-|     - Overround and pricing data across sportsbooks and casino lobbies      |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  2. DETERMINISTIC MATHEMATICAL SCORING LAYER                                |
-|     - Automated calculation of Promo Richness Index                         |
-|     - Conversion friction scoring across registration & deposit funnels     |
-|     - Statistical time-series anomaly detection                             |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  3. DOMAIN-CONSTRAINED REASONING ENGINE                                     |
-|     - Industry-specific knowledge graph (Operators, Brands, Licenses, Terms)|
-|     - Grounded factual retrieval (strictly prohibits ungrounded claims)     |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  4. BOARD-READY COMMERCIAL SYNTHESIS                                        |
-|     - Executive summaries with concrete metrics and historical deltas       |
-|     - Tactical recommendations for Trading, Product, and Marketing leads    |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Metric / Dimension** | **- Technical UX performance logs (LCP, INP, CLS, latency metrics)** | **- Industry-specific knowledge graph (Operators, Brands, Licenses, Terms)** |
+|---|---|---|
+| **Daily proposition feeds across 35+ global jurisdictions** | - | - |
+| **Technical UX performance logs (LCP, INP, CLS, latency metrics)** | - | - |
+| **Overround and pricing data across sportsbooks and casino lobbies** | - | - |
+| **Automated calculation of Promo Richness Index** | - | - |
+| **Conversion friction scoring across registration & deposit funnels** | - | - |
+| **Statistical time-series anomaly detection** | - | - |
+| **------------------------------------------------------------------------** | - | - |
+| **Industry-specific knowledge graph (Operators, Brands, Licenses, Terms)** | - | - |
+| **Grounded factual retrieval (strictly prohibits ungrounded claims)** | - | - |
+| **Executive summaries with concrete metrics and historical deltas** | - | - |
+| **Tactical recommendations for Trading, Product, and Marketing leads** | - | - |
 
 ### 1. Structured Telemetry Ingestion
 
@@ -125,27 +99,9 @@ The model outputs structured commercial intelligence written in the voice of a s
 
 When domain-specific AI synthesis is embedded into executive operations, it streamlines commercial decision-making across the enterprise:
 
-```
-+-----------------------------------------------------------------------------+
-|                  Executive Applications of Domain-Specific AI               |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  EXECUTIVE ROLE          AI INTELLIGENCE DELIVERABLE                        |
-|  -------------------------------------------------------------------------  |
-|  Chief Executive Officer - Weekly Executive Radar: Multi-brand market share |
-|                          shifts and regulatory positioning adjustments.     |
-|                                                                             |
-|  Chief Commercial Officer- Proposition Generosity Matrix: Identification of |
-|                          rival bonus concessions and margin risks.          |
-|                                                                             |
-|  Chief Marketing Officer - Acquisition Channel Synthesis: Analysis of rival |
-|                          paid search, affiliate, and CRM messaging tactics. |
-|                                                                             |
-|  Chief Product Officer   - UX Benchmarking Dossier: Ranked, commercially    |
-|                          weighted recommendations to eliminate friction.    |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **EXECUTIVE ROLE** | **AI INTELLIGENCE DELIVERABLE** |
+| --- | --- |
+| **Chief Product Officer** | - UX Benchmarking Dossier: Ranked, commercially weighted recommendations to eliminate friction. |
 
 ### 1. Weekly Executive Synthesis for the C-Suite
 
@@ -168,27 +124,11 @@ When product teams evaluate feature backlogs, the AI correlates technical UX aud
 
 To eliminate hallucination and deliver audit-grade intelligence, Jurnii grounds its AI reasoning engine in deterministic telemetry across the four foundational layers of the platform:
 
-```
-+-----------------------------------------------------------------------------+
-|               Jurnii Domain AI Intelligence Layer Foundations               |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. JURNII UX AUDIT TELEMETRY ("See what your customers see")              |
-|     - Continuous analysis of 300+ iGaming brands across 4 categories:       |
-|       Journey Effectiveness, Usability, Performance, Perception             |
-|     - 70+ commercially weighted recommendations per audit delivered in mins |
-|                                                                             |
-|  2. JURNII 360 PROPOSITION RADAR ("See what your competitors launch")      |
-|     - Real-time tracking across 21 feature areas and 35+ jurisdictions      |
-|     - 1,000+ offers tracked weekly; 100% automated move capture             |
-|     - Proprietary Promo Richness Index quantifying generosity vs house edge |
-|                                                                             |
-|  3. JURNII CORTEX ATTRIBUTION ENGINE                                        |
-|     - Econometric Marketing Mix Modelling (MMM) isolating incremental ROI   |
-|     - Causal impact models evaluating competitive campaign shocks           |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. JURNII UX AUDIT TELEMETRY ("See what your customers see")** | Continuous analysis of 300+ iGaming brands across 4 categories: Journey Effectiveness, Usability, Performance, Perception | 70+ commercially weighted recommendations per audit delivered in mins |
+| **2. JURNII 360 PROPOSITION RADAR ("See what your competitors launch")** | Real-time tracking across 21 feature areas and 35+ jurisdictions | 1,000+ offers tracked weekly; 100% automated move capture; Proprietary Promo Richness Index quantifying generosity vs house edge |
+| **3. JURNII CORTEX ATTRIBUTION ENGINE** | Econometric Marketing Mix Modelling (MMM) isolating incremental ROI | Causal impact models evaluating competitive campaign shocks |
 
 ## Factual Grounding: The Antidote to AI Hallucination
 

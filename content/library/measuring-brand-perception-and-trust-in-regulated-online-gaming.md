@@ -31,33 +31,13 @@ To safeguard commercial sustainability, operators must actively measure and opti
 
 Jurnii audits brand perception across five concrete operational pillars:
 
-```
-+-----------------------------------------------------------------------------+
-|               The 5 Pillars of iGaming Trust Architecture                   |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. PAYMENT INTEGRITY & WITHDRAWAL SPEED                                    |
-|     - Fast, transparent payout processing (< 5 minutes via Open Banking)   |
-|     - Absence of artificial reverse-withdrawal retention delays             |
-|                                                                             |
-|  2. PROMOTIONAL AND WAGERING TRANSPARENCY                                   |
-|     - Clear, high-contrast display of wagering multiples and caps          |
-|     - Zero hidden clauses or unfair bonus cancellation conditions           |
-|                                                                             |
-|  3. ONBOARDING & VERIFICATION ELEGANCE                                      |
-|     - Automated, privacy-conscious electronic KYC lookup                   |
-|     - Transparent explanations for additional document verification requests|
-|                                                                             |
-|  4. PROACTIVE SAFER GAMBLING INTEGRATION                                    |
-|     - Frictionless access to deposit limits, reality checks, and cool-off tools|
-|     - Responsible gambling presented as a consumer utility, not a barrier   |
-|                                                                             |
-|  5. REGULATORY DISCLOSURE & SECURITY PROOF POINTS                           |
-|     - Prominent licensing badges (UKGC, MGA, AGCO, etc.)                    |
-|     - Clear links to independent dispute resolution (IBAS, eCOGRA)          |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. PAYMENT INTEGRITY & WITHDRAWAL SPEED** | Fast, transparent payout processing (< 5 minutes via Open Banking) | Absence of artificial reverse-withdrawal retention delays |
+| **2. PROMOTIONAL AND WAGERING TRANSPARENCY** | Clear, high-contrast display of wagering multiples and caps | Zero hidden clauses or unfair bonus cancellation conditions |
+| **3. ONBOARDING & VERIFICATION ELEGANCE** | Automated, privacy-conscious electronic KYC lookup | Transparent explanations for additional document verification requests |
+| **4. PROACTIVE SAFER GAMBLING INTEGRATION** | Frictionless access to deposit limits, reality checks, and cool-off tools | Responsible gambling presented as a consumer utility, not a barrier |
+| **5. REGULATORY DISCLOSURE & SECURITY PROOF POINTS** | Prominent licensing badges (UKGC, MGA, AGCO, etc.) | Clear links to independent dispute resolution (IBAS, eCOGRA) |
 
 ### 1. Payment Integrity and Withdrawal Velocity
 
@@ -91,27 +71,10 @@ Traditional brand perception tracking relies on quarterly consumer surveys or Ne
 
 Jurnii audits brand perception through structured operational heuristics and public sentiment telemetry:
 
-```
-+-----------------------------------------------------------------------------+
-|                 Jurnii Brand Perception Scoring Framework                   |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  DIMENSION                      DATA SOURCES & HEURISTICS                   |
-|  -------------------------------------------------------------------------  |
-|  Operational Transparency Score Audits of terms clarity, withdrawal rules,  |
-|                                 and regulatory disclosures.                 |
-|                                                                             |
-|  External Sentiment Index       Natural language analysis across Trustpilot,|
-|                                 Reddit, betting forums, and App Store logs. |
-|                                                                             |
-|  Regulatory Risk Score          Longitudinal compliance enforcement audits  |
-|                                 and advertising standards precedents.       |
-|                                                                             |
-|  =========================================================================  |
-|  COMPOSITE PERCEPTION RATING (0 - 100 Index)                                |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **DIMENSION** | **DATA SOURCES & HEURISTICS** |
+| --- | --- |
+| **External Sentiment Index** | Natural language analysis across Trustpilot, Reddit, betting forums, and App Store logs. |
+| **Regulatory Risk Score** | Longitudinal compliance enforcement audits and advertising standards precedents. ========================================================================= COMPOSITE PERCEPTION RATING (0 - 100 Index) |
 
 ### 1. Operational Transparency Audits
 
@@ -129,53 +92,22 @@ Auditing the platform against regulatory codes ensures the brand maintains high 
 
 Investing in trust architecture delivers clear commercial dividends:
 
-```
-+-----------------------------------------------------------------------------+
-|                     The Commercial ROI of High Trust                        |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. LOWER BLENDED CUSTOMER ACQUISITION COSTS (CAC)                          |
-|     - Positive organic word-of-mouth and high App Store ratings lift        |
-|       organic registration volumes by 20-35%.                               |
-|                                                                             |
-|  2. ELEVATED PLAYER LIFETIME VALUE (LTV)                                    |
-|     - Players who experience fast, reliable withdrawals deposit 40% more   |
-|       over their first 12 months than players who experience payment delays.|
-|                                                                             |
-|  3. REDUCED COMPLIANCE AND DISPUTE COSTS                                    |
-|     - Clear terms and transparent mechanics reduce chargebacks and customer |
-|       support dispute volume by over 50%.                                   |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **1. LOWER BLENDED CUSTOMER ACQUISITION COSTS (CAC)** | Positive organic word-of-mouth and high App Store ratings lift organic registration volumes by 20-35%. |
+| **2. ELEVATED PLAYER LIFETIME VALUE (LTV)** | Players who experience fast, reliable withdrawals deposit 40% more over their first 12 months than players who experience payment delays. |
+| **3. REDUCED COMPLIANCE AND DISPUTE COSTS** | Clear terms and transparent mechanics reduce chargebacks and customer support dispute volume by over 50%. |
 
 ## The Perception Category in Jurnii UX Auditing
 
 Within [Jurnii UX](/products/jurnii-ux), the Perception category accounts for 20% of the composite Brand Meta Score, evaluating four key operational pillars:
 
-```
-+-----------------------------------------------------------------------------+
-|               Perception Category Telemetry in Jurnii UX                    |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. TRANSPARENT PROMOTIONAL COMMUNICATION                                   |
-|     - Prominence of turnover multiples, expiry windows, and cash payout caps|
-|     - Zero dark patterns or hidden opt-in checkboxes                        |
-|                                                                             |
-|  2. SAFER GAMBLING & REGULATORY COMPLIANCE INTEGRATION                      |
-|     - Frictionless deposit limit selectors embedded directly in cashier UI  |
-|     - Prominent reality checks and single-tap cooling-off triggers          |
-|                                                                             |
-|  3. CASHIER INTEGRITY & WITHDRAWAL CERTAINTY                                |
-|     - Real-time visual progress trackers for pending payouts                |
-|     - Explicit fee disclosures and payout timing guarantees                 |
-|                                                                             |
-|  4. SOCIAL PROOF & REGULATORY JURISDICTION ACCREDITATION                    |
-|     - Official regulatory licensing badges (UKGC, MGA, AGCO, SPA) in header |
-|     - High-visibility customer dispute arbitration affiliations (IBAS, eCOGRA)|
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. TRANSPARENT PROMOTIONAL COMMUNICATION** | Prominence of turnover multiples, expiry windows, and cash payout caps | Zero dark patterns or hidden opt-in checkboxes |
+| **2. SAFER GAMBLING & REGULATORY COMPLIANCE INTEGRATION** | Frictionless deposit limit selectors embedded directly in cashier UI | Prominent reality checks and single-tap cooling-off triggers |
+| **3. CASHIER INTEGRITY & WITHDRAWAL CERTAINTY** | Real-time visual progress trackers for pending payouts | Explicit fee disclosures and payout timing guarantees |
+| **4. SOCIAL PROOF & REGULATORY JURISDICTION ACCREDITATION** | Official regulatory licensing badges (UKGC, MGA, AGCO, SPA) in header | High-visibility customer dispute arbitration affiliations (IBAS, eCOGRA) |
 
 Across 300+ analysed global brands, operators scoring above 80/100 in Perception experience 38% higher 90-day retention and generate significantly higher organic brand search volume.
 
@@ -183,20 +115,12 @@ Across 300+ analysed global brands, operators scoring above 80/100 in Perception
 
 Empirical telemetry gathered across 300+ analysed gaming brands proves that player retention is directly correlated with perceived platform trust:
 
-```
-+-----------------------------------------------------------------------------+
-|               Perception Score vs 90-Day Retention Telemetry                |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  PERCEPTION TIER        AVG 90-DAY RETENTION        ANNUAL PLAYER LTV       |
-|  -------------------------------------------------------------------------  |
-|  Top Decile (90-100)    42% Active Depositors       £1,240 / Player         |
-|  Competitive (75-89)    28% Active Depositors       £780 / Player           |
-|  Mid-Market (60-74)     18% Active Depositors       £420 / Player           |
-|  High Friction (< 60)   9% Active Depositors        £190 / Player           |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **PERCEPTION TIER** | **AVG 90-DAY RETENTION** | **ANNUAL PLAYER LTV** |
+| --- | --- | --- |
+| **Top Decile (90-100)** | 42% Active Depositors | £1,240 / Player |
+| **Competitive (75-89)** | 28% Active Depositors | £780 / Player |
+| **Mid-Market (60-74)** | 18% Active Depositors | £420 / Player |
+| **High Friction (< 60)** | 9% Active Depositors | £190 / Player |
 
 When an operator resolves transparency issues (such as making withdrawal terms clear and displaying licensing badges prominently), player retention expands rapidly, lifting long-term Gross Gaming Revenue.
 

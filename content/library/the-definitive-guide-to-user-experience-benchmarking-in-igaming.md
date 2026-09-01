@@ -31,33 +31,12 @@ To build a defensible commercial advantage, operators must implement comprehensi
 
 Jurnii evaluates digital gaming platforms across four comprehensive pillars:
 
-```
-+-----------------------------------------------------------------------------+
-|               The 4 Core Pillars of iGaming UX Benchmarking                 |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. JOURNEY EFFECTIVENESS                                                   |
-|     - Registration completion rate and identity verification latency        |
-|     - First Time Deposit (FTD) conversion velocity and payment method depth |
-|     - Betslip submission speed and casino game initialization               |
-|                                                                             |
-|  2. USABILITY HEURISTICS                                                    |
-|     - Information architecture, navigation depth, and discovery efficiency  |
-|     - Error prevention, validation clarity, and recovery workflows          |
-|     - Cognitive load reduction and visual data hierarchy                   |
-|                                                                             |
-|  3. TECHNICAL PERFORMANCE                                                   |
-|     - Largest Contentful Paint (LCP) under real-world mobile network limits |
-|     - Interaction to Next Paint (INP) tactile UI responsiveness             |
-|     - Cumulative Layout Shift (CLS) on dynamic live odds feeds              |
-|                                                                             |
-|  4. PERCEPTION & TRUST ARCHITECTURE                                         |
-|     - Regulatory licensing prominence and safer gambling accessibility      |
-|     - Payment fee clarity and withdrawal condition transparency             |
-|     - Customer dispute resolution and security proof points                 |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. JOURNEY EFFECTIVENESS** | Registration completion rate and identity verification latency | First Time Deposit (FTD) conversion velocity and payment method depth; Betslip submission speed and casino game initialization |
+| **2. USABILITY HEURISTICS** | Information architecture, navigation depth, and discovery efficiency | Error prevention, validation clarity, and recovery workflows; Cognitive load reduction and visual data hierarchy |
+| **3. TECHNICAL PERFORMANCE** | Largest Contentful Paint (LCP) under real-world mobile network limits | Interaction to Next Paint (INP) tactile UI responsiveness; Cumulative Layout Shift (CLS) on dynamic live odds feeds |
+| **4. PERCEPTION & TRUST ARCHITECTURE** | Regulatory licensing prominence and safer gambling accessibility | Payment fee clarity and withdrawal condition transparency; Customer dispute resolution and security proof points |
 
 ### 1. Journey Effectiveness: Transactional Velocity
 
@@ -92,23 +71,12 @@ Perception evaluates how operational transparency builds player trust:
 
 To aggregate disparate qualitative heuristics and technical metrics into an executive-level KPI, Jurnii computes the **Brand Meta Score**:
 
-```
-+-----------------------------------------------------------------------------+
-|                 Brand Meta Score Composition & Thresholds                   |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  Formula:                                                                   |
-|  Meta Score = (0.30 x Journey) + (0.25 x Usability) +                       |
-|               (0.25 x Performance) + (0.20 x Perception)                    |
-|                                                                             |
-|  Score Tiers:                                                               |
-|  - 90 - 100: Market Leader (Frictionless, sub-second transactional speed)   |
-|  - 75 - 89:  Competitive Tier-1 (Solid execution; minor UX friction)       |
-|  - 60 - 74:  Mid-Market Standard (Noticeable conversion leakage)            |
-|  - < 60:     Critical Commercial Risk (High churn & payment drop-off)       |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Evaluation Variable** | **Benchmark Standard / Impact** |
+|---|---|
+| **90 - 100** | Market Leader (Frictionless, sub-second transactional speed) |
+| **75 - 89** | Competitive Tier-1 (Solid execution; minor UX friction) |
+| **60 - 74** | Mid-Market Standard (Noticeable conversion leakage) |
+| **< 60** | Critical Commercial Risk (High churn & payment drop-off) |
 
 By scoring platforms on a standardized 0 to 100 index within [Jurnii UX](/products/jurnii-ux), leadership teams compare digital performance across multi-brand portfolios and benchmark directly against tier-1 competitors.
 
@@ -116,46 +84,24 @@ By scoring platforms on a standardized 0 to 100 index within [Jurnii UX](/produc
 
 A benchmark audit is valuable only when it translates into operational remediation. Jurnii converts audit findings into prioritised, commercially weighted backlog tickets:
 
-```
-+-----------------------------------------------------------------------------+
-|               From Benchmark Finding to Engineering Execution               |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ BENCHMARK FINDING ]                                                      |
-|  Deposit journey scores 48/100 due to 3-step cashier modal and missing      |
-|  biometric payment options on mobile.                                       |
-|                                                                             |
-|  [ COMMERCIAL ATTRIBUTION ]                                                 |
-|  Estimated 18% First Time Deposit drop-off resulting in £120,000 monthly    |
-|  lost Net Gaming Revenue.                                                   |
-|                                                                             |
-|  [ ACTIONABLE JIRA SPECIFICATION ]                                          |
-|  Integrate Apple Pay / Pix single-tap deposit drawer; display minimum       |
-|  deposit limits inline.                                                     |
-|                                                                             |
-|  [ POST-DEPLOYMENT VERIFICATION ]                                           |
-|  Re-audit journey score (lifts to 88/100); verify +22% lift in FTD volume.  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **BENCHMARK FINDING** | Deposit journey scores 48/100 due to 3-step cashier modal and missing biometric payment options on mobile. |
+| **COMMERCIAL ATTRIBUTION** | Estimated 18% First Time Deposit drop-off resulting in £120,000 monthly lost Net Gaming Revenue. |
+| **ACTIONABLE JIRA SPECIFICATION** | Integrate Apple Pay / Pix single-tap deposit drawer; display minimum deposit limits inline. |
+| **POST-DEPLOYMENT VERIFICATION** | Re-audit journey score (lifts to 88/100); verify +22% lift in FTD volume. |
 
 ## The 5 Core Customer Journeys Evaluated in Jurnii UX
 
 Under the Journey Effectiveness category, Jurnii UX rigorously audits the five customer funnels that dictate operator conversion yield:
 
-```
-+-----------------------------------------------------------------------------+
-|               The 5 Core Customer Journeys in iGaming                       |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. REGISTRATION & ONBOARDING (Form fields, address APIs, mobile keypad)    |
-|  2. ELECTRONIC KYC & IDENTITY VERIFICATION (Instant lookup pass rates)      |
-|  3. FIRST TIME DEPOSIT & CASHIER VELOCITY (In-context biometric drawer)     |
-|  4. BETSLIP & IN-PLAY WAGERING (Sub-100ms INP, odds drift toggles)          |
-|  5. WITHDRAWAL & ACCOUNT MANAGEMENT (Open Banking automated payouts < 3m)   |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **1. REGISTRATION & ONBOARDING (Form fields, address APIs, mobile keypad)** | - |
+| **2. ELECTRONIC KYC & IDENTITY VERIFICATION (Instant lookup pass rates)** | - |
+| **3. FIRST TIME DEPOSIT & CASHIER VELOCITY (In-context biometric drawer)** | - |
+| **4. BETSLIP & IN-PLAY WAGERING (Sub-100ms INP, odds drift toggles)** | - |
+| **5. WITHDRAWAL & ACCOUNT MANAGEMENT (Open Banking automated payouts < 3m)** | - |
 
 Across 300+ analysed global brands, platforms that systematically benchmark these 5 journeys against market best practice achieve 28% higher First Time Deposit conversion and retain 35% more active players at Day 90.
 
@@ -163,28 +109,13 @@ Across 300+ analysed global brands, platforms that systematically benchmark thes
 
 Jurnii UX benchmarks every operator across the complete five-funnel customer lifecycle:
 
-```
-+-----------------------------------------------------------------------------+
-|               The Complete 5-Funnel Audit Protocol                          |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. REGISTRATION FUNNEL                                                     |
-|     - Time-to-complete, field count, postcode API integration               |
-|                                                                             |
-|  2. ELECTRONIC IDENTITY VERIFICATION (KYC)                                  |
-|     - Background database lookup pass rate (Target: > 85%)                  |
-|                                                                             |
-|  3. FIRST TIME DEPOSIT & CASHIER CHECKOUT                                   |
-|     - In-context slide-out drawer, biometric Apple Pay / Pix rails          |
-|                                                                             |
-|  4. BETSLIP & IN-PLAY TRANSACTION VELOCITY                                  |
-|     - Sub-100ms INP responsiveness, dynamic odds drift acceptance toggles   |
-|                                                                             |
-|  5. WITHDRAWAL & SAFER GAMBLING GOVERNANCE                                  |
-|     - Automated Open Banking payout (< 3 minutes), clear limits selectors   |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **1. REGISTRATION FUNNEL** | Time-to-complete, field count, postcode API integration |
+| **2. ELECTRONIC IDENTITY VERIFICATION (KYC)** | Background database lookup pass rate (Target: > 85%) |
+| **3. FIRST TIME DEPOSIT & CASHIER CHECKOUT** | In-context slide-out drawer, biometric Apple Pay / Pix rails |
+| **4. BETSLIP & IN-PLAY TRANSACTION VELOCITY** | Sub-100ms INP responsiveness, dynamic odds drift acceptance toggles |
+| **5. WITHDRAWAL & SAFER GAMBLING GOVERNANCE** | Automated Open Banking payout (< 3 minutes), clear limits selectors |
 
 Continuously auditing these five funnels ensures that operators eliminate silent conversion leakage and maximize player lifetime value.
 
@@ -192,19 +123,12 @@ Continuously auditing these five funnels ensures that operators eliminate silent
 
 Gaming operators advance through four distinct stages of UX maturity:
 
-```
-+-----------------------------------------------------------------------------+
-|               iGaming UX Maturity Progression Model                         |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  STAGE 1: AD-HOC (Subjective internal opinions, no structured benchmarking) |
-|  STAGE 2: REACTIVE (Periodic agency heuristic reviews after churn spikes)   |
-|  STAGE 3: SYSTEMATIC (Continuous RUM metrics, Core Web Vitals monitoring)   |
-|  STAGE 4: CONTINUOUS INTELLIGENCE (Always-on Jurnii UX benchmarking across  |
-|           300+ competitors with 70+ commercially weighted recommendations)  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Evaluation Variable** | **Benchmark Standard / Impact** |
+|---|---|
+| **STAGE 1** | AD-HOC (Subjective internal opinions, no structured benchmarking) |
+| **STAGE 2** | REACTIVE (Periodic agency heuristic reviews after churn spikes) |
+| **STAGE 3** | SYSTEMATIC (Continuous RUM metrics, Core Web Vitals monitoring) |
+| **STAGE 4** | CONTINUOUS INTELLIGENCE (Always-on Jurnii UX benchmarking across |
 
 Reaching Stage 4 maturity enables product teams to see what their customers see and eliminate friction before revenue is lost.
 

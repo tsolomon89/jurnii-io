@@ -10,7 +10,8 @@
     "api/v1/bookings/[id]/status.js": { "maxDuration": 30 },
     "api/v1/internal/jobs/run.js": { "maxDuration": 60 },
     "api/v1/internal/jobs/retention.js": { "maxDuration": 60 },
-    "api/v1/internal/journeys/[id]/resolve.js": { "maxDuration": 60 }
+    "api/v1/internal/journeys/[id]/resolve.js": { "maxDuration": 60 },
+    "api/v1/internal/lemlist-sync.js": { "maxDuration": 60 }
   },
   "headers": [
     {
@@ -30,6 +31,10 @@
     {
       "path": "/api/v1/internal/jobs/retention",
       "schedule": "15 3 * * *"
+    },
+    {
+      "path": "/api/v1/internal/lemlist-sync",
+      "schedule": "30 4 * * *"
     }
   ],
   "rewrites": [

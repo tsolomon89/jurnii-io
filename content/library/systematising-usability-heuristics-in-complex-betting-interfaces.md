@@ -31,45 +31,17 @@ To eliminate cognitive friction and ensure frictionless interaction flow, produc
 
 Generic usability checklists designed for e-commerce or blogs fail when applied to sportsbooks and casinos. Jurnii evaluates gaming platforms across nine domain-specific heuristics:
 
-```
-+-----------------------------------------------------------------------------+
-|               9 Domain-Adapted Usability Heuristics for iGaming             |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. VISIBILITY OF TRANSACTIONAL SYSTEM STATUS                               |
-|     - Instant visual confirmation of betslip updates and odds price changes |
-|     - Unambiguous deposit and withdrawal processing state feedback          |
-|                                                                             |
-|  2. MATCH BETWEEN SYSTEM AND THE REAL BETTOR'S MENTAL MODEL                 |
-|     - Natural sports terminology and intuitive coupon groupings             |
-|     - Standardised casino category taxonomy (Slots, Live, Megaways, Drops)  |
-|                                                                             |
-|  3. USER CONTROL AND FREEDOM (ERROR RECOVERY)                               |
-|     - One-tap removal of betslip selections and clear cash-out cancel paths |
-|     - Frictionless editing of deposit amounts without resetting the cashier |
-|                                                                             |
-|  4. CONSISTENCY ACROSS PLATFORMS AND SURFACES                               |
-|     - Identical iconography, odds displays, and account menus on Web & App  |
-|                                                                             |
-|  5. ERROR PREVENTION IN BET PLACEMENT                                       |
-|     - Explicit alerts for conflicting accumulator selections                |
-|     - Minimum and maximum stake boundary warnings before submission         |
-|                                                                             |
-|  6. RECOGNITION RATHER THAN RECALL                                          |
-|     - Persistent search bars with recent teams and popular leagues auto-fill|
-|     - Recently played casino games prominently anchored in lobby header     |
-|                                                                             |
-|  7. FLEXIBILITY AND SPEED FOR RECREATIONAL VS EXPERT BETTORS               |
-|     - Simplified single-tap bets for casuals; multi-market grids for experts|
-|                                                                             |
-|  8. AESTHETIC INTEGRITY AND DATA DENSITY                                    |
-|     - High typographic contrast and zero distracting decorative clutter     |
-|                                                                             |
-|  9. TRANSPARENCY OF REGULATORY DISCLOSURES AND SAFER GAMBLING               |
-|     - Accessible reality checks, deposit limits, and clear wagering terms   |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. VISIBILITY OF TRANSACTIONAL SYSTEM STATUS** | Instant visual confirmation of betslip updates and odds price changes | Unambiguous deposit and withdrawal processing state feedback |
+| **2. MATCH BETWEEN SYSTEM AND THE REAL BETTOR'S MENTAL MODEL** | Natural sports terminology and intuitive coupon groupings | Standardised casino category taxonomy (Slots, Live, Megaways, Drops) |
+| **3. USER CONTROL AND FREEDOM (ERROR RECOVERY)** | One-tap removal of betslip selections and clear cash-out cancel paths | Frictionless editing of deposit amounts without resetting the cashier |
+| **4. CONSISTENCY ACROSS PLATFORMS AND SURFACES** | Identical iconography, odds displays, and account menus on Web & App | Empirical benchmark verified |
+| **5. ERROR PREVENTION IN BET PLACEMENT** | Explicit alerts for conflicting accumulator selections | Minimum and maximum stake boundary warnings before submission |
+| **6. RECOGNITION RATHER THAN RECALL** | Persistent search bars with recent teams and popular leagues auto-fill | Recently played casino games prominently anchored in lobby header |
+| **7. FLEXIBILITY AND SPEED FOR RECREATIONAL VS EXPERT BETTORS** | Simplified single-tap bets for casuals; multi-market grids for experts | Empirical benchmark verified |
+| **8. AESTHETIC INTEGRITY AND DATA DENSITY** | High typographic contrast and zero distracting decorative clutter | Empirical benchmark verified |
+| **9. TRANSPARENCY OF REGULATORY DISCLOSURES AND SAFER GAMBLING** | Accessible reality checks, deposit limits, and clear wagering terms | Empirical benchmark verified |
 
 ### 1. Visibility of Transactional System Status
 
@@ -91,27 +63,16 @@ Effective interfaces employ predictive search with live thumbnail previews, cate
 
 To illustrate the commercial impact of usability heuristics, consider the standard betslip interaction journey audited in [Jurnii UX](/products/jurnii-ux):
 
-```
-+-----------------------------------------------------------------------------+
-|               High-Friction vs Low-Friction Betslip Journey                 |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  HIGH-FRICTION IMPLEMENTATION (Heuristic Violations)                        |
-|  1. User taps odds -> Full-screen modal covers the sports match list.       |
-|  2. User must manually close modal to browse other matches for accumulator. |
-|  3. Minimum stake error appears only after clicking "Place Bet".            |
-|  4. Odds change forces full betslip reset with zero explanation.            |
-|  Outcome: 38% Betslip Abandonment Rate                                      |
-|                                                                             |
-|  LOW-FRICTION IMPLEMENTATION (Jurnii Heuristic Standards)                   |
-|  1. User taps odds -> Selection docks smoothly into floating bottom ribbon. |
-|  2. User compiles 4 selections while continuing to browse match coupon.     |
-|  3. Inline presets (£5, £10, £25) display potential returns dynamically.   |
-|  4. Odds drift displays inline toggle: "Accept odds change (2.10 -> 2.25)?" |
-|  Outcome: 11% Betslip Abandonment Rate (71% Relative Improvement)           |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **1. User taps odds -> Full-screen modal covers the sports match list.** | - |
+| **2. User must manually close modal to browse other matches for accumulator.** | - |
+| **3. Minimum stake error appears only after clicking "Place Bet".** | - |
+| **4. Odds change forces full betslip reset with zero explanation.** | Outcome: 38% Betslip Abandonment Rate LOW-FRICTION IMPLEMENTATION (Jurnii Heuristic Standards) |
+| **1. User taps odds -> Selection docks smoothly into floating bottom ribbon.** | - |
+| **2. User compiles 4 selections while continuing to browse match coupon.** | - |
+| **3. Inline presets (£5, £10, £25) display potential returns dynamically.** | - |
+| **4. Odds drift displays inline toggle: "Accept odds change (2.10 -> 2.25)?"** | Outcome: 11% Betslip Abandonment Rate (71% Relative Improvement) |
 
 By eliminating structural heuristic violations in the betslip, an operator dramatically improves accumulator completion rates without spending an additional penny on customer acquisition marketing.
 
@@ -121,23 +82,11 @@ Usability cannot be a one-off audit conducted prior to platform launch. Every ne
 
 Implement a structured usability governance process:
 
-```
-+-----------------------------------------------------------------------------+
-|               Continuous Usability Governance Framework                     |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ DESIGN SYSTEM AUDIT ]                                                    |
-|  Verify that all new component patterns adhere to 9 iGaming heuristics.     |
-|                                                                             |
-|  [ REGULAR TASK TESTING ]                                                   |
-|  Conduct quarterly cognitive walkthroughs across core transactional funnels |
-|  (Registration, KYC, FTD, Betslip, Cash-Out).                               |
-|                                                                             |
-|  [ COMPETITIVE BENCHMARKING ]                                               |
-|  Benchmark usability sub-scores against direct market peers via Jurnii UX.  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **DESIGN SYSTEM AUDIT** | Verify that all new component patterns adhere to 9 iGaming heuristics. |
+| **REGULAR TASK TESTING** | Conduct quarterly cognitive walkthroughs across core transactional funnels (Registration, KYC, FTD, Betslip, Cash-Out). |
+| **COMPETITIVE BENCHMARKING** | Benchmark usability sub-scores against direct market peers via Jurnii UX. |
 
 ### 1. Quarterly Cognitive Walkthroughs
 
@@ -154,46 +103,32 @@ Score each funnel against the 9 heuristics, calculating a normalised 0-100 Usabi
 
 Within [Jurnii UX](/products/jurnii-ux), the Usability category systematically audits platforms against 9 domain-specific heuristics:
 
-```
-+-----------------------------------------------------------------------------+
-|               The 9 Domain Heuristics for iGaming Interfaces                |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. VISIBILITY OF SYSTEM STATE (Live score clock, odds suspension banners)  |
-|  2. MATCH BETWEEN SYSTEM & REAL WORLD (Familiar football team nomenclatures)|
-|  3. USER CONTROL & FREEDOM (One-tap betslip removal, undo stake inputs)     |
-|  4. CONSISTENCY & STANDARDS (Standardized odds format toggles, token reuse) |
-|  5. ERROR PREVENTION (Explicit stake caps, confirmation before cash-out)   |
-|  6. RECOGNITION OVER RECALL (Pre-populated favorite leagues and bets)      |
-|  7. FLEXIBILITY & EFFICIENCY OF USE (Quick-deposit presets: £10, £25, £50)  |
-|  8. AESTHETIC & MINIMALIST DESIGN (Zero clutter in high-frequency lobbies)  |
-|  9. ERROR RECOVERY & INLINE GUIDANCE (Dynamic payment decline alternatives) |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **1. VISIBILITY OF SYSTEM STATE (Live score clock, odds suspension banners)** | - |
+| **2. MATCH BETWEEN SYSTEM & REAL WORLD (Familiar football team nomenclatures)** | - |
+| **3. USER CONTROL & FREEDOM (One-tap betslip removal, undo stake inputs)** | - |
+| **4. CONSISTENCY & STANDARDS (Standardized odds format toggles, token reuse)** | - |
+| **5. ERROR PREVENTION (Explicit stake caps, confirmation before cash-out)** | - |
+| **6. RECOGNITION OVER RECALL (Pre-populated favorite leagues and bets)** | - |
+| **7. FLEXIBILITY & EFFICIENCY OF USE (Quick-deposit presets: £10, £25, £50)** | - |
+| **8. AESTHETIC & MINIMALIST DESIGN (Zero clutter in high-frequency lobbies)** | - |
+| **9. ERROR RECOVERY & INLINE GUIDANCE (Dynamic payment decline alternatives)** | - |
 
 ## The Detailed Evaluation Rubric for Betting Usability
 
 To eliminate subjectivity from UX audits, Jurnii UX applies a quantitative evaluation rubric across every interaction step:
 
-```
-+-----------------------------------------------------------------------------+
-|               iGaming Usability Scoring Rubric (0 to 100)                   |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  HEURISTIC DIMENSION       AUDIT CRITERIA                  MAX SCORE        |
-|  -------------------------------------------------------------------------  |
-|  System State Visibility   Live score & price update delay < 250ms  15 Pts  |
-|  Real-World Match          Intuitive sports nomenclature & icons    10 Pts  |
-|  User Control & Undo       1-tap betslip removal & clear-all CTA    10 Pts  |
-|  Design Consistency        Standardized design tokens & spacing     10 Pts  |
-|  Error Prevention          Stake confirmation & max liability alert 15 Pts  |
-|  Recognition over Recall   Quick-access favorites & past bets       10 Pts  |
-|  Efficiency of Use         Quick-deposit selectors (£10, £20, £50)  15 Pts  |
-|  Minimalist Layout         Zero extraneous clutter in live lobbies  15 Pts  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **HEURISTIC DIMENSION** | **AUDIT CRITERIA** | **MAX SCORE** |
+| --- | --- | --- |
+| **System State Visibility** | Live score & price update delay < 250ms | 15 Pts |
+| **Real-World Match** | Intuitive sports nomenclature & icons | 10 Pts |
+| **User Control & Undo** | 1-tap betslip removal & clear-all CTA | 10 Pts |
+| **Design Consistency** | Standardized design tokens & spacing | 10 Pts |
+| **Error Prevention** | Stake confirmation & max liability alert 15 Pts | - |
+| **Recognition over Recall** | Quick-access favorites & past bets | 10 Pts |
+| **Efficiency of Use** | Quick-deposit selectors (£10, £20, £50) | 15 Pts |
+| **Minimalist Layout** | Zero extraneous clutter in live lobbies | 15 Pts |
 
 Auditing interfaces against this deterministic rubric ensures that product teams receive objective, reproducible evidence that eliminates internal debate and accelerates backlog prioritisation.
 

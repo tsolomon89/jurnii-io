@@ -33,33 +33,17 @@ To achieve sustainable CAC reduction, operators must implement [customer acquisi
 
 To understand why onboarding optimisation is the most powerful lever for CAC reduction, consider the mathematical relationship between funnel conversion and effective acquisition cost:
 
-```
-+-----------------------------------------------------------------------------+
-|               The Mathematical Mechanics of Funnel CAC Reduction            |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  SCENARIO: Operator acquires 10,000 Landing Page Clicks at £3.00 CPC        |
-|  Total Media Spend = £30,000                                                |
-|                                                                             |
-|  BASELINE FUNNEL (Current Performance):                                     |
-|  - Landing Page to Registration Start:  30%  (3,000 users)                  |
-|  - Registration Start to Form Submit:   40%  (1,200 users)                  |
-|  - Form Submit to Electronic KYC Pass:  70%  (840 users)                    |
-|  - KYC Pass to First Time Deposit:      50%  (420 FTDs)                     |
-|  EFFECTIVE BLENDED CAC: £30,000 / 420 = £71.43 per FTD                      |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  OPTIMISED JURNII FUNNEL (Eliminating Frictional Bottlenecks):              |
-|  - Landing Page to Registration Start:  45%  (4,500 users)                  |
-|  - Registration Start to Form Submit:   65%  (2,925 users)                  |
-|  - Form Submit to Electronic KYC Pass:  85%  (2,486 users)                  |
-|  - KYC Pass to First Time Deposit:      75%  (1,864 FTDs)                   |
-|  EFFECTIVE BLENDED CAC: £30,000 / 1,864 = £16.09 per FTD                    |
-|                                                                             |
-|  COMMERCIAL OUTCOME: 77% CAC Reduction on the Exact Same Media Budget       |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Metric / Dimension** | **BASELINE FUNNEL (Current Performance)** | **OPTIMISED JURNII FUNNEL (Eliminating Frictional Bottlenecks)** |
+|---|---|---|
+| **SCENARIO** | Operator acquires 10,000 Landing Page Clicks at £3.00 CPC | - |
+| **BASELINE FUNNEL (Current Performance)** | - | - |
+| **Landing Page to Registration Start** | 30%  (3,000 users) | 45%  (4,500 users) |
+| **Registration Start to Form Submit** | 40%  (1,200 users) | 65%  (2,925 users) |
+| **Form Submit to Electronic KYC Pass** | 70%  (840 users) | 85%  (2,486 users) |
+| **KYC Pass to First Time Deposit** | 50%  (420 FTDs) | 75%  (1,864 FTDs) |
+| **EFFECTIVE BLENDED CAC** | £30,000 / 420 = £71.43 per FTD | £30,000 / 1,864 = £16.09 per FTD |
+| **OPTIMISED JURNII FUNNEL (Eliminating Frictional Bottlenecks)** | - | - |
+| **COMMERCIAL OUTCOME** | - | 77% CAC Reduction on the Exact Same Media Budget |
 
 As demonstrated above, modest, compounding improvements across each sequential stage of the onboarding funnel produce an exponential reduction in effective acquisition costs.
 
@@ -67,29 +51,12 @@ As demonstrated above, modest, compounding improvements across each sequential s
 
 Auditing over 300 gaming platforms via [Jurnii UX](/products/jurnii-ux) reveals four primary chokepoints where prospective depositors abandon:
 
-```
-+-----------------------------------------------------------------------------+
-|               The 4 High-Friction Chokepoints in Onboarding                 |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. THE MONOLITHIC REGISTRATION FORM                                        |
-|     - Multi-page redirects, missing field auto-focus, lack of postcode API |
-|     - Disabling mobile browser autofill attributes                          |
-|                                                                             |
-|  2. THE OPAQUE IDENTITY VERIFICATION (KYC) QUEUE                            |
-|     - Routing users to manual document upload without explaining why        |
-|     - Clunky mobile camera interfaces lacking auto-cropping and edge-detect |
-|                                                                             |
-|  3. THE DETACHED CASHIER REDIRECT                                           |
-|     - Forcing users out of the registration context to a generic /cashier   |
-|     - Missing single-tap biometric payment integrations (Apple Pay, Pix)   |
-|                                                                             |
-|  4. PROMOTIONAL TERMS AMBIGUITY                                             |
-|     - Hiding bonus claiming toggles or confusing users with promo codes     |
-|     - Unclear minimum deposit requirements displayed in fine print          |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. THE MONOLITHIC REGISTRATION FORM** | Multi-page redirects, missing field auto-focus, lack of postcode API | Disabling mobile browser autofill attributes |
+| **2. THE OPAQUE IDENTITY VERIFICATION (KYC) QUEUE** | Routing users to manual document upload without explaining why | Clunky mobile camera interfaces lacking auto-cropping and edge-detect |
+| **3. THE DETACHED CASHIER REDIRECT** | Forcing users out of the registration context to a generic /cashier | Missing single-tap biometric payment integrations (Apple Pay, Pix) |
+| **4. PROMOTIONAL TERMS AMBIGUITY** | Hiding bonus claiming toggles or confusing users with promo codes | Unclear minimum deposit requirements displayed in fine print |
 
 ### 1. The Monolithic Registration Form
 
@@ -107,25 +74,12 @@ Redirecting a newly registered user to an external cashier portal introduces imm
 
 To slash acquisition costs across your gaming operations, execute this structured four-step remediation roadmap:
 
-```
-+-----------------------------------------------------------------------------+
-|               Funnel CAC Optimization Engineering Playbook                  |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ STEP 1: CONSOLIDATE ONBOARDING ARCHITECTURE ]                            |
-|  Replace multi-page forms with single-screen progressive accordion flows.   |
-|                                                                             |
-|  [ STEP 2: INTEGRATE REAL-TIME ADDRESS & IDENTITY APIS ]                    |
-|  Enable automated postcode lookup and multi-source electronic KYC fallback. |
-|                                                                             |
-|  [ STEP 3: EMBED BIOMETRIC CASHIER OVERLAYS ]                              |
-|  Deploy in-context deposit drawers with Apple Pay, Pix, and Google Pay.     |
-|                                                                             |
-|  [ STEP 4: RECONCILE SAVED CAC AGAINST MARKETING BUDGETS ]                  |
-|  Reinvest CAC savings into high-yield upper-funnel brand media.             |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **STEP 1: CONSOLIDATE ONBOARDING ARCHITECTURE** | Replace multi-page forms with single-screen progressive accordion flows. |
+| **STEP 2: INTEGRATE REAL-TIME ADDRESS & IDENTITY APIS** | Enable automated postcode lookup and multi-source electronic KYC fallback. |
+| **STEP 3: EMBED BIOMETRIC CASHIER OVERLAYS** | Deploy in-context deposit drawers with Apple Pay, Pix, and Google Pay. |
+| **STEP 4: RECONCILE SAVED CAC AGAINST MARKETING BUDGETS** | Reinvest CAC savings into high-yield upper-funnel brand media. |
 
 ## Case Study: Cutting Blended CAC by 44% in a Regulated Market
 
@@ -149,20 +103,12 @@ A comprehensive funnel audit conducted via [Jurnii UX](/products/jurnii-ux) iden
 
 Within [Jurnii UX](/products/jurnii-ux), the onboarding funnel is audited against empirical conversion benchmarks:
 
-```
-+-----------------------------------------------------------------------------+
-|               Onboarding Funnel Telemetry Architecture                      |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  FUNNEL STAGE           TOP-DECILE BENCHMARK        COMMERCIAL IMPACT       |
-|  -------------------------------------------------------------------------  |
-|  Registration Time      < 45 seconds                +35% completion rate    |
-|  Electronic KYC Pass    > 85% background clearance  -40% manual review cost |
-|  First Deposit Speed    < 15 seconds (Biometric)    +48% FTD conversion     |
-|  Mobile Interaction INP < 80ms on keyboard inputs   0 dropped input events  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **FUNNEL STAGE** | **TOP-DECILE BENCHMARK** | **COMMERCIAL IMPACT** |
+| --- | --- | --- |
+| **Registration Time** | < 45 seconds | +35% completion rate |
+| **Electronic KYC Pass** | > 85% background clearance | -40% manual review cost |
+| **First Deposit Speed** | < 15 seconds (Biometric) | +48% FTD conversion |
+| **Mobile Interaction INP < 80ms on keyboard inputs** | 0 dropped input events | - |
 
 Across 300+ analysed global brands, optimising these three onboarding steps produces a 35-50% reduction in blended CAC without requiring any increase in advertising spend.
 
@@ -170,25 +116,15 @@ Across 300+ analysed global brands, optimising these three onboarding steps prod
 
 The relationship between onboarding completion rate and blended Customer Acquisition Cost is non-linear:
 
-```
-+-----------------------------------------------------------------------------+
-|               Onboarding Funnel Yield vs Blended CAC Model                  |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  PAID TRAFFIC SPEND: £100,000 (100,000 Clicks at £1.00 CPC)                 |
-|                                                                             |
-|  SCENARIO A (Baseline 15% Onboarding Yield):                                |
-|  - Completed Registrations: 15,000                                          |
-|  - 40% FTD Conversion: 6,000 First Time Depositors                         |
-|  - Blended Cost per Depositor: £16.67                                       |
-|                                                                             |
-|  SCENARIO B (Optimised 35% Onboarding Yield via Jurnii UX):                 |
-|  - Completed Registrations: 35,000                                          |
-|  - 48% FTD Conversion: 16,800 First Time Depositors                        |
-|  - Blended Cost per Depositor: £5.95 (64% Reduction in Acquisition CAC)     |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Evaluation Variable** | **Benchmark Standard / Impact** |
+|---|---|
+| **PAID TRAFFIC SPEND** | £100,000 (100,000 Clicks at £1.00 CPC) |
+| **Completed Registrations** | 15,000 |
+| **40% FTD Conversion** | 6,000 First Time Depositors |
+| **Blended Cost per Depositor** | £16.67 |
+| **Completed Registrations** | 35,000 |
+| **48% FTD Conversion** | 16,800 First Time Depositors |
+| **Blended Cost per Depositor** | £5.95 (64% Reduction in Acquisition CAC) |
 
 Optimizing onboarding flow yield delivers far greater financial utilise than attempting to reduce paid media ad bids.
 

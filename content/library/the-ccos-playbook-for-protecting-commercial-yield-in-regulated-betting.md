@@ -31,29 +31,12 @@ To defend margins and achieve consistent revenue growth, commercial leaders must
 
 A complete commercial framework equips the CCO across four core financial disciplines:
 
-```
-+-----------------------------------------------------------------------------+
-|               The 4 Strategic Pillars of the iGaming CCO Framework          |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. DYNAMIC PRICING & TRADING MARGIN GOVERNANCE                             |
-|     - Continuous benchmarking of sportsbook overrounds across sports        |
-|     - Surgical pricing adjustments balancing bet volume against risk        |
-|                                                                             |
-|  2. PROMOTIONAL YIELD & BONUS MARGIN CONTROL                                |
-|     - Promo Richness Index calculation across internal and competitor offers|
-|     - Eliminating bonus hunting arbitrage while maintaining acquisition pace|
-|                                                                             |
-|  3. HIGH-VELOCITY PLAYER & VIP YIELD PROTECTION                             |
-|     - Tailored cashback structures and margin-protective loyalty models     |
-|     - Sub-second execution and instant Open Banking payouts for VIPs        |
-|                                                                             |
-|  4. ECONOMETRIC REVENUE ATTRIBUTION & CAPITAL ALLOCATION                    |
-|     - Separating organic sporting tailwinds from marketing-generated yield  |
-|     - Reconciling affiliate CPA contracts against incremental net revenue   |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. DYNAMIC PRICING & TRADING MARGIN GOVERNANCE** | Continuous benchmarking of sportsbook overrounds across sports | Surgical pricing adjustments balancing bet volume against risk |
+| **2. PROMOTIONAL YIELD & BONUS MARGIN CONTROL** | Promo Richness Index calculation across internal and competitor offers | Eliminating bonus hunting arbitrage while maintaining acquisition pace |
+| **3. HIGH-VELOCITY PLAYER & VIP YIELD PROTECTION** | Tailored cashback structures and margin-protective loyalty models | Sub-second execution and instant Open Banking payouts for VIPs |
+| **4. ECONOMETRIC REVENUE ATTRIBUTION & CAPITAL ALLOCATION** | Separating organic sporting tailwinds from marketing-generated yield | Reconciling affiliate CPA contracts against incremental net revenue |
 
 ### 1. Dynamic Pricing and Overround Governance
 
@@ -75,51 +58,23 @@ The CCO uses econometric Marketing Mix Modelling within [Jurnii Cortex](/product
 
 To maintain profitability during market turbulence, the CCO executes disciplined decision playbooks:
 
-```
-+-----------------------------------------------------------------------------+
-|                  CCO Commercial Decision Action Matrix                      |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  MARKET SCENARIO                   CCO PLAYBOOK ACTION                      |
-|  -------------------------------------------------------------------------  |
-|  Rival launches aggressive         Deconstruct rival terms in Jurnii 360;   |
-|  headline bonus war                refuse to match loss-leading 50x bonus;  |
-|                                    counter-position on instant payout speed |
-|                                                                             |
-|  Turnover dips on marquee football Cross-reference overrounds; if pricing is|
-|  derby                             competitive, check Jurnii UX latency;    |
-|                                    resolve betslip friction immediately     |
-|                                                                             |
-|  Affiliate demands higher CPA      Audit incremental lift via Jurnii Cortex;|
-|  bounty rates                      shift underperforming partners to tiered |
-|                                    revenue-share linked to net yield        |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **MARKET SCENARIO** | **CCO PLAYBOOK ACTION** |
+| --- | --- |
+| **Rival launches aggressive** | Deconstruct rival terms in Jurnii 360; |
+| **headline bonus war** | refuse to match loss-leading 50x bonus; counter-position on instant payout speed Turnover dips on marquee football Cross-reference overrounds; if pricing is |
+| **derby** | competitive, check Jurnii UX latency; resolve betslip friction immediately |
+| **Affiliate demands higher CPA** | Audit incremental lift via Jurnii Cortex; |
+| **bounty rates** | shift underperforming partners to tiered revenue-share linked to net yield |
 
 ## Practical Executive Applications: Defending Commercial Margins
 
 Deploying a structured commercial intelligence engine delivers three vital business outcomes:
 
-```
-+-----------------------------------------------------------------------------+
-|                  Commercial Impact of the CCO Playbook                      |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. PROTECTED GROSS & NET GAMING MARGINS                                    |
-|     - Prevent margin races to the bottom by identifying competitor          |
-|       wagering restrictions and fine print constraints.                     |
-|                                                                             |
-|  2. ELIMINATED BONUS EQUITY ARBITRAGE                                       |
-|     - Save hundreds of thousands annually by tightening terms on channels   |
-|       exploited by professional bonus harvesting syndicates.                |
-|                                                                             |
-|  3. EVIDENCE-BASED BOARD REPORTING                                          |
-|     - Present C-suite colleagues and investors with clear, econometric      |
-|       proof of commercial performance and capital efficiency.               |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **1. PROTECTED GROSS & NET GAMING MARGINS** | Prevent margin races to the bottom by identifying competitor wagering restrictions and fine print constraints. |
+| **2. ELIMINATED BONUS EQUITY ARBITRAGE** | Save hundreds of thousands annually by tightening terms on channels exploited by professional bonus harvesting syndicates. |
+| **3. EVIDENCE-BASED BOARD REPORTING** | Present C-suite colleagues and investors with clear, econometric proof of commercial performance and capital efficiency. |
 
 ## Reconciling Trading Exposure with Acquisition Strategy
 
@@ -127,44 +82,22 @@ A common failure mode in sports betting operations is the misalignment between m
 
 The CCO playbook aligns trading and marketing into a unified commercial strategy:
 
-```
-+-----------------------------------------------------------------------------+
-|               Trading and Marketing Alignment Framework                     |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ CAMPAIGN SIZING & EXPOSURE CEILING ]                                     |
-|  - Trading pre-models maximum liability exposure for acquisition boosts     |
-|  - Marketing allocates paid media spend to match pre-approved liquidity     |
-|                                                                             |
-|  [ SYNCHRONIZED COUNTER-ATTACKS ]                                           |
-|  - Real-time Jurnii 360 alert triggers simultaneous odds and ad adjustment  |
-|  - Marketing bids defensively on search keywords during rival boost windows |
-|                                                                             |
-|  [ POST-EVENT MARGIN RECONCILIATION ]                                       |
-|  - Reconcile trading hold percentage against marketing acquisition CAC      |
-|  - Evaluate 30-day cohort turnover to measure promotional profitability     |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **CAMPAIGN SIZING & EXPOSURE CEILING** | Trading pre-models maximum liability exposure for acquisition boosts | Marketing allocates paid media spend to match pre-approved liquidity |
+| **SYNCHRONIZED COUNTER-ATTACKS** | Real-time Jurnii 360 alert triggers simultaneous odds and ad adjustment | Marketing bids defensively on search keywords during rival boost windows |
+| **POST-EVENT MARGIN RECONCILIATION** | Reconcile trading hold percentage against marketing acquisition CAC | Evaluate 30-day cohort turnover to measure promotional profitability |
 
 ## The CCO Commercial Yield Architecture in Jurnii 360
 
 Within [Jurnii 360](/products/jurnii-360), commercial yield is protected through automated proposition intelligence:
 
-```
-+-----------------------------------------------------------------------------+
-|               CCO Commercial Yield Governance Architecture                  |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  INTELLIGENCE VECTOR    RADAR CAPABILITY            COMMERCIAL IMPACT       |
-|  -------------------------------------------------------------------------  |
-|  Promotion Indexing     1,000+ Offers Tracked / Wk  100% Promo Move Capture |
-|  Market Coverage        35+ Regulated Jurisdictions Eliminates Local Blindspots|
-|  Feature Monitoring     21 Proprietary Feature Areas Protects Gross Hold %  |
-|  Operational Velocity   Hours Not Days to React     30+ Hours Saved / Wk    |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **INTELLIGENCE VECTOR** | **RADAR CAPABILITY** | **COMMERCIAL IMPACT** |
+| --- | --- | --- |
+| **Promotion Indexing** | 1,000+ Offers Tracked / Wk | 100% Promo Move Capture |
+| **Market Coverage** | 35+ Regulated Jurisdictions Eliminates Local Blindspots | - |
+| **Feature Monitoring** | 21 Proprietary Feature Areas Protects Gross Hold % | - |
+| **Operational Velocity** | Hours Not Days to React | 30+ Hours Saved / Wk |
 
 Across tier-1 gaming groups, CCOs deploying Jurnii 360 protect gross gaming margins by up to 180 basis points while ensuring promotional capital is deployed exclusively where it drives incremental player lifetime value.
 
@@ -172,24 +105,13 @@ Across tier-1 gaming groups, CCOs deploying Jurnii 360 protect gross gaming marg
 
 Chief Commercial Officers balance promotional attractiveness against strict gross gaming margin targets:
 
-```
-+-----------------------------------------------------------------------------+
-|               Gross Gaming Margin Defense Framework                         |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  COMMERCIAL LEVER       YIELD OPTIMIZATION RULE     RISK MITIGATION         |
-|  -------------------------------------------------------------------------  |
-|  Acquisition Boosts     Cap individual liability;   Restrict to verified    |
-|                         target high-retention sports single accounts        |
-|                                                                             |
-|  In-Play Overrounds     Maintain 106-108% hold on   Deploy cash-out margins |
-|                         high-liquidity football     to lock in profit       |
-|                                                                             |
-|  VIP Cashback Terms     Link rebates to net loss    Enforce 1x turnover on  |
-|                         rather than gross turnover  bonus credits           |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **COMMERCIAL LEVER** | **YIELD OPTIMIZATION RULE** | **RISK MITIGATION** |
+| --- | --- | --- |
+| **Acquisition Boosts** | Cap individual liability; | Restrict to verified target high-retention sports single accounts |
+| **In-Play Overrounds** | Maintain 106-108% hold on | Deploy cash-out margins |
+| **high-liquidity football** | to lock in profit | - |
+| **VIP Cashback Terms** | Link rebates to net loss | Enforce 1x turnover on |
+| **rather than gross turnover** | bonus credits | - |
 
 Disciplined margin governance ensures that increased betting turnover translates directly into expanding EBITDA.
 
@@ -197,22 +119,11 @@ Disciplined margin governance ensures that increased betting turnover translates
 
 During premier sports betting windows, commercial directors monitor live margin balance:
 
-```
-+-----------------------------------------------------------------------------+
-|               CCO Matchday Yield Defense Checklist                          |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. 11:00 AUDIT COMPETITOR OVERROUNDS: Ingest rival match pricing via       |
-|     Jurnii 360; verify your overround is competitive on marquee fixtures.   |
-|                                                                             |
-|  2. 13:00 BALANCE PROMO GENEROSITY: Check rival enhanced odds boosts;       |
-|     deploy targeted extra-place concessions without sacrificing hold.       |
-|                                                                             |
-|  3. 16:45 MONITOR IN-PLAY MARGINS: Ensure cash-out margin algorithms        |
-|     capture 6-8% hold while maintaining smooth player acceptance rates.     |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **1. 11:00 AUDIT COMPETITOR OVERROUNDS: Ingest rival match pricing via** | Jurnii 360; verify your overround is competitive on marquee fixtures. |
+| **2. 13:00 BALANCE PROMO GENEROSITY: Check rival enhanced odds boosts;** | deploy targeted extra-place concessions without sacrificing hold. |
+| **3. 16:45 MONITOR IN-PLAY MARGINS: Ensure cash-out margin algorithms** | capture 6-8% hold while maintaining smooth player acceptance rates. |
 
 Executing this checklist guarantees that trading desks defend gross margins while delivering an engaging player experience.
 

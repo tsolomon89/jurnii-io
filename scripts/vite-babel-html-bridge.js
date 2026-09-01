@@ -81,6 +81,12 @@ ${importLines}
 
 ${meta.inline}
 `;
+    if (fs.existsSync(filePath)) {
+      const existing = fs.readFileSync(filePath, 'utf-8');
+      if (existing === code) {
+        return `/src/generated/${fileSafe}`;
+      }
+    }
     fs.writeFileSync(filePath, code);
     return `/src/generated/${fileSafe}`;
   }

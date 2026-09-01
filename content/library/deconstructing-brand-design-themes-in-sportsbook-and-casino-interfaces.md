@@ -31,29 +31,12 @@ To maximize transactional throughput, design teams must systematically deconstru
 
 Designing for online gambling platforms introduces unique cognitive challenges that standard consumer applications do not face:
 
-```
-+-----------------------------------------------------------------------------+
-|               The 4 Functional Imperatives of iGaming UI                    |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. HIGH-FREQUENCY INFORMATION SCANNING                                     |
-|     - Bettors must evaluate 10-20 match prices in seconds                   |
-|     - Micro-typographic clarity and tabular tabular-nums alignment          |
-|                                                                             |
-|  2. EXTREME DARK-MODE OPTIMISATION                                          |
-|     - Over 85% of gaming sessions occur in low-ambient lighting conditions  |
-|     - Multi-tier surface elevation tokens replacing pure black (#000000)    |
-|                                                                             |
-|  3. REAL-TIME STATE VISIBILITY                                              |
-|     - Unambiguous visual indicators for price drifts (Up/Down odds flashes) |
-|     - Clear distinction between active, disabled, and suspended states      |
-|                                                                             |
-|  4. REGULATORY TRANSPARENCY BY DEFAULT                                      |
-|     - Embedded safer gambling limits and regulatory disclaimers             |
-|     - High-contrast terms and conditions within the primary visual flow     |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. HIGH-FREQUENCY INFORMATION SCANNING** | Bettors must evaluate 10-20 match prices in seconds | Micro-typographic clarity and tabular tabular-nums alignment |
+| **2. EXTREME DARK-MODE OPTIMISATION** | Over 85% of gaming sessions occur in low-ambient lighting conditions | Multi-tier surface elevation tokens replacing pure black (#000000) |
+| **3. REAL-TIME STATE VISIBILITY** | Unambiguous visual indicators for price drifts (Up/Down odds flashes) | Clear distinction between active, disabled, and suspended states |
+| **4. REGULATORY TRANSPARENCY BY DEFAULT** | Embedded safer gambling limits and regulatory disclaimers | High-contrast terms and conditions within the primary visual flow |
 
 ### 1. Information Density vs Visual Clutter
 
@@ -81,28 +64,11 @@ Sports odds are not static numbers; they are live financial quotes that update e
 
 To understand how visual design controls player behaviour, let us examine three core components analysed during [Jurnii UX](/products/jurnii-ux) audits:
 
-```
-+-----------------------------------------------------------------------------+
-|                     Component Design Deconstruction                         |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ COMPONENT A: THE ODDS BUTTON (CORE TRANSACTIONAL TRIGGER) ]              |
-|  - Layout: Selection Label (Top) + Decimal Odds (Bottom Bold)               |
-|  - Target Size: Minimum 44x44px mobile tap target                           |
-|  - Active State: High-contrast brand accent border + background fill        |
-|                                                                             |
-|  [ COMPONENT B: THE PROMOTIONAL HERO BANNER ]                               |
-|  - Typography: Left-aligned value proposition (e.g., "Bet £10 Get £40")     |
-|  - Terms Clarity: Prominent 12px subtitle outlining 1x wagering multiple    |
-|  - CTA Button: Direct deep-link to qualifying market, not generic register  |
-|                                                                             |
-|  [ COMPONENT C: THE CASINO LOBBY CARD ]                                     |
-|  - Media: 16:9 vertical ratio thumbnail with standardized studio badge      |
-|  - Dynamic Metadata: Live player count, volatility rating (1-5), RTP %     |
-|  - Hover Action: Instant "Play Demo" vs "Real Play" dual-action split       |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **COMPONENT A: THE ODDS BUTTON (CORE TRANSACTIONAL TRIGGER)** | Layout: Selection Label (Top) + Decimal Odds (Bottom Bold) | Target Size: Minimum 44x44px mobile tap target; Active State: High-contrast brand accent border + background fill |
+| **COMPONENT B: THE PROMOTIONAL HERO BANNER** | Typography: Left-aligned value proposition (e.g., "Bet £10 Get £40") | Terms Clarity: Prominent 12px subtitle outlining 1x wagering multiple; CTA Button: Direct deep-link to qualifying market, not generic register |
+| **COMPONENT C: THE CASINO LOBBY CARD** | Media: 16:9 vertical ratio thumbnail with standardized studio badge | Dynamic Metadata: Live player count, volatility rating (1-5), RTP %; Hover Action: Instant "Play Demo" vs "Real Play" dual-action split |
 
 ### The Anatomy of an High-Converting Odds Button
 
@@ -125,20 +91,12 @@ The critical rule of brand design systems is that emotional styling must never c
 
 Rather than debating design aesthetics in committee meetings, leading operators audit their design systems through quantitative benchmarking:
 
-```
-+-----------------------------------------------------------------------------+
-|                   Quantitative Design System Audit Matrix                   |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  METRIC                INDUSTRY BENCHMARK       COMMERCIAL IMPACT           |
-|  -------------------------------------------------------------------------  |
-|  WCAG Text Contrast    Minimum 4.5:1 (AA)       Eliminates mobile eye strain|
-|  Tap-Target Precision  Minimum 44x44px          Prevents costly mis-clicks  |
-|  Typographic Scale     Consistent 1.25 Modular  Accelerates odds scanning   |
-|  Layout Shift (CLS)    < 0.05 on Dynamic Odds   Protects betslip accuracy   |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **METRIC** | **INDUSTRY BENCHMARK** | **COMMERCIAL IMPACT** |
+| --- | --- | --- |
+| **WCAG Text Contrast** | Minimum 4.5:1 (AA) | Eliminates mobile eye strain |
+| **Tap-Target Precision** | Minimum 44x44px | Prevents costly mis-clicks |
+| **Typographic Scale** | Consistent 1.25 Modular | Accelerates odds scanning |
+| **Layout Shift (CLS)** | < 0.05 on Dynamic Odds | Protects betslip accuracy |
 
 ### 1. Contrast Ratio Verification
 

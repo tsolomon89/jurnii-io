@@ -1,0 +1,14 @@
+{
+  "name": "jurnii-lemlist-zoho",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Daily one-directional import of Lemlist LinkedIn outbound activity into Zoho CRM as completed Tasks.",
+  "//": "CommonJS on purpose. The repo root declares \"type\": \"module\", and this subsystem requires across into booking/ (also CommonJS) for the Zoho client, auth and logging. Vercel copies the nearest package.json into every function bundle, so this manifest is what keeps the bundled code CJS. Do not remove: see api/package.json for the same reason.",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node --import ./tests/_guard.mjs --test \"tests/*.test.js\"",
+    "spike": "node scripts/spike.js",
+    "snapshot": "node scripts/zoho-field-snapshot.js",
+    "snapshot:check": "node scripts/zoho-field-snapshot.js --check"
+  }
+}

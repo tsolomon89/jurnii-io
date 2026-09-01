@@ -31,28 +31,11 @@ To protect profitability, operators must conduct systematic [brand promotion ana
 
 In digital gaming, promotional generosity operates along a curve of diminishing commercial returns:
 
-```
-+-----------------------------------------------------------------------------+
-|               The Promotional Generosity vs Net Yield Curve                 |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  Net Yield (NGR)                                                            |
-|      ^                                                                      |
-|      |                  [ OPTIMAL YIELD ZONE ]                              |
-|      |                         * * *                                        |
-|      |                     *           *                                    |
-|      |                   *               *  [ MARGIN EROSION ZONE ]         |
-|      |                 *                   *                                |
-|      |               *                       *                              |
-|      |             *                           *                            |
-|      |  [ UNDER-  *                             *   (Excessive bonus costs  |
-|      |  INVESTED] *                              *   attract non-converting |
-|      |           *                                *  bonus hunters)         |
-|      +------------------------------------------------------------>         |
-|      0%                      Nominal Promotional Generosity       100%      |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| Generosity Investment Tier | Promotional Structure Example | Net Commercial Yield (NGR) Impact | Player Behavior Profile |
+|---|---|---|---|
+| **Under-Invested (<30%)** | High wagering (50x+), strict caps, <24h expiry | Low (High landing page bounce) | Rejects terms; converts with regional rivals |
+| **Optimal Yield (50% – 75%)** | Matched deposit with balanced turnover (10x–20x) | **Maximum NGR Realization** | Genuine long-term player conversion and retention |
+| **Margin Erosion (>80%)** | Zero-risk free bets, excessive reload subsidies | Severe erosion (Negative ROI) | Transient bonus hunters; churns post-wagering |
 
 ### 1. The Under-Invested Zone
 
@@ -72,25 +55,11 @@ To determine where a promotional campaign sits on the generosity curve, Jurnii a
 
 The Promo Richness Index deconstructs three core variables:
 
-```
-+-----------------------------------------------------------------------------+
-|                 Promo Richness Index Mathematical Structure                 |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. NOMINAL GENEROSITY RATIO (G_nom)                                        |
-|     G_nom = Bonus Value / Minimum Qualifying Deposit                        |
-|                                                                             |
-|  2. TURNOVER REALISATION PROBABILITY (P_real)                               |
-|     P_real = f(Wagering Multiple, Game RTP, Minimum Odds, Game Weighting)   |
-|                                                                             |
-|  3. EXECUTION FRICTION DISCOUNT (F_disc)                                    |
-|     F_disc = Expiry Windows + Withdrawal Caps + Payment Restrictions        |
-|                                                                             |
-|  =========================================================================  |
-|  PROMO RICHNESS SCORE = (G_nom x P_real) x (1 - F_disc)                     |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **1. NOMINAL GENEROSITY RATIO (G_nom)** | G_nom = Bonus Value / Minimum Qualifying Deposit |
+| **2. TURNOVER REALISATION PROBABILITY (P_real)** | P_real = f(Wagering Multiple, Game RTP, Minimum Odds, Game Weighting) |
+| **3. EXECUTION FRICTION DISCOUNT (F_disc)** | F_disc = Expiry Windows + Withdrawal Caps + Payment Restrictions ========================================================================= PROMO RICHNESS SCORE = (G_nom x P_real) x (1 - F_disc) |
 
 ### 1. Nominal Generosity Ratio ($G_{nom}$)
 
@@ -113,25 +82,12 @@ The operational constraints that diminish player utility:
 
 Using [Jurnii UX](/products/jurnii-ux) and [Jurnii 360](/products/jurnii-360), commercial directors conduct structured audits of their promotional portfolios:
 
-```
-+-----------------------------------------------------------------------------+
-|                 Commercial Promotion Audit Workflow                         |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ STEP 1: PORTFOLIO DECOMPOSITION ]                                        |
-|  Map all active promotions (Welcome, Reload, VIP, Cross-Sell)               |
-|                                                                             |
-|  [ STEP 2: MATHEMATICAL SCORING ]                                           |
-|  Compute Promo Richness Index for internal campaigns vs 10 direct rivals    |
-|                                                                             |
-|  [ STEP 3: FINANCIAL RECONCILIATION ]                                       |
-|  Correlate promo richness scores with 30-day, 60-day, and 90-day player LTV |
-|                                                                             |
-|  [ STEP 4: CALIBRATED OPTIMISATION ]                                        |
-|  Adjust wagering multiples and caps to shift spend into high-yield zones    |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **STEP 1: PORTFOLIO DECOMPOSITION** | Map all active promotions (Welcome, Reload, VIP, Cross-Sell) |
+| **STEP 2: MATHEMATICAL SCORING** | Compute Promo Richness Index for internal campaigns vs 10 direct rivals |
+| **STEP 3: FINANCIAL RECONCILIATION** | Correlate promo richness scores with 30-day, 60-day, and 90-day player LTV |
+| **STEP 4: CALIBRATED OPTIMISATION** | Adjust wagering multiples and caps to shift spend into high-yield zones |
 
 ### Case Study: Rebalancing Casino Welcome Mechanics
 
@@ -154,25 +110,15 @@ To maintain promotional discipline across multi-brand operations:
 
 In [Jurnii 360](/products/jurnii-360), the Promo Richness Index is computed mathematically across thousands of live offers:
 
-```
-+-----------------------------------------------------------------------------+
-|               Promo Richness Index Mathematical Model                       |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  Formula:                                                                   |
-|  PRI = [ (Nominal_Bonus / Min_Deposit) * (1 - House_Edge)^Wagering_Mult ]  |
-|        * [ 1 - (1 / Days_Valid) ] * Stake_Cap_Factor                        |
-|                                                                             |
-|  Where:                                                                     |
-|  - Nominal_Bonus: Stated bonus value (e.g. £100)                             |
-|  - Min_Deposit: Required qualifying deposit (e.g. £20)                      |
-|  - House_Edge: Standard house edge on qualifying games (e.g. 0.04 for slots)|
-|  - Wagering_Mult: Turnover requirement (e.g. 35x bonus amount)              |
-|  - Days_Valid: Expiration window (e.g. 7 days)                              |
-|  - Stake_Cap_Factor: Penalty multiplier for maximum allowed bet (e.g. £2)   |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Evaluation Variable** | **Benchmark Standard / Impact** |
+|---|---|
+| **Item** | [ 1 - (1 / Days_Valid) ] * Stake_Cap_Factor |
+| **Nominal_Bonus** | Stated bonus value (e.g. £100) |
+| **Min_Deposit** | Required qualifying deposit (e.g. £20) |
+| **House_Edge** | Standard house edge on qualifying games (e.g. 0.04 for slots) |
+| **Wagering_Mult** | Turnover requirement (e.g. 35x bonus amount) |
+| **Days_Valid** | Expiration window (e.g. 7 days) |
+| **Stake_Cap_Factor** | Penalty multiplier for maximum allowed bet (e.g. £2) |
 
 By tracking over 1,000+ offers weekly across 35+ global jurisdictions within Jurnii 360, commercial teams quantify promotional generosity with mathematical precision, enabling board-level conversations like *"We are currently 23% less generous than Bet365 on football promotions, yet our 90-day retention is 12% higher due to zero-wagering free spins."*
 
@@ -180,26 +126,10 @@ By tracking over 1,000+ offers weekly across 35+ global jurisdictions within Jur
 
 To prevent promotional liability from eroding gross gaming margin, commercial analysts use Monte Carlo simulation algorithms within [Jurnii 360](/products/jurnii-360):
 
-```
-+-----------------------------------------------------------------------------+
-|               Promotional Turnover Simulation Architecture                  |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ INPUT PARAMETERS ]                                                       |
-|  - Nominal Bonus: £50 Match                                                 |
-|  - Wagering Requirement: 30x Bonus (£1,500 Turnover)                        |
-|  - Average Game RTP: 96.0% (House Edge: 4.0%)                               |
-|  - Average Bet Size: £1.00 (1,500 Individual Bets)                          |
-|                                                                             |
-|  [ MONTE CARLO SIMULATION (10,000 ITERATIONS) ]                             |
-|  - Probability of Player Depleting Balance: 88.4%                           |
-|  - Probability of Player Completing Wagering: 11.6%                         |
-|  - Expected Net Cost per Acquired Player: £5.80                             |
-|  - Expected 90-Day NGR from Retained Cohort: £142.00                        |
-|  - Net Campaign ROI: +2,348% on promotional capital                         |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **INPUT PARAMETERS** | Nominal Bonus: £50 Match | Wagering Requirement: 30x Bonus (£1,500 Turnover); Average Game RTP: 96.0% (House Edge: 4.0%); Average Bet Size: £1.00 (1,500 Individual Bets) |
+| **MONTE CARLO SIMULATION (10,000 ITERATIONS)** | Probability of Player Depleting Balance: 88.4% | Probability of Player Completing Wagering: 11.6%; Expected Net Cost per Acquired Player: £5.80; Expected 90-Day NGR from Retained Cohort: £142.00; Net Campaign ROI: +2,348% on promotional capital |
 
 Simulating promotional mechanics before launching marketing campaigns ensures that bonus expenditure functions as an investment in player lifetime value rather than an uncontrolled expense.
 

@@ -1,37 +1,30 @@
 'use strict';
 
 /**
- * ⚠ THIS FILE PINS CURRENT (SUPERSEDED) BEHAVIOUR.
- *   Authority: zoho-functions/docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md
+ * §8 — multi-product bookings under the APPROVED commercial model.
  *
- *   The approved model is one Account -> zero or one persistent Deal, with Products entering as
- *   Quotes. Under it, the entire "remaining Product Deals" block these tests pin
- *   (handleMeetingEvent.deluge ~458-596) is deleted — one Deal means no anchor-selection problem.
+ * Authority: zoho-functions/docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md
  *
- *   THESE ASSERTIONS ARE EXPECTED TO FAIL when the model is corrected. That failure is the
- *   intended signal. Invert them into the §14 acceptance guards; do NOT delete them. There is
- *   currently no test anywhere in the repo asserting the prohibited architecture is ABSENT.
+ * ⚠ THIS FILE WAS INVERTED (work item 4.3). It previously pinned the SUPERSEDED behaviour —
+ * the "remaining Product Deals" block in handleMeetingEvent that resolved one Deal per
+ * additional Product on a multi-product booking. Its own header said those assertions were
+ * expected to fail when the model was corrected, that the failure was the intended signal,
+ * and that they should be INVERTED into acceptance guards rather than deleted, because
+ * nothing in the repo asserted the prohibited architecture was ABSENT.
  *
- * §8 — reconciling the Product Deals a multi-product booking selected beyond its anchor.
+ * That is what this file now does. The approved model is:
  *
- * A Deal is Account x Product, but a Zoho Event has exactly ONE native `What_Id`. So a
- * multi-product booking still produces ONE Google event and ONE Zoho Meeting, anchored on
- * one Product Deal, with the full scope carried in `Meeting_Task_Contract_Products`.
- * `handleMeetingEvent` reconciles the rest after the Contact transition.
+ *     one Account  ->  ZERO OR ONE persistent Deal
+ *     one Product  ->  a QUOTE under that one Deal, never another Deal
  *
- * Deluge cannot be executed here, so this pins the behaviour two ways, as
- * `deluge-reminder-rule.test.js` does:
+ * so a multi-product booking has no anchor-selection problem to solve: the Event's single
+ * native What_Id points at the only Deal there is, and the full selected scope travels in
+ * Meeting_Task_Contract_Products for processDeal to turn into one Quote per Product.
  *
- *   1. STRUCTURAL — the block exists, sits after the Contact transition, resolves Deals
- *      EXACTLY, and cannot fail a confirmed booking. These are what stop a later edit
- *      quietly reintroducing a guess or a stage write.
- *   2. BEHAVIOURAL — a JS reference of the decision table, exercised over every required
- *      scenario. A disagreement between the Deluge and this table is a visible failure
- *      rather than a silent production surprise.
- *
- * What neither layer can prove is that the LIVE workflow behaves this way. Contact and
- * Deal stage propagation is only observable in the tenant, and it stays on the live
- * verification list — a source assertion is not a behavioural one.
+ * Deluge cannot be executed here, so these are SOURCE assertions: they prove the prohibited
+ * constructs are absent and cannot be quietly reintroduced by a later edit. What they cannot
+ * prove is live behaviour — Contact and Deal propagation is only observable in the tenant and
+ * stays on the live verification list (canary assertions C11/C12 in the correction plan).
  */
 
 const test = require('node:test');
@@ -39,268 +32,173 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
 
-const SRC_PATH = path.join(__dirname, '..', '..', 'zoho-functions', 'v6', 'activity', 'handleMeetingEvent.deluge');
-const noDeluge = fs.existsSync(SRC_PATH) ? false : 'handleMeetingEvent.deluge is not present';
-const SRC = noDeluge ? '' : fs.readFileSync(SRC_PATH, 'utf8');
+const V6 = path.join(__dirname, '..', '..', 'zoho-functions', 'v6');
 
-/** The reconcile block only, so an assertion cannot be satisfied by unrelated code. */
-function block() {
-  const start = SRC.indexOf('remainingKeys = List();');
-  assert.notStrictEqual(start, -1, 'the multi-product reconcile block is missing');
-  return SRC.slice(start);
+function src(rel) {
+  return fs.readFileSync(path.join(V6, rel), 'utf8');
 }
 
-/**
- * The block with its comments removed. A comment must stay free to NAME the thing it
- * forbids — the lookup is documented as "no substring matching on Deal_Name", and a
- * naive search would read that explanation as the offence.
- *
- * This org's Deluge uses both `//` and a leading backslash as line-comment markers.
- */
-const codeOnly = () => block().split('\n')
-  .filter((l) => !/^\s*(\/\/|\\)/.test(l)).join('\n');
+// Comments legitimately DESCRIBE the deleted architecture (that is how the removal stays
+// legible), so every assertion below runs against code with line comments stripped.
+function code(rel) {
+  return src(rel)
+    .split('\n')
+    .map((l) => l.split('//')[0])
+    .join('\n');
+}
 
-// ---------------------------------------------------------------------------
-// 1. Structural
-// ---------------------------------------------------------------------------
-
-test('the block runs AFTER the Contact transition', { skip: noDeluge }, () => {
-  // The remaining Deals derive their stage from a Contact that has already moved, so
-  // ordering is load-bearing, not cosmetic.
-  const routed = SRC.indexOf('"meeting:created"');
-  const reconcile = SRC.indexOf('remainingKeys = List();');
-  assert.notStrictEqual(routed, -1, 'the first-booking routeContactSequence call is missing');
-  assert.ok(reconcile > routed,
-    'reconciling the other Deals before the Contact moves would roll up a stale stage');
-});
-
-test('WF007 still refuses any Event that is not related to a Deal', { skip: noDeluge }, () => {
-  // The block must not have weakened the function's first guard.
-  assert.match(SRC, /seModule\s*!=\s*"Deals"/,
-    'the $se_module guard is the reason a half-linked Meeting cannot route anything');
-  assert.ok(SRC.indexOf('seModule != "Deals"') < SRC.indexOf('remainingKeys = List();'));
-});
-
-test('Deals are resolved EXACTLY, by unique Deal_Key', { skip: noDeluge }, () => {
-  const b = block();
-  assert.match(b, /searchRecords\("Deals", "\(Deal_Key:equals:"/,
-    'Deal_Key is UNIQUE, so an equals lookup is unambiguous by construction');
-  assert.equal(/Deal_Name/.test(codeOnly()), false,
-    'no substring matching on Deal_Name here — that is a guess, and guessing is forbidden');
-  assert.match(b, /computeProductKey/, 'product names must be keyed through the shared normaliser');
-});
-
-test('the block never creates a Deal', { skip: noDeluge }, () => {
-  const b = block();
-  assert.equal(/createOrReuseProductDeal/.test(b), false,
-    'a missing Product Deal raises a review; it is never conjured');
-  assert.equal(/createRecord\("Deals"/.test(b), false);
-});
-
-test('the block never writes a Contact, Deal or Event field itself', { skip: noDeluge }, () => {
-  const b = block();
-  // processDeal owns every Deal field change, including never-regress and the RTP floor.
-  assert.equal(/updateRecord\("Deals"/.test(b), false, 'processDeal owns Deal fields');
-  assert.equal(/updateRecord\("Contacts"/.test(b), false, 'routeContactSequence owns Contact fields');
-  // An Event write here would re-enter WF007 unless suppressed — and MTG-4 guards
-  // terminal states, not this path.
-  assert.equal(/updateRecord\("Events"/.test(b), false, 'an Event write would re-trigger WF007');
-  assert.match(b, /automation\.processDeal\(rDealId, "\{\}"\)/,
-    'the roll-up must delegate to processDeal with empty context, not commercial evidence');
-});
-
-test('a missing or ambiguous Deal raises the existing review codes and continues', { skip: noDeluge }, () => {
-  const b = block();
-  assert.match(b, /createManualReview\(contactId, "", "product_unresolved"/);
-  assert.match(b, /createManualReview\(contactId, "", "duplicate_product_deal"/);
-  // `continue`, never `return`: one unresolvable product must not abandon the others,
-  // and must never fail a booking Google has already confirmed.
-  assert.equal(/\breturn\s*;/.test(b), false,
-    'a bare return here would abandon the remaining products and the rest of the function');
-});
-
-test('the review names the journey, account, contact and product', { skip: noDeluge }, () => {
-  const b = block();
-  assert.match(b, /Ext_Calendar_Booking_ID/, 'the review must carry the booking reference');
-  for (const token of ['rDealKey', 'contactId', 'rName']) {
-    assert.ok(b.includes(token), `the review detail omits ${token}`);
-  }
-});
-
-test('Partnership is skipped before the lookup, with no review', { skip: noDeluge }, () => {
-  const b = block();
-  const gate = b.indexOf('pipelineForProductKey');
-  const lookup = b.indexOf('searchRecords("Deals"');
-  assert.notStrictEqual(gate, -1, 'the Partnership gate is missing');
-  assert.ok(gate < lookup, 'Partnership must be skipped BEFORE a Deal lookup, not after');
-  const partnershipBranch = b.slice(gate, lookup);
-  assert.equal(/createManualReview/.test(partnershipBranch), false,
-    'a Partnership Deal no B2B flow would touch must not raise a review');
-});
-
-test('a non-primary Contact is skipped without a review', { skip: noDeluge }, () => {
-  const b = block();
-  assert.match(b, /rPrimaryId != contactId/,
-    'the Contact must be the Deal primary before its stage may move');
-  assert.match(b, /non_primary_skipped/);
-  const idx = b.indexOf('rPrimaryId != contactId');
-  const branch = b.slice(idx, b.indexOf('processDeal(rDealId'));
-  assert.equal(/createManualReview/.test(branch), false,
-    'a non-primary Contact is a legitimate state, not a data error');
-});
-
-test('the anchor product is excluded, and the block exits before any CRM read', { skip: noDeluge }, () => {
-  const b = block();
-  assert.match(b, /Deal_Product_Key/, 'the anchor is excluded by its own Deal_Product_Key');
-  const exit = b.indexOf('if(remainingKeys.size() > 0)');
-  assert.notStrictEqual(exit, -1, 'the early exit is missing');
-  const before = b.slice(0, exit);
-  assert.equal(/getRecordById|searchRecords/.test(before), false,
-    'a single-product save must cost WF007 no extra CRM read');
-});
-
-// ---------------------------------------------------------------------------
-// 2. Behavioural — the decision table
-// ---------------------------------------------------------------------------
-
-/**
- * A JS reference of the Deluge block's decision table. It is the intended answer for
- * each scenario, written once so the cases below read as a specification.
- *
- * Returns `{ reconcile, review, skip }`, each an array of product keys.
- */
-function decideRemaining({
-  contractProducts = [], anchorKey = '', dealsByKey = {}, primaryByKey = {},
-  contactId = 'C1', partnershipKeys = ['partnership'],
-} = {}) {
-  const out = { reconcile: [], review: [], skip: [] };
-
-  const key = (name) => String(name || '').trim().toLowerCase()
-    .replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
-
-  const remaining = [];
-  for (const name of contractProducts) {
-    const s = String(name || '').trim();
-    if (!s || s === '-None-') continue;
-    const k = key(s);
-    if (!k || k === anchorKey || remaining.includes(k)) continue;
-    remaining.push(k);
-  }
-  if (!remaining.length) return out;                       // single-product: a no-op
-
-  for (const k of remaining) {
-    if (partnershipKeys.includes(k)) { out.skip.push(k); continue; }   // before any lookup
-    const matches = dealsByKey[k] || [];
-    if (matches.length > 1) { out.review.push({ key: k, code: 'duplicate_product_deal' }); continue; }
-    if (matches.length === 0) { out.review.push({ key: k, code: 'product_unresolved' }); continue; }
-    if (primaryByKey[k] !== contactId) { out.skip.push(k); continue; } // legitimate, no review
-    out.reconcile.push(k);
+const ORCHESTRATORS = ['processLead.deluge', 'processContact.deluge', 'processAccount.deluge'];
+const ALL_DELUGE = (function walk(dir) {
+  const out = [];
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, e.name);
+    if (e.isDirectory()) out.push(...walk(full));
+    else if (e.name.endsWith('.deluge')) out.push(path.relative(V6, full));
   }
   return out;
-}
+})(V6);
 
-const CASES = [
-  {
-    name: 'one product: nothing beyond the anchor, so nothing happens',
-    input: { contractProducts: ['Jurnii UX'], anchorKey: 'jurnii_ux' },
-    expect: { reconcile: [], review: [], skip: [] },
-  },
-  {
-    name: 'no product selected at all',
-    input: { contractProducts: [], anchorKey: '' },
-    expect: { reconcile: [], review: [], skip: [] },
-  },
-  {
-    name: 'two products, primary Contact: the non-anchor Deal is reconciled',
-    input: {
-      contractProducts: ['Jurnii UX', 'Jurnii Cortex'], anchorKey: 'jurnii_ux',
-      dealsByKey: { jurnii_cortex: ['D2'] }, primaryByKey: { jurnii_cortex: 'C1' },
-    },
-    expect: { reconcile: ['jurnii_cortex'], review: [], skip: [] },
-  },
-  {
-    name: 'three products: every exact Deal with this Contact as primary is reconciled',
-    input: {
-      contractProducts: ['Jurnii UX', 'Jurnii 360', 'Jurnii Cortex'], anchorKey: 'jurnii_ux',
-      dealsByKey: { jurnii_360: ['D2'], jurnii_cortex: ['D3'] },
-      primaryByKey: { jurnii_360: 'C1', jurnii_cortex: 'C1' },
-    },
-    expect: { reconcile: ['jurnii_360', 'jurnii_cortex'], review: [], skip: [] },
-  },
-  {
-    name: 'non-primary Contact: skipped, and NOT forced onto that Deal',
-    input: {
-      contractProducts: ['Jurnii UX', 'Jurnii Cortex'], anchorKey: 'jurnii_ux',
-      dealsByKey: { jurnii_cortex: ['D2'] }, primaryByKey: { jurnii_cortex: 'C9' },
-    },
-    expect: { reconcile: [], review: [], skip: ['jurnii_cortex'] },
-  },
-  {
-    name: 'missing Deal: review, and the other products still reconcile',
-    input: {
-      contractProducts: ['Jurnii UX', 'Jurnii 360', 'Jurnii Cortex'], anchorKey: 'jurnii_ux',
-      dealsByKey: { jurnii_cortex: ['D3'] }, primaryByKey: { jurnii_cortex: 'C1' },
-    },
-    expect: {
-      reconcile: ['jurnii_cortex'],
-      review: [{ key: 'jurnii_360', code: 'product_unresolved' }], skip: [],
-    },
-  },
-  {
-    name: 'ambiguous Deal: review, never a guess',
-    input: {
-      contractProducts: ['Jurnii UX', 'Jurnii Cortex'], anchorKey: 'jurnii_ux',
-      dealsByKey: { jurnii_cortex: ['D2', 'D3'] }, primaryByKey: { jurnii_cortex: 'C1' },
-    },
-    expect: {
-      reconcile: [], review: [{ key: 'jurnii_cortex', code: 'duplicate_product_deal' }], skip: [],
-    },
-  },
-  {
-    name: 'Partnership alongside B2B: skipped before any lookup, no review',
-    input: {
-      contractProducts: ['Jurnii UX', 'Partnership'], anchorKey: 'jurnii_ux',
-      dealsByKey: {}, primaryByKey: {},
-    },
-    expect: { reconcile: [], review: [], skip: ['partnership'] },
-  },
-  {
-    name: 'Partnership-only booking: it IS the anchor, so nothing remains',
-    input: { contractProducts: ['Partnership'], anchorKey: 'partnership' },
-    expect: { reconcile: [], review: [], skip: [] },
-  },
-  {
-    name: 'blanks and the -None- sentinel are not products',
-    input: {
-      contractProducts: ['Jurnii UX', '', '-None-', null], anchorKey: 'jurnii_ux',
-    },
-    expect: { reconcile: [], review: [], skip: [] },
-  },
-];
+// ---------------------------------------------------------------------------
+// ABSENCE GUARDS — the prohibited architecture must not come back
+// ---------------------------------------------------------------------------
 
-for (const c of CASES) {
-  test(`decision table: ${c.name}`, () => {
-    assert.deepStrictEqual(decideRemaining(c.input), c.expect);
-  });
-}
-
-test('re-running on the same meeting produces the identical outcome', () => {
-  // WF007 fires on every Event save, so this block re-enters on a rep's own edits. It
-  // must be inherently repeatable — processDeal never regresses a stage, and
-  // createManualReview dedups on its leading [code] token.
-  const input = {
-    contractProducts: ['Jurnii UX', 'Jurnii 360', 'Jurnii Cortex'], anchorKey: 'jurnii_ux',
-    dealsByKey: { jurnii_cortex: ['D3'] }, primaryByKey: { jurnii_cortex: 'C1' },
-  };
-  assert.deepStrictEqual(decideRemaining(input), decideRemaining(input));
+test('no Deluge source composes a product-scoped Deal_Key', () => {
+  // Deal_Key == Account_Key. The "::" product suffix was the whole Product-Deal model in one
+  // token, so its absence is the single most load-bearing guard in this file.
+  const offenders = [];
+  for (const rel of ALL_DELUGE) {
+    const c = code(rel);
+    if (/\+\s*"::"\s*\+/.test(c)) offenders.push(rel);
+  }
+  assert.deepEqual(offenders, [], 'a "::" Deal_Key composition reappeared');
 });
 
-test('the anchor product is never reconciled twice', () => {
-  // routeContactSequence already reconciled it. Doing it again here would be harmless
-  // but wasteful, and would muddy the automation log.
-  const r = decideRemaining({
-    contractProducts: ['Jurnii UX', 'Jurnii UX', 'Jurnii Cortex'], anchorKey: 'jurnii_ux',
-    dealsByKey: { jurnii_cortex: ['D2'] }, primaryByKey: { jurnii_cortex: 'C1' },
-  });
-  assert.deepStrictEqual(r.reconcile, ['jurnii_cortex']);
+test('the Product-Deal creation helper is gone and has no callers', () => {
+  assert.equal(
+    fs.existsSync(path.join(V6, 'activity', '_util_createOrReuseProductDeal.deluge')),
+    false,
+    '_util_createOrReuseProductDeal.deluge should have been deleted'
+  );
+  const callers = ALL_DELUGE.filter((rel) => /createOrReuseProductDeal\s*\(/.test(code(rel)));
+  assert.deepEqual(callers, [], 'a caller of the deleted Product-Deal helper survives');
+});
+
+test('the Product-derived pipeline helper is gone and has no callers', () => {
+  // 3.1: Pipeline is a property of the Account relationship, read from Deals.Pipeline.
+  assert.equal(
+    fs.existsSync(path.join(V6, 'activity', '_util_pipelineForProductKey.deluge')),
+    false,
+    '_util_pipelineForProductKey.deluge should have been deleted'
+  );
+  const callers = ALL_DELUGE.filter((rel) => /pipelineForProductKey\s*\(/.test(code(rel)));
+  assert.deepEqual(callers, [], 'a caller of the deleted Product-pipeline helper survives');
+});
+
+test('handleMeetingEvent no longer reconciles per-Product sibling Deals', () => {
+  const c = code('activity/handleMeetingEvent.deluge');
+  assert.equal(/Deal_Product_Key/.test(c), false, 'the anchor Deal_Product_Key read survives');
+  assert.equal(
+    /multi_product_reconcile/.test(c),
+    false,
+    'the per-Product reconcile pass survives'
+  );
+  // The scope field itself MUST still be read — it is how Products reach processDeal as Quotes.
+  assert.ok(
+    /Meeting_Task_Contract_Products/.test(c),
+    'Meeting_Task_Contract_Products must still be read: it carries the Quote scope'
+  );
+});
+
+test('each orchestrator resolves the Account Deal exactly once, and never fans out', () => {
+  for (const rel of ORCHESTRATORS) {
+    const c = code(rel);
+    const resolves = (c.match(/resolveOrCreateAccountDeal\s*\(/g) || []).length;
+    assert.equal(resolves, 1, `${rel} should resolve the Account's Deal exactly once`);
+  }
+});
+
+test('the three retired review codes are not raised anywhere', () => {
+  // Retired with the correction: several Products under one Deal is normal operation, and
+  // there are no Product Deals to duplicate.
+  const retired = [
+    'multi_product_sequence_ambiguous',
+    'quote_product_mismatch',
+    'duplicate_product_deal',
+  ];
+  const offenders = [];
+  for (const rel of ALL_DELUGE) {
+    const c = code(rel);
+    for (const r of retired) {
+      if (c.includes(r)) offenders.push(`${rel}:${r}`);
+    }
+  }
+  assert.deepEqual(offenders, [], 'a retired review code is still raised');
+});
+
+test('a second Deal under one Account is never merged, re-keyed or Lost automatically', () => {
+  // K6. The old duplicate-silencing pass wrote Opportunity_State=Lost, blanked Deal_Key and
+  // renamed the Deal "(Duplicate)". A silent merge hides the concurrency defect that needs
+  // seeing, so the correction replaces it with a review naming every candidate.
+  const c = code('processAccount.deluge');
+  assert.equal(/\(Duplicate\)/.test(c), false, 'the duplicate-renaming write survives');
+  assert.equal(
+    /"Deal_Key"\s*,\s*""/.test(c) || /put\("Deal_Key",\s*""\)/.test(c),
+    false,
+    'the Deal_Key-blanking write survives'
+  );
+  assert.ok(
+    /multiple_deals_for_account/.test(c),
+    'processAccount must raise multiple_deals_for_account instead of silencing'
+  );
+});
+
+// ---------------------------------------------------------------------------
+// STRUCTURAL — what MUST still be true of the corrected path
+// ---------------------------------------------------------------------------
+
+test('the Account-Deal resolver enforces the K6 match-count contract', () => {
+  const c = code('activity/_util_resolveAccountDeal.deluge');
+  for (const status of ['"none"', '"one"', '"many"']) {
+    assert.ok(c.includes(status), `resolveAccountDeal must return ${status}`);
+  }
+  // "many" must never yield a deal id.
+  assert.ok(
+    /r\.put\("status",\s*"many"\)/.test(c),
+    'the ambiguous branch must set status "many"'
+  );
+});
+
+test('the create path re-searches Deal_Key and asserts exactly one match', () => {
+  const c = code('activity/_util_resolveOrCreateAccountDeal.deluge');
+  assert.ok(/searchRecords\("Deals",\s*"\(Deal_Key:equals:/.test(c), 'post-insert re-search missing');
+  assert.ok(/insert_not_verifiable/.test(c), 'zero-match-after-insert branch missing');
+  assert.ok(/duplicate_deal_key_after_insert/.test(c), 'multi-match-after-insert branch missing');
+});
+
+test('the resolver writes Deal_Key = Account_Key and Deal_Name = Account_Name', () => {
+  const c = code('activity/_util_resolveOrCreateAccountDeal.deluge');
+  assert.ok(/dm\.put\("Deal_Key",\s*aKey\)/.test(c), 'Deal_Key must be the Account_Key');
+  assert.ok(/dm\.put\("Deal_Name",\s*dealName\)/.test(c), 'Deal_Name must be derived from Account_Name');
+  // and NEVER a Product identity
+  assert.equal(/Deal_Product/.test(c), false, 'the resolver must not write any Deal_Product field');
+});
+
+test('the Partnership REST-insert branch is retained', () => {
+  // Native createRecord DROPS the mandatory Pipeline special field, so a Partnership Deal must
+  // be created through the v6 Records INSERT API with a compatible Stage in the same payload.
+  const c = code('activity/_util_resolveOrCreateAccountDeal.deluge');
+  assert.ok(/invokeurl/.test(c), 'the REST insert path was lost');
+  assert.ok(/restRec\.put\("Pipeline",\s*"Partnership"\)/.test(c), 'Pipeline is not sent on the REST insert');
+  assert.ok(/restRec\.put\("Stage",\s*"MQL"\)/.test(c), 'a compatible Stage must ride in the same payload');
+});
+
+test('dispatch resolves the Account Deal read-only and never creates one', () => {
+  // A cadence pass must not manufacture commercial state.
+  const c = code('activity/routeContactSequence.deluge');
+  assert.ok(/resolveAccountDeal\s*\(/.test(c), 'dispatch must resolve the Account Deal');
+  assert.equal(
+    /resolveOrCreateAccountDeal\s*\(/.test(c),
+    false,
+    'dispatch must never call the CREATE-capable resolver'
+  );
 });

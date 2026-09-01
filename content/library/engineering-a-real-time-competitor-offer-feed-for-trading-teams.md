@@ -31,30 +31,20 @@ Engineering an automated [competitor offer feed](/features/competitor-offer-feed
 
 Sports betting trading desks operate in high-tempo environments governed by automated risk models, live data feeds, and fluctuating market liabilities. However, while internal risk management systems are highly automated, external promotional tracking has remained predominantly manual.
 
-```
-+-----------------------------------------------------------------------------+
-|                 The Latency Penalty in Sportsbook Trading                   |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  SCENARIO: Competitor launches a 3/1 Flash Odds Boost at 10:00 AM           |
-|                                                                             |
-|  TRADITIONAL WORKFLOW (Manual Monitoring)                                   |
-|  10:00 AM -> Competitor launches campaign                                   |
-|  10:30 AM -> Player liquidity begins draining from your platform            |
-|  01:00 PM -> Junior trader spots promotion on social media                  |
-|  02:00 PM -> Internal meeting discusses response                           |
-|  03:00 PM -> Match kicks off; zero counter-action executed                  |
-|  Outcome: Lost turnover, increased player churn, zero yield defense         |
-|                                                                             |
-|  MODERN WORKFLOW (Real-Time Offer Feed via Jurnii 360)                      |
-|  10:00 AM -> Competitor launches campaign                                   |
-|  10:02 AM -> Ingestion node captures and normalises offer                   |
-|  10:03 AM -> Automated alert triggers on Trading Slack/Teams channel        |
-|  10:15 AM -> Trading desk deploys calculated counter-proposition            |
-|  Outcome: Turnover defended, margin protected, player engagement retained   |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Evaluation Variable** | **Benchmark Standard / Impact** |
+|---|---|
+| **SCENARIO** | Competitor launches a 3/1 Flash Odds Boost at 10:00 AM |
+| **10** | 00 AM -> Competitor launches campaign |
+| **10** | 30 AM -> Player liquidity begins draining from your platform |
+| **01** | 00 PM -> Junior trader spots promotion on social media |
+| **02** | 00 PM -> Internal meeting discusses response |
+| **03** | 00 PM -> Match kicks off; zero counter-action executed |
+| **Outcome** | Lost turnover, increased player churn, zero yield defense |
+| **10** | 00 AM -> Competitor launches campaign |
+| **10** | 02 AM -> Ingestion node captures and normalises offer |
+| **10** | 03 AM -> Automated alert triggers on Trading Slack/Teams channel |
+| **10** | 15 AM -> Trading desk deploys calculated counter-proposition |
+| **Outcome** | Turnover defended, margin protected, player engagement retained |
 
 Manual monitoring introduces three critical operational failures:
 
@@ -66,35 +56,20 @@ Manual monitoring introduces three critical operational failures:
 
 An automated competitor offer feed is an end-to-end data pipeline designed for high-frequency ingestion, structural normalisation, and instant event dispatching:
 
-```
-+-----------------------------------------------------------------------------+
-|               Competitor Offer Feed Technical Pipeline                      |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. POLLING & WEBSOCKET LISTENING LAYER                                     |
-|     - Headless browser agents polling competitor lobby APIs                 |
-|     - Real-time DOM mutation observers on live sportsbook carousels         |
-|     - Webhook listeners for automated promotional push and email feeds      |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  2. EVENT PARSING & ATTRIBUTE EXTRACTION ENGINE                             |
-|     - Entity extraction: Event ID, Sport, Market Type, Selection            |
-|     - Financial parsing: Nominal Odds, Boosted Odds, Max Stake Cap          |
-|     - Term parsing: Wagering Multiple, Cash vs Free Bet Payout, Expiry      |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  3. REAL-TIME SCORING & ANOMALY FILTER                                      |
-|     - Generosity Ratio & Value Index Calculation                            |
-|     - Threshold Evaluation (Triggers alerts only on high-impact deviations) |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  4. DISPATCH & INTEGRATION LAYER                                            |
-|     - Low-latency WebSocket feeds to Trading Dashboards                     |
-|     - Webhook notifications to Slack / Microsoft Teams                      |
-|     - REST API streaming to Internal Risk and CRM Management Engines        |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Metric / Dimension** | **Baseline** | **- Threshold Evaluation (Triggers alerts only on high-impact deviations)** |
+|---|---|---|
+| **Headless browser agents polling competitor lobby APIs** | - | - |
+| **Real-time DOM mutation observers on live sportsbook carousels** | - | - |
+| **Webhook listeners for automated promotional push and email feeds** | - | - |
+| **Entity extraction** | - | Event ID, Sport, Market Type, Selection |
+| **Financial parsing** | - | Nominal Odds, Boosted Odds, Max Stake Cap |
+| **Term parsing** | - | Wagering Multiple, Cash vs Free Bet Payout, Expiry |
+| **------------------------------------------------------------------------** | - | - |
+| **Generosity Ratio & Value Index Calculation** | - | - |
+| **Threshold Evaluation (Triggers alerts only on high-impact deviations)** | - | - |
+| **Low-latency WebSocket feeds to Trading Dashboards** | - | - |
+| **Webhook notifications to Slack / Microsoft Teams** | - | - |
+| **REST API streaming to Internal Risk and CRM Management Engines** | - | - |
 
 ### Layer 1: Polling and WebSocket Ingestion
 
@@ -107,63 +82,16 @@ The ingestion layer utilizes high-frequency headless browser nodes running on ge
 
 When a new promotional banner or lobby card is detected, the extraction engine converts raw HTML and image text into normalised JSON objects:
 
-```json
-{
-  "operator": "Competitor A",
-  "jurisdiction": "UK",
-  "timestamp": "2026-09-15T10:02:14Z",
-  "category": "Odds Boost",
-  "sport": "Football",
-  "event": "Arsenal vs Chelsea",
-  "market": "Match Winner",
-  "selection": "Arsenal to Win",
-  "nominalOdds": 1.95,
-  "boostedOdds": 3.00,
-  "maxStake": 10.00,
-  "payoutType": "Cash + Free Bet",
-  "wageringRequirement": 1.0,
-  "promoRichnessScore": 82.4
-}
-```
-
-### Layer 3: Real-Time Scoring and Anomaly Filtering
-
-To prevent trading desks from being flooded with trivial updates (such as minor headline wording tweaks), the engine applies threshold filtering:
-- **Value Deviation Filter**: An alert is only generated if the boosted odds represent a margin discount exceeding a predefined threshold (e.g., > 15% above market median).
-- **Stake Cap Significance**: The system evaluates whether the offer carries an aggressive £50 maximum stake cap (representing serious acquisition intent) or a restrictive £1 limit (indicating a low-cost promotional stunt).
-
-### Layer 4: Dispatch and Operational Delivery
-
-Qualified proposition events are immediately pushed to operational teams via:
-- **Trading WebSockets**: Live ticker integration directly within internal trading screens in [Jurnii 360](/products/jurnii-360).
-- **Automated Messaging Webhooks**: Instant alerts formatted into dedicated Slack and Microsoft Teams channels.
-- **Data Warehouse Stream**: Real-time event ingestion into analytical platforms for subsequent econometric modeling.
-
-## Commercial Applications: How Trading Desks Exploit Live Feeds
-
-When an automated offer feed is embedded into trading operations, it transforms how commercial teams respond to market volatility:
-
-```
-+-----------------------------------------------------------------------------+
-|                  Trading Desk Action Matrix via Live Feeds                  |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  DETECTED COMPETITOR EVENT         OPERATIONAL TRADING RESPONSE             |
-|  -------------------------------------------------------------------------  |
-|  Rival launches 2/1 Boost on       Deploy targeted Bet Builder insurance    |
-|  Derby Favourite                   without escalating single-match margin   |
-|                                                                             |
-|  Rival expands Extra Places from   Match extra place terms on specific high-|
-|  4 to 6 on Feature Race            liquidity horses while trimming overround|
-|                                                                             |
-|  Rival rolls out 100% Reload       CRM desk dispatches VIP free-to-play     |
-|  Casino Bonus                      predictive game to lock in session time  |
-|                                                                             |
-|  Rival introduces Restrictive      Stand down; highlight transparent cash   |
-|  Wagering Terms on Headline Offer  payout terms in real-time social copy    |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **DETECTED COMPETITOR EVENT** | **OPERATIONAL TRADING RESPONSE** |
+| --- | --- |
+| **Rival launches 2/1 Boost on** | Deploy targeted Bet Builder insurance |
+| **Derby Favourite** | without escalating single-match margin |
+| **Rival expands Extra Places from** | Match extra place terms on specific high- |
+| **4 to 6 on Feature Race** | liquidity horses while trimming overround |
+| **Rival rolls out 100% Reload** | CRM desk dispatches VIP free-to-play |
+| **Casino Bonus** | predictive game to lock in session time |
+| **Rival introduces Restrictive** | Stand down; highlight transparent cash |
+| **Wagering Terms on Headline Offer** | payout terms in real-time social copy |
 
 ### 1. Preempting Liquidity Drains Ahead of Major Fixtures
 

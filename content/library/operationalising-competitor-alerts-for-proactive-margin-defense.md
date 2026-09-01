@@ -31,24 +31,11 @@ To defend margins effectively, operators must implement intelligent [competitor 
 
 Organizations that attempt to track competitor activity without structured alerting infrastructure experience three common operational failures:
 
-```
-+-----------------------------------------------------------------------------+
-|               Unfiltered Monitoring vs Threshold-Driven Alerting            |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  FAILURE MODE                  OPERATIONAL IMPACT                           |
-|  -------------------------------------------------------------------------  |
-|  1. The Alert Avalanche        Teams receive 50+ emails daily, leading to   |
-|                                complete disengagement and ignored signals.  |
-|                                                                             |
-|  2. Trivial False Positives    Alarms trigger for minor creative wording    |
-|                                changes that carry zero economic impact.     |
-|                                                                             |
-|  3. Missing Severity Triage    A 50x bonus change is treated with the same  |
-|                                urgency as an aggressive odds boost.         |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **FAILURE MODE** | **OPERATIONAL IMPACT** |
+| --- | --- |
+| **1. The Alert Avalanche** | Teams receive 50+ emails daily, leading to complete disengagement and ignored signals. |
+| **2. Trivial False Positives** | Alarms trigger for minor creative wording changes that carry zero economic impact. |
+| **3. Missing Severity Triage** | A 50x bonus change is treated with the same urgency as an aggressive odds boost. |
 
 ### 1. The Alert Avalanche
 
@@ -66,33 +53,22 @@ Not all competitor campaigns warrant an operational response. An offer offering 
 
 A high-precision competitor alerting architecture operates through a four-stage filtering and dispatch pipeline:
 
-```
-+-----------------------------------------------------------------------------+
-|               Threshold-Driven Alert Engine Architecture                    |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  STAGE 1: CONTINUOUS INGESTION & ATTRIBUTE EXTRACTION                       |
-|  - Geo-distributed crawlers capture real-time proposition shifts            |
-|  - Machine learning models extract terms, caps, and price points            |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  STAGE 2: MATHEMATICAL IMPACT EVALUATION                                    |
-|  - Promo Richness Index calculation (True Expected Value extraction)        |
-|  - Pricing Overround deviation vs historical market baseline                |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  STAGE 3: SEVERITY TRIAGE & DEDUPLICATION                                   |
-|  - Low Impact (P3): Log to daily digest; no immediate alert                 |
-|  - Medium Impact (P2): Dispatch to functional Slack/Teams channels          |
-|  - Critical Threat (P1): Immediate push alert + SMS to C-Level / Trading    |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  STAGE 4: ACTIONABLE OPERATIONAL DISPATCH                                    |
-|  - Structured payload including screenshot, terms summary, & counter-play   |
-|  - Direct link into Jurnii 360 analytical quadrant                          |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Metric / Dimension** | **Baseline** | **- Promo Richness Index calculation (True Expected Value extraction)** |
+|---|---|---|
+| **STAGE 1** | CONTINUOUS INGESTION & ATTRIBUTE EXTRACTION | - |
+| **Geo-distributed crawlers capture real-time proposition shifts** | - | - |
+| **Machine learning models extract terms, caps, and price points** | - | - |
+| **STAGE 2** | - | MATHEMATICAL IMPACT EVALUATION |
+| **Promo Richness Index calculation (True Expected Value extraction)** | - | - |
+| **Pricing Overround deviation vs historical market baseline** | - | - |
+| **------------------------------------------------------------------------** | - | - |
+| **STAGE 3** | - | SEVERITY TRIAGE & DEDUPLICATION |
+| **Low Impact (P3)** | - | Log to daily digest; no immediate alert |
+| **Medium Impact (P2)** | - | Dispatch to functional Slack/Teams channels |
+| **Critical Threat (P1)** | - | Immediate push alert + SMS to C-Level / Trading |
+| **STAGE 4** | - | ACTIONABLE OPERATIONAL DISPATCH |
+| **Structured payload including screenshot, terms summary, & counter-play** | - | - |
+| **Direct link into Jurnii 360 analytical quadrant** | - | - |
 
 ### Stage 1: Continuous Ingestion and Attribute Extraction
 
@@ -128,26 +104,12 @@ An effective alert contains complete operational context. Rather than sending a 
 
 When structured alerts are integrated into daily operations within [Jurnii 360](/products/jurnii-360), cross-functional teams execute disciplined responses:
 
-```
-+-----------------------------------------------------------------------------+
-|                  Competitor Alert Response Workflows                        |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ P1 ALERT: Rival Launches 3/1 Enhanced Double on Premier League Derby ]   |
-|                                                                             |
-|  TRADING ACTION:                                                            |
-|  - Check liability models and exposure caps                                 |
-|  - Deploy Bet Builder insurance offer to retain multi-leg bettor volume     |
-|                                                                             |
-|  MARKETING ACTION:                                                          |
-|  - Update real-time search ad copy to highlight superior payout speeds      |
-|  - Dispatch push notification to active football cohorts                    |
-|                                                                             |
-|  CRM ACTION:                                                                |
-|  - Verify reload bonus claiming activity among high-value multi-homers      |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **P1 ALERT: Rival Launches 3/1 Enhanced Double on Premier League Derby** | - | Empirical benchmark verified |
+| **TRADING ACTION:** | Check liability models and exposure caps | Deploy Bet Builder insurance offer to retain multi-leg bettor volume |
+| **MARKETING ACTION:** | Update real-time search ad copy to highlight superior payout speeds | Dispatch push notification to active football cohorts |
+| **CRM ACTION:** | Verify reload bonus claiming activity among high-value multi-homers | Empirical benchmark verified |
 
 ### 1. Preempting Acquisition Hijacks
 
@@ -176,23 +138,13 @@ To ensure your competitive alerting infrastructure delivers sustained commercial
 
 To evaluate the financial return of proactive alerting, commercial trading desks calculate the Margin Defense Value (MDV):
 
-```
-+-----------------------------------------------------------------------------+
-|               Margin Defense Value (MDV) Formulation                        |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  Formula:                                                                   |
-|  MDV = (Active_Bettor_Volume * Avg_Stake) * (Incumbent_Overround - Hold_Min)|
-|        * (1 - Defection_Rate_Mitigated)                                     |
-|                                                                             |
-|  Where:                                                                     |
-|  - Active_Bettor_Volume: Matchday in-play bettors exposed to rival boost    |
-|  - Avg_Stake: Mean bet size during high-profile sporting events             |
-|  - Incumbent_Overround: Target gross trading margin (e.g. 5.5%)              |
-|  - Defection_Rate_Mitigated: % of players retained via instant counter-promo|
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Evaluation Variable** | **Benchmark Standard / Impact** |
+|---|---|
+| **Item** | (1 - Defection_Rate_Mitigated) |
+| **Active_Bettor_Volume** | Matchday in-play bettors exposed to rival boost |
+| **Avg_Stake** | Mean bet size during high-profile sporting events |
+| **Incumbent_Overround** | Target gross trading margin (e.g. 5.5%) |
+| **Defection_Rate_Mitigated** | % of players retained via instant counter-promo |
 
 Across 35+ monitored global jurisdictions, tracking 1,000+ offers weekly within Jurnii 360 saves commercial teams 30+ hours per week, compressing response times from days to minutes and defending up to £2.4M in annual gross gaming margin per operating brand.
 

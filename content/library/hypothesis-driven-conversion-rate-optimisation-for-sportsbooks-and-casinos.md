@@ -31,24 +31,13 @@ To build a high-yielding experimentation engine, operators must transition to [h
 
 Most digital gaming organizations struggle with their experimentation programs due to three systemic weaknesses:
 
-```
-+-----------------------------------------------------------------------------+
-|               Unstructured A/B Testing vs Hypothesis-Driven CRO             |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  DIMENSION          UNSTRUCTURED A/B TESTING    HYPOTHESIS-DRIVEN (JURNII)  |
-|  -------------------------------------------------------------------------  |
-|  Ideation Source    Random internal brainstorming Empirical usability audits|
-|                     and aesthetic opinions      and heuristic defect scoring|
-|                                                                             |
-|  Test Scope         Superficial cosmetic tweaks Architectural funnel refactors|
-|                     (button colors, hero images) (single-screen onboarding) |
-|                                                                             |
-|  Commercial Link    Vague micro-conversions     Directly tied to FTD volume |
-|                     (banner clicks, pageviews)  and 90-day Net Gaming Yield |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **DIMENSION** | **UNSTRUCTURED A/B TESTING** | **HYPOTHESIS-DRIVEN (JURNII)** |
+| --- | --- | --- |
+| **Ideation Source** | Random internal brainstorming Empirical usability audits | - |
+| **and aesthetic opinions** | and heuristic defect scoring | - |
+| **Test Scope** | Superficial cosmetic tweaks Architectural funnel refactors | - (button colors, hero images) (single-screen onboarding) |
+| **Commercial Link** | Vague micro-conversions | Directly tied to FTD volume |
+| **(banner clicks, pageviews)** | and 90-day Net Gaming Yield | - |
 
 ### 1. The Cosmetic Testing Trap
 
@@ -66,32 +55,20 @@ Generic CRO frameworks imported from retail e-commerce do not understand the psy
 
 Jurnii UX structures conversion optimisation through a rigorous four-stage experimentation pipeline:
 
-```
-+-----------------------------------------------------------------------------+
-|             Hypothesis-Driven CRO Architecture (Jurnii UX)                  |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  STAGE 1: EMPIRICAL FRICTION DISCOVERY                                      |
-|  - Continuous audit across Journey, Usability, Performance, Perception      |
-|  - Quantitative drop-off mapping across registration, KYC, and cashier      |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  STAGE 2: STRUCTURED COMMERCIAL HYPOTHESIS FORMATION                        |
-|  - If [Specific Friction Remediation], then [Conversion Metric Lift],       |
-|    because [Empirical Usability Heuristic / Competitor Benchmark].          |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  STAGE 3: HIGH-VELOCITY EXPERIMENTATION & VARIANTS                          |
-|  - Deploy clean code variants (e.g. Accordion Onboarding, Betslip Drawer)   |
-|  - Bayesian testing frameworks for rapid statistical convergence            |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  STAGE 4: PRODUCTION ROLLOUT & REVENUE RECONCILIATION                      |
-|  - Merge winning variants into core design system tokens                    |
-|  - Reconcile incremental FTD lift against financial acquisition targets     |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Metric / Dimension** | **Baseline** | **- Deploy clean code variants (e.g. Accordion Onboarding, Betslip Drawer)** |
+|---|---|---|
+| **STAGE 1** | EMPIRICAL FRICTION DISCOVERY | - |
+| **Continuous audit across Journey, Usability, Performance, Perception** | - | - |
+| **Quantitative drop-off mapping across registration, KYC, and cashier** | - | - |
+| **STAGE 2** | - | STRUCTURED COMMERCIAL HYPOTHESIS FORMATION |
+| **If [Specific Friction Remediation], then [Conversion Metric Lift],** | - | - |
+| **------------------------------------------------------------------------** | - | - |
+| **STAGE 3** | - | HIGH-VELOCITY EXPERIMENTATION & VARIANTS |
+| **Deploy clean code variants (e.g. Accordion Onboarding, Betslip Drawer)** | - | - |
+| **Bayesian testing frameworks for rapid statistical convergence** | - | - |
+| **STAGE 4** | - | PRODUCTION ROLLOUT & REVENUE RECONCILIATION |
+| **Merge winning variants into core design system tokens** | - | - |
+| **Reconcile incremental FTD lift against financial acquisition targets** | - | - |
 
 ### Stage 1: Empirical Friction Discovery
 
@@ -115,30 +92,11 @@ Winning experiments are merged into production, and the incremental FTD lift is 
 
 To understand the revenue impact of hypothesis-driven CRO, examine these real-world optimisations:
 
-```
-+-----------------------------------------------------------------------------+
-|                     High-Impact Gaming CRO Optimizations                    |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  EXPERIMENT 1: THE SINGLE-SCREEN PROGRESSIVE ONBOARDING ACCORDION           |
-|  - Problem: 4-page registration funnel suffered from 38% mobile drop-off.   |
-|  - Solution: Replaced multi-page flow with single-screen accordion + Apple   |
-|    biometric autofill.                                                      |
-|  - Result: +31% Registration Completion Rate; -42s Average Onboarding Time. |
-|                                                                             |
-|  EXPERIMENT 2: IN-BETSLIP ONE-TAP BIOMETRIC CASHIER                         |
-|  - Problem: Unfunded bettors placing live bets were redirected to detached   |
-|    cashier page, causing 64% live bet abandonment.                          |
-|  - Solution: Embedded Apple Pay / Pix deposit drawer directly inside slip.  |
-|  - Result: +44% First Time Deposit Conversion on Live Sports Coupons.       |
-|                                                                             |
-|  EXPERIMENT 3: TRANSPARENT ZERO-WAGERING PROMOTIONAL UI                     |
-|  - Problem: 40x bonus terms caused high drop-off on deposit bonus claiming. |
-|  - Solution: Restructured UI to highlight "Zero-Wagering Cash Free Spins".  |
-|  - Result: +26% Deposit Conversion; 2.2x Higher 60-Day Player Retention.    |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **EXPERIMENT 1: THE SINGLE-SCREEN PROGRESSIVE ONBOARDING ACCORDION** | Problem: 4-page registration funnel suffered from 38% mobile drop-off. | Solution: Replaced multi-page flow with single-screen accordion + Apple biometric autofill.; Result: +31% Registration Completion Rate; -42s Average Onboarding Time. |
+| **EXPERIMENT 2: IN-BETSLIP ONE-TAP BIOMETRIC CASHIER** | Problem: Unfunded bettors placing live bets were redirected to detached cashier page, causing 64% live bet abandonment. | Solution: Embedded Apple Pay / Pix deposit drawer directly inside slip.; Result: +44% First Time Deposit Conversion on Live Sports Coupons. |
+| **EXPERIMENT 3: TRANSPARENT ZERO-WAGERING PROMOTIONAL UI** | Problem: 40x bonus terms caused high drop-off on deposit bonus claiming. | Solution: Restructured UI to highlight "Zero-Wagering Cash Free Spins".; Result: +26% Deposit Conversion; 2.2x Higher 60-Day Player Retention. |
 
 ## Embedding a Continuous Experimentation Culture
 
@@ -151,18 +109,12 @@ To maximize the commercial return on CRO, gaming operators must embed experiment
 
 Within [Jurnii UX](/products/jurnii-ux), hypothesis-driven CRO is powered by the 4 foundational UX categories:
 
-```
-+-----------------------------------------------------------------------------+
-|               Jurnii UX Experimentation Telemetry Framework                 |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. JOURNEY EFFECTIVENESS (Form step reductions, mobile keypads, address API)|
-|  2. USABILITY HEURISTICS (Tap target expansions, inline error recovery)     |
-|  3. PERFORMANCE VITALS (LCP < 1.2s, INP < 100ms, CLS < 0.01)                |
-|  4. PERCEPTION & TRUST (Transparent terms, regulatory licensing prominence)  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **1. JOURNEY EFFECTIVENESS (Form step reductions, mobile keypads, address API)** | - |
+| **2. USABILITY HEURISTICS (Tap target expansions, inline error recovery)** | - |
+| **3. PERFORMANCE VITALS (LCP < 1.2s, INP < 100ms, CLS < 0.01)** | - |
+| **4. PERCEPTION & TRUST (Transparent terms, regulatory licensing prominence)** | - |
 
 Across 300+ analysed global brands, running hypothesis-driven experiments aligned with Jurnii UX recommendations consistently yields a 25-45% lift in First Time Deposit conversion within two engineering sprints.
 
@@ -172,19 +124,11 @@ Industry research indicates that over 70% of digital experimentation programs fa
 
 Jurnii UX grounds experiments in validated commercial heuristics:
 
-```
-+-----------------------------------------------------------------------------+
-|               High-Yield vs Low-Yield Experimentation Matrix                |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  LOW-YIELD A/B TESTS (High Failure) HIGH-YIELD STRUCTURAL TESTS (High Lift) |
-|  -------------------------------------------------------------------------  |
-|  Changing button colors (Green/Blue) Single-screen progressive accordion    |
-|  Hero banner carousel animations    In-betslip 1-tap Apple Pay cashier      |
-|  Generic promotional taglines       Zero-wagering transparent free spins    |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+- LOW-YIELD A/B TESTS (High Failure) HIGH-YIELD STRUCTURAL TESTS (High Lift)
+- -------------------------------------------------------------------------
+- Changing button colors (Green/Blue) Single-screen progressive accordion
+- Hero banner carousel animations    In-betslip 1-tap Apple Pay cashier
+- Generic promotional taglines       Zero-wagering transparent free spins
 
 Focusing testing capacity on structural transactional flows ensures that experiments produce measurable lifts in First Time Deposit conversion.
 
@@ -192,23 +136,16 @@ Focusing testing capacity on structural transactional flows ensures that experim
 
 A tier-1 UK operator tested two contrasting conversion optimisation initiatives over 60 days:
 
-```
-+-----------------------------------------------------------------------------+
-|               Cosmetic vs Structural CRO Experiment Comparison              |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  EXPERIMENT A: COSMETIC (Hero Banner Headline & CTA Color Variations)       |
-|  - Sample Size: 250,000 Visitors                                            |
-|  - First Time Deposit Lift: +0.4% (Not Statistically Significant)           |
-|  - Engineering Effort: 2 Sprints                                            |
-|                                                                             |
-|  EXPERIMENT B: STRUCTURAL (Single-Screen Cashier Drawer with Apple Pay)     |
-|  - Sample Size: 250,000 Visitors                                            |
-|  - First Time Deposit Lift: +24.8% (p < 0.001 Highly Significant)           |
-|  - Engineering Effort: 2 Sprints                                            |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Evaluation Variable** | **Benchmark Standard / Impact** |
+|---|---|
+| **EXPERIMENT A** | COSMETIC (Hero Banner Headline & CTA Color Variations) |
+| **Sample Size** | 250,000 Visitors |
+| **First Time Deposit Lift** | +0.4% (Not Statistically Significant) |
+| **Engineering Effort** | 2 Sprints |
+| **EXPERIMENT B** | STRUCTURAL (Single-Screen Cashier Drawer with Apple Pay) |
+| **Sample Size** | 250,000 Visitors |
+| **First Time Deposit Lift** | +24.8% (p < 0.001 Highly Significant) |
+| **Engineering Effort** | 2 Sprints |
 
 Testing structural interaction mechanics delivers massive commercial impact compared to superficial visual tweaks.
 

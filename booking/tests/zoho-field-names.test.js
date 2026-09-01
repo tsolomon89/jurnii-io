@@ -91,15 +91,27 @@ const WRITTEN = {
     'Country', 'Job_Title', 'Job_Title_Raw', 'Product_Interest', 'Contact_Marketing_Consent'],
   // the post-conversion Contact update, and processLead's step-5 enrichment
   // NB: no Country, no Product_Interest, no Personal_Phone — see the lead-only test below.
+  // The eight Contact_Completed_*_At stage-ENTRY timestamps are now LOAD-BEARING: they are
+  // criterion 4 of the leading-Contact election (4.8a), not just bookkeeping. All eight are KEEP.
+  // ⚠ The api_names say "Completed"; the owner-defined fact is Stage ENTRY. A label-only rename
+  // may be proposed; the api_names must NOT change and no replacement field may be created.
   Contacts: ['First_Name', 'Last_Name', 'Email', 'Lead_Source', 'Phone',
     'Job_Title', 'Job_Title_Raw', 'Marketing_Consent', 'Stage', 'State',
-    'Status', 'Contact_Role1', 'Account_Name'],
+    'Status', 'Contact_Role1', 'Account_Name',
+    'Contact_Completed_Marketing_Qualification_At', 'Contact_Completed_Demo_Booking_At',
+    'Contact_Completed_Demo_Confirmation_At', 'Contact_Completed_Demo_Hosted_At',
+    'Contact_Completed_Proposal_Preparation_At', 'Contact_Completed_Commercial_Agreement_At',
+    'Contact_Completed_Onboarding_At', 'Contact_Completed_Renewal_At'],
   Events: ['Ext_Calendar_Booking_ID', 'Start_DateTime', 'End_DateTime', 'Who_Id',
     'What_Id', 'Description', 'Event_Title', 'Meeting_Task_Stage',
     'Meeting_Task_State', 'Meeting_Task_Status', 'Meeting_Task_Lost_Reasons',
     'Meeting_Task_Contract_Products', 'Meeting_Task_Pipeline',
     'Meeting_Task_Opportunity', 'Reminder_Send_At'],
-  Deals: ['Deal_Name', 'Deal_Key', 'Deal_Product', 'Deal_Product_Key', 'Account_Name',
+  // Deal_Product / Deal_Product_Key / Company_Tier REMOVED from this list (work items 4.3-5.1):
+  // nothing writes them any more. They still EXIST in live metadata and are only deleted after
+  // P10, so asserting their existence here would still pass -- but this list documents what the
+  // chain WRITES, and a retired writer must not be recorded as a live one.
+  Deals: ['Deal_Name', 'Deal_Key', 'Account_Name',
     'Contact_Name', 'Opportunity_State', 'Opportunity_Status', 'Stage', 'Pipeline',
     'Closing_Date', 'Lead_Source', 'Demo_Reminder_Send_At'],
   Accounts: ['Account_Name', 'Account_Key', 'Website', 'Phone', 'Company_Tier'],
@@ -213,53 +225,96 @@ for (const fn of ROLE_RESOLVERS) {
   test(`${fn} does not default an unmatched RAW title to Decision Maker`, { skip: noDeluge }, () => {
     const src = fs.readFileSync(path.join(DELUGE_DIR, fn), 'utf8');
     const code = src.split('\n').filter((l) => !l.trim().startsWith('//')).join('\n');
-    // The seed is path-dependent: "Decision Maker" for a curated picklist value whose map
-    // entry is missing, "" for arbitrary visitor free text. Guessing on free text would
-    // silently inflate the highest-value segment with every unrecognised title typed.
-    assert.match(code, /=\s*if\(\s*\w+\s*!=\s*"",\s*"Decision Maker",\s*""\s*\)/,
-      `${fn} must seed the role by path, not unconditionally`);
-    // All three role lists must actually be consulted. `dmTitles` was declared and never
-    // read in processContact and processDeal, which was harmless only while the default
-    // was unconditionally "Decision Maker" — with a blank raw default it would have
-    // dropped every raw Decision-Maker title.
-    for (const list of ['dmTitles', 'euTitles', 'infTitles']) {
-      assert.ok(new RegExp(`${list}\\.contains\\(`).test(code),
-        `${fn} declares ${list} but never reads it`);
-    }
+    // ⚠ INVERTED (work item 4.7). This previously REQUIRED a path-dependent seed --
+    // "Decision Maker" for a curated picklist value whose map entry was missing, "" for
+    // arbitrary free text -- on the reasoning that a governed title implies seniority.
+    //
+    // The correction removes that: BLANK STAYS BLANK, on both paths. The original reasoning
+    // was half right (guessing on free text inflates the highest-value segment) but stopped
+    // one step short: guessing on a governed title inflates it too, just more quietly. And
+    // the guess did not stay local -- an unresolved role fed the leading-Contact election,
+    // where an unrecognised role ALSO defaulted to the top rank, so a title nobody had
+    // classified outranked a known Influencer.
+    //
+    // An unresolved title is now left blank for manual triage, and a blank role sorts LAST.
+    assert.doesNotMatch(code, /=\s*if\(\s*\w+\s*!=\s*"",\s*"Decision Maker",\s*""\s*\)/,
+      `${fn} re-seeds an unmatched title to Decision Maker; blank must stay blank`);
+    assert.doesNotMatch(code, /resolvedRole\w*\s*=\s*"Decision Maker"\s*;/,
+      `${fn} assigns Decision Maker as a default rather than a resolution`);
+    // Resolution must go through the single authority, not a local copy of the corpora.
+    assert.match(code, /automation\.roleForTitle\s*\(/,
+      `${fn} must resolve the role through _util_roleForTitle`);
+    assert.doesNotMatch(code, /dmTitles|euTitles|infTitles/,
+      `${fn} still carries its own copy of the title corpora`);
   });
 }
 
-test('multi-product bookings defer activation to a human (current behaviour — SUPERSEDED, see authority §5.4)', { skip: noDeluge }, () => {
-  // ⚠ PINS CURRENT (SUPERSEDED) BEHAVIOUR.
-  //   Authority: zoho-functions/docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md §5.4 —
-  //   "Several Products or Quotes under the Deal do not make the Contact sequence ambiguous."
+test('the title corpora live in ONE authority and all three are consulted', { skip: noDeluge }, () => {
+  // ⚠ RETARGETED (work item 4.7). This assertion used to run per-orchestrator, requiring each of
+  // processLead / processContact / processDeal to declare AND read all three corpora. It caught a
+  // real bug at the time: `dmTitles` was declared but never read in processContact and
+  // processDeal, which was harmless only while the seed defaulted to "Decision Maker" anyway --
+  // remove that default and every raw Decision-Maker title would silently have dropped to blank.
   //
-  //   HARD RULE 7 (one active sequence per Contact) is CORRECT and survives. Deriving ambiguity
-  //   from the NUMBER OF PRODUCTS is the violation. Under the approved model this branch is
-  //   arithmetically unreachable — one Account has one Deal, so driverDealIds.size() is never > 1
-  //   and [multi_product_sequence_ambiguous] deletes itself.
+  // The corpora now exist exactly once, so the assertion moves to the authority. That also
+  // retires the whole bug class: "declared but never read" can no longer have three different
+  // answers in three files.
+  const src = fs.readFileSync(
+    path.join(DELUGE_DIR, 'activity', '_util_roleForTitle.deluge'), 'utf8');
+  const code = src.split('\n').filter((l) => !l.trim().startsWith('//')).join('\n');
+
+  for (const list of ['dmTitles', 'euTitles', 'infTitles']) {
+    assert.ok(new RegExp(`${list}\\s*=\\s*\\{`).test(code),
+      `_util_roleForTitle must declare ${list}`);
+    assert.ok(new RegExp(`${list}\\.contains\\(`).test(code),
+      `_util_roleForTitle declares ${list} but never reads it`);
+  }
+
+  // An unresolved title must come back blank, never as a guessed role.
+  assert.match(code, /return\s*""\s*;/,
+    '_util_roleForTitle must return "" for an unresolved title');
+});
+
+test('a multi-product Contact activates normally, with no Product-derived ambiguity', { skip: noDeluge }, () => {
+  // ⚠ THIS TEST WAS INVERTED (work item 4.3).
   //
-  //   THIS ASSERTION IS EXPECTED TO FAIL when the model is corrected. Invert it into the §14.13
-  //   guard — "a multi-product Contact activates normally" — do NOT delete it.
+  // It previously pinned the SUPERSEDED behaviour: processContact raised
+  // [multi_product_sequence_ambiguous] and withheld the Activation Task whenever a Contact
+  // mapped to more than one "driver" Product Deal. Its own header said the assertion was
+  // expected to fail when the model was corrected, named the replacement ("a multi-product
+  // Contact activates normally"), and said to invert rather than delete it.
   //
-  // The form can now send up to four products, and processLead fans out one Product Deal
-  // per product. processContact applies HARD RULE 7 — one active automated sequence per
-  // Contact — and raises a Manual Review instead of the Activation Task when a Contact
-  // has more than one driver Deal.
+  // Authority: JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md §5.4 — "Several Products or Quotes
+  // under the Deal do not make the Contact sequence ambiguous." Cadence is Contact-scoped, so
+  // the NUMBER OF PRODUCTS was never a property that could make it ambiguous.
   //
-  // That branch was unreachable from the booking flow while the form was single-select.
-  // It is now on the ordinary happy path, so it is pinned here: it fails safely to a
-  // human, and neither side may be "fixed" to auto-pick a driver Deal without an
-  // explicit decision (see booking/docs/architecture.md).
+  // HARD RULE 7 itself — one active automated sequence per Contact — is correct and survives.
+  // What is removed is DERIVING a breach of it from Product count. The one-Deal-per-Account
+  // cardinality makes the old branch arithmetically unreachable, so it is deleted rather than
+  // left as dead code.
   const src = fs.readFileSync(path.join(DELUGE_DIR, 'processContact.deluge'), 'utf8');
   const code = src.split('\n').filter((l) => !l.trim().startsWith('//')).join('\n');
 
-  assert.match(code, /driverDealIds\.size\(\)\s*>\s*1/,
-    'the multi-driver guard is gone — a multi-product Contact would auto-pick a Deal');
-  assert.match(code, /multi_product_sequence_ambiguous/,
-    'the multi-driver branch must raise a Manual Review, not fail silently');
+  assert.doesNotMatch(code, /driverDealIds/,
+    'the Product-derived driver election is back — a Contact must not be gated on Product count');
+  assert.doesNotMatch(code, /multi_product_sequence_ambiguous/,
+    'a retired review code is being raised again');
+  assert.doesNotMatch(code, /b2bDriverDealIds|partnerDriverDealIds/,
+    'the B2B/Partnership driver split is back; Pipeline is a Deal property, not a Product vote');
 
-  // And the form must still be capable of producing that state, i.e. multi-select is real.
+  // The Contact activates against the ACCOUNT's one Deal.
+  assert.match(code, /accountDealId/,
+    'activation must be driven by the Account-resolved Deal');
+  assert.match(code, /resolveOrCreateAccountDeal\s*\(/,
+    'processContact must resolve the Account Deal through the single resolver');
+
+  // Eligibility is viability + not-already-sequenced. The Decision-Maker-only gate is gone
+  // (canary C4: every eligible Contact receives exactly one Activation Task).
+  assert.doesNotMatch(code, /contactRoleNow == "Decision Maker"/,
+    'the Decision-Maker-only activation gate is back; C4 requires every eligible Contact');
+
+  // And the form must still be capable of producing the multi-product state, i.e. multi-select
+  // is real — otherwise this whole interaction is moot in either direction.
   const form = fs.readFileSync(
     path.join(__dirname, '..', 'assets', 'booking-form.js'), 'utf8');
   assert.match(form, /data-field="productInterests"/,

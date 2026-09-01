@@ -14,7 +14,26 @@ marked.use(
     // market reports into math: "$350m to its Brazil position ... above $90m" rendered
     // as "350mtoitsBrazilposition…". The papers' real `$…$` and `$$…$$` are unaffected.
     nonStandard: false,
-  })
+  }),
+  {
+    renderer: {
+      table(token: any) {
+        const headerHtml = token.header
+          .map((cell: any) => `<th>${cell.tokens ? marked.parseInline(cell.text) : cell.text}</th>`)
+          .join('');
+        const rowsHtml = token.rows
+          .map((row: any) => {
+            const cells = row
+              .map((cell: any) => `<td>${cell.tokens ? marked.parseInline(cell.text) : cell.text}</td>`)
+              .join('');
+            return `<tr>${cells}</tr>`;
+          })
+          .join('\n');
+
+        return `<div class="article-table-wrap"><table class="article-table">\n<thead>\n<tr>${headerHtml}</tr>\n</thead>\n<tbody>\n${rowsHtml}\n</tbody>\n</table></div>\n`;
+      },
+    },
+  }
 );
 
 const cwd = process.cwd();

@@ -1726,11 +1726,111 @@ html.js-gsap .pbt-row.is-in, .pbt-row.is-in { opacity: 1; transform: translateY(
 @media (max-width: 640px) {
   .article-prose .figure-row { grid-auto-columns: minmax(180px, 62vw); }
 }
-.article-prose table { width: 100%; border-collapse: collapse; margin: var(--spacing-6) 0; font-size: var(--text-sm); display: block; overflow-x: auto; }
-.article-prose thead th { text-align: left; font-family: var(--font-mono); font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted-foreground); border-bottom: 2px solid var(--border); padding: var(--spacing-2) var(--spacing-3); white-space: nowrap; }
-.article-prose tbody td { padding: var(--spacing-2) var(--spacing-3); border-bottom: 1px solid var(--border); color: var(--foreground); vertical-align: top; }
-.article-prose tbody tr:last-child td { border-bottom: none; }
-.article-prose tbody td:first-child { font-weight: 600; }
+.article-prose .article-table-wrap {
+  margin: var(--spacing-8) 0;
+  width: 100%;
+  max-width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02), 0 4px 12px rgba(0, 0, 0, 0.02);
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.article-prose .article-table-wrap::-webkit-scrollbar {
+  height: 6px;
+}
+.article-prose .article-table-wrap::-webkit-scrollbar-track {
+  background: transparent;
+}
+.article-prose .article-table-wrap::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: var(--radius-full);
+}
+.article-prose .article-table,
+.article-prose table {
+  width: 100%;
+  min-width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: var(--text-sm);
+  text-align: left;
+  margin: 0;
+}
+.article-prose > table {
+  margin: var(--spacing-8) 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.article-prose table thead {
+  background: var(--accent);
+}
+.article-prose table thead th {
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted-foreground);
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  padding: var(--spacing-3) var(--spacing-4);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.article-prose table thead th:last-child {
+  border-right: none;
+}
+.article-prose table tbody tr {
+  transition: background-color 150ms ease;
+}
+.article-prose table tbody tr:nth-child(even) {
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.article-prose table tbody tr:hover {
+  background: color-mix(in srgb, var(--accent) 70%, transparent);
+}
+[data-theme="dark"] .article-prose table tbody tr:hover,
+[data-theme="jurnii-v1"] .article-prose table tbody tr:hover {
+  background: var(--white-a-6);
+}
+.article-prose table tbody td {
+  padding: var(--spacing-3) var(--spacing-4);
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  color: var(--foreground);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  vertical-align: top;
+  font-variant-numeric: tabular-nums;
+}
+.article-prose table tbody td:last-child {
+  border-right: none;
+}
+.article-prose table tbody tr:last-child td {
+  border-bottom: none;
+}
+.article-prose table tbody td:first-child {
+  font-weight: var(--fw-semibold);
+}
+.article-prose table strong {
+  color: var(--foreground);
+  font-weight: var(--fw-semibold);
+}
+.article-prose table code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  padding: 2px 5px;
+  background: var(--muted);
+  border-radius: var(--radius-xs);
+}
 
 /* Half the migrated covers are 1:1 promotional cards and one is portrait, so a
    plain width:100% hero fills the whole fold before a word of the article shows.

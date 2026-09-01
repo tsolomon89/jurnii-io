@@ -31,25 +31,11 @@ To protect high-yield player cohorts and maximize customer lifetime value, comme
 
 High-value players interact with gaming platforms differently from casual recreational users. Operators frequently fail to protect VIP lifetime value due to three critical operational vulnerabilities:
 
-```
-+-----------------------------------------------------------------------------+
-|               The 3 Operational Vulnerabilities in VIP Retention            |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. THE WITHDRAWAL LATENCY INSULT                                           |
-|     - Forcing a high-stakes player who deposited £10,000 to wait 48 hours   |
-|       for a £5,000 withdrawal creates instant, permanent defection.         |
-|                                                                             |
-|  2. THE GENERIC MASS-MARKETING ALIENATION                                   |
-|     - Bombarding VIP sports bettors with £5 casino free spin bonuses signals|
-|       a complete lack of commercial understanding, destroying trust.        |
-|                                                                             |
-|  3. TRANSACTIONAL FRICTION DURING LIVE PEAK SESSIONS                        |
-|     - Sluggish bet confirmation (INP > 200ms) or unexpected stake factoring |
-|       causes immediate balance transfers to competitors during big matches. |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **1. THE WITHDRAWAL LATENCY INSULT** | Forcing a high-stakes player who deposited £10,000 to wait 48 hours for a £5,000 withdrawal creates instant, permanent defection. |
+| **2. THE GENERIC MASS-MARKETING ALIENATION** | Bombarding VIP sports bettors with £5 casino free spin bonuses signals a complete lack of commercial understanding, destroying trust. |
+| **3. TRANSACTIONAL FRICTION DURING LIVE PEAK SESSIONS** | Sluggish bet confirmation (INP > 200ms) or unexpected stake factoring causes immediate balance transfers to competitors during big matches. |
 
 ### 1. Withdrawal Processing Speed as the Primary VIP Retainer
 
@@ -71,29 +57,12 @@ During high-stakes live betting (such as in-play Grand Slam tennis or major boxi
 
 Jurnii UX approaches LTV optimisation through four interconnected operational pillars:
 
-```
-+-----------------------------------------------------------------------------+
-|               The 4 Pillars of iGaming LTV Optimisation                     |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. ZERO-FRICTION TRANSACTIONAL INFRASTRUCTURE                              |
-|     - Sub-100ms INP responsiveness across live sports coupons and lobbies   |
-|     - Instant Open Banking payout execution (< 3 minutes)                   |
-|                                                                             |
-|  2. COHORT-SPECIFIC PROPOSITION CALIBRATION                                 |
-|     - Replace generic mass bonuses with high-value, low-wagering cashback   |
-|     - Calculate personalized Promo Richness scores for VIP player tiers     |
-|                                                                             |
-|  3. PROACTIVE CHURN PREDICTION & TELEMETRY                                  |
-|     - Detect early churn signals (declining session frequency, failed bets) |
-|     - Automated VIP concierge intervention before defection occurs          |
-|                                                                             |
-|  4. PROACTIVE SAFER GAMBLING & SUSTAINABLE PLAY                             |
-|     - AI-driven behavioural monitoring to identify risky play patterns      |
-|     - Protect long-term player longevity while adhering to compliance rules |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. ZERO-FRICTION TRANSACTIONAL INFRASTRUCTURE** | Sub-100ms INP responsiveness across live sports coupons and lobbies | Instant Open Banking payout execution (< 3 minutes) |
+| **2. COHORT-SPECIFIC PROPOSITION CALIBRATION** | Replace generic mass bonuses with high-value, low-wagering cashback | Calculate personalized Promo Richness scores for VIP player tiers |
+| **3. PROACTIVE CHURN PREDICTION & TELEMETRY** | Detect early churn signals (declining session frequency, failed bets) | Automated VIP concierge intervention before defection occurs |
+| **4. PROACTIVE SAFER GAMBLING & SUSTAINABLE PLAY** | AI-driven behavioural monitoring to identify risky play patterns | Protect long-term player longevity while adhering to compliance rules |
 
 ### 1. Zero-Friction Transactional Rails
 
@@ -133,20 +102,12 @@ A comprehensive VIP journey audit conducted via [Jurnii UX](/products/jurnii-ux)
 
 Within [Jurnii UX](/products/jurnii-ux), high-velocity and VIP player journeys are audited against strict performance thresholds:
 
-```
-+-----------------------------------------------------------------------------+
-|               VIP Player Journey Telemetry Architecture                     |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  JOURNEY TOUCHPOINT     STANDARD PLAYER FLOW      OPTIMIZED VIP BENCHMARK   |
-|  -------------------------------------------------------------------------  |
-|  Withdrawal Processing  Manual review queue (12-24h) Automated Open Banking (< 3m)|
-|  In-Play Betslip Confirm Price delay latency (> 3s)  Instant execution (< 250ms)|
-|  Re-deposit Flow        Redirect to full cashier  In-context 1-tap quick reload|
-|  VIP Promotion Claim    Manual bonus codes        Automated 0-wagering credit  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **JOURNEY TOUCHPOINT** | **STANDARD PLAYER FLOW** | **OPTIMIZED VIP BENCHMARK** |
+| --- | --- | --- |
+| **Withdrawal Processing** | Manual review queue (12-24h) Automated Open Banking (< 3m) | - |
+| **In-Play Betslip Confirm Price delay latency (> 3s)** | Instant execution (< 250ms) | - |
+| **Re-deposit Flow** | Redirect to full cashier | In-context 1-tap quick reload |
+| **VIP Promotion Claim** | Manual bonus codes | Automated 0-wagering credit |
 
 Across 300+ analysed global brands, operators providing sub-second transactional execution to high-velocity players achieve up to 3x higher 12-month retention and protect vital Gross Gaming Revenue margins.
 
@@ -154,24 +115,14 @@ Across 300+ analysed global brands, operators providing sub-second transactional
 
 In digital gaming, 10% of active players generate 80% of total Gross Gaming Revenue. Because these players wager with high frequency and stakes, they possess zero tolerance for transactional latency.
 
-```
-+-----------------------------------------------------------------------------+
-|               VIP Player Telemetry & Churn Prevention Protocol              |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  VIP FRICTION TRIGGER       OPERATIONAL RISK        AUTOMATED JURNII ACTION |
-|  -------------------------------------------------------------------------  |
-|  Withdrawal Delayed > 1h    Immediate Competitor    Pre-approve Open Banking|
-|                             Account Opening         automated settlement    |
-|                                                                             |
-|  Betslip Factor Delay > 2s  Live Bet Abandonment    Dedicated high-roller   |
-|                             and Loss of Turnover    trading risk channel    |
-|                                                                             |
-|  Cashier Decline Error      Frustration Churn       Dynamic alternative rail|
-|                             to Rival Sportsbook     prompt with instant VIP |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **VIP FRICTION TRIGGER** | **OPERATIONAL RISK** | **AUTOMATED JURNII ACTION** |
+| --- | --- | --- |
+| **Withdrawal Delayed > 1h** | Immediate Competitor | Pre-approve Open Banking |
+| **Account Opening** | automated settlement | - |
+| **Betslip Factor Delay > 2s** | Live Bet Abandonment | Dedicated high-roller |
+| **and Loss of Turnover** | trading risk channel | - |
+| **Cashier Decline Error** | Frustration Churn | Dynamic alternative rail |
+| **to Rival Sportsbook** | prompt with instant VIP | - |
 
 Protecting the VIP experience directly protects the financial core of the operating business.
 

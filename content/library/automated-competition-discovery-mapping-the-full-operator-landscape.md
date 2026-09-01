@@ -31,29 +31,12 @@ To de-risk market entry and accelerate time to profitability, commercial leaders
 
 A complete market discovery framework evaluates four foundational operational pillars:
 
-```
-+-----------------------------------------------------------------------------+
-|               The 4 Pillars of Systematic Market Discovery                  |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. LOCAL COMPETITOR TAXONOMY & LICENSING MAPPING                           |
-|     - Identify all tier-1 incumbents, local heroes, and offshore operators  |
-|     - Map multi-brand corporate ownership and local white-label networks    |
-|                                                                             |
-|  2. PROMOTIONAL RICHNESS & BONUS CONVENTION BENCHMARKING                    |
-|     - Calculate local baseline Promo Richness Index across welcome offers   |
-|     - Identify local retention mechanics, VIP schemes, and wagering norms   |
-|                                                                             |
-|  3. PAYMENT ECOSYSTEM & TRANSACTIONAL INFRASTRUCTURE                        |
-|     - Audit local payment method dominance (e.g. Pix, Interac, Mobile Money)|
-|     - Measure local deposit and withdrawal processing latency benchmarks    |
-|                                                                             |
-|  4. PRODUCT VERTICALS & REGIONAL CONTENT PREFERENCES                        |
-|     - Sportsbook depth (local football leagues, basketball, regional props) |
-|     - Casino studio penetration (Crash games, localized live dealer tables) |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. LOCAL COMPETITOR TAXONOMY & LICENSING MAPPING** | Identify all tier-1 incumbents, local heroes, and offshore operators | Map multi-brand corporate ownership and local white-label networks |
+| **2. PROMOTIONAL RICHNESS & BONUS CONVENTION BENCHMARKING** | Calculate local baseline Promo Richness Index across welcome offers | Identify local retention mechanics, VIP schemes, and wagering norms |
+| **3. PAYMENT ECOSYSTEM & TRANSACTIONAL INFRASTRUCTURE** | Audit local payment method dominance (e.g. Pix, Interac, Mobile Money) | Measure local deposit and withdrawal processing latency benchmarks |
+| **4. PRODUCT VERTICALS & REGIONAL CONTENT PREFERENCES** | Sportsbook depth (local football leagues, basketball, regional props) | Casino studio penetration (Crash games, localized live dealer tables) |
 
 ### 1. Competitor Taxonomy and Corporate Mapping
 
@@ -86,25 +69,12 @@ Discovery audits map the exact game catalogues, live dealer studios, and sports 
 
 To execute a structured market discovery program, commercial teams follow a four-stage workflow powered by [Jurnii 360](/products/jurnii-360):
 
-```
-+-----------------------------------------------------------------------------+
-|               Systematic Competition Discovery Workflow                     |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ STAGE 1: GEOGRAPHIC SCOPING (T-180 DAYS) ]                              |
-|  Deploy geo-distributed headless crawlers across target licensing zone.    |
-|                                                                             |
-|  [ STAGE 2: RECONNAISSANCE & INGESTION (T-120 DAYS) ]                       |
-|  Ingest all active competitor marketing surfaces, terms, and odds feeds.    |
-|                                                                             |
-|  [ STAGE 3: PROPOSITION & UX BENCHMARKING (T-60 DAYS) ]                     |
-|  Model local Promo Richness, journey velocity, and Core Web Vitals baselines.|
-|                                                                             |
-|  [ STAGE 4: COMMERCIAL ROADMAP CALIBRATION (T-0 DAYS) ]                     |
-|  Finalize acquisition offers, payment gateway priority, and launch pricing. |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **STAGE 1: GEOGRAPHIC SCOPING (T-180 DAYS)** | Deploy geo-distributed headless crawlers across target licensing zone. |
+| **STAGE 2: RECONNAISSANCE & INGESTION (T-120 DAYS)** | Ingest all active competitor marketing surfaces, terms, and odds feeds. |
+| **STAGE 3: PROPOSITION & UX BENCHMARKING (T-60 DAYS)** | Model local Promo Richness, journey velocity, and Core Web Vitals baselines. |
+| **STAGE 4: COMMERCIAL ROADMAP CALIBRATION (T-0 DAYS)** | Finalize acquisition offers, payment gateway priority, and launch pricing. |
 
 ### Stage 1: Geographic Scoping and Proxy Deployment
 
@@ -144,48 +114,24 @@ By pivoting their launch strategy to a localized matched deposit accumulator pro
 
 Operating across multiple regulated jurisdictions requires an automated intelligence pipeline that scales effortlessly:
 
-```
-+-----------------------------------------------------------------------------+
-|               Automated Competition Discovery Matrix                        |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ REGULATORY TELEMETRY ]                                                   |
-|  - Real-time indexing of newly licensed domain registries across 35+ markets|
-|  - Continuous verification of mandatory licensing disclosures and terms     |
-|                                                                             |
-|  [ PROPOSITION MONITORING ]                                                 |
-|  - 100% automated move tracking across 21 feature areas                     |
-|  - Normalized Promo Richness Index calculations comparing regional peers    |
-|                                                                             |
-|  [ OPERATIONAL TIME SAVINGS ]                                               |
-|  - Saves commercial teams over 30+ hours per week vs manual research        |
-|  - Compresses competitive response times from weeks to hours                |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **REGULATORY TELEMETRY** | Real-time indexing of newly licensed domain registries across 35+ markets | Continuous verification of mandatory licensing disclosures and terms |
+| **PROPOSITION MONITORING** | 100% automated move tracking across 21 feature areas | Normalized Promo Richness Index calculations comparing regional peers |
+| **OPERATIONAL TIME SAVINGS** | Saves commercial teams over 30+ hours per week vs manual research | Compresses competitive response times from weeks to hours |
 
 ## Regional Expansion Case Studies: Discovery in Practice
 
 When entering high-growth regulated jurisdictions like Latin America (Brazil) or North America (Ontario, Ohio), automated competition discovery gives commercial teams immediate market visibility:
 
-```
-+-----------------------------------------------------------------------------+
-|               New Market Operator Discovery & Mapping Matrix                |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  MARKET JURISDICTION    DISCOVERED COMPETITORS      DOMINANT PROPOSITION    |
-|  -------------------------------------------------------------------------  |
-|  Brazil (SPA Regulated) 48 Licensed Brands          Pix Instant Cashier     |
-|                         14 Tier-1 Multinationals    Local Football Boosts   |
-|                                                                             |
-|  Ontario (iGaming ON)   72 Active Sportsbooks       Same Game Parlay Push   |
-|                         35 Casino Specialists       Zero Wagering Free Spins|
-|                                                                             |
-|  United Kingdom (UKGC)  110+ Monitored Operators    Safer Gambling Limits   |
-|                         25 High-Frequency Books     Open Banking Payouts    |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **MARKET JURISDICTION** | **DISCOVERED COMPETITORS** | **DOMINANT PROPOSITION** |
+| --- | --- | --- |
+| **Brazil (SPA Regulated) 48 Licensed Brands** | Pix Instant Cashier | - |
+| **14 Tier-1 Multinationals** | Local Football Boosts | - |
+| **Ontario (iGaming ON)** | 72 Active Sportsbooks | Same Game Parlay Push |
+| **35 Casino Specialists** | Zero Wagering Free Spins | - |
+| **United Kingdom (UKGC)** | 110+ Monitored Operators | Safer Gambling Limits |
+| **25 High-Frequency Books** | Open Banking Payouts | - |
 
 Instead of spending weeks contracting local agencies, commercial teams deploy [Jurnii 360](/products/jurnii-360) to generate complete competitive landscape maps within hours.
 

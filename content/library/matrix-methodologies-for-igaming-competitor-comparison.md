@@ -41,37 +41,26 @@ To achieve genuine commercial utility, a comparison matrix must evaluate transac
 
 A rigorous competitive comparison matrix is organized into four distinct analytical tiers, moving from technical infrastructure up to high-level commercial yield:
 
-```
-+-----------------------------------------------------------------------------+
-|               4-Tier iGaming Competitor Comparison Matrix                   |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  TIER 4: COMMERCIAL YIELD & PROPOSITION ECONOMICS (Weight: 35%)             |
-|  - Promo Richness Index (Nominal Value vs Turnover Friction)                |
-|  - Pricing Overround Competitiveness (Primary vs Secondary Markets)         |
-|  - Retention Incentive Calibration (Reload Frequency & VIP Tiers)           |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  TIER 3: TRANSACTIONAL JOURNEY VELOCITY (Weight: 30%)                       |
-|  - Registration Click-to-Completion Time (Seconds)                          |
-|  - Automated KYC Verification Pass Rate & Latency                           |
-|  - First Time Deposit (FTD) Flow Friction & Payment Method Breadth          |
-|  - Withdrawal Processing Velocity (Minutes to Cash in Hand)                 |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  TIER 2: USABILITY & INTERACTION HEURISTICS (Weight: 20%)                   |
-|  - Information Architecture & Menu Depth (Taps to Primary Markets)          |
-|  - Betslip Interaction Efficiency & Error Recovery Clarity                  |
-|  - Casino Lobby Search & Provider Filtering Maturity                        |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  TIER 1: TECHNICAL PERFORMANCE & INFRASTRUCTURE (Weight: 15%)               |
-|  - Largest Contentful Paint (LCP) under Simulated 4G Mobile Conditions      |
-|  - Interaction to Next Paint (INP) Input Responsiveness                     |
-|  - Cumulative Layout Shift (CLS) on Live Dynamic Odds Feeds                 |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Metric / Dimension** | **TIER 4: COMMERCIAL YIELD & PROPOSITION ECONOMICS (Weight: 35%)** | **TIER 3: TRANSACTIONAL JOURNEY VELOCITY (Weight: 30%)** |
+|---|---|---|
+| **TIER 4** | COMMERCIAL YIELD & PROPOSITION ECONOMICS (Weight: 35%) | - |
+| **Promo Richness Index (Nominal Value vs Turnover Friction)** | - | - |
+| **Pricing Overround Competitiveness (Primary vs Secondary Markets)** | - | - |
+| **Retention Incentive Calibration (Reload Frequency & VIP Tiers)** | - | - |
+| **TIER 3** | - | TRANSACTIONAL JOURNEY VELOCITY (Weight: 30%) |
+| **Registration Click-to-Completion Time (Seconds)** | - | - |
+| **Automated KYC Verification Pass Rate & Latency** | - | - |
+| **First Time Deposit (FTD) Flow Friction & Payment Method Breadth** | - | - |
+| **Withdrawal Processing Velocity (Minutes to Cash in Hand)** | - | - |
+| **------------------------------------------------------------------------** | - | - |
+| **TIER 2** | - | USABILITY & INTERACTION HEURISTICS (Weight: 20%) |
+| **Information Architecture & Menu Depth (Taps to Primary Markets)** | - | - |
+| **Betslip Interaction Efficiency & Error Recovery Clarity** | - | - |
+| **Casino Lobby Search & Provider Filtering Maturity** | - | - |
+| **TIER 1** | - | TECHNICAL PERFORMANCE & INFRASTRUCTURE (Weight: 15%) |
+| **Largest Contentful Paint (LCP) under Simulated 4G Mobile Conditions** | - | - |
+| **Interaction to Next Paint (INP) Input Responsiveness** | - | - |
+| **Cumulative Layout Shift (CLS) on Live Dynamic Odds Feeds** | - | - |
 
 ### Tier 1: Technical Performance & Infrastructure Metrics
 
@@ -109,28 +98,13 @@ Tier 4 evaluates the mathematical attractiveness of the operator's commercial te
 
 To construct and operationalise a competitive matrix within your organization, follow this structured five-step workflow:
 
-```
-+-----------------------------------------------------------------------------+
-|               Matrix Construction and Execution Workflow                    |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ STEP 1: DEFINE PEER COHORT ]                                             |
-|  Select 4-6 primary competitors (Tier-1 Incumbents + Direct Challengers)    |
-|                                                                             |
-|  [ STEP 2: ASSIGN STRATEGIC WEIGHTINGS ]                                    |
-|  Calibrate tier weights based on current commercial priorities (e.g. CRO)   |
-|                                                                             |
-|  [ STEP 3: AUTOMATE DATA INGESTION ]                                        |
-|  Ingest daily telemetry via Jurnii 360 & Jurnii UX                          |
-|                                                                             |
-|  [ STEP 4: CALCULATE COMPOSITE SCORES ]                                     |
-|  Normalize raw metrics onto a 0-100 index for comparative benchmarking      |
-|                                                                             |
-|  [ STEP 5: TRANSLATE TO ENGINEERING & MARKETING BACKLOGS ]                  |
-|  Convert bottom-decile scores into prioritized sprint deliverables          |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **STEP 1: DEFINE PEER COHORT** | Select 4-6 primary competitors (Tier-1 Incumbents + Direct Challengers) |
+| **STEP 2: ASSIGN STRATEGIC WEIGHTINGS** | Calibrate tier weights based on current commercial priorities (e.g. CRO) |
+| **STEP 3: AUTOMATE DATA INGESTION** | Ingest daily telemetry via Jurnii 360 & Jurnii UX |
+| **STEP 4: CALCULATE COMPOSITE SCORES** | Normalize raw metrics onto a 0-100 index for comparative benchmarking |
+| **STEP 5: TRANSLATE TO ENGINEERING & MARKETING BACKLOGS** | Convert bottom-decile scores into prioritized sprint deliverables |
 
 ### Step 1: Define the Comparative Cohort
 

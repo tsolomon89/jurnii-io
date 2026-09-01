@@ -29,33 +29,13 @@ To plug conversion leaks and maximize revenue yield, operators must execute syst
 
 Jurnii audits and benchmarks player experience across five core transactional journeys:
 
-```
-+-----------------------------------------------------------------------------+
-|               The 5 Critical iGaming Customer Journeys                      |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. REGISTRATION & ONBOARDING FUNNEL                                        |
-|     - Form field count, progressive disclosure, and auto-complete speed     |
-|     - Mobile keyboard optimisation and terms acceptance clarity             |
-|                                                                             |
-|  2. IDENTITY VERIFICATION & KYC FLOW                                        |
-|     - Automated electronic background checks vs manual document upload      |
-|     - Status feedback clarity and SLA communication for pending reviews     |
-|                                                                             |
-|  3. FIRST TIME DEPOSIT (FTD) & CASHIER CONDUIT                              |
-|     - Number of steps to payment, biometric gateway support (Apple Pay/Pix) |
-|     - Inline minimum/maximum limits and payment error handling              |
-|                                                                             |
-|  4. BETSLIP & CASINO GAME INITIATION                                        |
-|     - Clicks and seconds required to validate odds and place a live wager   |
-|     - Game canvas initialization speed and mobile viewport scaling          |
-|                                                                             |
-|  5. WITHDRAWAL & CASH-OUT WORKFLOW                                          |
-|     - Payout transparency, fee disclosures, and bank settlement velocity    |
-|     - Absence of hostile retention barriers or reverse-withdrawal prompts   |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. REGISTRATION & ONBOARDING FUNNEL** | Form field count, progressive disclosure, and auto-complete speed | Mobile keyboard optimisation and terms acceptance clarity |
+| **2. IDENTITY VERIFICATION & KYC FLOW** | Automated electronic background checks vs manual document upload | Status feedback clarity and SLA communication for pending reviews |
+| **3. FIRST TIME DEPOSIT (FTD) & CASHIER CONDUIT** | Number of steps to payment, biometric gateway support (Apple Pay/Pix) | Inline minimum/maximum limits and payment error handling |
+| **4. BETSLIP & CASINO GAME INITIATION** | Clicks and seconds required to validate odds and place a live wager | Game canvas initialization speed and mobile viewport scaling |
+| **5. WITHDRAWAL & CASH-OUT WORKFLOW** | Payout transparency, fee disclosures, and bank settlement velocity | Absence of hostile retention barriers or reverse-withdrawal prompts |
 
 ### 1. The Registration and Onboarding Journey
 
@@ -96,22 +76,10 @@ Withdrawal processing is the ultimate test of brand trust:
 
 To illustrate how journey benchmarking isolates friction, consider this comparative audit conducted within [Jurnii UX](/products/jurnii-ux):
 
-```
-+-----------------------------------------------------------------------------+
-|                 Comparative Registration Funnel Benchmark                   |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  DIMENSION             LEGACY OPERATOR (Score: 38/100) TIER-1 LEADER (94/100)
-|  -------------------------------------------------------------------------  |
-|  Form Structure        4 Separate Page Loads           Single Accordion     |
-|  Field Count           14 Form Inputs                  6 Progressive Inputs |
-|  Address Lookup        Manual Street Address Entry     Automated Postcode   |
-|  Mobile Keyboard       Generic Alphanumeric on Phone # Dedicated Tel Keypad |
-|  Average Time-to-FTD   3 mins 45 secs                  48 secs              |
-|  Overall Abandonment   44% Registration Drop-Off       12% Drop-Off         |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Evaluation Variable** | **Benchmark Standard / Impact** |
+|---|---|
+| **DIMENSION             LEGACY OPERATOR (Score** | 38/100) TIER-1 LEADER (94/100) |
+| **Item** | ------------------------------------------------------------------------ |
 
 By identifying the specific friction points in the legacy operator's flow, product managers can implement concrete engineering tickets that reduce registration drop-off by over 70%.
 
@@ -119,25 +87,12 @@ By identifying the specific friction points in the legacy operator's flow, produ
 
 To maintain high conversion rates across all player funnels, implement a continuous governance cycle:
 
-```
-+-----------------------------------------------------------------------------+
-|               Continuous Journey Governance Operating Cycle                 |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ QUARTERLY FUNNEL TELEMETRY AUDIT ]                                       |
-|  Measure drop-off percentages and completion times across all 5 funnels.    |
-|                                                                             |
-|  [ COMPETITIVE SPEED & FRICTION BENCHMARKING ]                              |
-|  Benchmark step counts and latency against top 5 direct competitors.        |
-|                                                                             |
-|  [ CONVERSION OPTIMIZATION SPRINT DEPLOYMENT ]                              |
-|  Deploy targeted UI refactors to eliminate bottom-decile friction points.   |
-|                                                                             |
-|  [ POST-DEPLOYMENT CONVERSION RECONCILIATION ]                              |
-|  Verify financial lift in FTD volume and active depositor retention.        |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **QUARTERLY FUNNEL TELEMETRY AUDIT** | Measure drop-off percentages and completion times across all 5 funnels. |
+| **COMPETITIVE SPEED & FRICTION BENCHMARKING** | Benchmark step counts and latency against top 5 direct competitors. |
+| **CONVERSION OPTIMIZATION SPRINT DEPLOYMENT** | Deploy targeted UI refactors to eliminate bottom-decile friction points. |
+| **POST-DEPLOYMENT CONVERSION RECONCILIATION** | Verify financial lift in FTD volume and active depositor retention. |
 
 ## The Mathematical Economics of Funnel Recovery
 
@@ -157,19 +112,13 @@ When product teams quantify friction across each journey step, the business case
 
 Within [Jurnii UX](/products/jurnii-ux), customer journey benchmarking is organized around the five sequential funnels that dictate customer lifetime value:
 
-```
-+-----------------------------------------------------------------------------+
-|               The 5 Core Customer Journeys in Jurnii UX                     |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. REGISTRATION & ONBOARDING (Time-to-complete, form field count, address) |
-|  2. ELECTRONIC KYC & VERIFICATION (Instant electronic pass rate > 85%)      |
-|  3. FIRST TIME DEPOSIT & CASHIER (In-context biometric drawer: Apple Pay)   |
-|  4. BETSLIP & IN-PLAY WAGERING (Sub-100ms INP, odds drift toggles)          |
-|  5. WITHDRAWAL & ACCOUNT MANAGEMENT (Open Banking payouts < 3 minutes)      |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **1. REGISTRATION & ONBOARDING (Time-to-complete, form field count, address)** | - |
+| **2. ELECTRONIC KYC & VERIFICATION (Instant electronic pass rate > 85%)** | - |
+| **3. FIRST TIME DEPOSIT & CASHIER (In-context biometric drawer: Apple Pay)** | - |
+| **4. BETSLIP & IN-PLAY WAGERING (Sub-100ms INP, odds drift toggles)** | - |
+| **5. WITHDRAWAL & ACCOUNT MANAGEMENT (Open Banking payouts < 3 minutes)** | - |
 
 Across 300+ analysed global brands, operators deploying Jurnii UX to benchmark and optimise these 5 journeys see their blended Customer Acquisition Cost drop by up to 34% through pure funnel efficiency.
 
@@ -177,21 +126,13 @@ Across 300+ analysed global brands, operators deploying Jurnii UX to benchmark a
 
 Jurnii UX benchmarks drop-off rates and completion velocity against strict top-quartile standards:
 
-```
-+-----------------------------------------------------------------------------+
-|               5 Core Journeys Benchmark Telemetry Standards                 |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  CORE FUNNEL JOURNEY    TOP-QUARTILE DURATION       MAX ACCEPTABLE DROP-OFF |
-|  -------------------------------------------------------------------------  |
-|  1. Registration Flow   < 35 Seconds (1 Screen)     < 12% Drop-off Rate     |
-|  2. Electronic KYC      < 3 Seconds (Auto Pass)     < 8% Drop-off Rate      |
-|  3. First Time Deposit  < 10 Seconds (Biometric)    < 15% Drop-off Rate     |
-|  4. Betslip Placement   < 250ms Interaction INP     < 5% Drop-off Rate      |
-|  5. Account Withdrawal  < 3 Minutes Settlement      < 2% Friction Escalation|
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **CORE FUNNEL JOURNEY** | **TOP-QUARTILE DURATION** | **MAX ACCEPTABLE DROP-OFF** |
+| --- | --- | --- |
+| **1. Registration Flow** | < 35 Seconds (1 Screen) | < 12% Drop-off Rate |
+| **2. Electronic KYC** | < 3 Seconds (Auto Pass) | < 8% Drop-off Rate |
+| **3. First Time Deposit** | < 10 Seconds (Biometric) | < 15% Drop-off Rate |
+| **4. Betslip Placement** | < 250ms Interaction INP | < 5% Drop-off Rate |
+| **5. Account Withdrawal** | < 3 Minutes Settlement | < 2% Friction Escalation |
 
 Pinpointing exact funnel drop-offs enables operators to direct engineering resources to the highest-yielding conversion bottlenecks.
 

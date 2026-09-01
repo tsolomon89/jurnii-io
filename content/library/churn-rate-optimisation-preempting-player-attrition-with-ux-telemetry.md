@@ -31,29 +31,12 @@ To achieve meaningful churn reduction, operators must transition to [churn rate 
 
 While marketing teams often assume players churn due to competitor bonus generosity, empirical UX auditing reveals that the vast majority of player defection is caused by **accumulated transactional friction**:
 
-```
-+-----------------------------------------------------------------------------+
-|               The 4 Operational Triggers of Silent Churn                    |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. PAYMENT GATEWAY FRICTION & DELAYS                                       |
-|     - Payment declines with generic error messages ("Transaction Failed")   |
-|     - Withdrawal requests held in manual 24-hour review queues              |
-|                                                                             |
-|  2. BETSLIP & CASINO LATENCY DURING PEAK WINDOWS                            |
-|     - Sluggish in-play validation (INP > 200ms) causing rejected bets       |
-|     - Casino game initialization freezes or crashes on mobile 4G networks   |
-|                                                                             |
-|  3. REPETITIVE & INTRUSIVE VERIFICATION HURDLES                             |
-|     - Sudden document re-verification requests during withdrawal attempts   |
-|     - Clunky document upload interfaces lacking mobile camera auto-capture  |
-|                                                                             |
-|  4. PROMOTIONAL DISILLUSIONMENT                                             |
-|     - Realizing winnings are locked behind punitive 40x wagering multiples  |
-|     - Expired bonus countdown clocks that feel deceptive and hostile       |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. PAYMENT GATEWAY FRICTION & DELAYS** | Payment declines with generic error messages ("Transaction Failed") | Withdrawal requests held in manual 24-hour review queues |
+| **2. BETSLIP & CASINO LATENCY DURING PEAK WINDOWS** | Sluggish in-play validation (INP > 200ms) causing rejected bets | Casino game initialization freezes or crashes on mobile 4G networks |
+| **3. REPETITIVE & INTRUSIVE VERIFICATION HURDLES** | Sudden document re-verification requests during withdrawal attempts | Clunky document upload interfaces lacking mobile camera auto-capture |
+| **4. PROMOTIONAL DISILLUSIONMENT** | Realizing winnings are locked behind punitive 40x wagering multiples | Expired bonus countdown clocks that feel deceptive and hostile |
 
 ### 1. Payment Friction: The Primary Catalyst of Churn
 
@@ -71,29 +54,20 @@ Players who register for a headline £100 bonus, only to discover a buried 40x t
 
 Jurnii UX enables preemptive churn prevention by monitoring behavioural friction signals in real time:
 
-```
-+-----------------------------------------------------------------------------+
-|               Preemptive Churn Telemetry System Architecture                |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  STAGE 1: REAL-TIME TRANSACTIONAL EVENT INGESTION                           |
-|  - Cashier error logs (declines, timeout errors, gateway retries)           |
-|  - Betslip interaction metrics (repeated rage clicks, odds drift rejects)   |
-|  - Technical vitals (mobile LCP spikes, game canvas initialization latency) |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  STAGE 2: CHURN PROPENSITY SCORING                                          |
-|  - Compute real-time Friction Impact Score per active account               |
-|  - Flag accounts experiencing > 2 friction events in a 48-hour window       |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  STAGE 3: AUTOMATED OPERATIONAL INTERVENTION                                |
-|  - Instant cashier routing to alternative payment rails                     |
-|  - Automated CRM apology drops (e.g. instant zero-wagering free spins)      |
-|  - VIP account manager outreach for high-tier accounts                      |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Metric / Dimension** | **- Cashier error logs (declines, timeout errors, gateway retries)** | **- Automated CRM apology drops (e.g. instant zero-wagering free spins)** |
+|---|---|---|
+| **STAGE 1** | REAL-TIME TRANSACTIONAL EVENT INGESTION | - |
+| **Cashier error logs (declines, timeout errors, gateway retries)** | - | - |
+| **Betslip interaction metrics (repeated rage clicks, odds drift rejects)** | - | - |
+| **Technical vitals (mobile LCP spikes, game canvas initialization latency)** | - | - |
+| **STAGE 2** | - | CHURN PROPENSITY SCORING |
+| **Compute real-time Friction Impact Score per active account** | - | - |
+| **Flag accounts experiencing > 2 friction events in a 48-hour window** | - | - |
+| **------------------------------------------------------------------------** | - | - |
+| **STAGE 3** | - | AUTOMATED OPERATIONAL INTERVENTION |
+| **Instant cashier routing to alternative payment rails** | - | - |
+| **Automated CRM apology drops (e.g. instant zero-wagering free spins)** | - | - |
+| **VIP account manager outreach for high-tier accounts** | - | - |
 
 ### 1. Real-Time Telemetry Capture
 
@@ -113,25 +87,11 @@ Instead of waiting thirty days, the operator responds within minutes:
 
 Deploying preemptive churn optimisation delivers significant financial returns:
 
-```
-+-----------------------------------------------------------------------------+
-|               Commercial Impact of Preemptive Churn Prevention              |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. 90-DAY RETENTION EXPANSION                                              |
-|     - Reducing early friction lifts 90-day active depositor retention from  |
-|       18% to 32%, compounding player lifetime value.                       |
-|                                                                             |
-|  2. LOWER BLENDED CUSTOMER ACQUISITION COSTS                                |
-|     - Defending the active player base reduces the volume of new FTDs       |
-|       required to meet monthly Gross Gaming Revenue targets.                |
-|                                                                             |
-|  3. MAXIMIZED VIP ACCOUNT LIFETIME                                          |
-|     - Proactive intervention on high-value accounts protects the 10% of     |
-|       players who generate 80% of net gaming yield.                         |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **1. 90-DAY RETENTION EXPANSION** | Reducing early friction lifts 90-day active depositor retention from 18% to 32%, compounding player lifetime value. |
+| **2. LOWER BLENDED CUSTOMER ACQUISITION COSTS** | Defending the active player base reduces the volume of new FTDs required to meet monthly Gross Gaming Revenue targets. |
+| **3. MAXIMIZED VIP ACCOUNT LIFETIME** | Proactive intervention on high-value accounts protects the 10% of players who generate 80% of net gaming yield. |
 
 ### Case Study: Mitigating Cashier Churn in a European Casino
 
@@ -149,20 +109,12 @@ A major European online casino was experiencing a 42% 30-day churn rate among ne
 
 Within [Jurnii UX](/products/jurnii-ux), churn risks are audited across the four foundational UX categories:
 
-```
-+-----------------------------------------------------------------------------+
-|               UX Churn Risk Telemetry Matrix                                |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  UX CATEGORY            CHURN RISK INDICATOR        REMEDIATION PROTOCOL    |
-|  -------------------------------------------------------------------------  |
-|  Journey Effectiveness  Payment decline loop (2+x)  Dynamic alternative rail|
-|  Usability Heuristics   Betslip stake error modal   Inline tactile keypad   |
-|  Performance Vitals     LCP > 2.5s on game launch   Edge asset caching      |
-|  Perception & Trust     Unclear withdrawal status   Real-time payout tracker|
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **UX CATEGORY** | **CHURN RISK INDICATOR** | **REMEDIATION PROTOCOL** |
+| --- | --- | --- |
+| **Journey Effectiveness** | Payment decline loop (2+x) | Dynamic alternative rail |
+| **Usability Heuristics** | Betslip stake error modal | Inline tactile keypad |
+| **Performance Vitals** | LCP > 2.5s on game launch | Edge asset caching |
+| **Perception & Trust** | Unclear withdrawal status | Real-time payout tracker |
 
 Across 300+ analysed global brands, operators deploying Jurnii UX to preemptively identify and resolve these friction triggers reduce 30-day player churn by an average of 27%.
 
@@ -170,20 +122,12 @@ Across 300+ analysed global brands, operators deploying Jurnii UX to preemptivel
 
 Jurnii UX captures real-time interaction signals to calculate player churn propensity before defection occurs:
 
-```
-+-----------------------------------------------------------------------------+
-|               Player Churn Propensity Feature Weights                       |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  INTERACTION SIGNAL     FEATURE DESCRIPTION         CHURN WEIGHT (0 to 1.0) |
-|  -------------------------------------------------------------------------  |
-|  Cashier Loading Delay  LCP > 2.5s on deposit modal 0.84 (High Predictor)   |
-|  Payment Method Decline Unhandled decline error     0.91 (Severe Risk)      |
-|  Betslip Odds Drift     Price change rejected 2x+   0.76 (High Friction)    |
-|  Navigation Stutter     INP > 200ms on live odds    0.68 (Moderate Frustr)  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **INTERACTION SIGNAL** | **FEATURE DESCRIPTION** | **CHURN WEIGHT (0 to 1.0)** |
+| --- | --- | --- |
+| **Cashier Loading Delay** | LCP > 2.5s on deposit modal 0.84 (High Predictor) | - |
+| **Payment Method Decline Unhandled decline error** | 0.91 (Severe Risk) | - |
+| **Betslip Odds Drift** | Price change rejected 2x+ | 0.76 (High Friction) |
+| **Navigation Stutter** | INP > 200ms on live odds | 0.68 (Moderate Frustr) |
 
 Surfacing these interaction bottlenecks allows product and CRM teams to remediate friction before players defect to competing platforms.
 

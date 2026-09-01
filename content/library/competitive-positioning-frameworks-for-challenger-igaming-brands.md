@@ -35,24 +35,11 @@ In mainstream corporate strategy, market positioning is frequently evaluated thr
 
 In digital gaming, these generic marketing frameworks fail for three fundamental reasons:
 
-```
-+-----------------------------------------------------------------------------+
-|               Generic Marketing Maps vs Jurnii Positioning Engine           |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  DIMENSION          GENERIC BRAND CONSULTING    JURNII POSITIONING ENGINE   |
-|  -------------------------------------------------------------------------  |
-|  Data Source        Subjective consumer surveys Empirical telemetry across  |
-|                     and qualitative focus groups 35+ regulated jurisdictions|
-|                                                                             |
-|  Axes Definition    Abstract perceptions        Quantified operational data |
-|                     ("Trustworthy", "Exciting") (Overrounds, Speed, Generosity)
-|                                                                             |
-|  Commercial Link    Vague brand awareness KPIs  Directly links to FTD %,    |
-|                                                 CAC efficiency, and NGR yield|
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **DIMENSION** | **GENERIC BRAND CONSULTING** | **JURNII POSITIONING ENGINE** |
+| --- | --- | --- |
+| **Data Source** | Subjective consumer surveys Empirical telemetry across | - and qualitative focus groups 35+ regulated jurisdictions |
+| **Axes Definition** | Abstract perceptions | Quantified operational data ("Trustworthy", "Exciting") (Overrounds, Speed, Generosity) |
+| **Commercial Link** | Vague brand awareness KPIs | Directly links to FTD %, CAC efficiency, and NGR yield |
 
 ### 1. Subjective Perceptions vs Operational Reality
 
@@ -72,26 +59,12 @@ Competitors adjust their commercial posture continuously. An operator that posit
 
 By analyzing continuous operational telemetry across 300+ digital gaming brands within [Jurnii 360](/products/jurnii-360), four primary positioning archetypes emerge:
 
-```
-+-----------------------------------------------------------------------------+
-|               The 4 Strategic Archetypes of iGaming Positioning             |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|      High Generosity |                                                      |
-|                      |   [ PROMOTIONAL LEADERS ] | [ BALANCED CONGLOMERATES]|
-|                      |   - High headline bonuses | - Massive marketing spend|
-|                      |   - Gamified VIP rewards  | - Broad multi-product    |
-|                      |   - Moderate UX friction  | - Tier-1 brand prestige  |
-|                      |---------------------------+--------------------------|
-|                      |   [ LEGACY INCUMBENTS ]   | [ VELOCITY SPECIALISTS ] |
-|                      |   - High retail brand     | - Sub-second execution   |
-|                      |     recognition           | - Instant Open Banking   |
-|                      |   - Slow tech & high fees | - Tight odds & no gimmicks|
-|       Low Generosity +------------------------------------------------------|
-|                             High Friction                 Low Friction      |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| Positioning Archetype | Generosity & Value Level | Interface Velocity & Friction | Target Segment & Operational Profile |
+|---|---|---|---|
+| **Promotional Leaders** | High Headline Bonuses | Moderate UX Friction / Standard Speed | High upfront promotional spend, gamified retention |
+| **Balanced Conglomerates** | High / Broad Value | High Velocity / Deep Product Suites | Massive media spend, tier-1 brand prestige, multi-product |
+| **Legacy Incumbents** | Low / Restrictive Value | High Friction / Legacy Stack | High retail recognition, slow technical speed, higher fees |
+| **Velocity Specialists** | Targeted & Transparent Value | Sub-Second Execution / Zero Friction | Instant Open Banking (<3 min payout), tight odds, streamlined UX |
 
 ### 1. Balanced Conglomerates (Tier-1 Market Leaders)
 
@@ -121,25 +94,12 @@ These operators are highly vulnerable to customer defection from agile Velocity 
 
 To establish a defensible positioning strategy, commercial leaders must identify unserved or underserved segments within their target jurisdiction:
 
-```
-+-----------------------------------------------------------------------------+
-|               White-Space Discovery & Positioning Matrix                    |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ STEP 1: AUDIT INCUMBENT CLUSTERING ]                                     |
-|  Plot all licensed competitors on the Generosity vs Friction Matrix.       |
-|                                                                             |
-|  [ STEP 2: IDENTIFY OVER-CROWDED QUADRANTS ]                                |
-|  Avoid entering saturated spaces (e.g. standard 40x bonus casino clones).   |
-|                                                                             |
-|  [ STEP 3: ISOLATE UNMET PLAYER DEMAND ]                                    |
-|  Locate friction gaps (e.g. lack of instant payouts or transparent terms).  |
-|                                                                             |
-|  [ STEP 4: ALIGN PLATFORM ARCHITECTURE WITH POSITIONING ]                  |
-|  Configure odds overrounds, UX funnels, and bonus terms to own the niche.   |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **STEP 1: AUDIT INCUMBENT CLUSTERING** | Plot all licensed competitors on the Generosity vs Friction Matrix. |
+| **STEP 2: IDENTIFY OVER-CROWDED QUADRANTS** | Avoid entering saturated spaces (e.g. standard 40x bonus casino clones). |
+| **STEP 3: ISOLATE UNMET PLAYER DEMAND** | Locate friction gaps (e.g. lack of instant payouts or transparent terms). |
+| **STEP 4: ALIGN PLATFORM ARCHITECTURE WITH POSITIONING** | Configure odds overrounds, UX funnels, and bonus terms to own the niche. |
 
 ### Case Study: Owning the "Zero-Wagering Payout Speed" White Space
 
@@ -160,24 +120,13 @@ The operator built their entire commercial positioning around two operational pi
 
 A successful positioning strategy requires absolute alignment across all functional departments:
 
-```
-+-----------------------------------------------------------------------------+
-|               Cross-Functional Positioning Alignment Matrix                 |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  POSITIONING STRATEGY      ENGINEERING FOCUS        MARKETING & TRADING     |
-|  -------------------------------------------------------------------------  |
-|  Velocity Specialist       - Sub-100ms INP speed    - Tight 102% overrounds |
-|                            - Biometric checkout     - Zero gimmicks copy    |
-|                                                                             |
-|  Promotional Leader        - Gamification engines   - Rich retention drops  |
-|                            - Social sharing widgets - Tiered VIP rewards    |
-|                                                                             |
-|  VIP / High-Roller Hub     - Custom high stakes API - Dedicated concierge   |
-|                            - Zero stake factoring   - Bespoke rebate terms  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **POSITIONING STRATEGY** | **ENGINEERING FOCUS** | **MARKETING & TRADING** |
+| --- | --- | --- |
+| **Velocity Specialist** | - Sub-100ms INP speed | - Tight 102% overrounds |
+| **- Biometric checkout** | - Zero gimmicks copy | - |
+| **Promotional Leader** | - Gamification engines | - Rich retention drops - Social sharing widgets - Tiered VIP rewards |
+| **VIP / High-Roller Hub** | - Custom high stakes API - Dedicated concierge | - |
+| **- Zero stake factoring** | - Bespoke rebate terms | - |
 
 When engineering, marketing, and trading execute against a single positioning mandate, the operator eliminates brand confusion and builds a clear, defensible market identity.
 
@@ -185,20 +134,12 @@ When engineering, marketing, and trading execute against a single positioning ma
 
 Within [Jurnii 360](/products/jurnii-360), challenger operators evaluate market opportunities across four positioning quadrants:
 
-```
-+-----------------------------------------------------------------------------+
-|               Asymmetric Positioning Scorecard Matrix                       |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  POSITIONING QUADRANT   INCUMBENT DEFENSE           CHALLENGER ADVANTAGE    |
-|  -------------------------------------------------------------------------  |
-|  1. Velocity Specialist Heavy technical debt        Modern headless UI stack|
-|  2. Promo Generosity    High bonus liability        Zero-wagering free spins|
-|  3. VIP / High-Staking  Aggressive stake factoring  Bespoke liquidity & fast|
-|  4. Niche Category Hub  Generic multi-vertical UI   Tailored local derbies  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **POSITIONING QUADRANT** | **INCUMBENT DEFENSE** | **CHALLENGER ADVANTAGE** |
+| --- | --- | --- |
+| **1. Velocity Specialist Heavy technical debt** | Modern headless UI stack | - |
+| **2. Promo Generosity** | High bonus liability | Zero-wagering free spins |
+| **3. VIP / High-Staking** | Aggressive stake factoring | Bespoke liquidity & fast |
+| **4. Niche Category Hub** | Generic multi-vertical UI | Tailored local derbies |
 
 Across 35+ monitored global markets, challenger brands deploying Jurnii 360 to identify competitor weaknesses save 30+ hours per week of manual analysis, reacting in hours not days to capture high-value defecting players.
 

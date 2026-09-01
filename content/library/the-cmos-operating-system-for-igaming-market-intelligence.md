@@ -31,29 +31,12 @@ To lead with commercial authority, marketing executives require a unified [CMO o
 
 A comprehensive intelligence operating system provides the CMO with complete visibility across four operational pillars:
 
-```
-+-----------------------------------------------------------------------------+
-|               The 4 Pillars of the iGaming CMO Operating System             |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. REAL-TIME COMPETITIVE PROPOSITION RADAR (JURNII 360)                    |
-|     - Daily tracking of rival welcome bonuses, reload terms, and odds boosts|
-|     - Promo Richness Index calculation across 35+ global jurisdictions      |
-|                                                                             |
-|  2. ECONOMETRIC MARKETING MIX MODELLING (JURNII CORTEX)                     |
-|     - Privacy-first time-series attribution replacing broken last-click BI  |
-|     - Optimization of blended CAC and marginal Return on Ad Spend (mROAS)   |
-|                                                                             |
-|  3. TRANSACTIONAL EXPERIENCE & FUNNEL YIELD (JURNII UX)                     |
-|     - Continuous auditing of registration, KYC, and first deposit funnels   |
-|     - Core Web Vitals performance benchmarking against tier-1 market peers  |
-|                                                                             |
-|  4. BOARD-READY COMMERCIAL GOVERNANCE & FORECASTING                         |
-|     - Unified executive dashboards linking marketing spend directly to NGR  |
-|     - Interactive budget simulation tools for C-suite capital allocation   |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. REAL-TIME COMPETITIVE PROPOSITION RADAR (JURNII 360)** | Daily tracking of rival welcome bonuses, reload terms, and odds boosts | Promo Richness Index calculation across 35+ global jurisdictions |
+| **2. ECONOMETRIC MARKETING MIX MODELLING (JURNII CORTEX)** | Privacy-first time-series attribution replacing broken last-click BI | Optimization of blended CAC and marginal Return on Ad Spend (mROAS) |
+| **3. TRANSACTIONAL EXPERIENCE & FUNNEL YIELD (JURNII UX)** | Continuous auditing of registration, KYC, and first deposit funnels | Core Web Vitals performance benchmarking against tier-1 market peers |
+| **4. BOARD-READY COMMERCIAL GOVERNANCE & FORECASTING** | Unified executive dashboards linking marketing spend directly to NGR | Interactive budget simulation tools for C-suite capital allocation |
 
 ### 1. Competitive Proposition Radar
 
@@ -75,77 +58,35 @@ The CMO OS translates complex marketing metrics (impressions, CTR, CPA) into the
 
 To drive operational excellence, the CMO OS establishes a structured weekly rhythm across marketing and commercial teams:
 
-```
-+-----------------------------------------------------------------------------+
-|               The Data-Driven CMO Weekly Operating Rhythm                   |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ MONDAY 09:00: REVENUE & ATTRIBUTION RECONCILIATION ]                     |
-|  Review weekend trading performance against Jurnii Cortex econometric MMM.  |
-|  Isolate sporting result windfalls from true incremental marketing yield.   |
-|                                                                             |
-|  [ WEDNESDAY 11:00: COMPETITIVE PROPOSITION STANDUP ]                       |
-|  Review Jurnii 360 competitor alerts ahead of weekend sporting fixtures.    |
-|  Calibrate promotional generosity and search bidding thresholds.            |
-|                                                                             |
-|  [ THURSDAY 14:00: FUNNEL CONVERSION REVIEW ]                               |
-|  Inspect Jurnii UX journey scores; review progress on onboarding tickets.   |
-|                                                                             |
-|  [ FRIDAY 16:00: EXECUTIVE CAPITAL ALLOCATION ]                             |
-|  Run MMM simulation models to reallocate next week's discretionary budget.  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **MONDAY 09:00: REVENUE & ATTRIBUTION RECONCILIATION** | Review weekend trading performance against Jurnii Cortex econometric MMM. Isolate sporting result windfalls from true incremental marketing yield. |
+| **WEDNESDAY 11:00: COMPETITIVE PROPOSITION STANDUP** | Review Jurnii 360 competitor alerts ahead of weekend sporting fixtures. Calibrate promotional generosity and search bidding thresholds. |
+| **THURSDAY 14:00: FUNNEL CONVERSION REVIEW** | Inspect Jurnii UX journey scores; review progress on onboarding tickets. |
+| **FRIDAY 16:00: EXECUTIVE CAPITAL ALLOCATION** | Run MMM simulation models to reallocate next week's discretionary budget. |
 
 ## Practical Executive Applications: Solving the CMO's Critical Challenges
 
 Deploying a unified intelligence platform resolves the most difficult strategic questions facing gaming CMOs:
 
-```
-+-----------------------------------------------------------------------------+
-|               Strategic Decision Scenarios for Gaming CMOs                  |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  STRATEGIC CHALLENGE               CMO OS RESOLUTION & ACTION               |
-|  -------------------------------------------------------------------------  |
-|  "CFO demands 20% budget cut       Use Jurnii Cortex MMM saturation curves  |
-|  without revenue decline."         to trim £2M in saturated brand search    |
-|                                    with zero impact on total depositors.    |
-|                                                                             |
-|  "Competitor launches aggressive   Audit competitor fine print in Jurnii    |
-|  headline bonus war."              360; prove rival offer has 40x wagering; |
-|                                    counter-position around cash payout speed|
-|                                                                             |
-|  "CAC surges unexpectedly in       Cross-reference Jurnii UX logs; discover |
-|  newly regulated market."          payment gateway latency caused 32% drop- |
-|                                    off; deploy instant Apple Pay drawer.    |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **STRATEGIC CHALLENGE** | **CMO OS RESOLUTION & ACTION** |
+| --- | --- |
+| **"CFO demands 20% budget cut** | Use Jurnii Cortex MMM saturation curves |
+| **without revenue decline."** | to trim £2M in saturated brand search with zero impact on total depositors. |
+| **"Competitor launches aggressive** | Audit competitor fine print in Jurnii |
+| **headline bonus war."** | 360; prove rival offer has 40x wagering; counter-position around cash payout speed |
+| **"CAC surges unexpectedly in** | Cross-reference Jurnii UX logs; discover |
+| **newly regulated market."** | payment gateway latency caused 32% drop- off; deploy instant Apple Pay drawer. |
 
 ## Cross-Functional Integration: Bridging Marketing, Product, and Trading
 
 A modern gaming CMO cannot operate in isolation from platform product teams or sportsbook trading desks. The CMO operating system creates structured collaboration conduits:
 
-```
-+-----------------------------------------------------------------------------+
-|               Cross-Functional Commercial Collaboration Model               |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ TRADING INTEGRATION ]                                                    |
-|  - Real-time coordination of marketing acquisition boosts with trading risk |
-|  - Dynamic odds concessions timed with paid search bidding surges           |
-|                                                                             |
-|  [ PRODUCT & UX INTEGRATION ]                                               |
-|  - Marketing-driven identification of onboarding drop-off bottlenecks       |
-|  - Joint prioritisation of conversion-rate optimisation sprint tickets      |
-|                                                                             |
-|  [ FINANCE INTEGRATION ]                                                    |
-|  - Econometric reconciliation of media spend against Net Gaming Revenue     |
-|  - Transparent margin defense forecasting for quarterly board reviews       |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **TRADING INTEGRATION** | Real-time coordination of marketing acquisition boosts with trading risk | Dynamic odds concessions timed with paid search bidding surges |
+| **PRODUCT & UX INTEGRATION** | Marketing-driven identification of onboarding drop-off bottlenecks | Joint prioritisation of conversion-rate optimisation sprint tickets |
+| **FINANCE INTEGRATION** | Econometric reconciliation of media spend against Net Gaming Revenue | Transparent margin defense forecasting for quarterly board reviews |
 
 ## The Modern CMO's Executive Metric Scorecard
 
@@ -162,51 +103,27 @@ To demonstrate marketing return on investment to executive peers, modern CMOs mo
 
 To maintain full command over digital operations, CMOs deploy the unified Jurnii intelligence architecture:
 
-```
-+-----------------------------------------------------------------------------+
-|               The CMO 3-Pillar Market Intelligence Stack                    |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. JURNII UX BENCHMARKING ("See what your customers see")                 |
-|     - Continuous audit of 300+ brands across 4 categories                  |
-|     - 70+ commercially weighted recommendations per audit delivered in mins |
-|     - Identifies onboarding leakage and payment checkout drop-off           |
-|                                                                             |
-|  2. JURNII 360 RADAR ("See what your competitors launch")                   |
-|     - 100% automated move tracking across 21 feature areas & 35+ markets    |
-|     - 1,000+ offers tracked weekly; saves 30+ hours per week of manual work |
-|     - Proprietary Promo Richness Index quantifying competitor generosity    |
-|                                                                             |
-|  3. JURNII CORTEX ATTRIBUTION                                               |
-|     - Econometric MMM isolating incremental NGR from organic tailwinds      |
-|     - Reconciles media spend against Net Gaming Revenue with +46% accuracy  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. JURNII UX BENCHMARKING ("See what your customers see")** | Continuous audit of 300+ brands across 4 categories | 70+ commercially weighted recommendations per audit delivered in mins; Identifies onboarding leakage and payment checkout drop-off |
+| **2. JURNII 360 RADAR ("See what your competitors launch")** | 100% automated move tracking across 21 feature areas & 35+ markets | 1,000+ offers tracked weekly; saves 30+ hours per week of manual work; Proprietary Promo Richness Index quantifying competitor generosity |
+| **3. JURNII CORTEX ATTRIBUTION** | Econometric MMM isolating incremental NGR from organic tailwinds | Reconciles media spend against Net Gaming Revenue with +46% accuracy |
 
 ## The CMO Daily Operational Rhythm in Jurnii
 
 To maintain executive control over marketing performance, Chief Marketing Officers deploy a structured daily rhythm:
 
-```
-+-----------------------------------------------------------------------------+
-|               CMO Daily Market Intelligence Rhythm                          |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  08:30 MORNING RADAR BRIEFING (Jurnii 360)                                  |
-|  - Review competitor overnight campaign launches across 35+ jurisdictions   |
-|  - Check Promo Richness Index movements on upcoming marquee fixtures        |
-|                                                                             |
-|  11:00 ATTRIBUTION & LIFT AUDIT (Jurnii Cortex)                             |
-|  - Reconcile marketing expenditure against incremental Net Gaming Revenue   |
-|  - Reallocate capital from saturated search channels to high-yield audio    |
-|                                                                             |
-|  15:00 FUNNEL FRICTION GATEKEEPING (Jurnii UX)                              |
-|  - Verify paid media landing page performance (LCP < 1.2s, 0 layout shifts) |
-|  - Ensure promotional ad copy matches on-site cashier terms exactly         |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Evaluation Variable** | **Benchmark Standard / Impact** |
+|---|---|
+| **08** | 30 MORNING RADAR BRIEFING (Jurnii 360) |
+| **Item** | Review competitor overnight campaign launches across 35+ jurisdictions |
+| **Item** | Check Promo Richness Index movements on upcoming marquee fixtures |
+| **11** | 00 ATTRIBUTION & LIFT AUDIT (Jurnii Cortex) |
+| **Item** | Reconcile marketing expenditure against incremental Net Gaming Revenue |
+| **Item** | Reallocate capital from saturated search channels to high-yield audio |
+| **15** | 00 FUNNEL FRICTION GATEKEEPING (Jurnii UX) |
+| **Item** | Verify paid media landing page performance (LCP < 1.2s, 0 layout shifts) |
+| **Item** | Ensure promotional ad copy matches on-site cashier terms exactly |
 
 This operating rhythm transforms marketing from an unpredictable cost center into an exact commercial growth engine.
 

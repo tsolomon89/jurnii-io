@@ -34,25 +34,11 @@ To build an enduring, high-yield business, operators must embrace [iGaming marke
 
 To understand why intelligence and user experience are the primary determinants of commercial success, one must examine the modern gaming landscape:
 
-```
-+-----------------------------------------------------------------------------+
-|               The 3 Structural Realities of Modern iGaming                  |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. THE SUPPLIER COMMODITISATION PARITY                                     |
-|     - Competitors license identical slot catalogues and live dealer studios |
-|     - Sports odds compilation feeds have largely converged                  |
-|                                                                             |
-|  2. THE MULTI-HOMING PLAYER LIQUIDITY POOL                                  |
-|     - Bettors maintain 3-5 active accounts simultaneously                   |
-|     - Balances shift in seconds based on interface speed and payout clarity |
-|                                                                             |
-|  3. THE PRIVACY & REGULATORY SQUEEZE                                        |
-|     - Deprecation of cookies and mobile ad IDs broke user-level attribution |
-|     - Compliance mandates require frictionless, privacy-preserving UX       |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. THE SUPPLIER COMMODITISATION PARITY** | Competitors license identical slot catalogues and live dealer studios | Sports odds compilation feeds have largely converged |
+| **2. THE MULTI-HOMING PLAYER LIQUIDITY POOL** | Bettors maintain 3-5 active accounts simultaneously | Balances shift in seconds based on interface speed and payout clarity |
+| **3. THE PRIVACY & REGULATORY SQUEEZE** | Deprecation of cookies and mobile ad IDs broke user-level attribution | Compliance mandates require frictionless, privacy-preserving UX |
 
 ### 1. Product Commoditisation and the Disappearance of Content Moats
 
@@ -70,29 +56,12 @@ Privacy changes (GDPR, Apple ATT, cookie deprecation) have severed the determini
 
 Jurnii resolves these industry-wide challenges through a unified commercial intelligence architecture:
 
-```
-+-----------------------------------------------------------------------------+
-|               The 4 Pillars of the Jurnii Intelligence Layer                |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. REAL-TIME PROPOSITION TELEMETRY (JURNII 360)                            |
-|     - Daily tracking of rival welcome bonuses, reload terms, and odds boosts|
-|     - Automated calculation of Promo Richness across 35+ jurisdictions      |
-|                                                                             |
-|  2. TRANSACTIONAL EXPERIENCE & SPEED BENCHMARKING (JURNII UX)               |
-|     - Continuous Core Web Vitals and heuristic auditing across 300+ brands  |
-|     - Evidence-based backlog ranking linking UX fixes directly to NGR yield |
-|                                                                             |
-|  3. ECONOMETRIC MARKETING MIX MODELLING (JURNII CORTEX)                     |
-|     - Bayesian time-series attribution isolating true incremental ROI       |
-|     - Dynamic budget simulation accounting for competitor and sports noise  |
-|                                                                             |
-|  4. CROSS-FUNCTIONAL COMMERCIAL SYNCHRONIZATION                             |
-|     - Unified executive alignment linking Trading, Marketing, and Product   |
-|     - Board-ready governance dashboards demonstrating capital efficiency    |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. REAL-TIME PROPOSITION TELEMETRY (JURNII 360)** | Daily tracking of rival welcome bonuses, reload terms, and odds boosts | Automated calculation of Promo Richness across 35+ jurisdictions |
+| **2. TRANSACTIONAL EXPERIENCE & SPEED BENCHMARKING (JURNII UX)** | Continuous Core Web Vitals and heuristic auditing across 300+ brands | Evidence-based backlog ranking linking UX fixes directly to NGR yield |
+| **3. ECONOMETRIC MARKETING MIX MODELLING (JURNII CORTEX)** | Bayesian time-series attribution isolating true incremental ROI | Dynamic budget simulation accounting for competitor and sports noise |
+| **4. CROSS-FUNCTIONAL COMMERCIAL SYNCHRONIZATION** | Unified executive alignment linking Trading, Marketing, and Product | Board-ready governance dashboards demonstrating capital efficiency |
 
 ### 1. Real-Time Proposition Intelligence
 
@@ -130,52 +99,23 @@ Using the Jurnii intelligence suite, the operator executed an asymmetric commerc
 
 To understand why the intelligence layer represents a fundamental category shift, compare the legacy approaches with the unified Jurnii platform:
 
-```
-+-----------------------------------------------------------------------------+
-|               The Intelligence Layer Paradigm Shift                         |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  CRITERIA            TRADITIONAL AGENCIES   GENERIC ANALYTICS  JURNII       |
-|  -------------------------------------------------------------------------  |
-|  Delivery Speed      4-6 Weeks (Static PDF) Real-time dashboards Minutes    |
-|  Analysis Scope      Subjective Opinion     Raw events / logs  Commercially |
-|                                                                Weighted ROI |
-|  Market Breadth      Single Market Snapshot Internal Data Only 35+ Markets  |
-|  Actionable Output   Generic Advice         Complex Queries    70+ Ranked   |
-|                                                                Jira Tickets |
-|  Commercial Context  Disconnected           No Competitor Lens Full Context |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **CRITERIA** | **TRADITIONAL AGENCIES** | **GENERIC ANALYTICS** | **JURNII** |
+| --- | --- | --- | --- |
+| **Delivery Speed** | 4-6 Weeks (Static PDF) Real-time dashboards Minutes | - | - |
+| **Analysis Scope** | Subjective Opinion | Raw events / logs | Commercially Weighted ROI |
+| **Market Breadth** | Single Market Snapshot Internal Data Only 35+ Markets | - | - |
+| **Actionable Output** | Generic Advice | Complex Queries | 70+ Ranked Jira Tickets |
+| **Commercial Context** | Disconnected | No Competitor Lens Full Context | - |
 
 ## The 3 Pillars of the Jurnii Intelligence Suite
 
 Jurnii unifies experience benchmarking, competitor proposition telemetry, and econometric attribution into a single enterprise system:
 
-```
-+-----------------------------------------------------------------------------+
-|               The Unified Jurnii Intelligence Architecture                  |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. JURNII UX (Experience Intelligence)                                     |
-|     - "See what your customers see"                                         |
-|     - Continuous benchmarking across 300+ global brands                     |
-|     - 4 foundational categories: Journey, Usability, Performance, Perception|
-|     - 70+ commercially weighted recommendations delivered in minutes        |
-|                                                                             |
-|  2. JURNII 360 (Commercial Radar)                                           |
-|     - "See what your competitors launch"                                    |
-|     - 100% automated move tracking across 21 feature areas & 35+ markets    |
-|     - 1,000+ offers tracked weekly; saves 30+ hours per week of manual work |
-|     - Proprietary Promo Richness Index quantifying generosity vs yield      |
-|                                                                             |
-|  3. JURNII CORTEX (Attribution Engine)                                      |
-|     - Econometric Marketing Mix Modelling (MMM) isolating incremental ROI   |
-|     - Causal impact models evaluating competitive campaign shocks           |
-|     - +46% attribution accuracy, 3x media efficiency, $4.85M reallocated    |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. JURNII UX (Experience Intelligence)** | "See what your customers see" | Continuous benchmarking across 300+ global brands; 4 foundational categories: Journey, Usability, Performance, Perception; 70+ commercially weighted recommendations delivered in minutes |
+| **2. JURNII 360 (Commercial Radar)** | "See what your competitors launch" | 100% automated move tracking across 21 feature areas & 35+ markets; 1,000+ offers tracked weekly; saves 30+ hours per week of manual work; Proprietary Promo Richness Index quantifying generosity vs yield |
+| **3. JURNII CORTEX (Attribution Engine)** | Econometric Marketing Mix Modelling (MMM) isolating incremental ROI | Causal impact models evaluating competitive campaign shocks; +46% attribution accuracy, 3x media efficiency, $4.85M reallocated |
 
 ## The Category Imperative: Proprietary Intelligence vs AI Parity
 
@@ -183,20 +123,12 @@ As generic AI tools become commoditised, adopting off-the-shelf LLM wrappers cre
 
 The operators who command enduring market leadership build upon proprietary domain intelligence:
 
-```
-+-----------------------------------------------------------------------------+
-|               Proprietary Intelligence vs Generic AI Parity                 |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  GENERIC AI TOOLS (Parity)          JURNII INTELLIGENCE LAYER (Advantage)   |
-|  -------------------------------------------------------------------------  |
-|  Generic language summaries         70+ ranked, commercially weighted fixes |
-|  Unstructured internet scraping     Structured telemetry from 300+ brands   |
-|  Disconnected from financial yield  Directly mapped to NGR, LTV, and CAC    |
-|  Snapshot, one-off analyses         Always-on, near-real-time market radar  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **GENERIC AI TOOLS (Parity)** | **JURNII INTELLIGENCE LAYER (Advantage)** |
+| --- | --- |
+| **Generic language summaries** | 70+ ranked, commercially weighted fixes |
+| **Unstructured internet scraping** | Structured telemetry from 300+ brands |
+| **Disconnected from financial yield** | Directly mapped to NGR, LTV, and CAC |
+| **Snapshot, one-off analyses** | Always-on, near-real-time market radar |
 
 Deploying Jurnii transforms user experience into an enduring competitive moat that competitors cannot easily copy.
 

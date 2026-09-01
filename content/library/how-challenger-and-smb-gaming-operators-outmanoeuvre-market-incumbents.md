@@ -31,29 +31,12 @@ By deploying specialized [challenger and SMB market intelligence solutions](/use
 
 Challenger operators win by playing an asymmetric commercial game across four core dimensions:
 
-```
-+-----------------------------------------------------------------------------+
-|               The 4 Asymmetric Advantages of Challenger Operators           |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. SPEED OF DECISION-MAKING & TACTICAL COUNTER-PLAY                        |
-|     - Deploying promotional counter-propositions in minutes vs months       |
-|     - Agile sprint prioritisation without six layers of corporate approval  |
-|                                                                             |
-|  2. NICHE VERTICAL & DEMOGRAPHIC SPECIALIZATION                             |
-|     - Dominating specific sports (e.g. Esports, MMA, Niche Racing)          |
-|     - Designing tailored interfaces for high-engagement enthusiast cohorts  |
-|                                                                             |
-|  3. FRICTIONLESS TRANSACTIONAL VELOCITY                                     |
-|     - Modern headless tech stacks delivering sub-second page rendering (LCP)|
-|     - Instant Open Banking payouts (< 3 mins) vs legacy 24h review queues   |
-|                                                                             |
-|  4. TRANSPARENT, COMMUNITY-CENTRIC PROPOSITIONS                             |
-|     - Zero-wagering cash bonuses replacing opaque 40x conglomerate terms    |
-|     - Direct, human customer support creating authentic player loyalty      |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. SPEED OF DECISION-MAKING & TACTICAL COUNTER-PLAY** | Deploying promotional counter-propositions in minutes vs months | Agile sprint prioritisation without six layers of corporate approval |
+| **2. NICHE VERTICAL & DEMOGRAPHIC SPECIALIZATION** | Dominating specific sports (e.g. Esports, MMA, Niche Racing) | Designing tailored interfaces for high-engagement enthusiast cohorts |
+| **3. FRICTIONLESS TRANSACTIONAL VELOCITY** | Modern headless tech stacks delivering sub-second page rendering (LCP) | Instant Open Banking payouts (< 3 mins) vs legacy 24h review queues |
+| **4. TRANSPARENT, COMMUNITY-CENTRIC PROPOSITIONS** | Zero-wagering cash bonuses replacing opaque 40x conglomerate terms | Direct, human customer support creating authentic player loyalty |
 
 ### 1. Tactical Execution Velocity
 
@@ -75,46 +58,23 @@ Bettors are increasingly cynical regarding conglomerate promotional gimmicks. A 
 
 To outmanoeuvre larger competitors, challenger operators execute disciplined operational playbooks within [Jurnii 360](/products/jurnii-360):
 
-```
-+-----------------------------------------------------------------------------+
-|               Challenger Commercial Action Matrix (Jurnii 360)              |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  INCUMBENT BEHAVIOUR               CHALLENGER ASYMMETRIC COUNTER-MOVE       |
-|  -------------------------------------------------------------------------  |
-|  Incumbent launches £100 Bonus     Do not enter bonus spend race; highlight |
-|  with 40x Wagering Restrictions    "100% Cash Free Spins with Zero Turnover"|
-|                                                                             |
-|  Incumbent widens Overrounds on    Tighten pricing on that specific niche to|
-|  niche sports leagues (e.g. MMA)   capture passionate, high-volume bettors  |
-|                                                                             |
-|  Incumbent's mobile app suffers    Run targeted social campaigns highlighting|
-|  slow LCP and betslip lag          sub-second bet confirmation speed        |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **INCUMBENT BEHAVIOUR** | **CHALLENGER ASYMMETRIC COUNTER-MOVE** |
+| --- | --- |
+| **Incumbent launches £100 Bonus** | Do not enter bonus spend race; highlight |
+| **with 40x Wagering Restrictions** | "100% Cash Free Spins with Zero Turnover" |
+| **Incumbent widens Overrounds on** | Tighten pricing on that specific niche to |
+| **niche sports leagues (e.g. MMA)** | capture passionate, high-volume bettors |
+| **Incumbent's mobile app suffers** | Run targeted social campaigns highlighting |
+| **slow LCP and betslip lag** | sub-second bet confirmation speed |
 
 ## The Lean Operational Framework for Challenger Operators
 
 Challenger and SMB operators operate with compact teams. To maximize operational impact, commercial and product functions must be streamlined:
 
-```
-+-----------------------------------------------------------------------------+
-|               The Lean Challenger Operational Architecture                  |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ CORE TECHNOLOGY PRINCIPLES ]                                             |
-|  - Modern headless architecture delivering sub-second LCP and INP speed     |
-|  - Integration with third-party automated KYC for 85%+ instant verification |
-|  - Direct Open Banking API rails for instantaneous automated withdrawals    |
-|                                                                             |
-|  [ MARKETING & PROPOSITION PRINCIPLES ]                                     |
-|  - Zero-wagering promotional mechanics that build authentic player trust    |
-|  - Focused niche acquisition avoiding direct bidding against conglomerates  |
-|  - High-velocity CRM retention drops timed during rival inactivity windows  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **CORE TECHNOLOGY PRINCIPLES** | Modern headless architecture delivering sub-second LCP and INP speed | Integration with third-party automated KYC for 85%+ instant verification; Direct Open Banking API rails for instantaneous automated withdrawals |
+| **MARKETING & PROPOSITION PRINCIPLES** | Zero-wagering promotional mechanics that build authentic player trust | Focused niche acquisition avoiding direct bidding against conglomerates; High-velocity CRM retention drops timed during rival inactivity windows |
 
 ## Case Study: How a Boutique Sportsbook Outperformed Tier-1 Rivals
 
@@ -138,20 +98,11 @@ Using [Jurnii 360](/products/jurnii-360) and [Jurnii UX](/products/jurnii-ux), t
 
 To outmanoeuvre well-funded incumbents, SMB operators deploy the combined Jurnii intelligence stack:
 
-```
-+-----------------------------------------------------------------------------+
-|               Challenger Operator Agility Architecture                      |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  STRATEGIC VECTOR       INCUMBENT VULNERABILITY     CHALLENGER PLAYBOOK     |
-|  -------------------------------------------------------------------------  |
-|  Promotional Speed      2-3 weeks committee approval Hours not days response|
-|  UX Friction Remediation 6-month engineering backlog 70+ recommendations/min|
-|  Payment Settlement     12-24 hour manual review    Automated Open Banking  |
-|  Market White Space     Ignored niche sports/leagues Targeted localized odds |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **STRATEGIC VECTOR** | **INCUMBENT VULNERABILITY** | **CHALLENGER PLAYBOOK** |
+| --- | --- | --- |
+| **Promotional Speed** | 2-3 weeks committee approval Hours not days response | - UX Friction Remediation 6-month engineering backlog 70+ recommendations/min |
+| **Payment Settlement** | 12-24 hour manual review | Automated Open Banking |
+| **Market White Space** | Ignored niche sports/leagues Targeted localized odds | - |
 
 Across 300+ analysed global brands, agile challengers utilizing real-time proposition and UX telemetry achieve up to 2.8x faster growth in active recreational depositor market share.
 
@@ -159,22 +110,11 @@ Across 300+ analysed global brands, agile challengers utilizing real-time propos
 
 Challenger operators win by exploiting incumbent inertia:
 
-```
-+-----------------------------------------------------------------------------+
-|               Asymmetric Challenger Execution Playbook                      |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. EXECUTION SPEED: Deploy promotional counter-measures in hours, while     |
-|     incumbents spend three weeks debating in committee meetings.            |
-|                                                                             |
-|  2. PAYMENT VELOCITY: Offer 3-minute Open Banking automated withdrawals,    |
-|     while incumbents delay payouts with 24-hour manual approval queues.     |
-|                                                                             |
-|  3. TRANSPARENT PROPOSITIONS: Provide zero-wagering cash free spins, while  |
-|     incumbents frustrate players with complex 40x turnover hurdles.         |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **1. EXECUTION SPEED: Deploy promotional counter-measures in hours, while** | incumbents spend three weeks debating in committee meetings. |
+| **2. PAYMENT VELOCITY: Offer 3-minute Open Banking automated withdrawals,** | while incumbents delay payouts with 24-hour manual approval queues. |
+| **3. TRANSPARENT PROPOSITIONS: Provide zero-wagering cash free spins, while** | incumbents frustrate players with complex 40x turnover hurdles. |
 
 By turning agility into a decisive commercial weapon, challenger brands capture profitable market share with lean operating overheads.
 
@@ -182,20 +122,12 @@ By turning agility into a decisive commercial weapon, challenger brands capture 
 
 Challenger operators maximize return on capital by deploying agile intelligence:
 
-```
-+-----------------------------------------------------------------------------+
-|               Challenger vs Incumbent Efficiency Comparison                 |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  OPERATING CRITERIA     TIER-1 INCUMBENT CONGLOMERATE AGILE CHALLENGER      |
-|  -------------------------------------------------------------------------  |
-|  Monthly Promo Spend    £2.5M+ (High Wastage)         £250k (Targeted Value)|
-|  Decision Cycle Speed   3-4 Weeks per Campaign        2-4 Hours via 360     |
-|  Platform Velocity      Heavy Legacy PAM Stack        Headless React/Solid  |
-|  Player Defection Risk  High (70-80% Multi-homing)    Low (Instant Payouts) |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **OPERATING CRITERIA** | **TIER-1 INCUMBENT CONGLOMERATE AGILE CHALLENGER** |
+| --- | --- |
+| **Monthly Promo Spend** | £2.5M+ (High Wastage) £250k (Targeted Value) |
+| **Decision Cycle Speed** | 3-4 Weeks per Campaign 2-4 Hours via 360 |
+| **Platform Velocity** | Heavy Legacy PAM Stack Headless React/Solid |
+| **Player Defection Risk** | High (70-80% Multi-homing) Low (Instant Payouts) |
 
 Operating with modern intelligence tools allows challengers to capture outsized market share relative to their operational expenditure.
 
@@ -203,18 +135,12 @@ Operating with modern intelligence tools allows challengers to capture outsized 
 
 Challenger leadership teams deploy [Jurnii UX](/products/jurnii-ux) and [Jurnii 360](/products/jurnii-360) in regular operational standups:
 
-```
-+-----------------------------------------------------------------------------+
-|               20-Minute Challenger Executive Standup Protocol               |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  - 0-5 MINS: Review competitor promotional feed; identify rival bonus shifts.|
-|  - 5-10 MINS: Check top 5 competitor overrounds across tonight's fixtures.  |
-|  - 10-15 MINS: Inspect Jurnii UX journey scores for recent mobile releases. |
-|  - 15-20 MINS: Dispatch 1-2 tactical counter-offers and push notifications. |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Evaluation Variable** | **Benchmark Standard / Impact** |
+|---|---|
+| **0-5 MINS** | Review competitor promotional feed; identify rival bonus shifts. |
+| **5-10 MINS** | Check top 5 competitor overrounds across tonight's fixtures. |
+| **10-15 MINS** | Inspect Jurnii UX journey scores for recent mobile releases. |
+| **15-20 MINS** | Dispatch 1-2 tactical counter-offers and push notifications. |
 
 This lightweight operational cadence gives challenger teams faster decision loops than conglomerate competitors.
 

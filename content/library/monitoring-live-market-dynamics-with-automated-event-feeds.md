@@ -31,21 +31,13 @@ Deploying an automated [competitor live feed](/features/competitor-live-feed) pr
 
 To understand the necessity of live event feeds, one must evaluate how player behaviour shifts once a sporting event begins.
 
-```
-+-----------------------------------------------------------------------------+
-|               Pre-Match vs In-Play Commercial Dynamics                      |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  DIMENSION          PRE-MATCH BETTING           IN-PLAY LIVE BETTING        |
-|  -------------------------------------------------------------------------  |
-|  Decision Window    Hours to days               Seconds to minutes          |
-|  Player Mindset     Calculated, price shopping  Impulsive, momentum driven  |
-|  Pricing Volatility Stable, low tick frequency  Hyper-volatile, live feeds  |
-|  Promotional Style  Scheduled deposit matches   Flash boosts, half-time CRM |
-|  Multi-Homing Risk  Moderate (planned bets)     Extreme (instant balance hop)|
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **DIMENSION** | **PRE-MATCH BETTING** | **IN-PLAY LIVE BETTING** |
+| --- | --- | --- |
+| **Decision Window** | Hours to days | Seconds to minutes |
+| **Player Mindset** | Calculated, price shopping | Impulsive, momentum driven |
+| **Pricing Volatility Stable, low tick frequency** | Hyper-volatile, live feeds | - |
+| **Promotional Style** | Scheduled deposit matches | Flash boosts, half-time CRM |
+| **Multi-Homing Risk** | Moderate (planned bets) | Extreme (instant balance hop) |
 
 During live events, multi-homing behaviour accelerates. A bettor watching a football match on television with their smartphone in hand does not browse multiple apps leisurely. If an incident occurs (such as a red card, a penalty, or a momentum shift) and a competitor's app pushes a notification offering "3/1 on the Next Goalscorer" within 45 seconds, the bettor switches apps immediately.
 
@@ -55,34 +47,19 @@ If an operator is unaware that three major competitors have deployed targeted li
 
 Capturing live event propositions requires a high-throughput, low-latency data architecture capable of handling rapid DOM updates and event-driven notifications:
 
-```
-+-----------------------------------------------------------------------------+
-|               In-Play Live Event Feed System Architecture                   |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. EVENT-TRIGGERED INGESTION NODES                                         |
-|     - Match clock synchronisation (monitors T-0, Half-Time, Final Whistle)  |
-|     - Real-time DOM listeners on competitor in-play lobbies                 |
-|     - Mobile app push notification interception                             |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  2. LOW-LATENCY STREAM PROCESSING (KAFKA / REDIS)                           |
-|     - Microsecond event parsing and deduplication                           |
-|     - Temporal matching (correlates live promotion with match state)        |
-|     - Margin overround extraction on active live markets                    |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  3. HEURISTIC & THRESHOLD EVALUATION ENGINE                                 |
-|     - Detects sudden overround drops (e.g. 108% -> 102% on live match odds) |
-|     - Identifies high-generosity flash offers and stake caps                |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  4. TRADING DESK HUD & AUTOMATED DISPATCH                                   |
-|     - Real-time Heads-Up Display (HUD) within Jurnii 360                    |
-|     - Sub-second webhook alerts to Slack and Microsoft Teams                |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Metric / Dimension** | **- Match clock synchronisation (monitors T-0, Half-Time, Final Whistle)** | **2. LOW-LATENCY STREAM PROCESSING (KAFKA / REDIS)** |
+|---|---|---|
+| **Match clock synchronisation (monitors T-0, Half-Time, Final Whistle)** | - | - |
+| **Real-time DOM listeners on competitor in-play lobbies** | - | - |
+| **Mobile app push notification interception** | - | - |
+| **Microsecond event parsing and deduplication** | - | - |
+| **Temporal matching (correlates live promotion with match state)** | - | - |
+| **Margin overround extraction on active live markets** | - | - |
+| **------------------------------------------------------------------------** | - | - |
+| **Detects sudden overround drops (e.g. 108% -> 102% on live match odds)** | - | - |
+| **Identifies high-generosity flash offers and stake caps** | - | - |
+| **Real-time Heads-Up Display (HUD) within Jurnii 360** | - | - |
+| **Sub-second webhook alerts to Slack and Microsoft Teams** | - | - |
 
 ### 1. Match Clock Synchronisation and Ingestion Triggers
 
@@ -104,27 +81,16 @@ The engine filters noise, surfacing only high-impact commercial events to tradin
 
 When trading teams have access to continuous live feeds, they transition from passive risk managers to proactive commercial operators:
 
-```
-+-----------------------------------------------------------------------------+
-|                  In-Play Trading Response Playbooks                         |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  LIVE EVENT SCENARIO               CALCULATED TRADING RESPONSE              |
-|  -------------------------------------------------------------------------  |
-|  Competitor drops live 1X2         Do not compromise single-match margin;   |
-|  overround to 102% at 60 mins      deploy live Bet Builder boost on corners |
-|                                                                             |
-|  Competitor pushes 50% Half-Time   Trigger automated free-to-play predictive|
-|  Reload Casino bonus               push to retain mobile screen attention   |
-|                                                                             |
-|  Competitor offers early payout    Highlight superior cash-out execution    |
-|  on 2-goal lead                    speed and zero withdrawal delays         |
-|                                                                             |
-|  Competitor suspends in-play       Keep high-liquidity markets open with    |
-|  markets during volatility         wider spreads to capture stranded volume |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **LIVE EVENT SCENARIO** | **CALCULATED TRADING RESPONSE** |
+| --- | --- |
+| **Competitor drops live 1X2** | Do not compromise single-match margin; |
+| **overround to 102% at 60 mins** | deploy live Bet Builder boost on corners |
+| **Competitor pushes 50% Half-Time** | Trigger automated free-to-play predictive |
+| **Reload Casino bonus** | push to retain mobile screen attention |
+| **Competitor offers early payout** | Highlight superior cash-out execution |
+| **on 2-goal lead** | speed and zero withdrawal delays |
+| **Competitor suspends in-play** | Keep high-liquidity markets open with |
+| **markets during volatility** | wider spreads to capture stranded volume |
 
 ### 1. The Half-Time Screen Attention Battle
 
@@ -146,26 +112,14 @@ Post-event financial reviews often struggle to explain why live margin fell duri
 
 To evaluate in-play pricing efficiency with mathematical precision, trading desks track the **In-Play Overround Trajectory (IOT)** across key market tiers:
 
-```
-+-----------------------------------------------------------------------------+
-|               In-Play Overround Trajectory (IOT) Calculation                |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  Formula:                                                                   |
-|  IOT(t) = [ SUM( 1 / Odds_i(t) ) - 1 ] * 100                               |
-|                                                                             |
-|  Where:                                                                     |
-|  - t is the discrete match timestamp (e.g. Minute 15, Minute 45, Minute 75) |
-|  - Odds_i(t) represents the decimal odds for selection i at time t          |
-|                                                                             |
-|  BENCHMARK OVERROUND THRESHOLDS (Football Match Odds):                      |
-|  - Premier Tier 1 Standard:   105.5% - 107.0% Overround                     |
-|  - Competitive Live Window:   103.5% - 105.0% Overround                     |
-|  - Aggressive Promo Boost:    100.5% - 102.0% Overround                     |
-|  - Subsidised / Negative Hold:< 100.0% Overround (Arbitrage Risk)           |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Evaluation Variable** | **Benchmark Standard / Impact** |
+|---|---|
+| **Item** | t is the discrete match timestamp (e.g. Minute 15, Minute 45, Minute 75) |
+| **Item** | Odds_i(t) represents the decimal odds for selection i at time t |
+| **Premier Tier 1 Standard** | 105.5% - 107.0% Overround |
+| **Competitive Live Window** | 103.5% - 105.0% Overround |
+| **Aggressive Promo Boost** | 100.5% - 102.0% Overround |
+| **Subsidised / Negative Hold** | < 100.0% Overround (Arbitrage Risk) |
 
 When an automated feed detects that a competitor's IOT has dipped below 102.0% during a live broadcast, the trading desk evaluates whether the rival is running an unhedged volume acquisition play or applying strict £10 maximum stake limits behind the scenes.
 
@@ -173,25 +127,11 @@ When an automated feed detects that a competitor's IOT has dipped below 102.0% d
 
 In modern sportsbook trading rooms, live feeds do not merely feed human dashboards; they stream directly into proprietary algorithmic risk engines via high-frequency webhooks.
 
-```
-+-----------------------------------------------------------------------------+
-|               Automated In-Play Trading System Integration                  |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ JURNII 360 LIVE FEED ]                                                   |
-|  - Real-time ingestion of live offers across 1,000+ weekly promotions       |
-|  - Microsecond price parsing and stake restriction extraction               |
-|                                                                             |
-|  [ TRADING ALGO CONNECTOR ]                                                 |
-|  - Feeds competitor pricing deltas into internal liability pricing models   |
-|  - Dynamically recalculates risk-adjusted overrounds                        |
-|                                                                             |
-|  [ CRM AUTOMATION BRIDGE ]                                                  |
-|  - Triggers localized half-time push notifications in under 3 minutes       |
-|  - Deploys zero-turnover free-to-play predictors during match lulls         |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **JURNII 360 LIVE FEED** | Real-time ingestion of live offers across 1,000+ weekly promotions | Microsecond price parsing and stake restriction extraction |
+| **TRADING ALGO CONNECTOR** | Feeds competitor pricing deltas into internal liability pricing models | Dynamically recalculates risk-adjusted overrounds |
+| **CRM AUTOMATION BRIDGE** | Triggers localized half-time push notifications in under 3 minutes | Deploys zero-turnover free-to-play predictors during match lulls |
 
 ## The Long-Term Commercial Impact of Live Event Intelligence
 

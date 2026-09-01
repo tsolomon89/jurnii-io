@@ -1,0 +1,57 @@
+{
+  "//": "Live Zoho field snapshot for the modules this subsystem writes to. Captured read-only via GET /crm/v6/settings/fields. Regenerate with `node scripts/zoho-field-snapshot.js`; `--check` fails on drift. This is the subsystem's OWN fixture — booking/tests/fixtures/zoho-fields.json is a separate file and is not touched.",
+  "generatedAt": "2026-08-31",
+  "source": "GET /crm/v6/settings/fields?module=<M>&type=all",
+  "modules": {
+    "Tasks": [
+      "Blocks_Sequence", "Closed_Time", "Created_By", "Created_Time", "Description",
+      "Due_Date", "id", "Last_Activity_Time", "Locked__s", "Modified_By", "Modified_Time",
+      "Owner", "Priority", "Record_Status__s", "Recurring_Activity", "Remind_At",
+      "Send_Notification_Email", "Status", "Subject", "Tag", "Task_Contract_Brands",
+      "Task_Contract_Date_End", "Task_Contract_Date_Start", "Task_Contract_Frequency",
+      "Task_Contract_Products", "Task_Lost_Reasons", "Task_Opportunity", "Task_Pipeline",
+      "Task_Sequence_Managed", "Task_Sequence_Stage", "Task_Sequence_Type", "Task_Stage",
+      "Task_State", "Task_Status", "Task_Type", "What_Id", "Who_Id"
+    ],
+    "Contacts": [
+      "Account_Name", "Description", "Email", "First_Name", "Full_Name", "id",
+      "Job_Title", "Job_Title_Raw", "Last_Name", "Lead_Source", "Marketing_Consent",
+      "Mobile", "Owner", "Personal_Linkedin", "Phone", "Salutation", "Secondary_Email",
+      "Stage", "State", "Status", "Contact_Role1", "Title"
+    ],
+    "Accounts": [
+      "Account_Key", "Account_Name", "Account_Number", "Account_Site", "Account_Status",
+      "Account_Type", "Automation_Suppressed", "Company_Linkedin", "Company_Tier",
+      "Description", "id", "Industry", "Jurnii_Org_ID", "Owner", "Phone", "Website"
+    ]
+  },
+  "readOnly": {
+    "Tasks": ["Closed_Time", "Created_By", "Created_Time", "Last_Activity_Time", "Modified_By", "Modified_Time", "Record_Status__s", "Locked__s"]
+  },
+  "unused": {
+    "Tasks": [],
+    "Contacts": ["Title"],
+    "Accounts": []
+  },
+  "mandatory": {
+    "Contacts": ["Last_Name"],
+    "Accounts": ["Account_Name"]
+  },
+  "unique": {
+    "Contacts": ["Email"],
+    "Accounts": ["Account_Name", "Account_Key"]
+  },
+  "lengths": {
+    "Tasks": { "Subject": 255, "Description": 32000 },
+    "Contacts": { "Job_Title_Raw": 120 },
+    "Accounts": { "Account_Key": 255 }
+  },
+  "picklists": {
+    "Tasks": {
+      "Status": ["Not Started", "Deferred", "In Progress", "Completed", "Waiting on someone else"],
+      "Task_Type": ["-None-", "Enrichment", "Data Repair", "Draft Commercials", "Send Commercials", "Review Reply", "Onboarding Setup", "Manual Review", "Suppression Review", "Sequence Activation", "Email Sent", "Scheduled Send"],
+      "Task_State": ["-None-", "Open", "Won", "Lost"],
+      "Task_Status": ["-None-", "Open", "Working", "Closed"]
+    }
+  }
+}

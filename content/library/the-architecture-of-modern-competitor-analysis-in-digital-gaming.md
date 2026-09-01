@@ -31,21 +31,13 @@ To establish a defensible commercial advantage, leading operators are transition
 
 Before examining the architecture of an automated intelligence system, one must understand why manual research fails in high-velocity digital markets:
 
-```
-+-----------------------------------------------------------------------------+
-|               Manual Audits vs Automated Intelligence Units                 |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  DIMENSION          MANUAL COMPETITOR AUDITS    AUTOMATED INTELLIGENCE      |
-|  -------------------------------------------------------------------------  |
-|  Data Velocity      Weeks to months latency     Near real-time (daily/hourly) |
-|  Market Coverage    Sampled static screens      Comprehensive across 35+ MKs|
-|  Objectivity        Subjective analyst opinions Standardised scoring models |
-|  Integration        Isolated PDF slide decks    Directly feeds CRM & MMM    |
-|  Cost Efficiency    High continuous labour      Scalable cloud data engine  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **DIMENSION** | **MANUAL COMPETITOR AUDITS** | **AUTOMATED INTELLIGENCE** |
+| --- | --- | --- |
+| **Data Velocity** | Weeks to months latency | Near real-time (daily/hourly) |
+| **Market Coverage** | Sampled static screens | Comprehensive across 35+ MKs |
+| **Objectivity** | Subjective analyst opinions Standardised scoring models | - |
+| **Integration** | Isolated PDF slide decks | Directly feeds CRM & MMM |
+| **Cost Efficiency** | High continuous labour | Scalable cloud data engine |
 
 ### 1. High Human Labour with Low Analytical Return
 
@@ -63,36 +55,25 @@ Manual reports live in isolation as PDF presentations or static documents. They 
 
 An enterprise-grade competitor analysis unit operates on four interconnected technical layers:
 
-```
-+-----------------------------------------------------------------------------+
-|             Enterprise Competitor Analysis System Architecture              |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  LAYER 1: DISTRIBUTED MULTI-SURFACE INGESTION                               |
-|  - Headless Browser Crawlers (Simulated iOS, Android, Desktop Viewports)    |
-|  - Geo-Distributed IP Proxies across 35+ Regulated Jurisdictions            |
-|  - CRM Ingestion Webhooks (Email, SMS, App Push Notifications)              |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  LAYER 2: DATA NORMALISATION & ENTITY PARSING                               |
-|  - Optical Character Recognition (OCR) for Banners & Dynamic Sliders        |
-|  - Natural Language Processing (NLP) for Terms, Caps, and Wagering Multiples |
-|  - Relational Entity Mapping (Brand -> Market -> Vertical -> Proposition)   |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  LAYER 3: ANALYTICAL & SCORING PIPELINE                                     |
-|  - Promo Richness Indexing (Expected Value vs Friction Constraints)         |
-|  - UX Journey Velocity & Performance Benchmarking                           |
-|  - Anomaly Detection (Flash Odds, Sudden Generosity Spikes)                 |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  LAYER 4: COMMERCIAL DOWNSTREAM ACTIVATION                                  |
-|  - Real-Time Slack/Teams Alerting for Trading & CRM Desks                   |
-|  - Daily Executive Radar Dashboards                                         |
-|  - Structured CSV/API Exports for Econometric MMM Platforms                 |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Metric / Dimension** | **- Headless Browser Crawlers (Simulated iOS, Android, Desktop Viewports)** | **- Optical Character Recognition (OCR) for Banners & Dynamic Sliders** |
+|---|---|---|
+| **LAYER 1** | DISTRIBUTED MULTI-SURFACE INGESTION | - |
+| **Headless Browser Crawlers (Simulated iOS, Android, Desktop Viewports)** | - | - |
+| **Geo-Distributed IP Proxies across 35+ Regulated Jurisdictions** | - | - |
+| **CRM Ingestion Webhooks (Email, SMS, App Push Notifications)** | - | - |
+| **LAYER 2** | - | DATA NORMALISATION & ENTITY PARSING |
+| **Optical Character Recognition (OCR) for Banners & Dynamic Sliders** | - | - |
+| **Natural Language Processing (NLP) for Terms, Caps, and Wagering Multiples** | - | - |
+| **Relational Entity Mapping (Brand -> Market -> Vertical -> Proposition)** | - | - |
+| **------------------------------------------------------------------------** | - | - |
+| **LAYER 3** | - | ANALYTICAL & SCORING PIPELINE |
+| **Promo Richness Indexing (Expected Value vs Friction Constraints)** | - | - |
+| **UX Journey Velocity & Performance Benchmarking** | - | - |
+| **Anomaly Detection (Flash Odds, Sudden Generosity Spikes)** | - | - |
+| **LAYER 4** | - | COMMERCIAL DOWNSTREAM ACTIVATION |
+| **Real-Time Slack/Teams Alerting for Trading & CRM Desks** | - | - |
+| **Daily Executive Radar Dashboards** | - | - |
+| **Structured CSV/API Exports for Econometric MMM Platforms** | - | - |
 
 ### Layer 1: Distributed Multi-Surface Ingestion
 
@@ -131,29 +112,12 @@ The final layer distributes intelligence directly into operational workflows:
 
 A centralized competitor intelligence architecture creates cross-functional commercial advantage across the entire gaming enterprise:
 
-```
-+-----------------------------------------------------------------------------+
-|              Cross-Functional Intelligence Impact in iGaming                |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ TRADING & SPORTSBOOK DESK ]                                              |
-|  - Real-time visibility into rival price overrounds and margin concessions  |
-|  - Instant counter-positioning on major sporting event match odds           |
-|                                                                             |
-|  [ CRM & RETENTION TEAMS ]                                                  |
-|  - Exploit competitor retention gaps with targeted midweek campaigns        |
-|  - Neutralise rival reload bonuses with precision cohort incentives         |
-|                                                                             |
-|  [ PRODUCT & UX TEAMS ]                                                     |
-|  - Benchmark registration and deposit flows against leading industry UX     |
-|  - Eliminate transactional friction points identified in rival platforms    |
-|                                                                             |
-|  [ EXECUTIVE & FINANCE LEADERSHIP ]                                         |
-|  - Isolate external competitive pressure from internal marketing ROI        |
-|  - Make data-backed market entry and capital allocation decisions           |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **TRADING & SPORTSBOOK DESK** | Real-time visibility into rival price overrounds and margin concessions | Instant counter-positioning on major sporting event match odds |
+| **CRM & RETENTION TEAMS** | Exploit competitor retention gaps with targeted midweek campaigns | Neutralise rival reload bonuses with precision cohort incentives |
+| **PRODUCT & UX TEAMS** | Benchmark registration and deposit flows against leading industry UX | Eliminate transactional friction points identified in rival platforms |
+| **EXECUTIVE & FINANCE LEADERSHIP** | Isolate external competitive pressure from internal marketing ROI | Make data-backed market entry and capital allocation decisions |
 
 ### 1. Trading & Sportsbook Desks: Dynamic Margin Management
 

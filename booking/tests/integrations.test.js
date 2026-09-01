@@ -397,35 +397,58 @@ test('the Account is DERIVED from a verified Contact, never supplied', () => {
   assert.equal(Z.accountIdOfContact(null), null);
 });
 
-test('resolveProductDeal never guesses when several Deals match', async () => {
+test('resolveProductDeal resolves the Account\'s single Deal and never guesses', async () => {
   const fetch = (deals) => async () => deals;
 
-  // Two matches is ambiguity, not a choice — the caller escalates rather than picking.
+  // WORK ITEM 4.1. This test used to assert Product-name substring matching inside
+  // Deal_Name. That is the prohibited model, and it would break by construction once
+  // Deluge names the single Deal after the ACCOUNT: Deal_Name would contain no Product
+  // name, so every lookup would return 'none' and every Meeting would be created with
+  // no What_Id. The contract is now "the Account's Deal", and the assertion that
+  // matters most is that ambiguity is still never resolved by picking.
   const many = await Z.resolveProductDeal('810', 'Platform', {
     fetchDeals: fetch([
-      { id: '1', Deal_Name: 'Acme — Platform' },
-      { id: '2', Deal_Name: 'Acme — Platform Renewal' },
+      { id: '1', Deal_Name: 'Acme Ltd' },
+      { id: '2', Deal_Name: 'Acme Ltd' },
     ]),
   });
   assert.equal(many.status, 'many');
   assert.equal(many.deal, null, 'no Deal is returned, so none can be linked');
+  assert.deepEqual(many.candidates, ['1', '2'], 'every candidate is named for the review');
 
+  // The Account's one Deal resolves even though its name carries no Product at all —
+  // exactly the shape the Deluge naming change produces.
   const one = await Z.resolveProductDeal('810', 'Platform', {
-    fetchDeals: fetch([{ id: '1', Deal_Name: 'Acme — Platform' }]),
+    fetchDeals: fetch([{ id: '1', Deal_Name: 'Acme Ltd' }]),
   });
   assert.equal(one.status, 'one');
   assert.equal(one.deal.id, '1');
 
-  assert.equal((await Z.resolveProductDeal('810', 'Platform', { fetchDeals: fetch([]) })).status, 'none');
-  assert.equal((await Z.resolveProductDeal('810', 'Platform', {
-    fetchDeals: fetch([{ id: '9', Deal_Name: 'Acme — Something Else' }]) })).status, 'none');
+  // The product argument no longer participates in selection.
+  const ignored = await Z.resolveProductDeal('810', 'a product that does not exist', {
+    fetchDeals: fetch([{ id: '4', Deal_Name: 'Acme Ltd' }]),
+  });
+  assert.equal(ignored.status, 'one');
+  assert.equal(ignored.deal.id, '4');
 
-  // No Account or no product: nothing is fetched at all.
+  // A Lost relationship is excluded when something open exists beside it.
+  const lostExcluded = await Z.resolveProductDeal('810', 'Platform', {
+    fetchDeals: fetch([
+      { id: '5', Deal_Name: 'Acme Ltd', Opportunity_State: 'Lost' },
+      { id: '6', Deal_Name: 'Acme Ltd', Opportunity_State: 'Open' },
+    ]),
+  });
+  assert.equal(lostExcluded.status, 'one');
+  assert.equal(lostExcluded.deal.id, '6');
+
+  assert.equal((await Z.resolveProductDeal('810', 'Platform', { fetchDeals: fetch([]) })).status, 'none');
+
+  // No Account: nothing is fetched at all. A missing product no longer short-circuits,
+  // because the product is not an input to the decision any more.
   let called = false;
   const guard = { fetchDeals: async () => { called = true; return []; } };
   assert.equal((await Z.resolveProductDeal(null, 'Platform', guard)).status, 'none');
-  assert.equal((await Z.resolveProductDeal('810', null, guard)).status, 'none');
-  assert.equal(called, false, 'no Deal read is issued without both inputs');
+  assert.equal(called, false, 'no Deal read is issued without an Account');
 });
 
 /**

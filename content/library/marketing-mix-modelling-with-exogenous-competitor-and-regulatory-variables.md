@@ -40,41 +40,17 @@ $$\text{Revenue}_t = \alpha + \sum \beta_i \times \text{MediaSpend}_{i,t} + \eps
 
 In digital gaming, this equation is structurally inadequate. [Jurnii Cortex](/products/jurnii-mmm) expands the econometric formulation to incorporate multi-layered exogenous interactions:
 
-```
-+-----------------------------------------------------------------------------+
-|             Jurnii Cortex Exogenous Econometric Formulation                 |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  Y_t = Baseline + Media(Spend, Adstock, Saturation) +                       |
-|        Exogenous_Sports(Fixtures, Favourites, Volatility) +                 |
-|        Exogenous_Competitors(Promo Richness Index, Pricing Overrounds) +    |
-|        Exogenous_Regulatory(Deposit Limits, Ad Bans, Tax Changes) + \epsilon_t|
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+- Y_t = Baseline + Media(Spend, Adstock, Saturation) +
+- Exogenous_Sports(Fixtures, Favourites, Volatility) +
+- Exogenous_Competitors(Promo Richness Index, Pricing Overrounds) +
+- Exogenous_Regulatory(Deposit Limits, Ad Bans, Tax Changes) + \epsilon_t
 
-```
-+-----------------------------------------------------------------------------+
-|             The 4 Exogenous Vectors in iGaming Econometrics                 |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. COMPETITOR PROMOTIONAL INTENSITY (PROMO RICHNESS INDEX)                 |
-|     - Tracks competitor welcome bonus generosity and wagering multipliers   |
-|     - Calculates external market proposition pressure across 35+ jurisdictions|
-|                                                                             |
-|  2. SPORTS CALENDAR & RESULT VOLATILITY                                     |
-|     - Calendared density of tier-1 sporting events (Derbies, Grand Slams)   |
-|     - Favourites Win Rate index (measures recreational cash liquidity)      |
-|                                                                             |
-|  3. REGULATORY INTERVENTION & COMPLIANCE SHOCKS                             |
-|     - Implementation of mandatory deposit caps, verification hurdles        |
-|     - Advertising blackout windows (e.g. whistle-to-whistle broadcast bans) |
-|                                                                             |
-|  4. MACROECONOMIC & SEASONAL BASELINES                                      |
-|     - Payday calendar cycles, seasonal holiday periods, inflation indices   |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. COMPETITOR PROMOTIONAL INTENSITY (PROMO RICHNESS INDEX)** | Tracks competitor welcome bonus generosity and wagering multipliers | Calculates external market proposition pressure across 35+ jurisdictions |
+| **2. SPORTS CALENDAR & RESULT VOLATILITY** | Calendared density of tier-1 sporting events (Derbies, Grand Slams) | Favourites Win Rate index (measures recreational cash liquidity) |
+| **3. REGULATORY INTERVENTION & COMPLIANCE SHOCKS** | Implementation of mandatory deposit caps, verification hurdles | Advertising blackout windows (e.g. whistle-to-whistle broadcast bans) |
+| **4. MACROECONOMIC & SEASONAL BASELINES** | Payday calendar cycles, seasonal holiday periods, inflation indices | Empirical benchmark verified |
 
 ### 1. Competitor Promotional Intensity
 
@@ -94,32 +70,21 @@ When a jurisdiction introduces tighter verification rules (such as mandatory ele
 
 Jurnii Cortex executes econometric modelling through a Bayesian statistical pipeline:
 
-```
-+-----------------------------------------------------------------------------+
-|               Jurnii Cortex Bayesian MMM Pipeline                           |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  STAGE 1: AGGREGATED DATA INGESTION & FEATURE ENGINEERING                   |
-|  - Channel media spend, impressions, clicks, affiliate commissions         |
-|  - External feeds: Competitor Promo Richness, odds overrounds, sports logs  |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  STAGE 2: BAYESIAN PRIOR CALIBRATION                                        |
-|  - Ingest empirical priors derived from 300+ historical gaming audits       |
-|  - Set realistic parameter bounds for adstock decay and channel saturation  |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  STAGE 3: MARKOV CHAIN MONTE CARLO (MCMC) ESTIMATION                        |
-|  - Fit multi-variable non-linear regression using Hamiltonian Monte Carlo   |
-|  - Quantify parameter uncertainty and channel interaction effects           |
-|                                                                             |
-|  -------------------------------------------------------------------------  |
-|  STAGE 4: PRESCRIPTIVE BUDGET OPTIMISATION & SIMULATION                     |
-|  - Generate marginal ROAS curves and channel saturation thresholds          |
-|  - Simulate budget reallocation scenarios for executive leadership          |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Metric / Dimension** | **Baseline** | **STAGE 3: MARKOV CHAIN MONTE CARLO (MCMC) ESTIMATION** |
+|---|---|---|
+| **STAGE 1** | AGGREGATED DATA INGESTION & FEATURE ENGINEERING | - |
+| **Channel media spend, impressions, clicks, affiliate commissions** | - | - |
+| **External feeds** | Competitor Promo Richness, odds overrounds, sports logs | - |
+| **STAGE 2** | - | BAYESIAN PRIOR CALIBRATION |
+| **Ingest empirical priors derived from 300+ historical gaming audits** | - | - |
+| **Set realistic parameter bounds for adstock decay and channel saturation** | - | - |
+| **------------------------------------------------------------------------** | - | - |
+| **STAGE 3** | - | MARKOV CHAIN MONTE CARLO (MCMC) ESTIMATION |
+| **Fit multi-variable non-linear regression using Hamiltonian Monte Carlo** | - | - |
+| **Quantify parameter uncertainty and channel interaction effects** | - | - |
+| **STAGE 4** | - | PRESCRIPTIVE BUDGET OPTIMISATION & SIMULATION |
+| **Generate marginal ROAS curves and channel saturation thresholds** | - | - |
+| **Simulate budget reallocation scenarios for executive leadership** | - | - |
 
 ### Stage 1: Data Ingestion and Feature Normalisation
 
@@ -141,50 +106,21 @@ The platform provides interactive simulation tools, allowing commercial leaders 
 
 Deploying exogenous-aware MMM provides gaming executives with unprecedented commercial clarity:
 
-```
-+-----------------------------------------------------------------------------+
-|               Commercial Applications of Exogenous-Aware MMM                |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  EXECUTIVE SCENARIO                ECONOMETRIC INSIGHT & ACTION             |
-|  -------------------------------------------------------------------------  |
-|  CAC Spikes by 28% in October      Model reveals 3 rivals tripled bonus     |
-|                                    generosity; marketing campaigns performed|
-|                                    efficiently given external market headwind|
-|                                                                             |
-|  TV Campaign ROI Contested         Model proves TV ads generated £4.2M in   |
-|                                    lagged brand equity and lifted paid      |
-|                                    search conversion efficiency by 34%      |
-|                                                                             |
-|  Paid Search Saturation Identified Model shows brand PPC spend passed       |
-|                                    diminishing returns threshold; £600k     |
-|                                    reallocated to high-yield audio/video    |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **EXECUTIVE SCENARIO** | **ECONOMETRIC INSIGHT & ACTION** |
+| --- | --- |
+| **CAC Spikes by 28% in October** | Model reveals 3 rivals tripled bonus generosity; marketing campaigns performed efficiently given external market headwind |
+| **TV Campaign ROI Contested** | Model proves TV ads generated £4.2M in lagged brand equity and lifted paid search conversion efficiency by 34% Paid Search Saturation Identified Model shows brand PPC spend passed diminishing returns threshold; £600k reallocated to high-yield audio/video |
 
 ## The Jurnii Cortex Bayesian Econometric Formulation
 
 In [Jurnii Cortex](/products/jurnii-mmm), the time-series model decomposes Net Gaming Revenue ($Y_t$) into baseline, media, competitor, and regulatory components:
 
-```
-+-----------------------------------------------------------------------------+
-|               Bayesian Marketing Mix Model Formulation                      |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  Y_t = Base_t + SUM( beta_m * Saturation( Adstock( Spend_{m,t} ) ) )        |
-|        + gamma * Competitor_Promo_Richness_t                                |
-|        + delta * Sporting_Calendar_Index_t                                  |
-|        + theta * Regulatory_Tax_Adjustment_t + epsilon_t                    |
-|                                                                             |
-|  Where:                                                                     |
-|  - Adstock(x) captures lagged advertising decay: x_t + lambda * x_{t-1}     |
-|  - Saturation(x) models diminishing returns: x^alpha / (K^alpha + x^alpha)  |
-|  - Competitor_Promo_Richness_t captures rival promotional intensity         |
-|  - epsilon_t is the Gaussian error distribution                             |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Evaluation Variable** | **Benchmark Standard / Impact** |
+|---|---|
+| **Adstock(x) captures lagged advertising decay** | x_t + lambda * x_{t-1} |
+| **Saturation(x) models diminishing returns** | x^alpha / (K^alpha + x^alpha) |
+| **Item** | Competitor_Promo_Richness_t captures rival promotional intensity |
+| **Item** | epsilon_t is the Gaussian error distribution |
 
 In live commercial deployments managing up to $17.1M in marketing spend, this Bayesian formulation delivers a **+46% lift in attribution accuracy**, a **3x improvement in marginal media efficiency**, and compresses scenario planning cycles by **40x**.
 
@@ -192,18 +128,12 @@ In live commercial deployments managing up to $17.1M in marketing spend, this Ba
 
 To resolve media attribution during volatile tournament windows, Jurnii Cortex runs Markov Chain Monte Carlo (MCMC) simulations:
 
-```
-+-----------------------------------------------------------------------------+
-|               Bayesian MCMC Estimation Protocol                             |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  - 4 Independent Sampling Chains with 2,000 warmup iterations               |
-|  - Target Gelman-Rubin convergence diagnostic: R-hat < 1.05                 |
-|  - Ingestion of weekly competitor Promo Richness Index as exogenous feature |
-|  - Posterior predictive distributions for all media marginal ROAS curves    |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Evaluation Variable** | **Benchmark Standard / Impact** |
+|---|---|
+| **Item** | 4 Independent Sampling Chains with 2,000 warmup iterations |
+| **Target Gelman-Rubin convergence diagnostic** | R-hat < 1.05 |
+| **Item** | Ingestion of weekly competitor Promo Richness Index as exogenous feature |
+| **Item** | Posterior predictive distributions for all media marginal ROAS curves |
 
 This statistical rigor ensures that marketing budget allocations are grounded in objective econometric reality rather than subjective bias.
 

@@ -31,25 +31,11 @@ To eliminate this gap, operators must implement [market positioning benchmarking
 
 Jurnii evaluates positioning alignment across three operational pillars:
 
-```
-+-----------------------------------------------------------------------------+
-|               The 3 Pillars of Positioning Alignment                        |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. THE BRAND PROMISE AUDIT                                                 |
-|     - Deconstruct all public marketing claims, ad slogans, and copy         |
-|     - Map specific promises (Speed, Generosity, Liquidity, Simplicity)      |
-|                                                                             |
-|  2. TRANSACTIONAL REALITY BENCHMARKING                                      |
-|     - Measure actual execution telemetry against stated claims             |
-|     - Benchmark Core Web Vitals, KYC latency, and withdrawal turnarounds    |
-|                                                                             |
-|  3. COMPETITIVE RELATIVE POSITIONING                                        |
-|     - Compare operational execution against direct market peers             |
-|     - Identify vulnerabilities where rivals outperform on core promises     |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **1. THE BRAND PROMISE AUDIT** | Deconstruct all public marketing claims, ad slogans, and copy | Map specific promises (Speed, Generosity, Liquidity, Simplicity) |
+| **2. TRANSACTIONAL REALITY BENCHMARKING** | Measure actual execution telemetry against stated claims | Benchmark Core Web Vitals, KYC latency, and withdrawal turnarounds |
+| **3. COMPETITIVE RELATIVE POSITIONING** | Compare operational execution against direct market peers | Identify vulnerabilities where rivals outperform on core promises |
 
 ### 1. The Brand Promise Audit
 
@@ -75,31 +61,15 @@ Even if an operator improves their bet placement speed from 3.0 seconds to 2.0 s
 
 Consider a tier-2 European sportsbook that rebranded around the proposition: **"Built for Fast Action"**.
 
-```
-+-----------------------------------------------------------------------------+
-|                 Marketing Claim vs Operational Reality Gap                  |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  POSITIONING CLAIM: "The Fastest In-Play Betting Experience in Europe"      |
-|                                                                             |
-|  AUDITED REALITY VIA JURNII UX:                                             |
-|  - Registration Funnel: 3 mins 12 secs (Market Median: 55 secs)             |
-|  - Largest Contentful Paint (LCP): 3.2s on mobile 4G (Market Median: 1.6s)  |
-|  - Live Betslip Validation Latency: 2.8s (Top Rival: 0.9s)                 |
-|  - Withdrawal Payout Turnaround: 24 hours pending review (Top Rival: 3 mins)|
-|                                                                             |
-|  COMMERCIAL CONSEQUENCE:                                                    |
-|  - 42% of newly acquired players churned within 7 days.                     |
-|  - Customer Acquisition Cost (CAC) spiked by 35% due to poor conversion.    |
-|                                                                             |
-|  REMEDIATION ROADMAP:                                                       |
-|  1. Refactored front-end React architecture to achieve 1.2s LCP.             |
-|  2. Consolidated registration into progressive single-screen accordion.     |
-|  3. Integrated Trustly Open Banking for instant 3-minute payouts.           |
-|  Result: 90-day player retention increased by 31%, validating the brand.    |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |
+|---|---|---|
+| **POSITIONING CLAIM** | "The Fastest In-Play Betting Experience in Europe" | Empirical benchmark verified |
+| **AUDITED REALITY VIA JURNII UX:** | Registration Funnel: 3 mins 12 secs (Market Median: 55 secs) | Largest Contentful Paint (LCP): 3.2s on mobile 4G (Market Median: 1.6s); Live Betslip Validation Latency: 2.8s (Top Rival: 0.9s); Withdrawal Payout Turnaround: 24 hours pending review (Top Rival: 3 mins) |
+| **COMMERCIAL CONSEQUENCE:** | 42% of newly acquired players churned within 7 days. | Customer Acquisition Cost (CAC) spiked by 35% due to poor conversion. |
+| **REMEDIATION ROADMAP:** | - | Empirical benchmark verified |
+| **1. Refactored front-end React architecture to achieve 1.2s LCP.** | - | Empirical benchmark verified |
+| **2. Consolidated registration into progressive single-screen accordion.** | - | Empirical benchmark verified |
+| **3. Integrated Trustly Open Banking for instant 3-minute payouts.** | Result: 90-day player retention increased by 31%, validating the brand. | Empirical benchmark verified |
 
 By benchmarking operational telemetry against the brand promise, leadership identified the exact technical bottlenecks damaging customer retention and focused engineering capacity on closing the gap.
 
@@ -107,65 +77,32 @@ By benchmarking operational telemetry against the brand promise, leadership iden
 
 To ensure that marketing claims and technical delivery remain aligned as products evolve, implement a continuous governance model within [Jurnii UX](/products/jurnii-ux):
 
-```
-+-----------------------------------------------------------------------------+
-|               Continuous Positioning Governance Framework                   |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  [ QUARTERLY PROMISE RECONCILIATION ]                                       |
-|  Review marketing campaign themes against live Core Web Vitals and funnels. |
-|                                                                             |
-|  [ SPRINT QUALITY GATES ]                                                   |
-|  Ensure new feature deployments do not degrade core speed benchmarks.       |
-|                                                                             |
-|  [ COMPETITIVE POSITIONING AUDIT ]                                          |
-|  Benchmark your operational quadrant against direct peers quarterly.       |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **QUARTERLY PROMISE RECONCILIATION** | Review marketing campaign themes against live Core Web Vitals and funnels. |
+| **SPRINT QUALITY GATES** | Ensure new feature deployments do not degrade core speed benchmarks. |
+| **COMPETITIVE POSITIONING AUDIT** | Benchmark your operational quadrant against direct peers quarterly. |
 
 ## The Economic Dividends of Positioning Alignment
 
 When an operator's technical capabilities strictly match its positioning promises, marketing efficiency scales rapidly:
 
-```
-+-----------------------------------------------------------------------------+
-|                 Economic Impact of Positioning Alignment                     |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  1. REDUCED ACQUISITION BOUNCE RATES                                        |
-|     - When a landing page loads in < 1.2s and matches ad copy exactly,      |
-|       visitor bounce rates drop from 45% to under 18%.                      |
-|                                                                             |
-|  2. COMPOUNDED ORGANIC ADVOCACY                                             |
-|     - Delivering on instant payout promises elevates App Store ratings from |
-|       3.2 to 4.7 stars, generating high organic referral volume.            |
-|                                                                             |
-|  3. ELEVATED 90-DAY DEPOSIT RETENTION                                       |
-|     - Players who experience frictionless execution during their initial    |
-|       session demonstrate 40% higher deposit frequency over 3 months.       |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Dimension / Scope** | **Key Operational Deliverable** |
+|---|---|
+| **1. REDUCED ACQUISITION BOUNCE RATES** | When a landing page loads in < 1.2s and matches ad copy exactly, visitor bounce rates drop from 45% to under 18%. |
+| **2. COMPOUNDED ORGANIC ADVOCACY** | Delivering on instant payout promises elevates App Store ratings from 3.2 to 4.7 stars, generating high organic referral volume. |
+| **3. ELEVATED 90-DAY DEPOSIT RETENTION** | Players who experience frictionless execution during their initial session demonstrate 40% higher deposit frequency over 3 months. |
 
 ## The Positioning-to-Execution Matrix in Jurnii UX
 
 Within [Jurnii UX](/products/jurnii-ux), positioning alignment is audited across the 4 foundational categories:
 
-```
-+-----------------------------------------------------------------------------+
-|               Positioning-to-Execution Alignment Matrix                     |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  BRAND POSITIONING PILLAR       JURNII UX TELEMETRY BENCHMARK               |
-|  -------------------------------------------------------------------------  |
-|  "The Fastest In-Play Bookie"   INP < 100ms on betslip; 0 layout shifts     |
-|  "Instant Winnings in Minutes"  Open Banking automated payout < 3 minutes   |
-|  "Simple & Fair Gaming"         Zero-wagering free spins; clear terms       |
-|  "The Premium VIP Experience"   Sub-second table loading, dedicated cashier |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **BRAND POSITIONING PILLAR** | **JURNII UX TELEMETRY BENCHMARK** |
+| --- | --- |
+| **"The Fastest In-Play Bookie"** | INP < 100ms on betslip; 0 layout shifts |
+| **"Instant Winnings in Minutes"** | Open Banking automated payout < 3 minutes |
+| **"Simple & Fair Gaming"** | Zero-wagering free spins; clear terms |
+| **"The Premium VIP Experience"** | Sub-second table loading, dedicated cashier |
 
 Across 300+ analysed global brands, operators achieving strict alignment between brand promise and technical telemetry score above 85/100 on the Brand Meta Score and generate up to 2.4x higher Net Gaming Revenue per active player cohort.
 
@@ -173,19 +110,11 @@ Across 300+ analysed global brands, operators achieving strict alignment between
 
 When an operator's marketing narrative claims speed but technical execution delivers latency, customer trust is permanently damaged:
 
-```
-+-----------------------------------------------------------------------------+
-|               Promise vs Reality Gap Analysis Model                         |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  MARKETING CLAIM            OPERATIONAL REALITY         CHURN RISK LEVEL    |
-|  -------------------------------------------------------------------------  |
-|  "The Fastest Live Betting" 2.8s LCP on mobile coupons  CRITICAL (42% Churn)|
-|  "Instant Winnings"         18-hour manual withdrawal   HIGH (31% Churn)    |
-|  "Fair & Simple Gaming"     40x wagering on free spins  SEVERE (58% Churn)  |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **MARKETING CLAIM** | **OPERATIONAL REALITY** | **CHURN RISK LEVEL** |
+| --- | --- | --- |
+| **"The Fastest Live Betting" 2.8s LCP on mobile coupons** | CRITICAL (42% Churn) | - |
+| **"Instant Winnings"** | 18-hour manual withdrawal | HIGH (31% Churn) |
+| **"Fair & Simple Gaming"** | 40x wagering on free spins | SEVERE (58% Churn) |
 
 Aligning technical execution with brand messaging eliminates cognitive dissonance, ensuring marketing investments convert into long-term player equity.
 
@@ -193,18 +122,12 @@ Aligning technical execution with brand messaging eliminates cognitive dissonanc
 
 In [Jurnii 360](/products/jurnii-360), brand differentiation is plotted across four distinct commercial axes:
 
-```
-+-----------------------------------------------------------------------------+
-|               Brand Differentiation Radar Architecture                      |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  AXIS 1: TRANSACTIONAL VELOCITY (Sub-second loading, 1-tap checkout)       |
-|  AXIS 2: PROMOTIONAL GENEROSITY (Promo Richness Index, zero-wagering value) |
-|  AXIS 3: CONTENT & VERTICAL DEPTH (Niche sports, exclusive live tables)     |
-|  AXIS 4: TRUST & TRANSPARENCY (Clear terms, proactive safer gambling)       |
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **Evaluation Variable** | **Benchmark Standard / Impact** |
+|---|---|
+| **AXIS 1** | TRANSACTIONAL VELOCITY (Sub-second loading, 1-tap checkout) |
+| **AXIS 2** | PROMOTIONAL GENEROSITY (Promo Richness Index, zero-wagering value) |
+| **AXIS 3** | CONTENT & VERTICAL DEPTH (Niche sports, exclusive live tables) |
+| **AXIS 4** | TRUST & TRANSPARENCY (Clear terms, proactive safer gambling) |
 
 Balancing these four axes enables operators to establish clear, defensible market positioning that resonates with target player cohorts.
 
@@ -212,20 +135,12 @@ Balancing these four axes enables operators to establish clear, defensible marke
 
 Operators who align technical execution with their core brand promise experience immediate commercial gains across the customer lifecycle:
 
-```
-+-----------------------------------------------------------------------------+
-|               Positioning Alignment Commercial Impact Matrix                |
-+-----------------------------------------------------------------------------+
-|                                                                             |
-|  POSITIONING METRIC     BEFORE TECHNICAL ALIGNMENT  AFTER JURNII UX ALIGNMENT|
-|  -------------------------------------------------------------------------  |
-|  FTD Conversion Rate    22.4% on Mobile Web         41.2% (+84% Lift)       |
-|  30-Day Churn Rate      68.0% of Signups            41.5% (-39% Churn)      |
-|  Organic Word-of-Mouth  4.2% Referral Share         18.6% (+4.4x Expansion) |
-|  Blended Acquisition CAC £92.00 / Active Depositor   £48.50 / Active Depositor|
-|                                                                             |
-+-----------------------------------------------------------------------------+
-```
+| **POSITIONING METRIC** | **BEFORE TECHNICAL ALIGNMENT** | **AFTER JURNII UX ALIGNMENT** |
+| --- | --- | --- |
+| **FTD Conversion Rate** | 22.4% on Mobile Web | 41.2% (+84% Lift) |
+| **30-Day Churn Rate** | 68.0% of Signups | 41.5% (-39% Churn) |
+| **Organic Word-of-Mouth** | 4.2% Referral Share | 18.6% (+4.4x Expansion) |
+| **Blended Acquisition CAC £92.00 / Active Depositor** | £48.50 / Active Depositor | - |
 
 Eliminating the gap between advertising rhetoric and transactional reality builds an enduring commercial moat.
 
