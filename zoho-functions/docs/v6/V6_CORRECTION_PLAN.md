@@ -277,7 +277,51 @@ unrelated automation off.** Only the rules named as active in a phase are active
 | Phase | Active workflows | Action | Stop condition |
 |---|---|---|---|
 | **P0 · Freeze** | **none** | Deactivate all 18. Record `last_executed_time` for each. Drain in-flight `booking_journeys`, take the form offline, stop the ops worker | — |
-| **P1 · Publish** | **none** | **First: verify the `zoho_crm` connection** (see below). Then publish **Stage 2 (2.1–2.4) and the Stage 4 Deluge set (4.2–4.9)**, then the booking resolver (4.1). No rule is active, so nothing executes on publish. ⚠ **No field is deleted in P1** — Stage 5 deletion happens last, after P10 | Any publish error; a failed connection check |
+> ## ✅ P0 EXECUTED — 2026-09-04 12:13–12:15 BST
+>
+> **All 18 rules are now inactive** (WF021 already was). Verified by read-back: `status_active=true`
+> returns **0 rules**, and a full listing confirms 18 rules still **exist** with every `execute_when`,
+> `description` and `last_executed_time` intact — deactivated, not deleted.
+>
+> ⚠ **P0 ran AFTER P1, not before.** The Deluge set was published at 11:21–11:23 while all 17 rules
+> were still active. Nothing fired in that window (zero Deals/Contacts/Tasks modified after 11:20,
+> zero function failures, zero pending Scheduled Sends), so no damage — but the order was wrong and
+> the record should say so.
+>
+> **Method note for the restore at P7–P9:** the `updateWorkflowRuleById` API documents both "supports
+> partial updates" AND "omitted fields may be cleared". A status-only payload
+> (`{id, status:{active, delete_schedule_action}}`) was **probed first on WF010d** — the one rule being
+> deleted anyway, so a cleared definition would have cost nothing. Read-back confirmed `name`,
+> `execute_when` and `conditions` all survive. `delete_schedule_action: false` was used throughout, so
+> pending scheduled actions are preserved rather than destroyed.
+>
+> ### The P0 record — `last_executed_time` as frozen
+>
+> | Rule | id | last_executed_time at freeze |
+> |---|---|---|
+> | WF001a Process Lead | `991103000000663622` | 2026-08-14 13:40:37 |
+> | WF001b0 Process Contact | `991103000000663630` | 2026-07-21 17:50:15 |
+> | WF001b2 Process Contact | `991103000001499202` | 2026-08-14 13:40:43 |
+> | WF001c Process Account | `991103000000663648` | 2026-08-14 13:40:43 |
+> | WF001d Process Deal | `991103000000663638` | 2026-08-02 18:02:44 |
+> | WF006 Handle Call Outcome | `991103000000808046` | 2026-07-21 08:41:10 |
+> | WF007 Event Meeting Handler | `991103000000782052` | **2026-09-04 11:14:26** (last thing to fire, pre-publish) |
+> | WF008 Task Completion Handler | `991103000000784145` | 2026-07-20 19:51:49 |
+> | WF009a Email Replied | `991103000000790073` | never |
+> | WF009b Email Bounced | `991103000000806019` | never |
+> | WF009c Email Not Replied | `991103000000789167` | never |
+> | WF009d Email Open+Unreplied | `991103000000796107` | never |
+> | WF009e Email Clicked | `991103000000799022` | never |
+> | WF010c Demo Reminder | `991103000000802001` | never |
+> | WF010d Comm Follow-Up | `991103000000790038` | never — **DELETE, do not restore** |
+> | WF020 Quotes | `991103000001581243` | 2026-07-29 10:25:17 — **never re-activate** (shares action id with WF021) |
+> | WF021 Quotes Create/Edit | `991103000001699034` | never — was already inactive; activate at P8 |
+> | WFC-SchedEmail | `991103000001499121` | never |
+>
+> **Nine of eighteen have never fired.** That is the strongest argument for deleting WF009a–e rather
+> than restoring them at P10.
+
+| **P1 · Publish** | ✅ **DONE 2026-09-04 11:21–11:23** | **First: verify the `zoho_crm` connection** (see below). Then publish **Stage 2 (2.1–2.4) and the Stage 4 Deluge set (4.2–4.9)**, then the booking resolver (4.1). No rule is active, so nothing executes on publish. ⚠ **No field is deleted in P1** — Stage 5 deletion happens last, after P10 | Any publish error; a failed connection check |
 
 > ⚠ **P1 PRE-FLIGHT — the `zoho_crm` connection is now a hard runtime dependency.**
 >
