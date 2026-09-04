@@ -47,8 +47,9 @@ app.use(express.urlencoded({ extended: true }));
 function wrapHandler(handler) {
   return async (req, res, next) => {
     try {
-      if (req.params) {
-        req.query = Object.assign({}, req.query || {}, req.params);
+      if (req.params && Object.keys(req.params).length > 0) {
+        const merged = Object.assign({}, req.query || {}, req.params);
+        Object.defineProperty(req, 'query', { value: merged, configurable: true, writable: true });
       }
       await handler(req, res);
     } catch (err) {
