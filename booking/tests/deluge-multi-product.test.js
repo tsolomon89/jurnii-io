@@ -175,6 +175,59 @@ test('the create path re-searches Deal_Key and asserts exactly one match', () =>
   assert.ok(/duplicate_deal_key_after_insert/.test(c), 'multi-match-after-insert branch missing');
 });
 
+test('a Partnership Deal is reachable at creation, from Product evidence', () => {
+  // ⚠ THIS IS A REGRESSION GUARD, and its absence is what let the defect ship.
+  //
+  // The resolver takes an optional pipelineHint, and every one of its three callers passes "".
+  // An earlier revision derived Pipeline from that hint ALONE, so `pipeline` was always "B2B",
+  // the Partnership REST-insert branch was unreachable dead code, and every Partnership
+  // relationship was created as B2B. Because Deals.Pipeline is what the standing dispatch gate
+  // in routeContactSequence reads, the end of that chain is a Partnership Contact receiving the
+  // B2B sales sequence.
+  //
+  // Partnership is a real Product (Products record "Partnership", a live Product_Interest
+  // option, and computeProductKey maps it to "partnership"), so Account Product evidence is the
+  // correct source rather than a legacy coupling.
+  const c = code('activity/_util_resolveOrCreateAccountDeal.deluge');
+
+  // The hint must not be the ONLY route to Partnership.
+  assert.match(c, /collectProductEvidence\s*\(\s*"Accounts"/,
+    'the resolver must derive Pipeline from Account Product evidence, not the hint alone');
+  assert.match(c, /computeProductKey\s*\(/,
+    'evidence returns raw display names, so it must be normalised before comparison');
+  assert.match(c, /"partnership"/,
+    'the derivation must test for the partnership product key');
+
+  // An explicit caller hint must still win, so the import path can skip the lookup.
+  assert.match(c, /pHint == "Partnership"/,
+    'an explicit caller hint must still be honoured');
+
+  // And the REST-insert branch it feeds must still exist.
+  assert.match(c, /restRec\.put\("Pipeline",\s*"Partnership"\)/,
+    'the Partnership REST insert must remain reachable');
+});
+
+test('a Partnership relationship never gets a B2B scaffold Quote', () => {
+  // The scaffold is a priced placeholder for a B2B opportunity. A partnership is not run as one,
+  // so it must be excluded from scaffold candidacy even though it IS a real Product.
+  const c = code('processDeal.deluge');
+  assert.match(c, /computeProductKey\([^)]*\)\s*==\s*"partnership"/,
+    'the scaffold path must exclude the partnership product');
+});
+
+test('the scaffold still fires on a plain reconcile when Account evidence exists', () => {
+  // resolvedProductIds is only populated from activity context (ctx.products). On a plain
+  // reconcile — processDeal(dealId, "{}") — it is empty, so without an Account-evidence fallback
+  // the scaffold silently stopped firing. It used to read Deals.Deal_Product, which WAS populated
+  // on existing Deals, so retiring that field removed the plain path's only source.
+  const c = code('processDeal.deluge');
+  assert.match(c, /collectProductEvidence\s*\(\s*"Accounts"/,
+    'the scaffold needs an Account-evidence fallback for plain reconciles');
+  // Still only ever ONE Product scaffolds; several means several real Quotes.
+  assert.match(c, /scafCandIds\.size\(\)\s*==\s*1/,
+    'the scaffold must require exactly one resolved Product');
+});
+
 test('the resolver writes Deal_Key = Account_Key and Deal_Name = Account_Name', () => {
   const c = code('activity/_util_resolveOrCreateAccountDeal.deluge');
   assert.ok(/dm\.put\("Deal_Key",\s*aKey\)/.test(c), 'Deal_Key must be the Account_Key');

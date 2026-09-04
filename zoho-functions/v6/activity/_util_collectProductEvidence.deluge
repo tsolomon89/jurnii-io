@@ -15,12 +15,12 @@ string automation.collectProductEvidence(string moduleName, string recordId)
 	// Per module:
 	//   Leads:    Product_Interest (multiselect; jsonarray or bracketed string) +
 	//             Acquisition_/Expansion_/Renewal_ Quote_Plan_Products (single picklist)
-	//   Contacts: Products_Linked (junction jsonarray of {name}) +
-	//             Product_Interest_Staging (comma-string mirror)
+	//   Contacts: Products_Linked (junction jsonarray of {name})
 	//   Deals:    Deal_Product (lookup .name) + Deal_Product_Key +
 	//             child Quotes' Quote_Product (lookup .name; fetch Quote if omitted)
-	//   Accounts: union of each related Contact's Products_Linked +
-	//             Product_Interest_Staging, plus each related Deal's Deal_Product_Key
+	//   Accounts: union of each related Contact's Products_Linked. (The related-Deal
+	//             Deal_Product_Key read is gone -- retiring field, and a Deal carries no
+	//             Product identity. Quote-derived evidence is the "Deals" mode's job.)
 	//
 	// Cleaning: drop "", "-None-", "null"; fix "Jurnii Cortext" -> "Jurnii Cortex".
 	//
@@ -88,12 +88,9 @@ string automation.collectProductEvidence(string moduleName, string recordId)
 					for each tok in plCleaned.toList(",") { candidates.add(tok.trim()); }
 				}
 			}
-			pisRaw = rec.get("Product_Interest_Staging");
-			if(!isNull(pisRaw))
-			{
-				pisCleaned = pisRaw.toString().removeFirstOccurence("[").removeLastOccurence("]").replaceAll(";", ",").replaceAll("\"", "").replaceAll("'", "");
-				for each tok in pisCleaned.toList(",") { candidates.add(tok.trim()); }
-			}
+			// REMOVED 2026-08-11 -- a Contacts.Product_Interest_Staging read. That api_name does
+			// not exist on Contacts, so it always returned null and this branch never ran.
+			// Products_Linked (read directly above) is the real Contact product evidence.
 		}
 	}
 	else if(mod == "Deals")
@@ -101,10 +98,14 @@ string automation.collectProductEvidence(string moduleName, string recordId)
 		rec = zoho.crm.getRecordById("Deals", rid.toLong());
 		if(!isNull(rec) && !isNull(rec.get("id")))
 		{
-			dpLookup = rec.get("Deal_Product");
-			if(!isNull(dpLookup) && !isNull(dpLookup.get("name"))) { candidates.add(dpLookup.get("name").toString().trim()); }
-			dpk = ifnull(rec.get("Deal_Product_Key"), "").toString().trim();
-			if(dpk != "") { candidates.add(dpk); }
+			// WORK ITEM 5.1: the Deal_Product / Deal_Product_Key reads are REMOVED. Both fields
+			// are retiring and a Deal has no Product identity under the approved model -- a
+			// Product is a QUOTE under the one Deal. The child-Quote scan below is now the only
+			// Deal-side Product evidence, which is also the correct source: it reports what is
+			// actually being quoted rather than a cached single-Product label.
+			//
+			// Readers must go before the fields do. Reading a DELETED api_name is what voids an
+			// entire updateRecord map, so a reader left "just in case" is the failure mode.
 
 			quotes = zoho.crm.getRelatedRecords("Quotes", "Deals", rid.toLong());
 			if(!isNull(quotes) && quotes.size() > 0 && !quotes.toString().startsWith("{\"code\""))
@@ -144,15 +145,17 @@ string automation.collectProductEvidence(string moduleName, string recordId)
 				}
 			}
 		}
-		deals = zoho.crm.getRelatedRecords("Deals", "Accounts", rid.toLong());
-		if(!isNull(deals) && deals.size() > 0 && !deals.toString().startsWith("{\"code\""))
-		{
-			for each d in deals
-			{
-				dpk = ifnull(d.get("Deal_Product_Key"), "").toString().trim();
-				if(dpk != "") { candidates.add(dpk); }
-			}
-		}
+		// The related-Deals loop that used to sit here is DELETED (5.1). It read each Deal's
+		// Deal_Product_Key -- a retiring field, and a Deal has no Product identity under the
+		// approved model. An earlier revision stubbed the read as `dpk = ""` and left the
+		// `if(dpk != "")` test beneath it, which was always false: the loop then fetched every
+		// Deal on the Account and did nothing with them, costing a related-list read per call.
+		//
+		// Quote-derived evidence is still available where a caller actually wants it: the
+		// "Deals" mode above reads each Deal's child Quotes' Quote_Product. It is deliberately
+		// NOT recursed into from here -- Account-level callers (the Pipeline derivation in
+		// _util_resolveOrCreateAccountDeal, the scaffold fallback in processDeal) are asking
+		// about a Deal that has no Quotes yet, so it would cost N x M reads to learn nothing.
 	}
 
 	// clean + distinct (case-insensitive). seenKeys holds lowercased accepted tokens.

@@ -1,3 +1,20 @@
+> # 📁 HISTORICAL — v3/v4-era field-reuse decisions
+>
+> Two of its references no longer resolve: `docs/v2/02-pipeline-model.md` does not exist, and
+> `.agents/context/api_field_names/*.csv` is **stale** (it is missing 79 live Lead fields — use live
+> `getFields` instead).
+>
+> **Still live-true:** its Deals row — `Opportunity_Stage` carries the stage value, and native `Stage`
+> is labelled "Opportunity Type". That naming inversion is confirmed in live metadata and is exactly
+> what authority §10 flags for reassessment.
+>
+> **Superseded:** its claim that `Deals.Opportunity_Stage` is *the* stage authority. Authority §5.2
+> gives granular Stage authority to `Contacts.Stage`; the Deal value is a derived roll-up.
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # FIELD_REUSE_NOTES.md — Existing fields the new spec should reuse
 
 ## Purpose

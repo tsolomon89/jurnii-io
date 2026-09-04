@@ -1,0 +1,137 @@
+string automation.resolveAccountDeal(string accountId, string accountKey)
+{
+	// =========================================================================
+	// _util_resolveAccountDeal   (VERSION: v6-account-deal)
+	//
+	// READ-ONLY. The single authority for the question "which Deal belongs to this
+	// Account?" under the approved model:
+	//
+	//     one Account  ->  ZERO OR ONE persistent Deal
+	//     Deal_Key     ==  Account_Key      (no "::" product suffix)
+	//
+	// This helper NEVER creates, updates, merges, re-keys or Loses anything. It
+	// answers the match-count question and hands the caller the K6 contract:
+	//
+	//   status "none"  -> the Account legitimately has no Deal yet. Under the model
+	//                     that is a LEGAL state, not an error. A dispatch caller
+	//                     proceeds with no Deal context; a create caller (see
+	//                     _util_resolveOrCreateAccountDeal) makes exactly one.
+	//   status "one"   -> reuse that Deal. Its key is immutable (K1).
+	//   status "many"  -> STOP. Raise a visible review naming EVERY candidate and
+	//                     perform NO dependent write. The declared UNIQUE constraint
+	//                     on Deal_Key is NOT enforced live (two Deals share
+	//                     "jurnii-e2e.dev::jurnii_360"), so a duplicate is a
+	//                     concurrency defect that a silent merge would hide.
+	//   status "error" -> the lookup itself failed; the caller must not infer "none".
+	//
+	// ⚠ Two lookups, deliberately, in this order:
+	//   1. Deal_Key == accountKey  -- the authority once the cutover has run.
+	//   2. the Account's Deals related list -- the fallback that still SEES the
+	//      pre-cutover graph. Before Stage 4 an Account holds Product Deals keyed
+	//      "<accountKey>::<productKey>", so lookup 1 returns zero while the Account
+	//      really has 2-3 Deals. Reporting "none" there would be a lie that let a
+	//      caller create a fourth. The fallback turns that into "many", which stops.
+	//      This is precisely why the plan forbids publishing this resolver before the
+	//      P0 freeze.
+	//
+	// Returns a JSON string (parse with .toMap()):
+	//   status ("none"|"one"|"many"|"error"), deal_id, count, candidates
+	//   (comma-joined ids, always populated when status=="many"), via, reason
+	// =========================================================================
+	r = Map();
+	r.put("status", "error");
+	r.put("deal_id", "");
+	r.put("count", "0");
+	r.put("candidates", "");
+	r.put("via", "");
+	r.put("reason", "init");
+
+	accId = ifnull(accountId, "").toString().replaceAll("zcrm_", "").trim();
+	aKey = ifnull(accountKey, "").toString().trim();
+
+	if(accId == "" && aKey == "")
+	{
+		r.put("reason", "no_account_evidence");
+		return r.toString();
+	}
+	if(accId != "" && !accId.matches("[0-9]+"))
+	{
+		r.put("reason", "invalid_account_id");
+		return r.toString();
+	}
+
+	foundIds = List();
+	via = "";
+
+	// ---- lookup 1: Deal_Key == Account_Key (post-cutover authority) ----
+	if(aKey != "")
+	{
+		byKey = zoho.crm.searchRecords("Deals", "(Deal_Key:equals:" + aKey + ")");
+		if(!isNull(byKey) && byKey.toString().startsWith("{\"code\""))
+		{
+			// A genuine API failure. Do NOT fall through to "none" -- an empty result and a
+			// failed call are different facts and only one of them is safe to act on.
+			automation.logAutomationEvent("resolveAccountDeal", "Deals", "-", "lookup", "deal_key_search_failed", {"account_key":aKey, "resp":byKey.toString()});
+			r.put("reason", "deal_key_search_failed");
+			return r.toString();
+		}
+		if(!isNull(byKey) && byKey.size() > 0)
+		{
+			for each d in byKey
+			{
+				did = ifnull(d.get("id"), "").toString().trim();
+				if(did != "" && did.matches("[0-9]+") && !foundIds.contains(did)) { foundIds.add(did); }
+			}
+			via = "deal_key";
+		}
+	}
+
+	// ---- lookup 2: the Account's Deals related list (sees the pre-cutover graph) ----
+	if(foundIds.size() == 0 && accId != "")
+	{
+		rel = zoho.crm.getRelatedRecords("Deals", "Accounts", accId.toLong());
+		if(!isNull(rel) && rel.toString().startsWith("{\"code\""))
+		{
+			automation.logAutomationEvent("resolveAccountDeal", "Deals", "-", "lookup", "related_list_failed", {"account":accId, "resp":rel.toString()});
+			r.put("reason", "related_list_failed");
+			return r.toString();
+		}
+		if(!isNull(rel) && rel.size() > 0)
+		{
+			for each d in rel
+			{
+				did = ifnull(d.get("id"), "").toString().trim();
+				if(did != "" && did.matches("[0-9]+") && !foundIds.contains(did)) { foundIds.add(did); }
+			}
+			if(foundIds.size() > 0) { via = "account_related_list"; }
+		}
+	}
+
+	r.put("count", foundIds.size().toString());
+	r.put("via", via);
+
+	if(foundIds.size() == 0)
+	{
+		r.put("status", "none");
+		r.put("reason", "no_deal_for_account");
+		return r.toString();
+	}
+
+	candStr = "";
+	for each fid in foundIds { candStr = candStr + if(candStr != "", ",", "") + fid; }
+	r.put("candidates", candStr);
+
+	if(foundIds.size() == 1)
+	{
+		r.put("status", "one");
+		r.put("deal_id", foundIds.get(0));
+		r.put("reason", "resolved");
+		return r.toString();
+	}
+
+	// More than one. Never choose. Never merge. The caller raises the review.
+	r.put("status", "many");
+	r.put("reason", "multiple_deals_for_account");
+	automation.logAutomationEvent("resolveAccountDeal", "Accounts", accId, "guard", "multiple_deals_for_account", {"account_key":aKey, "count":foundIds.size().toString(), "candidates":candStr, "via":via});
+	return r.toString();
+}

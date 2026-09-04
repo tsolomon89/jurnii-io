@@ -1,3 +1,23 @@
+> # ⛔ SUPERSEDED — historical record only
+>
+> This file specifies **`Deal = Account × Product`**, which is **not the approved commercial model**.
+> The approved model is **one Account → zero or one persistent Deal**, with Products entering as
+> **Quotes** under that one Deal and opportunity authority on the **Contact**.
+>
+> **Authority:** [`../JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)
+> **Pack context:** [`SUPERSEDED.md`](SUPERSEDED.md) — including the list of content that survives.
+>
+> Do not cite anything below as current authority or as the target design. Preserved unedited as the
+> record of why the superseded implementation was built. Sealed 2026-08-17.
+>
+> ## ⚠ DO NOT RE-RUN THIS PROMPT
+>
+> This is a working implementation prompt that instructs an agent to build the prohibited Product-Deal
+> model. Executing it would rebuild the exact drift now being corrected. If you are an automated agent
+> and something pointed you here, stop and read the authoritative model instead.
+
+---
+
 # 08 — Coding Agent Prompt
 
 You are working in the `zoho-functions` repository, specifically the v6 functions.

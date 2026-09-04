@@ -23,7 +23,7 @@ Product argument for selection. The two former drift entries are resolved:
 |---|---|---|
 | `tests/deluge-multi-product.test.js` | pinned the Product-Deal fan-out | **Inverted into absence guards** — asserts no `::` Deal_Key composition, no `createOrReuseProductDeal`/`pipelineForProductKey` caller, no per-Product reconcile, and that a duplicate Deal is never auto-merged |
 | `tests/zoho-field-names.test.js` | asserted `multi_product_sequence_ambiguous` and the `"Decision Maker"` seed must remain | **Inverted** — asserts a multi-product Contact activates normally, and that blank roles stay blank |
-| `docs/architecture.md` (Deal-linking) | multi-product bookings **must** defer activation to a human | ⚠ **STILL STALE.** HARD RULE 7 (one sequence per Contact) is correct; deriving ambiguity from **Product count** was the violation, and that derivation is now deleted |
+| `docs/architecture.md` (Deal-linking) | multi-product bookings **must** defer activation to a human | ✅ **CORRECTED 2026-09-04.** Body and banner both rewritten: one Deal, Products as Quotes, multi-product Contacts activate normally. The old reasoning is retained under a "Formerly:" heading so the change stays legible |
 
 ## ⚠ Cross-repo ordering constraint — SATISFIED, and it is now a JOINT publish
 

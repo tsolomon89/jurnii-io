@@ -295,6 +295,58 @@ test('no retrievable body still creates the Task, with the absence stated', asyn
   assert.ok(d.includes('campaign: Q3 UK Operators'));
 });
 
+test('the body comes from activity.text, with NO inbox request at all', async () => {
+  // Verified live 2026-09-01: linkedinSent carries the rendered message as plain
+  // text on the activity itself. The documented /inbox hop is not needed.
+  const withText = activity({
+    text: 'Hey Elena, Fraser here from Jurnii.\n\nWe track competitor promotions.',
+  });
+
+  const h = harness(Object.assign({
+    fetchActivities: pages([withText]),
+    findTaskByActivityId: null,
+    findContactsByLinkedinFragment: [EXISTING_CONTACT],
+    findContactsByEmail: [EXISTING_CONTACT],
+    createTask: { ok: true, id: 't1' },
+    readBack: null,
+    // getInboxMessages is NOT stubbed: calling it would throw `unexpected call`.
+  }, NO_TEAM));
+
+  const r = await sync.runSync({ env: ARMED, deps: h.deps });
+
+  assert.equal(r.tasksCreated, 1);
+  assert.equal(r.bodiesResolved, 1);
+  assert.equal(h.countOf('getInboxMessages'), 0, 'the activity already had the body');
+
+  const d = h.named('createTask')[0].args[0].Description;
+  assert.ok(d.includes('Hey Elena, Fraser here from Jurnii.'));
+  assert.ok(d.includes('We track competitor promotions.'));
+});
+
+test('activity.text falls back to the inbox only when absent', async () => {
+  const noText = activity({ text: '' });
+
+  const h = harness(Object.assign({
+    fetchActivities: pages([noText]),
+    findTaskByActivityId: null,
+    findContactsByLinkedinFragment: [EXISTING_CONTACT],
+    findContactsByEmail: [EXISTING_CONTACT],
+    // The inbox field is `text`, not `message` — also verified live.
+    getInboxMessages: {
+      messages: [{ _id: 'act_x6esGLhoPa2SMHCZ7', text: 'From the inbox instead.' }],
+      pagination: null,
+    },
+    createTask: { ok: true, id: 't1' },
+    readBack: null,
+  }, NO_TEAM));
+
+  const r = await sync.runSync({ env: ARMED, deps: h.deps });
+
+  assert.equal(h.countOf('getInboxMessages'), 1);
+  assert.ok(h.named('createTask')[0].args[0].Description.includes('From the inbox instead.'));
+  assert.equal(r.bodiesResolved, 1);
+});
+
 test('an inbox failure does not block the Task', async () => {
   const h = harness(Object.assign({
     fetchActivities: pages([activity()]),
@@ -683,6 +735,59 @@ test('a body carrying a Deluge control marker refuses the payload, not the run',
 // ---------------------------------------------------------------------------
 // Owner
 // ---------------------------------------------------------------------------
+
+test('LEMLIST_SENDER_MAP maps the sender to a Zoho user, with no API lookup', async () => {
+  // This is the only mapping path that works: verified live, no Lemlist endpoint
+  // exposes a sender email, so /team can never resolve one.
+  const h = harness(Object.assign({
+    fetchActivities: pages([activity({ sendUserId: 'usr_xYvofAcCBx8X7amjL' })]),
+    findTaskByActivityId: null,
+    findContactsByLinkedinFragment: [EXISTING_CONTACT],
+    findContactsByEmail: [EXISTING_CONTACT],
+    getInboxMessages: { messages: [], pagination: null },
+    createTask: { ok: true, id: 't1' },
+    readBack: null,
+    // Neither getTeamUsers nor getActiveUsers is stubbed: calling either would
+    // throw `unexpected call`, proving the config path short-circuits both.
+  }, {}));
+
+  const r = await sync.runSync({
+    env: Object.assign({}, ARMED, {
+      LEMLIST_SENDER_MAP: 'usr_xYvofAcCBx8X7amjL:991103000001576001',
+    }),
+    deps: h.deps,
+  });
+
+  assert.equal(r.sendersUnmapped, 0);
+  assert.deepEqual(h.named('createTask')[0].args[0].Owner, { id: '991103000001576001' });
+  assert.equal(h.countOf('getTeamUsers'), 0);
+  assert.equal(h.countOf('getActiveUsers'), 0);
+});
+
+test('a malformed sender-map entry is skipped and logged, never guessed at', async () => {
+  const h = harness(Object.assign({
+    fetchActivities: pages([activity({ sendUserId: 'usr_xYvofAcCBx8X7amjL' })]),
+    findTaskByActivityId: null,
+    findContactsByLinkedinFragment: [EXISTING_CONTACT],
+    findContactsByEmail: [EXISTING_CONTACT],
+    getInboxMessages: { messages: [], pagination: null },
+    createTask: { ok: true, id: 't1' },
+    readBack: null,
+  }, NO_TEAM));
+
+  const r = await sync.runSync({
+    env: Object.assign({}, ARMED, {
+      // A Zoho id that is not numeric, and an entry with no colon at all.
+      LEMLIST_SENDER_MAP: 'usr_xYvofAcCBx8X7amjL:not-an-id,garbage',
+    }),
+    deps: h.deps,
+  });
+
+  assert.equal(r.sendersUnmapped, 1, 'the bad entry must not map');
+  assert.ok(h.logs.some((l) => l.evt === 'lemlist.sender_map_entry_invalid'));
+  // It falls through to the configured default rather than inventing an owner.
+  assert.deepEqual(h.named('createTask')[0].args[0].Owner, { id: ARMED.LEMLIST_DEFAULT_OWNER_ID });
+});
 
 test('a mapped sender becomes the Task Owner', async () => {
   const h = harness({

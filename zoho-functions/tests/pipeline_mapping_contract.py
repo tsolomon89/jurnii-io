@@ -1,5 +1,17 @@
 """Reference implementation of the Product Key -> Pipeline mapping.
 
+⚠ PINS CURRENT (SUPERSEDED) BEHAVIOUR.
+    Authority: zoho-functions/docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md
+
+    Pipeline is a DEAL relationship attribute (§6.3), not a function of the Product key.
+    `Deals.Pipeline` is live-readable (confirmed 96/96 over COQL, contradicting the claim at
+    _util_resolveDealPipeline.deluge:11-13), so the whole Product -> Pipeline chain retires:
+    _util_pipelineForProductKey.deluge is DELETE in V6_CRUD_PLAN.md, and _util_resolveDealPipeline
+    is rewritten to read Deals.Pipeline directly.
+
+    THIS CONTRACT IS EXPECTED TO FAIL when the model is corrected. That failure is the intended
+    signal — do not "repair" the mapping to keep it green.
+
 Line-for-line mirror of v6/activity/_util_pipelineForProductKey.deluge, the deployed
 single source of truth for the Product -> Deal Pipeline rule. Deluge has no local
 runner, so the contract is pinned here and exercised by tests/test_pipeline_mapping.py.

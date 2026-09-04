@@ -1,3 +1,12 @@
+> # 📁 HISTORICAL — provenance for the field contract
+>
+> Preserved. Records one live metadata change (`Tasks.Task_Sequence_Stage` created) and one deliberate
+> non-creation — both needed as provenance by the field-use contract.
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../../../docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # R2 Repair + Deployment Manifest (2026-06-24)
 
 Repairs for the four E2E gate findings (F1–F4) + timestamp classification. **Hard constraint: Deluge function source cannot be deployed via MCP** (the function-CRUD tools carry only metadata — no `script`/`body`). Repo edits below are the deployable source of truth; **the user must republish** each changed function. The new `_util_resolveDealPipeline` must be **created** as a function in the org and its code pasted in.

@@ -1,3 +1,21 @@
+> # ⛔ SUPERSEDED — historical record only
+>
+> This file specifies **`Deal = Account × Product`**, which is **not the approved commercial model**.
+> The approved model is **one Account → zero or one persistent Deal**, with Products entering as
+> **Quotes** under that one Deal and opportunity authority on the **Contact**.
+>
+> **Authority:** [`../JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)
+> **Pack context:** [`SUPERSEDED.md`](SUPERSEDED.md) — including the list of content that survives.
+>
+> Do not cite anything below as current authority or as the target design. Preserved unedited as the
+> record of why the superseded implementation was built. Sealed 2026-08-17.
+>
+> **Largest salvage in the pack.** The A/E/R slot and idempotency rules survive; substitute "the
+> Account's Deal" for "Product Deal" throughout. L54 ("do not blindly close the Deal if other open
+> Quotes exist") is already correct under authority §6.5.
+
+---
+
 # 04 — Quote Lifecycle Rules
 
 ## Quote is contract

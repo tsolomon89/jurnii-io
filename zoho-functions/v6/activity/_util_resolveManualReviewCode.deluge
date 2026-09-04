@@ -20,23 +20,45 @@ string automation.resolveManualReviewCode(string codeKey)
 	key = key.replaceAll("[^a-z0-9_]+", "_").replaceAll("^_+", "").replaceAll("_+$", "");
 	if(key == "") { return "[manual_review]"; }
 
-	// canonical set (spec 06/08 recommended codes + plan Part B additions)
+	// Canonical set. Three codes RETIRED with the root-model correction because the
+	// conditions they named are now normal operation, not defects:
+	//   duplicate_product_deal            -- there are no Product Deals to duplicate
+	//   quote_product_mismatch            -- several Quote Products under one Deal is
+	//                                        expected (a Product is a Quote, not a Deal)
+	//   multi_product_sequence_ambiguous  -- several Products never made a Contact's
+	//                                        sequence ambiguous; cadence is Contact-scoped
+	// They are listed here as retired rather than deleted from the comment so a stale
+	// caller is recognisable as stale.
+	//
+	// ⚠ NO COMMENTS INSIDE THE LITERAL. Deluge's parser rejects a `//` line between the
+	// braces of a list or map literal ("no viable alternative at input"), so the grouping
+	// notes for the codes added by the root-model correction live here instead:
+	//   quote_product_cardinality, quote_header_line_mismatch
+	//       -- Quote integrity (4.4). Quote-SCOPED, never Deal-product-scoped.
+	//   multiple_deals_for_account, account_key_ambiguous
+	//       -- Cardinality (4.2 / 4.7a K6). Never auto-merged, never auto-re-keyed.
+	//   dispatch_deal_unresolved, send_commercials_no_deal, draft_commercials_no_deal
+	//       -- Contact-only dispatch (2.4). Replaces the silent skip_missing_ids log lines.
 	known = {
 		"missing_product_interest",
 		"product_unresolved",
 		"quote_missing_contact",
 		"non_decision_maker_quote_contact",
-		"duplicate_product_deal",
 		"duplicate_open_quote",
-		"quote_product_mismatch",
 		"activity_product_mismatch",
 		"expansion_downgrade_attempt",
 		"renewal_date_invalid",
 		"quote_lifecycle_conflict",
 		"target_acv_unresolved",
-		"multi_product_sequence_ambiguous",
 		"contract_product_conflict",
-		"conflicting_opening_variant"
+		"conflicting_opening_variant",
+		"quote_product_cardinality",
+		"quote_header_line_mismatch",
+		"multiple_deals_for_account",
+		"account_key_ambiguous",
+		"dispatch_deal_unresolved",
+		"send_commercials_no_deal",
+		"draft_commercials_no_deal"
 	};
 	if(known.contains(key)) { return "[" + key + "]"; }
 

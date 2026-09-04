@@ -1,4 +1,5 @@
-﻿Related List Label,API Name,Custom Related List
+# STALE SNAPSHOT - do not rely on this file. Superseded by zoho-functions/docs/v6/V6_FIELD_USE_CONTRACT.md; for current fields use live GET /crm/v6/settings/fields?module=<M>&type=all
+Related List Label,API Name,Custom Related List
 Attachments,Attachments,
 Products,Products,
 Emails,Emails,

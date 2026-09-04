@@ -1,3 +1,19 @@
+> # ⚠ INVARIANT SURVIVES — one precondition changes, one case must be added
+>
+> The invariant under test — **no email may send before an Activation Task is committed** — is
+> model-independent and survives unchanged. This plan is still unrun.
+>
+> **Change one line:** the AG-N1 precondition "Create a Decision-Maker Contact **with a Product Deal**"
+> becomes "…with the Account's Deal". Product count is irrelevant to activation (authority §5.4).
+>
+> **Add one case:** a Contact with two or more Product interests must still activate normally. Today it
+> yields `[multi_product_sequence_ambiguous]` and never activates — that is the §5.4 violation, and this
+> is the test that proves it fixed (authority §14.13).
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # v6 Activation Gate Test Plan
 
 Verifies the sequence-email invariant:

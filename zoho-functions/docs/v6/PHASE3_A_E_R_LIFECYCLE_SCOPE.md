@@ -1,3 +1,23 @@
+> # ⚠ RE-SCOPE REQUIRED — never coded; the state machine survives, the anchor changes
+>
+> Status remains *scoping only* — none of this was implemented, so there is no code debt here.
+>
+> **The A/E/R state machine survives intact.** Only its anchor changes: successor Quotes live on **the
+> Account's one Deal**, not "the SAME Product Deal". Two specific rules must be restated before this is
+> implemented:
+>
+> - `Quote_Product = Deal_Product` ("canonical; never a variant") is superseded. A successor Renewal must
+>   inherit its Product from its **predecessor Quote's** `Quote_Product`. Under one Deal per Account
+>   `Deal_Product` is blank or arbitrary, and using it would mis-product every renewal.
+> - "Account Lost when ALL its Product Deals are Lost" must be restated per authority §6.5 against the
+>   single Deal and its Quotes.
+>
+> Do not banner-and-abandon this file — re-scope it.
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # Phase 3 — A/E/R Quote Transition Lifecycle (SCOPE)
 
 Status: **scoping only — no code yet.** Author-reviewed against live code 2026-07-04.

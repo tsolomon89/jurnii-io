@@ -1,3 +1,20 @@
+> # ⚠ KNOWN DRIFT — the Who/What pairing is correct; "Product Deal" is not
+>
+> **What is correct and stays:** `Who_Id` = the Contact and `What_Id` = the Deal, both, every time.
+> Authority §8.1 explicitly endorses this pairing.
+>
+> **What is drift:** the word "**Product**" in "Product Deal", and the `Deal_Key = <Account_Key>::<productKey>`
+> anchoring. Under the approved model `What_Id` is the Account's single persistent Deal, so there is no
+> anchor-selection problem and no "remaining Product Deals" to reconcile.
+>
+> `[product_unresolved]` and `[duplicate_product_deal]` retire with the correction but remain live today
+> and stay documented. `Meeting_Task_Pipeline` is correctly Deal-sourced (§8.3) — only its derivation
+> *through* `Deal_Product_Key` changes.
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # Meeting (Event) CRUD Guide — v6
 
 **Scope.** How to create, read, update and retire Meetings/Events in Zoho CRM under the v6

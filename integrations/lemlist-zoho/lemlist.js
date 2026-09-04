@@ -278,13 +278,32 @@ async function getInboxMessages(contactId, { limit = 100, skip = 0 } = {}) {
   return { messages, pagination: body.pagination || null };
 }
 
-/** The team's users, `[{ userId, name, email, role }]`. One call per run. */
+/**
+ * Team users that carry an email, for mapping a Lemlist sender to a Zoho user.
+ *
+ * ⚠ VERIFIED LIVE 2026-09-01: THIS RETURNS AN EMPTY LIST IN PRACTICE.
+ *
+ * The published schema describes `users[{userId, name, email, role}]`. The real
+ * response is `{_id, userIds, createdBy, createdAt, beta, name, creatorDomain,
+ * invitedUsers}` where **`userIds` is an array of bare id STRINGS with no email
+ * attached**. `GET /team/senders` is no better — `[{userId, campaigns}]`, also
+ * no email — and `GET /users` is not a route.
+ *
+ * So there is NO API path from a Lemlist `sendUserId` to an email address, and
+ * therefore none to a Zoho user. Sender attribution comes from the static
+ * `LEMLIST_SENDER_MAP` instead; see `resolveOwner` in sync.js.
+ *
+ * This function is kept, and still returns only entries that actually carry an
+ * email, so that if Lemlist ever populates them the mapping starts working with
+ * no code change. It is deliberately not "fixed" to return `userIds`: bare ids
+ * with no email cannot be mapped, and returning them would imply otherwise.
+ */
 async function getTeamUsers() {
   const body = await get(teamPath());
   if (!body) return [];
-  if (Array.isArray(body.users)) return body.users;
-  if (Array.isArray(body)) return body;
-  return [];
+  const candidates = Array.isArray(body.users) ? body.users
+    : (Array.isArray(body) ? body : []);
+  return candidates.filter((u) => u && u.userId && u.email);
 }
 
 module.exports = {

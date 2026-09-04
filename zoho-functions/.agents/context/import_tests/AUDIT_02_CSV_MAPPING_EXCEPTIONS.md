@@ -1,3 +1,12 @@
+> # 📁 HISTORICAL — pre-Product-Deal, and consistent with the approved model
+>
+> Already carries a correction banner. L136's "one Account + one Deal per domain" predates the
+> Product-Deal refactor and matches the approved model. Preserved.
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../../../docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 > **⚠ CORRECTED BY [AUDIT_00_REVISION_R1.md](AUDIT_00_REVISION_R1.md) (2026-06-22):** (1) **Do NOT drop the `Type` column** (§D row 21) — it is the likely source of the pricing **tier** (Base/Markup/Agency), which materially changes price; preserve it pending business confirmation. (2) The binary "Quote-ready" in §F is replaced by a **4-tier** readiness model (Product-resolution / Draft-creation / Auto-pricing / Confirmation). (3) `Jurnii UX` (generic family) is **ambiguous → not Product-resolution-ready**; no Fixed/Flex default. See R1 §1.
 
 # Pre-Import Audit, Part 2: CSV Field Mapping, Row Exceptions, Readiness

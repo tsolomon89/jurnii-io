@@ -1,3 +1,27 @@
+> # 📁 HISTORICAL — API mechanics largely still true; verify before relying on any claim
+>
+> **Reviewed 2026-08-17.** Authority for the commercial model:
+> [`../../docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../../docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)
+>
+> This is an API mechanics reference, not a model document, so most of it survives. Three live-verified
+> corrections that any Deluge author needs:
+>
+> 1. **`SUCCESS` proves nothing — always read the record back.** An api_name that does not exist can
+>    void an **entire** `updateRecord` map; a field that exists but sits off-layout silently discards
+>    only its own key. Deleting a field converts the second case into the first.
+> 2. **Picklists round-trip in DISPLAY space** over Deluge, COQL and the record API — and COQL
+>    *filters* in display space too. `Task_Stage` stores the actual value `Renewall` while every
+>    surface returns `Renewal`. An out-of-set value is discarded like an unknown api_name.
+> 3. **`Contact_Roles` is the valid Deals related-list name; `Contacts` is not** and always errors.
+>    Separately, `Contacts.Contact_Role1` is the Contact-record field while `Contact_Role` is the
+>    junction field — querying the latter on Contacts returns blank for every record.
+>
+> Preserved unedited below.
+>
+> Reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # Zoho CRM Deluge Integration API Reference
 
 This reference manual documents the official signatures, criteria structures, pagination limits, and linking behaviors for the Zoho CRM integration tasks used throughout this workspace.

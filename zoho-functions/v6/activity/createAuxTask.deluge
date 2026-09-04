@@ -4,9 +4,20 @@ string automation.createAuxTask(string contactIdStr, string dealIdStr, string ta
 	// createAuxTask  (Contact-centric)
 	//
 	// Creates a blocking manual Task (e.g. "Data Repair", "Manual Review",
-	// "Review Reply") linked to Who_Id=Contact, What_Id=Deal. Reuses existing
-	// Task_Type picklist values only. Deduplicated per Contact/Deal/type on open
-	// status. Returns the Task ID (existing or new) or "".
+	// "Review Reply") linked to Who_Id=Contact, with What_Id=Deal as OPTIONAL
+	// context. Reuses existing Task_Type picklist values only. Deduplicated per
+	// Contact/type on open status. Returns the Task ID (existing or new) or "".
+	//
+	// WORK ITEM 2.4 -- the Deal is now OPTIONAL. This function used to hard-return ""
+	// when dealIdStr was blank, which meant every review raised against a Deal-less
+	// Contact was SILENTLY DROPPED. That is the exact opposite of what 2.4(3)
+	// requires ("dispatch stops VISIBLY as unresolved -- a named review, not a silent
+	// log line"): a visible review is impossible while its only constructor discards
+	// Deal-less calls. Who_Id is required; What_Id is context.
+	//
+	// WORK ITEM 3.2 -- the Activity context snapshots are re-sourced. Task_Stage and
+	// Task_Opportunity now come from the CONTACT (the opportunity authority per the
+	// authoritative model); only Task_Pipeline still comes from the Deal.
 	// =========================================================================
 
 	info "VERSION: v6-contact-centric";
@@ -15,17 +26,31 @@ string automation.createAuxTask(string contactIdStr, string dealIdStr, string ta
 	if(!isNull(contactIdStr) && contactIdStr != "") { contactId = contactIdStr.toLong(); }
 	dealId = 0;
 	if(!isNull(dealIdStr) && dealIdStr != "") { dealId = dealIdStr.toLong(); }
-	if(contactId == 0 || dealId == 0 || isNull(taskType) || taskType == "") { return ""; }
+	// 2.4: Who_Id is required, What_Id is not. dealId == 0 is a supported shape.
+	if(contactId == 0 || isNull(taskType) || taskType == "") { return ""; }
+	hasDeal = (dealId != 0);
 
 	// Real newline for rep-facing Description text. This org's Deluge stores a literal backslash-n
 	// sequence instead of a line break (verified live 2026-07-07), so line breaks must come from an
 	// actual newline character. hextoText("0A") = line feed (a raw newline in a string literal is not valid Deluge here).
 	nl = hextoText("0A");
 
-	existingTasks = zoho.crm.getRelatedRecords("Tasks", "Deals", dealId);
-	if(isNull(existingTasks) || existingTasks.size() == 0 || existingTasks.toString().startsWith("{\"code\""))
+	// Dedupe lookup. With a Deal, the Deal's Task list is the cheapest scope and the
+	// Who_Id test below still narrows it to this Contact. WITHOUT a Deal there is no
+	// Deal list to read, so search by Who_Id directly -- otherwise a Deal-less Contact
+	// would get a fresh duplicate review on every single pass.
+	existingTasks = List();
+	if(hasDeal)
 	{
-		existingTasks = zoho.crm.searchRecords("Tasks", "(What_Id:equals:" + dealId + ")");
+		existingTasks = zoho.crm.getRelatedRecords("Tasks", "Deals", dealId);
+		if(isNull(existingTasks) || existingTasks.size() == 0 || existingTasks.toString().startsWith("{\"code\""))
+		{
+			existingTasks = zoho.crm.searchRecords("Tasks", "(What_Id:equals:" + dealId + ")");
+		}
+	}
+	else
+	{
+		existingTasks = zoho.crm.searchRecords("Tasks", "(Who_Id:equals:" + contactId + ")");
 	}
 	if(!isNull(existingTasks) && existingTasks.size() > 0 && !existingTasks.toString().startsWith("{\"code\""))
 	{
@@ -86,16 +111,31 @@ string automation.createAuxTask(string contactIdStr, string dealIdStr, string ta
 		}
 	}
 
-	deal = zoho.crm.getRecordById("Deals", dealId);
+	deal = null;
+	if(hasDeal) { deal = zoho.crm.getRecordById("Deals", dealId); }
+	// 3.2: the Contact is the opportunity authority, so it is read unconditionally --
+	// the Stage snapshot no longer depends on a Deal being present.
+	auxContact = zoho.crm.getRecordById("Contacts", contactId);
+	auxContactStage = "";
+	if(!isNull(auxContact) && !isNull(auxContact.get("id"))) { auxContactStage = ifnull(auxContact.get("Stage"), "").toString().trim(); }
+
 	tkMap = Map();
 	tkMap.put("Subject", taskType + ": " + ifnull(note, "").toString());
 	tkMap.put("Status", "In Progress");
-	tkMap.put("What_Id", dealId);
-	tkMap.put("$se_module", "Deals");
+	// 2.4: What_Id / $se_module are written ONLY when a Deal exists. Writing a 0 id
+	// would either fail the create or attach the Task to nothing.
+	if(hasDeal)
+	{
+		tkMap.put("What_Id", dealId);
+		tkMap.put("$se_module", "Deals");
+	}
 	tkMap.put("Who_Id", contactId);
 	tkMap.put("Task_Sequence_Managed", true);
 	tkMap.put("Task_Type", taskType);
-	tkMap.put("Blocks_Sequence", "Yes");
+	// 5.1: Blocks_Sequence writer removed. RETIRE, zero readers -- blocking is COMPUTED
+	// from Task_Sequence_Managed / Task_Type / Status / Task_Status (the isBlockingTask
+	// derivation), so the persisted field added nothing. Writers must go BEFORE the field is
+	// deleted: reading a deleted api_name voids the whole map, taking valid keys with it.
 	// Field-update contract footer for the rep. The specific issue/instruction (note) leads; the
 	// footer states the ONE user action + exactly what automation does on save, tailored to the task
 	// TYPE so it never promises behaviour the handler does not perform:
@@ -121,18 +161,34 @@ string automation.createAuxTask(string contactIdStr, string dealIdStr, string ta
 	tkMap.put("Description", ifnull(note, "").toString() + auxHelp);
 	tkMap.put("Task_Status", "Working");
 	tkMap.put("Task_State", "Open");
+	// ---- Activity context snapshots (WORK ITEM 3.2) ----
+	// Stage + Opportunity are CONTACT-sourced; Pipeline is DEAL-sourced. Previously all
+	// three came from the Deal (auxOppType = Deals.Stage, auxStage =
+	// Deals.Opportunity_Stage), so every Activity on a multi-Contact Deal recorded the
+	// Deal's roll-up rather than the Contact's own position. Blank is written as
+	// absent, never as a default -- an out-of-set picklist value is discarded silently.
+	if(auxContactStage != "")
+	{
+		tkMap.put("Task_Stage", auxContactStage);
+		auxOppType = automation.opportunityForContactStage(auxContactStage);
+		if(auxOppType != "") { tkMap.put("Task_Opportunity", auxOppType); }
+	}
 	if(!isNull(deal) && !isNull(deal.get("id")))
 	{
 		ownerLookup = deal.get("Owner");
 		if(!isNull(ownerLookup) && !isNull(ownerLookup.get("id"))) { tkMap.put("Owner", ownerLookup.get("id").toString()); }
-		// activity mirror fields (automation-owned) from the Deal context
 		// F3 FIX: Deluge getRecordById omits the special Pipeline field; resolve via the shared resolver.
 		auxPipeline = automation.resolveDealPipeline(dealId.toString());
-		auxOppType  = ifnull(deal.get("Stage"), "").toString();
-		auxStage    = ifnull(deal.get("Opportunity_Stage"), "").toString();
-		if(auxPipeline != "") { tkMap.put("Task_Pipeline", auxPipeline); }
-		if(auxOppType != "")  { tkMap.put("Task_Opportunity", auxOppType); }
-		if(auxStage != "")    { tkMap.put("Task_Stage", auxStage); }
+		if(auxPipeline != "" && auxPipeline != "unresolved") { tkMap.put("Task_Pipeline", auxPipeline); }
+	}
+	else
+	{
+		// No Deal: inherit ownership from the Contact so the Task is not ownerless.
+		if(!isNull(auxContact) && !isNull(auxContact.get("id")))
+		{
+			cOwnLk = auxContact.get("Owner");
+			if(!isNull(cOwnLk) && !isNull(cOwnLk.get("id"))) { tkMap.put("Owner", cOwnLk.get("id").toString()); }
+		}
 	}
 	createResp = zoho.crm.createRecord("Tasks", tkMap);
 	newId = "";

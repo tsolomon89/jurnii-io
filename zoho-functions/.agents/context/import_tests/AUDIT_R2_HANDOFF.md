@@ -1,3 +1,16 @@
+> # 📁 HISTORICAL — tooling constraints still true
+>
+> 2026-06-24 session handoff. Its tooling constraints remain accurate: Deluge source is not readable or
+> deployable over MCP, and the owner republishes functions by hand. That is why no plan in this
+> repository may assume a function is live until the owner confirms publication.
+>
+> `resolveDealPipeline`, deployed per this handoff, is being repointed: it must read `Deals.Pipeline`
+> rather than derive Pipeline from `Deal_Product_Key`.
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../../../docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # R2 Repair — Session Handoff (2026-06-24)
 
 Pick up the F1–F4 + timestamp repair of the Jurnii v6 Zoho automation. **F2, F4, and the timestamp item are DONE and verified live. F3 and F1 are still open** and need one diagnostic each (Deluge function log / data-model decision) — not more blind redeploys. Read this top to bottom before touching anything.

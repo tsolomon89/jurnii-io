@@ -1,0 +1,79 @@
+string automation.deriveAccountKey(string website, string emailAddr, string companyName, string recordId)
+{
+	// =========================================================================
+	// _util_deriveAccountKey   (VERSION: v6-account-key)
+	//
+	// THE single Account_Key derivation. Pure: no CRM reads, no writes.
+	//
+	// ⚠ WORK ITEM 4.7a. FOUR different precedences existed before this:
+	//   processLead:296-314        Website -> Email domain -> Company        -> unknown::<leadId>
+	//   processContact:72-92       Website -> Email domain -> Account_Name   -> unknown::<contactId>
+	//   processContact:100-110     Email domain -> Company                   -> unknown::<contactId>
+	//                             (NO Website step -- the divergence that forked keys)
+	//   processAccount:52-63       Website -> Account_Name                   -> unknown::<accountId>
+	//                             (no email step; structurally forced, Accounts carry no Email)
+	// so the same company could key two or three different ways depending on which module
+	// happened to see it first. One authority, one precedence:
+	//
+	//   1. domain_from_website(Website)              if Website present
+	//   2. domain_from_email(Email)                  if Email present AND not a free provider
+	//   3. normalize_company(Company | Account_Name) whichever the module carries
+	//   4. "unknown::" + <calling record id>         terminal fallback
+	//
+	//   domain_from_website(w) = lowercase, strip "https://" / "http://" / "www.",
+	//                            take the segment before the first "/"
+	//   domain_from_email(e)   = lowercase suffix after "@"
+	//   normalize_company(n)   = remove ( ) : , then trim then lowercase
+	//   truncate every result to 200 characters
+	//
+	// The free-provider filter matters: without it a Lead with a gmail.com address would key
+	// its Account as "gmail.com" and every unrelated gmail Lead would then resolve to that same
+	// Account. Step 2 is skipped for those and step 3 (the company name) is used instead.
+	//
+	// ⚠ This function DERIVES. It does not decide whether derivation is even allowed --
+	// K1/K2/K4 say an existing key is authoritative and immutable and must never be
+	// recomputed, so callers must check for one BEFORE calling this. `_util_resolveAccount`
+	// enforces that ordering.
+	//
+	// Accounts carry no Email, so passing "" for emailAddr there is correct and step 2 is
+	// simply skipped -- the same authority, exercising the evidence that module has.
+	// =========================================================================
+	w = ifnull(website, "").toString().trim();
+	e = ifnull(emailAddr, "").toString().trim();
+	c = ifnull(companyName, "").toString().trim();
+	rid = ifnull(recordId, "").toString().replaceAll("zcrm_", "").trim();
+
+	key = "";
+
+	// ---- 1. website domain ----
+	if(w != "")
+	{
+		d = w.toLowerCase().replaceAll("https://", "").replaceAll("http://", "").replaceAll("www.", "");
+		if(d.contains("/")) { d = d.toList("/").get(0); }
+		d = d.trim();
+		if(d != "") { key = d; }
+	}
+
+	// ---- 2. corporate email domain (free providers excluded) ----
+	if(key == "" && e != "" && e.contains("@"))
+	{
+		dom = e.toLowerCase().subString(e.indexOf("@") + 1).trim();
+		freeProviders = {"gmail.com", "yahoo.com", "hotmail.com", "outlook.com", "aol.com", "icloud.com"};
+		if(dom != "" && !freeProviders.contains(dom)) { key = dom; }
+	}
+
+	// ---- 3. normalised company / account name ----
+	if(key == "" && c != "")
+	{
+		key = c.replaceAll("[\\(\\)\\:\\,]", "").trim().toLowerCase();
+	}
+
+	// ---- 4. terminal fallback ----
+	if(key == "")
+	{
+		key = "unknown::" + rid;
+	}
+
+	if(key.length() > 200) { key = key.subString(0, 200); }
+	return key;
+}

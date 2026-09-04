@@ -88,6 +88,9 @@ async function main() {
       ['S7', 'does sendUserId map to a team user with an email?'],
       ['S8', 'what is the actual volume?'],
     ]) record(id, q, 'UNRESOLVED', null);
+    // The Zoho probes use a different credential entirely, so a missing Lemlist
+    // key must not skip them.
+    await checkZohoScopes();
     return summarise();
   }
 
@@ -247,30 +250,48 @@ async function main() {
     record('S7', 'does GET /team give userId -> email?', 'UNRESOLVED', err.code || err.message);
   }
 
-  // ---- S9: Zoho scopes, READ ONLY, opt-in --------------------------------
-  if (CHECK_ZOHO) {
-    const zoho = require('../zoho');
-    const probes = [
-      ['Tasks read + COQL', () => zoho.coql('select id from Tasks where Subject = \'__lemlist_spike_probe__\'')],
-      ['Contacts read', () => zoho.coql(`select id from Contacts where Email = '__none@example.invalid'`)],
-      ['Accounts read', () => zoho.coql(`select id from Accounts where Account_Key = '__none.invalid'`)],
-      ['users read', () => zoho.getActiveUsers()],
-    ];
-    for (const [label, fn] of probes) {
-      try {
-        await fn();
-        record('S9', `Zoho scope: ${label}`, 'YES', 'read succeeded');
-      } catch (err) {
-        record('S9', `Zoho scope: ${label}`, 'NO',
-          `${err.code || err.message} — a missing scope is a prerequisite to REPORT, not to widen`);
-      }
-    }
-  } else {
-    record('S9', 'Zoho scopes', 'UNRESOLVED', 'pass --zoho to check (read-only)');
-  }
+  await checkZohoScopes();
 
   if (WRITE_FIXTURES && typed.length) writeFixtures(typed);
   return summarise();
+}
+
+/**
+ * S9 — do the configured Zoho credentials carry the scopes this subsystem needs?
+ *
+ * READ ONLY. Every probe is a SELECT against a value that cannot exist, so it
+ * returns zero rows on success and an auth error on a missing scope. A CREATE
+ * scope cannot be probed without creating something, so those are inferred from
+ * the module read succeeding plus the OAuth scope list the owner granted — the
+ * first live create is what proves them, which is why the rollout starts at a
+ * cap of five Tasks.
+ */
+async function checkZohoScopes() {
+  if (!CHECK_ZOHO) {
+    record('S9', 'Zoho scopes', 'UNRESOLVED', 'pass --zoho to check (read-only)');
+    return;
+  }
+  if (!process.env.ZOHO_REFRESH_TOKEN) {
+    record('S9', 'Zoho scopes', 'UNRESOLVED', 'no ZOHO_REFRESH_TOKEN in the environment');
+    return;
+  }
+
+  const zoho = require('../zoho');
+  const probes = [
+    ['COQL + Tasks read', () => zoho.coql("select id from Tasks where Subject = '__lemlist_spike_probe__'")],
+    ['Contacts read', () => zoho.coql("select id from Contacts where Email = '__none@example.invalid'")],
+    ['Accounts read', () => zoho.coql("select id from Accounts where Account_Key = '__none.invalid'")],
+    ['users read (optional)', () => zoho.getActiveUsers()],
+  ];
+  for (const [label, fn] of probes) {
+    try {
+      await fn();
+      record('S9', `Zoho scope: ${label}`, 'YES', 'read succeeded');
+    } catch (err) {
+      record('S9', `Zoho scope: ${label}`, 'NO',
+        `${err.code || err.message} — a missing scope is a prerequisite to REPORT, not to widen`);
+    }
+  }
 }
 
 /** Redacted fixtures, safe to commit: shapes and presence, never a real value. */

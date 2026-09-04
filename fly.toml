@@ -1,0 +1,25 @@
+app = 'jurnii-web'
+primary_region = 'lhr'
+
+[processes]
+  app = 'node server.js'
+  worker = 'node worker-runner.js'
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ['app']
+
+[[http_service.checks]]
+  grace_period = '10s'
+  interval = '30s'
+  method = 'GET'
+  timeout = '5s'
+  path = '/health'
+
+[[vm]]
+  size = 'shared-cpu-1x'
+  memory = '512mb'

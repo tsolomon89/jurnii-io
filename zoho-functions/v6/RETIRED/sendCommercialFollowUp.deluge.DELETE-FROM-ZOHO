@@ -1,3 +1,32 @@
+// ############################################################################
+// ##  RETIRED - DELETE THIS FUNCTION FROM ZOHO                              ##
+// ############################################################################
+//
+// Zoho function name : sendCommercialFollowUp
+// Where it lives     : WORKFLOW function on module Deals. CONFIRMED LIVE 2026-08-19, associated=true.
+// Ids                : registration id 991103000001499072  |  function id 991103000001499021
+//
+// Why retired        : The whole WF010d unit is deleted (work item 1.3).
+// Safety             : No in-code callers ever existed - WF010d was its only invoker.
+//
+// DELETE ORDER:
+//   1. DELETE THE RULE FIRST: WF010d, rule id 991103000000790038 (Deals,
+//      date_or_datetime on Next_Comm_Follow_Up_Date). It has NEVER fired
+//      (last_executed_time: null), so nothing is lost.
+//      Deleting the function while a rule still points at it leaves a broken action.
+//   2. Deregister / delete the function: registration 991103000001499072.
+//   3. ONLY THEN delete the field Deals.Next_Comm_Follow_Up_Date.
+//      Rule -> function -> field. That order is mandatory.
+//
+// This file is NOT source any more. The .DELETE-FROM-ZOHO suffix keeps it out of
+// every *.deluge glob, so no scanner, test or publish list can pick it up. It is
+// kept only so the live org can be reconciled against it before deletion, and so
+// the body is readable without digging through git history. Delete this file once
+// the Zoho-side function is gone.
+//
+// Original source follows, unmodified, as published.
+// ############################################################################
+
 void automation.sendCommercialFollowUp(string dealIdStr)
 {
 	// =========================================================================

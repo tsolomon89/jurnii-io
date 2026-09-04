@@ -1,3 +1,17 @@
+> # 📁 HISTORICAL — and the strongest pro-model evidence in the repository
+>
+> This file already carries a partial-supersession banner. Extending it:
+>
+> **L115 is live-verified proof that the approved model previously worked in this org** — a controlled
+> test recording `Deal_Key = domain::active` and "one Account→one Deal→many Contacts". The architecture
+> it validated was replaced by `../../../docs/v6/zoho_v6_refactor_spec_pack/`, and is now **re-authorised**.
+>
+> Preserve untouched. Its L74 claim that WF004 exists is **false** — WF004 does not exist in the live org.
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../../../docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 > **⚠ SUPERSEDED IN PART BY [AUDIT_00_REVISION_R1.md](AUDIT_00_REVISION_R1.md) (2026-06-22).** The pricing statements below are **wrong**: the Quote line price is the banded **matrix** value (Line ACV = PPB × brand count), **not** `Product.Unit_Price`. Ignore the "£12,000 / £8,400" framing in §A.3 and §G and the "plan type + brand count" minimum in §C — see R1 §1. Defects D1/D2/D4 now have repo fixes (R1 §2) but are **not deployed**. Read R1 first.
 
 # Jurnii Zoho CRM — Pre-Import Audit, Part 1: Architecture, E2E Test, Quote Model

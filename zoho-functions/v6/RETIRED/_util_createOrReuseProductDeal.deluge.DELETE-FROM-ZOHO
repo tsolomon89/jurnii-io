@@ -1,3 +1,30 @@
+// ############################################################################
+// ##  RETIRED - DELETE THIS FUNCTION FROM ZOHO                              ##
+// ############################################################################
+//
+// Zoho function name : createOrReuseProductDeal
+// Where it lives     : STANDALONE function (Setup > Functions > Standalone). NOT in the workflow-function API.
+// Ids                : no registered id available over the API - locate it by NAME in Setup > Functions
+//
+// Why retired        : Replaced by _util_resolveOrCreateAccountDeal (work item 4.2/4.3).
+// Safety             : ZERO callers remain. Verified by deluge-syntax-check.py, which fails on any
+//   unresolved automation.<fn>() target, and by the absence guard in
+//   booking/tests/deluge-multi-product.test.js.
+//
+// DELETE ORDER:
+//   1. Publish the P1 bundle first (nothing must reference this at delete time).
+//   2. Setup > Functions > Standalone -> find "createOrReuseProductDeal" -> Delete.
+//   No workflow rule references it, so there is no rule to unbind.
+//
+// This file is NOT source any more. The .DELETE-FROM-ZOHO suffix keeps it out of
+// every *.deluge glob, so no scanner, test or publish list can pick it up. It is
+// kept only so the live org can be reconciled against it before deletion, and so
+// the body is readable without digging through git history. Delete this file once
+// the Zoho-side function is gone.
+//
+// Original source follows, unmodified, as published.
+// ############################################################################
+
 string automation.createOrReuseProductDeal(string accountId, string accountKey, string productId, string productName, string productKey, string accountName)
 {
 	// =========================================================================

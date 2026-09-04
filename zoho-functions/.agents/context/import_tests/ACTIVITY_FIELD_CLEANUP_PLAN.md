@@ -1,3 +1,20 @@
+> # ⚠ HISTORICAL — Layer 1 conflicts with verified Zoho semantics; must be re-sequenced
+>
+> **Do not run this plan as written.** Its Layer 1 approach ("hide via layout/profile") is unsafe:
+> an off-layout field **silently discards writes**, so hiding a field that still has writers loses data
+> without erroring. Deleting is safer than hiding.
+>
+> Correct order: remove every writer → **publish** → verify by reading the whole update map back →
+> remove from layout → delete the field. See
+> `../../../../docs/V6_FIELD_VALIDATION_ADVERSARIAL_2026-08-15.md` for the void-the-map finding that
+> makes ordering mandatory, and `../../../../docs/V6_MANUAL_DEPENDENCY_CHECKLIST.md` for the console gate.
+>
+> Layer 4 (deletion) remains deferred.
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../../../docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # v6 Activity Field Cleanup — Execution Plan (awaiting approval)
 
 Companion to `ACTIVITY_FIELD_DEPENDENCY_AUDIT.md`. Four layers, sequenced. **No code committed, no

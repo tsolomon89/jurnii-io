@@ -1,0 +1,294 @@
+string automation.resolveOrCreateAccountDeal(string accountId, string accountKey, string accountName, string pipelineHint)
+{
+	// =========================================================================
+	// _util_resolveOrCreateAccountDeal   (VERSION: v6-account-deal)
+	//
+	// Replaces _util_createOrReuseProductDeal. The single entry point for the
+	// approved cardinality:
+	//
+	//     one Account  ->  ZERO OR ONE persistent Deal
+	//     Deal_Key     ==  Account_Key            (NO "::" product suffix)
+	//     Deal_Name    ==  Account_Name
+	//
+	// Products do NOT enter the model as Deals. A Product becomes a QUOTE under this
+	// one Deal. Nothing here writes Deal_Product or Deal_Product_Key -- both are
+	// retired (Stage 5) and a Deal's Product identity is no longer a thing that
+	// exists.
+	//
+	// Search is delegated to _util_resolveAccountDeal so there is exactly ONE
+	// authority for "which Deal belongs to this Account". This function adds only the
+	// create-if-none step and the post-insert assertion.
+	//
+	// ⚠ Post-insert assertion (plan 4.2). After creating, the Deal_Key is re-searched
+	// and MUST return exactly one match:
+	//     zero          -> the insert silently failed. Stop, raise a review.
+	//     exactly one   -> good.
+	//     more than one -> stop, raise a review naming EVERY id, and make NO further
+	//                      write to any of them.
+	// The declared UNIQUE constraint on Deal_Key is NOT enforced live (two Deals
+	// share "jurnii-e2e.dev::jurnii_360"), so a duplicate is a concurrency defect.
+	// NEVER collapse, merge, re-key or Lose a Deal automatically -- a silent merge
+	// would hide exactly the defect that needs to be seen.
+	//
+	// ⚠ pipelineHint -- a DEVIATION from the plan's 3-arg signature, deliberate and
+	// flagged. Deals.Pipeline is mandatory and native zoho.crm.createRecord DROPS it
+	// (verified 2026-07-19), so a value is required AT CREATE TIME. Plan 4.2 says
+	// "retain the Partnership REST-insert branch" but the 3-arg signature carries
+	// nothing to select it with, because the only partnership signal that has ever
+	// existed in this codebase was Product-derived (_util_pipelineForProductKey's
+	// "partnership" product key) -- and that route is being deleted by 3.1. Rather
+	// than resurrect a Product dependency inside the Account-Deal resolver, the
+	// caller passes what it knows. Blank/unrecognised -> "B2B", which is also the
+	// native default, so a B2B create is unchanged.
+	//   OPEN: the durable Pipeline authority for a NEWLY created Deal is unresolved.
+	//   It is a property of the Account relationship, but no Accounts field records
+	//   it today. Reading an EXISTING Deal's Pipeline is settled (3.1, Deals.Pipeline
+	//   readable 96/96); only creation is open.
+	//
+	// Returns a JSON string (parse with .toMap()):
+	//   valid ("true"/"false"), deal_id, created ("true"/"false"), reason,
+	//   candidates (comma-joined ids; populated on any ambiguous outcome)
+	// =========================================================================
+	r = Map();
+	r.put("valid", "false");
+	r.put("deal_id", "");
+	r.put("created", "false");
+	r.put("candidates", "");
+	r.put("reason", "init");
+
+	accId = ifnull(accountId, "").toString().replaceAll("zcrm_", "").trim();
+	aKey = ifnull(accountKey, "").toString().trim();
+	aName = ifnull(accountName, "").toString().trim();
+	pHint = ifnull(pipelineHint, "").toString().trim();
+
+	if(accId == "" || !accId.matches("[0-9]+")) { r.put("reason", "invalid_account_id"); return r.toString(); }
+	// Account_Key IS the Deal_Key. Without it there is no key to create under, and
+	// deriving one here would create a second Account_Key authority (forbidden by 4.7a K1).
+	if(aKey == "") { r.put("reason", "missing_account_key"); return r.toString(); }
+
+	// ---- resolve first: never create over an existing Deal ----
+	resolvedRaw = automation.resolveAccountDeal(accId, aKey);
+	resolved = Map();
+	if(!isNull(resolvedRaw) && resolvedRaw.toString().trim() != "") { resolved = resolvedRaw.toString().toMap(); }
+	rStatus = ifnull(resolved.get("status"), "error").toString();
+
+	if(rStatus == "one")
+	{
+		r.put("valid", "true");
+		r.put("deal_id", ifnull(resolved.get("deal_id"), "").toString());
+		r.put("created", "false");
+		r.put("reason", "reused");
+		return r.toString();
+	}
+	if(rStatus == "many")
+	{
+		// K6: stop. The caller raises the review naming every candidate; no dependent write.
+		r.put("candidates", ifnull(resolved.get("candidates"), "").toString());
+		r.put("reason", "multiple_deals_for_account");
+		return r.toString();
+	}
+	if(rStatus != "none")
+	{
+		// "error" -- the lookup itself failed. Creating now could duplicate a Deal that
+		// already exists but could not be read. Stop.
+		r.put("reason", ifnull(resolved.get("reason"), "resolve_failed").toString());
+		return r.toString();
+	}
+
+	// ---- status "none": the legal new-relationship case. Create exactly one Deal. ----
+	//
+	// ⚠ PIPELINE AT CREATION. This is the value the standing dispatch gate in
+	// routeContactSequence reads for the rest of the relationship's life, so getting it wrong
+	// here is not cosmetic -- it decides whether a Partnership Contact receives B2B sales email.
+	//
+	// It has to be derived, not defaulted. An earlier revision took the value only from pHint,
+	// and every caller passed "" -- so `pipeline` was always "B2B", the Partnership REST-insert
+	// branch below was unreachable dead code, and every Partnership relationship was created as
+	// B2B. That is exactly the failure the whole-Deal `partnership_held` gate used to catch
+	// before work item 4.5 (correctly) deleted it for having the wrong scope.
+	//
+	// PARTNERSHIP IS A REAL PRODUCT, so Product evidence is the right source and not a legacy
+	// coupling. Verified live 2026-09-04: Products record "Partnership" (id 991103000001728134,
+	// active), a live Leads.Product_Interest option, and computeProductKey already normalises it
+	// to "partnership".
+	//
+	// Only on the CREATE path -- an existing Deal's Pipeline is never recomputed (it is
+	// relationship state, and K1's immutability logic applies to it for the same reason), so the
+	// common reuse path above returns before this and pays nothing.
+	pipeline = "B2B";
+	pipelineVia = "default_b2b";
+	if(pHint == "Partnership")
+	{
+		// An explicit caller hint still wins: the import path knows the answer without a lookup.
+		pipeline = "Partnership";
+		pipelineVia = "caller_hint";
+	}
+	else if(pHint == "")
+	{
+		// collectProductEvidence returns RAW display names, so the comparison goes through
+		// computeProductKey rather than matching strings. "Accounts" unions each related
+		// Contact's Products_Linked.
+		evRaw = automation.collectProductEvidence("Accounts", accId);
+		ev = Map();
+		if(!isNull(evRaw) && evRaw.toString().trim() != "") { ev = evRaw.toString().toMap(); }
+		evNames = ifnull(ev.get("raw"), List());
+		for each evName in evNames
+		{
+			if(automation.computeProductKey(ifnull(evName, "").toString()) == "partnership")
+			{
+				pipeline = "Partnership";
+				pipelineVia = "account_product_evidence";
+			}
+		}
+	}
+	automation.logAutomationEvent("resolveOrCreateAccountDeal", "Accounts", accId, "pipeline_at_create", pipeline, {"via":pipelineVia, "hint":pHint});
+
+	dealName = aName;
+	if(dealName == "") { dealName = aKey; }
+
+	closeDate = zoho.currentdate.addDay(30).toString("yyyy-MM-dd");
+
+	dm = Map();
+	dm.put("Deal_Name", dealName);
+	dm.put("Account_Name", accId);
+	dm.put("Deal_Key", aKey);
+	dm.put("Pipeline", pipeline);
+	// Deal viability = Opportunity_State / Opportunity_Status (Deals have NO bare State/Status).
+	// Deals are never Won: Opportunity_State in {Open, Lost} only.
+	dm.put("Opportunity_State", "Open");
+	dm.put("Opportunity_Status", "New");
+	dm.put("Closing_Date", closeDate);
+
+	newId = "";
+	createReason = "created";
+	restRaw = "";
+
+	if(pipeline == "Partnership")
+	{
+		// ---- direct REST Deals Insert with Pipeline + Stage together ----
+		// Retained verbatim in behaviour from _util_createOrReuseProductDeal: native
+		// createRecord DROPS the mandatory Pipeline special field, so a Partnership Deal must be
+		// created via the v6 Records INSERT API, which accepts Pipeline when a compatible Stage
+		// rides in the SAME payload (MQL is valid under both pipelines). Uses the zoho_crm
+		// connection (needs ZohoCRM.modules.deals scope + an authorized/connected state).
+		// trigger:[] suppresses the workflow cascade; the caller calls processDeal explicitly.
+		acctLk = Map(); acctLk.put("id", accId);
+		restRec = Map();
+		restRec.put("Deal_Name", dealName);
+		restRec.put("Account_Name", acctLk);
+		restRec.put("Deal_Key", aKey);
+		restRec.put("Opportunity_State", "Open");
+		restRec.put("Opportunity_Status", "New");
+		restRec.put("Closing_Date", closeDate);
+		restRec.put("Pipeline", "Partnership");
+		restRec.put("Stage", "MQL");
+		restBody = Map(); restData = List(); restData.add(restRec); restBody.put("data", restData); restBody.put("trigger", List());
+		restHdr = Map(); restHdr.put("Content-Type", "application/json");
+		restResp = invokeurl
+		[
+			url: "https://www.zohoapis.eu/crm/v6/Deals"
+			type: POST
+			parameters: restBody.toString()
+			connection: "zoho_crm"
+			headers: restHdr
+		];
+		restRaw = ifnull(restResp, "").toString();
+		if(!isNull(restResp) && restRaw.startsWith("{") && !isNull(restResp.get("data")) && restResp.get("data").size() > 0)
+		{
+			d0 = restResp.get("data").get(0);
+			if(ifnull(d0.get("code"), "").toString() == "SUCCESS" && !isNull(d0.get("details")) && !isNull(d0.get("details").get("id"))) { newId = d0.get("details").get("id").toString(); }
+		}
+		automation.logAutomationEvent("resolveOrCreateAccountDeal", "Deals", ifnull(newId, "-").toString(), "pipeline_rest_insert", if(newId != "", "created_partnership", "failed"), {"deal_key":aKey, "resp":restRaw});
+		if(newId != "")
+		{
+			createReason = "created_rest_partnership";
+		}
+		else
+		{
+			// REST insert did not create the Deal (e.g. the zoho_crm connection is disconnected or
+			// lost its Deals scope). Fall back to native createRecord so ingestion is not broken,
+			// and flag the Deal: native drops Pipeline, so the field defaults to B2B and needs
+			// manual correction. The Product_Key gate that used to hold such a Deal out of B2B
+			// automation NO LONGER EXISTS under the corrected model, so this misclassification is
+			// now behavioural, not cosmetic -- the dispatch gate at routeContactSequence reads
+			// Deals.Pipeline and would treat this Deal as B2B. The review is therefore mandatory.
+			res = zoho.crm.createRecord("Deals", dm);
+			if(!isNull(res) && !isNull(res.get("id"))) { newId = res.get("id").toString(); }
+			else if(!isNull(res) && res.get("code") == "DUPLICATE_DATA" && !isNull(res.get("details")) && !isNull(res.get("details").get("id"))) { newId = res.get("details").get("id").toString(); }
+			if(newId != "")
+			{
+				zoho.crm.updateRecord("Deals", newId.toLong(), {"Description": "[partnership_pipeline_rest_failed] Partnership Deal created via native fallback; Pipeline defaulted to B2B and MUST be corrected to Partnership by hand. Until it is, sequence dispatch treats this relationship as B2B. Check the zoho_crm connection (Setup > Connections). Full REST response is in the automation log."}, {"trigger": List()});
+			}
+			createReason = "created_native_rest_failed";
+		}
+	}
+	else
+	{
+		res = zoho.crm.createRecord("Deals", dm);
+		if(!isNull(res) && !isNull(res.get("id"))) { newId = res.get("id").toString(); }
+		else if(!isNull(res) && res.get("code") == "DUPLICATE_DATA" && !isNull(res.get("details")) && !isNull(res.get("details").get("id"))) { newId = res.get("details").get("id").toString(); }
+	}
+
+	if(newId == "")
+	{
+		r.put("reason", "create_failed");
+		automation.logAutomationEvent("resolveOrCreateAccountDeal", "Deals", "-", "create", "failed", {"deal_key":aKey, "rest_resp":restRaw});
+		return r.toString();
+	}
+
+	// ---- post-insert assertion: re-search Deal_Key, require EXACTLY one ----
+	// Deliberately a direct Deal_Key search, not resolveAccountDeal: the related-list fallback
+	// there would also return legacy Deals under the same Account and turn a perfectly good
+	// create into a false "many". This assertion is about the KEY.
+	verify = zoho.crm.searchRecords("Deals", "(Deal_Key:equals:" + aKey + ")");
+	verifyIds = List();
+	verifyFailed = false;
+	if(isNull(verify) || verify.toString().startsWith("{\"code\"")) { verifyFailed = true; }
+	else
+	{
+		for each vd in verify
+		{
+			vid = ifnull(vd.get("id"), "").toString().trim();
+			if(vid != "" && vid.matches("[0-9]+") && !verifyIds.contains(vid)) { verifyIds.add(vid); }
+		}
+	}
+
+	if(verifyFailed)
+	{
+		// The Deal exists (newId is set) but the readback could not be performed. Report it
+		// rather than claiming a verified create -- SUCCESS proves nothing.
+		r.put("valid", "true");
+		r.put("deal_id", newId);
+		r.put("created", "true");
+		r.put("reason", "created_readback_failed");
+		automation.logAutomationEvent("resolveOrCreateAccountDeal", "Deals", newId, "verify", "readback_failed", {"deal_key":aKey});
+		return r.toString();
+	}
+
+	vCand = "";
+	for each vi in verifyIds { vCand = vCand + if(vCand != "", ",", "") + vi; }
+
+	if(verifyIds.size() == 0)
+	{
+		// createRecord handed back an id but the key is not searchable. Either the write was
+		// discarded or Deal_Key never committed. Either way: do not proceed.
+		r.put("reason", "insert_not_verifiable");
+		r.put("candidates", newId);
+		automation.logAutomationEvent("resolveOrCreateAccountDeal", "Deals", newId, "verify", "zero_matches_after_insert", {"deal_key":aKey});
+		return r.toString();
+	}
+	if(verifyIds.size() > 1)
+	{
+		r.put("reason", "duplicate_deal_key_after_insert");
+		r.put("candidates", vCand);
+		automation.logAutomationEvent("resolveOrCreateAccountDeal", "Deals", newId, "verify", "duplicate_deal_key_after_insert", {"deal_key":aKey, "count":verifyIds.size().toString(), "candidates":vCand});
+		return r.toString();
+	}
+
+	r.put("valid", "true");
+	r.put("deal_id", verifyIds.get(0));
+	r.put("created", "true");
+	r.put("reason", createReason);
+	automation.logAutomationEvent("resolveOrCreateAccountDeal", "Deals", verifyIds.get(0), "create", "account_deal_created", {"deal_key":aKey, "pipeline":pipeline, "deal_name":dealName});
+	return r.toString();
+}

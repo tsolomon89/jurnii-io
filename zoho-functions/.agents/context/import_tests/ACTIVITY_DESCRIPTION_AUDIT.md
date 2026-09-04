@@ -1,3 +1,14 @@
+> # 📁 HISTORICAL — one live gap it identifies is still open
+>
+> Preserved. Relevant to an open defect: the Activation Task's rep-facing Description does **not** warn
+> reps against touching native `Status`, and a rep who sets `Task_State = Won` together with native
+> `Status = Completed` in one save currently fails activation. The Description wording is documentation,
+> not the fix.
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../../../docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # v6 Activity Description — Field-Update Contract Audit & Rewrite
 
 **Date:** 2026-07-07

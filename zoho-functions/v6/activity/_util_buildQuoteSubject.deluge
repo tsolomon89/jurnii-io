@@ -13,10 +13,15 @@ string automation.buildQuoteSubject(string accountName, string productNames, str
 	//
 	// The Subject is COMPOSED FROM CANONICAL PARTS — it is never derived by
 	// patching a previously-built Subject or by concatenating Deal_Name with a
-	// product. Deal_Name is itself "<Account> - <Product>" (createOrReuseProductDeal),
-	// so "Deal_Name + ' - ' + product" duplicated the product; that is the defect
-	// this helper replaces. Because the output is recomputed from parts, calling
-	// this on an already-correct Quote is idempotent.
+	// product.
+	//
+	// Historically Deal_Name was itself "<Account> - <Product>", so
+	// "Deal_Name + ' - ' + product" duplicated the product name -- the defect this helper
+	// replaces. Under the corrected model Deal_Name is just the ACCOUNT name, so that
+	// particular duplication can no longer arise; composing from canonical parts is still
+	// the rule, because the Subject must name the Product and Deal_Name no longer does.
+	// Because the output is recomputed from parts, calling this on an already-correct
+	// Quote is idempotent.
 	//
 	// EXACTLY-ONCE RULE
 	//   A product is appended only when the base does not already carry it as a

@@ -1,3 +1,13 @@
+> # 📁 HISTORICAL — and independently required by the approved model
+>
+> Dated 2026-06-22. Its core finding — **`Product.Unit_Price` is not the price**; pricing comes from the
+> banded matrix — is independently required by authority §7.5, which forbids using `Product.Unit_Price`
+> directly as Deal Amount. Cite it; do not edit it.
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../../../docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # Pre-Import Audit — REVISION R1 (2026-06-22)
 
 **This document supersedes the pricing conclusions in AUDIT_01/02/03 and records the defect fixes, retest evidence, revised decisions, and the go/no-go.** It was produced after the reviewer correctly flagged that the original audit conflated `Product.Unit_Price` with the actual **banded pricing matrix**.

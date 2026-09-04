@@ -64,11 +64,24 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 
 	automation.logAutomationEvent("routeContactSequence", "Contacts", ifnull(contactId, "").toString(), "entry", "in_progress", {"deal":dealId.toString(), "trigger":trig, "source":ctxSource});
 
-	if(contactId == 0 || dealId == 0)
+	// ---- WORK ITEM 2.4: the Contact is required; the Deal is OPTIONAL context ----
+	// This was `if(contactId == 0 || dealId == 0)` -> a silent skip_missing_ids return, and it
+	// was the single line that made Contact-only cadence impossible: activation could commit
+	// on the Task and then lose the Contact right here. Cadence is Contact-scoped, so a
+	// missing Deal is a missing piece of CONTEXT, not a missing identity.
+	//
+	// When dealIdStr arrives blank the Deal is resolved below, from the Contact's Account,
+	// once the Contact record has been read. Resolution that comes back AMBIGUOUS raises a
+	// named review and stops; resolution that comes back genuinely EMPTY proceeds without a
+	// Deal, because "one Account -> ZERO OR ONE Deal" makes zero a legal state.
+	if(contactId == 0)
 	{
-		automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "guard", "skip_missing_ids", {"deal":dealId.toString()});
+		automation.logAutomationEvent("routeContactSequence", "Contacts", "-", "guard", "skip_missing_contact", {"deal":dealId.toString()});
 		return;
 	}
+	hasDeal = (dealId != 0);
+	dealCtxStr = "";
+	if(hasDeal) { dealCtxStr = dealId.toString(); }
 
 	// =====================================================================
 	// ACTIVITY RELATIONSHIP VALIDATION — runs BEFORE any Contact mutation.
@@ -117,10 +130,19 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 				mismatch = true;
 				mismatchReason = "who_id_mismatch";
 			}
-			else if(actWhat != dealId.toString())
+			// 2.4: Who_Id is the identity assertion and is always checked. What_Id is a
+			// CONTEXT assertion, so it is only checked when a Deal is actually in play. An
+			// Activity with no What_Id routed for a Contact with no Deal is consistent, not a
+			// mismatch -- the old unconditional test made that shape unroutable.
+			else if(hasDeal && actWhat != "" && actWhat != dealId.toString())
 			{
 				mismatch = true;
 				mismatchReason = "what_id_mismatch";
+			}
+			else if(hasDeal && actWhat == "")
+			{
+				mismatch = true;
+				mismatchReason = "activity_missing_what_id";
 			}
 		}
 
@@ -136,7 +158,7 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 				mismatchReason = "contact_not_found";
 			}
 		}
-		if(!mismatch)
+		if(!mismatch && hasDeal)
 		{
 			valDeal = zoho.crm.getRecordById("Deals", dealId);
 			if(isNull(valDeal) || isNull(valDeal.get("id")))
@@ -147,7 +169,8 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 		}
 
 		// Contact belongs to the Deal Account OR is linked via Contact Roles.
-		if(!mismatch)
+		// 2.4: skipped entirely when there is no Deal -- there is no membership to assert.
+		if(!mismatch && hasDeal)
 		{
 			belongs = false;
 			// (i) same Account
@@ -212,15 +235,73 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 		automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "guard", "contact_not_found", null);
 		return;
 	}
-	deal = zoho.crm.getRecordById("Deals", dealId);
-	if(isNull(deal) || isNull(deal.get("id")))
+	// ---- WORK ITEM 2.4(2): resolve the optional Deal context ----
+	// No Deal was supplied. Resolve the Contact's Account, then that Account's single Deal,
+	// through the ONE authority for the question (_util_resolveAccountDeal, READ-ONLY -- a
+	// dispatch pass must never CREATE a Deal; creation belongs to the ingestion path).
+	if(!hasDeal)
 	{
-		automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "guard", "deal_not_found", {"deal":dealId.toString()});
-		return;
+		rcsAcctId = "";
+		rcsAcctLk = contact.get("Account_Name");
+		if(!isNull(rcsAcctLk) && !isNull(rcsAcctLk.get("id"))) { rcsAcctId = rcsAcctLk.get("id").toString(); }
+		if(rcsAcctId != "")
+		{
+			rcsResolvedRaw = automation.resolveAccountDeal(rcsAcctId, "");
+			rcsResolved = Map();
+			if(!isNull(rcsResolvedRaw) && rcsResolvedRaw.toString().trim() != "") { rcsResolved = rcsResolvedRaw.toString().toMap(); }
+			rcsStatus = ifnull(rcsResolved.get("status"), "error").toString();
+			if(rcsStatus == "one")
+			{
+				dealId = ifnull(rcsResolved.get("deal_id"), "0").toString().toLong();
+				hasDeal = (dealId != 0);
+				if(hasDeal) { dealCtxStr = dealId.toString(); }
+				automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "deal_context", "resolved_from_account", {"account":rcsAcctId, "deal":dealCtxStr});
+			}
+			else if(rcsStatus == "none")
+			{
+				// LEGAL. "one Account -> ZERO OR ONE Deal": a relationship with no Deal yet
+				// dispatches Contact-only. Recorded as context, never as a skip.
+				automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "deal_context", "no_deal_contact_only", {"account":rcsAcctId});
+			}
+			else
+			{
+				// 2.4(3): AMBIGUOUS or unreadable. Stop VISIBLY -- a named review naming every
+				// candidate, not the silent log line this used to be. Picking one here is
+				// exactly what would hide a duplicate-Deal concurrency defect.
+				automation.createManualReview(contactId.toString(), "", "dispatch_deal_unresolved", "Sequence dispatch for this Contact could not resolve a single Deal for its Account (" + rcsAcctId + "): status=" + rcsStatus + ", candidates=" + ifnull(rcsResolved.get("candidates"), "").toString() + ". Nothing was dispatched and nothing was written. Under the approved model an Account holds at most ONE Deal - review the Deals named above and consolidate them by hand. Never merge or re-key them automatically.");
+				automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "deal_context", "dispatch_deal_unresolved", {"account":rcsAcctId, "status":rcsStatus, "candidates":ifnull(rcsResolved.get("candidates"), "").toString()});
+				return;
+			}
+		}
+		else
+		{
+			automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "deal_context", "no_account_contact_only", null);
+		}
+	}
+
+	// The Deal record is loaded only if one is in play. A supplied-but-unreadable Deal is no
+	// longer a fatal return: it degrades to Contact-only dispatch with a visible review,
+	// because losing CONTEXT must not cost the Contact its cadence.
+	deal = null;
+	if(hasDeal)
+	{
+		deal = zoho.crm.getRecordById("Deals", dealId);
+		if(isNull(deal) || isNull(deal.get("id")))
+		{
+			automation.createManualReview(contactId.toString(), "", "dispatch_deal_unresolved", "Sequence dispatch was given Deal " + dealId.toString() + " for this Contact but that Deal could not be read, so the Contact was dispatched WITHOUT Deal context (Pipeline-gated steps and Deal-scoped commercial writes were skipped). Verify the Deal exists and that the Task or Activity What_Id points at it.");
+			automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "deal_context", "deal_not_found_degraded", {"deal":dealId.toString()});
+			deal = null;
+			hasDeal = false;
+			dealId = 0;
+			dealCtxStr = "";
+		}
 	}
 	dealOwnerId = "";
-	dOwn = deal.get("Owner");
-	if(!isNull(dOwn) && !isNull(dOwn.get("id"))) { dealOwnerId = dOwn.get("id").toString(); }
+	if(!isNull(deal))
+	{
+		dOwn = deal.get("Owner");
+		if(!isNull(dOwn) && !isNull(dOwn.get("id"))) { dealOwnerId = dOwn.get("id").toString(); }
+	}
 
 	stage    = ifnull(contact.get("Stage"), "").toString();
 	seqType  = ifnull(contact.get("Sequence_Type"), "").toString();
@@ -306,12 +387,12 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 		}
 		else if(lossAction == "find_decision_maker")
 		{
-			automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "Activity Lost (No Authority): find another decision maker; reassign the buyer. Deal stays Open.");
+			automation.createAuxTask(contactId.toString(), dealCtxStr, "Manual Review", "Activity Lost (No Authority): find another decision maker; reassign the buyer. Deal stays Open.");
 			return;
 		}
 		else if(lossAction == "data_repair")
 		{
-			automation.createAuxTask(contactId.toString(), dealId.toString(), "Data Repair", "Activity Lost (Invalid / Bad Data): repair before the sequence continues.");
+			automation.createAuxTask(contactId.toString(), dealCtxStr, "Data Repair", "Activity Lost (Invalid / Bad Data): repair before the sequence continues.");
 			return;
 		}
 		else if(lossAction == "suppress")
@@ -326,7 +407,7 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 		else
 		{
 			// manual_review (incl. commercial reasons that need human context)
-			automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "Activity Lost (" + lossRsn + "): review (reschedule, find another contact, or close the Contact). Deal stays Open.");
+			automation.createAuxTask(contactId.toString(), dealCtxStr, "Manual Review", "Activity Lost (" + lossRsn + "): review (reschedule, find another contact, or close the Contact). Deal stays Open.");
 			return;
 		}
 	}
@@ -360,7 +441,7 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 				btManaged = ifnull(bt.get("Task_Sequence_Managed"), false).toString();
 				btType = ifnull(bt.get("Task_Type"), "").toString();
 				btTaskStatus = ifnull(bt.get("Task_Status"), "").toString();
-				btIsBlocking = (btManaged == "true" && btType != "Scheduled Send" && btType != "Email Sent" && btStatus != "Completed" && btStatus != "Cancelled" && btStatus != "Deferred" && btTaskStatus != "Closed");
+				btIsBlocking = (btManaged == "true" && btType != "Scheduled Send" && btType != "Email Sent" && btStatus != "Completed" && btStatus != "Deferred" && btTaskStatus != "Closed");
 				if(btWho == contactId.toString() && btIsBlocking && (btSeqStage == "" || btSeqStage == stage))
 				{
 					automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "guard", "blocked_by_task", {"task":bt.get("id").toString()});
@@ -387,7 +468,21 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 	if(stepStr != "" && stepStr != "None") { stepNum = stepStr.toLong(); }
 	trigLc = ifnull(trig, "").toString().trim().toLowerCase();
 
-	cadenceStages = {"Marketing Consent", "Demo Booking", "Demo Hosted", "Commercial Agreement", "Renewal"};
+	// ---- WORK ITEM 2.1-2.3 / blocker G3 consequence 1 ----
+	// "Demo Hosted" is REMOVED. Neither of its two entry paths starts a cadence:
+	//   meeting:attended -> action = "await_meeting" (awaiting the Meeting outcome, and the
+	//                       comment there says so explicitly)
+	//   demo:followup    -> action = "none" (CHANGE 11 deliberately removed the recovery cadence)
+	// so listing it made the set describe an intent rather than the behaviour. The four real
+	// one-Call cadence Stages each map to their existing "Call 1" script.
+	//
+	// ⚠ G5 REMAINS OPEN and is the reason this line is a behavioural risk, not pure description:
+	// progression maps Demo Confirmation -> Demo Hosted, and call:positive advances with
+	// doEntry = true, which WOULD reach the cadence block. That path is BELIEVED unreachable
+	// because Demo Confirmation is meeting-class and has no Call to produce call:positive, but it
+	// is not proven. If the fixture check shows it IS live, restore "Demo Hosted" here -- removing
+	// it would then be a behaviour change, not a correction.
+	cadenceStages = {"Marketing Consent", "Demo Booking", "Commercial Agreement", "Renewal"};
 	taskStages    = {"Proposal Preparation", "Onboarding"};
 
 	progression = Map();
@@ -493,29 +588,32 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 		}
 		else if(trigLc == "call:neutral" || trigLc == "call:noanswer")
 		{
-			if(stepNum < 5)
-			{
-				nextSeqState = "Running";
-				nextSeqStage = "Call";
-				nextStep = (stepNum + 1).toString();
-				action = "create_call";
-				dueOffsetDays = 2;
-				sideEmailKind = "cadence";
-				sideEmailStep = stepNum;
-				reason = "call_neutral_next_call";
-			}
-			else
-			{
-				nextSeqState = "Running";
-				nextSeqStage = "Email";
-				nextStep = "1";
-				action = "schedule_email";
-				emailKind = "postcall";
-				dueOffsetDays = 2;
-				sideEmailKind = "cadence";
-				sideEmailStep = 5;
-				reason = "call_neutral_postcall";
-			}
+			// ---- WORK ITEM 2.1-2.3: ONE Call per Stage, then the 5-step email chain ----
+			//
+			// This was the 5-Call escalation: Call 1 -> Call 2 -> ... -> Call 5, each carrying a
+			// SIDE cadence email, and only after Call 5 a single "postcall" email. Two Calls were
+			// never the design; five were an artefact.
+			//
+			// The corrected shape is two cadence routes, not five Calls. The single Call has now
+			// returned non-progressing, so the Stage hands off to the email chain at STEP 1 and
+			// no further Call is created. Nothing about the chain itself is new: same scheduler
+			// (WFC-SchedEmail), same payload format, same +2-business-day spacing, same template
+			// keys (<stage-slug>:1:initial through :5:final), same audit contract. What changes is
+			// only the SOURCE of the next step.
+			//
+			// sideEmailKind is deliberately blank. Under the old shape the side email accompanied
+			// the next Call; here the scheduled step IS the email, so a side email would send the
+			// same template twice -- once immediately and once on Due_Date -- and the Contact-scoped
+			// SendKey would then suppress the scheduled one, silently truncating the chain.
+			nextSeqState = "Running";
+			nextSeqStage = "Email";
+			nextStep = "1";
+			action = "schedule_email";
+			emailKind = "cadence";
+			emailStep = 1;
+			dueOffsetDays = 2;
+			sideEmailKind = "";
+			reason = "call_nonprogressing_email_chain";
 			resolved = true;
 		}
 		else if(trigLc == "call:deferred")
@@ -974,19 +1072,45 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 	// than only at commit, so a Partnership Contact with Email or Call stored dispatches no
 	// cadence Call, cadence Task, scheduled cadence email or automated cadence email - at the
 	// Stage where it was activated, and at every Stage it ever reaches.
-	gatePipeline = automation.resolveDealPipeline(dealId.toString());
-	if(gatePipeline != "B2B")
+	//
+	// ⚠ WORK ITEM 2.4 -- the gate is evaluated ONLY when a Deal exists.
+	//
+	// Pipeline is a property of the Account RELATIONSHIP, carried on the Deal. Three cases,
+	// and conflating any two of them breaks something:
+	//
+	//   Deal present, Pipeline == "B2B"        -> cadence dispatches. Unchanged.
+	//   Deal present, Pipeline != "B2B"        -> Partnership holds SILENTLY; anything else is
+	//                                             an upstream data problem -> review, no dispatch.
+	//   NO Deal                                -> there is no relationship that could be a
+	//                                             Partnership, so there is nothing to hold. The
+	//                                             gate does not apply and cadence dispatches.
+	//
+	// Before this change the third case fell into the second: resolveDealPipeline("0") cannot
+	// return "B2B", so a Deal-less Contact was suppressed AND handed a
+	// [pipeline_unresolved_no_dispatch] review naming Deal "0". That would have made the
+	// Contact-only cadence unreachable in practice and buried the reason in a review about a
+	// Deal that does not exist -- undoing 2.4 one layer below the guard it removed.
+	gatePipeline = "";
+	if(!isNull(deal))
 	{
-		dispatchSuppressed = true;
-		if(gatePipeline == "Partnership")
+		gatePipeline = automation.resolveDealPipeline(dealId.toString());
+		if(gatePipeline != "B2B")
 		{
-			automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "dispatch_gate", "dispatch_suppressed_partnership", {"deal":dealId.toString(), "pipeline":gatePipeline, "seq_type":sType});
+			dispatchSuppressed = true;
+			if(gatePipeline == "Partnership")
+			{
+				automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "dispatch_gate", "dispatch_suppressed_partnership", {"deal":dealId.toString(), "pipeline":gatePipeline, "seq_type":sType});
+			}
+			else
+			{
+				automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "[pipeline_unresolved_no_dispatch] Deal " + dealId + " has an unresolved pipeline (" + gatePipeline + "), so no cadence was dispatched for this Contact. A blank or unrecognised Deals.Pipeline must NEVER be treated as B2B. Set the Deal's Pipeline correctly, then re-enter the Stage.");
+				automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "dispatch_gate", "pipeline_unresolved_no_dispatch", {"deal":dealId.toString(), "pipeline":gatePipeline});
+			}
 		}
-		else
-		{
-			automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "[pipeline_unresolved_no_dispatch] Deal " + dealId + " has an unresolved pipeline (" + gatePipeline + "), so no cadence was dispatched for this Contact. An unrecognised Product Interest / Deal_Product_Key must never be treated as B2B. Correct the Deal's product so the pipeline resolves, then re-enter the Stage.");
-			automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "dispatch_gate", "pipeline_unresolved_no_dispatch", {"deal":dealId.toString(), "pipeline":gatePipeline});
-		}
+	}
+	else
+	{
+		automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "dispatch_gate", "no_deal_pipeline_gate_not_applicable", null);
 	}
 
 	// ---- CHANGE 8a (Manual): prospective, scoped to NEW STAGE ENTRY only -------------------
@@ -1051,11 +1175,20 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 				tStatus = ifnull(tsk.get("Status"), "").toString();
 				tType = ifnull(tsk.get("Task_Type"), "").toString();
 				tDesc = ifnull(tsk.get("Description"), "").toString();
-				if(tWho == contactId.toString() && ifnull(tsk.get("Task_Sequence_Managed"), false).toString() == "true" && tType != "Email Sent" && tStatus != "Completed" && tStatus != "Cancelled" && tStatus != "Deferred")
+				if(tWho == contactId.toString() && ifnull(tsk.get("Task_Sequence_Managed"), false).toString() == "true" && tType != "Email Sent" && tStatus != "Completed" && tStatus != "Deferred")
 				{
 					if(tDesc.contains("ScheduledSend|"))
 					{
-						zoho.crm.updateRecord("Tasks", tsk.get("id").toLong(), {"Status":"Cancelled", "Description":tDesc + "\nSuperseded by Stage change."}, noTrigger);
+						// D1 FIX 2026-08-11. Native Status has NO live "Cancelled" option (live set:
+						// Completed, Deferred, In Progress, Not Started, Waiting on someone else), so
+						// the previous {"Status":"Cancelled"} was DISCARDED -- and this line set no
+						// Task_Status either, so the stop-gate at sendScheduledEmailFromTask:32 never
+						// tripped and a superseded Scheduled Send still fired its email on Due_Date.
+						// Deferred + Task_Status=Closed are both live-valid, and either alone already
+						// satisfies that gate. Identical to the already-corrected sibling at
+						// handleTaskCompletion.deluge:506. Idempotent: the guard above skips a Task
+						// that is already Deferred.
+						zoho.crm.updateRecord("Tasks", tsk.get("id").toLong(), {"Status":"Deferred", "Task_Status":"Closed", "Description":tDesc + "\nSuperseded by Stage change."}, noTrigger);
 					}
 					else
 					{
@@ -1066,14 +1199,22 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 		}
 	}
 
-	// Activity mirror fields (automation-owned) derived from the Deal context; the
-	// process Stage mirror = nextStage. Stamped on created Calls/Tasks for reporting parity.
-	// F3 FIX: Deluge getRecordById omits the special Pipeline field; resolve via the shared
-	// REST-backed resolver (never deal.get("Pipeline"), which returns blank).
-	// Already resolved once for the Change 20 standing gate above - reuse it rather than paying
-	// for a second read.
+	// ---- Activity context snapshots (WORK ITEM 3.2) ----
+	// Stage + Opportunity are CONTACT-sourced; Pipeline is DEAL-sourced. Stamped on created
+	// Calls/Tasks for reporting parity.
+	//
+	// The `ifnull(..., deal.get("Stage"))` fallback is DELETED. It was unreachable for every
+	// Stage in the ladder (stageOpportunity covers all eight), so its only effect was to make
+	// a Contact-scoped fact look Deal-sourced -- and it would have become live and WRONG the
+	// moment a Deal-less Contact dispatched, since deal is now legitimately null.
+	// _util_opportunityForContactStage is the single authority and returns "" for an unknown
+	// Stage; "" is written as absent, never as a default.
+	//
+	// F3 FIX retained: Deluge getRecordById omits the special Pipeline field, so Pipeline
+	// comes from the REST-backed resolver (never deal.get("Pipeline"), which returns blank).
+	// Already resolved once for the Change 20 standing gate above - reuse it.
 	mirrorPipeline = gatePipeline;
-	mirrorOppType  = ifnull(stageOpportunity.get(nextStage), ifnull(deal.get("Stage"), "")).toString();
+	mirrorOppType  = automation.opportunityForContactStage(nextStage);
 
 	// ---- 2. + 3. Side cadence email + primary action (create_call / create_task /
 	//         schedule_email) — DEFERRED. The state-machine DECISION above resolved the
@@ -1098,13 +1239,20 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 	// >>> REVIEWER: if a live Intent_To_Sign boolean is later created, reinstate the
 	//     write here. Until then the commercial stamp is Opportunity_State only.
 	// =====================================================================
-	if(trigLc == "commercial:signed")
+	// 2.4: a Deal-scoped commercial stamp is skipped, not attempted, when there is no Deal.
+	// The Contact-side transition still runs -- signing is a Contact fact; the Deal mirror is
+	// a roll-up of it.
+	if(trigLc == "commercial:signed" && !isNull(deal))
 	{
 		dCom = Map();
 		// Deals are never Won: signing advances Opportunity_Stage; viability stays Open.
 		if(ifnull(deal.get("Opportunity_State"), "").toString() != "Open") { dCom.put("Opportunity_State", "Open"); }
 		if(dCom.size() > 0) { zoho.crm.updateRecord("Deals", dealId, dCom, noTrigger); }
 		automation.logAutomationEvent("routeContactSequence", "Deals", dealId.toString(), "commercial_signed", "live_fields_stamped", {"contact":contactId.toString()});
+	}
+	else if(trigLc == "commercial:signed")
+	{
+		automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "commercial_signed", "no_deal_stamp_skipped", null);
 	}
 
 	// ---- 4. Write Contact sequence fields (+ loss flags) — workflow-suppressed.
@@ -1224,15 +1372,28 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 	zoho.crm.updateRecord("Contacts", contactId, cUpd, noTrigger);
 
 	// ---- 5. Deal handling ----
+	// 2.4: every branch below is Deal-scoped. With no Deal there is nothing to reconcile, so
+	// primaryId stays blank and dealReconciled stays false -- see the gate note at section 6.
 	primaryId = "";
-	cnLookup = deal.get("Contact_Name");
-	if(!isNull(cnLookup) && !isNull(cnLookup.get("id"))) { primaryId = cnLookup.get("id").toString(); }
+	if(!isNull(deal))
+	{
+		cnLookup = deal.get("Contact_Name");
+		if(!isNull(cnLookup) && !isNull(cnLookup.get("id"))) { primaryId = cnLookup.get("id").toString(); }
+	}
 
 	transitionRouted = false;
 	dealReconciled = false;
 	processOutcome = "";
 
-	if(setContactLost == "true")
+	// 2.4: both arms below are Deal-scoped -- the first writes Deal viability, the second
+	// hands the Deal to processDeal. With no Deal neither has anything to act on, so the
+	// Contact-side writes above stand alone and dealReconciled stays false (which section 6
+	// no longer reads as a failure).
+	if(isNull(deal))
+	{
+		automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "deal_handling", "skipped_no_deal", {"contact_lost":setContactLost});
+	}
+	else if(setContactLost == "true")
 	{
 		// Deal viability (absorbs lossPrimaryContact). Only the Primary Contact's loss can
 		// affect the Deal, and the Deal is marked Lost ONLY if no other Open Contact remains
@@ -1311,6 +1472,8 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 		runReconcile = (primaryId == contactId.toString()) || isActivityCtx;
 		if(runReconcile)
 		{
+			// 2.4: reachable only under the `else if` chain opened by `if(isNull(deal))` above,
+			// so processDeal is never called with a blank or "0" Deal id.
 			resultRaw = automation.processDeal(dealId.toString(), ifnull(contextJson, "{}").toString());
 			pdResult = Map();
 			if(!isNull(resultRaw) && resultRaw.toString().trim() != "") { pdResult = resultRaw.toString().toMap(); }
@@ -1362,7 +1525,13 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 		suppressOuter = false;
 		suppressWhy = "";
 		if(transitionRouted == true) { suppressOuter = true; suppressWhy = "nested_transition_routed"; }
-		else if(dealReconciled != true) { suppressOuter = true; suppressWhy = "processDeal_not_success"; }
+		// 2.4: "processDeal did not succeed" and "there was no Deal to reconcile" are different
+		// facts. Only the first is a reason to withhold dispatch. Without the hasDeal test a
+		// Deal-less Contact would fall into processDeal_not_success on every activity Won and
+		// silently never dispatch -- reintroducing, one layer down, exactly the invisible stall
+		// that removing the skip_missing_ids guard was meant to fix.
+		else if(!isNull(deal) && dealReconciled != true) { suppressOuter = true; suppressWhy = "processDeal_not_success"; }
+		else if(isNull(deal)) { suppressWhy = "no_deal_nothing_to_reconcile"; }
 
 		// re-read Contact Sequence_State (it may have moved to Stopped during reconcile)
 		if(!suppressOuter)
@@ -1394,7 +1563,7 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 					rtManaged = ifnull(rt.get("Task_Sequence_Managed"), false).toString();
 					rtType = ifnull(rt.get("Task_Type"), "").toString();
 					rtTaskStatus = ifnull(rt.get("Task_Status"), "").toString();
-					rtIsBlocking = (rtManaged == "true" && rtType != "Scheduled Send" && rtType != "Email Sent" && rtStatus != "Completed" && rtStatus != "Cancelled" && rtStatus != "Deferred" && rtTaskStatus != "Closed");
+					rtIsBlocking = (rtManaged == "true" && rtType != "Scheduled Send" && rtType != "Email Sent" && rtStatus != "Completed" && rtStatus != "Deferred" && rtTaskStatus != "Closed");
 					if(rtWho == contactId.toString() && rtIsBlocking) { suppressOuter = true; suppressWhy = "blocking_task_present"; }
 				}
 			}
@@ -1453,7 +1622,7 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 			// blocked/failed reviews; a "" return here that is NOT an idempotency skip means the
 			// send did not happen).
 			automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "side_email_selected", sideEmailKind, {"deal":dealId.toString(), "stage":sideEmailStage, "step":sideEmailStep.toString(), "trigger":trig});
-			sideMsgId = automation.sendSequencedEmail(contactId.toString(), dealId.toString(), sideEmailStage, sideEmailStep.toLong(), sideEmailKind, "", "");
+			sideMsgId = automation.sendSequencedEmail(contactId.toString(), dealCtxStr, sideEmailStage, sideEmailStep.toLong(), sideEmailKind, "", "");
 			sideResult = "not_sent_or_idempotent";
 			if(ifnull(sideMsgId, "").toString() != "") { sideResult = "sent"; }
 			automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "side_email_dispatch", sideResult, {"deal":dealId.toString(), "kind":sideEmailKind, "stage":sideEmailStage, "message_id":ifnull(sideMsgId, "").toString()});
@@ -1471,7 +1640,7 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 		// email-entry opener: send the opener, then fall through to the shared create_call block.
 		if(action == "send_opener_then_call")
 		{
-			automation.sendSequencedEmail(contactId.toString(), dealId.toString(), nextStage, 1, "opener", "", openerVariant);
+			automation.sendSequencedEmail(contactId.toString(), dealCtxStr, nextStage, 1, "opener", "", openerVariant);
 			action = "create_call";
 			nextStep = "1";
 			dueOffsetDays = 0;
@@ -1504,15 +1673,13 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 			}
 			if(!dupCall)
 			{
-				purposeMap = Map();
-				purposeMap.put("Marketing Consent", "Data Completion");
-				purposeMap.put("Demo Booking", "Book Demo");
-				purposeMap.put("Demo Confirmation", "Confirm Attendance");
-				purposeMap.put("Demo Hosted", "Post-Demo Follow-Up");
-				purposeMap.put("Proposal Preparation", "Commercial Discussion");
-				purposeMap.put("Commercial Agreement", "Commercial Discussion");
-				purposeMap.put("Onboarding", "Onboarding");
-				purposeMap.put("Renewal", "Renewal");
+				// REMOVED 2026-08-11 -- purposeMap and the Call_Purpose_Detail write it fed.
+				// Call_Purpose_Detail is not a live field, so the write was always discarded. It is
+				// deliberately NOT repointed to the live Call_Purpose: call purpose is not
+				// information this model needs -- Stage, Pipeline and Status already encode it, and
+				// the Call Subject carries "<Stage> Call <attempt>". Call_Purpose also sits in the
+				// Unused Fields bin and its picklist vocabulary (Prospecting / Administrative /
+				// Negotiation / Demo / Project / Support) does not match these values anyway.
 				if(dueOffsetDays > 0)
 				{
 					dueBase = automation.calculateBusinessDate(zoho.currenttime, dueOffsetDays, "business_days");
@@ -1524,13 +1691,16 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 				}
 				callMap = Map();
 				callMap.put("Subject", nextStage + " Call " + callStep);
-				callMap.put("What_Id", dealId);
-				callMap.put("$se_module", "Deals");
+				// 2.4: What_Id is optional context. Who_Id (set below) is the required link.
+				if(!isNull(deal))
+				{
+					callMap.put("What_Id", dealId);
+					callMap.put("$se_module", "Deals");
+				}
 				callMap.put("Who_Id", contactId);
 				callMap.put("Sequence_Managed", "Yes");
 				callMap.put("Sequence_Stage", nextStage);
 				callMap.put("Sequence_Attempt", callStep);
-				callMap.put("Call_Purpose_Detail", ifnull(purposeMap.get(nextStage), "Data Completion").toString());
 				callMap.put("Call_Type", "Outbound");
 				callMap.put("Call_Start_Time", callDue);
 				callMap.put("Outgoing_Call_Status", "Scheduled");
@@ -1552,7 +1722,7 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 		}
 		else if(action == "send_email_now")
 		{
-			automation.sendSequencedEmail(contactId.toString(), dealId.toString(), nextStage, emailStep.toLong(), emailKind, "", "");
+			automation.sendSequencedEmail(contactId.toString(), dealCtxStr, nextStage, emailStep.toLong(), emailKind, "", "");
 		}
 		else if(action == "schedule_email")
 		{
@@ -1560,46 +1730,19 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 			// only need the deterministic payload + a generic subject for the wake-up Task.
 			if(emailKind != "")
 			{
-				schedPayload = "ScheduledSend|stage=" + nextStage + "|step=" + emailStep + "|kind=" + emailKind;
-				schedDue = zoho.currenttime.toString("yyyy-MM-dd");
-				if(dueOffsetDays > 0)
+				// ---- WORK ITEM 2.1-2.3: delegated to the shared scheduler ----
+				// The payload build, business-date calculation, dedupe scan and create map that
+				// used to be inlined here now live in _util_scheduleCadenceStep, because
+				// sendScheduledEmailFromTask needs the identical behaviour to advance the chain
+				// from step n to step n+1. Two implementations of "park the next step" would drift.
+				//
+				// The dedupe also had to change scope: it read the DEAL's Task list (falling back
+				// to a What_Id search), so with no Deal it saw nothing and would have re-booked the
+				// same step on every pass. The helper dedupes on Who_Id.
+				schedResult = automation.scheduleCadenceStep(contactId.toString(), dealCtxStr, nextStage, emailStep, emailKind, dueOffsetDays, dealOwnerId);
+				if(schedResult == "")
 				{
-					schedBase = automation.calculateBusinessDate(zoho.currenttime, dueOffsetDays, "business_days");
-					schedDue = schedBase.toDateTime("yyyy-MM-dd HH:mm:ss").toString("yyyy-MM-dd");
-				}
-				schedDup = false;
-				exSched = zoho.crm.getRelatedRecords("Tasks", "Deals", dealId);
-				if(isNull(exSched) || exSched.size() == 0 || exSched.toString().startsWith("{\"code\""))
-				{
-					exSched = zoho.crm.searchRecords("Tasks", "(What_Id:equals:" + dealId + ")");
-				}
-				if(!isNull(exSched) && exSched.size() > 0 && !exSched.toString().startsWith("{\"code\""))
-				{
-					for each xt in exSched
-					{
-						xtWho = "";
-						xwl = xt.get("Who_Id");
-						if(!isNull(xwl) && !isNull(xwl.get("id"))) { xtWho = xwl.get("id").toString(); }
-						if(xtWho == contactId.toString() && ifnull(xt.get("Status"), "").toString() != "Completed" && ifnull(xt.get("Status"), "").toString() != "Cancelled" && ifnull(xt.get("Description"), "").toString().contains(schedPayload)) { schedDup = true; }
-					}
-				}
-				if(!schedDup)
-				{
-					schedTask = Map();
-					schedTask.put("Subject", "Scheduled Email: " + nextStage + " " + emailKind + " " + emailStep);
-					schedTask.put("Status", "Not Started");
-					schedTask.put("What_Id", dealId);
-					schedTask.put("$se_module", "Deals");
-					schedTask.put("Who_Id", contactId);
-					schedTask.put("Task_Sequence_Managed", true);
-					schedTask.put("Task_Type", "Scheduled Send");
-					schedTask.put("Task_Sequence_Stage", nextStage);
-					schedTask.put("Blocks_Sequence", "No");
-					schedTask.put("Due_Date", schedDue);
-					schedTask.put("Description", schedPayload + "\n(Awaiting Due_Date " + schedDue + " to send.)");
-					if(dealOwnerId != "") { schedTask.put("Owner", dealOwnerId); }
-					zoho.crm.createRecord("Tasks", schedTask);
-					automation.logAutomationEvent("routeContactSequence", "Tasks", "", "schedule_email", "scheduled", {"contact":contactId.toString(), "deal":dealId.toString(), "payload":schedPayload, "due":schedDue});
+					automation.logAutomationEvent("routeContactSequence", "Contacts", contactId.toString(), "schedule_email", "not_scheduled", {"stage":nextStage, "step":emailStep.toString(), "kind":emailKind});
 				}
 			}
 		}
@@ -1633,13 +1776,20 @@ void automation.routeContactSequence(string contactIdStr, string dealIdStr, stri
 				// Setup / Manual Review): NEW/WORKING RULE -> native Status=In Progress +
 				// Task_Status=Working (Task_State stays Open). Not an internal scheduler record.
 				stTask.put("Status", "In Progress");
-				stTask.put("What_Id", dealId);
-				stTask.put("$se_module", "Deals");
+				// 2.4: What_Id is optional context. Who_Id (set below) is the required link.
+				if(!isNull(deal))
+				{
+					stTask.put("What_Id", dealId);
+					stTask.put("$se_module", "Deals");
+				}
 				stTask.put("Who_Id", contactId);
 				stTask.put("Task_Sequence_Managed", true);
 				stTask.put("Task_Type", stTaskType);
 				stTask.put("Task_Sequence_Stage", nextStage);
-				stTask.put("Blocks_Sequence", "Yes");
+				// 5.1: Blocks_Sequence writer removed. RETIRE, zero readers -- blocking is COMPUTED
+	// from Task_Sequence_Managed / Task_Type / Status / Task_Status (the isBlockingTask
+	// derivation), so the persisted field added nothing. Writers must go BEFORE the field is
+	// deleted: reading a deleted api_name voids the whole map, taking valid keys with it.
 				// Field-update contract for the rep. Draft Commercials REQUIRES the commercial-evidence
 				// fields (handleTaskCompletion builds the Draft Quote package from them and bounces the
 				// task back if they are missing); other stage tasks just need Task State = Won. All other

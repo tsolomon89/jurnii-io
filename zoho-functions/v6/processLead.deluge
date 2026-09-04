@@ -14,17 +14,18 @@ void automation.processLead(string lead_id)
 	//   2. Resolve / create the canonical Account
 	//   3. Convert the Lead (creates Contact + links to canonical Account)
 	//   4. Enrich Contact from Lead (idempotent, never regress Stage)
-	//   5. PER-PRODUCT FAN-OUT: normalizeToProductQuoteTuples("Leads", lead_id) yields
-	//      one bucket per resolved Product (product-interest-only or with contract terms).
-	//      For each bucket: createOrReuseProductDeal (Deal = Account x Product), seed
-	//      Lead-only Deal fields, then processDeal (import_bootstrap when terms exist,
-	//      plain reconcile otherwise). Unresolved evidence + conflicts -> Manual Review.
+	//   5. ONE ACCOUNT DEAL + Quote bootstrap: normalizeToProductQuoteTuples("Leads", lead_id)
+	//      yields one bucket per resolved Product. Every bucket's terms are CONCATENATED and
+	//      bootstrapped onto the Account's SINGLE Deal (resolveOrCreateAccountDeal), where
+	//      processDeal 5b derives one QUOTE PER PRODUCT. Unresolved evidence + plan-type
+	//      conflicts -> Manual Review.
 	//   6. processContact(newContactId) fires via WF001b2 (Contacts-create) -> activation.
 	//
-	// v6-product-deal fan-out: the single account-level "::active" Deal is GONE. A Deal is
-	// ALWAYS Account x Product (Deal_Key = accountKey::productKey via createOrReuseProductDeal).
-	// The inline flat termsEncoded builder is GONE; normalizeToProductQuoteTuples (adapter) now
-	// owns evidence collection + encoding. No legacy migration / no "::active" handling (fresh org).
+	// ⚠ CORRECTED (work item 4.3): the per-Product Deal fan-out is GONE, along with the
+	// "::active" account-level key it replaced. One Account holds ZERO OR ONE persistent Deal,
+	// keyed Deal_Key == Account_Key with no "::" suffix, and a Product enters as a QUOTE under
+	// it -- never as another Deal. normalizeToProductQuoteTuples still owns evidence collection
+	// and encoding; what changed is that its buckets become Quotes rather than Deals.
 	//
 	// Graph enrichment writes suppress Contact workflow recursion; Contact create is the
 	// single deterministic downstream step (processLead -> processContact -> processDeal).
@@ -165,7 +166,13 @@ void automation.processLead(string lead_id)
 	if(leadRecord.get("Contact_AOR_Region") != null) { for each item in leadRecord.get("Contact_AOR_Region") { leadContactAORRegion.add(item.toString()); } }
 	if(leadRecord.get("Contact_AOR_Sub_Region") != null) { for each item in leadRecord.get("Contact_AOR_Sub_Region") { leadContactAORSubRegion.add(item.toString()); } }
 	leadContactAORRegional = leadRecord.get("Contact_AOR_Regional");
-	leadRoleAOR = ifnull(leadRecord.get("Role_AOR"), "").toString().trim();
+	// Contact_AOR (not "Role_AOR" -- that api_name does not exist on Leads or Contacts, so this
+	// read was always blank and the mirroring write below was silently discarded).
+	//
+	// OPEN QUESTION: Contact_AOR has no code reader anywhere in v6 and no email-template merge
+	// reference. This conversion copy is its only writer. The field is retained by the field owner,
+	// so the copy is kept for now; whether conversion should populate it at all is unresolved.
+	leadContactAOR = ifnull(leadRecord.get("Contact_AOR"), "").toString().trim();
 
 	// Company AOO fields from Lead (lists for multiselect)
 	leadCompanyAOOContinent = List();
@@ -215,35 +222,26 @@ void automation.processLead(string lead_id)
 	leadContactRole = ifnull(leadRecord.get("Contact_Role1"), "").toString().trim();
 	if((leadJobTitle != "" || leadJobTitleRaw != "") && leadContactRole == "")
 	{
-		resolvedRole = if(leadJobTitle != "", "Decision Maker", "");
+		// WORK ITEM 4.7: one title->role authority, and BLANK STAYS BLANK.
+		// This seeded resolvedRole = "Decision Maker" whenever a governed Job_Title was present,
+		// so any title matching none of the three corpora was recorded as a Decision Maker --
+		// manufactured authority that then outranked real Influencers in the leading-Contact
+		// election. roleForTitle returns "" for an unresolved title.
 		titleKey = if(leadJobTitle != "", leadJobTitle.trim().toLowerCase(), leadJobTitleRaw.trim().toLowerCase());
-
-		dmTitles = {"automation & ai transformation director","casino director","chief architect","chief commercial officer","chief customer officer","chief data officer","chief executive officer","chief financial officer","chief marketing officer","chief online gaming","chief operating officer","chief product officer","chief revenue officer","chief strategy officer","chief systems officer","chief technology officer","chief trading officer","chief transformation officer","co-founder","commercial director","commerical director","company director","customer experience director","data director","design director","digital director","digital experience director","director of digital product","director of gaming","director of information technology","director of operations","director of product","director of product & operations management","director of product analysis","director of product operations","director of strategy & customer experience","director of technology","director of ux & growth","director product & tech","director product & technology","experimentation lead","founder","fp&a director","gaming director","general manager","global cmo","global cxo","global director of product support & services","global head of product","global product director","global product manager","group cfo","group chief operating officer","group gaming director emea","group head of commercial gaming operations","group product manager","group strategy director","group trading director","growth director","head of acquisition","head of analytics","head of bi","head of brand","head of brand & creative","head of brand marketing","head of casino","head of casino business development","head of commercial","head of crm","head of cro","head of customer experience","head of customer marketing","head of customer value management","head of cx","head of data platform","head of design","head of digital","head of digital product","head of engineering","head of finance","head of gaming","head of gaming commercial","head of gaming operations","head of gaming product","head of group marketing","head of growth","head of igaming","head of infrastructure","head of internal audit","head of international horse racing","head of marketing","head of online","head of online & customer acquisition","head of online casino operations","head of product","head of product design","head of product marketing","head of program product + chief of staff","head of promotions","head of proposition","head of research","head of retention","head of special product development","head of sports","head of sportsbook","head of strategy & performance","head of technology","head of ux","lifecycle director","manager of global product management","managing director","market manager","marketing director","operational product supplier manager","owner","performance marketing director","president","product design director","product director","product management lead","product operations director","promotions director","proposition director","regional director","revenue director","senior global brand manager","senior ia & ai business transformation architect","senior product manager","senior vice president product development","sportsbook director","svp product","ux director","vice managing director","vice president","vice president & general manager","vice president marketing","vice president of commercials","vice president of finance","vice president of global operations & media","vice president of operations","vice president of pricing strategy","vice president of product","vice president of product development","vice president of sales & marketing","vice president product management","vice president risk","vp customer experience","vp growth","vp product"};
-		if(dmTitles.contains(titleKey))
-		{
-			resolvedRole = "Decision Maker";
-		}
-		else
-		{
-			euTitles = {"advanced analytics lead","ai & automation lead","ai lead","analytics engineer","attribution manager","behavioural analyst","betting operations manager","bi analyst","bi developer","bonus manager","brand & marketing director","brand & product marketing lead","business operations manager","campaign manager","casino manager","casino product manager","commercial analyst","competitor intelligence analyst","country manager","crm director","crm manager","cro director","cro manager","cro product manager","customer excellence department head","customer experience insights manager","customer experience manager","customer insights product owner","customer journey manager","cx manager","data layer specialist","data visualisation analyst","design lead","design manager","design systems engineer","design systems lead","digital analyst","digital product manager","director customer experience & strategy","director of applied intelligence","director of cx & optimisation","director of digital marketing","director of marketing","director of marketing & affiliation","director of marketing communications","director of poker & bingo","director of poker operations","director of sportsbook","director of strategy & business delivery","director of user experience","experience researcher","experimentation manager","frontend developer","gaming product manager","generosity analytics & segmentation senior manager","go-to-market manager","head of experience","head of generosity transformation","head of performance","head of pricing strategy & insights","head of product analytics","head of product growth","head of sales","head of seo","head of trade marketing","head of ux & design","head trader","igaming product manager","information & product analysis specialist manager","interaction designer","lead product designer","lifecycle manager","live casino manager","manager egaming","manager product management","manager ux/ui & da gaming","market analyst","marketing analyst","marketing operations manager","offer manager","optimisation manager","paid search executive","planning & execution director","player engagement manager","pricing analyst","pricing strategy director","product & design operations specialist","product & experience operations manager","product analyst","product analytics","product designer","product experience director","product insights manager","product manager","product manager & qa lead","product marketing manager","product operations manager","product owner","promotions manager","proposition manager","regional head of digital","research manager","retention manager","senior crm marketing specialist","senior cvm manager","senior director sportsbook product","senior generosity transformation manager","senior product designer","senior product development manager","senior project leader","senior research manager","senior ux researcher","sports director","sportsbook operations manager","sportsbook product manager","sportsbook trading manager","tagging specialist","tracking specialist","trading manager","ui designer","user experience research manager","user research lead","user research manager","user researcher","ux analyst","ux architect","ux designer","ux researcher","voice of customer manager","web analyst","web developer","website manager","website product manager"};
-			if(euTitles.contains(titleKey))
-			{
-				resolvedRole = "End User";
-			}
-			else
-			{
-				infTitles = {"account executive","acquisition manager","administrative assistant","art director","associate director of product","bi manager","brand manager","business development director","business development executive","campaign strategy manager","chief assurance officer","chief of staff","client director","client partner","commercial finance manager","commercial manager","commercial planning manager","compliance manager","compliance product manager","consultant","creative director","creative lead","customer operations manager","data analyst","delivery director","deputy director","designer","director","director & general manager","director of corporate compliance","director of corporate security","director of engineering","director of generosity transformation","director of hospitality & general services","director of hotel sales","director of payments","director of people & culture","director of product compliance","director of product design","director of product development","director of product management","director of project management","director of trading strategy","engineering manager","experience director (product, cx, data, research & pmo)","finance business partner","fp&a manager","freelance writer","frontend lead","head cashier","head of affiliates","head of aml","head of aml, fraud & risk","head of b2b","head of backend engineering","head of business development","head of compliance","head of corporate communications","head of creative","head of creative research & insights","head of customer care","head of customer excellence","head of customer service","head of customer support","head of customer support & vip accounts management","head of facility & workplace strategy","head of greyhound racing operations","head of human resources","head of investor relations & capital deployment","head of legal","head of liquidity","head of live casino","head of operations","head of operations & support","head of partnerships","head of people & culture","head of propositions","head of social","head of streaming operations","head of support department","head of trading","head of trading & risk","head of vip","head of vip services","human resources business partner","human resources director","insight manager","legal counsel","lifecycle marketing manager","live ops product manager","live ops product manager, head of content","m&a principal","marketing manager","obg strategy","paid search manager","paid social manager","payment product manager","performance marketing manager","player experience lead","player operations manager","player protection lead","player value manager","poker product manager","principal product manager","product & customer support manager","product & insight director","product lead","product release manager","program manager","regulatory affairs manager","responsible gambling manager","safer gambling analyst","safer gambling lead","sales manager","senior business development manager","senior commercial manager","senior ecommerce consultant","senior graphic designer","senior legal & regulatory counsel","senior manager","senior manager new business & sales executive","senior product owner","senior sales manager","sportsbook property director kentucky","strategy consultant","supplier manager","team lead hr business partner","technical director","trading graduate","uk news editor","ux/ui designer","vice president of human resources","vip manager"};
-				if(infTitles.contains(titleKey))
-				{
-					resolvedRole = "Influencer";
-				}
-			}
-		}
+		resolvedRole = automation.roleForTitle(leadJobTitle, leadJobTitleRaw);
 
 		if(resolvedRole != "")
 		{
 			info "Resolved Contact_Role for Lead: title='" + titleKey + "' → role='" + resolvedRole + "'";
-			leadStampResp = zoho.crm.updateRecord("Leads", cleanId.toLong(), {"Contact_Role1": resolvedRole});
+			// WORK ITEM 1.2 -- re-entrancy. This was a bare 3-arg updateRecord, so it fired
+			// triggers and re-entered WF001a (Leads, create_or_edit, repeat=true, NO criteria) on
+			// the very Lead currently being converted. The guard earlier in this function stops an
+			// infinite loop, not a second CONCURRENT conversion -- which is the live-corroborated
+			// cause of the two Jurnii E2E Deals sharing one Deal_Key. Suppressing triggers here is
+			// behaviour-preserving for the stamp itself: nothing downstream needs WF001a to re-run
+			// to observe Contact_Role1, because the value is carried forward in leadContactRole
+			// below and re-read from the Lead tuple during conversion.
+			leadStampResp = zoho.crm.updateRecord("Leads", cleanId.toLong(), {"Contact_Role1": resolvedRole}, {"trigger":List()});
 			info "Lead Contact_Role stamp resp: " + leadStampResp;
 			leadContactRole = resolvedRole;
 		}
@@ -288,55 +286,82 @@ void automation.processLead(string lead_id)
 	// a single source of truth for evidence -> tuple encoding shared with processContact/processDeal.
 
 	// ---- 2. Derive Account_Key ----
-	normalizedDomain = "";
-	if(website != "")
-	{
-		normalizedDomain = website.toLowerCase().replaceAll("https://", "").replaceAll("http://", "").replaceAll("www.", "");
-		if(normalizedDomain.contains("/")) { normalizedDomain = normalizedDomain.toList("/").get(0); }
-	}
-	else if(email != "" && email.contains("@"))
-	{
-		domainPart = email.getSuffix("@").toLowerCase();
-		freeDomains = {"gmail.com", "yahoo.com", "hotmail.com", "outlook.com", "aol.com", "icloud.com"};
-		if(!freeDomains.contains(domainPart)) { normalizedDomain = domainPart; }
-	}
-
-	accountKey = "";
-	if(normalizedDomain != "") { accountKey = normalizedDomain; }
-	else if(company != "") { accountKey = company.replaceAll("[\\(\\)\\:\\,]", "").trim().toLowerCase(); }
-	else { accountKey = "unknown::" + cleanId; }
-	if(accountKey.length() > 200) { accountKey = accountKey.substring(0, 200); }
+	// WORK ITEM 4.7a. Delegated to the single authority. This site's precedence was
+	// Website -> Email domain -> Company -> unknown::<leadId>, which is exactly the canonical
+	// order, so the derivation here is behaviour-identical -- it was the OTHER three sites that
+	// diverged. Consolidating removes the possibility of them drifting apart again.
+	accountKey = automation.deriveAccountKey(website, email, company, cleanId);
 
 	// ---- 3. Resolve / create canonical Account ----
+	//
+	// WORK ITEM 4.7a (K5/K6). This used to run three searches inline -- Account_Key, then
+	// Website, then Account_Name -- and take `.get(0)` on each. Two defects:
+	//
+	//   1. NO K6. More than one match resolved to whichever the API happened to list first, so
+	//      a company that had accidentally forked into two Accounts silently got one of them,
+	//      and which one could vary between runs. This is the MAIN Account-creation path (Lead
+	//      conversion births nearly every Account), so it was the worst place to guess.
+	//   2. The Website / Account_Name searches matched RAW FIELD values, so a Lead with
+	//      Company = "Acme Ltd" would not find an Account keyed "acme ltd" unless Account_Name
+	//      was byte-identical.
+	//
+	// Both searches are preserved -- they are the only way to match an Account whose
+	// Account_Key was never stamped -- but they now live in _util_resolveAccount as its tier-2
+	// pass, where they feed the same K6 match-count contract as the key-form searches.
 	accountId = "";
 	accountRecord = null;
 
-	searchAcc = zoho.crm.searchRecords("Accounts", "(Account_Key:equals:" + accountKey + ")");
-	if(searchAcc != null && searchAcc.size() > 0 && !searchAcc.toString().startsWith("{\"code\""))
-	{
-		accountRecord = searchAcc.get(0);
-		accountId = accountRecord.get("id").toString();
-	}
+	plAccRaw = automation.resolveAccount(website, email, company, cleanId);
+	plAcc = Map();
+	if(!isNull(plAccRaw) && plAccRaw.toString().trim() != "") { plAcc = plAccRaw.toString().toMap(); }
+	plAccStatus = ifnull(plAcc.get("status"), "error").toString();
 
-	if(accountId == "" && normalizedDomain != "")
+	if(plAccStatus == "one")
 	{
-		searchAcc = zoho.crm.searchRecords("Accounts", "(Website:equals:" + normalizedDomain + ")");
-		if(searchAcc != null && searchAcc.size() > 0 && !searchAcc.toString().startsWith("{\"code\""))
+		// K1/K4: reuse the Account and its immutable key. The key this Lead's own evidence would
+		// derive is discarded -- stable beats forking.
+		accountId = ifnull(plAcc.get("account_id"), "").toString();
+		accountKey = ifnull(plAcc.get("account_key"), "").toString();
+		accountRecord = zoho.crm.getRecordById("Accounts", accountId.toLong());
+		if(ifnull(plAcc.get("reason"), "").toString() == "reused_unkeyed_account")
 		{
-			accountRecord = searchAcc.get(0);
-			accountId = accountRecord.get("id").toString();
+			// Matched on a raw field with no Account_Key stamped. K1 protects only a NON-blank
+			// key, so stamp the derived one now and read it back.
+			zoho.crm.updateRecord("Accounts", accountId.toLong(), {"Account_Key": accountKey}, {"trigger": List()});
+			plKeyBack = "";
+			plReread = zoho.crm.getRecordById("Accounts", accountId.toLong());
+			if(!isNull(plReread) && !isNull(plReread.get("id")))
+			{
+				plKeyBack = ifnull(plReread.get("Account_Key"), "").toString().trim();
+				accountRecord = plReread;
+			}
+			if(plKeyBack != accountKey)
+			{
+				automation.createManualReview("", "", "account_key_ambiguous", "Account " + accountId + " matched this Lead on Website/Account_Name but had no Account_Key, and the stamp did not read back (wrote '" + accountKey + "', read '" + plKeyBack + "'). Nothing downstream was created against an unverified key.");
+				automation.logAutomationEvent("processLead", "Accounts", accountId, "account_key", "readback_mismatch", {"wrote":accountKey, "read":plKeyBack});
+				return;
+			}
 		}
 	}
-
-	if(accountId == "" && company != "")
+	else if(plAccStatus == "many")
 	{
-		safeCompany = company.replaceAll("[\\(\\)\\:\\,]", "").trim();
-		searchAcc = zoho.crm.searchRecords("Accounts", "(Account_Name:equals:" + safeCompany + ")");
-		if(searchAcc != null && searchAcc.size() > 0 && !searchAcc.toString().startsWith("{\"code\""))
-		{
-			accountRecord = searchAcc.get(0);
-			accountId = accountRecord.get("id").toString();
-		}
+		// K6: STOP. Name every candidate, create nothing, convert nothing. Converting the Lead
+		// here would attach a Contact to an arbitrarily-chosen Account and make the fork worse.
+		automation.createManualReview("", "", "account_key_ambiguous", "Lead " + cleanId + " matches MORE THAN ONE Account (" + ifnull(plAcc.get("candidates"), "").toString() + "). The Lead was NOT converted and no Account, Deal or Quote was created. Consolidate the Accounts by hand; automation will never merge or re-key them.");
+		automation.logAutomationEvent("processLead", "Leads", cleanId, "account_resolution", "multiple_accounts", {"candidates":ifnull(plAcc.get("candidates"), "").toString()});
+		return;
+	}
+	else if(plAccStatus != "none")
+	{
+		// The lookup itself failed. Do NOT fall through and create -- that is how a company that
+		// already has an Account acquires a second one.
+		automation.logAutomationEvent("processLead", "Leads", cleanId, "account_resolution", "resolve_failed", {"reason":ifnull(plAcc.get("reason"), "").toString()});
+		return;
+	}
+	else
+	{
+		// K6 zero -> the valid new-company case. accountKey stays as derived; the create below runs.
+		accountKey = ifnull(plAcc.get("derived_key"), accountKey).toString();
 	}
 
 	if(accountId == "")
@@ -547,18 +572,18 @@ void automation.processLead(string lead_id)
 	{
 		updCon.put("Marketing_Consent", true);
 	}
-	// Product_Interest_Staging is a read-only formula. Lead Product Interest is
-	// preserved below by creating Contacts_X_Products junction rows.
-	if(importedRecordType != "" && ifnull(contactRecord.get("Contact_Source_Class"), "") != importedRecordType)
-	{
-		updCon.put("Contact_Source_Class", importedRecordType);
-	}
+	// Lead Product Interest is preserved below by creating Contacts_X_Products junction rows.
+	//
+	// REMOVED 2026-08-11 -- the Contact_Source_Class write. That api_name does not exist on
+	// Contacts, so the write was silently discarded. The source class IS recorded, on the
+	// Account: Accounts.Account_Source_Class is written from the same importedRecordType at
+	// the Account create/update above, and the Contact belongs to that Account.
 	if(leadContactAORContinent.size() > 0 && (contactRecord.get("Contact_AOR_Continent") == null || contactRecord.get("Contact_AOR_Continent").size() == 0)) { updCon.put("Contact_AOR_Continent", leadContactAORContinent); }
 	if(leadContactAORCountry.size() > 0 && (contactRecord.get("Contact_AOR_Country") == null || contactRecord.get("Contact_AOR_Country").size() == 0)) { updCon.put("Contact_AOR_Country", leadContactAORCountry); }
 	if(leadContactAORRegion.size() > 0 && (contactRecord.get("Contact_AOR_Region") == null || contactRecord.get("Contact_AOR_Region").size() == 0)) { updCon.put("Contact_AOR_Region", leadContactAORRegion); }
 	if(leadContactAORSubRegion.size() > 0 && (contactRecord.get("Contact_AOR_Sub_Region") == null || contactRecord.get("Contact_AOR_Sub_Region").size() == 0)) { updCon.put("Contact_AOR_Sub_Region", leadContactAORSubRegion); }
 	if(leadContactAORRegional != null && contactRecord.get("Contact_AOR_Regional") == null) { updCon.put("Contact_AOR_Regional", leadContactAORRegional); }
-	if(leadRoleAOR != "" && ifnull(contactRecord.get("Role_AOR"), "") == "") { updCon.put("Role_AOR", leadRoleAOR); }
+	if(leadContactAOR != "" && ifnull(contactRecord.get("Contact_AOR"), "") == "") { updCon.put("Contact_AOR", leadContactAOR); }
 	if(mqCompletedAt != null && contactRecord.get("Contact_Completed_Marketing_Qualification_At") == null) { updCon.put("Contact_Completed_Marketing_Qualification_At", mqCompletedAt); }
 	if(dbCompletedAt != null && contactRecord.get("Contact_Completed_Demo_Booking_At") == null) { updCon.put("Contact_Completed_Demo_Booking_At", dbCompletedAt); }
 	if(dcCompletedAt != null && contactRecord.get("Contact_Completed_Demo_Confirmation_At") == null) { updCon.put("Contact_Completed_Demo_Confirmation_At", dcCompletedAt); }
@@ -579,14 +604,27 @@ void automation.processLead(string lead_id)
 		info "Contact update resp (incl. Contact_Role, trigger suppressed): " + contactUpdResp;
 	}
 
-	// ---- 6. PER-PRODUCT DEAL FAN-OUT (v6-product-deal) ----
-	// The single account-level "::active" Deal is GONE. normalizeToProductQuoteTuples owns evidence
-	// collection + encoding and returns one bucket per RESOLVED Product (each with its own
-	// terms_encoded, "" for product-interest-only), plus the unresolved evidence and plan-type
-	// conflict lists. For each bucket we guarantee the Deal = Account x Product box via
-	// createOrReuseProductDeal (Deal_Key = accountKey::productKey), seed the Lead-only Deal fields
-	// the helper does not set, then hand off to processDeal (import_bootstrap when the bucket carries
-	// contract terms, plain reconcile otherwise). No generic Account-level Deal is ever created.
+	// ======================================================================================
+	// ---- 6. RESOLVE THE ACCOUNT'S ONE DEAL, then bootstrap every term onto it ----
+	//
+	// WORK ITEM 4.3. This replaces the per-product Deal fan-out: one createOrReuseProductDeal
+	// call per resolved Product bucket (Deal_Key = accountKey::productKey), a seed write per
+	// Deal, and a processDeal call per Deal.
+	//
+	// Under the approved ontology a Product enters as a QUOTE under the Account's single Deal.
+	// So the buckets do not become Deals -- their terms are CONCATENATED into ONE
+	// import_bootstrap call, and processDeal 5b derives one Quote per term. That works without
+	// changing the encoding: terms are ";"-joined and processDeal already splits on ";", and each
+	// term carries its own product name at field index 1 plus its own Quote_Type at index 0, so a
+	// mixed Acquisition/Expansion/Renewal, multi-Product import produces the right set of Quotes
+	// under one Deal. That per-term encoding is why a single call is now correct where a single
+	// importCtx-level opportunityType would have been wrong.
+	//
+	// ⚠ PRESERVED: tuple-capture-before-convertLead. prodBuckets / unresolvedList / conflictList
+	// are captured PRE-convert because getRecordById on a converted Lead returns null. Nothing
+	// below re-reads the Lead. This is the constraint the plan calls out explicitly, and the
+	// collapse does not weaken it -- it needs the tuples in exactly the same place.
+	// ======================================================================================
 	accountName = if(company != "", company, accountKey);
 	if(accountRecord != null && ifnull(accountRecord.get("Account_Name"), "") != "") { accountName = accountRecord.get("Account_Name").toString(); }
 
@@ -595,9 +633,11 @@ void automation.processLead(string lead_id)
 
 	// prodBuckets / unresolvedList / conflictList were captured PRE-convert (before convertLead)
 	// because getRecordById on a converted Lead returns null. Do NOT re-read the lead here.
-	info "6: fan-out using pre-convert tuples: products=" + prodBuckets.size() + " unresolved=" + unresolvedList.size() + " conflicts=" + conflictList.size();
+	info "6: single-Deal bootstrap using pre-convert tuples: products=" + prodBuckets.size() + " unresolved=" + unresolvedList.size() + " conflicts=" + conflictList.size();
 
-	// Unresolved product evidence -> Contact-only Manual Review (no Deal exists for it). Never discard.
+	// Unresolved product evidence -> Contact-only Manual Review. Never discard. This is
+	// UNCHANGED: unresolved evidence has no Quote and no Deal to attach to, and 4.4 keeps
+	// [product_unresolved] as a genuine data-quality signal rather than a Deal-identity artefact.
 	for each ur in unresolvedList
 	{
 		urRaw = ifnull(ur.get("raw"), "").toString().trim();
@@ -609,67 +649,92 @@ void automation.processLead(string lead_id)
 		}
 	}
 
-	// Fan out one Product Deal per resolved bucket.
-	for each bucket in prodBuckets
+	// ---- one Deal for the Account ----
+	plDealRaw = automation.resolveOrCreateAccountDeal(accountId, accountKey, accountName, "");
+	plDeal = Map();
+	if(!isNull(plDealRaw) && plDealRaw.toString().trim() != "") { plDeal = plDealRaw.toString().toMap(); }
+
+	dealId = "";
+	if(ifnull(plDeal.get("valid"), "false").toString() == "true")
 	{
-		bProductId = ifnull(bucket.get("product_id"), "").toString().trim();
-		bProductName = ifnull(bucket.get("product_name"), "").toString().trim();
-		bProductKey = ifnull(bucket.get("product_key"), "").toString().trim();
-		bTermsEncoded = ifnull(bucket.get("terms_encoded"), "").toString();
-		if(bProductKey == "") { continue; }
+		dealId = ifnull(plDeal.get("deal_id"), "").toString().trim();
+	}
 
-		cprJson = automation.createOrReuseProductDeal(accountId, accountKey, bProductId, bProductName, bProductKey, accountName);
-		cpr = cprJson.toMap();
-		if(ifnull(cpr.get("valid"), "false") != "true")
+	if(dealId == "" || !dealId.matches("[0-9]+"))
+	{
+		plReason = ifnull(plDeal.get("reason"), "unknown").toString();
+		plCands = ifnull(plDeal.get("candidates"), "").toString();
+		if(plReason == "multiple_deals_for_account" || plReason == "duplicate_deal_key_after_insert")
 		{
-			automation.createManualReview(newContactId, "", "product_unresolved", "Could not create/reuse the Product Deal for '" + bProductName + "' (" + bProductKey + "): " + ifnull(cpr.get("reason"), "") + ".");
-			automation.logAutomationEvent("processLead", "Contacts", newContactId, "product_deal_unavailable", ifnull(cpr.get("reason"), "").toString(), {"product_key":bProductKey});
-			continue;
+			automation.createManualReview(newContactId, "", "multiple_deals_for_account", "This Lead's Account resolves to MORE THAN ONE Deal (" + plCands + "). Under the approved model an Account holds at most one persistent Deal, so this is a concurrency defect. No Deal was seeded and no Quote was bootstrapped. Consolidate by hand; never merge or re-key automatically.");
 		}
-		dealId = ifnull(cpr.get("deal_id"), "").toString().trim();
-		if(dealId == "" || dealId == "null") { continue; }
-
-		// Seed Lead-only Deal fields the helper does not set (suppress triggers; idempotent).
-		// createOrReuseProductDeal already sets Deal_Name/Account_Name/Deal_Key/Deal_Product/
-		// Deal_Product_Key/Opportunity_State=Open/Opportunity_Status=New/Closing_Date.
+		else
+		{
+			automation.createManualReview(newContactId, "", "product_unresolved", "Could not resolve or create the Account's Deal (" + plReason + "). No Quote was bootstrapped from this Lead's contract terms.");
+		}
+		automation.logAutomationEvent("processLead", "Contacts", newContactId, "account_deal_unresolved", plReason, {"account":accountId, "candidates":plCands});
+	}
+	else
+	{
+		// ---- seed the Lead-only Deal fields the resolver does not set (idempotent) ----
+		// resolveOrCreateAccountDeal sets Deal_Name / Account_Name / Deal_Key / Pipeline /
+		// Opportunity_State / Opportunity_Status / Closing_Date. It deliberately writes NO
+		// Deal_Product or Deal_Product_Key -- both are retiring and a Deal has no Product identity.
 		seedDeal = Map();
 		seedDeal.put("Contact_Name", newContactId);
 		if(leadSource != "") { seedDeal.put("Lead_Source", leadSource); }
-		// Company_Tier mirror on the Deal (Account is authoritative; see 6a). Target ACV benchmark only.
-		if(leadCompanyTier != "") { seedDeal.put("Company_Tier", leadCompanyTier); }
+		// 4.9: the Deals.Company_Tier mirror is RETIRED (zero behavioural readers). The ACCOUNT is
+		// the authoritative tier and processDeal reads it live when deriving the Target-ACV
+		// estimate, so seeding a Deal-level copy only created a second version of one fact.
+		// Account seeding still happens at Account create/reuse above and in 6a below.
 		if(leadLostReasons != "")
 		{
-			// Lead arrived already lost -> the Product Deal is Lost/Closed (Deals never Won).
+			// Lead arrived already lost -> the Deal is Lost/Closed (Deals are never Won).
 			seedDeal.put("Opportunity_State", "Lost");
 			seedDeal.put("Opportunity_Status", "Closed");
 			seedDeal.put("Lost_Reasons", leadLostReasons);
 		}
 		zoho.crm.updateRecord("Deals", dealId.toLong(), seedDeal, noTrig);
 
-		// Hand off to processDeal (single commercial owner). import_bootstrap when this bucket
-		// carries contract terms; plain reconcile otherwise.
-		if(bTermsEncoded != "")
+		// ---- concatenate EVERY bucket's terms into ONE import_bootstrap ----
+		allTerms = "";
+		bootProducts = "";
+		for each bucket in prodBuckets
+		{
+			bTermsEncoded = ifnull(bucket.get("terms_encoded"), "").toString().trim();
+			bProductKey = ifnull(bucket.get("product_key"), "").toString().trim();
+			if(bProductKey == "") { continue; }
+			bootProducts = bootProducts + if(bootProducts != "", ",", "") + bProductKey;
+			if(bTermsEncoded != "")
+			{
+				allTerms = allTerms + if(allTerms != "", ";", "") + bTermsEncoded;
+			}
+		}
+
+		if(allTerms != "")
 		{
 			importCtx = Map();
 			importCtx.put("source", "import_bootstrap");
 			importCtx.put("sourceModule", "Leads");
 			importCtx.put("sourceRecordId", cleanId);
 			importCtx.put("contactId", newContactId);
-			// NOTE: opportunityType is intentionally NOT passed. Quote_Type is now per-term
-				// (encoded at index 0 of the 11-field termsEncoded string) and processDeal 5b derives
-				// it per Quote; a single importCtx-level opportunityType would be wrong for mixed
-				// A/E/R buckets and must never override the per-term Quote_Type.
-			importCtx.put("termsEncoded", bTermsEncoded);
+			// NOTE: opportunityType is intentionally NOT passed. Quote_Type is per-term (field 0 of
+			// the 11-field ~-joined encoding) and processDeal 5b derives it per Quote. A single
+			// importCtx-level opportunityType would be wrong for a mixed A/E/R import and must
+			// never override the per-term value -- which is precisely what makes concatenating
+			// every bucket into one call safe.
+			importCtx.put("termsEncoded", allTerms);
 			impResp = automation.processDeal(dealId, importCtx.toString());
-			info "6: import_bootstrap processDeal (" + bProductKey + ") resp=" + impResp;
+			info "6: single import_bootstrap processDeal (" + bootProducts + ") resp=" + impResp;
 		}
 		else
 		{
-			// Pass the controlling Contact so the scaffold Quote (processDeal 8z) binds it.
+			// Product-interest-only, or no product evidence at all. Pass the controlling Contact so
+			// the scaffold Quote (processDeal 8z) binds it.
 			plainCtx = Map();
 			plainCtx.put("contactId", newContactId);
 			plainResp = automation.processDeal(dealId, plainCtx.toString());
-			info "6: plain processDeal (" + bProductKey + ") resp=" + plainResp;
+			info "6: plain processDeal (no contract terms) resp=" + plainResp;
 		}
 	}
 
@@ -710,8 +775,9 @@ void automation.processLead(string lead_id)
 	//          activation. prodBuckets already covers BOTH Product_Interest AND the A/E/R
 	//          Quote_Plan_Products (collectProductEvidence reads both), so A/E/R-only imports also
 	//          give the Contact product evidence -> processContact (step 7) can resolve their
-	//          Product Deals and activate. Product_Interest_Staging is a READ-ONLY FORMULA mirror of
-	//          these links and must NEVER be written directly. Idempotent (no duplicate links);
+	//          Product Deals and activate. (Product_Interest_Staging does not exist on any module;
+	//          the structured Products_Linked junction is the only Contact product evidence.)
+	//          Idempotent (no duplicate links);
 	//          unresolved SKUs are routed to Manual Review by the step-6 fan-out (never here). ----
 	if(newContactId != "" && newContactId != "null" && prodBuckets.size() > 0)
 	{

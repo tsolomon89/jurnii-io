@@ -1,3 +1,25 @@
+> # ✅ CONSISTENT WITH THE MODEL — with one resolved point and one correction
+>
+> "One Product per Quote" matches authority §7.2 and is confirmed live: 125 line items across 125
+> Quotes, every one `Sequence_Number: "1"`.
+>
+> **Resolved — this spec's mandate of *both* `Quote_Product` and native `Quoted_Items` is correct, and
+> the §7.4 test is met.** The mechanical reason: `Quoted_Items` is a Zoho **subform**, and subforms
+> cannot appear in a COQL `where` clause or in `searchRecords` criteria. Every Quote-matching and
+> idempotency predicate in the codebase therefore requires a header-level Product lookup.
+> **Authority split:** `Quoted_Items` is authoritative for the Product relationship and line commercials;
+> `Quote_Product` is a **derived queryable index** over it and must never be independently editable.
+> They are not co-authoritative.
+>
+> **Correction:** the `Opportunity_Type` line derives it "from the Deal floor". Authority §11 forbids an
+> opportunity snapshot sourced from an independently progressing Deal opportunity — it must be re-derived
+> from the **attributed Contact** opportunity. Live: `Opportunity_Type` is RTP 58 / FTP 67 against only 28
+> Renewals, so it is genuinely not a duplicate of `Quote_Type`.
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # Jurnii Zoho Quote/Product Contract Spec v6
 
 ## Purpose
@@ -33,7 +55,7 @@ Define the current Product Quote contract model used by v6 automation.
 ## Workflow Model
 - `WF021` is the final Quote create/edit workflow.
 - `WF020` remains active only during staging and is disabled after the WF021 gates pass.
-- `WF004` remains active only during staging as a safe legacy wrapper and is disabled after the WF021 gates pass.
+- ⛔ **`WF004` does not exist** (live-verified 2026-08-17). It is not part of the cutover: there is no legacy wrapper to keep active and none to disable. The cutover is WF020 → WF021 only.
 
 ## Retired Model
 - Do not write Deal phantom fields: `Commercials_Sent_At`, `Signed_At`, `Commercials_Discussed_At`, or `Intent_To_Sign`.

@@ -10,8 +10,8 @@ void automation.handleEmailEvent(string emailRecordIdStr, string eventType, stri
 	//
 	//   replied -> Review Reply Task (blocking). Reply is NOT auto-positive; the
 	//              rep decides the next step. No Stage move.
-	//   bounced -> Data Repair Task (blocking) + Contact Profile_Completion_Status
-	//              = "Needs Enrichment".
+	//   bounced -> Data Repair Task (blocking). The Task IS the operational signal; there is
+	//              no Contact status field for it (Profile_Completion_Status does not exist).
 	//   passive (not replied / opened / clicked) -> log only.
 	//
 	// Contact is taken from relatedContactId, falling back to the Deal's Primary
@@ -101,11 +101,10 @@ void automation.handleEmailEvent(string emailRecordIdStr, string eventType, stri
 	if(eventType == "bounced")
 	{
 		automation.createAuxTask(contactId, relatedDealId.toString(), "Data Repair", "Email bounced - repair contact data.");
-		noTrigger = Map();
-		noTrigger.put("trigger", List());
-		cUpd = Map();
-		cUpd.put("Profile_Completion_Status", "Needs Enrichment");
-		zoho.crm.updateRecord("Contacts", contactId.toLong(), cUpd, noTrigger);
+		// REMOVED 2026-08-11 -- a Contacts.Profile_Completion_Status = "Needs Enrichment" write and
+		// its updateRecord. That api_name does not exist on Contacts, so the whole call was a no-op
+		// that still cost an API hit. The Data Repair task created above is the actionable signal,
+		// and Contacts already carries Zoho's native Enrich_Status__s.
 		automation.logAutomationEvent("handleEmailEvent", "Contacts", contactId, "bounced", "data_repair_task", {"deal":relatedDealId.toString()});
 		return;
 	}

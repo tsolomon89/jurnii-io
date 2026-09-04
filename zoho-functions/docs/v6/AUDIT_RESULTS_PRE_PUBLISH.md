@@ -1,3 +1,15 @@
+> # 📁 HISTORICAL — read-only census, 2026-08-08
+>
+> Counts are evidence and are **not** restated. A newer census exists in
+> `../../../../docs/V6_DIAGNOSIS_BRIEFING_2026-08-15.md` (132 Activation Tasks against the 153 recorded
+> here); prefer the newer figure for current state and treat this one as the 2026-08-08 baseline.
+>
+> Architecturally model-neutral. Preserved as-is.
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # Pre-publish audit results (AUD-1..AUD-5)
 
 Run 2026-08-08, read-only, against the live org. No record was written.

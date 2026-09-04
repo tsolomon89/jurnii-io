@@ -1,3 +1,4 @@
+# STALE SNAPSHOT - do not rely on this file. Superseded by zoho-functions/docs/v6/V6_FIELD_USE_CONTRACT.md; for current fields use live GET /crm/v6/settings/fields?module=<M>&type=all
 Field Label,API Name,Data Type,Custom Field
 All day,All_day,Boolean,
 Check-In Address,Check_In_Address,Multi Line,

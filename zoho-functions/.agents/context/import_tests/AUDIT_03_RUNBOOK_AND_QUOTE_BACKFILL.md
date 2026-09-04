@@ -1,3 +1,15 @@
+> # 📁 HISTORICAL — runbook still operative
+>
+> Already carries an update banner. Its L63/L67 checkpoint "one Account + one Deal per domain" matches
+> the approved model.
+>
+> **Still operative:** the "Trigger workflows" import control described here is the current safety
+> mechanism and is lifted into the migration procedure of the v6 correction plan.
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../../../docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 > **⚠ UPDATED BY [AUDIT_00_REVISION_R1.md](AUDIT_00_REVISION_R1.md) (2026-06-22):** Revised open-item decisions (R1 §4) — no UX plan-type default; preserve `Type`; add Industry values; SQL no-email rows import inert **but excluded from auto-conversion**; RTP=Renewal default. **Production conversion is NO-GO until D1/D2/D4 are deployed + retested** (R1 §3/§5). Quote backfill must use **family-specific** pricing inputs (UX plan type, 360 frequency, brand count; Cortex → Manual Review) — R1 §1.
 
 # Pre-Import Audit, Part 3: Manual Import Runbook + Quote Backfill Plan

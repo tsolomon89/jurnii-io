@@ -74,6 +74,10 @@ function newSummary() {
     accountsMatchedByDomain: 0,
     accountsMatchedByLinkedin: 0,
     accountsCreated: 0,
+    // Dry-run projections: what a run WITH creation armed would have done. These
+    // are the numbers an operator reads before arming anything.
+    wouldCreateAccount: 0,
+    wouldCreateContact: 0,
     bodiesResolved: 0,
     bodiesUnavailable: 0,
     sendersUnmapped: 0,
@@ -118,16 +122,41 @@ function defaultDeps() {
 // ---------------------------------------------------------------------------
 
 /**
- * The Task owner for an activity's sender.
+ * `LEMLIST_SENDER_MAP` — the authoritative Lemlist-sender -> Zoho-user mapping.
  *
- * `GET /team` returns `users[{userId, name, email, role}]`, so the whole map is
- * one call per run. `GET /team/senders` is NOT used: it carries no email and so
- * cannot be matched to a Zoho user.
+ * Format: `usr_xYvofAcCBx8X7amjL:991103000001576001,usr_other:99110300000...`
  *
- * The chain is deterministic and never guesses:
- *   sender email -> matching Zoho active user
+ * WHY THIS IS CONFIG RATHER THAN AN API LOOKUP. Verified live 2026-09-01: there
+ * is no API path from a Lemlist `sendUserId` to an email address. `GET /team`
+ * returns `userIds` as bare strings, `GET /team/senders` returns
+ * `[{userId, campaigns}]`, and neither carries an email — so nothing can be
+ * matched against a Zoho user. An operator-curated map is the only deterministic
+ * option, and it is a small one: the workspace has a single sender today.
+ *
+ * A malformed entry is skipped and logged rather than guessed at.
+ */
+function parseSenderMap(env, ctx) {
+  const raw = String((env && env.LEMLIST_SENDER_MAP) || '').trim();
+  const map = new Map();
+  if (!raw) return map;
+  for (const pair of raw.split(',')) {
+    const [lemlistId, zohoId] = pair.split(':').map((s) => (s || '').trim());
+    if (/^usr_[A-Za-z0-9]+$/.test(lemlistId) && /^\d{6,}$/.test(zohoId)) {
+      map.set(lemlistId, zohoId);
+    } else if (pair.trim()) {
+      ctx.deps.log({ evt: 'lemlist.sender_map_entry_invalid' });
+    }
+  }
+  return map;
+}
+
+/**
+ * The Task owner for an activity's sender. Deterministic; never guesses.
+ *
+ *   LEMLIST_SENDER_MAP[sendUserId]                       -> that Zoho user
+ *   -> else a /team email matched to a Zoho active user   (inert today; see above)
  *   -> else LEMLIST_DEFAULT_OWNER_ID
- *   -> else no Owner key at all (Zoho defaults to the API user), counted.
+ *   -> else no Owner key at all, and Zoho defaults to the API user. Counted.
  */
 async function buildSenderMap(ctx) {
   if (ctx.senderMap) return ctx.senderMap;
@@ -168,19 +197,31 @@ async function buildZohoUserMap(ctx) {
 
 async function resolveOwner(activity, ctx) {
   const senderId = activity.sendUserId || activity.userId || activity.createdBy || null;
+
+  // 1. The configured map. Authoritative, and the only path that works today.
+  if (!ctx.configuredSenderMap) ctx.configuredSenderMap = parseSenderMap(ctx.env, ctx);
+  if (senderId && ctx.configuredSenderMap.has(String(senderId))) {
+    return {
+      ownerId: ctx.configuredSenderMap.get(String(senderId)),
+      senderEmail: null, mapped: true, via: 'config',
+    };
+  }
+
+  // 2. An email from /team matched to a Zoho active user. Inert while Lemlist
+  //    returns no emails, but costs nothing and starts working if that changes.
   const senderMap = await buildSenderMap(ctx);
   const email = senderId ? senderMap.get(String(senderId)) : null;
-
   if (email) {
     const zohoUsers = await buildZohoUserMap(ctx);
     if (zohoUsers.has(email)) {
-      return { ownerId: zohoUsers.get(email), senderEmail: email, mapped: true };
+      return { ownerId: zohoUsers.get(email), senderEmail: email, mapped: true, via: 'team_email' };
     }
   }
 
   // No deterministic match. Use the configured integration owner if there is
   // one; otherwise omit `Owner` entirely and let Zoho default to the API user.
   // An arbitrary user is never chosen at any step.
+  // 3/4. The configured integration owner, or nothing at all.
   const fallback = ctx.env.LEMLIST_DEFAULT_OWNER_ID || null;
   ctx.summary.sendersUnmapped += 1;
   ctx.deps.log({
@@ -188,7 +229,7 @@ async function resolveOwner(activity, ctx) {
     senderId: senderId ? String(senderId) : null,
     usedDefaultOwner: Boolean(fallback),
   });
-  return { ownerId: fallback, senderEmail: email || null, mapped: false };
+  return { ownerId: fallback, senderEmail: email || null, mapped: false, via: 'default' };
 }
 
 // ---------------------------------------------------------------------------
@@ -198,14 +239,29 @@ async function resolveOwner(activity, ctx) {
 /**
  * The rendered LinkedIn message for one activity, or a terminal "unavailable".
  *
- * Inbox items carry `_id` in the same `act_…` namespace as an activity, which is
- * the join key. The inbox is fetched ONCE PER LEMLIST CONTACT and cached for the
- * run, so N activities for one person cost one request.
+ * THE ACTIVITY CARRIES THE BODY DIRECTLY. Verified against the live workspace on
+ * 2026-09-01: `activity.text` holds the rendered message as PLAIN TEXT (not
+ * HTML) on 100% of sampled `linkedinSent` activities. So the common path costs
+ * ZERO extra requests — the documented `/inbox/{contactId}` hop is not needed.
+ *
+ * The inbox remains a fallback for the case where `text` is absent. Inbox items
+ * carry `_id` in the same `act_…` namespace, which is the join key, and the
+ * field there is `text` too (not `message`, as the published schema suggests).
+ * It is fetched once per Lemlist contact and cached for the run.
  *
  * Failure to retrieve a body NEVER blocks the Task — the requirement is that the
  * activity still lands, with the absence stated explicitly.
  */
 async function resolveBody(activity, ctx) {
+  // The activity's own text, when present, is the whole answer.
+  const inline = activity && typeof activity.text === 'string' ? activity.text.trim() : '';
+  if (inline) {
+    // Already plain text in practice; the transform is total and idempotent, so
+    // running it costs nothing and still strips a tracking pixel if one appears.
+    const text = zoho.htmlToPlainText(inline) || inline;
+    return { available: true, text, source: 'activity' };
+  }
+
   if (!ctx.bodyLookupEnabled || !activity.contactId) {
     return { available: false, text: null };
   }
@@ -428,14 +484,6 @@ async function createPerson(input, ctx) {
   const s = ctx.summary;
   const { lead, email, linkedinUrl, companyDomain, companyLinkedinUrl, companyName } = input;
 
-  // The gate is checked BEFORE the data precondition, so a run with creation
-  // disabled reports the gate rather than blaming the Lemlist record for a
-  // create it was never going to attempt.
-  if (!ctx.gates.createEnabled) {
-    bump(s.skipped, 'creation_disabled');
-    return { ok: false, reason: 'creation_disabled' };
-  }
-
   // `Last_Name` is the only system_mandatory Contacts field, so it is a
   // PRECONDITION. It is never synthesised from the email local-part, the company
   // name, or by splitting a full name — that would write a fabricated person
@@ -446,6 +494,14 @@ async function createPerson(input, ctx) {
     bump(s.skipped, 'missing_last_name');
     return { ok: false, reason: 'missing_last_name' };
   }
+
+  // NOTE ON ORDERING. Account resolution and the create veto run even when
+  // creation is disabled, because that is the ENTIRE VALUE OF A DRY RUN: it is
+  // how an operator learns, before arming anything, how many activities would
+  // match an existing Account, how many would create one, and how many would hit
+  // the veto. Gating the resolution behind the write flag would make the dry run
+  // report `creation_disabled` and nothing else. Only the WRITES are gated, and
+  // they are gated immediately below each resolution.
 
   // ---- Account ------------------------------------------------------------
   let account;
@@ -494,6 +550,13 @@ async function createPerson(input, ctx) {
       return { ok: false, reason: veto.reason };
     }
 
+    if (!ctx.gates.createEnabled) {
+      // The veto is clean and a create WOULD happen. Reported, not performed.
+      s.wouldCreateAccount += 1;
+      bump(s.skipped, 'creation_disabled');
+      return { ok: false, reason: 'creation_disabled', wouldCreateAccount: true };
+    }
+
     const record = { Account_Name: veto.accountName };
     // `Website` is data about the domain; `Account_Key` is identity machinery.
     // They coincide only when a domain exists — a name-derived value must never
@@ -535,6 +598,13 @@ async function createPerson(input, ctx) {
   }
 
   // ---- Contact ------------------------------------------------------------
+  if (!ctx.gates.createEnabled) {
+    // An Account was matched, so only the Contact would be created.
+    s.wouldCreateContact += 1;
+    bump(s.skipped, 'creation_disabled');
+    return { ok: false, reason: 'creation_disabled', wouldCreateContact: true };
+  }
+
   const record = { Last_Name: lastName };
   const firstName = I.firstNameFor(lead);
   if (firstName) record.First_Name = firstName;

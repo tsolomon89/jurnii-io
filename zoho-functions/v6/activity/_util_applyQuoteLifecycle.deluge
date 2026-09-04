@@ -40,20 +40,29 @@ void automation.applyQuoteLifecycle(string dealId)
 	deal = zoho.crm.getRecordById("Deals", dId.toLong());
 	if(isNull(deal) || isNull(deal.get("id"))) { return; }
 
-	// Resolve Deal product + Account + controlling Contact (successor Quote wiring).
-	dpLk = deal.get("Deal_Product");
-	dealProdId = "";
-	dealProdName = "";
-	if(!isNull(dpLk) && !isNull(dpLk.get("id"))) { dealProdId = dpLk.get("id").toString(); dealProdName = ifnull(dpLk.get("name"), "").toString(); }
+	// ---- WORK ITEM 4.6: the Deal's Product identity is NOT read ----
+	// This resolved dealProdId / dealProdName from Deals.Deal_Product and used them to build the
+	// successor Renewal Quote. That is wrong twice over:
+	//
+	//   1. Deal_Product does not exist under the approved model (and is retiring) -- a Deal
+	//      carries the relationship, and Products are Quotes under it. On a Deal with several
+	//      Product Quotes there is no single Deal Product to inherit from, so every successor
+	//      would have been built from whatever that field happened to hold.
+	//   2. Even when it held something, it was the WRONG SOURCE. A Renewal succeeds a specific
+	//      PREDECESSOR QUOTE. Its Product, its ACV and its terms all come from that Quote.
+	//
+	// Both are now taken per-predecessor inside the pass below (predProdId / predProdName).
+	// Nothing Deal-level is consulted for Product identity anywhere in this function.
 
 	accId = "";
 	accName = "";
 	accLk = deal.get("Account_Name");
 	if(!isNull(accLk) && !isNull(accLk.get("id"))) { accId = accLk.get("id").toString(); accName = ifnull(accLk.get("name"), "").toString(); }
 
+	// WORK ITEM 5.1 -- reader 2 of 3 collapsed off Deal_Primary_Contact. Its only writer targeted
+	// a phantom api_name, so it has never held a value on any Deal and this branch always fell
+	// through to Contact_Name, which is the canonical controlling Deal Contact.
 	primaryContactId = "";
-	pcLk = deal.get("Deal_Primary_Contact");
-	if(!isNull(pcLk) && !isNull(pcLk.get("id"))) { primaryContactId = pcLk.get("id").toString(); }
 	if(primaryContactId == "")
 	{
 		cnLk = deal.get("Contact_Name");
@@ -77,7 +86,14 @@ void automation.applyQuoteLifecycle(string dealId)
 	// ---- snapshot: read every Quote (full records; getRelatedRecords omits custom fields) ----
 	relQ = zoho.crm.getRelatedRecords("Quotes", "Deals", dId.toLong());
 	fullQuotes = List();
-	openRenewalId = "";        // the single OPEN (non-CL, non-CW) Renewal, if any
+	// ---- WORK ITEM 4.6: the open-Renewal slot is per (DEAL, PRODUCT), not per Deal ----
+	// This was a single `openRenewalId` for the whole Deal. Under the old model that was safe by
+	// accident: a Deal WAS one Product, so "the Deal's open Renewal" and "this Product's open
+	// Renewal" were the same thing. Under the approved model one Deal carries several Product
+	// Quotes, so a single slot means the first Product's Renewal is treated as every Product's
+	// Renewal -- an Expansion on Product B would bump Product A's Renewal ACV, and a Closed Won
+	// on Product B would find A's Renewal and create none of its own.
+	openRenewalByProduct = Map();   // productKey -> the single OPEN (non-CL, non-CW) Renewal id
 	if(!isNull(relQ) && relQ.size() > 0 && !relQ.toString().startsWith("{\"code\""))
 	{
 		for each rq in relQ
@@ -90,7 +106,13 @@ void automation.applyQuoteLifecycle(string dealId)
 			fullQuotes.add(fq);
 			fqStg = ifnull(fq.get("Quote_Stage"), "").toString().trim();
 			fqType = ifnull(fq.get("Quote_Type"), "").toString().trim();
-			if(fqType == "Renewal" && fqStg != "Closed Lost" && fqStg != "Closed Won") { openRenewalId = rqId; }
+			if(fqType == "Renewal" && fqStg != "Closed Lost" && fqStg != "Closed Won")
+			{
+				fqPk = "";
+				fqQp = fq.get("Quote_Product");
+				if(!isNull(fqQp) && !isNull(fqQp.get("name"))) { fqPk = automation.computeProductKey(fqQp.get("name").toString()); }
+				if(fqPk != "") { openRenewalByProduct.put(fqPk, rqId); }
+			}
 		}
 	}
 	if(fullQuotes.size() == 0) { return; }
@@ -110,6 +132,32 @@ void automation.applyQuoteLifecycle(string dealId)
 		else if(qtype == "Expansion") { transKey = "ExpCW:" + qid; }
 		else { transKey = "RenCW:" + qid; }
 
+		// ---- WORK ITEM 4.6: the successor's Product comes from THIS PREDECESSOR QUOTE ----
+		// Not from Deals.Deal_Product. A Renewal succeeds a specific Quote, so its Product, ACV
+		// and terms are all that Quote's. With several Product Quotes under one Deal this is the
+		// only source that can be right.
+		predProdId = "";
+		predProdName = "";
+		predProdKey = "";
+		predQp = fq.get("Quote_Product");
+		if(!isNull(predQp) && !isNull(predQp.get("id")))
+		{
+			predProdId = predQp.get("id").toString();
+			predProdName = ifnull(predQp.get("name"), "").toString();
+			if(predProdName != "") { predProdKey = automation.computeProductKey(predProdName); }
+		}
+		if(predProdKey == "")
+		{
+			// No resolvable Product on the predecessor. Do NOT fall back to a Deal-level Product
+			// and do NOT guess: a successor Quote with the wrong Product is worse than none, and
+			// "no Productless Quote is ever created" is a settled ruling.
+			automation.createManualReview(primaryContactId, dId, "quote_missing_contact", "Closed Won Quote " + qid + " has no resolvable Quote_Product, so no successor Renewal could be created from it. Set the Quote's Product, then re-save.");
+			automation.logAutomationEvent("applyQuoteLifecycle", "Quotes", qid, "successor_blocked", "predecessor_no_product", {"deal":dId, "type":qtype});
+			continue;
+		}
+		// This Product's open Renewal slot -- NOT the Deal's.
+		openRenewalId = ifnull(openRenewalByProduct.get(predProdKey), "").toString();
+
 		// idempotency: re-read the trigger Quote's keys LIVE right before acting.
 		qLive = zoho.crm.getRecordById("Quotes", qid.toLong());
 		if(isNull(qLive)) { continue; }
@@ -128,7 +176,7 @@ void automation.applyQuoteLifecycle(string dealId)
 				curRenAcv = ifnull(renFull.get("Contract_ACV"), "0").toDecimal();
 				newRenAcv = curRenAcv + expAcv;
 				zoho.crm.updateRecord("Quotes", openRenewalId.toLong(), {"Contract_ACV": newRenAcv}, noTrigger);
-				automation.logAutomationEvent("applyQuoteLifecycle", "Deals", dId, "renewal_bumped", dealProdName, {"from":transKey, "renewal":openRenewalId, "added":expAcv.toString(), "new_acv":newRenAcv.toString()});
+				automation.logAutomationEvent("applyQuoteLifecycle", "Deals", dId, "renewal_bumped", predProdName, {"from":transKey, "renewal":openRenewalId, "added":expAcv.toString(), "new_acv":newRenAcv.toString()});
 			}
 		}
 		else
@@ -150,7 +198,12 @@ void automation.applyQuoteLifecycle(string dealId)
 						if(isNull(rq2Full)) { continue; }
 						rq2Stg = ifnull(rq2Full.get("Quote_Stage"), "").toString().trim();
 						rq2Type = ifnull(rq2Full.get("Quote_Type"), "").toString().trim();
-						if(rq2Type == "Renewal" && rq2Stg != "Closed Lost" && rq2Stg != "Closed Won") { openRenewalId = rq2Id; }
+						// 4.6: match the PRODUCT as well as the type. Without this the concurrent-create
+						// guard would reuse another Product's Renewal and this Product would never get one.
+						rq2Pk = "";
+						rq2Qp = rq2Full.get("Quote_Product");
+						if(!isNull(rq2Qp) && !isNull(rq2Qp.get("name"))) { rq2Pk = automation.computeProductKey(rq2Qp.get("name").toString()); }
+						if(rq2Type == "Renewal" && rq2Stg != "Closed Lost" && rq2Stg != "Closed Won" && rq2Pk == predProdKey) { openRenewalId = rq2Id; }
 					}
 				}
 			}
@@ -174,21 +227,34 @@ void automation.applyQuoteLifecycle(string dealId)
 
 				renewLine = Map();
 				renewLinePm = Map();
-				if(dealProdId != "" && dealProdId.matches("[0-9]+")) { renewLinePm.put("id", dealProdId); renewLine.put("Product_Name", renewLinePm); }
+				if(predProdId != "" && predProdId.matches("[0-9]+")) { renewLinePm.put("id", predProdId); renewLine.put("Product_Name", renewLinePm); }
 				renewLine.put("Quantity", 1);
-				renewLine.put("Quoted_Item_Pricing_Tier", "Base");
+				// WORK ITEM 4.9: carry the PREDECESSOR's real pricing tier. This was hardcoded
+				// "Base", so a Markup or Agency contract silently lost its tier at renewal and the
+				// matrix rows for those tiers were dead. Falls back to "Base" only when the
+				// predecessor genuinely has no tier.
+				predTier = "Base";
+				predLines = fq.get("Quoted_Items");
+				if(!isNull(predLines) && predLines.size() > 0)
+				{
+					predTierRaw = ifnull(predLines.get(0).get("Quoted_Item_Pricing_Tier"), "").toString().trim();
+					if(predTierRaw != "") { predTier = predTierRaw; }
+				}
+				renewLine.put("Quoted_Item_Pricing_Tier", predTier);
 				renewLine.put("List_Price", 0);
 				renewLines = List(); renewLines.add(renewLine);
 
 				originKey = "Origin:" + transKey;
 				renewMap = Map();
-				renewMap.put("Subject", automation.buildQuoteSubject(accName, dealProdName, "Renewal", ifnull(deal.get("Deal_Name"), "").toString()));
+				renewMap.put("Subject", automation.buildQuoteSubject(accName, predProdName, "Renewal", ifnull(deal.get("Deal_Name"), "").toString()));
 				renewMap.put("Quote_Stage", "Draft");
 				renewMap.put("Quote_Type", "Renewal");
 				renewMap.put("Opportunity_Type", "RTP");
 				if(accId != "") { rAcc = Map(); rAcc.put("id", accId); renewMap.put("Account_Name", rAcc); }
 				rDeal = Map(); rDeal.put("id", dId); renewMap.put("Deal_Name", rDeal);
-				if(dealProdId != "" && dealProdId.matches("[0-9]+")) { rQp = Map(); rQp.put("id", dealProdId); renewMap.put("Quote_Product", rQp); }
+				// 4.6: the successor inherits the PREDECESSOR's Product. predProdKey is non-blank by
+				// the guard above, so a Productless successor is impossible here.
+				if(predProdId != "" && predProdId.matches("[0-9]+")) { rQp = Map(); rQp.put("id", predProdId); renewMap.put("Quote_Product", rQp); }
 				if(primaryContactId != "") { rC = Map(); rC.put("id", primaryContactId); renewMap.put("Contact_Name", rC); }
 				renewMap.put("Quote_Target_ACV", tierTarget);
 				renewMap.put("Quote_Last_Deal_ID", dId);
@@ -199,7 +265,7 @@ void automation.applyQuoteLifecycle(string dealId)
 					renewMap.put("Contract_Date_End", newEnd);
 					renewMap.put("Quote_Contract_Date_Renewal", renewalChase);
 				}
-				if(dealProdId != "") { renewMap.put("Quoted_Items", renewLines); }
+				if(predProdId != "") { renewMap.put("Quoted_Items", renewLines); }
 				renewMap.put("Quote_Applied_Lifecycle_Keys", originKey);
 
 				rBody = Map(); rData = List(); rData.add(renewMap); rBody.put("data", rData); rBody.put("trigger", List());
@@ -218,8 +284,14 @@ void automation.applyQuoteLifecycle(string dealId)
 					r0 = rResp.get("data").get(0);
 					if(ifnull(r0.get("code"), "").toString() == "SUCCESS" && !isNull(r0.get("details")) && !isNull(r0.get("details").get("id"))) { newRenId = r0.get("details").get("id").toString(); }
 				}
-				if(newRenId != "") { openRenewalId = newRenId; }
-				automation.logAutomationEvent("applyQuoteLifecycle", "Deals", dId, "renewal_created", dealProdName, {"from":transKey, "renewal":newRenId, "dates":if(datesOk, newStart + ".." + newEnd, "none"), "acv":predAcv.toString()});
+				if(newRenId != "")
+				{
+					openRenewalId = newRenId;
+					// 4.6: record it against THIS Product so a later iteration for the same Product
+					// reuses it instead of creating a second Renewal.
+					openRenewalByProduct.put(predProdKey, newRenId);
+				}
+				automation.logAutomationEvent("applyQuoteLifecycle", "Deals", dId, "renewal_created", predProdName, {"from":transKey, "renewal":newRenId, "dates":if(datesOk, newStart + ".." + newEnd, "none"), "acv":predAcv.toString()});
 
 				if(!datesOk)
 				{
@@ -258,6 +330,13 @@ void automation.applyQuoteLifecycle(string dealId)
 		for each k in liveKeys.toList("\n") { if(k.trim() == transKey) { applied = true; } }
 		if(applied) { continue; }
 
+		// 4.6: the churn log names THIS Quote's Product (was the Deal-level Deal_Product, which
+		// no longer exists). Log-only, so a blank is harmless rather than a blocking condition --
+		// unlike pass 1, where a missing Product would build a wrong successor.
+		lostProdName = "";
+		lostQp = fq.get("Quote_Product");
+		if(!isNull(lostQp) && !isNull(lostQp.get("name"))) { lostProdName = ifnull(lostQp.get("name"), "").toString(); }
+
 		// D4: OPEN = non-Closed-Lost AND non-Closed-Won. Historical Closed Won does NOT keep the
 		// Deal open. Re-read the Deal's Quotes LIVE so a successor created in pass 1 is counted.
 		hasOtherOpen = false;
@@ -292,12 +371,12 @@ void automation.applyQuoteLifecycle(string dealId)
 				// picklist has no "Churned / Did Not Renew" option and we never create one.
 				churnUpd.put("Lost_Reasons", "Churned / Did Not Renew");
 				zoho.crm.updateRecord("Deals", dId.toLong(), churnUpd, noTrigger);
-				automation.logAutomationEvent("applyQuoteLifecycle", "Deals", dId, "deal_churned", dealProdName, {"from":transKey});
+				automation.logAutomationEvent("applyQuoteLifecycle", "Deals", dId, "deal_churned", lostProdName, {"from":transKey});
 			}
 		}
 		else
 		{
-			automation.logAutomationEvent("applyQuoteLifecycle", "Deals", dId, "renewal_lost_deal_open", dealProdName, {"from":transKey});
+			automation.logAutomationEvent("applyQuoteLifecycle", "Deals", dId, "renewal_lost_deal_open", lostProdName, {"from":transKey});
 		}
 
 		newKeys = liveKeys;

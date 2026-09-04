@@ -1,6 +1,34 @@
 ---
 name: zoho-crm-deluge-refactoring
-description: Refactor Zoho CRM Deluge functions to fix account duplication, phone mapping, deal creation, product interest, and commercial state normalization.
+description: "SUPERSEDED — DO NOT INVOKE. Obsolete v3/v4-era skill describing five Deluge functions that no longer exist, under a commercial model that is two architectures out of date. Retained as historical evidence only. For any Zoho Deluge work read zoho-functions/docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md instead."
+---
+
+> # ⛔ SUPERSEDED — DO NOT EXECUTE THIS SKILL
+>
+> **Sealed 2026-08-17** (`jurnii-doc-reconciliation-2026-08-17`).
+> **Authority:** [`../../../docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../../../docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)
+>
+> This skill is **two architectures out of date** and carries an active refactoring mandate. If an agent
+> matched it on its description and acted on it, it would rewrite live automation against a model that
+> was replaced twice over.
+>
+> **The five functions it instructs you to refactor do not exist:**
+> `convert2lead.deluge` · `normalizeContactCommercialState.deluge` ·
+> `normalizeDealCommercialState.deluge` · `syncDealProductsAndValue.deluge` ·
+> `rollupAccountCommercialState.deluge`
+>
+> The live architecture is **38 Deluge functions under `zoho-functions/v6/`**. Start at
+> [`../../../v6/CLAUDE.md`](../../../v6/CLAUDE.md).
+>
+> **Two specific instructions below are model violations:**
+> - §1.5 *"Deal Staging: generate a new Deal map for conversion if no suitable existing Deal is found"* —
+>   the approved model is **one Account → zero or one persistent Deal**; Deal creation is not per-conversion.
+> - `syncDealProductsAndValue` sums **Product values into Deal Amount** — authority §7.5 explicitly
+>   forbids using `Product.Unit_Price` as Deal Amount. Amount derives from **Quote** evidence.
+>
+> Preserved unedited below (apart from this banner and the frontmatter `description`) as the record of
+> the v3/v4-era approach.
+
 ---
 
 # Skill: Zoho CRM Deluge Refactoring

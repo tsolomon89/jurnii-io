@@ -1,3 +1,32 @@
+> # ⚠ SUPERSEDED AS GOVERNING RULES — historical reference only
+>
+> **Sealed 2026-08-17.** Authority:
+> [`../../docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../../docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)
+>
+> This file claims to *"govern all Zoho CRM Deluge development within this workspace."* **It does not.**
+> It is v3/v4-era and predates the current architecture. For live rules read
+> [`../../v6/CLAUDE.md`](../../v6/CLAUDE.md) and the field authority
+> [`../../docs/v6/V6_FIELD_USE_CONTRACT.md`](../../docs/v6/V6_FIELD_USE_CONTRACT.md).
+>
+> **What is still true:** no Zoho Cadences (all logic in workflow-triggered custom functions);
+> zero-block Lead conversion; never create a duplicate Account. Those survive.
+>
+> **What is superseded:**
+> - *"Deal Reusability: attempt to locate and reuse a suitable existing Deal under the matching
+>   Account"* — accidentally **closer** to the approved model than the code is, which makes it more
+>   confusing rather than less. The approved rule is stronger: **one Account → zero or one persistent
+>   Deal**, always.
+> - Any mandate to run `syncDealProductsAndValue` — that function does not exist, and summing Product
+>   values into `Deal.Amount` is forbidden by authority §7.5. Amount derives from **Quote** evidence.
+> - The mapping of `Product Interest (Staging)` → `Amount`. `Product_Interest_Staging` is on the
+>   authority §10 **retire** list and its readers have already been removed in the working tree.
+>
+> Preserved unedited below.
+>
+> Reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # Zoho CRM Deluge Automation Rules
 
 These baseline constraints and programming guidelines govern all Zoho CRM Deluge development within this workspace. Antigravity agents must strictly adhere to these rules when modifying `.deluge` scripts.

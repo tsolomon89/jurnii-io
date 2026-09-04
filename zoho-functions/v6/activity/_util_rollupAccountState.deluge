@@ -38,19 +38,22 @@ void automation.rollupAccountState(string accountId)
 			if(did == "" || !did.matches("[0-9]+")) { continue; }
 			full = zoho.crm.getRecordById("Deals", did.toLong());
 			if(isNull(full) || isNull(full.get("id"))) { continue; }
-			// Count ONLY genuine Product Deals so legacy/non-product Deals don't pollute Account_Status
-			// while Phase 1/2 coexist with old data. Ignore:
-			//   - blank Deal_Key (silenced duplicate)
-			//   - Deal_Key ending "::active" (legacy account-level Deal)
-			//   - no product identity (blank Deal_Product_Key AND blank Deal_Product)
+			// ---- WORK ITEM 3.3: the Product-Deal scoping is REMOVED ----
+			// This used to count ONLY "genuine Product Deals", skipping any Deal with no Product
+			// identity and any Deal whose key ended "::active". Under the corrected model the
+			// canonical Deal has NO Product identity (a Product is a Quote under it) and its key
+			// is exactly the Account_Key with no "::" suffix -- so BOTH tests excluded the only
+			// Deal that now exists. The roll-up would have iterated the Account's one real Deal
+			// and skipped it, then written a state derived from zero Deals.
+			//
+			// A blank Deal_Key is still skipped: that is a silenced duplicate, and it is a
+			// data-integrity marker rather than a Product-model artefact.
+			//
+			// Deal_Product_Key / Deal_Product are no longer read here at all -- both are
+			// scheduled for retirement, and a reader kept "just in case" is what turns a
+			// retirement into a phantom-field incident.
 			dKey = ifnull(full.get("Deal_Key"), "").toString().trim();
-			dpKey = ifnull(full.get("Deal_Product_Key"), "").toString().trim();
-			dpLk = full.get("Deal_Product");
-			dpId = "";
-			if(!isNull(dpLk) && !isNull(dpLk.get("id"))) { dpId = dpLk.get("id").toString(); }
 			if(dKey == "") { continue; }
-			if(dKey.endsWith("::active")) { continue; }
-			if(dpKey == "" && dpId == "") { continue; }
 
 			total = total + 1;
 			st = ifnull(full.get("Opportunity_State"), "Open").toString();
@@ -97,15 +100,35 @@ void automation.rollupAccountState(string accountId)
 		acctStatus = if(signed > 0, "Active Customer", "Prospect");
 	}
 
+	// ---- WORK ITEM 3.3 / 5.1: Accounts.State and Accounts.Account_Status are RETIRED ----
+	//
+	// Both were WRITE-ONLY. Verified: this function was the sole writer of Account_Status, and
+	// there are ZERO readers across all 38 Deluge files and all of booking/ (the only booking
+	// occurrence is a field-name entry in a test fixture, not a read). This function's own
+	// comment conceded "State / Account_Status are currently unused on live Accounts (all
+	// null)". Live population was 75/372.
+	//
+	// Under the owner's retention rule -- a possible future use is not enough -- both fail the
+	// test. An earlier plan draft proposed classifying a Deal-less Account as "Prospect"; that
+	// is WITHDRAWN, because it would have added new behaviour to a field with no proven consumer.
+	//
+	// The writes go first, ahead of the field deletion, because that ordering is mandatory: an
+	// api_name that no longer exists can void the ENTIRE updateRecord map. Writers out ->
+	// publish -> read the whole map back -> then delete, after P10.
+	//
+	// ⚠ The COMPUTATION above is retained deliberately. total / lost / signed still drive the
+	// Deal-side roll-up this function performs, and acctState / acctStatus remain useful in the
+	// log line below -- which is now the only place the classification surfaces. Canary
+	// assertion C14 was rewritten for exactly this reason: it can no longer prove roll-up
+	// execution via Accounts.Account_Status, so it proves it through retained authoritative
+	// outputs instead.
 	upd = Map();
-	upd.put("State", acctState);
-	upd.put("Account_Status", acctStatus);
-	updResp = zoho.crm.updateRecord("Accounts", accId.toLong(), upd, noTrigger);
-	// State / Account_Status are currently unused on live Accounts (all null), so an
-	// invalid picklist option would be rejected here. Surface any rejection in the log
-	// instead of assuming success. (Verify the option strings before publish -- see
-	// Phase 0 checklist.)
-	updOk = (!isNull(updResp) && !isNull(updResp.get("id")));
+	updResp = null;
+	if(upd.size() > 0) { updResp = zoho.crm.updateRecord("Accounts", accId.toLong(), upd, noTrigger); }
+	// No fields are written any more, so there is nothing to confirm. Treated as OK so the
+	// existing log/branching below keeps its shape rather than reporting a false failure.
+	updOk = true;
+	if(!isNull(updResp)) { updOk = (!isNull(updResp.get("id"))); }
 	if(updOk)
 	{
 		automation.logAutomationEvent("rollupAccountState", "Accounts", accId, "rollup", "applied", {"state":acctState, "account_status":acctStatus, "total":total.toString(), "lost":lost.toString(), "signed":signed.toString()});

@@ -1,3 +1,23 @@
+> # ⛔ SUPERSEDED — DO NOT RUN THIS PIPELINE
+>
+> **Sealed 2026-08-17.** Authority:
+> [`../../docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../../docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)
+>
+> This workflow declares a **`/refactor-deluge` slash command** over a five-function pipeline that
+> **no longer exists**: `convert2lead` → `normalizeContactCommercialState` →
+> `normalizeDealCommercialState` → `syncDealProductsAndValue` → `rollupAccountCommercialState`.
+>
+> Nothing in that chain is live. The current architecture is **38 Deluge functions** under
+> `zoho-functions/v6/`, entered through `processLead` / `processContact` / `processAccount` /
+> `processDeal` plus the activity handlers. Start at [`../../v6/CLAUDE.md`](../../v6/CLAUDE.md).
+>
+> The commercial model it assumes is two architectures out of date. **Do not invoke the command and do
+> not use the mermaid graph as a function map.** Preserved unedited as historical evidence.
+>
+> Reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # Workflow: Deluge Refactoring & Verification Pipeline
 
 This workflow outlines the step-by-step pipeline for refactoring, verifying, and testing the Zoho CRM Deluge functions in this workspace.

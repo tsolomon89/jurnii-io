@@ -1,3 +1,24 @@
+> # ⚠ KNOWN DRIFT — accurate for today; the Deal model described here WILL change
+>
+> This guide claims to describe how the system behaves **today**, and it does. It is deliberately **not**
+> rewritten ahead of the code, because reps act on it.
+>
+> **The one thing to know:** where this guide says "one Deal per product, per Account" and "If someone
+> wants two products, you get two Deals — this is normal and correct", that is a **known deviation from
+> the approved model** and it will change. Under the approved model several Products create several
+> **Quotes** under **one** Deal. Do not treat the current Deal model as the target.
+>
+> Two review codes documented here retire with the correction, but remain live and can still fire today,
+> so they stay documented: `[multi_product_sequence_ambiguous]` (several Products must **not** make a
+> Contact's sequence ambiguous — authority §5.4) and `[quote_product_mismatch]` (several Quote Products
+> under one Deal are **valid** — §7.5).
+>
+> The Quote/Amount section and the field cheat-sheet largely survive unchanged.
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # Jurnii Sales System — SDR & AE Guide
 
 **How to use and maintain the Zoho CRM automation.**

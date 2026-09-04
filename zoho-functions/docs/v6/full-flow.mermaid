@@ -1,3 +1,21 @@
+%% ============================================================================
+%% KNOWN DRIFT NOTE - reconciled 2026-08-17 (jurnii-doc-reconciliation-2026-08-17)
+%% Authority: JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md (same directory)
+%%
+%% This diagram never labels a Deal as "Account x Product", so it is closer to the
+%% approved model than the surrounding prose. Two nodes still need correcting:
+%%
+%%   1. The Deal node carries "Opportunity state/stage". Under authority SS5.1 the
+%%      opportunity ontology belongs on the CONTACT; the Deal node is a derived
+%%      roll-up of its Contact opportunities.
+%%   2. "Per-Product Quote upsert" is CORRECT and compatible with the model - one
+%%      Deal, many Quotes. Read the single Deal node as the one persistent
+%%      Account-level Deal, never as one of several Product Deals.
+%%
+%% The Retired/DEP and Phantom node contents are now superseded by
+%% V6_FIELD_USE_CONTRACT.md, which is authoritative for field classification.
+%% ============================================================================
+
 flowchart TD
     classDef live fill:#e8f5ff,stroke:#1f6feb,color:#0b1f33
     classDef gate fill:#fff4ce,stroke:#9a6700,color:#2f2100
@@ -48,9 +66,9 @@ flowchart TD
     MoveCheck -- unlinked --> OldOnly["processDeal old role<br/>clear marker"]:::live
 
     WF020["WF020 Quote_Stage field update<br/>legacy until cutover"]:::retired
-    WF004["WF004 Commercials_Status<br/>legacy wrapper until cutover"]:::retired
+    WF004["WF004 Commercials_Status<br/>DOES NOT EXIST - never deployed"]:::retired
     WF020 -. disable after gates .-> QuoteEdit
-    WF004 -. disable after gates .-> Router
+    WF004 -. NOT LIVE - no such rule .-> Router
 
     RetiredFields["Retired/DEP labels<br/>Commercials_Status<br/>Meeting_Type<br/>Conversion_Outcome"]:::retired
     Phantom["Do not write<br/>Commercials_*_At<br/>Signed_At<br/>Intent_To_Sign<br/>activity marker fields"]:::retired

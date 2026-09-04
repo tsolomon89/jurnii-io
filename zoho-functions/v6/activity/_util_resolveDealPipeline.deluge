@@ -1,42 +1,72 @@
 string automation.resolveDealPipeline(string dealIdStr)
 {
 	// =========================================================================
-	// _util_resolveDealPipeline   (VERSION: v6-product-pipeline)
+	// _util_resolveDealPipeline   (VERSION: v6-deal-pipeline)
 	//
-	// Resolve the Deal Pipeline (B2B / Partnership) for the activity mirror fields
-	// (Task_Pipeline / Call_Task_Pipeline / Meeting_Task_Pipeline), derived from the
-	// authoritative Product -> Pipeline rule.
+	// THE single authority for a Deal's relationship Pipeline. Reads Deals.Pipeline
+	// itself, over REST.
 	//
-	// Product Interest is authoritative for the pipeline. The Deal's own `Pipeline`
-	// field is UNREADABLE inside the Deluge runtime (verified 2026-07-16: native/REST/
-	// COQL all return it blank in-function), but `Deal_Product_Key` IS readable — so we
-	// read the product key and map it via pipelineForProductKey. This is the runtime
-	// form of the authoritative mapping, NOT a name/tag/layout heuristic (that heuristic
-	// has been removed).
+	//   "B2B"          -> B2B relationship. Cadence dispatches.
+	//   "Partnership"  -> Partnership. Cadence is held (silently -- an expected state).
+	//   "unresolved"   -> the Pipeline could not be read or is not one of the two live
+	//                     values. NEVER treated as B2B.
 	//
-	//   product key B2B (jurnii_*) / blank -> "B2B"
-	//   product key "partnership"           -> "Partnership"
-	//   unknown non-blank key               -> "" (leave mirror blank) + log
+	// ⚠ WORK ITEM 3.1. Two things were wrong here and both are corrected:
 	//
-	// Every call site guards `if(pipeline != "")`, so a blank return leaves the mirror
-	// untouched rather than mislabelling it.
+	// 1. The Deal_Product_Key route is DELETED. Pipeline was derived from the Product
+	//    ("Product Interest is authoritative for the pipeline"), which is a Product-Deal
+	//    artefact: under the approved model a Product is a QUOTE under the one Deal, so
+	//    a Deal has no Product identity to derive anything from. Pipeline is a property
+	//    of the Account RELATIONSHIP and lives on the Deal.
+	//
+	// 2. The claim that Deals.Pipeline is "UNREADABLE inside the Deluge runtime
+	//    (verified 2026-07-16)" was FALSE. Native zoho.crm.getRecordById does omit the
+	//    special Pipeline field -- that part is true and is why this helper exists at
+	//    all -- but a plain REST GET with ?fields=Pipeline returns it, and it is
+	//    populated on 96/96 live Deals. The old comment generalised one API's omission
+	//    into a property of the field.
+	//
+	// ⚠ The failure mode also changed. This used to return "" for an unresolved
+	// pipeline, and every caller guarded `if(pipeline != "")` -- which left the mirror
+	// blank but let DISPATCH proceed, because the dispatch gate tested `!= "B2B"` and a
+	// blank is not B2B... in one place, while pipelineForProductKey("") returned "B2B"
+	// and failed OPEN in another. Returning the explicit token "unresolved" makes the
+	// two behaviours impossible to confuse: callers that stamp a mirror field must skip
+	// it, and callers that gate dispatch must block.
+	//
+	// Requires the zoho_crm connection (ZohoCRM.modules.deals scope). A connection
+	// failure returns "unresolved", never a guess.
 	// =========================================================================
 	dealId = 0;
 	cleanDealId = ifnull(dealIdStr, "").toString().replaceAll("zcrm_", "").trim();
 	if(cleanDealId != "" && cleanDealId.matches("[0-9]+")) { dealId = cleanDealId.toLong(); }
-	if(dealId == 0) { return ""; }
+	if(dealId == 0) { return "unresolved"; }
 
-	nativeDeal = zoho.crm.getRecordById("Deals", dealId);
-	if(isNull(nativeDeal) || isNull(nativeDeal.get("id"))) { return ""; }
-
-	dealProductKey = ifnull(nativeDeal.get("Deal_Product_Key"), "").toString().trim();
-	pl = automation.pipelineForProductKey(dealProductKey);
-
-	if(pl == "unresolved")
+	pl = "";
+	restHdr = Map();
+	restHdr.put("Content-Type", "application/json");
+	restResp = invokeurl
+	[
+		url: "https://www.zohoapis.eu/crm/v6/Deals/" + dealId.toString() + "?fields=Pipeline"
+		type: GET
+		connection: "zoho_crm"
+		headers: restHdr
+	];
+	if(!isNull(restResp) && restResp.toString().startsWith("{") && !isNull(restResp.get("data")) && restResp.get("data").size() > 0)
 	{
-		automation.logAutomationEvent("resolveDealPipeline", "Deals", dealId.toString(), "pipeline_unresolved_product", "blank_mirror", {"product_key":dealProductKey});
-		return "";
+		d0 = restResp.get("data").get(0);
+		if(!isNull(d0)) { pl = ifnull(d0.get("Pipeline"), "").toString().trim(); }
 	}
-	automation.logAutomationEvent("resolveDealPipeline", "Deals", dealId.toString(), "pipeline_resolved", pl, {"product_key":dealProductKey});
-	return pl;
+
+	// Exactly two live pipelines. Anything else -- blank, "-None-", an unreadable
+	// response, a value added to the picklist without updating this authority -- is
+	// unresolved, and the caller decides what to do about it.
+	if(pl == "B2B" || pl == "Partnership")
+	{
+		automation.logAutomationEvent("resolveDealPipeline", "Deals", dealId.toString(), "pipeline_resolved", pl, {"via":"deals_pipeline_rest"});
+		return pl;
+	}
+
+	automation.logAutomationEvent("resolveDealPipeline", "Deals", dealId.toString(), "pipeline_unresolved", "unresolved", {"raw":pl, "resp":ifnull(restResp, "").toString()});
+	return "unresolved";
 }

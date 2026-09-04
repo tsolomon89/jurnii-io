@@ -26,11 +26,17 @@ string automation.sendSequencedEmail(string contactIdStr, string dealIdStr, stri
 
 	automation.logAutomationEvent("sendSequencedEmail", "Contacts", contactId.toString(), "entry", "in_progress", {"deal":dealId.toString(), "stage":stage, "step":step, "kind":kind, "existingTask":auditTaskId});
 
-	if(contactId == 0 || dealId == 0)
+	// ---- WORK ITEM 2.4: the Contact is required; the Deal is OPTIONAL context ----
+	// This was the fourth of five identical `dealId == 0` returns. Every scheduled step of a
+	// Contact-only chain died here, silently.
+	if(contactId == 0)
 	{
-		automation.logAutomationEvent("sendSequencedEmail", "Contacts", contactId.toString(), "guard", "skip_missing_ids", {"deal":dealId.toString()});
+		automation.logAutomationEvent("sendSequencedEmail", "Contacts", "-", "guard", "skip_missing_contact", {"deal":dealId.toString()});
 		return "";
 	}
+	hasDeal = (dealId != 0);
+	dealCtxStr = "";
+	if(hasDeal) { dealCtxStr = dealId.toString(); }
 
 	// ---- resolve canonical template key (absorbed _util_resolveTemplate) ----
 	// key = <stage-slug>:<step>:<kind>. Sequence_Type is NOT in the key (one shared chain).
@@ -121,7 +127,7 @@ string automation.sendSequencedEmail(string contactIdStr, string dealIdStr, stri
 	if(canonicalKey == "" || templateId == "")
 	{
 		automation.logAutomationEvent("sendSequencedEmail", "Contacts", contactId.toString(), "guard", "template_missing", {"stage":stage, "step":step, "kind":kind, "key":canonicalKey});
-		automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "Missing/invalid email template for key '" + canonicalKey + "' (stage=" + stage + ", step=" + step + ", kind=" + kind + ").");
+		automation.createAuxTask(contactId.toString(), dealCtxStr, "Manual Review", "Missing/invalid email template for key '" + canonicalKey + "' (stage=" + stage + ", step=" + step + ", kind=" + kind + ").");
 		return "";
 	}
 
@@ -148,14 +154,27 @@ string automation.sendSequencedEmail(string contactIdStr, string dealIdStr, stri
 	}
 
 	// ---- SendKey (absorbed _util_buildSendKey) — key-based, NOT the volatile template id ----
-	sendKey = contactId.toString() + "|" + dealId.toString() + "|" + canonicalKey;
+	//
+	// ⚠ WORK ITEM 2.4(4). The key was contactId|dealId|canonicalKey. The Deal contributed
+	// NOTHING to uniqueness -- cadence is Contact-scoped, so (Contact, template key) is already
+	// unique -- while its presence is exactly what broke the no-Deal case: dealId would key as
+	// "0" and, worse, the lookup below could not find the audit Task at all, so a Contact-only
+	// chain re-sent every step on every pass.
+	//
+	// This INVALIDATES every SendKey written under the old three-part format. That is acceptable
+	// ONLY because the records are being rebuilt (P2-P6); it must never be published against data
+	// intended to survive. This is one of the two reasons Stage 2 cannot ship before the freeze.
+	sendKey = contactId.toString() + "|" + canonicalKey;
 
 	// ---- idempotency: a Completed "Email Sent" audit with this SendKey already exists? ----
-	existingTasks = zoho.crm.getRelatedRecords("Tasks", "Deals", dealId);
-	if(isNull(existingTasks) || existingTasks.size() == 0 || existingTasks.toString().startsWith("{\"code\""))
-	{
-		existingTasks = zoho.crm.searchRecords("Tasks", "(What_Id:equals:" + dealId + ")");
-	}
+	//
+	// ⚠ WORK ITEM 2.4(4). The lookup was Deal-scoped (the Deal's Task related list, falling back
+	// to What_Id search), so it could only ever see Tasks attached to that Deal. For a
+	// Contact-only cadence it found nothing and the dedupe was blind. Audit Tasks are Contact-
+	// scoped facts, so the search is now Who_Id-scoped -- correct with a Deal, and the only form
+	// that works without one. Both halves of 2.4(4) had to change together: keying alone would
+	// still have re-sent, and searching alone would still have mis-keyed.
+	existingTasks = zoho.crm.searchRecords("Tasks", "(Who_Id:equals:" + contactId + ")");
 	if(!isNull(existingTasks) && existingTasks.size() > 0 && !existingTasks.toString().startsWith("{\"code\""))
 	{
 		for each tk in existingTasks
@@ -192,7 +211,7 @@ string automation.sendSequencedEmail(string contactIdStr, string dealIdStr, stri
 	if(isNull(contact) || isNull(contact.get("id")))
 	{
 		automation.logAutomationEvent("sendSequencedEmail", "Contacts", contactId.toString(), "guard", "contact_unreadable", {"deal":dealId.toString(), "key":canonicalKey});
-		automation.createManualReview(contactId.toString(), dealId.toString(), "email_contact_unreadable", "Sequenced email '" + canonicalKey + "' was not sent: the Contact could not be read at send time (native getRecordById + REST GET both returned null, typically a deeply-nested dispatch). Re-trigger to send.");
+		automation.createManualReview(contactId.toString(), dealCtxStr, "email_contact_unreadable", "Sequenced email '" + canonicalKey + "' was not sent: the Contact could not be read at send time (native getRecordById + REST GET both returned null, typically a deeply-nested dispatch). Re-trigger to send.");
 		return "";
 	}
 
@@ -228,7 +247,33 @@ string automation.sendSequencedEmail(string contactIdStr, string dealIdStr, stri
 		else if(k == "commercials_terms")               { callerHint = "routeContactSequence (commercial:sent side email)"; }
 		else if(k == "demo_reminder")                   { callerHint = "sendDemoReminder (scheduled)"; }
 		automation.logAutomationEvent("sendSequencedEmail", "Contacts", contactId.toString(), "guard", "blocked_not_activated", {"deal":dealId.toString(), "key":canonicalKey, "stage":stage, "step":step, "kind":kind, "seq_state":blockedSeqState, "seq_type":blockedSeqType, "caller":callerHint});
-		automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "[send_blocked_not_activated] Blocked a sequenced email to this Contact: attempted step '" + canonicalKey + "' (stage=" + stage + ", step=" + step + ", kind=" + kind + "), called from " + callerHint + ". Missing condition: Sequence_Activated_At is blank — the Sequence Activation Task was never completed with a valid Task Sequence Type. Contact reports Sequence_State=" + blockedSeqState + " / Sequence_Type=" + blockedSeqType + ". No email was sent and no sequence state was advanced. To send: complete the Contact's Sequence Activation Task (Task_Sequence_Type = Email/Call/Manual, Task_State = Won).");
+		automation.createAuxTask(contactId.toString(), dealCtxStr, "Manual Review", "[send_blocked_not_activated] Blocked a sequenced email to this Contact: attempted step '" + canonicalKey + "' (stage=" + stage + ", step=" + step + ", kind=" + kind + "), called from " + callerHint + ". Missing condition: Sequence_Activated_At is blank — the Sequence Activation Task was never completed with a valid Task Sequence Type. Contact reports Sequence_State=" + blockedSeqState + " / Sequence_Type=" + blockedSeqType + ". No email was sent and no sequence state was advanced. To send: complete the Contact's Sequence Activation Task (Task_Sequence_Type = Email/Call/Manual, Task_State = Won).");
+		return "";
+	}
+
+	// ---- WORK ITEM 2.3a: cancellation conditions 1, 2 and 4 ----
+	// A pending chain step must not fire once the Contact has left the cadence. All three are
+	// existing CRM state; none needs new infrastructure. Condition 3 (Stage progressed /
+	// superseded) is handled by the supersede write -- Status="Deferred" + Task_Status="Closed"
+	// -- which sendScheduledEmailFromTask already refuses, so it is not repeated here.
+	//
+	// These are checked AFTER the activation gate and BEFORE any send, and they are silent
+	// rather than review-raising: leaving a cadence is normal operation, not a defect.
+	sseState = ifnull(contact.get("State"), "").toString().trim();
+	sseSeqState = ifnull(contact.get("Sequence_State"), "").toString().trim();
+	if(sseState == "Lost")
+	{
+		automation.logAutomationEvent("sendSequencedEmail", "Contacts", contactId.toString(), "cadence_cancelled", "contact_lost", {"key":canonicalKey});
+		return "";
+	}
+	if(sseSeqState == "Stopped")
+	{
+		automation.logAutomationEvent("sendSequencedEmail", "Contacts", contactId.toString(), "cadence_cancelled", "sequence_stopped", {"key":canonicalKey});
+		return "";
+	}
+	if(sseSeqState == "Complete")
+	{
+		automation.logAutomationEvent("sendSequencedEmail", "Contacts", contactId.toString(), "cadence_cancelled", "sequence_complete", {"key":canonicalKey});
 		return "";
 	}
 
@@ -236,7 +281,7 @@ string automation.sendSequencedEmail(string contactIdStr, string dealIdStr, stri
 	if(contactEmail == "")
 	{
 		automation.logAutomationEvent("sendSequencedEmail", "Contacts", contactId.toString(), "guard", "no_contact_email", {"key":canonicalKey});
-		automation.createManualReview(contactId.toString(), dealId.toString(), "email_no_recipient", "Sequenced email '" + canonicalKey + "' was not sent: the Contact has no Email address. Add an email, then re-trigger.");
+		automation.createManualReview(contactId.toString(), dealCtxStr, "email_no_recipient", "Sequenced email '" + canonicalKey + "' was not sent: the Contact has no Email address. Add an email, then re-trigger.");
 		return "";
 	}
 	// These emails are B2B sales, pipeline, transactional, or operational emails.
@@ -251,38 +296,33 @@ string automation.sendSequencedEmail(string contactIdStr, string dealIdStr, stri
 	deal = zoho.crm.getRecordById("Deals", dealId);
 
 	// PIPELINE DEFENCE (defence-in-depth): a Partnership (or unresolved) Deal must never send a
-	// B2B sequence email, even if an upstream gate is bypassed. Keyed on Deal_Product_Key.
-	// ROBUSTNESS: Deluge getRecordById can return the Deal with Deal_Product_Key BLANK in deeply-
-	// nested runs (e.g. the commercial:signed side email dispatched via
-	// Call -> routeContactSequence -> processDeal -> routeContactSequence). A blank key makes
-	// pipelineForProductKey("") resolve non-B2B and would DROP a legitimate B2B send silently, which
-	// is exactly how commercials_signed_confirmation went missing. When the key reads blank, fall
-	// back to the REST-backed resolveDealPipeline before deciding (never guess a template).
+	// B2B sequence email, even if an upstream gate is bypassed.
+	//
+	// WORK ITEM 3.1 -- the Deal_Product_Key route is DELETED. Pipeline is read from
+	// Deals.Pipeline via the REST-backed resolver, which is the single authority (readable
+	// 96/96 live). The old two-route form existed only because the product key was believed to
+	// be the pipeline source; it also carried a "blank key -> fall back" repair that was really
+	// a symptom of keying pipeline off a Product at all.
+	//
+	// WORK ITEM 2.4 -- with NO Deal there is no relationship that could be a Partnership, so
+	// there is nothing to defend against and the send proceeds. That is a different fact from
+	// "a Deal exists but its Pipeline will not resolve", which still blocks and still raises a
+	// review.
 	sendPipeline = "B2B";
-	pipelineVia = "default";
+	pipelineVia = "no_deal";
 	if(!isNull(deal) && !isNull(deal.get("id")))
 	{
-		sendDpk = ifnull(deal.get("Deal_Product_Key"), "").toString().trim();
-		if(sendDpk != "")
-		{
-			sendPipeline = automation.pipelineForProductKey(sendDpk);
-			pipelineVia = "product_key";
-		}
-		else
-		{
-			sendPipeline = automation.resolveDealPipeline(dealId.toString());
-			pipelineVia = "rest_fallback";
-			automation.logAutomationEvent("sendSequencedEmail", "Contacts", contactId.toString(), "pipeline_fallback", ifnull(sendPipeline, "").toString(), {"deal":dealId.toString(), "key":canonicalKey, "reason":"blank_deal_product_key"});
-		}
+		sendPipeline = automation.resolveDealPipeline(dealId.toString());
+		pipelineVia = "deals_pipeline";
 	}
 	if(sendPipeline != "B2B")
 	{
-		automation.logAutomationEvent("sendSequencedEmail", "Contacts", contactId.toString(), "guard", "blocked_non_b2b_pipeline", {"deal":dealId.toString(), "pipeline":ifnull(sendPipeline, "").toString(), "via":pipelineVia, "key":canonicalKey});
+		automation.logAutomationEvent("sendSequencedEmail", "Contacts", contactId.toString(), "guard", "blocked_non_b2b_pipeline", {"deal":dealCtxStr, "pipeline":ifnull(sendPipeline, "").toString(), "via":pipelineVia, "key":canonicalKey});
 		// Genuine Partnership block is expected and stays silent; an UNRESOLVED pipeline means the
 		// send was dropped without a clean decision -> surface a review rather than fail silently.
-		if(sendPipeline == "" || sendPipeline == "Unresolved" || sendPipeline == "-None-")
+		if(sendPipeline == "" || sendPipeline == "unresolved" || sendPipeline == "Unresolved" || sendPipeline == "-None-")
 		{
-			automation.createManualReview(contactId.toString(), dealId.toString(), "email_pipeline_unresolved", "Sequenced email '" + canonicalKey + "' was not sent because the Deal pipeline could not be resolved (got '" + ifnull(sendPipeline, "").toString() + "', via " + pipelineVia + "). Verify Deal_Product_Key / pipeline, then re-trigger.");
+			automation.createManualReview(contactId.toString(), dealCtxStr, "email_pipeline_unresolved", "Sequenced email '" + canonicalKey + "' was not sent because the Deal pipeline could not be resolved (got '" + ifnull(sendPipeline, "").toString() + "', via " + pipelineVia + "). Set Deals.Pipeline on the Account's Deal, then re-trigger.");
 		}
 		return "";
 	}
@@ -366,22 +406,25 @@ string automation.sendSequencedEmail(string contactIdStr, string dealIdStr, stri
 			zoho.crm.updateRecord("Tasks", auditTaskId.toLong(), {"Description": oldDesc + "\nSend failed at " + zoho.currenttime.toString() + " (retryable)."});
 		}
 		// sole owner of invalid-template handling: surface a visible Manual Review on Send-Mail error
-		automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "Send Mail API failed for key '" + canonicalKey + "' (templateId " + templateId + "); see logs.");
+		automation.createAuxTask(contactId.toString(), dealCtxStr, "Manual Review", "Send Mail API failed for key '" + canonicalKey + "' (templateId " + templateId + "); see logs.");
 		automation.logAutomationEvent("sendSequencedEmail", "Contacts", contactId.toString(), "send", "failed", {"template":canonicalKey, "templateId":templateId, "sendKey":sendKey});
 		return "";
 	}
 
 	// ---- success: one audit Task ----
-	// activity mirror fields (automation-owned) for the email audit Task
-	emDeal = zoho.crm.getRecordById("Deals", dealId);
+	// Activity context snapshots (WORK ITEM 3.2). Stage + Opportunity are CONTACT-sourced;
+	// Pipeline is DEAL-sourced. emOpp used to read Deals.Stage, which made a Contact-scoped fact
+	// Deal-sourced -- every audit Task on a multi-Contact Deal recorded the Deal's roll-up.
+	// The Contact's Stage is read from the record already loaded above.
+	emStage = ifnull(contact.get("Stage"), "").toString().trim();
+	emOpp = automation.opportunityForContactStage(emStage);
 	emPipeline = "";
-	emOpp = "";
-	if(!isNull(emDeal) && !isNull(emDeal.get("id")))
+	if(hasDeal)
 	{
 		// F3 FIX: Deluge getRecordById omits the special Pipeline field; resolve via the shared
-		// REST-backed resolver (never emDeal.get("Pipeline"), which returns blank).
+		// REST-backed resolver (never deal.get("Pipeline"), which returns blank).
 		emPipeline = automation.resolveDealPipeline(dealId.toString());
-		emOpp = ifnull(emDeal.get("Stage"), "").toString();
+		if(emPipeline == "unresolved") { emPipeline = ""; }
 	}
 	auditDesc = "SendKey: " + sendKey + "\nMessage ID: " + sentMessageId;
 	if(auditTaskId != "")
@@ -391,13 +434,19 @@ string automation.sendSequencedEmail(string contactIdStr, string dealIdStr, stri
 		upd.put("Status", "Completed");
 		upd.put("Task_Type", "Email Sent");
 		upd.put("Task_Sequence_Stage", ifnull(stage, "").toString());
-		upd.put("Blocks_Sequence", "No");
+		// 5.1: the Blocks_Sequence write is removed (RETIRE, zero readers -- blocking is computed
+		// from Task_Sequence_Managed / Task_Type / Status / Task_Status, see the isBlockingTask
+		// derivation in routeContactSequence). Writers must go before the field is deleted, or an
+		// unknown api_name voids the whole update map.
 		upd.put("Subject", "Email Sent: " + canonicalKey);
 		upd.put("Description", auditDesc);
 		// email-as-Task: SEND completed (native Status), result pending reply -> Task_State Open
 		upd.put("Task_State", "Open");
 		upd.put("Task_Status", "New");
-		if(ifnull(stage, "").toString() != "") { upd.put("Task_Stage", stage); }
+		// 3.2: Task_Stage is the CONTACT's Stage when the Activity was raised. It falls back to
+		// the cadence stage argument only when the Contact's own Stage is unreadable.
+		if(emStage != "") { upd.put("Task_Stage", emStage); }
+		else if(ifnull(stage, "").toString() != "") { upd.put("Task_Stage", stage); }
 		if(emPipeline != "") { upd.put("Task_Pipeline", emPipeline); }
 		if(emOpp != "") { upd.put("Task_Opportunity", emOpp); }
 		zoho.crm.updateRecord("Tasks", auditTaskId.toLong(), upd);
@@ -408,18 +457,24 @@ string automation.sendSequencedEmail(string contactIdStr, string dealIdStr, stri
 		tkMap = Map();
 		tkMap.put("Subject", "Email Sent: " + canonicalKey);
 		tkMap.put("Status", "Completed");
-		tkMap.put("What_Id", dealId);
-		tkMap.put("$se_module", "Deals");
+		// 2.4: What_Id is optional context; Who_Id is the required link.
+		if(hasDeal)
+		{
+			tkMap.put("What_Id", dealId);
+			tkMap.put("$se_module", "Deals");
+		}
 		tkMap.put("Who_Id", contactId);
 		tkMap.put("Task_Sequence_Managed", true);
 		tkMap.put("Task_Type", "Email Sent");
 		tkMap.put("Task_Sequence_Stage", ifnull(stage, "").toString());
-		tkMap.put("Blocks_Sequence", "No");
+		// 5.1: Blocks_Sequence writer removed -- see the note on the scheduled path above.
 		tkMap.put("Description", auditDesc);
 		// email-as-Task: SEND completed (native Status), result pending reply -> Task_State Open
 		tkMap.put("Task_State", "Open");
 		tkMap.put("Task_Status", "New");
-		if(ifnull(stage, "").toString() != "") { tkMap.put("Task_Stage", stage); }
+		// 3.2: as above -- the Contact's Stage is the snapshot; the argument is the fallback.
+		if(emStage != "") { tkMap.put("Task_Stage", emStage); }
+		else if(ifnull(stage, "").toString() != "") { tkMap.put("Task_Stage", stage); }
 		if(emPipeline != "") { tkMap.put("Task_Pipeline", emPipeline); }
 		if(emOpp != "") { tkMap.put("Task_Opportunity", emOpp); }
 		if(ownerId != "") { tkMap.put("Owner", ownerId); }

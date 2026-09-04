@@ -1,3 +1,16 @@
+> # 📁 HISTORICAL — and supporting evidence for the approved model
+>
+> v4 CRM-graph E2E test log, 2026-06-08, with record ids. Preserved untouched.
+>
+> **Promoted, not just archived.** L129 tests a *second* Deal under one Account as the duplicate-detection
+> case — i.e. the one-Deal-per-Account invariant was once tested and enforced in this org. Together with
+> `import_tests/AUDIT_01_ARCHITECTURE_E2E_QUOTE.md:115` this is evidence that the approved model is a
+> **reversion to a previously proven state**, not a novel design.
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../../docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # v4 CRM Graph E2E Test Log
 
 * **Org mode:** Production (Test data only)

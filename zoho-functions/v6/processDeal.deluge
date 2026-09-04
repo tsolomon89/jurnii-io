@@ -89,41 +89,41 @@ string automation.processDeal(string deal_id, string contextJson)
 		return result.toString();
 	}
 
-	// ---- PIPELINE GATE (Product Interest is authoritative for the pipeline) ----
-	// Hold non-B2B Deals out of the B2B automation BEFORE any Quote / Amount / ledger /
-	// commercial-transition / sequence work below. Keyed on Deal_Product_Key (readable in
-	// the Deluge runtime; the Pipeline field is not) via pipelineForProductKey.
-	//   Partnership -> held pending its own automation (NOT permanently barred).
-	//   unresolved  -> data anomaly: hold + Manual Review; never run B2B on a bad key.
-	//   B2B / blank -> unchanged B2B path continues below.
-	// Distinct from Automation_Suppressed (manual kill-switch, left untouched).
-	dealPipeline = automation.pipelineForProductKey(ifnull(dealRecord.get("Deal_Product_Key"), "").toString().trim());
-	if(dealPipeline == "Partnership")
-	{
-		automation.logAutomationEvent("processDeal", "Deals", cleanId, "guard", "partnership_pipeline_held", {"product_key":ifnull(dealRecord.get("Deal_Product_Key"), "").toString()});
-		result.put("success", true);
-		result.put("outcome", "partnership_held");
-		return result.toString();
-	}
-	if(dealPipeline == "unresolved")
-	{
-		heldContactId = "";
-		hcl = dealRecord.get("Contact_Name");
-		if(!isNull(hcl) && !isNull(hcl.get("id"))) { heldContactId = hcl.get("id").toString(); }
-		automation.createManualReview(heldContactId, cleanId, "product_key_unresolved", "Deal " + cleanId + " has an unrecognised Deal_Product_Key '" + ifnull(dealRecord.get("Deal_Product_Key"), "").toString() + "' that maps to no pipeline; held out of B2B automation. Fix the Product / Deal_Product_Key.");
-		automation.logAutomationEvent("processDeal", "Deals", cleanId, "guard", "product_key_unresolved", {"product_key":ifnull(dealRecord.get("Deal_Product_Key"), "").toString()});
-		result.put("outcome", "product_key_unresolved");
-		return result.toString();
-	}
+	// ---- PIPELINE GATE -- REMOVED FROM THIS FUNCTION (work item 4.5) ----
+	// There used to be a whole-Deal hold here, keyed on Deal_Product_Key via
+	// pipelineForProductKey, which returned before ANY Quote / Amount / ledger / commercial
+	// work. Both the key and the helper are gone (3.1 / 5.1), and the SCOPE was wrong anyway:
+	// Partnership should suppress cadence DISPATCH, not bookkeeping.
+	// Automation_Suppressed (the manual kill-switch) is untouched and still gates this function.
+	// ---- WORK ITEM 4.5: the whole-Deal partnership hold is DELETED ----
+	//
+	// Both branches removed. They keyed off Deal_Product_Key -> pipelineForProductKey, i.e.
+	// Product-derived pipeline, which the corrected model does not have: a Product is a Quote
+	// under the one Deal, so the Deal has no Product identity to classify by.
+	//
+	// More importantly the SCOPE was wrong. This returned partnership_held for the ENTIRE Deal,
+	// so no reconciliation ran at all: no Amount, no Quote upsert, no Contact roll-up, no Account
+	// roll-up. A Partnership relationship should suppress CADENCE DISPATCH, not bookkeeping -- a
+	// partnership still has Quotes, still has a value, still has Contacts whose Stages roll up.
+	// Under the one-Deal model the blast radius is larger still: one Partnership Product used to
+	// hold only its own Product Deal, whereas the Account's single Deal now carries the whole
+	// relationship.
+	//
+	// Partnership scoping now lives in exactly one place -- the dispatch gate at
+	// routeContactSequence (CHANGE 20, "Partnership no-dispatch as a STANDING gate at every Stage
+	// entry"), which reads Deals.Pipeline through the corrected resolver and suppresses cadence
+	// while letting structural reconciliation run.
+	//
+	// The `unresolved` branch goes with it: it existed only to catch a bad PRODUCT key. An
+	// unresolved Deals.Pipeline is now surfaced by the dispatch gate, against the Deal that
+	// actually carries it, with a review naming the right field.
+	//
+	// Automation_Suppressed (the manual kill-switch) is untouched and still gates this function.
 
 	stageRanks = {"Marketing Consent":1, "Demo Booking":2, "Demo Confirmation":3, "Demo Hosted":4, "Proposal Preparation":5, "Commercial Agreement":6, "Onboarding":7, "Renewal":8};
 	onboardingRank = 7;
 
 	// Title -> Contact_Role mapping (precedence on duplicate titles: End User > Influencer > Decision Maker).
-	dmTitles = {"automation & ai transformation director","casino director","chief architect","chief commercial officer","chief customer officer","chief data officer","chief executive officer","chief financial officer","chief marketing officer","chief online gaming","chief operating officer","chief product officer","chief revenue officer","chief strategy officer","chief systems officer","chief technology officer","chief trading officer","chief transformation officer","co-founder","commercial director","commerical director","company director","customer experience director","data director","design director","digital director","digital experience director","director of digital product","director of gaming","director of information technology","director of operations","director of product","director of product & operations management","director of product analysis","director of product operations","director of strategy & customer experience","director of technology","director of ux & growth","director product & tech","director product & technology","experimentation lead","founder","fp&a director","gaming director","general manager","global cmo","global cxo","global director of product support & services","global head of product","global product director","global product manager","group cfo","group chief operating officer","group gaming director emea","group head of commercial gaming operations","group product manager","group strategy director","group trading director","growth director","head of acquisition","head of analytics","head of bi","head of brand","head of brand & creative","head of brand marketing","head of casino","head of casino business development","head of commercial","head of crm","head of cro","head of customer experience","head of customer marketing","head of customer value management","head of cx","head of data platform","head of design","head of digital","head of digital product","head of engineering","head of finance","head of gaming","head of gaming commercial","head of gaming operations","head of gaming product","head of group marketing","head of growth","head of igaming","head of infrastructure","head of internal audit","head of international horse racing","head of marketing","head of online","head of online & customer acquisition","head of online casino operations","head of product","head of product design","head of product marketing","head of program product + chief of staff","head of promotions","head of proposition","head of research","head of retention","head of special product development","head of sports","head of sportsbook","head of strategy & performance","head of technology","head of ux","lifecycle director","manager of global product management","managing director","market manager","marketing director","operational product supplier manager","owner","performance marketing director","president","product design director","product director","product management lead","product operations director","promotions director","proposition director","regional director","revenue director","senior global brand manager","senior ia & ai business transformation architect","senior product manager","senior vice president product development","sportsbook director","svp product","ux director","vice managing director","vice president","vice president & general manager","vice president marketing","vice president of commercials","vice president of finance","vice president of global operations & media","vice president of operations","vice president of pricing strategy","vice president of product","vice president of product development","vice president of sales & marketing","vice president product management","vice president risk","vp customer experience","vp growth","vp product"};
-	euTitles = {"advanced analytics lead","ai & automation lead","ai lead","analytics engineer","attribution manager","behavioural analyst","betting operations manager","bi analyst","bi developer","bonus manager","brand & marketing director","brand & product marketing lead","business operations manager","campaign manager","casino manager","casino product manager","commercial analyst","competitor intelligence analyst","country manager","crm director","crm manager","cro director","cro manager","cro product manager","customer excellence department head","customer experience insights manager","customer experience manager","customer insights product owner","customer journey manager","cx manager","data layer specialist","data visualisation analyst","design lead","design manager","design systems engineer","design systems lead","digital analyst","digital product manager","director customer experience & strategy","director of applied intelligence","director of cx & optimisation","director of digital marketing","director of marketing","director of marketing & affiliation","director of marketing communications","director of poker & bingo","director of poker operations","director of sportsbook","director of strategy & business delivery","director of user experience","experience researcher","experimentation manager","frontend developer","gaming product manager","generosity analytics & segmentation senior manager","go-to-market manager","head of experience","head of generosity transformation","head of performance","head of pricing strategy & insights","head of product analytics","head of product growth","head of sales","head of seo","head of trade marketing","head of ux & design","head trader","igaming product manager","information & product analysis specialist manager","interaction designer","lead product designer","lifecycle manager","live casino manager","manager egaming","manager product management","manager ux/ui & da gaming","market analyst","marketing analyst","marketing operations manager","offer manager","optimisation manager","paid search executive","planning & execution director","player engagement manager","pricing analyst","pricing strategy director","product & design operations specialist","product & experience operations manager","product analyst","product analytics","product designer","product experience director","product insights manager","product manager","product manager & qa lead","product marketing manager","product operations manager","product owner","promotions manager","proposition manager","regional head of digital","research manager","retention manager","senior crm marketing specialist","senior cvm manager","senior director sportsbook product","senior generosity transformation manager","senior product designer","senior product development manager","senior project leader","senior research manager","senior ux researcher","sports director","sportsbook operations manager","sportsbook product manager","sportsbook trading manager","tagging specialist","tracking specialist","trading manager","ui designer","user experience research manager","user research lead","user research manager","user researcher","ux analyst","ux architect","ux designer","ux researcher","voice of customer manager","web analyst","web developer","website manager","website product manager"};
-	infTitles = {"account executive","acquisition manager","administrative assistant","art director","associate director of product","bi manager","brand manager","business development director","business development executive","campaign strategy manager","chief assurance officer","chief of staff","client director","client partner","commercial finance manager","commercial manager","commercial planning manager","compliance manager","compliance product manager","consultant","creative director","creative lead","customer operations manager","data analyst","delivery director","deputy director","designer","director","director & general manager","director of corporate compliance","director of corporate security","director of engineering","director of generosity transformation","director of hospitality & general services","director of hotel sales","director of payments","director of people & culture","director of product compliance","director of product design","director of product development","director of product management","director of project management","director of trading strategy","engineering manager","experience director (product, cx, data, research & pmo)","finance business partner","fp&a manager","freelance writer","frontend lead","head cashier","head of affiliates","head of aml","head of aml, fraud & risk","head of b2b","head of backend engineering","head of business development","head of compliance","head of corporate communications","head of creative","head of creative research & insights","head of customer care","head of customer excellence","head of customer service","head of customer support","head of customer support & vip accounts management","head of facility & workplace strategy","head of greyhound racing operations","head of human resources","head of investor relations & capital deployment","head of legal","head of liquidity","head of live casino","head of operations","head of operations & support","head of partnerships","head of people & culture","head of propositions","head of social","head of streaming operations","head of support department","head of trading","head of trading & risk","head of vip","head of vip services","human resources business partner","human resources director","insight manager","legal counsel","lifecycle marketing manager","live ops product manager","live ops product manager, head of content","m&a principal","marketing manager","obg strategy","paid search manager","paid social manager","payment product manager","performance marketing manager","player experience lead","player operations manager","player protection lead","player value manager","poker product manager","principal product manager","product & customer support manager","product & insight director","product lead","product release manager","program manager","regulatory affairs manager","responsible gambling manager","safer gambling analyst","safer gambling lead","sales manager","senior business development manager","senior commercial manager","senior ecommerce consultant","senior graphic designer","senior legal & regulatory counsel","senior manager","senior manager new business & sales executive","senior product owner","senior sales manager","sportsbook property director kentucky","strategy consultant","supplier manager","team lead hr business partner","technical director","trading graduate","uk news editor","ux/ui designer","vice president of human resources","vip manager"};
-
 	// ---- duplicate-record short-circuit (still honour an explicitly-flagged duplicate) ----
 	// NOTE: duplicate-ACTIVE-Deal SILENCING + canonical reselection have been REMOVED
 	// (moved to processAccount). We still avoid reviving a record explicitly flagged as a
@@ -165,9 +165,26 @@ string automation.processDeal(string deal_id, string contextJson)
 	// NEVER compose a Subject from Deal_Name + product: Deal_Name is already
 	// "<Account> - <Product>", which is what duplicated the product name.
 	accountName = ifnull(accRec.get("Account_Name"), "").toString();
-	// Deal_Key is PRODUCT-SCOPED: accountKey + "::" + productKey. The productKey is resolved from
-	// the Deal's own Deal_Product / else EXACTLY ONE unique non-lost child Quote product (§6b below),
-	// so Deal_Key is composed there — never here, and NEVER the legacy "::active" account-level key.
+	// ---- WORK ITEM 4.9: the pricing tier for an ACTIVITY-driven Quote line ----
+	// Five sites hardcoded Quoted_Item_Pricing_Tier = "Base", which is why a Markup or Agency
+	// contract lost its tier and those matrix rows were dead.
+	//
+	// The IMPORT path is already fixed at source: the normalize adapter encodes the real tier at
+	// field 8 of the 11-field term string and processDeal's import line builder writes `impTier`.
+	// The UPDATE path already preserves whatever the existing line carries (`xlTier`).
+	//
+	// What is left is the activity-driven CREATE path, and it genuinely has no tier evidence: a
+	// Call/Task/Meeting Contract-fields payload carries Products, Brands, dates and frequency, but
+	// no pricing tier. So "Base" remains the correct DEFAULT here -- the fix is that it is now one
+	// named decision instead of three scattered literals, and the post-write verification below
+	// checks the tier ROUND-TRIPPED rather than asserting it equals "Base". If a tier ever becomes
+	// available on an activity, this is the single line to change.
+	lineTier = "Base";
+
+	// Deal_Key == Account_Key. There is no product scoping and no "::" suffix: one Account holds
+	// at most one persistent Deal, and a Product is a QUOTE under it. The key is set by
+	// _util_resolveOrCreateAccountDeal at creation and is IMMUTABLE thereafter (4.7a K1), so this
+	// function never composes or rewrites it -- see §8, which now only backfills a blank.
 	dealKey = "";
 
 	// EXACT supplied deal only — never reselect a canonical/min-id Deal.
@@ -190,8 +207,21 @@ string automation.processDeal(string deal_id, string contextJson)
 	processedContactIds = List();
 	contactJobTitleMap = Map();
 	contactRoleMap = Map();
-	contactStageMap = Map();
-	contactDatesMap = Map();
+	// 4.8a step 4: cId -> the Contact's stage-ENTRY timestamp for the Stage it currently occupies.
+	// The api_names say "Completed"; the owner-defined fact is Stage ENTRY (documented deliberately
+	// in processContact -- do not "fix" it by inference, and do not create replacement fields).
+	contactStageEntryAt = Map();
+	contactStageEntryFields = Map();
+	contactStageEntryFields.put("Marketing Consent", "Contact_Completed_Marketing_Qualification_At");
+	contactStageEntryFields.put("Demo Booking", "Contact_Completed_Demo_Booking_At");
+	contactStageEntryFields.put("Demo Confirmation", "Contact_Completed_Demo_Confirmation_At");
+	contactStageEntryFields.put("Demo Hosted", "Contact_Completed_Demo_Hosted_At");
+	contactStageEntryFields.put("Proposal Preparation", "Contact_Completed_Proposal_Preparation_At");
+	contactStageEntryFields.put("Commercial Agreement", "Contact_Completed_Commercial_Agreement_At");
+	contactStageEntryFields.put("Onboarding", "Contact_Completed_Onboarding_At");
+	contactStageEntryFields.put("Renewal", "Contact_Completed_Renewal_At");
+	// contactStageMap / contactDatesMap removed 2026-08-11 -- they existed only to feed the
+	// Deal-level stage-completion stamping in §10, which wrote six fields that do not exist.
 	contactProductKeysMap = Map();   // cId -> List of CANONICAL product_key (for product-scoped Contact_Role stamping)
 	productKeyResolveCache = Map();  // rawLower -> canonical product_key ("" if unresolved); avoids repeat resolveDealProduct calls
 	everRTPviaContact = false;   // ANY Deal-linked Contact completed Onboarding or Renewal
@@ -215,24 +245,31 @@ string automation.processDeal(string deal_id, string contextJson)
 				// arrive here in Job_Title_Raw alone. Read for the role fallback below.
 				cJobTitleRawLoop = ifnull(fullC.get("Job_Title_Raw"), "").toString().trim();
 				contactJobTitleMap.put(cId, cJobTitleLoop);
-				contactRoleMap.put(cId, ifnull(fullC.get("Contact_Role1"), "Decision Maker").toString());
-				contactStageMap.put(cId, cStage);
+				// WORK ITEM 4.7: blank STAYS blank. This defaulted to "Decision Maker", which
+				// manufactured decision-making authority for every Contact whose role was unset --
+				// and because the ranking below ALSO defaulted an unrecognised role to the top
+				// rank, a role-less Contact outranked a real Influencer. Two independent defaults
+				// pointing the same wrong way.
+				contactRoleMap.put(cId, ifnull(fullC.get("Contact_Role1"), "").toString().trim());
 
 				// everRTP via LIVE Contact completion timestamps (across ALL Deal-linked Contacts,
 				// not just the Primary — changing the Primary must not erase the historical floor).
 				if(ifnull(fullC.get("Contact_Completed_Onboarding_At"), "").toString() != "") { everRTPviaContact = true; }
 				if(ifnull(fullC.get("Contact_Completed_Renewal_At"), "").toString() != "") { everRTPviaContact = true; }
 
-				cDates = Map();
-				cDates.put("Marketing Consent", ifnull(fullC.get("Contact_Completed_Marketing_Qualification_At"), ""));
-				cDates.put("Demo Booking", ifnull(fullC.get("Contact_Completed_Demo_Booking_At"), ""));
-				cDates.put("Demo Confirmation", ifnull(fullC.get("Contact_Completed_Demo_Confirmation_At"), ""));
-				cDates.put("Demo Hosted", ifnull(fullC.get("Contact_Completed_Demo_Hosted_At"), ""));
-				cDates.put("Proposal Preparation", ifnull(fullC.get("Contact_Completed_Proposal_Preparation_At"), ""));
-				cDates.put("Commercial Agreement", ifnull(fullC.get("Contact_Completed_Commercial_Agreement_At"), ""));
-				cDates.put("Onboarding", ifnull(fullC.get("Contact_Completed_Onboarding_At"), ""));
-				cDates.put("Renewal", ifnull(fullC.get("Contact_Completed_Renewal_At"), ""));
-				contactDatesMap.put(cId, cDates);
+				// The eight-field cDates map removed 2026-08-11 is NOT restored: it fed the §10
+				// Deal-level stamping that wrote six phantom fields, and reading all eight per
+				// Contact was wasted work.
+				//
+				// WORK ITEM 4.8a step 4 needs exactly ONE of them -- the timestamp for the Stage
+				// this Contact CURRENTLY occupies -- as the recency criterion in the
+				// leading-Contact ordering. One targeted read off the record already in hand.
+				cEntryField = ifnull(contactStageEntryFields.get(cStage), "").toString();
+				if(cEntryField != "")
+				{
+					cEntryAt = ifnull(fullC.get(cEntryField), "").toString().trim();
+					if(cEntryAt != "") { contactStageEntryAt.put(cId, cEntryAt); }
+				}
 
 				// Stamp Contact_Role on the Contact if blank and the title resolves to a role.
 				// Falls back to Job_Title_Raw when the governed picklist is empty, matching
@@ -244,11 +281,9 @@ string automation.processDeal(string deal_id, string contextJson)
 				cContactRoleLoop = ifnull(fullC.get("Contact_Role1"), "").toString().trim();
 				if(cContactRoleLoop == "" && (cJobTitleLoop != "" || cJobTitleRawLoop != ""))
 				{
-					resolvedRoleLoop = if(cJobTitleLoop != "", "Decision Maker", "");
+					// WORK ITEM 4.7: one authority; blank stays blank.
+					resolvedRoleLoop = automation.roleForTitle(cJobTitleLoop, cJobTitleRawLoop);
 					tKeyLoop = if(cJobTitleLoop != "", cJobTitleLoop.toLowerCase(), cJobTitleRawLoop.toLowerCase());
-					if(dmTitles.contains(tKeyLoop)) { resolvedRoleLoop = "Decision Maker"; }
-					else if(euTitles.contains(tKeyLoop)) { resolvedRoleLoop = "End User"; }
-					else if(infTitles.contains(tKeyLoop)) { resolvedRoleLoop = "Influencer"; }
 					if(resolvedRoleLoop != "")
 					{
 						stampResp = zoho.crm.updateRecord("Contacts", cId.toLong(), {"Contact_Role1": resolvedRoleLoop}, noTrigger);
@@ -263,20 +298,10 @@ string automation.processDeal(string deal_id, string contextJson)
 				// Per-contact raw product-name evidence (for product-scoped Contact_Role stamping in Section 3).
 				cRawProdNames = List();
 
-				cPIStaging = ifnull(fullC.get("Product_Interest_Staging"), "").toString().trim();
-				if(cPIStaging != "")
-				{
-					for each part in cPIStaging.toList(",")
-					{
-						pTrim = part.trim();
-						if(pTrim != "" && !cRawProdNames.contains(pTrim)) { cRawProdNames.add(pTrim); }
-						if(pTrim != "" && !lowercasePIList.contains(pTrim.toLowerCase()))
-						{
-							aggregatedPIList.add(pTrim);
-							lowercasePIList.add(pTrim.toLowerCase());
-						}
-					}
-				}
+				// REMOVED 2026-08-11 -- a Contacts.Product_Interest_Staging read. That api_name does
+				// not exist on Contacts, so it always returned null and this branch never
+				// contributed evidence. Products_Linked below feeds the same two accumulators
+				// (cRawProdNames + aggregatedPIList) and is the real source.
 				cPI = fullC.get("Products_Linked");
 				if(cPI != null)
 				{
@@ -463,17 +488,15 @@ string automation.processDeal(string deal_id, string contextJson)
 	}
 	info "Existing Contact_Roles on Deal " + targetDealId + ": " + existingRoleMap.size();
 
-	// Product-scope guard: a Contact is stamped onto this Deal ONLY if its product evidence
-	// matches the Deal's product, OR it is the controlling Deal/Quote Contact (Contact_Name).
-	dealProdKey = ifnull(dealRecord.get("Deal_Product_Key"), "").toString().trim();
-	if(dealProdKey == "")
-	{
-		dealProdLookup = dealRecord.get("Deal_Product");
-		if(!isNull(dealProdLookup) && !isNull(dealProdLookup.get("name")))
-		{
-			dealProdKey = ifnull(automation.computeProductKey(dealProdLookup.get("name").toString()), "").toString().trim();
-		}
-	}
+	// ---- WORK ITEM 4.3 / 5.1: the product-scope guard is REMOVED ----
+	// A Contact used to be stamped onto this Deal only if its product evidence matched the DEAL's
+	// product. Under the approved model the Deal has no product, and a Contact's membership of a
+	// relationship has nothing to do with which Product it happens to carry evidence for: one
+	// Deal holds many Contact opportunities and many Product Quotes, independently.
+	//
+	// dealProdKey is kept as a blank so the scope test below degrades to "always in scope" --
+	// which is the corrected behaviour -- without restructuring the loop that reads it.
+	dealProdKey = "";
 	dealPrimaryContactId = "";
 	dealCnLookup = dealRecord.get("Contact_Name");
 	if(!isNull(dealCnLookup) && !isNull(dealCnLookup.get("id"))) { dealPrimaryContactId = dealCnLookup.get("id").toString(); }
@@ -506,23 +529,22 @@ string automation.processDeal(string deal_id, string contextJson)
 			if(existingRoleVal == null || existingRoleVal.toString().trim() == "")
 			{
 				cJobTitle = ifnull(contactJobTitleMap.get(cId), "").toString().trim();
-				resolvedRoleName = "Decision Maker";
-				if(cJobTitle != "")
-				{
-					titleKey = cJobTitle.toLowerCase();
-					if(euTitles.contains(titleKey)) { resolvedRoleName = "End User"; }
-					else if(infTitles.contains(titleKey)) { resolvedRoleName = "Influencer"; }
-				}
-				resolvedRoleId = ifnull(roleIdMap.get(resolvedRoleName), "").toString();
-				if(resolvedRoleId == "")
-				{
-					resolvedRoleId = ifnull(roleIdMap.get("Decision Maker"), "").toString();
-				}
+				// WORK ITEM 4.7: the Contact_Roles junction value comes from the SAME authority,
+				// and an unresolved title no longer becomes a Decision Maker. The junction reads
+				// the CONTACT -- see the roleValueToPass resolution below.
+				resolvedRoleName = automation.roleForTitle(cJobTitle, "");
+				// 4.7: the "Decision Maker" fallback is REMOVED. It applied whenever roleIdMap had
+				// no entry for the resolved name -- INCLUDING when the name was blank -- so an
+				// unresolved title still reached the junction as a Decision Maker even after the
+				// resolver stopped saying so. Blank now stays blank: the junction row is written
+				// WITHOUT a Contact_Role rather than with a guessed one.
+				resolvedRoleId = "";
+				if(resolvedRoleName != "") { resolvedRoleId = ifnull(roleIdMap.get(resolvedRoleName), "").toString(); }
 				roleValueToPass = resolvedRoleId;
 				if(roleValueToPass == "") { roleValueToPass = resolvedRoleName; }
 
 				roleMap = Map();
-				roleMap.put("Contact_Role", roleValueToPass);
+				if(roleValueToPass != "") { roleMap.put("Contact_Role", roleValueToPass); }
 				roleResp = zoho.crm.updateRelatedRecord("Contact_Roles", cId.toLong(), "Deals", targetDealId.toLong(), roleMap);
 				info "Contact_Roles upsert deal=" + targetDealId + " contact=" + cId + " role=" + resolvedRoleName + " (passed=" + roleValueToPass + ", title=" + cJobTitle + ") resp=" + roleResp;
 			}
@@ -542,6 +564,37 @@ string automation.processDeal(string deal_id, string contextJson)
 	cnLookup0 = targetDeal.get("Contact_Name");
 	if(cnLookup0 != null && cnLookup0.get("id") != null) { currentPrimaryId = cnLookup0.get("id").toString(); }
 
+	// ======================================================================================
+	// WORK ITEM 4.8a -- the leading-Contact election, fully specified.
+	//
+	// Elected FROM CONTACT FACTS ONLY. No Quote is consulted. Each criterion is consulted only
+	// to break a tie in the one above it:
+	//
+	//   1. Viability      Contacts.State == "Open"
+	//   2. Authority      Contacts.Contact_Role1, ranked Decision Maker > Influencer > End User.
+	//                     A BLANK or unrecognised role does not rank -- it sorts LAST.
+	//   3. Progression    highest Contacts.Stage rank on the 8-stage ladder
+	//   4. Recency        Contact_Completed_<CurrentStage>_At, most recent wins. Equal or blank
+	//                     falls through to 5.
+	//   5. Tie-break      the incumbent Deals.Contact_Name if still a candidate, else the LOWEST
+	//                     Contact id. Never related-list iteration order.
+	//
+	// Criteria 1 and 3 are already applied upstream: openContactIdsAtMax is the set of State=Open
+	// Contacts at the maximum Stage rank. This block applies 2, 4 and 5 to that set.
+	//
+	// ⚠ TWO CORRECTIONS, both behaviour-changing:
+	//
+	// (a) THE ROLE RANKING WAS INVERTED AND FAILED OPEN. It read
+	//     {"Decision Maker":3, "End User":2, "Influencer":1} -- but the authority order is
+	//     Decision Maker > Influencer > End User, so End User and Influencer were the wrong way
+	//     round. Worse, BOTH the map lookup and contactRoleMap defaulted an unknown/blank role to
+	//     rank 3, the TOP -- so a Contact with no role at all beat a known Decision Maker on
+	//     iteration order. Blank now scores 0 and sorts last, per 4.7.
+	//
+	// (b) RECENCY DID NOT EXIST. There was no criterion 4 at all: a role tie fell straight to
+	//     "whichever the loop saw first, unless it happens to be the incumbent", i.e. related-list
+	//     iteration order -- exactly what 4.8a forbids. Ordering is now total and deterministic.
+	// ======================================================================================
 	furthestContactId = "";
 	if(openContactIdsAtMax.size() > 0)
 	{
@@ -551,25 +604,69 @@ string automation.processDeal(string deal_id, string contextJson)
 		}
 		else
 		{
-			roleRanks = {"Decision Maker": 3, "End User": 2, "Influencer": 1};
+			// Authority order per 4.8a. Blank / unrecognised deliberately absent -> 0 -> last.
+			roleRanks = {"Decision Maker": 3, "Influencer": 2, "End User": 1};
 			bestRoleRank = -1;
+			bestEntryAt = "";
+			bestEntryNum = 0;
 			bestContactId = "";
 			for each cId_tie in openContactIdsAtMax
 			{
-				cRole_tie = ifnull(contactRoleMap.get(cId_tie), "Decision Maker").toString();
-				cRoleRank = ifnull(roleRanks.get(cRole_tie), 3).toLong();
-				isCurrentPrimary = cId_tie == currentPrimaryId;
-				if(cRoleRank > bestRoleRank)
+				cRole_tie = ifnull(contactRoleMap.get(cId_tie), "").toString().trim();
+				// ifnull default 0: an unrecognised role does not rank.
+				cRoleRank = ifnull(roleRanks.get(cRole_tie), 0).toLong();
+				cEntry_tie = ifnull(contactStageEntryAt.get(cId_tie), "").toString().trim();
+				// Recency compares NUMBERS, not the timestamp strings. Deluge has no relational
+				// operator for TEXT ("Operator > is not valid for TEXT expression"), so
+				// "2026-08-19T14:22:05" is folded to 20260819142205 -- the same normalisation
+				// handleTaskCompletion uses to pick the latest Note. A value too short to carry
+				// a time stays 0, which sorts last, exactly as a blank does.
+				cEntryNum = 0;
+				if(cEntry_tie.length() >= 19)
+				{
+					cEntryDigits = cEntry_tie.substring(0, 19).replaceAll("[^0-9]", "");
+					if(cEntryDigits != "") { cEntryNum = cEntryDigits.toLong(); }
+				}
+
+				takeIt = false;
+				if(bestContactId == "")
+				{
+					takeIt = true;
+				}
+				else if(cRoleRank > bestRoleRank)
+				{
+					// 2. authority
+					takeIt = true;
+				}
+				else if(cRoleRank == bestRoleRank)
+				{
+					// 4. recency, on the normalised yyyyMMddHHmmss numbers computed above.
+					// Timestamps are "yyyy-MM-dd'T'HH:mm:ss" (or the Zoho ISO form), which
+					// would sort correctly lexically -- but Deluge cannot apply > to TEXT at
+					// all, so the compare is numeric. A blank never wins: W7 says a blank does
+					// not rank at this step, and the presence test stays on the STRING so a
+					// blank is distinguished from an unparseable value that also folds to 0.
+					if(cEntry_tie != "" && bestEntryAt == "") { takeIt = true; }
+					else if(cEntry_tie != "" && bestEntryAt != "" && cEntryNum > bestEntryNum) { takeIt = true; }
+					else if(cEntry_tie == bestEntryAt)
+					{
+						// 5. stable tie-break: incumbent first, else lowest id. Deterministic and
+						// independent of iteration order.
+						if(cId_tie == currentPrimaryId) { takeIt = true; }
+						else if(bestContactId != currentPrimaryId && cId_tie.toLong() < bestContactId.toLong()) { takeIt = true; }
+					}
+				}
+
+				if(takeIt)
 				{
 					bestRoleRank = cRoleRank;
-					bestContactId = cId_tie;
-				}
-				else if(cRoleRank == bestRoleRank && isCurrentPrimary)
-				{
+					bestEntryAt = cEntry_tie;
+					bestEntryNum = cEntryNum;
 					bestContactId = cId_tie;
 				}
 			}
 			furthestContactId = bestContactId;
+			automation.logAutomationEvent("processDeal", "Deals", targetDealId, "leading_contact", "elected", {"contact":bestContactId, "role_rank":bestRoleRank.toString(), "entry_at":bestEntryAt, "candidates":openContactIdsAtMax.size().toString()});
 		}
 	}
 
@@ -962,7 +1059,7 @@ string automation.processDeal(string deal_id, string contextJson)
 							pm.put("id", prodId);
 							lm.put("Product_Name", pm);
 							lm.put("Quantity", 1);
-							lm.put("Quoted_Item_Pricing_Tier", "Base");
+							lm.put("Quoted_Item_Pricing_Tier", lineTier);
 							if(ctxBrands != "" && ctxBrands != "null") { lm.put("Quoted_Item_Plan_Brands", ctxBrands.toLong()); }
 							if(ctxFreq != "") { lm.put("Quoted_Item_Frequency", ctxFreq); }
 							if(ctxBrands != "" && ctxBrands != "null")
@@ -1081,7 +1178,7 @@ string automation.processDeal(string deal_id, string contextJson)
 						line = Map();
 						linePm = Map(); linePm.put("id", prodId); line.put("Product_Name", linePm);
 						line.put("Quantity", 1);
-						line.put("Quoted_Item_Pricing_Tier", "Base");
+						line.put("Quoted_Item_Pricing_Tier", lineTier);
 						if(ctxBrands != "" && ctxBrands != "null") { line.put("Quoted_Item_Plan_Brands", ctxBrands.toLong()); }
 						if(ctxFreq != "") { line.put("Quoted_Item_Frequency", ctxFreq); }
 						if(ctxBrands != "" && ctxBrands != "null")
@@ -1180,7 +1277,12 @@ string automation.processDeal(string deal_id, string contextJson)
 								vL = vLines.get(0);
 								vlp = vL.get("Product_Name");
 								if(!isNull(vlp) && !isNull(vlp.get("id")) && vlp.get("id").toString() == prodId) { vLineOk = true; }
-								vTierOk = (ifnull(vL.get("Quoted_Item_Pricing_Tier"), "").toString() == "Base");
+								// WORK ITEM 4.9. This asserted the written tier was literally "Base", so the
+								// moment a real Markup or Agency tier is carried through, a correct write
+								// would FAIL verification and raise a review. Verify the tier ROUND-TRIPPED
+								// -- that what came back is what went out -- rather than that it equals one
+								// hardcoded value.
+								vTierOk = (ifnull(vL.get("Quoted_Item_Pricing_Tier"), "").toString() == lineTier);
 								if(ctxBrands != "" && ctxBrands != "null") { vBrandsOk = (ifnull(vL.get("Quoted_Item_Plan_Brands"), "").toString() == ctxBrands); }
 							}
 							if(vKeyOk != true || vProdOk != true || vLineOk != true || vTierOk != true || vBrandsOk != true)
@@ -1670,13 +1772,80 @@ string automation.processDeal(string deal_id, string contextJson)
 	//     Company Tier. Quote_Product = the canonical Deal_Product (no [quote_product_mismatch]).
 	// ===================================================================
 	scafDealState = ifnull(targetDeal.get("Opportunity_State"), "Open").toString().trim();
+	// ---- WORK ITEM 5.1: the scaffold Product comes from EVIDENCE, not Deals.Deal_Product ----
+	// The scaffold Draft Quote gives an Open Deal a priced placeholder. With no Deal-level
+	// Product, the Product must come from the same evidence everything else uses.
+	//
+	// Only a SINGLE unambiguous Product scaffolds. With several the right artefact is several real
+	// Quotes -- which the import and activity paths create -- not a scaffold guessing which one to
+	// represent. With none, nothing scaffolds, so "no Productless Quote is ever created" holds, and
+	// plan item 4.9 endorses that case explicitly: the Target-ACV estimate lives in Deals.Amount
+	// under basis target_acv_pipeline and no Quote exists.
+	//
+	// TWO SOURCES, in order:
+	//   1. resolvedProductIds -- Products actually linked on THIS pass. Only populated when the
+	//      caller supplied activity context (ctx.products), i.e. an activity-driven reconcile.
+	//   2. the ACCOUNT's product evidence -- for a PLAIN reconcile (processDeal(dealId, "{}")),
+	//      where ctx is empty. Without this fallback the scaffold silently stopped firing on
+	//      plain reconciles: it used to read Deals.Deal_Product, which WAS populated on existing
+	//      Deals, so removing that field removed the only source the plain path had.
+	//
+	// ⚠ "partnership" is excluded from scaffold candidacy. It is a real Product, but a
+	// Partnership relationship must not receive a B2B placeholder Quote -- the whole point of the
+	// Pipeline gate is that partnerships are not run as B2B opportunities.
 	scafProdId = "";
 	scafProdName = "";
-	dpScaf = targetDeal.get("Deal_Product");
-	if(!isNull(dpScaf) && !isNull(dpScaf.get("id")))
+	scafCandIds = List();
+	scafVia = "";
+	if(resolvedProductIds.size() > 0)
 	{
-		scafProdId = dpScaf.get("id").toString();
-		scafProdName = ifnull(dpScaf.get("name"), "").toString();
+		scafCandIds = resolvedProductIds;
+		scafVia = "activity_context";
+	}
+	else if(accountId != "")
+	{
+		// Plain reconcile: fall back to the Account's product evidence. Same route the Pipeline
+		// derivation in _util_resolveOrCreateAccountDeal uses, so the two agree by construction.
+		scafEvRaw = automation.collectProductEvidence("Accounts", accountId);
+		scafEv = Map();
+		if(!isNull(scafEvRaw) && scafEvRaw.toString().trim() != "") { scafEv = scafEvRaw.toString().toMap(); }
+		for each scafNm in ifnull(scafEv.get("raw"), List())
+		{
+			scafNmStr = ifnull(scafNm, "").toString().trim();
+			if(scafNmStr == "") { continue; }
+			if(automation.computeProductKey(scafNmStr) == "partnership") { continue; }
+			scafRes = automation.resolveDealProduct(scafNmStr);
+			scafResMap = Map();
+			if(!isNull(scafRes) && scafRes.toString().trim() != "") { scafResMap = scafRes.toString().toMap(); }
+			// Test `valid`, matching the other three call sites -- an unresolved name must not
+			// contribute a candidate, or an unrecognised Product Interest would scaffold nothing
+			// while still counting toward the "exactly one" test below.
+			if(ifnull(scafResMap.get("valid"), "false").toString() == "true")
+			{
+				scafResId = ifnull(scafResMap.get("product_id"), "").toString().trim();
+				if(scafResId != "" && scafResId.matches("[0-9]+") && !scafCandIds.contains(scafResId)) { scafCandIds.add(scafResId); }
+			}
+		}
+		if(scafCandIds.size() > 0) { scafVia = "account_evidence"; }
+	}
+
+	if(scafCandIds.size() == 1)
+	{
+		scafCandId = ifnull(scafCandIds.get(0), "").toString().trim();
+		if(scafCandId.matches("[0-9]+"))
+		{
+			// One read, only on the scaffold path, only when a single Product resolved.
+			scafProdRec = zoho.crm.getRecordById("Products", scafCandId.toLong());
+			if(!isNull(scafProdRec) && !isNull(scafProdRec.get("id")))
+			{
+				scafProdId = scafCandId;
+				scafProdName = ifnull(scafProdRec.get("Product_Name"), "").toString().trim();
+			}
+		}
+	}
+	if(scafProdId != "")
+	{
+		automation.logAutomationEvent("processDeal", "Deals", targetDealId, "scaffold_product", scafProdName, {"via":scafVia, "candidates":scafCandIds.size().toString()});
 	}
 	if(!isImport && scafDealState == "Open" && scafProdId != "" && accountId != "")
 	{
@@ -1716,7 +1885,7 @@ string automation.processDeal(string deal_id, string contextJson)
 			scafLine = Map();
 			scafLinePm = Map(); scafLinePm.put("id", scafProdId); scafLine.put("Product_Name", scafLinePm);
 			scafLine.put("Quantity", 1);
-			scafLine.put("Quoted_Item_Pricing_Tier", "Base");
+			scafLine.put("Quoted_Item_Pricing_Tier", "Base");   // 4.9: the scaffold Draft has no tier evidence -- "Base" is the correct default here, not a lost value.
 			// List_Price 0 so Zoho does not inherit the Product Unit_Price and fabricate a total.
 			scafLine.put("List_Price", 0);
 			scafLines = List(); scafLines.add(scafLine);
@@ -1843,10 +2012,24 @@ string automation.processDeal(string deal_id, string contextJson)
 	quoteCount = 0;
 	// Phase 1: product identity + controlling-Contact gathered INSIDE the Amount loop (no extra reads).
 	nonLostProdKeys = List();          // distinct normalised Quote_Product keys across non-lost Quotes
-	nonLostProdIdByKey = Map();        // productKey -> Products record id (for stamping Deal_Product)
-	ctrlContactId = "";                // controlling Quote's Contact (most-advanced non-lost Quote)
-	ctrlContactRank = -1;
-	ctrlContactQuoteId = 0;
+	nonLostProdIdByKey = Map();        // productKey -> Products record id
+	// ---- WORK ITEM 4.4: per-Quote evidence for the P1 / P2 integrity checks in 6b ----
+	// Collected in this loop rather than a second pass: the full Quote is already being read
+	// here for its calculated totals, so the line scan is free.
+	// Scope is deliberately the SAME as the Amount scope -- open Quotes only. A Closed Won or
+	// Closed Lost Quote is contract history whose attribution is retained permanently (§7.3), so
+	// raising an integrity review against one would report a defect nobody is allowed to fix.
+	quoteProductRows = Map();          // quoteId -> List of normalised line Product keys
+	quoteHeaderProductKey = Map();     // quoteId -> normalised header Quote_Product key
+	// ---- WORK ITEM 4.8a: ctrlContactId is GONE ----
+	// It elected a "controlling Contact" from the most-advanced non-lost Quote and then overrode
+	// Deals.Contact_Name with it. That was circular (open-Quote attribution must FOLLOW the
+	// leading Contact, so it cannot elect one) and it made primaryContactId and dealContactId
+	// diverge. The election is now §4's, from Contact facts only.
+	//
+	// What replaces it is the OPPOSITE direction of travel: open Quotes are RE-ATTRIBUTED to the
+	// independently elected leading Contact (canary C7), while Closed Won / Closed Lost Quotes
+	// keep their historical attribution permanently (§7.3, canary C8).
 	qStageRankMap = {"Draft":1, "Negotiation":2, "On Hold":2, "Delivered":3, "Confirmed":4, "Closed Won":5};
 	dealQuotesAmt = zoho.crm.getRelatedRecords("Quotes", "Deals", targetDealId.toLong());
 	if(dealQuotesAmt != null && dealQuotesAmt.size() > 0 && !dealQuotesAmt.toString().startsWith("{\"code\""))
@@ -1879,7 +2062,7 @@ string automation.processDeal(string deal_id, string contextJson)
 			else if(sub > 0) { qTotal = sub; }
 			totalAmount = totalAmount + qTotal;
 
-			// --- Phase 1: gather this non-lost Quote's product key + controlling Contact ---
+			// --- gather this non-lost Quote's product key + controlling Contact ---
 			qpLk = fullQ.get("Quote_Product");
 			if(!isNull(qpLk) && !isNull(qpLk.get("name")))
 			{
@@ -1888,19 +2071,44 @@ string automation.processDeal(string deal_id, string contextJson)
 				{
 					if(!nonLostProdKeys.contains(qpk)) { nonLostProdKeys.add(qpk); }
 					if(!isNull(qpLk.get("id"))) { nonLostProdIdByKey.put(qpk, qpLk.get("id").toString()); }
+					quoteHeaderProductKey.put(dqId, qpk);
 				}
 			}
-			qcLk = fullQ.get("Contact_Name");
-			if(!isNull(qcLk) && !isNull(qcLk.get("id")))
+			// 4.4 / P1: every Quoted_Items row's Product, normalised. Product_Name is the line's
+			// Product lookup (standard, not a custom subform field, so a native read carries it).
+			// A Quote with NO readable lines contributes nothing -- absence of evidence is not a
+			// violation, and inventing one would put a review on every scaffold Draft.
+			qLines = fullQ.get("Quoted_Items");
+			if(!isNull(qLines) && qLines.size() > 0)
 			{
-				qCid = qcLk.get("id").toString();
-				qRank = ifnull(qStageRankMap.get(qStg), 0).toLong();
-				if(qRank > ctrlContactRank || (qRank == ctrlContactRank && dqId.toLong() > ctrlContactQuoteId))
+				qLineKeys = List();
+				for each ql in qLines
 				{
-					ctrlContactRank = qRank;
-					ctrlContactQuoteId = dqId.toLong();
-					ctrlContactId = qCid;
+					qlProd = ql.get("Product_Name");
+					if(!isNull(qlProd) && !isNull(qlProd.get("name")))
+					{
+						qlk = automation.computeProductKey(qlProd.get("name").toString());
+						if(qlk != "" && !qLineKeys.contains(qlk)) { qLineKeys.add(qlk); }
+					}
 				}
+				if(qLineKeys.size() > 0) { quoteProductRows.put(dqId, qLineKeys); }
+			}
+			// ---- C7: open-Quote attribution FOLLOWS the elected leading Contact ----
+			// furthestContactId is §4's election, already resolved from Contact facts only before
+			// this loop runs. This loop only ever sees OPEN Quotes -- Closed Won and Closed Lost
+			// were skipped by the Amount guard above -- so C8 holds by construction: a closed
+			// Quote's Contact_Name is never reachable from here, and re-electing a different
+			// leading Contact later cannot disturb it.
+			qcLk = fullQ.get("Contact_Name");
+			qCurCid = "";
+			if(!isNull(qcLk) && !isNull(qcLk.get("id"))) { qCurCid = qcLk.get("id").toString(); }
+			if(furthestContactId != "" && qCurCid != furthestContactId)
+			{
+				qAttr = Map();
+				qAttrC = Map(); qAttrC.put("id", furthestContactId);
+				qAttr.put("Contact_Name", qAttrC);
+				zoho.crm.updateRecord("Quotes", dqId.toLong(), qAttr, noTrigger);
+				automation.logAutomationEvent("processDeal", "Quotes", dqId, "quote_attribution", "followed_leading_contact", {"deal":targetDealId, "from":qCurCid, "to":furthestContactId, "stage":qStg});
 			}
 		}
 	}
@@ -1913,80 +2121,96 @@ string automation.processDeal(string deal_id, string contextJson)
 	info "Amount recompute: quoteCount=" + quoteCount + " totalAmount=" + totalAmount;
 
 	// ===================================================================
-	// 6b. Phase 1 — resolve the Deal's PRODUCT identity + compose the product-scoped Deal_Key.
-	//     Precedence (never "::active", never partial):
-	//       - Deal_Product / Deal_Product_Key present -> AUTHORITATIVE; compose Deal_Key from it,
-	//         and flag any disagreeing non-lost Quote [quote_product_mismatch] (do NOT auto-move).
-	//       - else derive from non-lost child Quotes: EXACTLY ONE unique product key -> stamp + compose;
-	//         >1 unique -> [quote_product_mismatch], do NOT stamp Deal_Product / compose Deal_Key;
-	//         0 -> [product_unresolved], do NOT compose Deal_Key.
-	//     (dUpd does not exist yet; stamping of Deal_Product/Key/Deal_Key happens in §8.)
+	// 6b. QUOTE INTEGRITY  (work item 4.4)
+	//
+	// ⚠ WHAT WAS HERE IS DELETED. §6b previously resolved the Deal's PRODUCT IDENTITY and
+	// composed a product-scoped Deal_Key, in four branches:
+	//
+	//   1. Deal_Product / Deal_Product_Key present -> authoritative; compose
+	//      accountKey + "::" + productKey, and flag any disagreeing non-lost Quote
+	//      as [quote_product_mismatch]                                  -> DELETED
+	//   2. exactly one unique non-lost Quote product -> derive the Deal's product from it
+	//      and compose the key                                          -> DELETED
+	//   3. more than one -> [quote_product_mismatch], stamp nothing      -> DELETED
+	//   4. none, and FTP+ -> [product_unresolved]                        -> RE-SCOPED, kept
+	//
+	// Branches 1-3 are Product-Deal artefacts. Under the approved model a Deal has no Product
+	// identity to resolve, and SEVERAL Quote Products under one Deal is NORMAL OPERATION rather
+	// than a mismatch -- which is why [quote_product_mismatch] is one of the three retired
+	// review codes. Branch 2 was the most actively harmful: it silently stamped the Deal with
+	// whichever single Product happened to be quoted first, creating exactly the Product
+	// identity the model says does not exist.
+	//
+	// ⚠ AND NONE OF IT VALIDATED QUOTE INTEGRITY. Verified: no header-versus-line Product
+	// consistency check existed anywhere in the 38 files, and no multi-line guard either. B3
+	// proved agreement 125/125 by manual query -- nothing ENFORCED it. So this is a gap the
+	// correction closes, and the checks below are new behaviour, not preserved behaviour.
+	//
+	// Product cardinality is NOT row cardinality:
+	//
+	//   P1  All Quoted_Items rows on a Quote resolve to the SAME Product.
+	//       The §7.2 invariant "one Product per Quote" is a statement about PRODUCTS.
+	//   P2  Quotes.Quote_Product equals the Product P1 resolved.
+	//       The header is a derived queryable index, never a competing authority (§7.4).
+	//   P3  Row cardinality is NOT asserted. One row today (125/125 live) is an
+	//       IMPLEMENTATION FACT, not a semantic invariant: splitting one Product across rows --
+	//       by band, term or brand group -- violates nothing, and asserting one row would
+	//       forbid a legal shape.
+	//
+	// A violation raises a QUOTE-SCOPED review naming the Quote id. Never a Deal-product review:
+	// the defect belongs to the Quote, and attributing it to the Deal is what made the old codes
+	// unactionable.
+	//
+	// _util_matchDraftQuotes is untouched. It already discriminates by Quote_Product WITHIN one
+	// Deal, and becomes more load-bearing now that several Products legitimately coexist there.
 	// ===================================================================
-	dealProductKey = ifnull(targetDeal.get("Deal_Product_Key"), "").toString().trim();
-	dealProductId = "";
-	dpExisting = targetDeal.get("Deal_Product");
-	if(!isNull(dpExisting) && !isNull(dpExisting.get("id"))) { dealProductId = dpExisting.get("id").toString(); }
-	if(dealProductKey == "" && !isNull(dpExisting) && !isNull(dpExisting.get("name")))
+	for each iq in quoteProductRows.keys()
 	{
-		dealProductKey = automation.computeProductKey(dpExisting.get("name").toString());
-	}
-	dealProductResolved = false;
+		iqId = iq.toString();
+		iqKeys = quoteProductRows.get(iqId);
+		if(isNull(iqKeys)) { continue; }
 
-	if(dealProductKey != "")
-	{
-		// AUTHORITATIVE Deal product — compose from it; flag any Quote that disagrees.
-		dealProductResolved = true;
-		dealKey = accountKey + "::" + dealProductKey;
-		qDisagree = false;
-		for each pk in nonLostProdKeys
+		// ---- P1: one PRODUCT across all rows (any number of rows) ----
+		iqDistinct = List();
+		for each rk in iqKeys
 		{
-			if(pk.toString() != dealProductKey) { qDisagree = true; }
+			rks = ifnull(rk, "").toString().trim();
+			if(rks != "" && !iqDistinct.contains(rks)) { iqDistinct.add(rks); }
 		}
-		if(qDisagree)
+		if(iqDistinct.size() > 1)
 		{
 			result.put("reviewRequired", true);
-			if(!reviewReasons.contains("quote_product_mismatch")) { reviewReasons.add("quote_product_mismatch"); }
-			automation.createManualReview(primaryContactId, targetDealId, "quote_product_mismatch", "Deal_Product=" + dealProductKey + " but non-lost Quote products = " + nonLostProdKeys.toString() + ". Reroute mismatched Quotes to the correct Product Deal (not auto-moved).");
-			automation.logAutomationEvent("processDeal", "Deals", targetDealId, "product_mismatch", "quote_vs_deal_product", {"deal":dealProductKey, "quotes":nonLostProdKeys.toString()});
+			if(!reviewReasons.contains("quote_product_cardinality")) { reviewReasons.add("quote_product_cardinality"); }
+			automation.createManualReview(primaryContactId, targetDealId, "quote_product_cardinality", "Quote " + iqId + " has Quoted_Items rows resolving to MORE THAN ONE Product (" + iqDistinct.toString() + "). One Quote carries exactly one Product; several Products belong on several Quotes under this same Deal. Split the Quote. (Several ROWS for one Product are fine - band, term or brand-group splits are legal.)");
+			automation.logAutomationEvent("processDeal", "Quotes", iqId, "quote_integrity", "product_cardinality_violated", {"deal":targetDealId, "products":iqDistinct.toString()});
+			continue;
+		}
+		if(iqDistinct.size() == 0) { continue; }
+
+		// ---- P2: the header agrees with the lines ----
+		iqLineKey = iqDistinct.get(0).toString();
+		iqHeaderKey = ifnull(quoteHeaderProductKey.get(iqId), "").toString().trim();
+		if(iqHeaderKey != "" && iqHeaderKey != iqLineKey)
+		{
+			result.put("reviewRequired", true);
+			if(!reviewReasons.contains("quote_header_line_mismatch")) { reviewReasons.add("quote_header_line_mismatch"); }
+			automation.createManualReview(primaryContactId, targetDealId, "quote_header_line_mismatch", "Quote " + iqId + " header Quote_Product is '" + iqHeaderKey + "' but its Quoted_Items rows resolve to '" + iqLineKey + "'. The header is a derived index of the lines, never a competing authority - correct the header to match the lines.");
+			automation.logAutomationEvent("processDeal", "Quotes", iqId, "quote_integrity", "header_line_mismatch", {"deal":targetDealId, "header":iqHeaderKey, "lines":iqLineKey});
 		}
 	}
-	else if(nonLostProdKeys.size() == 1)
+
+	// ---- branch 4, RE-SCOPED: a commercial-stage relationship with NO Product evidence ----
+	// "FTP+ Deal has no Deal_Product" was Deal-identity phrasing for a real data-quality signal:
+	// a Deal at a commercial stage that nobody has quoted anything for. Re-expressed against the
+	// QUOTES rather than Deal identity, and it no longer blocks a Deal_Key (there is nothing to
+	// compose -- the key is the Account_Key and already set).
+	ftpPlus = (effectiveOppType == "FTP" || effectiveOppType == "RTP");
+	if(ftpPlus && nonLostProdKeys.size() == 0)
 	{
-		// derive from the single unique non-lost Quote product
-		dealProductResolved = true;
-		dealProductKey = nonLostProdKeys.get(0).toString();
-		dealProductId = ifnull(nonLostProdIdByKey.get(dealProductKey), "").toString();
-		dealKey = accountKey + "::" + dealProductKey;
-	}
-	else if(nonLostProdKeys.size() > 1)
-	{
-		// ambiguous — do NOT stamp Deal_Product or compose Deal_Key; never auto-pick.
 		result.put("reviewRequired", true);
-		if(!reviewReasons.contains("quote_product_mismatch")) { reviewReasons.add("quote_product_mismatch"); }
-		automation.createManualReview(primaryContactId, targetDealId, "quote_product_mismatch", "Deal has non-lost Quotes for multiple Products " + nonLostProdKeys.toString() + " and no authoritative Deal_Product; cannot resolve a single Product. Reroute Quotes to the correct Product Deals.");
-		automation.logAutomationEvent("processDeal", "Deals", targetDealId, "product_mismatch", "multiple_quote_products", {"keys":nonLostProdKeys.toString()});
-	}
-	else
-	{
-		// No authoritative Deal_Product AND no non-lost Quote product.
-		//   FTP+ (commercial) -> genuinely unresolved: Manual Review [product_unresolved].
-		//   Pre-FTP early-stage -> LEGACY COEXISTENCE GUARD (narrow): leave the Deal UNTOUCHED
-		//     (no [product_unresolved], no re-key, no stamp) while Phase 1 runs before the Phase 2
-		//     creators exist. dealKey stays "" so §8 never writes it (never restores "::active");
-		//     dealProductResolved stays false so §8 stamps nothing. This tolerates legacy
-		//     productless early-stage Deals until Phase 2 / fresh import replaces them.
-		ftpPlus = (effectiveOppType == "FTP" || effectiveOppType == "RTP");
-		if(ftpPlus)
-		{
-			result.put("reviewRequired", true);
-			if(!reviewReasons.contains("product_unresolved")) { reviewReasons.add("product_unresolved"); }
-			automation.createManualReview(primaryContactId, targetDealId, "product_unresolved", "FTP+ Deal has no Deal_Product and no non-lost Quote with a resolvable Product; cannot compose a product-scoped Deal_Key.");
-			automation.logAutomationEvent("processDeal", "Deals", targetDealId, "product_unresolved", "ftp_no_product_identity", {"oppType":effectiveOppType});
-		}
-		else
-		{
-			automation.logAutomationEvent("processDeal", "Deals", targetDealId, "product_skip_legacy_early_stage", "no_product_evidence_pre_ftp", {"oppType":effectiveOppType});
-		}
+		if(!reviewReasons.contains("product_unresolved")) { reviewReasons.add("product_unresolved"); }
+		automation.createManualReview(primaryContactId, targetDealId, "product_unresolved", "This relationship is at a commercial stage (" + effectiveOppType + ") but has no non-lost Quote carrying a resolvable Product, so there is no Product evidence anywhere on it. Add the Quote for what is actually being sold.");
+		automation.logAutomationEvent("processDeal", "Deals", targetDealId, "product_unresolved", "commercial_stage_no_quote_product", {"oppType":effectiveOppType});
 	}
 
 	// ===================================================================
@@ -2114,27 +2338,30 @@ pplTmp = agg.get("planProductsList"); pplTmp.add(fam);
 
 	// ===================================================================
 	// 8. Build Deal-update map (Deal_Key, Amount, primary Contact, viability, stage,
-	//    Product_Interest_Staging, ledger fields, completion stamps)
+	//    ledger fields)
 	// ===================================================================
 	dUpd = Map();
 
-	// Deal_Key is product-scoped; write ONLY when composed (§6b resolved a single Product). Never
-	// write empty / "::active" / partial. (isQuoteSrc guard preserved: quote-sourced reconciles do
-	// not clobber the key set by the creator.)
-	if(dealKey != "" && ifnull(targetDeal.get("Deal_Key"), "").toString() != dealKey && !isQuoteSrc) { dUpd.put("Deal_Key", dealKey); }
-
-	// Stamp Deal_Product / Deal_Product_Key when a single Product was resolved (§6b).
-	if(dealProductResolved && dealProductKey != "")
+	// Deal_Key == Account_Key and is IMMUTABLE once set (4.7a K1). This is now a BACKFILL only:
+	// it writes the Account_Key onto a Deal that somehow has none, and never overwrites an
+	// existing value -- not even when the Account_Key looks "better". Rewriting a live Deal_Key
+	// would silently re-identify the relationship and orphan every audit reference to it.
+	// (isQuoteSrc guard preserved: quote-sourced reconciles do not touch the key at all.)
+	if(accountKey != "" && ifnull(targetDeal.get("Deal_Key"), "").toString().trim() == "" && !isQuoteSrc)
 	{
-		if(ifnull(targetDeal.get("Deal_Product_Key"), "").toString() != dealProductKey) { dUpd.put("Deal_Product_Key", dealProductKey); }
-		if(dealProductId != "" && dealProductId.matches("[0-9]+"))
-		{
-			curDpId = "";
-			curDp2 = targetDeal.get("Deal_Product");
-			if(!isNull(curDp2) && !isNull(curDp2.get("id"))) { curDpId = curDp2.get("id").toString(); }
-			if(curDpId != dealProductId) { dpm = Map(); dpm.put("id", dealProductId); dUpd.put("Deal_Product", dpm); }
-		}
+		dUpd.put("Deal_Key", accountKey);
+		automation.logAutomationEvent("processDeal", "Deals", targetDealId, "deal_key", "backfilled_from_account_key", {"account_key":accountKey});
 	}
+
+	// ---- Deal_Product / Deal_Product_Key stamping DELETED (4.4 + 5.1) ----
+	// Both fields are retiring and a Deal has no Product identity under the approved model, so
+	// there is nothing to stamp: the §6b branches that resolved dealProductResolved /
+	// dealProductKey / dealProductId are gone, and this block referenced only those locals.
+	//
+	// Removing the WRITERS is the mandatory first step of the retirement ordering: an api_name
+	// that no longer exists can void the ENTIRE updateRecord map, taking valid keys down with it
+	// (twice recorded as a production incident). Writers out -> publish -> read the whole map
+	// back -> only then delete the fields, which happens after P10, never inside the freeze.
 
 	currentAmount = ifnull(targetDeal.get("Amount"), "0").toDecimal();
 	// Deal.Amount is set by the valuation-hierarchy block AFTER viability is resolved (it needs the
@@ -2142,55 +2369,42 @@ pplTmp = agg.get("planProductsList"); pplTmp.add(fam);
 	// carried forward as the Quote-authority input.
 
 	// primary Contact
-	primaryContactsRaw = targetDeal.get("Primary_Contact");
-	primaryContactIdsList = List();
-	if(primaryContactsRaw != null)
-	{
-		pcStr = primaryContactsRaw.toString();
-		if(pcStr.startsWith("[") && pcStr.endsWith("]") && pcStr.contains("{"))
-		{
-			for each pcItem in primaryContactsRaw
-			{
-				if(pcItem != null && pcItem.get("id") != null) { primaryContactIdsList.add(pcItem.get("id").toString()); }
-			}
-		}
-	}
-	// Deal.Contact = controlling Quote.Contact (the most-advanced non-lost Quote, resolved in §6b)
-	// when present; otherwise the furthest-stage open Account Contact (prior behaviour).
-	// Spec: Quote.Contact -> Deal.Contact.
+	//
+	// REMOVED 2026-08-11 -- the "Primary_Contact" read/write pair. That api_name does not exist on
+	// Deals, so the read always produced an empty list and the write was silently discarded.
+	//
+	// It is NOT repointed to Deal_Primary_Contact. Contact_Name is the canonical controlling Deal
+	// Contact: it is read in 12+ places across v6 and written here. Deal_Primary_Contact is a
+	// duplicate read in only three places (createManualReview:39, handleMeetingEvent:573,
+	// applyQuoteLifecycle:55), each of which immediately falls back to Contact_Name -- and because
+	// its only write targeted the phantom, it has never held a value on any Deal, so those reads
+	// have always fallen through. Adding a write here would persist duplicate state rather than
+	// remove it. Deal_Primary_Contact is scheduled for retirement once those three reads are
+	// collapsed onto Contact_Name.
+
+	// ---- WORK ITEM 4.8a: ctrlContactId is REMOVED from the ordering entirely ----
+	//
+	// Deal.Contact was overridden by the controlling Quote's Contact whenever one existed, which
+	// was CIRCULAR: open-Quote attribution is supposed to FOLLOW the leading Contact, so it cannot
+	// also help ELECT one. The override also made primaryContactId (§4) and dealContactId diverge
+	// -- so Deals.Contact_Name and the Contact that Manual Reviews were raised against could be
+	// two different people. Removing it closes that by construction: there is now one election,
+	// and both names refer to its result.
 	dealContactId = furthestContactId;
-	if(ctrlContactId != "") { dealContactId = ctrlContactId; }
+	if(dealContactId == "") { dealContactId = primaryContactId; }
 	if(dealContactId != "")
 	{
 		if(dealContactId != currentPrimaryId) { dUpd.put("Contact_Name", dealContactId); }
-		if(!primaryContactIdsList.contains(dealContactId))
-		{
-			pcList = List();
-			for each existingPcId in primaryContactIdsList
-			{
-				existingPcMap = Map(); existingPcMap.put("id", existingPcId.toLong()); pcList.add(existingPcMap);
-			}
-			newPcMap = Map(); newPcMap.put("id", dealContactId.toLong()); pcList.add(newPcMap);
-			dUpd.put("Primary_Contact", pcList);
-			primaryContactIdsList.add(dealContactId);
-		}
 	}
+	// The two must agree. primaryContactId gates transitions and owns review attribution;
+	// dealContactId is what gets written to Deals.Contact_Name.
+	primaryContactId = dealContactId;
 
-	// completion dates source = furthest primary contact's dates
-	dealPcDates = Map();
-	dealPcMaxRank = -1;
-	dealPcBestContactId = "";
-	for each pcId in primaryContactIdsList
-	{
-		pcStage = contactStageMap.get(pcId);
-		if(pcStage != null && pcStage != "")
-		{
-			pcRank = ifnull(stageRanks.get(pcStage), 1).toLong();
-			if(pcRank > dealPcMaxRank) { dealPcMaxRank = pcRank; dealPcBestContactId = pcId; }
-		}
-	}
-	if(dealPcBestContactId == "" && furthestContactId != "") { dealPcBestContactId = furthestContactId; }
-	if(dealPcBestContactId != "") { dealPcDates = contactDatesMap.get(dealPcBestContactId); }
+	// NOTE: the Deal-level completion-date source (dealPcDates) was removed 2026-08-11 along with
+	// the §10 stamping block it fed. Deals has NO stage-completion field -- live metadata is 70
+	// fields and the only *_At is Demo_Reminder_Send_At. Stage completion is Contact-scoped and
+	// owned by the eight Contact_Completed_*_At fields, which this function already reads back in
+	// Section 1 to derive everRTP.
 
 	// Product Interest staging string
 	aggregatedPIStr = "";
@@ -2198,8 +2412,8 @@ pplTmp = agg.get("planProductsList"); pplTmp.add(fam);
 	{
 		aggregatedPIStr = aggregatedPIStr + if(aggregatedPIStr != "", ", ", "") + apiItem;
 	}
-	// F1 FIX (2026-06-24): Deals.Product_Interest_Staging does NOT exist (COQL rejects it), so
-	// this write was a silent no-op. Product interest is read from Contact Products_Linked / Product_Interest_Staging
+	// F1 FIX (2026-06-24): Deals.Product_Interest_Staging does NOT exist, so that write was a
+	// silent no-op. Product interest is read from Contact Products_Linked
 	// and resolved onto the Deal as Contract_*_Plan_Products via the Quote/Quoted_Items flow above —
 	// not as a Deal staging string. aggregatedPIStr is retained only for logging/diagnostics.
 	automation.logAutomationEvent("processDeal", "Deals", targetDealId.toString(), "product_interest", "resolved_to_contract_products", {"aggregated":aggregatedPIStr});
@@ -2310,22 +2524,20 @@ pplTmp = agg.get("planProductsList"); pplTmp.add(fam);
 	}
 
 	// ===================================================================
-	// 8a2. Company Tier mirror (the ACCOUNT is live-authoritative)
-	//      Company_Tier is an Account attribute; Deal.Company_Tier is only a mirror/cache for the
-	//      Target-ACV benchmark. Keep the Deal mirror in lock-step with the Account: set/update it
-	//      when they differ, and CLEAR it when the Account tier is removed. There is NO manual
-	//      Deal-level tier override field, so the Account always wins — no [company_tier_conflict].
-	//      §8b derives the pipeline Amount from the LIVE Account tier (acctTierLive), so an Account
-	//      tier change (1->3, or ->blank) re-prices the Deal on the next reconcile (WF001c ->
-	//      processAccount -> processDeal). The Deal-tier field write here is the cache refresh.
+	// 8a2. Company Tier — the ACCOUNT is the only source. The Deal MIRROR is RETIRED.
+	//
+	// WORK ITEM 4.9 / 5.1. Deals.Company_Tier was a cache of Accounts.Company_Tier with ZERO
+	// behavioural readers: §8b below already derives the Target-ACV estimate from the LIVE Account
+	// tier (acctTierLive), and so do the import and scaffold paths. The mirror write existed only
+	// to keep a copy in step with the thing it copied.
+	//
+	// The write is removed here, ahead of the field deletion, because that ordering is mandatory:
+	// an api_name that no longer exists can void the ENTIRE updateRecord map and take valid keys
+	// with it. Writers out -> publish -> read the whole map back -> then delete, after P10.
+	//
+	// acctTierLive is still read: §8b needs it.
 	// ===================================================================
-	dealTierCur = ifnull(targetDeal.get("Company_Tier"), "").toString().trim();
 	acctTierLive = ifnull(accRec.get("Company_Tier"), "").toString().trim();
-	if(dealTierCur != acctTierLive)
-	{
-		dUpd.put("Company_Tier", acctTierLive);
-		automation.logAutomationEvent("processDeal", "Deals", targetDealId, "company_tier_mirror", acctTierLive, {"from":dealTierCur, "account":accountId});
-	}
 
 	// ===================================================================
 	// 8b. Deal.Amount valuation hierarchy (Amount is BOTH the contracted value AND the
@@ -2508,39 +2720,19 @@ pplTmp = agg.get("planProductsList"); pplTmp.add(fam);
 	}
 
 	// ===================================================================
-	// 10. Stage-completion date stamping + write Deal + Account rollups
+	// 10. Write Deal + Account rollups
 	// ===================================================================
-	stagesList = {"Marketing Consent", "Demo Booking", "Demo Confirmation", "Demo Hosted", "Proposal Preparation", "Commercial Agreement"};
-	stageFields = Map();
-	stageFields.put("Marketing Consent", "Marketing_Qualification_Completed_At");
-	stageFields.put("Demo Booking", "Demo_Booking_Completed_At");
-	stageFields.put("Demo Confirmation", "Demo_Confirmation_Completed_At");
-	stageFields.put("Demo Hosted", "Demo_Hosted_Completed_At");
-	stageFields.put("Proposal Preparation", "Proposal_Preparation_Completed_At");
-	stageFields.put("Commercial Agreement", "Commercial_Agreement_Completed_At");
-	// NOTE: Deal-level Onboarding_Completed_At / Renewal_Completed_At are PHANTOM (do not exist).
-	// They are intentionally absent from stageFields so they are NEVER written.
-
-	finalOppStage = ifnull(dUpd.get("Opportunity_Stage"), ifnull(targetDeal.get("Opportunity_Stage"), "Marketing Consent")).toString();
-	finalRank = ifnull(stageRanks.get(finalOppStage), 1).toLong();
-
-	for each stageItem in stagesList
-	{
-		stageItemRank = ifnull(stageRanks.get(stageItem), 0).toLong();
-		if(stageItemRank <= finalRank)
-		{
-			fieldApi = stageFields.get(stageItem);
-			if(fieldApi != null && targetDeal.get(fieldApi) == null && dUpd.get(fieldApi) == null)
-			{
-				pcDateVal = "";
-				if(dealPcDates != null) { pcDateVal = ifnull(dealPcDates.get(stageItem), ""); }
-				if(pcDateVal != "") { dUpd.put(fieldApi, pcDateVal.toString()); }
-				// Store local CRM time without an explicit timezone. XXX stored one hour
-				// behind in BST; literal Z stored one hour ahead; raw DateTime was ignored.
-				else { dUpd.put(fieldApi, zoho.currenttime.toString("yyyy-MM-dd'T'HH:mm:ss")); }
-			}
-		}
-	}
+	// REMOVED 2026-08-11 -- Deal-level stage-completion stamping.
+	//
+	// This block wrote six Deal fields (Marketing_Qualification_Completed_At, Demo_Booking_*,
+	// Demo_Confirmation_*, Demo_Hosted_*, Proposal_Preparation_*, Commercial_Agreement_*) on every
+	// reconcile. NONE of them exist: live Deals is 70 fields and the only *_At is
+	// Demo_Reminder_Send_At. The old comment here correctly called the Onboarding/Renewal pair
+	// phantom and excluded them -- the other six were equally phantom and were not.
+	//
+	// Stage completion is Contact-scoped. The eight Contact_Completed_*_At fields on Contacts (and
+	// Leads) are the real, populated record, and Section 1 of this function already reads them back
+	// to derive everRTP. Nothing consumed the Deal mirror.
 
 	if(dUpd.size() > 0)
 	{

@@ -1,3 +1,15 @@
+> # 📁 HISTORICAL — one end-state claim superseded
+>
+> **L63's desired end-state, "canonical Account×Product Deals", is superseded.** The approved end-state
+> is one persistent Deal per Account with Products as Quotes.
+>
+> Everything else is preserved: L36 (a seeded Product Deal set Lost) is an observation and stands, and
+> the import contract itself is unaffected by the model correction.
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../../../docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # Import Contract / Zoho Schema-Alignment Report (v6)
 
 **Template (the recurring import contract):** `Jurnii LTD Pipeline - Copy of Contact.csv`

@@ -1,21 +1,28 @@
-> # ⚠ SECOND BANNER — the Deal-linking design below is KNOWN DRIFT
+> # ⚠ SECOND BANNER — Deal-linking drift is CORRECTED IN-TREE, not yet published
 >
 > This file's existing banner correctly marks the pre-rewrite sections out of date and the "As-built"
 > material authoritative. **This banner is narrower and applies inside the surviving As-built half.**
 >
-> The section arguing that **multi-product bookings must defer sequence activation to a human** — and
-> that auto-picking a driver Deal "would break HARD RULE 7" — is **inverted relative to the approved
-> model.** HARD RULE 7 (one sequence per Contact) is correct. Deriving ambiguity from the *number of
-> Products* is the violation: authority §5.4 states that several Products or Quotes under the Deal do
-> **not** make the Contact sequence ambiguous.
+> **Corrected 2026-09-04.** The Deal-linking section below previously argued that multi-product
+> bookings *must* defer sequence activation to a human, and that auto-picking a driver Deal "would
+> break HARD RULE 7". That was inverted relative to the approved model, and both the code and this
+> file's body have now been fixed:
 >
-> Likewise "`processLead` fans out one Product Deal per resolved product" is current behaviour, not
-> target design.
+> - one Account holds **one Deal**; Products enter as **Quotes** under it
+> - HARD RULE 7 (one sequence per Contact) stands — deriving a breach of it from the *number of
+>   Products* was the violation (authority §5.4)
+> - the driver-Deal election and `multi_product_sequence_ambiguous` are **deleted**, and the review
+>   code is retired
 >
-> **What must not change:** the defensive rule that a Meeting links a Deal as `What_Id` only when that
-> Deal already exists. That is correct under either model.
+> ⚠ **The live Zoho org still runs the superseded model.** The working tree and the org differ on
+> purpose, pending the P1 publish. Until then this file describes the *target*, and the org behaves
+> the old way.
 >
-> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../../zoho-functions/docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+> **What did not change:** a Meeting links a Deal as `What_Id` only when that Deal already exists.
+> Correct under either model, and still enforced — an Account resolving to more than one Deal now
+> returns `status:'many'` and the meeting is person-linked rather than attached to a guess.
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../../zoho-functions/docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)
 
 ---
 
@@ -157,33 +164,32 @@ automation — Zoho reconciles the graph after the fact, and it is read **once**
   visitor would otherwise lose the interests already recorded against them. The enrichment read happens
   **before** the at-most-once send latch and degrades to a plain replace if it fails, so it can never
   consume the single permitted workflow-enabled write.
-- The **first** selected product is the one that resolves a Deal, because a Meeting links to exactly one
-  record via `What_Id`. With a single selection this is identical to the pre-multi-select behaviour.
+- The selected products no longer resolve *which* Deal a Meeting links to. A Meeting links to exactly
+  one record via `What_Id`, and there is now exactly one Deal per Account, so `What_Id` is simply the
+  Account's Deal. The product selection travels separately, in `Meeting_Task_Contract_Products`.
 
-> **Multi-product bookings defer sequence activation to a human. This is by design, and the
-> multi-select made it reachable.**
+> **Multi-product bookings activate normally. They no longer defer to a human.**
+> *(Corrected 2026-09-04. The previous text described the superseded model and is quoted below so the
+> change is legible.)*
 >
-> `processLead` fans out **one Product Deal per resolved product**, so a visitor who ticks two boxes
-> gets two Deals. `processContact` then applies HARD RULE 7 — one active automated sequence per
-> Contact — and, on finding more than one driver Deal, raises a
-> `multi_product_sequence_ambiguous` Manual Review **instead of** the Sequence Activation Task
-> (`processContact.deluge`, the `driverDealIds.size() > 1` branch).
+> **Formerly:** `processLead` fanned out one Product Deal per resolved product, so ticking two boxes
+> produced two Deals; `processContact` then found more than one "driver Deal" and raised
+> `multi_product_sequence_ambiguous` **instead of** the Sequence Activation Task. The multi-select
+> made that branch reachable from the happy path, so every multi-product booking cost a Manual Review.
 >
-> Before the multi-select the form could only ever send one product, so that branch was
-> unreachable from the booking flow. It is now reachable from the ordinary happy path. Nothing
-> breaks — it fails safely to a human, which is what the rule is for, and a genuinely two-product
-> prospect does need a person to choose which Deal drives the sequence. But it is a real change in
-> operational load: expect a Manual Review for every multi-product booking. Neither side was
-> altered to paper over it, because the alternatives are worse — sending only the first product
-> would discard what the visitor told us, and auto-picking a driver Deal would break HARD RULE 7.
+> **Now:** ticking two boxes produces **one Deal with two Quotes**. HARD RULE 7 — one active automated
+> sequence per Contact — is still correct and still enforced; what was wrong was deriving a breach of
+> it from the *number of products*. Cadence is Contact-scoped, so several Products under one Deal
+> cannot make a Contact's sequence ambiguous. The driver-Deal election and
+> `multi_product_sequence_ambiguous` are both deleted, and the review code is retired.
 >
-> If that load proves unacceptable, the decision belongs in Deluge (e.g. a documented precedence
-> order over driver Deals), not in the form.
-- A Product Deal is **never required to book**. At booking, if a product was selected **and** exactly
-  one matching open Deal already exists, the meeting is linked to it (`What_Id` + `$se_module='Deals'`);
-  otherwise the meeting is **person-linked** and confirms anyway. Products/Deals are never fabricated by
-  the website, and it never creates a productless Deal or a Quote (`processDeal` owns the Deal + scaffold
-  Quote).
+> The operational load this section warned about is therefore gone: a two-product prospect activates
+> like any other, and no Manual Review is raised for having bought two things.
+- A Deal is **never required to book**. At booking, if the Account already has its Deal the meeting is
+  linked to it (`What_Id` + `$se_module='Deals'`); otherwise the meeting is **person-linked** and
+  confirms anyway. Deals are never fabricated by the website, and it never creates a Deal or a Quote
+  (`processDeal` owns the Deal + scaffold Quote). If an Account resolves to **more than one** Deal the
+  resolver returns `status:'many'` and the meeting is person-linked rather than attached to a guess.
 
 ## ~~Known limitation~~ — CLOSED by the durable backend
 
@@ -230,10 +236,11 @@ No Zoho-side reconciliation workflow was added — and none may be. See the meta
 - Google Calendar is the source of availability and the Meet conference. The event stores
   `extendedProperties.private.{journeyId, email}` and emails the invitee (`sendUpdates:'all'`).
 - The Zoho **Event** always links to the resolved person (`Who_Id` = Contact when converted, else the
-  Lead), stores the Meet link, and carries `Ext_Calendar_Booking_ID = journeyId`. It links the exact
-  Product Deal (`What_Id` + **`$se_module:'Deals'`**) **only when that Deal already exists** at booking;
-  then WF007 `handleMeetingEvent` advances the pipeline. Otherwise the meeting is person-linked (see
-  Known limitation). The **Activation Task remains the human decision point**.
+  Lead), stores the Meet link, and carries `Ext_Calendar_Booking_ID = journeyId`. It links the
+  **Account's Deal** (`What_Id` + **`$se_module:'Deals'`**) **only when that Deal already exists** at
+  booking, and only when the Account resolves to exactly one — `status:'many'` is person-linked, never
+  a guess. Then WF007 `handleMeetingEvent` advances the pipeline. Otherwise the meeting is
+  person-linked (see Known limitation). The **Activation Task remains the human decision point**.
 - **Ownership verification:** because `journeyId` is client-controlled, a reused Google event is
   accepted only if its stored `journeyId` **and normalized `email`** match the signed token, and a reused
   Zoho event only if its `Ext_Calendar_Booking_ID` matches — otherwise `409 correlation_conflict`. This

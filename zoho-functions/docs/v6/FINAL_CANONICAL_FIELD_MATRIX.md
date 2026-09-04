@@ -1,3 +1,23 @@
+> # ⚠ PREDATES THE AUTHORITATIVE MODEL — largely aligned, three rows superseded
+>
+> **Materially aligned.** Its central claim — Activation-Task identity is `Who_Id` + `Task_Type`,
+> de-coupled from Deal, Stage and pipeline — matches authority §5.4 and is *more* correct under the
+> approved model than under the one the code implements. Do **not** class this file as obsolete.
+>
+> **Three rows superseded.** (1) `Deals.Opportunity_State` / `Opportunity_Status` are described as an
+> independent "Deal commercial lifecycle" and "Deal work status"; authority §6.3 says the Deal has no
+> independent opportunity lifecycle — they are derived. (2) `Deals.Stage` / `Opportunity_Stage` /
+> `Pipeline` are grouped as "Commercial ontology"; §5.1 places the opportunity ontology on the Contact.
+> (3) The nine Activity mirrors are described as "**Deal context** mirrors"; §8.3 sources Stage and
+> Opportunity from the **Contact** and only Pipeline from the Deal.
+>
+> Reconcile against `../../../../docs/V6_FIELD_VALIDATION_MATRIX_2026-08-15.md` (newer, owner-ruled) and
+> the field-use contract, which supersedes both on field classification.
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # v6 Final Canonical Field Matrix
 
 Date: 2026-06-25
@@ -132,8 +152,12 @@ Source: v6 lifecycle closeout audit + live readback synthesis (see `V6_CLOSEOUT_
   `Email|Call|Meeting|Task`, but `Calls.Sequence_Stage` reuses the same api_name with the lifecycle-stage
   vocabulary. Two different fields share the api_name with different meanings — flag for naming clarity;
   likely retain.
-- **`Commercials_Status` is still LIVE and WF004-bound (retirement NOT executed).** DEP-renamed
-  ('DEP - Commercials Status') and COQL-EMPTY, but still bound to ACTIVE WF004 (id 991103000000800001,
-  field_update trigger -> handleCommercialsStatusChange). The memory-recorded "retirement approved
-  2026-06-20" is not reflected in deployed state. Delete remains BLOCKED until WF004 is deactivated and the
-  wrapper functions retired/guarded.
+- **`Commercials_Status` — CORRECTED 2026-08-17. It is NOT WF004-bound, because WF004 does not exist.**
+  ~~still bound to ACTIVE WF004 (id 991103000000800001, field_update trigger ->
+  handleCommercialsStatusChange)~~ — refuted three ways against the live org: the org holds exactly 18
+  rules and none is WF004; `getWorkflowRuleById(991103000000800001)` returns no rule; and
+  `handleCommercialsStatusChange` is absent from the function registry.
+  The field is DEP-renamed, **0/96 populated, has zero code references and zero workflow bindings**.
+  **Delete is NOT blocked by any rule** — it is gated only by the manual console dependency check
+  (`../../../docs/V6_MANUAL_DEPENDENCY_CHECKLIST.md`). See `V6_CRUD_PLAN.md` §2 for the full live
+  rule inventory.

@@ -1,3 +1,20 @@
+> # ⚠ KNOWN DRIFT — read "## Current Architecture" as "Current *Implemented* Architecture"
+>
+> The Deal-identity statements below (`Deal = Account × Product`, `Deal_Key = accountKey::productKey`,
+> one canonical open Deal *per product key*) are **accurate descriptions of current code** and are kept
+> verbatim as current fact. They are **superseded as design**.
+>
+> Also drift: "`Deal.Opportunity_Stage` rolls up from the furthest-progressed open Contact" is correct as
+> mechanics but must not be read as *stage authority* — authority §5.1 gives granular Stage authority to
+> `Contacts.Stage`; the Deal value is a derived roll-up.
+>
+> The Workflow State, Activity Product Fields and Activity Context sections are model-neutral and
+> unchanged. **WF004, referenced at L25, does not exist in the live org.**
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # v6 Flow Reference
 
 ## Current Architecture
@@ -22,7 +39,7 @@
 | --- | --- | --- |
 | WF021 Quotes Create/Edit | Quotes | New unified Quote workflow. Keep disabled until all gates pass. |
 | WF020 Quotes | Quotes | Legacy Quote_Stage field-update workflow. Keep active until WF021 is verified. |
-| WF004 Commercials Status Handler | Deals | Legacy back-compat wrapper. Keep active until WF021 is verified, then disable. |
+| ~~WF004 Commercials Status Handler~~ | ~~Deals~~ | ⛔ **WF004 DOES NOT EXIST.** Live-verified 2026-08-17: the org has exactly 18 rules and none is WF004; there is no Deals `field_update` on `Commercials_Status`; and `handleCommercialsStatusChange` is not a registered function. Nothing to keep active, nothing to disable. |
 | WF006 Calls | Calls | Keep. Adapter reads Product-name picklist values and passes `products`. |
 | WF007 Events | Events | Keep. Adapter infers meeting type from `Meeting_Task_Stage` and passes `products`. |
 | WF008 Tasks | Tasks | Keep. Adapter reads Product-name picklist values and passes `products`. |
@@ -128,7 +145,7 @@ Multi-family Current term → one Quote per family (shares plan type / brands / 
 - Closed Lost Quotes are excluded from active amount and do not automatically close the Deal while other viable evidence remains.
 
 ## Retired Or Legacy Behavior
-- `Commercials_Status` is DEP-labeled and legacy-only while WF004 is active.
+- `Commercials_Status` is DEP-labeled, **0/96 populated, and bound to NO workflow** — WF004 does not exist. It is a plain RETIRE with no rule to deactivate first.
 - `handleCommercialsStatusChange` maps legacy values to a safe wrapper. It does not write phantom fields.
 - Do not write `Commercials_Sent_At`, `Signed_At`, `Commercials_Discussed_At`, or `Intent_To_Sign`.
 - `Meeting_Type` is DEP-labeled and unused. Events use `Meeting_Task_Stage`, `Meeting_Task_State`, and `Meeting_Task_Lost_Reasons`.
@@ -141,4 +158,4 @@ Multi-family Current term → one Quote per family (shares plan type / brands / 
 - Metadata readback confirms Quote fields, activity Product picklists, and Events `Meeting_Task_Stage`.
 - Atomic Quote write proof confirms header, `Quoted_Items`, and `Quote_Applied_Activity_Keys` can be written and read back together.
 - T1-T50 pass.
-- Final workflow readback confirms `WF021` active, `WF020` inactive, and `WF004` inactive.
+- Final workflow readback confirms `WF021` active and `WF020` inactive. (`WF004` is not part of the readback — it does not exist.)

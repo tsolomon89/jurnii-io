@@ -62,14 +62,31 @@ void automation.handleTaskCompletion(string taskIdStr)
 		return;
 	}
 
+	// ---- WORK ITEM 2.4: the Deal is OPTIONAL relationship context, not a precondition ----
+	// This guard used to RETURN unless $se_module=="Deals" AND What_Id was non-null, which
+	// made every Contact-scoped command undeliverable: activation is Contact-scoped
+	// (Who_Id required, What_Id optional) per the authoritative model, and a Contact whose
+	// Account has no Deal yet is a LEGAL state. The two branches that genuinely read Deals
+	// and Quotes -- Send Commercials and Draft Commercials -- carry their own Deal
+	// requirement further down, where it belongs.
+	//
+	// dealIdStr is "" (not "0") when there is no Deal, so every downstream pass-through --
+	// createAuxTask, createManualReview, routeContactSequence, processDeal, log payloads --
+	// receives a blank it already knows how to interpret.
 	whatLookup = task.get("What_Id");
 	seModule   = ifnull(task.get("$se_module"), "").toString();
-	if(seModule != "Deals" || isNull(whatLookup) || isNull(whatLookup.get("id")))
+	dealId = 0;
+	dealIdStr = "";
+	if(seModule == "Deals" && !isNull(whatLookup) && !isNull(whatLookup.get("id")))
 	{
-		automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "guard", "skip_no_related_deal", {"se_module":seModule});
-		return;
+		dealId = whatLookup.get("id").toLong();
+		dealIdStr = dealId.toString();
 	}
-	dealId = whatLookup.get("id").toLong();
+	hasDeal = (dealId != 0);
+	if(!hasDeal)
+	{
+		automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "context", "no_related_deal_proceeding", {"se_module":seModule});
+	}
 
 	whoLookup = task.get("Who_Id");
 	if(isNull(whoLookup) || isNull(whoLookup.get("id")))
@@ -216,7 +233,9 @@ void automation.handleTaskCompletion(string taskIdStr)
 				{
 					if(rId.toLong() != collKeep)
 					{
-						zoho.crm.updateRecord("Tasks", rId.toLong(), {"Status":"Deferred", "Blocks_Sequence":"No"}, noTrigger);
+						// 5.1: Blocks_Sequence dropped (RETIRE, zero readers). Status=Deferred alone retires
+						// the duplicate and already reads as non-blocking.
+						zoho.crm.updateRecord("Tasks", rId.toLong(), {"Status":"Deferred"}, noTrigger);
 						automation.logAutomationEvent("handleTaskCompletion", "Tasks", rId, "activation_dedupe", "deferred_duplicate", {"contact":contactId.toString(), "kept":collKeep.toString()});
 					}
 				}
@@ -236,7 +255,7 @@ void automation.handleTaskCompletion(string taskIdStr)
 				{
 					ambDetail2 = ambDetail2 + " " + aId2 + "(" + ifnull(actDetail.get(aId2), "").toString() + ")";
 				}
-				automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "[activation_control_ambiguous] Several active Sequence Activation Tasks exist for this Contact and they are not provably indistinguishable, so the command on task " + taskId + " was NOT applied. Candidates (id, Task_State/Task_Sequence_Type):" + ambDetail2 + ". Retire the ones that are not the intended control (native Status = Deferred), leaving exactly one, then re-save it.");
+				automation.createAuxTask(contactId.toString(), dealIdStr, "Manual Review", "[activation_control_ambiguous] Several active Sequence Activation Tasks exist for this Contact and they are not provably indistinguishable, so the command on task " + taskId + " was NOT applied. Candidates (id, Task_State/Task_Sequence_Type):" + ambDetail2 + ". Retire the ones that are not the intended control (native Status = Deferred), leaving exactly one, then re-save it.");
 				automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activation_control_ambiguous", "blocked", {"contact":contactId.toString(), "candidates":actActive.toString()});
 				return;
 			}
@@ -293,9 +312,18 @@ void automation.handleTaskCompletion(string taskIdStr)
 			if(contactSeqType != "") { lastKind = "legacy"; lastState = "Won"; lastType = contactSeqType; }
 			else { lastKind = "unresolvable"; }
 		}
-		else if(taskStatusMirror == "New" && tStatus == "Not Started")
+		else if(taskStatusMirror == "New")
 		{
 			// Genuinely uncommitted. The ONLY route to initial activation.
+			//
+			// WORK ITEM 1.1 (the activation trap). The test was
+			// `taskStatusMirror == "New" && tStatus == "Not Started"`. Native Status is
+			// automation-owned, but the Description tells the rep to set Task State = Won and the
+			// layout leaves Status editable, so a rep who also ticks Status = "Completed" -- the
+			// intuitive thing to do when completing a task -- fell straight through to
+			// `conflict` and could never activate. Task_Status is the mirror automation actually
+			// maintains; it alone decides whether this task is uncommitted. Native Status is now
+			// read for reporting only and never gates activation.
 			lastKind = "absent";
 		}
 		else if(taskState == "Won" && (taskStatusMirror == "Closed" || tStatus == "Completed") && taskSeqType != "" && taskSeqType == contactSeqType)
@@ -314,19 +342,19 @@ void automation.handleTaskCompletion(string taskIdStr)
 		// ---- the three stop-safely kinds: one idempotent Manual Review, nothing written ----
 		if(lastKind == "unreadable")
 		{
-			automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "[activation_marker_unreadable] Activation task " + taskId + " carries a malformed or duplicated 'ActivationCommand|' line in its Description, so no command was processed and nothing was written. That line is automation-owned: restore it to a single well-formed line, or delete it entirely so it can be rebuilt, then re-save the task.");
+			automation.createAuxTask(contactId.toString(), dealIdStr, "Manual Review", "[activation_marker_unreadable] Activation task " + taskId + " carries a malformed or duplicated 'ActivationCommand|' line in its Description, so no command was processed and nothing was written. That line is automation-owned: restore it to a single well-formed line, or delete it entirely so it can be rebuilt, then re-save the task.");
 			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activation_marker_unreadable", "blocked", {"contact":contactId.toString(), "marker_lines":markerCount.toString()});
 			return;
 		}
 		if(lastKind == "unresolvable")
 		{
-			automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "[activation_legacy_command_unresolved] Activation task " + taskId + " has no 'ActivationCommand|' marker and its Contact was activated (Sequence_Activated_At is set) but carries no Sequence_Type, so the previously-processed command cannot be reconstructed. Nothing was routed and nothing was written. Set the Contact's Sequence Type to the route that is actually running, then re-save this task.");
+			automation.createAuxTask(contactId.toString(), dealIdStr, "Manual Review", "[activation_legacy_command_unresolved] Activation task " + taskId + " has no 'ActivationCommand|' marker and its Contact was activated (Sequence_Activated_At is set) but carries no Sequence_Type, so the previously-processed command cannot be reconstructed. Nothing was routed and nothing was written. Set the Contact's Sequence Type to the route that is actually running, then re-save this task.");
 			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activation_legacy_command_unresolved", "blocked", {"contact":contactId.toString()});
 			return;
 		}
 		if(lastKind == "conflict")
 		{
-			automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "[activation_command_state_conflict] Activation task " + taskId + " has no 'ActivationCommand|' marker and its commit signals disagree (Task_State=" + taskState + ", Task_Status=" + taskStatusMirror + ", Status=" + tStatus + ", Task_Sequence_Type=" + taskSeqType + ", Contact Sequence_Type=" + contactSeqType + "). The evidence is too weak to tell an uncommitted task from a committed one, so nothing was routed and nothing was written. Confirm the intended route on the Contact, then re-save this task.");
+			automation.createAuxTask(contactId.toString(), dealIdStr, "Manual Review", "[activation_command_state_conflict] Activation task " + taskId + " has no 'ActivationCommand|' marker and its commit signals disagree (Task_State=" + taskState + ", Task_Status=" + taskStatusMirror + ", Status=" + tStatus + ", Task_Sequence_Type=" + taskSeqType + ", Contact Sequence_Type=" + contactSeqType + "). The evidence is too weak to tell an uncommitted task from a committed one, so nothing was routed and nothing was written. Do NOT set the Contact's Sequence Type to clear this: on a Contact that already carries an activation timestamp that makes automation treat this task as a command it has ALREADY processed, and the sequence will never start. Fix the task instead - set its Task Status back to New, leave native Status alone, then choose a Task Sequence Type and set Task State = Won again.");
 			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activation_command_state_conflict", "blocked", {"contact":contactId.toString(), "task_state":taskState, "task_status":taskStatusMirror, "status":tStatus});
 			return;
 		}
@@ -404,8 +432,15 @@ void automation.handleTaskCompletion(string taskIdStr)
 		if(actOutcome == "no_route")
 		{
 			// NO marker is written, so a corrected retry works.
-			zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Open", "Task_Status":"Working", "Status":"In Progress"}, noTrigger);
-			automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "[activation_no_route] Activation task " + taskId + " was set to Task State = Won without choosing Task Sequence Type. Choose Email / Call / Manual, then set Task State = Won again.");
+			//
+			// WORK ITEM 1.1. This used to write Task_Status="Working" and Status="In Progress"
+			// alongside the Task_State reset -- which was the trap. Task_Status="Working" makes the
+			// uncommitted test above fail on the retry, so the corrected re-save landed in
+			// `conflict` and the task became permanently unactivatable. Only Task_State is reset;
+			// the automation-owned mirrors stay at New / Not Started so the retry is a genuine
+			// first attempt.
+			zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Open"}, noTrigger);
+			automation.createAuxTask(contactId.toString(), dealIdStr, "Manual Review", "[activation_no_route] Activation task " + taskId + " was set to Task State = Won without choosing Task Sequence Type. Choose Email / Call / Manual, then set Task State = Won again.");
 			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activation_no_route", ifnull(taskSeqType, "").toString(), {"contact":contactId.toString()});
 			return;
 		}
@@ -501,7 +536,7 @@ void automation.handleTaskCompletion(string taskIdStr)
 				if(ntkWho != contactId.toString()) { continue; }
 				if(ifnull(ntk.get("Task_Type"), "").toString() != "Scheduled Send") { continue; }
 				ntkStatus = ifnull(ntk.get("Status"), "").toString();
-				if(ntkStatus == "Completed" || ntkStatus == "Cancelled" || ntkStatus == "Deferred") { continue; }
+				if(ntkStatus == "Completed" || ntkStatus == "Deferred") { continue; }
 				if(ifnull(ntk.get("Task_Status"), "").toString() == "Closed") { continue; }
 				ntkDesc = ifnull(ntk.get("Description"), "").toString();
 				zoho.crm.updateRecord("Tasks", ntk.get("id").toLong(), {"Status":"Deferred", "Task_Status":"Closed", "Description": ntkDesc + nlChar + "Cadence disabled by Activation Task " + taskId + "."}, noTrigger);
@@ -645,8 +680,11 @@ void automation.handleTaskCompletion(string taskIdStr)
 			openerVariant = automation.resolveOpenerVariant(latestNote);
 			if(openerVariant == "conflict")
 			{
-				zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Open", "Task_Status":"Working", "Status":"In Progress"}, noTrigger);
-				automation.createManualReview(contactId.toString(), dealId.toString(), "conflicting_opening_variant", "Activation task " + taskId + "'s latest Note names BOTH 'Warm' and 'Cold' as the opening-email variant, so the sequence was NOT activated. Edit the Note to contain only 'Warm' or 'Cold' (or remove it to use the standard opener), then set Task State = Won again.");
+				// WORK ITEM 1.1 -- same trap as the no_route path above. Reset only Task_State;
+				// leave Task_Status / Status at New / Not Started so the corrected re-save is
+				// still seen as uncommitted.
+				zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Open"}, noTrigger);
+				automation.createManualReview(contactId.toString(), dealIdStr, "conflicting_opening_variant", "Activation task " + taskId + "'s latest Note names BOTH 'Warm' and 'Cold' as the opening-email variant, so the sequence was NOT activated. Edit the Note to contain only 'Warm' or 'Cold' (or remove it to use the standard opener), then set Task State = Won again.");
 				automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activation_variant_conflict", "blocked", {"contact":contactId.toString(), "note":latestNote});
 				return;
 			}
@@ -659,12 +697,12 @@ void automation.handleTaskCompletion(string taskIdStr)
 			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "opener_variant_resolved", openerVariant, {"contact":contactId.toString(), "note":latestNote});
 		}
 
-		automation.routeContactSequence(contactId.toString(), dealId.toString(), actTrig, actCtx);
+		automation.routeContactSequence(contactId.toString(), dealIdStr, actTrig, actCtx);
 		// The ActivationCommand| marker is written HERE, with the commit, so the task carries the
 		// processed-command tuple from now on. Task_Status stays as the human-readable mirror but
 		// is no longer the processed-marker for activation.
 		zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Won", "Task_Status":"Closed", "Status":"Completed", "Description": descRebuilt}, noTrigger);
-		automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activated", actTrig, {"contact":contactId.toString(), "deal":dealId.toString(), "route_via":"Task_Sequence_Type", "opener_variant":actCtx});
+		automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activated", actTrig, {"contact":contactId.toString(), "deal":dealIdStr, "route_via":"Task_Sequence_Type", "opener_variant":actCtx});
 		return;
 	}
 
@@ -692,7 +730,7 @@ void automation.handleTaskCompletion(string taskIdStr)
 		if(taskReason == "")
 		{
 			zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Open", "Task_Status":"Working", "Status":"In Progress"}, noTrigger);
-			automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", tType + " " + taskId + " was marked Lost without Task Lost Reasons. Add a canonical Lost Reason, then set Task_State=Lost again.");
+			automation.createAuxTask(contactId.toString(), dealIdStr, "Manual Review", tType + " " + taskId + " was marked Lost without Task Lost Reasons. Add a canonical Lost Reason, then set Task_State=Lost again.");
 			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "state_lost", "missing_reason_reopened", {"contact":contactId.toString(), "type":tType});
 			return;
 		}
@@ -712,20 +750,20 @@ void automation.handleTaskCompletion(string taskIdStr)
 			// an explicit Contact-level decision. resolveActivityLoss is unchanged: it is a pure
 			// advisor, and the CALLER decides propagation - already its documented contract.
 			clr = ifnull(loss.get("contactLostReason"), "No Response").toString();
-			automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "[activity_lost_suggests_contact_loss] Task " + taskId + " Lost (" + clr + ") with the Contact's sequence exhausted. Closing the Contact is an explicit Contact-level decision; activity loss alone does not make the Contact or Deal Lost.");
-			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activity_lost_contact_loss_referred", clr, {"contact":contactId.toString(), "deal":dealId.toString()});
+			automation.createAuxTask(contactId.toString(), dealIdStr, "Manual Review", "[activity_lost_suggests_contact_loss] Task " + taskId + " Lost (" + clr + ") with the Contact's sequence exhausted. Closing the Contact is an explicit Contact-level decision; activity loss alone does not make the Contact or Deal Lost.");
+			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "activity_lost_contact_loss_referred", clr, {"contact":contactId.toString(), "deal":dealIdStr});
 		}
 		else if(act == "continue_cadence")
 		{
-			automation.routeContactSequence(contactId.toString(), dealId.toString(), "resume", "{}");
+			automation.routeContactSequence(contactId.toString(), dealIdStr, "resume", "{}");
 		}
 		else if(act == "find_decision_maker")
 		{
-			automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", tType + " " + taskId + ": Find Decision Maker (No Authority) - reassign the buyer/decision maker. Deal stays Open.");
+			automation.createAuxTask(contactId.toString(), dealIdStr, "Manual Review", tType + " " + taskId + ": Find Decision Maker (No Authority) - reassign the buyer/decision maker. Deal stays Open.");
 		}
 		else if(act == "data_repair")
 		{
-			automation.createAuxTask(contactId.toString(), dealId.toString(), "Data Repair", tType + " " + taskId + ": bad data - repair before the sequence continues.");
+			automation.createAuxTask(contactId.toString(), dealIdStr, "Data Repair", tType + " " + taskId + ": bad data - repair before the sequence continues.");
 		}
 		else if(act == "suppress")
 		{
@@ -733,7 +771,7 @@ void automation.handleTaskCompletion(string taskIdStr)
 		}
 		else
 		{
-			automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", tType + " " + taskId + " marked Lost (" + taskReason + ") - review next step (continue, find another contact, or close the Contact). Deal stays Open.");
+			automation.createAuxTask(contactId.toString(), dealIdStr, "Manual Review", tType + " " + taskId + " marked Lost (" + taskReason + ") - review next step (continue, find another contact, or close the Contact). Deal stays Open.");
 		}
 		zoho.crm.updateRecord("Tasks", taskId, {"Task_Status":"Closed", "Status":"Completed"}, noTrigger);
 		automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "state_lost", act, {"contact":contactId.toString(), "type":tType, "reason":taskReason});
@@ -806,15 +844,25 @@ void automation.handleTaskCompletion(string taskIdStr)
 
 	if(tType == "Send Commercials")
 	{
+		// WORK ITEM 2.4 -- the Deal requirement lives HERE, not at the top of the function.
+		// This branch reads the Deal record and its Quotes directly; a commercial package has
+		// no meaning without one. Visible, not silent: the rep gets a named review rather
+		// than a log line that only an admin would ever read.
+		if(!hasDeal)
+		{
+			automation.createManualReview(contactId.toString(), "", "send_commercials_no_deal", "Send Commercials Task " + taskId + " has no related Deal, so there is no commercial relationship to quote or deliver against. Link this Task to the Account's Deal (What_Id), then re-save.");
+			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "send_commercials", "blocked_no_deal", {"contact":contactId.toString()});
+			return;
+		}
 		if(hasTaskProductEvidence)
 		{
-			pdRawSend = automation.processDeal(dealId.toString(), taskActivityCtx.toString());
+			pdRawSend = automation.processDeal(dealIdStr, taskActivityCtx.toString());
 			pdSend = Map();
 			if(!isNull(pdRawSend) && pdRawSend.toString().trim() != "") { pdSend = pdRawSend.toString().toMap(); }
 			if(ifnull(pdSend.get("success"), false) != true)
 			{
-				automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "Send Commercials Task " + taskId + " could not apply Product evidence before sending. Resolve the Quote/Product issue and re-run.");
-				automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "send_commercials", "product_evidence_blocked", {"deal":dealId.toString(), "outcome":ifnull(pdSend.get("outcome"), "").toString()});
+				automation.createAuxTask(contactId.toString(), dealIdStr, "Manual Review", "Send Commercials Task " + taskId + " could not apply Product evidence before sending. Resolve the Quote/Product issue and re-run.");
+				automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "send_commercials", "product_evidence_blocked", {"deal":dealIdStr, "outcome":ifnull(pdSend.get("outcome"), "").toString()});
 				zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Open", "Task_Status":"Working", "Status":"In Progress"}, noTrigger);
 				return;
 			}
@@ -890,8 +938,8 @@ void automation.handleTaskCompletion(string taskIdStr)
 		if(sendValidQuoteCount == 0) { sendReasons.add("no_valid_product_quote"); }
 		if(sendReasons.size() > 0)
 		{
-			automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "[send_commercials_package_blocked] Send Commercials Task " + taskId + " blocked: " + sendReasons.toString() + ". Correct the Quote package and re-run.");
-			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "send_commercials", "package_blocked", {"deal":dealId.toString(), "reasons":sendReasons.toString()});
+			automation.createAuxTask(contactId.toString(), dealIdStr, "Manual Review", "[send_commercials_package_blocked] Send Commercials Task " + taskId + " blocked: " + sendReasons.toString() + ". Correct the Quote package and re-run.");
+			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "send_commercials", "package_blocked", {"deal":dealIdStr, "reasons":sendReasons.toString()});
 			zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Open", "Task_Status":"Working", "Status":"In Progress"}, noTrigger);
 			return;
 		}
@@ -899,7 +947,7 @@ void automation.handleTaskCompletion(string taskIdStr)
 		for each deliverQid in sendDeliverQuoteIds
 		{
 			zoho.crm.updateRecord("Quotes", deliverQid.toLong(), {"Quote_Stage":"Delivered"}, noTrigger);
-			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "send_commercials", "quote_delivered", {"quote":deliverQid, "deal":dealId.toString()});
+			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "send_commercials", "quote_delivered", {"quote":deliverQid, "deal":dealIdStr});
 		}
 
 		sendPostReasons = List();
@@ -930,13 +978,13 @@ void automation.handleTaskCompletion(string taskIdStr)
 		}
 		if(sendPostReasons.size() > 0)
 		{
-			automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "[send_commercials_delivery_blocked] Send Commercials Task " + taskId + " left relevant Quotes Draft/Negotiation/On Hold: " + sendPostReasons.toString() + ". Correct the package and re-run.");
-			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "send_commercials", "delivery_blocked", {"deal":dealId.toString(), "reasons":sendPostReasons.toString()});
+			automation.createAuxTask(contactId.toString(), dealIdStr, "Manual Review", "[send_commercials_delivery_blocked] Send Commercials Task " + taskId + " left relevant Quotes Draft/Negotiation/On Hold: " + sendPostReasons.toString() + ". Correct the package and re-run.");
+			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "send_commercials", "delivery_blocked", {"deal":dealIdStr, "reasons":sendPostReasons.toString()});
 			zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Open", "Task_Status":"Working", "Status":"In Progress"}, noTrigger);
 			return;
 		}
 
-		pdRawSendGate = automation.processDeal(dealId.toString(), "{}");
+		pdRawSendGate = automation.processDeal(dealIdStr, "{}");
 		pdSendGate = Map();
 		if(!isNull(pdRawSendGate) && pdRawSendGate.toString().trim() != "") { pdSendGate = pdRawSendGate.toString().toMap(); }
 		sendContactV = zoho.crm.getRecordById("Contacts", contactId);
@@ -947,33 +995,43 @@ void automation.handleTaskCompletion(string taskIdStr)
 		if(!isNull(sendDealV) && !isNull(sendDealV.get("id"))) { sendDealStageV = ifnull(sendDealV.get("Opportunity_Stage"), "").toString(); }
 		if(ifnull(pdSendGate.get("success"), false) != true || sendContactStageV != "Commercial Agreement" || sendDealStageV != "Commercial Agreement")
 		{
-			automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "[send_commercials_transition_blocked] Send Commercials Task " + taskId + " delivered the Quote package but Commercial Agreement transition was not verified. processDeal outcome=" + ifnull(pdSendGate.get("outcome"), "").toString() + ".");
-			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "send_commercials", "transition_blocked", {"deal":dealId.toString(), "outcome":ifnull(pdSendGate.get("outcome"), "").toString(), "contact_stage":sendContactStageV, "deal_stage":sendDealStageV});
+			automation.createAuxTask(contactId.toString(), dealIdStr, "Manual Review", "[send_commercials_transition_blocked] Send Commercials Task " + taskId + " delivered the Quote package but Commercial Agreement transition was not verified. processDeal outcome=" + ifnull(pdSendGate.get("outcome"), "").toString() + ".");
+			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "send_commercials", "transition_blocked", {"deal":dealIdStr, "outcome":ifnull(pdSendGate.get("outcome"), "").toString(), "contact_stage":sendContactStageV, "deal_stage":sendDealStageV});
 			zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Open", "Task_Status":"Working", "Status":"In Progress"}, noTrigger);
 			return;
 		}
 		zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Won", "Task_Status":"Closed", "Status":"Completed"}, noTrigger);
-		automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "send_commercials", "commercial_sent", {"deal":dealId.toString(), "quotes":sendRelevantQuoteIds.toString()});
+		automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "send_commercials", "commercial_sent", {"deal":dealIdStr, "quotes":sendRelevantQuoteIds.toString()});
 		return;
 	}
 
 	if(tType == "Data Repair" || tType == "Review Reply" || tType == "Enrichment")
 	{
-		automation.routeContactSequence(contactId.toString(), dealId.toString(), "resume", "{}");
+		automation.routeContactSequence(contactId.toString(), dealIdStr, "resume", "{}");
 		automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "task_complete", "resumed", {"contact":contactId.toString(), "type":tType});
 		return;
 	}
 
 	if(tType == "Draft Commercials")
 	{
+		// WORK ITEM 2.4 -- the Deal requirement lives HERE, not at the top of the function.
+		// This branch reads the Deal record and its Quotes directly; a commercial package has
+		// no meaning without one. Visible, not silent: the rep gets a named review rather
+		// than a log line that only an admin would ever read.
+		if(!hasDeal)
+		{
+			automation.createManualReview(contactId.toString(), "", "draft_commercials_no_deal", "Draft Commercials Task " + taskId + " has no related Deal, so there is no commercial relationship to draft a Quote under. Link this Task to the Account's Deal (What_Id), then re-save.");
+			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "draft_commercials", "blocked_no_deal", {"contact":contactId.toString()});
+			return;
+		}
 		// Draft = internal draft ready, NOT customer-facing -> do not advance. Surface the
 		// Send Commercials task and stay at Proposal Preparation. The advance to Commercial
 		// Agreement happens only at the customer-facing boundary (Send Commercials completion /
 		// Quote_Stage=Delivered -> commercial:sent). createAuxTask dedups on the open task.
 		if(!hasTaskProductEvidence)
 		{
-			automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "[draft_commercials_missing_products] Draft Commercials Task " + taskId + " has no Product evidence. Select Product(s) and re-run; no Quote or Send Commercials task was created.");
-			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "draft_commercials", "missing_product_evidence", {"deal":dealId.toString()});
+			automation.createAuxTask(contactId.toString(), dealIdStr, "Manual Review", "[draft_commercials_missing_products] Draft Commercials Task " + taskId + " has no Product evidence. Select Product(s) and re-run; no Quote or Send Commercials task was created.");
+			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "draft_commercials", "missing_product_evidence", {"deal":dealIdStr});
 			zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Open", "Task_Status":"Working", "Status":"In Progress"}, noTrigger);
 			return;
 		}
@@ -1041,7 +1099,7 @@ void automation.handleTaskCompletion(string taskIdStr)
 						}
 
 						// Link Products while we are here; Contacts_X_Products is the canonical
-						// junction behind Contact.Products_Linked / Product_Interest_Staging.
+						// junction behind Contact.Products_Linked.
 						fbContactProductLinked = false;
 						fbConLinks = zoho.crm.getRelatedRecords("Products12", "Contacts", contactId);
 						if(!isNull(fbConLinks) && fbConLinks.size() > 0 && !fbConLinks.toString().startsWith("{\"code\""))
@@ -1083,7 +1141,7 @@ void automation.handleTaskCompletion(string taskIdStr)
 						// ---- canonical reuse detection (SAME resolver as the final verification below) ----
 						// matched  = a Draft Quote for this product already carries this Task's activity key.
 						// reusable = a valid priced Draft Quote for this product missing only the key (adopt it).
-						fbmRaw = automation.matchDraftQuotes(dealId.toString(), fbProdId, fbQuoteOppType, fbActivityKey, "");
+						fbmRaw = automation.matchDraftQuotes(dealIdStr, fbProdId, fbQuoteOppType, fbActivityKey, "");
 						fbm = Map();
 						if(!isNull(fbmRaw) && fbmRaw.toString().trim() != "") { fbm = fbmRaw.toString().toMap(); }
 						fbMatched = ifnull(fbm.get("matched"), List());
@@ -1149,7 +1207,7 @@ void automation.handleTaskCompletion(string taskIdStr)
 							{
 								fbCreated = fbCreated + 1;
 								fbCreatedQuoteIds.add(fbReuseQid);
-								automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "draft_commercials", "fallback_quote_reused", {"deal":dealId.toString(), "quote":fbReuseQid, "product":fbProdId});
+								automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "draft_commercials", "fallback_quote_reused", {"deal":dealIdStr, "quote":fbReuseQid, "product":fbProdId});
 								continue;
 							}
 							fbReasons.add("quote_reuse_key_update_failed:" + fbReuseQid + ":" + ifnull(fbReuseResp, "").toString());
@@ -1167,7 +1225,7 @@ void automation.handleTaskCompletion(string taskIdStr)
 						// REST create via Quoted_Items (subform api_name) carries standard AND custom line fields.
 						fbLine.put("Product_Name", fbLineProd);
 						fbLine.put("Quantity", 1);
-						fbLine.put("Quoted_Item_Pricing_Tier", "Base");
+						fbLine.put("Quoted_Item_Pricing_Tier", "Base");   // 4.9: the Send-Commercials fallback has no tier evidence -- "Base" is the correct default here, not a lost value.
 						if(taskBrands != "") { fbLine.put("Quoted_Item_Plan_Brands", taskBrands.toLong()); }
 						if(taskFreq != "") { fbLine.put("Quoted_Item_Frequency", taskFreq); }
 						// Central pricing resolver (no inline/UX-only pricing). The resolver reads family + plan type
@@ -1182,7 +1240,7 @@ void automation.handleTaskCompletion(string taskIdStr)
 							}
 							else
 							{
-								automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "Draft Commercials Task " + taskId + ": Quote line for Product " + fbProdName + " could not be auto-priced (" + ifnull(fbPrice.get("reason"), "pricing_unavailable").toString() + "). Created unpriced; set the price manually.");
+								automation.createAuxTask(contactId.toString(), dealIdStr, "Manual Review", "Draft Commercials Task " + taskId + ": Quote line for Product " + fbProdName + " could not be auto-priced (" + ifnull(fbPrice.get("reason"), "pricing_unavailable").toString() + "). Created unpriced; set the price manually.");
 								automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "draft_commercials", "line_unpriced", {"product":fbProdId, "reason":ifnull(fbPrice.get("reason"), "pricing_unavailable").toString()});
 							}
 						}
@@ -1193,17 +1251,17 @@ void automation.handleTaskCompletion(string taskIdStr)
 						fbQ.put("Subject", automation.buildQuoteSubject(fbAccountName, fbProdName, "", ifnull(fbDeal.get("Deal_Name"), "").toString()));
 						fbQ.put("Quote_Stage", "Draft");
 						fbAccMap = Map(); fbAccMap.put("id", fbAccountId); fbQ.put("Account_Name", fbAccMap);
-						fbDealMap = Map(); fbDealMap.put("id", dealId.toString()); fbQ.put("Deal_Name", fbDealMap);
+						fbDealMap = Map(); fbDealMap.put("id", dealIdStr); fbQ.put("Deal_Name", fbDealMap);
 						fbProdMap = Map(); fbProdMap.put("id", fbProdId); fbQ.put("Quote_Product", fbProdMap);
 						fbContactMap = Map(); fbContactMap.put("id", contactId.toString()); fbQ.put("Contact_Name", fbContactMap);
 						fbQ.put("Opportunity_Type", fbQuoteOppType);
-						fbQ.put("Quote_Last_Deal_ID", dealId.toString());
+						fbQ.put("Quote_Last_Deal_ID", dealIdStr);
 						if(taskStart != "") { fbQ.put("Contract_Date_Start", taskStart); }
 						if(taskEnd != "") { fbQ.put("Contract_Date_End", taskEnd); }
 						fbQ.put("Quoted_Items", fbLines);
 						fbQ.put("Quote_Applied_Activity_Keys", fbActivityKey);
 
-						automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "draft_commercials", "fallback_quote_create_attempt", {"deal":dealId.toString(), "product":fbProdId, "brands":taskBrands});
+						automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "draft_commercials", "fallback_quote_create_attempt", {"deal":dealIdStr, "product":fbProdId, "brands":taskBrands});
 						// Create the Quote via the REST API (zoho_crm connection) in ONE call. Native Deluge createRecord
 						// uses the reserved Product_Details contract which DROPS custom subform fields; the REST API
 						// persists the Quoted_Items custom fields (Quoted_Item_Pricing_Tier/Plan_Brands) directly.
@@ -1223,7 +1281,7 @@ void automation.handleTaskCompletion(string taskIdStr)
 							connection: "zoho_crm"
 							headers: fbCrHeaders
 						];
-						automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "draft_commercials", "fallback_quote_create_response", {"deal":dealId.toString(), "product":fbProdId, "resp":ifnull(fbCreateResp, "").toString()});
+						automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "draft_commercials", "fallback_quote_create_response", {"deal":dealIdStr, "product":fbProdId, "resp":ifnull(fbCreateResp, "").toString()});
 						fbNewQid = "";
 						fbCrArr = null;
 						if(!isNull(fbCreateResp)) { fbCrArr = fbCreateResp.get("data"); }
@@ -1281,12 +1339,12 @@ void automation.handleTaskCompletion(string taskIdStr)
 
 				if(fbReasons.size() > 0 || fbCreated == 0)
 				{
-					automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "Draft Commercials Task " + taskId + " could not apply Product evidence. processDeal outcome=" + ifnull(pdDraft.get("outcome"), "").toString() + " raw=" + ifnull(pdRawDraft, "").toString() + " fallback=" + fbReasons.toString() + ". Resolve the Quote/Product issue and re-run.");
-					automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "draft_commercials", "product_evidence_blocked", {"deal":dealId.toString(), "outcome":ifnull(pdDraft.get("outcome"), "").toString(), "fallback":fbReasons.toString()});
+					automation.createAuxTask(contactId.toString(), dealIdStr, "Manual Review", "Draft Commercials Task " + taskId + " could not apply Product evidence. processDeal outcome=" + ifnull(pdDraft.get("outcome"), "").toString() + " raw=" + ifnull(pdRawDraft, "").toString() + " fallback=" + fbReasons.toString() + ". Resolve the Quote/Product issue and re-run.");
+					automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "draft_commercials", "product_evidence_blocked", {"deal":dealIdStr, "outcome":ifnull(pdDraft.get("outcome"), "").toString(), "fallback":fbReasons.toString()});
 					zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Open", "Task_Status":"Working", "Status":"In Progress"}, noTrigger);
 					return;
 				}
-				automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "draft_commercials", "fallback_quote_created", {"deal":dealId.toString(), "count":fbCreated.toString()});
+				automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "draft_commercials", "fallback_quote_created", {"deal":dealIdStr, "count":fbCreated.toString()});
 			}
 		}
 		draftEvidenceReasons = List();
@@ -1295,8 +1353,8 @@ void automation.handleTaskCompletion(string taskIdStr)
 		if(taskEnd == "") { draftEvidenceReasons.add("missing_contract_end"); }
 		if(draftEvidenceReasons.size() > 0)
 		{
-			automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "[draft_commercials_incomplete_terms] Draft Commercials Task " + taskId + " created/updated Quote evidence but is missing commercial terms: " + draftEvidenceReasons.toString() + ". Complete the Task evidence and re-run before Send Commercials is surfaced.");
-			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "draft_commercials", "incomplete_terms_blocked", {"deal":dealId.toString(), "reasons":draftEvidenceReasons.toString()});
+			automation.createAuxTask(contactId.toString(), dealIdStr, "Manual Review", "[draft_commercials_incomplete_terms] Draft Commercials Task " + taskId + " created/updated Quote evidence but is missing commercial terms: " + draftEvidenceReasons.toString() + ". Complete the Task evidence and re-run before Send Commercials is surfaced.");
+			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "draft_commercials", "incomplete_terms_blocked", {"deal":dealIdStr, "reasons":draftEvidenceReasons.toString()});
 			zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Open", "Task_Status":"Working", "Status":"In Progress"}, noTrigger);
 			return;
 		}
@@ -1406,7 +1464,7 @@ void automation.handleTaskCompletion(string taskIdStr)
 				healLinkMap.put("Contacts", contactId.toString());
 				healLinkMap.put("Product_Interest", healProdId);
 				healResp = zoho.crm.createRecord("Contacts_X_Products", healLinkMap);
-				automation.logAutomationEvent("handleTaskCompletion", "Contacts", contactId.toString(), "draft_commercials_contact_link_healed", healProdId, {"deal":dealId.toString()});
+				automation.logAutomationEvent("handleTaskCompletion", "Contacts", contactId.toString(), "draft_commercials_contact_link_healed", healProdId, {"deal":dealIdStr});
 				contactProdIds.add(healProdId);
 			}
 		}
@@ -1426,7 +1484,7 @@ void automation.handleTaskCompletion(string taskIdStr)
 		{
 			if(!dealProdIds.contains(draftProdId)) { draftReasons.add("deal_product_missing:" + draftProdId); }
 			if(!contactProdIds.contains(draftProdId)) { draftReasons.add("contact_product_missing:" + draftProdId); }
-			dqmRaw = automation.matchDraftQuotes(dealId.toString(), draftProdId, draftQuoteOppType, draftActivityKey, fbCreatedCsv);
+			dqmRaw = automation.matchDraftQuotes(dealIdStr, draftProdId, draftQuoteOppType, draftActivityKey, fbCreatedCsv);
 			dqm = Map();
 			if(!isNull(dqmRaw) && dqmRaw.toString().trim() != "") { dqm = dqmRaw.toString().toMap(); }
 			dqmMatched = ifnull(dqm.get("matched"), List());
@@ -1436,26 +1494,26 @@ void automation.handleTaskCompletion(string taskIdStr)
 
 		if(draftReasons.size() > 0)
 		{
-			automation.createAuxTask(contactId.toString(), dealId.toString(), "Manual Review", "[draft_commercials_package_blocked] Draft Commercials Task " + taskId + " blocked: " + draftReasons.toString() + ". Correct Product/Quote evidence and re-run.");
-			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "draft_commercials", "package_blocked", {"deal":dealId.toString(), "reasons":draftReasons.toString()});
+			automation.createAuxTask(contactId.toString(), dealIdStr, "Manual Review", "[draft_commercials_package_blocked] Draft Commercials Task " + taskId + " blocked: " + draftReasons.toString() + ". Correct Product/Quote evidence and re-run.");
+			automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "draft_commercials", "package_blocked", {"deal":dealIdStr, "reasons":draftReasons.toString()});
 			zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Open", "Task_Status":"Working", "Status":"In Progress"}, noTrigger);
 			return;
 		}
-		newSendId = automation.createAuxTask(contactId.toString(), dealId.toString(), "Send Commercials", "Commercials drafted - send to the customer to advance to Commercial Agreement.");
+		newSendId = automation.createAuxTask(contactId.toString(), dealIdStr, "Send Commercials", "Commercials drafted - send to the customer to advance to Commercial Agreement.");
 		zoho.crm.updateRecord("Tasks", taskId, {"Task_State":"Won", "Task_Status":"Closed", "Status":"Completed"}, noTrigger);
 		automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "draft_commercials", "send_commercials_surfaced", {"contact":contactId.toString(), "send_task":newSendId});
 		return;
 	}
 	if(tType == "Manual Review" || tType == "Suppression Review")
 	{
-		automation.routeContactSequence(contactId.toString(), dealId.toString(), "resume", "{}");
+		automation.routeContactSequence(contactId.toString(), dealIdStr, "resume", "{}");
 		automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "review_resolved", "resumed", {"contact":contactId.toString(), "type":tType});
 		return;
 	}
 
 	// Generic sequence-managed stage task: Task_State=Won advances the stage where
 	// task success genuinely is the stage gate (routeContactSequence/processDeal own the writes).
-	automation.routeContactSequence(contactId.toString(), dealId.toString(), "task:positive", taskActivityCtx.toString());
+	automation.routeContactSequence(contactId.toString(), dealIdStr, "task:positive", taskActivityCtx.toString());
 	automation.logAutomationEvent("handleTaskCompletion", "Tasks", taskId.toString(), "task_positive", "advanced", {"contact":contactId.toString(), "type":tType, "products":taskProductList.size().toString()});
 	return;
 }

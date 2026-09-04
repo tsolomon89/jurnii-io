@@ -119,11 +119,22 @@ void automation.handleCallOutcome(string callIdStr)
 	dealOppType  = "";
 	if(!isNull(dealRec) && !isNull(dealRec.get("id")))
 	{
-		// F3 FIX: Deluge getRecordById omits the special Pipeline field; resolve via the shared
-		// resolver so rescheduled / next Calls preserve Pipeline.
+		// F3 FIX retained: Deluge getRecordById omits the special Pipeline field, so Pipeline
+		// comes from the shared resolver and rescheduled / next Calls preserve it.
+		//
+		// WORK ITEM 3.1 -- the resolver now returns the explicit token "unresolved" instead of ""
+		// for a pipeline it could not read. Normalise it to "" here so the existing
+		// `if(dealPipeline != "")` mirror guards below keep meaning "do not stamp": writing the
+		// literal string "unresolved" into the Call_Task_Pipeline picklist would be an out-of-set
+		// value, discarded silently, and would hide the real problem.
 		dealPipeline = automation.resolveDealPipeline(dealId.toString());
-		dealOppType  = ifnull(dealRec.get("Stage"), "").toString();
+		if(dealPipeline == "unresolved") { dealPipeline = ""; }
 	}
+	// WORK ITEM 3.2 -- the Opportunity snapshot is CONTACT-sourced, not Deals.Stage. This used
+	// to read dealRec.get("Stage") inside the block above, which made every Call on a
+	// multi-Contact Deal record the Deal's roll-up rather than the Contact's own position.
+	// contactStage was read from the Contact record further up, so derive it here, once.
+	dealOppType = automation.opportunityForContactStage(contactStage);
 
 	// =====================================================================
 	// ACTIVITY-STATE SURFACE: Call_Task_State drives routing (Won / Open / Lost).
@@ -265,9 +276,21 @@ void automation.handleCallOutcome(string callIdStr)
 				// CALL-2: reused replacement Call is user-facing -> Working (native In Progress).
 				rescheduledUpdate.put("Call_Task_Status", "Working");
 				rescheduledUpdate.put("Outgoing_Call_Status", "Scheduled");
-				if(dealPipeline != "") { rescheduledUpdate.put("Call_Task_Pipeline", dealPipeline); }
-				if(dealOppType != "")  { rescheduledUpdate.put("Call_Task_Opportunity", dealOppType); }
-				if(contactStage != "") { rescheduledUpdate.put("Call_Task_Stage", contactStage); }
+				// ---- WORK ITEM 3.2: the snapshot re-stamp is DELETED ----
+				// This block reuses an EXISTING Call as the replacement, and it used to re-stamp
+				// that Call's three Activity context snapshot fields (Call_Task_Pipeline,
+				// Call_Task_Opportunity, Call_Task_Stage) with the CONTACT'S CURRENT position.
+				//
+				// All nine snapshot fields record state "when the Activity was raised". A reused
+				// Call was raised earlier, possibly several Stages ago, so overwriting them
+				// falsifies history: complete a 'Marketing Consent Call 1' and the record would
+				// afterwards claim it had been a Demo Booking / SQL call. The A-T3 acceptance test
+				// asserts precisely this -- that the original Call still reads Marketing Consent /
+				// MQL after the Contact advances.
+				//
+				// Sequence_Stage / Sequence_Attempt / Call_Start_Time above are NOT snapshots --
+				// they are live cadence pointers and are still updated. The distinction is the
+				// whole point: cadence state moves, history does not.
 				if(!isNull(rsProds)) { rescheduledUpdate.put("Call_Task_Contract_Products", rsProds); }
 				if(rsBrands != "") { rescheduledUpdate.put("Call_Task_Contract_Brands", rsBrands.toLong()); }
 				if(rsStart != "") { rescheduledUpdate.put("Call_Task_Contract_Date_Start", rsStart); }
@@ -411,7 +434,7 @@ void automation.handleCallOutcome(string callIdStr)
 							if(!isNull(stWhoL) && !isNull(stWhoL.get("id"))) { stWho = stWhoL.get("id").toString(); }
 							stStatus = ifnull(st.get("Status"), "").toString();
 							stDesc = ifnull(st.get("Description"), "").toString();
-							if(stWho == contactId.toString() && ifnull(st.get("Task_Sequence_Managed"), false).toString() == "true" && stStatus != "Completed" && stStatus != "Cancelled" && stStatus != "Deferred" && stDesc.contains("ScheduledSend|"))
+							if(stWho == contactId.toString() && ifnull(st.get("Task_Sequence_Managed"), false).toString() == "true" && stStatus != "Completed" && stStatus != "Deferred" && stDesc.contains("ScheduledSend|"))
 							{
 								scheduledSendActionable = true;
 							}

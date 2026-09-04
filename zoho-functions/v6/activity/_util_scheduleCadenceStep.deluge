@@ -1,0 +1,101 @@
+string automation.scheduleCadenceStep(string contactIdStr, string dealIdStr, string stage, int step, string kind, int dueOffsetDays, string ownerId)
+{
+	// =========================================================================
+	// _util_scheduleCadenceStep   (VERSION: v6-email-chain)
+	//
+	// Creates ONE "Scheduled Send" wake-up Task carrying the deterministic payload
+	//
+	//     ScheduledSend|stage=<stage>|step=<n>|kind=<kind>
+	//
+	// which WFC-SchedEmail picks up on Due_Date and hands to
+	// sendScheduledEmailFromTask -> sendSequencedEmail. Template resolution, the send
+	// itself and the audit record are all owned by sendSequencedEmail; this helper only
+	// parks the intent and the date.
+	//
+	// ⚠ WORK ITEM 2.1-2.3. This exists because the email chain now has to advance
+	// ITSELF. Previously step n+1 was scheduled as a SIDE email riding alongside Call
+	// n+1, so the Call escalation was what drove the chain forward. With the escalation
+	// removed -- one Call per Stage, then the 5-step email chain -- there is no Call n+1
+	// to carry the next step, so the completing step must schedule its successor.
+	//
+	// Two real callers, both wired in this window (ruling 2: no unused helper):
+	//   routeContactSequence      -- schedules step 1 (Call-first, after the single Call
+	//                                returns non-progressing)
+	//   sendScheduledEmailFromTask -- schedules step n+1 as step n completes
+	//
+	// Deal is OPTIONAL (2.4): What_Id is written only when one exists, Who_Id always.
+	// Dedupe is CONTACT-scoped on the exact payload, so a re-fire cannot double-book a
+	// step, and it works with no Deal (the old Deal-related-list scan could not).
+	//
+	// Returns the new Task id, "duplicate" if an identical pending step already exists,
+	// or "" on invalid input / create failure.
+	// =========================================================================
+	cId = ifnull(contactIdStr, "").toString().replaceAll("zcrm_", "").trim();
+	dId = ifnull(dealIdStr, "").toString().replaceAll("zcrm_", "").trim();
+	stg = ifnull(stage, "").toString().trim();
+	knd = ifnull(kind, "").toString().trim();
+
+	if(cId == "" || !cId.matches("[0-9]+")) { return ""; }
+	if(stg == "" || knd == "") { return ""; }
+	hasDeal = (dId != "" && dId.matches("[0-9]+"));
+
+	payload = "ScheduledSend|stage=" + stg + "|step=" + step + "|kind=" + knd;
+
+	schedDue = zoho.currenttime.toString("yyyy-MM-dd");
+	if(dueOffsetDays > 0)
+	{
+		schedBase = automation.calculateBusinessDate(zoho.currenttime, dueOffsetDays, "business_days");
+		schedDue = schedBase.toDateTime("yyyy-MM-dd HH:mm:ss").toString("yyyy-MM-dd");
+	}
+
+	// ---- dedupe: CONTACT-scoped, on the exact payload, pending only ----
+	exSched = zoho.crm.searchRecords("Tasks", "(Who_Id:equals:" + cId + ")");
+	if(!isNull(exSched) && exSched.size() > 0 && !exSched.toString().startsWith("{\"code\""))
+	{
+		for each xt in exSched
+		{
+			xtStatus = ifnull(xt.get("Status"), "").toString();
+			// A Completed step is history; a Deferred step was superseded. Neither blocks a
+			// fresh schedule. Only a genuinely PENDING identical step does.
+			if(xtStatus == "Completed" || xtStatus == "Deferred") { continue; }
+			if(ifnull(xt.get("Task_Status"), "").toString() == "Closed") { continue; }
+			if(ifnull(xt.get("Description"), "").toString().contains(payload))
+			{
+				automation.logAutomationEvent("scheduleCadenceStep", "Tasks", ifnull(xt.get("id"), "").toString(), "schedule_email", "duplicate_pending_step", {"contact":cId, "payload":payload});
+				return "duplicate";
+			}
+		}
+	}
+
+	schedTask = Map();
+	schedTask.put("Subject", "Scheduled Email: " + stg + " " + knd + " " + step);
+	schedTask.put("Status", "Not Started");
+	// 2.4: What_Id is optional context; Who_Id is the required link.
+	if(hasDeal)
+	{
+		schedTask.put("What_Id", dId);
+		schedTask.put("$se_module", "Deals");
+	}
+	schedTask.put("Who_Id", cId);
+	schedTask.put("Task_Sequence_Managed", true);
+	schedTask.put("Task_Type", "Scheduled Send");
+	schedTask.put("Task_Sequence_Stage", stg);
+	// 5.1: no Blocks_Sequence write. Blocking is computed from
+	// Task_Sequence_Managed / Task_Type / Status / Task_Status, and a Scheduled Send is
+	// explicitly excluded from that derivation, so the persisted field added nothing.
+	schedTask.put("Due_Date", schedDue);
+	schedTask.put("Description", payload + hextoText("0A") + "(Awaiting Due_Date " + schedDue + " to send.)");
+	own = ifnull(ownerId, "").toString().trim();
+	if(own != "" && own.matches("[0-9]+")) { schedTask.put("Owner", own); }
+
+	resp = zoho.crm.createRecord("Tasks", schedTask);
+	newId = "";
+	if(!isNull(resp) && !isNull(resp.get("id"))) { newId = resp.get("id").toString(); }
+	if(newId == "")
+	{
+		automation.logAutomationEvent("scheduleCadenceStep", "Tasks", "-", "schedule_email", "create_failed", {"contact":cId, "payload":payload, "resp":ifnull(resp, "").toString()});
+		return "";
+	}
+	automation.logAutomationEvent("scheduleCadenceStep", "Tasks", newId, "schedule_email", "scheduled", {"contact":cId, "deal":dId, "payload":payload, "due":schedDue});
+	return newId;
+}

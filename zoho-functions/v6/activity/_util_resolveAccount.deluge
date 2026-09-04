@@ -1,0 +1,215 @@
+string automation.resolveAccount(string website, string emailAddr, string companyName, string recordId)
+{
+	// =========================================================================
+	// _util_resolveAccount   (VERSION: v6-account-key)
+	//
+	// READ-ONLY. Finds the Account a record belongs to, under the 4.7a authority rules.
+	// It NEVER creates, updates, merges, re-keys or Loses anything -- the caller creates
+	// when this returns status "none", which keeps Account creation at the call site that
+	// owns the rest of the record's conversion.
+	//
+	// ⚠ K5. Resolution searches ALL AVAILABLE EVIDENCE -- the domain form AND the
+	// normalized-name form -- not just whichever one this record's own evidence derives.
+	// This is the rule that stops one company forking into two Accounts, and the worked
+	// example from the plan is exactly why:
+	//
+	//   1. A Lead arrives Company = "Acme Ltd", no website, no corporate email.
+	//      Derivation reaches step 3 -> "acme ltd". K3 persists it.
+	//   2. Later a Contact arrives x@acme.com with no Account link.
+	//      Derivation would reach step 2 -> "acme.com".
+	//   3. K5 searches for an Account matching EITHER "acme.com" OR "acme ltd".
+	//      The name form matches.
+	//   4. K1 + K4: the Contact links to that Account and REUSES "acme ltd". The
+	//      computed "acme.com" is discarded.
+	//
+	//   One Account, one Deal, one company. Stable-but-worse evidence beats
+	//   better-but-forking. If step 3 had found TWO candidates, K6 stops.
+	//
+	// ⚠ K6, the match-count contract:
+	//   zero          -> the valid NEW-COMPANY case. The caller creates exactly one Account,
+	//                    persists its Account_Key, and READS BOTH BACK.
+	//   exactly one   -> reuse that Account and its immutable key (K1).
+	//   more than one -> STOP. Raise a visible review naming EVERY candidate and perform NO
+	//                    dependent writes. Never automatically merge, re-key, Lose or delete
+	//                    a duplicate Account.
+	//   error         -> the lookup failed; the caller must NOT infer "none" and create.
+	//
+	// Returns a JSON string (parse with .toMap()):
+	//   status ("none"|"one"|"many"|"error"), account_id, account_key (the EXISTING
+	//   immutable key when status=="one"; the DERIVED candidate key when status=="none"),
+	//   candidates (comma-joined ids), matched_on, derived_key
+	// =========================================================================
+	r = Map();
+	r.put("status", "error");
+	r.put("account_id", "");
+	r.put("account_key", "");
+	r.put("candidates", "");
+	r.put("matched_on", "");
+	r.put("derived_key", "");
+	r.put("reason", "init");
+
+	w = ifnull(website, "").toString().trim();
+	e = ifnull(emailAddr, "").toString().trim();
+	c = ifnull(companyName, "").toString().trim();
+	rid = ifnull(recordId, "").toString().replaceAll("zcrm_", "").trim();
+
+	// The key this record's own evidence derives -- the candidate, used only if nothing exists.
+	derivedKey = automation.deriveAccountKey(w, e, c, rid);
+	r.put("derived_key", derivedKey);
+
+	// ---- K5: build EVERY searchable key form from the available evidence ----
+	// Not just the derived one. A record carrying both a website and a company name can
+	// legitimately match an Account keyed either way, and searching only the winner of the
+	// precedence is precisely how the Acme case forks.
+	forms = List();
+	if(derivedKey != "" && !derivedKey.startsWith("unknown::")) { forms.add(derivedKey); }
+	if(w != "")
+	{
+		wForm = automation.deriveAccountKey(w, "", "", rid);
+		if(wForm != "" && !wForm.startsWith("unknown::") && !forms.contains(wForm)) { forms.add(wForm); }
+	}
+	if(e != "")
+	{
+		eForm = automation.deriveAccountKey("", e, "", rid);
+		if(eForm != "" && !eForm.startsWith("unknown::") && !forms.contains(eForm)) { forms.add(eForm); }
+	}
+	if(c != "")
+	{
+		cForm = automation.deriveAccountKey("", "", c, rid);
+		if(cForm != "" && !cForm.startsWith("unknown::") && !forms.contains(cForm)) { forms.add(cForm); }
+	}
+
+	if(forms.size() == 0)
+	{
+		// No usable evidence at all. Not an error -- a genuinely new, unidentifiable record.
+		// The caller creates an Account under the unknown:: key.
+		r.put("status", "none");
+		r.put("account_key", derivedKey);
+		r.put("reason", "no_searchable_evidence");
+		return r.toString();
+	}
+
+	foundIds = List();
+	matchedOn = "";
+	for each f in forms
+	{
+		hits = zoho.crm.searchRecords("Accounts", "(Account_Key:equals:" + f + ")");
+		if(!isNull(hits) && hits.toString().startsWith("{\"code\""))
+		{
+			// A genuine API failure. An empty result and a failed call are different facts and
+			// only one of them is safe to act on -- returning "none" here would create a second
+			// Account for a company that already has one.
+			automation.logAutomationEvent("resolveAccount", "Accounts", "-", "lookup", "account_key_search_failed", {"form":f, "resp":hits.toString()});
+			r.put("reason", "account_key_search_failed");
+			return r.toString();
+		}
+		if(!isNull(hits) && hits.size() > 0)
+		{
+			for each h in hits
+			{
+				hid = ifnull(h.get("id"), "").toString().trim();
+				if(hid != "" && hid.matches("[0-9]+") && !foundIds.contains(hid))
+				{
+					foundIds.add(hid);
+					if(matchedOn == "") { matchedOn = f; }
+				}
+			}
+		}
+	}
+
+	r.put("matched_on", matchedOn);
+
+	// ---- TIER 2: raw-field search, for Accounts whose Account_Key was never stamped ----
+	// Absorbed from processLead, which searched Account_Key, then Website, then Account_Name and
+	// took .get(0) on each. Those two extra searches are genuinely useful -- an Account created
+	// before Account_Key existed, or by hand, matches on Website or Account_Name and on nothing
+	// else -- so they are kept. What changes is that they now COUNT rather than pick: a raw-field
+	// match feeds the same K6 contract as a key match, so two Accounts sharing a Website stop
+	// with a review instead of silently resolving to whichever the API listed first.
+	if(foundIds.size() == 0)
+	{
+		rawSearches = List();
+		if(w != "")
+		{
+			wDom = automation.deriveAccountKey(w, "", "", rid);
+			if(wDom != "" && !wDom.startsWith("unknown::")) { rawSearches.add("(Website:equals:" + wDom + ")"); }
+		}
+		if(c != "")
+		{
+			// The company name is searched AS WRITTEN (bracket/colon/comma stripped only), because
+			// Account_Name holds a display name, not a normalised key.
+			safeCo = c.replaceAll("[\\(\\)\\:\\,]", "").trim();
+			if(safeCo != "") { rawSearches.add("(Account_Name:equals:" + safeCo + ")"); }
+		}
+		for each q in rawSearches
+		{
+			hits2 = zoho.crm.searchRecords("Accounts", q);
+			if(!isNull(hits2) && hits2.toString().startsWith("{\"code\""))
+			{
+				automation.logAutomationEvent("resolveAccount", "Accounts", "-", "lookup", "raw_field_search_failed", {"query":q, "resp":hits2.toString()});
+				r.put("reason", "raw_field_search_failed");
+				return r.toString();
+			}
+			if(!isNull(hits2) && hits2.size() > 0)
+			{
+				for each h2 in hits2
+				{
+					h2id = ifnull(h2.get("id"), "").toString().trim();
+					if(h2id != "" && h2id.matches("[0-9]+") && !foundIds.contains(h2id))
+					{
+						foundIds.add(h2id);
+						if(matchedOn == "") { matchedOn = q; }
+					}
+				}
+			}
+		}
+		r.put("matched_on", matchedOn);
+	}
+
+	if(foundIds.size() == 0)
+	{
+		// K6 zero: the valid new-company case.
+		r.put("status", "none");
+		r.put("account_key", derivedKey);
+		r.put("reason", "new_company");
+		return r.toString();
+	}
+
+	candStr = "";
+	for each fid in foundIds { candStr = candStr + if(candStr != "", ",", "") + fid; }
+	r.put("candidates", candStr);
+
+	if(foundIds.size() == 1)
+	{
+		// K6 exactly one -> reuse. K1: read the EXISTING key back and treat it as immutable.
+		// The derived key is discarded, however much better its evidence looks.
+		accId = foundIds.get(0);
+		existingKey = "";
+		acc = zoho.crm.getRecordById("Accounts", accId.toLong());
+		if(!isNull(acc) && !isNull(acc.get("id"))) { existingKey = ifnull(acc.get("Account_Key"), "").toString().trim(); }
+		if(existingKey == "")
+		{
+			// Matched on a RAW field (tier 2) and the Account has never been keyed. K1 only
+			// protects a NON-blank key, so there is nothing to preserve: the caller may stamp the
+			// derived key. Reported as "one" with the derived key so the caller reuses the Account
+			// rather than creating a duplicate, and flagged so the stamp is visible in the log.
+			r.put("status", "one");
+			r.put("account_id", accId);
+			r.put("account_key", derivedKey);
+			r.put("reason", "reused_unkeyed_account");
+			automation.logAutomationEvent("resolveAccount", "Accounts", accId, "account_key", "matched_unkeyed_account", {"matched_on":matchedOn, "will_stamp":derivedKey});
+			return r.toString();
+		}
+		r.put("status", "one");
+		r.put("account_id", accId);
+		r.put("account_key", existingKey);
+		r.put("reason", "reused");
+		return r.toString();
+	}
+
+	// K6 more than one. Never choose. Never merge.
+	r.put("status", "many");
+	r.put("reason", "multiple_accounts_for_evidence");
+	automation.logAutomationEvent("resolveAccount", "Accounts", "-", "guard", "multiple_accounts_for_evidence", {"count":foundIds.size().toString(), "candidates":candStr, "forms":forms.toString()});
+	return r.toString();
+}

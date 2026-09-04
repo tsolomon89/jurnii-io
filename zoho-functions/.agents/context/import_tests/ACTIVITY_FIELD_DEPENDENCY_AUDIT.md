@@ -1,3 +1,16 @@
+> # 📁 HISTORICAL — load-bearing headline, still relied upon
+>
+> Dated 2026-07-08. Its headline finding — **no live activity workflow uses field-level criteria, so no
+> workflow criterion blocks an activity-field deprecation** — is a load-bearing input to authority §10
+> and to the manual dependency checklist.
+>
+> That finding is **inherited, not re-verified**: the workflow REST surface is unreachable from the
+> current client. Re-confirm before any writer-removal wave.
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](../../../docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # v6 Activity Field Dependency Audit (Deluge-first)
 
 **Date:** 2026-07-08 · **Scope:** `v6/**/*.deluge` (Tasks, Calls, Events) + live Zoho `getFields`,

@@ -1,3 +1,20 @@
+> # ⚠ KNOWN DRIFT — this file describes CURRENT BEHAVIOUR, not the approved model
+>
+> The orchestrator inventory and flow descriptions below are an **accurate description of what the code
+> does today** and are deliberately left accurate. They are **not** the target design.
+>
+> Specifically: "A **Deal is always `Account × Product`**" and the per-product fan-out described in the
+> orchestrator table are **implemented drift**. The approved model is **one Account → zero or one
+> persistent Deal**, with Products entering as **Quotes**.
+>
+> This file will be rewritten when the correction ships. It is not being rewritten now, because
+> describing the target as though it were implemented would make this documentation false for engineers
+> reading it today.
+>
+> **Authority:** [`JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md`](docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)  ·  reconciled 2026-08-17 (`jurnii-doc-reconciliation-2026-08-17`)
+
+---
+
 # Zoho CRM Deluge — Commercial Operations Automation (v6)
 
 This repository holds the **Zoho CRM Deluge** custom functions that run Jurnii's sales
@@ -149,14 +166,26 @@ backward by later low-stage evidence.
 
 ## 6. Documentation map
 
+**Read in this order.** The authority outranks every other row, including this README.
+
 | Doc | What it is |
 | --- | --- |
-| **[docs/SALES_GUIDE.md](docs/SALES_GUIDE.md)** | **Start here if you're an SDR/AE.** How to use and maintain the system. |
-| [docs/v6/zoho_v6_refactor_spec_pack/](docs/v6/zoho_v6_refactor_spec_pack/) | Authoritative current spec (ontology, fields, import, quote lifecycle, automation). |
-| [docs/v6/FLOW_REFERENCE.md](docs/v6/FLOW_REFERENCE.md) | End-to-end flow, cadences, and the Amount/valuation hierarchy. |
-| [docs/v6/PHASE3_A_E_R_LIFECYCLE_SCOPE.md](docs/v6/PHASE3_A_E_R_LIFECYCLE_SCOPE.md) | Acquisition / Expansion / Renewal quote lifecycle. |
-| [docs/v6/ACTIVATION_GATE_TEST_PLAN.md](docs/v6/ACTIVATION_GATE_TEST_PLAN.md) | Activation-gate + email-idempotency invariants. |
-| [docs/v6/FINAL_CANONICAL_FIELD_MATRIX.md](docs/v6/FINAL_CANONICAL_FIELD_MATRIX.md) | Per-module field authority reference. |
+| **[docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md](docs/v6/JURNII_AUTHORITATIVE_COMMERCIAL_MODEL.md)** | 🟢 **THE AUTHORITY.** Owner-approved commercial ontology. Outranks all code and documentation. Start here. |
+| [docs/v6/V6_DOCUMENTATION_AUTHORITY_MAP.md](docs/v6/V6_DOCUMENTATION_AUTHORITY_MAP.md) | Which document may be trusted, and for what. Every Zoho doc classified. |
+| [docs/v6/V6_FIELD_USE_CONTRACT.md](docs/v6/V6_FIELD_USE_CONTRACT.md) | 🟢 **Field authority.** Every field: source, readers, writers, dependencies, classification. Supersedes both field matrices. |
+| [docs/v6/V6_CONFLICT_LEDGER.md](docs/v6/V6_CONFLICT_LEDGER.md) | Every repository statement conflicting with the authority, and whether the code still implements it. |
+| [docs/v6/V6_RESIDUAL_SEARCH_REPORT.md](docs/v6/V6_RESIDUAL_SEARCH_REPORT.md) | The §12.4 completion test: where the prohibited architecture still appears, and why each occurrence is allowed. |
+| [docs/v6/V6_CRUD_PLAN.md](docs/v6/V6_CRUD_PLAN.md) | 🟢 **What to change.** Live inventory of all 18 Zoho workflow rules and all 38 Deluge files, with create/update/delete verdicts and the dependency-ordered publish sequence. |
+| [docs/v6/V6_CORRECTION_PLAN.md](docs/v6/V6_CORRECTION_PLAN.md) | 🟢 **THE PLAN.** Ordered work items in six stages, each citing ledger rows, with the publish order and the genuine blockers. Start here to do the work. |
+| [docs/v6/V6_FUNCTIONAL_SPEC_THREE_FLOWS.md](docs/v6/V6_FUNCTIONAL_SPEC_THREE_FLOWS.md) | 🟢 **Start here for the work itself.** What must be TRUE, in three flows: Lead→Account/Deal/Quote, Activities→cadence, core fields→supporting fields. Includes the ordered work list and the acceptance tests. |
+| [docs/v6/V6_REBUILD_VS_MIGRATE.md](docs/v6/V6_REBUILD_VS_MIGRATE.md) | **Decision record:** the existing CRM records are wiped and re-imported from CSV, not migrated. Provenance evidence, what a wipe does *not* remove, and the post-import acceptance set. |
+| **[docs/SALES_GUIDE.md](docs/SALES_GUIDE.md)** | **Start here if you're an SDR/AE.** How to use and maintain the system. ⚠ Describes current behaviour, including known drift. |
+| [docs/v6/zoho_v6_refactor_spec_pack/](docs/v6/zoho_v6_refactor_spec_pack/) | ⛔ **SUPERSEDED AND SEALED** — the specification that commissioned the Product-Deal refactor. Historical record only. **Do not implement from it; do not re-run `08_coding_agent_prompt.md`.** See [SUPERSEDED.md](docs/v6/zoho_v6_refactor_spec_pack/SUPERSEDED.md). |
+| [docs/v6/FLOW_REFERENCE.md](docs/v6/FLOW_REFERENCE.md) | End-to-end flow, cadences, and the Amount/valuation hierarchy. ⚠ Known drift on Deal identity. |
+| [docs/v6/PHASE3_A_E_R_LIFECYCLE_SCOPE.md](docs/v6/PHASE3_A_E_R_LIFECYCLE_SCOPE.md) | Acquisition / Expansion / Renewal quote lifecycle. ⚠ Never coded; needs re-scope onto the Account Deal. |
+| [docs/v6/ACTIVATION_GATE_TEST_PLAN.md](docs/v6/ACTIVATION_GATE_TEST_PLAN.md) | Activation-gate + email-idempotency invariants. Invariant survives; one precondition changes. |
+| [docs/v6/FINAL_CANONICAL_FIELD_MATRIX.md](docs/v6/FINAL_CANONICAL_FIELD_MATRIX.md) | Per-module field reference. ⚠ Predates the authority; three rows superseded. Prefer the field-use contract. |
+| [docs/MEETING_CRUD_GUIDE.md](docs/MEETING_CRUD_GUIDE.md) · [docs/MEETINGS_KISS.md](docs/MEETINGS_KISS.md) | Event/Meeting CRUD and the one-page rep guide. |
 | [.agents/context/activity-workflows/](.agents/context/activity-workflows/) | Email drafts and call scripts, per stage/step. |
 
 Historical migration artifacts (v1–v5, the June 2026 closeout cluster, one-time E2E

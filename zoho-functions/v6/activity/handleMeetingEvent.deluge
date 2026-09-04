@@ -108,9 +108,14 @@ void automation.handleMeetingEvent(string eventIdStr)
 		return;
 	}
 
-	// F3 FIX: Deluge getRecordById omits the special Pipeline field; resolve via the shared resolver.
+	// F3 FIX retained: Deluge getRecordById omits the special Pipeline field; resolve via the
+	// shared resolver. 3.1: normalise the new "unresolved" token to "" so the mirror guards below
+	// keep meaning "do not stamp" rather than writing an out-of-set picklist value.
 	dealPipeline = automation.resolveDealPipeline(dealId.toString());
-	dealOppType  = ifnull(deal.get("Stage"), "").toString();
+	if(dealPipeline == "unresolved") { dealPipeline = ""; }
+	// WORK ITEM 3.2 -- Opportunity is CONTACT-sourced. Was deal.get("Stage"). contactStage is
+	// resolved just below this point, so the derivation is deferred to the stamp site.
+	dealOppType = "";
 
 	// ---- TYPE inference from Meeting_Task_Stage (fallback to Contact Stage, else demo) ----
 	stageRanks = {"Marketing Consent":1, "Demo Booking":2, "Demo Confirmation":3, "Demo Hosted":4, "Proposal Preparation":5, "Commercial Agreement":6, "Onboarding":7, "Renewal":8};
@@ -399,6 +404,10 @@ void automation.handleMeetingEvent(string eventIdStr)
 	evUpd = Map();
 	if(reminderAt != null) { evUpd.put("Reminder_Send_At", reminderAt); }
 	if(dealPipeline != "") { evUpd.put("Meeting_Task_Pipeline", dealPipeline); }
+	// 3.2: derived HERE because contactStage is only known after the stage inference above.
+	// Meeting_Task_Stage is stamped from contactStage by the existing logic; the Opportunity
+	// snapshot must agree with it, so both come from the same Contact fact.
+	dealOppType = automation.opportunityForContactStage(contactStage);
 	if(dealOppType != "")  { evUpd.put("Meeting_Task_Opportunity", dealOppType); }
 	// Field-update contract for the rep. v6 does not CREATE meetings (they are booked externally), so
 	// stamp the guidance on the first UPCOMING pass - but ONLY when the rep has not written their own
@@ -455,144 +464,27 @@ void automation.handleMeetingEvent(string eventIdStr)
 			automation.logAutomationEvent("handleMeetingEvent", "Events", eventId.toString(), "upcoming_mirrored", mState, {"deal":dealId.toString(), "contact_stage":contactStage});
 		}
 
-		// ---- REMAINING PRODUCT DEALS (multi-product bookings) ----------------------
+		// ---- REMAINING PRODUCTS ON A MULTI-PRODUCT BOOKING -- BLOCK DELETED (4.3) ----
 		//
-		// A Deal is Account x Product, but an Event has exactly ONE native What_Id. So a
-		// multi-product booking creates ONE meeting anchored on ONE Product Deal, and the
-		// FULL selected scope travels in Meeting_Task_Contract_Products. The anchor Deal
-		// has just been reconciled by processDeal (routeContactSequence calls it when the
-		// routed Contact is that Deal's primary). This block reconciles the REMAINING
-		// selected products' Deals, and nothing else.
+		// This resolved and reconciled one Deal PER ADDITIONAL PRODUCT on a multi-product
+		// booking. It read the anchor's Deal_Product_Key, computed a product key per selected
+		// scope value, composed "<accountKey>::<productKey>" for each remaining one, searched
+		// Deals by that key, and called processDeal on every match.
 		//
-		// Placed after the if/else rather than inside the first-booking branch, so a
-		// second booking that ADDS a product still reconciles the new one.
+		// Every line of it was the "Deal = Account x Product" model:
+		//   - the premise ("A Deal is Account x Product, but an Event has exactly ONE native
+		//     What_Id") no longer holds. There is one Deal per Account, so the Event's single
+		//     What_Id is not a limitation to work around -- it points at the only Deal there is.
+		//   - Deal_Product_Key, the anchor comparison, is a retiring field.
+		//   - [duplicate_product_deal] (raised at the >1 match branch) is a retired review code.
+		//   - pipelineForProductKey, the Partnership skip, was the Product-derived pipeline route
+		//     deleted by 3.1.
 		//
-		// It NEVER creates a Deal, NEVER writes a Contact or Deal stage itself, NEVER
-		// fails the confirmed booking, and NEVER guesses. Missing or ambiguous raises the
-		// existing Manual Review and moves on.
-		//
-		// IDEMPOTENCY: WF007 fires on create_or_edit with NO field criteria, so this
-		// re-enters on every save of the Event - including a rep's own edits. Re-entry is
-		// harmless by construction rather than by a latch: processDeal never regresses a
-		// stage, and createManualReview dedups on its leading [code] token across the
-		// Contact's open review Tasks. No marker field is written here, and no Event or
-		// Deal record is updated, so this block cannot itself re-trigger WF007.
-		remainingKeys = List();
-		remainingNames = Map();
-		rawScope = event.get("Meeting_Task_Contract_Products");
-		if(!isNull(rawScope))
-		{
-			anchorKey = ifnull(deal.get("Deal_Product_Key"), "").toString().trim().toLowerCase();
-			for each sv in rawScope
-			{
-				svs = ifnull(sv, "").toString().trim();
-				if(svs == "" || svs == "-None-") { continue; }
-				svKey = automation.computeProductKey(svs);
-				if(svKey == "" || svKey == anchorKey) { continue; }
-				if(!remainingKeys.contains(svKey))
-				{
-					remainingKeys.add(svKey);
-					remainingNames.put(svKey, svs);
-				}
-			}
-		}
-
-		// Early exit BEFORE any CRM read. Single-product and product-less meetings are the
-		// overwhelming majority of saves, and they must cost WF007 nothing extra.
-		if(remainingKeys.size() > 0)
-		{
-			// Account_Key is the authoritative half of Deal_Key. Read it from the Account
-			// rather than splitting the anchor's Deal_Key: a manually created Deal may carry
-			// no key at all, or the legacy "{accountKey}::active" account-level form.
-			mpAccountId = "";
-			mpAccMap = deal.get("Account_Name");
-			if(!isNull(mpAccMap) && !isNull(mpAccMap.get("id"))) { mpAccountId = mpAccMap.get("id").toString(); }
-			mpAccountKey = "";
-			if(mpAccountId != "" && mpAccountId.matches("[0-9]+"))
-			{
-				mpAccRec = zoho.crm.getRecordById("Accounts", mpAccountId.toLong());
-				if(!isNull(mpAccRec)) { mpAccountKey = ifnull(mpAccRec.get("Account_Key"), "").toString().trim(); }
-			}
-			mpBookingRef = ifnull(event.get("Ext_Calendar_Booking_ID"), "").toString();
-
-			if(mpAccountKey == "")
-			{
-				// No key means no exact lookup is possible. Surface it once; never guess a Deal.
-				automation.createManualReview(contactId, "", "product_unresolved", "Booking " + mpBookingRef + ": the meeting selected " + remainingKeys.size().toString() + " product(s) beyond its anchor, but the Account (" + mpAccountId + ") has no Account_Key, so their Product Deals cannot be resolved exactly. The meeting and its anchor Deal are unaffected.");
-				automation.logAutomationEvent("handleMeetingEvent", "Events", eventId.toString(), "multi_product_reconcile", "missing_account_key", {"account":mpAccountId, "remaining":remainingKeys.size().toString()});
-			}
-			else
-			{
-				for each rKey in remainingKeys
-				{
-					rName = ifnull(remainingNames.get(rKey), rKey).toString();
-
-					// Partnership is held out of B2B automation by processDeal's own pipeline
-					// gate, and its Deals are created by processLead / processContact. Skip
-					// BEFORE the lookup: a review for a Partnership Deal that no B2B flow was
-					// ever going to touch is pure noise.
-					if(automation.pipelineForProductKey(rKey) == "Partnership")
-					{
-						automation.logAutomationEvent("handleMeetingEvent", "Events", eventId.toString(), "multi_product_reconcile", "partnership_skipped", {"product":rName});
-						continue;
-					}
-
-					// EXACT match. Deals.Deal_Key is UNIQUE, so this is unambiguous by
-					// construction - no substring matching on Deal_Name anywhere here.
-					rDealKey = mpAccountKey + "::" + rKey;
-					rFound = zoho.crm.searchRecords("Deals", "(Deal_Key:equals:" + rDealKey + ")");
-					rCount = 0;
-					rDealId = "";
-					if(!isNull(rFound) && !rFound.toString().startsWith("{\"code\""))
-					{
-						rCount = rFound.size();
-						if(rCount == 1) { rDealId = ifnull(rFound.get(0).get("id"), "").toString(); }
-					}
-
-					if(rCount > 1)
-					{
-						automation.createManualReview(contactId, "", "duplicate_product_deal", "Booking " + mpBookingRef + ": product '" + rName + "' matches " + rCount.toString() + " Deals for Deal_Key " + rDealKey + ". Contact " + contactId + ". The meeting is confirmed and its anchor Deal is reconciled; merge the duplicates, then re-save the meeting.");
-						automation.logAutomationEvent("handleMeetingEvent", "Events", eventId.toString(), "multi_product_reconcile", "duplicate_product_deal", {"deal_key":rDealKey, "count":rCount.toString()});
-						continue;
-					}
-					if(rDealId == "")
-					{
-						automation.createManualReview(contactId, "", "product_unresolved", "Booking " + mpBookingRef + ": product '" + rName + "' has no Product Deal for Deal_Key " + rDealKey + ". Contact " + contactId + ". The meeting is confirmed and its anchor Deal is reconciled; only this additional product could not be reconciled.");
-						automation.logAutomationEvent("handleMeetingEvent", "Events", eventId.toString(), "multi_product_reconcile", "product_unresolved", {"deal_key":rDealKey});
-						continue;
-					}
-
-					// The Contact must be THIS Deal's primary before its stage may move -
-					// the same rule routeContactSequence applies to the anchor Deal. A
-					// non-primary Contact is a legitimate state, not a data error, so it is
-					// logged and skipped WITHOUT a review.
-					rDeal = zoho.crm.getRecordById("Deals", rDealId.toLong());
-					rPrimaryId = "";
-					if(!isNull(rDeal) && !isNull(rDeal.get("id")))
-					{
-						rPc = rDeal.get("Deal_Primary_Contact");
-						if(!isNull(rPc) && !isNull(rPc.get("id"))) { rPrimaryId = rPc.get("id").toString(); }
-						if(rPrimaryId == "")
-						{
-							rCn = rDeal.get("Contact_Name");
-							if(!isNull(rCn) && !isNull(rCn.get("id"))) { rPrimaryId = rCn.get("id").toString(); }
-						}
-					}
-					if(rPrimaryId != contactId.toString())
-					{
-						automation.logAutomationEvent("handleMeetingEvent", "Events", eventId.toString(), "multi_product_reconcile", "non_primary_skipped", {"deal":rDealId, "product":rName, "primary":rPrimaryId});
-						continue;
-					}
-
-					// processDeal owns every Deal field change, including never-regress and
-					// the RTP floor. Empty context: this is a stage roll-up, not commercial
-					// evidence - the Contract fields belong to the Won path.
-					rRes = automation.processDeal(rDealId, "{}");
-					rMap = Map();
-					if(!isNull(rRes) && rRes.toString().trim() != "") { rMap = rRes.toString().toMap(); }
-					automation.logAutomationEvent("handleMeetingEvent", "Events", eventId.toString(), "multi_product_reconcile", ifnull(rMap.get("outcome"), "reconciled").toString(), {"deal":rDealId, "product":rName, "success":ifnull(rMap.get("success"), false).toString()});
-				}
-			}
-		}
+		// Nothing is lost. The full selected scope still travels in
+		// Meeting_Task_Contract_Products, and that is read by the activity contextJson built
+		// earlier in this function, which processDeal consumes to upsert ONE QUOTE PER PRODUCT
+		// under the one Deal. The anchor Deal was already reconciled above, so the additional
+		// Products are reconciled by that same call rather than by a second pass over sibling
+		// Deals that no longer exist.
 	}
 }

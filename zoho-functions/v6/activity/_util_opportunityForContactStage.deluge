@@ -1,0 +1,47 @@
+string automation.opportunityForContactStage(string contactStage)
+{
+	// =========================================================================
+	// _util_opportunityForContactStage   (VERSION: v6-contact-snapshot)
+	//
+	// The SINGLE authority for "which opportunity type does this Contact Stage
+	// represent?" -- the MQL / SQL / FTP / RTP value stamped into the nine Activity
+	// context snapshot fields.
+	//
+	// Per the authoritative commercial model, opportunity authority lives on the
+	// CONTACT, not the Deal:
+	//     *_Task_Stage        <- the Contact's Stage when the Activity was raised
+	//     *_Task_Opportunity  <- the Contact's MQL/SQL/FTP/RTP when it was raised
+	//     *_Task_Pipeline     <- the DEAL's relationship Pipeline when it was raised
+	//
+	// Before this existed the opportunity snapshot was read from Deals.Stage at five
+	// sites (processContact, createAuxTask, sendSequencedEmail, handleCallOutcome,
+	// handleMeetingEvent), which made a Contact-scoped fact Deal-sourced -- so two
+	// Contacts on one Deal recorded the same opportunity type regardless of where
+	// each actually was. The map itself is unchanged: it is the vocabulary that was
+	// already inlined at routeContactSequence:414-422, lifted to one place and given
+	// every caller in the same window.
+	//
+	// ⚠ Returns "" for a blank or unrecognised Stage. It NEVER defaults. A default
+	// here would write a plausible-but-false opportunity type into a permanent
+	// historical snapshot, and an out-of-set picklist write is discarded silently
+	// anyway. Callers must test for "" and simply omit the key.
+	//
+	// Deals.Stage remains the Deal's OWN opportunity roll-up and is still written by
+	// processDeal. This function does not replace that; it stops Activities from
+	// borrowing it.
+	// =========================================================================
+	s = ifnull(contactStage, "").toString().trim();
+	if(s == "") { return ""; }
+
+	m = Map();
+	m.put("Marketing Consent", "MQL");
+	m.put("Demo Booking", "SQL");
+	m.put("Demo Confirmation", "SQL");
+	m.put("Demo Hosted", "SQL");
+	m.put("Proposal Preparation", "FTP");
+	m.put("Commercial Agreement", "FTP");
+	m.put("Onboarding", "RTP");
+	m.put("Renewal", "RTP");
+
+	return ifnull(m.get(s), "").toString();
+}
