@@ -19,7 +19,10 @@ void automation.processLead(string lead_id)
 	//      bootstrapped onto the Account's SINGLE Deal (resolveOrCreateAccountDeal), where
 	//      processDeal 5b derives one QUOTE PER PRODUCT. Unresolved evidence + plan-type
 	//      conflicts -> Manual Review.
-	//   6. processContact(newContactId) fires via WF001b2 (Contacts-create) -> activation.
+	//   6. processContact(newContactId, "create") is called DIRECTLY, after 5 -> activation.
+	//      WF001b2 (Contacts-create) is superseded and inactive: this function owns the
+	//      conversion, so it initializes the Contact it just converted rather than leaving a
+	//      rule to react to it. Exactly one processContact and one processDeal per conversion.
 	//
 	// ⚠ CORRECTED (work item 4.3): the per-Product Deal fan-out is GONE, along with the
 	// "::active" account-level key it replaced. One Account holds ZERO OR ONE persistent Deal,
@@ -27,8 +30,9 @@ void automation.processLead(string lead_id)
 	// it -- never as another Deal. normalizeToProductQuoteTuples still owns evidence collection
 	// and encoding; what changed is that its buckets become Quotes rather than Deals.
 	//
-	// Graph enrichment writes suppress Contact workflow recursion; Contact create is the
-	// single deterministic downstream step (processLead -> processContact -> processDeal).
+	// Graph enrichment writes suppress Contact workflow recursion; the chain is one
+	// deterministic sequence with no workflow-triggered branch:
+	//   WF001a -> processLead -> convertLead -> processDeal(importCtx) -> processContact("create")
 	//
 	// REQUIRED ZOHO CRM SETTING:
 	// - Accounts.Account_Key UNIQUE
@@ -387,7 +391,27 @@ void automation.processLead(string lead_id)
 		if(leadCompanyExpansionRegional != null) { createAccMap.put("Company_Expansion_Regional", leadCompanyExpansionRegional); }
 		if(leadCompanyExpansionTimeline != null) { createAccMap.put("Company_Expansion_Timeline", leadCompanyExpansionTimeline); }
 
-		accCreateRes = zoho.crm.createRecord("Accounts", createAccMap);
+		// ⚠ noTrigger ON INSERT — see the duplicate-Task analysis below.
+		//
+		// This insert fired WF001c, which runs processAccount, which calls processDeal("{}").
+		// processLead then calls processDeal itself a few steps later WITH importCtx. Both run
+		// concurrently and both reach the same auxiliary-review point, so both call createAuxTask
+		// before either's Task is visible to the other's dedupe read. Observed live 2026-09-06:
+		// two identical [pipeline_target_acv_unresolved] Tasks in the same second, three times.
+		//
+		// Tasks carries NO unique or external field (verified against live metadata: 37 fields,
+		// zero unique, zero external), so there is no atomic upsert identity to dedupe on, and a
+		// search immediately before creation cannot close a race. The only remaining lever is to
+		// stop creating the redundant execution.
+		//
+		// Suppressing is correct, not merely convenient: processLead BUILT this Account itself --
+		// it sets Account_Key, name, website, phone and source class directly -- so processAccount
+		// has nothing to add here, and its processDeal("{}") is strictly weaker than the
+		// importCtx call that follows (it cannot bootstrap Quotes).
+		//
+		// WF001c still fires on every Account created ANYWHERE ELSE and on every Account edit.
+		// Only this function's own insert is silenced.
+		accCreateRes = zoho.crm.createRecord("Accounts", createAccMap, {"trigger": List()});
 		if(accCreateRes.get("id") != null)
 		{
 			accountId = accCreateRes.get("id").toString();
@@ -604,6 +628,80 @@ void automation.processLead(string lead_id)
 		info "Contact update resp (incl. Contact_Role, trigger suppressed): " + contactUpdResp;
 	}
 
+	// ---- 5b. Link the Contact to EACH resolved Product via the writable Products_Linked junction
+	//          (Contacts_X_Products / Products12) so the Contact carries product evidence for
+	//          activation. prodBuckets already covers BOTH Product_Interest AND the A/E/R
+	//          Quote_Plan_Products (collectProductEvidence reads both), so A/E/R-only imports also
+	//          give the Contact product evidence -> processContact (step 7) can resolve their
+	//          Product Deals and activate. (Product_Interest_Staging does not exist on any module;
+	//          the structured Products_Linked junction is the only Contact product evidence.)
+	//          Idempotent (no duplicate links);
+	//          unresolved SKUs are routed to Manual Review by the step-6 fan-out (never here).
+	//
+	// ⚠ THIS RUNS BEFORE THE DEAL RECONCILE, AND THAT ORDERING IS LOAD-BEARING. It used to sit at
+	// step 6b, AFTER the processDeal calls below. The scaffold Draft Quote (processDeal 8z) has
+	// exactly two evidence sources: ctx.products on an activity-driven reconcile, or -- on a plain
+	// reconcile -- collectProductEvidence("Accounts", accountId), which walks each related
+	// Contact's Products_Linked. A Product-Interest-only Lead has no contract terms, so this
+	// function takes the plainCtx branch, whose own comment says it exists precisely so "the
+	// scaffold Quote (processDeal 8z) binds it". With the linking still pending, that reconcile saw
+	// ZERO Account evidence and scaffolded nothing.
+	//
+	// It appeared to work only because a SECOND, redundant processDeal ran afterwards (WF001c on
+	// the Account, or processContact's cascade) and by then the links existed. Live proof,
+	// 2026-09-06: the three earlier Wave-1 conversions each produced their scaffold 3-5s AFTER the
+	// Activation Task -- i.e. from the later run, not from processLead's own. Once the redundant
+	// reconcile was removed, the scaffold stopped: Lead 991103000004041005 produced one Account,
+	// one Contact, one Deal, one Activation Task, exactly one Manual Review -- and no Quote.
+	//
+	// Moving the linking above the reconcile makes the authoritative call see the evidence it was
+	// always meant to act on, instead of depending on a duplicate execution to supply it.
+	if(newContactId != "" && newContactId != "null" && prodBuckets.size() > 0)
+	{
+		alreadyLinkedIds = List();
+		exConLinks = zoho.crm.getRelatedRecords("Products12", "Contacts", newContactId.toLong());
+		if(isNull(exConLinks) || exConLinks.size() == 0 || exConLinks.toString().startsWith("{\"code\""))
+		{
+			exConLinks = zoho.crm.getRelatedRecords("Products", "Contacts", newContactId.toLong());
+		}
+		if(!isNull(exConLinks) && exConLinks.size() > 0 && !exConLinks.toString().startsWith("{\"code\""))
+		{
+			for each exl in exConLinks
+			{
+				exlId = "";
+				if(!isNull(exl.get("id"))) { exlId = exl.get("id").toString(); }
+				exlProd = exl.get("Product_Details");
+				if(!isNull(exlProd) && !isNull(exlProd.get("id"))) { exlId = exlProd.get("id").toString(); }
+				exlPI = exl.get("Product_Interest");
+				if(!isNull(exlPI) && !isNull(exlPI.get("id"))) { exlId = exlPI.get("id").toString(); }
+				if(exlId != "") { alreadyLinkedIds.add(exlId); }
+			}
+		}
+		exJunctionLinks = zoho.crm.searchRecords("Contacts_X_Products", "(Contacts:equals:" + newContactId + ")");
+		if(!isNull(exJunctionLinks) && exJunctionLinks.size() > 0 && !exJunctionLinks.toString().startsWith("{\"code\""))
+		{
+			for each exj in exJunctionLinks
+			{
+				exjProdId = "";
+				exjPI = exj.get("Product_Interest");
+				if(!isNull(exjPI) && !isNull(exjPI.get("id"))) { exjProdId = exjPI.get("id").toString(); }
+				if(exjProdId != "" && !alreadyLinkedIds.contains(exjProdId)) { alreadyLinkedIds.add(exjProdId); }
+			}
+		}
+		for each lb in prodBuckets
+		{
+			lbProdId = ifnull(lb.get("product_id"), "").toString().trim();
+			if(lbProdId == "" || !lbProdId.matches("[0-9]+")) { continue; }
+			if(alreadyLinkedIds.contains(lbProdId)) { continue; }
+			linkPIMap = Map();
+			linkPIMap.put("Contacts", newContactId);
+			linkPIMap.put("Product_Interest", lbProdId);
+			linkPI = zoho.crm.createRecord("Contacts_X_Products", linkPIMap);
+			alreadyLinkedIds.add(lbProdId);
+			info "5b: linked Product '" + ifnull(lb.get("product_name"), lbProdId).toString() + "' (" + lbProdId + ") to Contact " + newContactId + " resp=" + linkPI;
+		}
+	}
+
 	// ======================================================================================
 	// ---- 6. RESOLVE THE ACCOUNT'S ONE DEAL, then bootstrap every term onto it ----
 	//
@@ -650,7 +748,29 @@ void automation.processLead(string lead_id)
 	}
 
 	// ---- one Deal for the Account ----
-	plDealRaw = automation.resolveOrCreateAccountDeal(accountId, accountKey, accountName, "");
+	//
+	// ⚠ PIPELINE HINT FROM THE LEAD, not from Account evidence.
+	//
+	// resolveOrCreateAccountDeal falls back to collectProductEvidence("Accounts", accId) when the
+	// hint is blank -- but that reads each related Contact's Products_Linked, and at THIS point in
+	// the conversion nothing has written it yet. Order is Account -> Contact -> Deal, and
+	// Products_Linked is populated downstream of the Deal. So the Account-evidence fallback finds
+	// nothing here and every Deal defaults to B2B.
+	//
+	// Proven live 2026-09-06: Lead caroline.maclean@test.com carried Product_Interest
+	// ["Partnership"] and its Deal was still created with Pipeline = "B2B". The dispatch gate in
+	// routeContactSequence reads Deals.Pipeline, so that misclassification would have run the B2B
+	// sequence against a partner.
+	//
+	// The Lead's own Product_Interest is the only Partnership evidence that exists this early, and
+	// processLead already has it parsed in leadPIStr. Passing it uses the 4th parameter exactly as
+	// intended -- an explicit caller hint always wins over the fallback -- with no signature change.
+	plPipelineHint = "";
+	for each piNm in leadPIStr.toList(",")
+	{
+		if(automation.computeProductKey(piNm.trim()) == "partnership") { plPipelineHint = "Partnership"; }
+	}
+	plDealRaw = automation.resolveOrCreateAccountDeal(accountId, accountKey, accountName, plPipelineHint);
 	plDeal = Map();
 	if(!isNull(plDealRaw) && plDealRaw.toString().trim() != "") { plDeal = plDealRaw.toString().toMap(); }
 
@@ -770,60 +890,9 @@ void automation.processLead(string lead_id)
 		}
 	}
 
-	// ---- 6b. Link the Contact to EACH resolved Product via the writable Products_Linked junction
-	//          (Contacts_X_Products / Products12) so the Contact carries product evidence for
-	//          activation. prodBuckets already covers BOTH Product_Interest AND the A/E/R
-	//          Quote_Plan_Products (collectProductEvidence reads both), so A/E/R-only imports also
-	//          give the Contact product evidence -> processContact (step 7) can resolve their
-	//          Product Deals and activate. (Product_Interest_Staging does not exist on any module;
-	//          the structured Products_Linked junction is the only Contact product evidence.)
-	//          Idempotent (no duplicate links);
-	//          unresolved SKUs are routed to Manual Review by the step-6 fan-out (never here). ----
-	if(newContactId != "" && newContactId != "null" && prodBuckets.size() > 0)
-	{
-		alreadyLinkedIds = List();
-		exConLinks = zoho.crm.getRelatedRecords("Products12", "Contacts", newContactId.toLong());
-		if(isNull(exConLinks) || exConLinks.size() == 0 || exConLinks.toString().startsWith("{\"code\""))
-		{
-			exConLinks = zoho.crm.getRelatedRecords("Products", "Contacts", newContactId.toLong());
-		}
-		if(!isNull(exConLinks) && exConLinks.size() > 0 && !exConLinks.toString().startsWith("{\"code\""))
-		{
-			for each exl in exConLinks
-			{
-				exlId = "";
-				if(!isNull(exl.get("id"))) { exlId = exl.get("id").toString(); }
-				exlProd = exl.get("Product_Details");
-				if(!isNull(exlProd) && !isNull(exlProd.get("id"))) { exlId = exlProd.get("id").toString(); }
-				exlPI = exl.get("Product_Interest");
-				if(!isNull(exlPI) && !isNull(exlPI.get("id"))) { exlId = exlPI.get("id").toString(); }
-				if(exlId != "") { alreadyLinkedIds.add(exlId); }
-			}
-		}
-		exJunctionLinks = zoho.crm.searchRecords("Contacts_X_Products", "(Contacts:equals:" + newContactId + ")");
-		if(!isNull(exJunctionLinks) && exJunctionLinks.size() > 0 && !exJunctionLinks.toString().startsWith("{\"code\""))
-		{
-			for each exj in exJunctionLinks
-			{
-				exjProdId = "";
-				exjPI = exj.get("Product_Interest");
-				if(!isNull(exjPI) && !isNull(exjPI.get("id"))) { exjProdId = exjPI.get("id").toString(); }
-				if(exjProdId != "" && !alreadyLinkedIds.contains(exjProdId)) { alreadyLinkedIds.add(exjProdId); }
-			}
-		}
-		for each lb in prodBuckets
-		{
-			lbProdId = ifnull(lb.get("product_id"), "").toString().trim();
-			if(lbProdId == "" || !lbProdId.matches("[0-9]+")) { continue; }
-			if(alreadyLinkedIds.contains(lbProdId)) { continue; }
-			linkPIMap = Map();
-			linkPIMap.put("Contacts", newContactId);
-			linkPIMap.put("Product_Interest", lbProdId);
-			linkPI = zoho.crm.createRecord("Contacts_X_Products", linkPIMap);
-			alreadyLinkedIds.add(lbProdId);
-			info "6b: linked Product '" + ifnull(lb.get("product_name"), lbProdId).toString() + "' (" + lbProdId + ") to Contact " + newContactId + " resp=" + linkPI;
-		}
-	}
+	// ---- 6b. Contact -> Products_Linked junction: MOVED UP to step 5b, above the Deal reconcile.
+	//          The scaffold Draft Quote reads this evidence through the Account, so it has to exist
+	//          before processDeal runs, not after. See the ordering note at 5b. ----
 
 	// ---- 6c. Imported-contract bootstrap hand-off: REMOVED (v6-product-deal) ----
 	// The flat single-Deal import_bootstrap call and the iConflict/cConflict createAuxTask reviews
@@ -844,7 +913,27 @@ void automation.processLead(string lead_id)
 	// never an auto-picked sequence; a non-DM gets no activation.
 	if(newContactId != "" && newContactId != "null")
 	{
-		automation.processContact(newContactId);
+		// ---- THE ONLY Contact-processing invocation in the conversion path ----
+		//
+		// "create": Contact INITIALIZATION only. WF001b2 (Contacts CREATE) is superseded and
+		// stays inactive, so this direct call is the single one -- there is no workflow-triggered
+		// processContact racing it, and no wrapper function standing in for one.
+		//
+		// AFTER, not before, the authoritative processDeal at :769. That ordering is required,
+		// not incidental:
+		//   - everything processDeal needs from the Contact is already written. It enumerates the
+		//     ACCOUNT's Contacts (processDeal:197) and builds the Contact_Roles junction itself
+		//     (:548); the Contact exists from convertLead at :492, and its Stage/State/Role1 were
+		//     normalized by this function at :521-:623.
+		//   - and processContact's activation section deliberately RE-READS the Contact for
+		//     authoritative Contact_Role1 / Primary Contact "because processDeal may have touched
+		//     them" (processContact:438). Running it first would read pre-reconcile values.
+		//
+		// This function has already reconciled the Deal at :769 with importCtx -- the only call
+		// carrying the contract terms that produce Quotes -- so processContact is passed "create"
+		// and withholds its own context-free processDeal. Activation, role, Account resolution and
+		// the Contact_Roles junction all still run; only the Deal cascade is withheld.
+		automation.processContact(newContactId, "create");
 	}
 
 	// ---- 8. Account rollup (EXPLICIT -- does not depend on WF001c firing on Account edits) ----

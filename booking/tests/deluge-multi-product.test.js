@@ -175,6 +175,228 @@ test('the create path re-searches Deal_Key and asserts exactly one match', () =>
   assert.ok(/duplicate_deal_key_after_insert/.test(c), 'multi-match-after-insert branch missing');
 });
 
+test('createAuxTask searches the Contact axis it matches on, not only the Deal', () => {
+  // ⚠ STRUCTURAL MISS, independent of concurrency. The identity evaluated is CONTACT-scoped
+  // (Who_Id + Task_Type + open + [issue_code]), but the lookup searched by DEAL and only fell
+  // back to Who_Id when there was no Deal. So if a Contact already held an open Manual Review
+  // and a NEW Deal was created, the Deal's related-Task list was empty by construction, the
+  // Contact-scoped identity was never evaluated, and a second Task was raised for a condition
+  // already open.
+  const c = code('activity/createAuxTask.deluge');
+
+  // The Contact search is guarded by the Contact alone — never by the ABSENCE of a Deal.
+  assert.match(c, /if\(contactId != 0\)\s*\{\s*scopeResults\.add\(zoho\.crm\.searchRecords\("Tasks", "\(Who_Id:equals:"/,
+    'the Who_Id search must be guarded by contactId only, and must always run for a Contact');
+  // …and the Deal scope is an ADDITIONAL independent guard, not an alternative branch.
+  assert.match(c, /\}\s*if\(hasDeal\)\s*\{\s*relTasks = zoho\.crm\.getRelatedRecords/,
+    'the Deal scope must be its own if, not an else — both scopes read on every call');
+  // Both scopes are then unioned and de-duplicated by record id, so a Task reachable from
+  // both (the ordinary case) is evaluated once.
+  assert.match(c, /for each scope in scopeResults/, 'both scopes must be walked');
+  assert.match(c, /seenTaskIds\.contains\(stId\)/, 'the union must be de-duplicated by record id');
+});
+
+test('createAuxTask openness respects all three lifecycle axes', () => {
+  // The model carries three separate axes and the predicate used to read only the native one:
+  //   Status      (native)     Not Started | Deferred | In Progress | Completed | Waiting…
+  //   Task_Status (automation) Open (displays "New") | Working | Closed
+  //   Task_State  (outcome)    Open | Won | Lost
+  // A Task retired by automation (Task_Status=Closed) or concluded (Task_State=Won/Lost) must
+  // not count as open merely because native Status was left at "In Progress".
+  const c = code('activity/createAuxTask.deluge');
+
+  assert.match(c, /tOpen\s*=\s*\(/, 'the openness predicate must be explicit');
+  assert.match(c, /tStatus\s*!=\s*"Completed"/, 'native Completed must close');
+  assert.match(c, /tTaskStatus\s*!=\s*"Closed"/, 'Task_Status Closed must close');
+  assert.match(c, /tTaskState\s*!=\s*"Won"/, 'Task_State Won must close');
+  assert.match(c, /tTaskState\s*!=\s*"Lost"/, 'Task_State Lost must close');
+
+  // Deferred / Waiting stay OPEN and are reopened only for a genuinely new issue code —
+  // live provenance 2026-08-02, Deal 991103000003257018.
+  assert.doesNotMatch(c, /tStatus\s*!=\s*"Deferred"/,
+    'Deferred must remain OPEN so a parked Task still absorbs a repeat');
+  assert.match(c, /tStatus == "Deferred" \|\| tStatus == "Waiting on someone else"/,
+    'the reopen rule for Deferred/Waiting must be preserved');
+});
+
+test('Contact-create and Contact-edit are distinguished by an explicit invocation mode', () => {
+  // processLead owns the conversion, so it initializes the Contact it just converted and passes
+  // "create". WF001b0 (Contacts field_update) supplies no second argument, which normalises to
+  // "edit" — preserving its downstream reconciliation exactly.
+  const pc = code('processContact.deluge');
+
+  assert.match(pc, /automation\.processContact\(string contact_id, string invocationMode\)/,
+    'processContact must take an explicit invocation mode');
+  // Fail-safe: anything not exactly "create" reconciles.
+  assert.match(pc, /if\(pcMode != "create"\)\s*\{\s*pcMode = "edit";/,
+    'an absent or unrecognised mode must normalise to "edit", not silently skip work');
+  // Create mode withholds ONLY the Deal cascade.
+  assert.match(pc, /if\(pcMode == "create"\)/, 'create mode must gate the processDeal cascade');
+  assert.match(pc, /else\s*\{\s*automation\.processDeal\(accountDealId, "\{\}"\);/,
+    'edit mode must still cascade into processDeal');
+
+  // The Activation Task sits BELOW the gate, so create mode still produces it.
+  const gate = pc.indexOf('if(pcMode == "create")');
+  const activation = pc.indexOf('Sequence Activation');
+  assert.ok(gate > 0 && activation > gate,
+    'the Sequence Activation Task must run after the cascade gate, in both modes');
+});
+
+test('a Lead conversion holds exactly one processContact and one processDeal', () => {
+  // The ingestion invariant: all new data enters through Leads, processLead owns the conversion,
+  // and direct Contact creation is not a supported path. So the converted Contact is initialized
+  // ONCE — by its converter — and the opportunity bootstrap runs ONCE, with importCtx.
+  //
+  // WF001b2 (Contacts CREATE) is superseded and stays inactive. It is NOT replaced by another
+  // workflow function: a wrapper existing only to keep a redundant rule alive would reintroduce
+  // the second invocation under a new name.
+  const pl = code('processLead.deluge');
+
+  assert.match(pl, /automation\.processContact\(newContactId, "create"\)/,
+    'processLead must initialize the converted Contact directly, in create mode');
+  assert.equal((pl.match(/automation\.processContact\(/g) || []).length, 1,
+    'processLead must call processContact exactly once');
+
+  // Exactly one reconcile reaches processDeal per conversion: the import and plain context
+  // branches are mutually exclusive arms of the same bootstrap, never both.
+  const pdCalls = pl.match(/automation\.processDeal\([^)]*\)/g) || [];
+  assert.equal(pdCalls.length, 2, 'processLead has exactly the two bootstrap arms');
+  assert.ok(pdCalls.every((c) => /importCtx|plainCtx/.test(c)),
+    'every processDeal call in processLead must carry the bootstrap context, never "{}"');
+
+  // ORDERING: the authoritative reconcile precedes Contact initialization, because
+  // processContact re-reads the Contact for values processDeal writes.
+  assert.ok(pl.indexOf('automation.processDeal(dealId, importCtx.toString())')
+    < pl.indexOf('automation.processContact(newContactId, "create")'),
+    'processDeal(importCtx) must run BEFORE processContact("create")');
+
+  // …and the Contact→Product linking precedes the reconcile, because the scaffold Draft Quote
+  // reads that evidence through the Account. When it ran after, the scaffold only ever fired
+  // from a SECOND, redundant processDeal — so removing the duplicate silently removed the Quote.
+  assert.ok(pl.indexOf('linkPIMap.put("Product_Interest", lbProdId)')
+    < pl.indexOf('automation.processDeal(dealId, importCtx.toString())'),
+    'Contact→Products_Linked must be written BEFORE the Deal reconcile that consumes it');
+
+  // No workflow function exists whose only purpose is to re-add the second invocation.
+  assert.ok(!ALL_DELUGE.includes('processContactCreated.deluge'),
+    'processContactCreated must not exist — WF001b2 is superseded, not re-pointed');
+});
+
+test('a conversion that RESOLVES an existing Contact follows the same single path', () => {
+  // Conversion has two shapes and both must end at one processContact("create"):
+  //   new Contact       -> convertLead creates it, convertRes.Contacts carries the new id
+  //   existing Contact  -> processLead passes it in convertMap so conversion binds rather than
+  //                        duplicates, and newContactId keeps that id
+  // WF001b2 would only have fired on the first shape, which is precisely why it could never have
+  // been the initialization mechanism: half of all conversions never triggered it.
+  const pl = code('processLead.deluge');
+
+  assert.match(pl, /if\(contactId != ""\)\s*\{ convertMap\.put\("Contacts", contactId\); \}/,
+    'an already-resolved Contact must be passed into convertLead, not duplicated');
+  assert.match(pl, /newContactId = contactId;\s*if\(convertRes\.get\("Contacts"\) != null\)/,
+    'newContactId must fall back to the resolved Contact when conversion returns none');
+  // One guarded call site serves both shapes.
+  assert.match(pl, /if\(newContactId != "" && newContactId != "null"\)\s*\{[\s\S]*?automation\.processContact\(newContactId, "create"\);\s*\}/,
+    'both conversion shapes must reach the same single processContact call');
+});
+
+test('WF001d is reserved for EXTERNAL Deal edits — automation never re-triggers itself', () => {
+  // WF001d (Deals create_or_edit) runs processDeal. Its reconciliation is untouched by this
+  // change, and the reason is structural: every Deal write the automation makes — insert and
+  // update alike — is trigger-suppressed, so WF001d only ever fires for an edit made by a human
+  // or an external system. Verified live 2026-09-06 on Deal 991103000004071002: Amount null →
+  // 10500 written WITH the trigger on, Modified_Time advanced past the write.
+  //
+  // A Deal write that forgets the suppression re-enters processDeal from inside processDeal.
+  const offenders = [];
+  for (const rel of ALL_DELUGE) {
+    const c = code(rel);
+    for (const w of c.match(/(?:create|update)Record\("Deals"[\s\S]{0,400}?\);/g) || []) {
+      if (!/\{"trigger": List\(\)\}|noTrigger|noTrig\b/.test(w)) offenders.push(`${rel}: ${w.slice(0, 90)}`);
+    }
+  }
+  assert.deepEqual(offenders, [], 'every Deal write must suppress its own workflow trigger');
+});
+
+test('a function that builds an Account itself suppresses the Account-create trigger', () => {
+  // ⚠ REGRESSION GUARD — duplicate auxiliary Tasks, observed live 2026-09-06 (three separate
+  // Lead runs) and in the 2026-08-14 E2E run.
+  //
+  // processLead/processContact create the Account, which fired WF001c -> processAccount ->
+  // processDeal("{}"), concurrently with their OWN processDeal call. Both reached the same
+  // review point and both called createAuxTask before either's Task was visible to the other's
+  // dedupe read, producing two identical Tasks in the same second.
+  //
+  // Tasks carries no unique or external field (verified live: 37 fields, 0 unique, 0 external),
+  // so there is no atomic upsert identity, and a search immediately before creation cannot close
+  // a race. The only lever is to not create the redundant execution.
+  //
+  // WF001c still fires on Accounts created anywhere else, and on every Account edit.
+  for (const f of ['processLead.deluge', 'processContact.deluge']) {
+    const c = code(f);
+    const inserts = [...c.matchAll(/createRecord\s*\(\s*"Accounts"[^;]*?\)\s*;/g)].map((m) => m[0]);
+    assert.ok(inserts.length > 0, `${f}: expected an Accounts insert to guard`);
+    for (const ins of inserts) {
+      assert.match(ins, /"trigger"\s*:\s*List\(\)/,
+        `${f}: an Accounts insert does not suppress the trigger — WF001c will run a second, `
+        + `weaker processDeal concurrently and race its own dedupe: ${ins}`);
+    }
+  }
+});
+
+test('processLead passes a Partnership pipeline hint derived from the Lead itself', () => {
+  // ⚠ REGRESSION GUARD — proven live 2026-09-06. Lead caroline.maclean@test.com carried
+  // Product_Interest ["Partnership"] and its Deal was still created with Pipeline = "B2B".
+  //
+  // The resolver's Account-evidence fallback CANNOT work at conversion time: the order is
+  // Account -> Contact -> Deal, and collectProductEvidence("Accounts", …) reads each related
+  // Contact's Products_Linked, which is written downstream of Deal creation. At the moment the
+  // Deal is created there is nothing to find, so it defaults to B2B every time.
+  //
+  // Deals.Pipeline is what routeContactSequence's dispatch gate reads, so a wrong value here
+  // runs the B2B sequence against a partner.
+  const c = code('processLead.deluge');
+
+  assert.doesNotMatch(c, /resolveOrCreateAccountDeal\([^)]*,\s*""\s*\)/,
+    'processLead passes a blank pipelineHint — the Account-evidence fallback cannot resolve '
+    + 'Partnership this early in the conversion');
+  assert.match(c, /resolveOrCreateAccountDeal\([^)]*plPipelineHint\s*\)/,
+    'processLead must pass a hint derived from the Lead');
+  // NB: allow the nested call in computeProductKey(piNm.trim()) — a [^)]* class cannot span it.
+  assert.match(c, /computeProductKey\([\s\S]{0,60}?"partnership"/,
+    'the hint must be derived by normalising the Lead Product_Interest values');
+  assert.match(c, /leadPIStr/,
+    "the hint must come from the Lead's own parsed Product_Interest");
+});
+
+test('every Deal insert in the resolver suppresses the workflow trigger', () => {
+  // ⚠ REGRESSION GUARD — observed live 2026-09-06 (Wave-1 dummy Lead) and 2026-08-14 (E2E run):
+  // TWO identical [pipeline_target_acv_unresolved] Manual Reviews, same Contact, same Deal,
+  // same second.
+  //
+  // The native insert did not suppress WF001d, so creating the Deal fired processDeal a SECOND
+  // time while the caller was already running it on that same Deal. Both executions called
+  // createAuxTask, whose dedupe is a getRelatedRecords/searchRecords read — and Zoho's index had
+  // not yet surfaced the other's Task. No search-based dedupe can win that race.
+  //
+  // Every caller (processLead/processContact/processAccount) invokes processDeal itself, WITH
+  // contextJson; WF001d passes deal_id alone and cannot do the Quote bootstrap. The rule's call
+  // is therefore strictly weaker as well as redundant.
+  const c = code('activity/_util_resolveOrCreateAccountDeal.deluge');
+
+  const inserts = [...c.matchAll(/createRecord\s*\(\s*"Deals"[^)]*\)/g)].map((m) => m[0]);
+  assert.ok(inserts.length > 0, 'expected at least one native Deals insert to guard');
+  for (const ins of inserts) {
+    assert.match(ins, /"trigger"\s*:\s*List\(\)/,
+      `a Deals insert does not suppress the workflow trigger — WF001d will double-run '
+      + 'processDeal and race its own dedupe: ${ins}`);
+  }
+
+  // The Partnership REST insert already did this; the two paths must stay symmetric.
+  assert.match(c, /restBody\.put\("trigger",\s*List\(\)\)/,
+    'the Partnership REST insert must keep suppressing the trigger');
+});
+
 test('a Partnership Deal is reachable at creation, from Product evidence', () => {
   // ⚠ THIS IS A REGRESSION GUARD, and its absence is what let the defect ship.
   //

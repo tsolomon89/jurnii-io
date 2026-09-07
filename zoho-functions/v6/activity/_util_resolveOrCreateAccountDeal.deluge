@@ -212,7 +212,10 @@ string automation.resolveOrCreateAccountDeal(string accountId, string accountKey
 			// automation NO LONGER EXISTS under the corrected model, so this misclassification is
 			// now behavioural, not cosmetic -- the dispatch gate at routeContactSequence reads
 			// Deals.Pipeline and would treat this Deal as B2B. The review is therefore mandatory.
-			res = zoho.crm.createRecord("Deals", dm);
+			// noTrigger: see the note on the else-branch insert below. WF001d must not fire on
+			// an insert this function performs -- every caller invokes processDeal itself, with
+			// context this rule cannot supply.
+			res = zoho.crm.createRecord("Deals", dm, {"trigger": List()});
 			if(!isNull(res) && !isNull(res.get("id"))) { newId = res.get("id").toString(); }
 			else if(!isNull(res) && res.get("code") == "DUPLICATE_DATA" && !isNull(res.get("details")) && !isNull(res.get("details").get("id"))) { newId = res.get("details").get("id").toString(); }
 			if(newId != "")
@@ -224,7 +227,26 @@ string automation.resolveOrCreateAccountDeal(string accountId, string accountKey
 	}
 	else
 	{
-		res = zoho.crm.createRecord("Deals", dm);
+		// ⚠ noTrigger ON INSERT. Observed live 2026-09-06 on the Wave-1 dummy Lead, and in the
+		// 2026-08-14 E2E run before it: TWO identical [pipeline_target_acv_unresolved] Manual
+		// Reviews, same Contact, same Deal, same second.
+		//
+		// Cause: this insert fired WF001d (Deals create_or_edit) while the CALLER was already
+		// running processDeal on the same Deal. Two concurrent processDeal executions each
+		// called createAuxTask, whose dedupe is a getRelatedRecords/searchRecords read -- and
+		// Zoho's index had not yet surfaced the other's Task. A search-based dedupe cannot win
+		// that race; the fix is to stop creating the second execution.
+		//
+		// Suppressing is correct, not merely convenient: every caller of this function
+		// (processLead, processContact, processAccount) invokes processDeal itself immediately
+		// afterwards, and does so WITH contextJson. WF001d passes deal_id alone, so its call is
+		// strictly the weaker of the two -- it cannot perform the Quote bootstrap. Suppressing
+		// the insert removes a redundant, less-capable duplicate run.
+		//
+		// Deal EDITS still trigger WF001d normally. Only this function's own insert is silenced,
+		// which is exactly what the Partnership REST branch above already does via
+		// restBody.put("trigger", List()). This makes the two insert paths symmetric.
+		res = zoho.crm.createRecord("Deals", dm, {"trigger": List()});
 		if(!isNull(res) && !isNull(res.get("id"))) { newId = res.get("id").toString(); }
 		else if(!isNull(res) && res.get("code") == "DUPLICATE_DATA" && !isNull(res.get("details")) && !isNull(res.get("details").get("id"))) { newId = res.get("details").get("id").toString(); }
 	}

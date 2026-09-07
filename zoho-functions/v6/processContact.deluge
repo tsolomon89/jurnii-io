@@ -1,10 +1,49 @@
-void automation.processContact(string contact_id)
+void automation.processContact(string contact_id, string invocationMode)
 {
 	// =========================================================================
 	// processContact  (Contact-centric)
 	//
 	// Owns Contact normalization + activation. Does NOT own reconciliation/rollup
 	// (that is processDeal, the sole owner — called once at the end).
+	//
+	// ---- invocationMode: "create" | "edit" (blank => "edit") ----------------------------
+	//
+	// TWO callers, two meanings, ONE function:
+	//   processLead, directly, after convertLead   -> "create"  Contact INITIALIZATION
+	//   WF001b0  Contacts field_update             -> "edit"    Contact CHANGE PROPAGATION
+	//
+	// WF001b2 (Contacts CREATE) is SUPERSEDED and stays INACTIVE. It is not replaced by another
+	// workflow function. Direct Contact creation is not a supported ingestion path: all new
+	// person, company and opportunity data enters through Leads, and processLead owns the
+	// conversion, so the converted Contact is initialized exactly once -- by its converter, not
+	// by a rule watching the record the converter just made.
+	//
+	// WHY the modes must differ. processLead is the authoritative bootstrap: it alone holds the
+	// Lead's contract terms, and it alone can turn them into Quotes. It reconciles the Deal
+	// itself with importCtx and THEN initializes the Contact. A second, context-free
+	// processDeal("{}") issued from inside that initialization would be redundant, strictly
+	// weaker (it cannot bootstrap Quotes) and concurrent with the authoritative one -- and both
+	// reach the same auxiliary-review point, each calling createAuxTask before either has
+	// committed, so both dedupe reads return empty.
+	//
+	// Live provenance, 2026-09-06 Wave-1 run (Contact 991103000004065001):
+	//   16:44:32  conversion; WF001b2 and WF001c both fire
+	//   16:44:35  Deal 991103000004065014 created
+	//   16:44:42  TWO identical [pipeline_target_acv_unresolved] Tasks, same second, same
+	//             Who_Id AND same What_Id (4069002 / 4074001)
+	//   16:44:45  ONE Sequence Activation Task -- that path deduped, because by then the
+	//             WF001b2 run had committed
+	// Reproduced on all five conversions that day.
+	//
+	// Tasks carries no unique or external field (verified live: 37 fields, 0 unique, 0 external),
+	// so there is no atomic upsert identity, and no search immediately before creation can close
+	// a race. The only lever is to stop issuing the redundant reconciles.
+	//
+	// In "create" mode this function performs ALL Contact-specific work -- normalization, role,
+	// Account resolution, the Contact_Roles junction and the Sequence Activation Task -- but does
+	// NOT cascade into processDeal.
+	// In "edit" mode (WF001b0) the full downstream reconciliation is preserved unchanged, so a
+	// later watched-field change still propagates to the Deal.
 	//
 	// Pipeline:
 	//   1. Read Contact, resolve / repair canonical Account (Account_Key)
@@ -36,6 +75,14 @@ void automation.processContact(string contact_id)
 
 	if(contact_id == null || contact_id == "") { return; }
 	cleanId = contact_id.replaceAll("zcrm_", "").trim();
+
+	// Mode normalisation. Anything that is not exactly "create" is treated as "edit", so an
+	// unmapped or absent second argument -- which is what WF001b0's registration supplies --
+	// keeps the previous full-cascade behaviour. Fail-safe by default: an unrecognised mode
+	// reconciles rather than silently skipping work.
+	pcMode = ifnull(invocationMode, "").toString().trim().toLowerCase();
+	if(pcMode != "create") { pcMode = "edit"; }
+	automation.logAutomationEvent("processContact", "Contacts", cleanId, "invocation_mode", pcMode, {"raw":ifnull(invocationMode, "").toString()});
 
 	contactRecord = zoho.crm.getRecordById("Contacts", cleanId.toLong());
 	if(contactRecord.get("id") == null) { return; }
@@ -126,7 +173,12 @@ void automation.processContact(string contact_id)
 			createAccMap.put("Account_Key", accountKey);
 			createAccMap.put("Account_Name", if(cName != "", cName, accountKey));
 
-			accCreateRes = zoho.crm.createRecord("Accounts", createAccMap);
+			// noTrigger on insert, for the same reason as processLead's Account insert: this
+			// function builds the Account itself and then calls processDeal directly, so letting
+			// WF001c fire processAccount -> processDeal("{}") adds a concurrent, strictly weaker
+			// execution that races this one's auxiliary-Task dedupe. WF001c still fires on every
+			// Account created elsewhere and on every Account edit.
+			accCreateRes = zoho.crm.createRecord("Accounts", createAccMap, {"trigger": List()});
 			if(!isNull(accCreateRes) && accCreateRes.get("id") != null)
 			{
 				accountId = accCreateRes.get("id").toString();
@@ -370,7 +422,25 @@ void automation.processContact(string contact_id)
 
 	// processDeal = sole owner of Contacts, Roles, Products, leading Contact, Quote upsert,
 	// Opportunity_* roll-up and the Account roll-up. It resolves Product evidence itself.
-	automation.processDeal(accountDealId, "{}");
+	//
+	// ⚠ CREATE MODE DOES NOT CASCADE. The initial reconcile belongs to processLead's importCtx
+	// call at :769 -- the only invocation carrying the contract terms that produce Quotes, and
+	// the one that has ALREADY run by the time processLead calls this function at :895. A second,
+	// context-free reconcile here would be redundant, strictly weaker, and would immediately
+	// re-enter the auxiliary-review path that the first one just completed (see the mode note in
+	// this function's header). EDIT mode keeps the cascade in full: a later watched-field change
+	// must still propagate to the Deal.
+	//
+	// Everything above this point -- normalization, role, Account resolution, the Contact_Roles
+	// junction -- and everything below it -- the Sequence Activation Task -- runs in BOTH modes.
+	if(pcMode == "create")
+	{
+		automation.logAutomationEvent("processContact", "Contacts", cleanId, "deal_reconcile", "skipped_create_mode", {"deal":accountDealId, "owner":"processLead:importCtx"});
+	}
+	else
+	{
+		automation.processDeal(accountDealId, "{}");
+	}
 
 	automation.logAutomationEvent("processContact", "Contacts", cleanId, "account_deal", ifnull(dealResMap.get("reason"), "").toString(), {"deal":accountDealId, "account":accountId});
 

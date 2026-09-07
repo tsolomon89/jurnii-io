@@ -35,22 +35,50 @@ string automation.createAuxTask(string contactIdStr, string dealIdStr, string ta
 	// actual newline character. hextoText("0A") = line feed (a raw newline in a string literal is not valid Deluge here).
 	nl = hextoText("0A");
 
-	// Dedupe lookup. With a Deal, the Deal's Task list is the cheapest scope and the
-	// Who_Id test below still narrows it to this Contact. WITHOUT a Deal there is no
-	// Deal list to read, so search by Who_Id directly -- otherwise a Deal-less Contact
-	// would get a fresh duplicate review on every single pass.
+	// ---- DEDUPE LOOKUP: the search axis must match the IDENTITY axis ----
+	//
+	// ⚠ The identity evaluated below is CONTACT-scoped: (Who_Id, Task_Type, open) with the
+	// [issue_code] in Description as the sub-identity. What_Id is written as the Deal
+	// relationship and context -- it is deliberately NOT part of the identity.
+	//
+	// This lookup used to search by DEAL and only fall back to Who_Id when there was no Deal.
+	// Searching one axis while matching another produces a structural miss that has nothing to
+	// do with concurrency: if a Contact already holds an open Manual Review and a NEW Deal is
+	// created, the Deal's related-Task list is empty by construction, so the Contact-scoped
+	// identity is never evaluated and a second Task is created for a condition already open.
+	//
+	// Both scopes are now read and UNIONED whenever a Contact is present. The Deal read is kept
+	// because it is the cheapest scope and still surfaces Tasks whose Who_Id is stale, but it is
+	// no longer the only scope. De-duplicated by record id, since a Task carrying both Who_Id and
+	// What_Id legitimately appears in both result sets.
 	existingTasks = List();
+	seenTaskIds = List();
+	scopeResults = List();
+
+	if(contactId != 0)
+	{
+		scopeResults.add(zoho.crm.searchRecords("Tasks", "(Who_Id:equals:" + contactId + ")"));
+	}
 	if(hasDeal)
 	{
-		existingTasks = zoho.crm.getRelatedRecords("Tasks", "Deals", dealId);
-		if(isNull(existingTasks) || existingTasks.size() == 0 || existingTasks.toString().startsWith("{\"code\""))
+		relTasks = zoho.crm.getRelatedRecords("Tasks", "Deals", dealId);
+		if(isNull(relTasks) || relTasks.size() == 0 || relTasks.toString().startsWith("{\"code\""))
 		{
-			existingTasks = zoho.crm.searchRecords("Tasks", "(What_Id:equals:" + dealId + ")");
+			relTasks = zoho.crm.searchRecords("Tasks", "(What_Id:equals:" + dealId + ")");
 		}
+		scopeResults.add(relTasks);
 	}
-	else
+
+	for each scope in scopeResults
 	{
-		existingTasks = zoho.crm.searchRecords("Tasks", "(Who_Id:equals:" + contactId + ")");
+		if(isNull(scope) || scope.toString().startsWith("{\"code\"")) { continue; }
+		for each st in scope
+		{
+			stId = ifnull(st.get("id"), "").toString().trim();
+			if(stId == "" || seenTaskIds.contains(stId)) { continue; }
+			seenTaskIds.add(stId);
+			existingTasks.add(st);
+		}
 	}
 	if(!isNull(existingTasks) && existingTasks.size() > 0 && !existingTasks.toString().startsWith("{\"code\""))
 	{
@@ -61,16 +89,36 @@ string automation.createAuxTask(string contactIdStr, string dealIdStr, string ta
 			if(!isNull(whoLookup) && !isNull(whoLookup.get("id"))) { tWho = whoLookup.get("id").toString(); }
 			tType = ifnull(tk.get("Task_Type"), "").toString();
 			tStatus = ifnull(tk.get("Status"), "").toString();
-			// OPEN = "not finished", not a whitelist of two statuses.
+			tTaskStatus = ifnull(tk.get("Task_Status"), "").toString().trim();
+			tTaskState = ifnull(tk.get("Task_State"), "").toString().trim();
+			// ---- OPEN = "not finished", across ALL THREE lifecycle axes ----
 			//
-			// The old test was (Not Started OR In Progress), which silently excluded
-			// "Deferred" — and the automation itself defers a blocking Task when the
-			// Contact advances. Live proof (2026-08-02, Deal 991103000003257018):
-			// processDeal raised [pipeline_target_acv_unresolved] at MQL 14:47:31, that
-			// Task was moved to Deferred, and the SQL pass at 14:49:08 could no longer see
-			// it and raised a SECOND Task carrying the identical reason code and remedy.
-			// A Task the automation parked must still absorb the repeat.
-			tOpen = (tStatus != "Completed");
+			// The model carries three deliberately separate axes, and this test used to read
+			// only the native one:
+			//   Status       (native)     Not Started | Deferred | In Progress | Completed |
+			//                             Waiting on someone else   -- the human worklist state
+			//   Task_Status  (automation) Open (displays "New") | Working | Closed
+			//   Task_State   (outcome)    Open | Won | Lost
+			//
+			// Reading Status alone meant a Task explicitly retired by automation
+			// (Task_Status = Closed) or concluded (Task_State = Won/Lost) still counted as open
+			// whenever its native Status happened to be left at "In Progress" -- so a genuinely
+			// finished condition could absorb a new issue code instead of raising a fresh Task.
+			//
+			// TRUTH TABLE (a Task is open only if ALL THREE agree it is unfinished):
+			//   Status      == "Completed"        -> CLOSED
+			//   Task_Status == "Closed"           -> CLOSED
+			//   Task_State  in ("Won","Lost")     -> CLOSED
+			//   otherwise                          -> OPEN
+			// "-None-"/blank on either custom axis is NOT a closure signal -- an unset picklist
+			// means "never classified", not "finished".
+			//
+			// Deferred / Waiting on someone else remain OPEN, preserving the documented rule and
+			// its live provenance (2026-08-02, Deal 991103000003257018): processDeal raised
+			// [pipeline_target_acv_unresolved] at MQL 14:47:31, the Task was moved to Deferred,
+			// and the SQL pass at 14:49:08 could no longer see it and raised a SECOND Task with
+			// the identical reason. A Task the automation parked must still absorb the repeat.
+			tOpen = (tStatus != "Completed" && tTaskStatus != "Closed" && tTaskState != "Won" && tTaskState != "Lost");
 			if(tWho == contactId.toString() && tType == taskType && tOpen)
 			{
 				// append-issue: a reused Manual Review accumulates DISTINCT issue codes
