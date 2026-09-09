@@ -260,20 +260,67 @@ curl -H "Authorization: Bearer $CRON_SECRET" \
   "$BASE/api/v1/internal/lemlist-sync?dryRun=1"
 ```
 
-The cron is registered in `vercel.json` at `30 4 * * *` and is **inert until armed**: every gate is
-fail-safe off, so an unconfigured environment runs the job and does nothing.
+### Deployment — Fly.io, not Vercel
+
+The project migrated to Fly.io (`fly.toml`, app `jurnii-web`, region `lhr`). Two process groups run from
+one image:
+
+```
+app     = node server.js         Express 5, serves dist/ and every /api route
+worker  = node worker-runner.js  a 60s loop: the booking recovery pass + the daily jobs
+```
+
+**Scheduling is `worker-runner.js`, not a platform cron.** The Lemlist sync fires from
+[worker-runner.js](../../worker-runner.js) on the first pass after **04:00 UTC**, guarded by an
+in-memory `lastLemlistRunDate`. The HTTP route
+`/api/v1/internal/lemlist-sync` is wired in [server.js](../../server.js) and remains available for
+manual runs.
+
+> ⚠ **`vercel.json` is vestigial.** No workflow deploys to Vercel any more, so its `crons` array never
+> fires — including the `30 4 * * *` Lemlist entry. The entry and the root `api/v1/internal/lemlist-sync.js`
+> shim are both kept as the Vercel-shaped wiring in case that host returns, and the handler test still
+> pins them, but **neither is what runs in production**. Do not "fix" scheduling by editing `vercel.json`.
+
+> **A restart re-runs the day's sync, and that is safe by design.** `lastLemlistRunDate` lives in memory,
+> so a deploy after 04:00 UTC makes the next pass run the sync again. The Subject-based import identity
+> makes that a no-op: every activity already imported is skipped. This is precisely the property that
+> justified having no database.
+
+Secrets are Fly secrets, not Vercel env vars:
+
+```bash
+fly secrets set \
+  LEMLIST_API_KEY=... \
+  LEMLIST_SENDER_MAP=usr_xxx:991103000001576001 \
+  LEMLIST_DEFAULT_OWNER_ID=991103000001576001 \
+  LEMLIST_SYNC_ENABLED=true \
+  LEMLIST_ZOHO_WRITE_ENABLED=false
+```
+
+`fly secrets set` restarts the machines, which is how new configuration takes effect on both the `app` and
+`worker` process groups.
 
 ### Rollout order
 
 | Step | Set | Expect |
 |---|---|---|
-| 1 | `LEMLIST_API_KEY` | run `spike.js`; settle the live questions |
-| 2 | `LEMLIST_SYNC_ENABLED=true` | full dry run: activities fetched, identities resolved, **nothing written**. Read the summary |
-| 3 | `LEMLIST_ZOHO_WRITE_ENABLED=true`, `LEMLIST_MAX_TASKS_PER_RUN=5` | five Tasks. Inspect them in the CRM, then re-run and confirm zero new ones |
-| 4 | raise the cap 25 → 100 → unset | steady state |
-| 5 | `LEMLIST_ALLOW_RECORD_CREATION=true` | Contacts and Accounts start being created |
+| 1 | `LEMLIST_API_KEY` | run `spike.js` locally; settle the live questions |
+| 2 | `LEMLIST_SYNC_ENABLED=true` | full dry run: activities fetched, identities resolved, creation **projected**, nothing written. Read the summary |
+| 3 | `LEMLIST_ZOHO_WRITE_ENABLED=true`, `LEMLIST_MAX_TASKS_PER_RUN=5` | Tasks for activities whose Contact already exists. Inspect in the CRM, re-run, confirm zero new ones |
+| 4 | `LEMLIST_ALLOW_RECORD_CREATION=true` | Contacts (and Accounts, if needed) start being created |
+| 5 | raise the cap 25 → 100 → unset | steady state |
+
+Steps 3 and 4 are swapped relative to a naive reading, because in this workspace **no messaged prospect
+yet exists in Zoho** — so with creation off, step 3 imports nothing. Check the dry-run
+`wouldCreateContact` count to see what step 4 will do.
 
 `?dryRun=1` forces a dry run at any point and can never be overridden by configuration.
+
+```bash
+# Drive it by hand on Fly
+curl -H "Authorization: Bearer $CRON_SECRET" \
+  "https://jurnii-web.fly.dev/api/v1/internal/lemlist-sync?dryRun=1"
+```
 
 ### Reading the run summary
 
@@ -300,6 +347,51 @@ in Zoho and run again.
 
 ---
 
+## Live spike results (2026-09-03)
+
+Run against the real workspace and the real Zoho org, read-only. These settle the questions the design
+was built to survive either answer to.
+
+| # | Question | Answer |
+|---|---|---|
+| S1 | Is `linkedinSent` a valid `/activities` type? | **Yes.** 6 in 120 days. The workspace also emits `linkedinVisitDone` (46), `linkedinInviteDone` (32), `linkedinInviteAccepted` (17), `linkedinOpened` (3) — all correctly excluded |
+| S2 | Is the server-side `type` filter honoured? | **Yes**, every returned row matched |
+| S3 | `contactId` present? | **100%** |
+| S3b | Personal LinkedIn URL present and canonicalisable? | **100%**, all `/in/` — identity resolution is fully available |
+| S3c | `lastName` present? | **100%** |
+| S4 | Is the rendered message body retrievable? | **Yes — better than expected.** `activity.text` carries it as **plain text** directly, so **no inbox request is needed at all**. The inbox also holds it (field `text`, not `message` as documented) and remains a fallback |
+| S5 | `companyDomain` present? | **100%**, all canonicalise cleanly |
+| S6 | Company LinkedIn URL in the payload? | 17% (1 of 6). Domain-only matching for the rest, as designed |
+| S7 | Can a sender be mapped via the API? | **No.** `GET /team` returns `userIds` as bare strings, `/team/senders` returns `[{userId, campaigns}]`, `/users` is not a route — **no endpoint exposes a sender email.** Hence `LEMLIST_SENDER_MAP`. One sender in this workspace |
+| S8 | Volume | 6 in 120 days. Comfortably one page |
+| S9 | Zoho scopes | COQL, Tasks read, Contacts read, Accounts read, users read **all pass** on the existing refresh token. CREATE scopes are unprovable without writing — see below |
+
+### The dry-run projection over those 6 activities
+
+```
+activitiesFetched            6
+contactsMatchedByLinkedin    0     ← none of the 6 people exist in Zoho yet
+contactsMatchedByEmail       0     ← these leads carry NO email at all; identity is LinkedIn-only
+accountsMatchedByDomain      4     ← Entain ×3, Playtech
+accountsMatchedByLinkedin    1     ← Novibet, whose domain is corporate.novibet.com
+wouldCreateAccount           0     ← every company already exists
+wouldCreateContact           5
+skipped                      { missing_company_name: 1 }
+```
+
+Three things worth drawing out:
+
+- **5 of 6 companies already exist in Zoho**, so the Account-create path is barely exercised. The riskiest
+  operation is the one least needed.
+- **Subdomains do get handled** — `corporate.novibet.com` does not match the `novibet.com` Account by
+  domain, but the company LinkedIn URL rescued it. Where neither works the activity is skipped, not
+  guessed at.
+- **The one refusal is correct, not a bug.** Five of six activities carry an **empty `companyName`**.
+  LiveScore's `livescoregroup.com` matched no Account, had no company LinkedIn and no name — so the veto
+  refused. `Accounts.Account_Name` is mandatory in Zoho, so a create would have failed anyway. **This is a
+  Lemlist data-quality gap, not a code one:** populating `companyName` on those leads would let them
+  import.
+
 ## Known limitations
 
 - **The exact send timestamp is not queryable.** It lives in `Description` because `Closed_Time` is
@@ -308,11 +400,14 @@ in Zoho and run again.
   `LinkedIn Sent` picklist member is an owner action with no correctness impact.
 - **Unresolved activities are invisible in the CRM.** Skips are counted in the run summary and logged;
   deliberately no Manual Review Task is created, because Deluge would adopt it.
-- **`linkedinSent` is not documented as an `/activities` type value** in Lemlist's spec — it appears as a
-  webhook event, a lead state and a stats counter. Strong evidence, not proof. It is one config constant
-  (`LEMLIST_ACTIVITY_TYPE`) and spike S1 settles it.
-- **Whether a rendered LinkedIn body is retrievable at all is unverified.** Every documented
-  `GET /inbox/{contactId}` example is an email. Spike S4 settles it; either way the Task is created.
+- **Sender attribution is manual config.** No Lemlist endpoint exposes a sender email, so
+  `LEMLIST_SENDER_MAP` must be updated by hand when an SDR is added. A new sender falls back to
+  `LEMLIST_DEFAULT_OWNER_ID` and is counted as `sendersUnmapped`, so it is visible rather than silent.
+- **Activities with no `companyName` are unimportable** when their domain matches no Account — currently
+  the majority. Fixable in Lemlist, not here.
+- **Zoho CREATE scopes are unproven.** Reads all pass on the existing token, but `booking/docs/runbook.md`
+  records that no scope inventory exists for it. The first live create is what proves them, which is why
+  the rollout starts at a cap of five.
 - **Two runs overlapping within seconds could both create a Task**, because Zoho's search index is
   eventually consistent. The cron runs daily, so this is not a real scenario — and the fix would be to not
   run two crons, not to add a database.

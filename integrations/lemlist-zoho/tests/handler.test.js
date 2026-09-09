@@ -135,34 +135,59 @@ test('timing-safe comparison: a correct-length wrong secret still fails', async 
 // Deployment wiring
 // ---------------------------------------------------------------------------
 
-test('the root /api shim points at this handler', () => {
-  const shim = path.join(__dirname, '..', '..', '..', 'api', 'v1', 'internal', 'lemlist-sync.js');
-  assert.ok(fs.existsSync(shim), 'Vercel serves functions only from the repo-root /api directory');
-  const src = fs.readFileSync(shim, 'utf8');
-  assert.ok(src.includes('integrations/lemlist-zoho/handler.js'), src);
-  // Requiring it must resolve to the same function.
-  assert.equal(require(shim), handler);
+const REPO = path.join(__dirname, '..', '..', '..');
+
+// PRODUCTION IS FLY.IO. `server.js` serves the routes and `worker-runner.js`
+// schedules the daily run. The Vercel wiring below is kept but vestigial — these
+// two tests are the ones that pin what actually runs.
+
+test('server.js requires this handler and routes it', () => {
+  const src = fs.readFileSync(path.join(REPO, 'server.js'), 'utf8');
+  assert.ok(src.includes("require('./integrations/lemlist-zoho/handler.js')"),
+    'the Express app must load the handler');
+  assert.ok(/app\.all\(\s*['"]\/api\/v1\/internal\/lemlist-sync['"]/.test(src),
+    'the Express app must route /api/v1/internal/lemlist-sync');
 });
 
-test('vercel.json registers the cron and a maxDuration, and leaves the others alone', () => {
-  const cfg = JSON.parse(fs.readFileSync(
-    path.join(__dirname, '..', '..', '..', 'vercel.json'), 'utf8'));
+test('worker-runner.js schedules the daily sync', () => {
+  const src = fs.readFileSync(path.join(REPO, 'worker-runner.js'), 'utf8');
+  assert.ok(src.includes("require('./integrations/lemlist-zoho/sync.js')"),
+    'the worker must load the sync module');
+  assert.ok(/runSync\(/.test(src), 'the worker must call runSync');
+  // Scheduling is a plain hour check plus an in-memory day marker. A restart
+  // therefore re-runs the day's sync, which is safe only because the Task
+  // Subject makes importing idempotent — so assert the marker exists rather
+  // than assuming a platform cron.
+  assert.ok(/lastLemlistRunDate/.test(src), 'the daily guard must be present');
+});
 
-  const cron = cfg.crons.find((c) => c.path === '/api/v1/internal/lemlist-sync');
-  assert.ok(cron, 'the daily cron must be registered');
-  assert.equal(cron.schedule, '30 4 * * *', 'after the 03:15 retention slot');
+test('fly.toml runs both process groups from one image', () => {
+  const toml = fs.readFileSync(path.join(REPO, 'fly.toml'), 'utf8');
+  assert.ok(/app\s*=\s*'node server\.js'/.test(toml), 'the app process serves the routes');
+  assert.ok(/worker\s*=\s*'node worker-runner\.js'/.test(toml), 'the worker process runs the schedule');
+});
 
+test('the Vercel wiring is kept intact but is vestigial', () => {
+  // Retained so the integration can move back to a serverless host without
+  // rediscovering the shape. Nothing here schedules anything today.
+  const shim = path.join(REPO, 'api', 'v1', 'internal', 'lemlist-sync.js');
+  assert.ok(fs.existsSync(shim));
+  assert.ok(fs.readFileSync(shim, 'utf8').includes('integrations/lemlist-zoho/handler.js'));
+  assert.equal(require(shim), handler, 'the shim must resolve to the same handler');
+
+  const cfg = JSON.parse(fs.readFileSync(path.join(REPO, 'vercel.json'), 'utf8'));
+  assert.ok(cfg.crons.some((c) => c.path === '/api/v1/internal/lemlist-sync'));
   assert.deepEqual(cfg.functions['api/v1/internal/lemlist-sync.js'], { maxDuration: 60 });
-
-  // The pre-existing booking crons must still be there, untouched.
-  assert.ok(cfg.crons.some((c) => c.path === '/api/v1/internal/jobs/run' && c.schedule === '* * * * *'));
-  assert.ok(cfg.crons.some((c) => c.path === '/api/v1/internal/jobs/retention' && c.schedule === '15 3 * * *'));
+  // The pre-existing booking entries must still be there, untouched.
+  assert.ok(cfg.crons.some((c) => c.path === '/api/v1/internal/jobs/run'));
+  assert.ok(cfg.crons.some((c) => c.path === '/api/v1/internal/jobs/retention'));
 });
 
-test('this subsystem declares CommonJS, because it requires across into booking/', () => {
+test('this subsystem declares CommonJS, and that manifest is load-bearing', () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf8'));
   assert.equal(pkg.type, 'commonjs',
-    'the repo root is "type":"module"; Vercel bundles the nearest package.json');
+    'the repo root is "type":"module", so without this every .js here would be ESM '
+    + 'and module.exports would break under createRequire() from server.js');
 });
 
 test('booking/** is not modified by this subsystem', () => {

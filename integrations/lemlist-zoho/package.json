@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "Daily one-directional import of Lemlist LinkedIn outbound activity into Zoho CRM as completed Tasks.",
-  "//": "CommonJS on purpose. The repo root declares \"type\": \"module\", and this subsystem requires across into booking/ (also CommonJS) for the Zoho client, auth and logging. Vercel copies the nearest package.json into every function bundle, so this manifest is what keeps the bundled code CJS. Do not remove: see api/package.json for the same reason.",
+  "//": "CommonJS on purpose, and this manifest is LOAD-BEARING. The repo root declares \"type\": \"module\", so without it Node would treat every .js here as ESM and `module.exports` would break. server.js and worker-runner.js are ESM and load this subsystem via createRequire(); booking/ is CommonJS too and is required across for the Zoho client, auth and logging. Do not remove: see api/package.json, which exists for the same reason.",
   "type": "commonjs",
   "scripts": {
     "test": "node --import ./tests/_guard.mjs --test \"tests/*.test.js\"",

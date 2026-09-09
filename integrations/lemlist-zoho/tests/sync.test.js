@@ -631,12 +631,127 @@ test('?dryRun=1 forces a dry run even when writes are armed', async () => {
   assert.equal(h.countOf('createTask'), 0);
 });
 
-test('creation can be disabled independently of Task writes', async () => {
+test('a dry run PROJECTS what creation would do — that is its whole value', async () => {
+  // Account resolution and the create veto must run even with creation off,
+  // otherwise a dry run reports `creation_disabled` and nothing an operator can
+  // act on. This is the shape actually observed against the live workspace:
+  // the Contact is absent but the company already exists.
+  const existingAccount = {
+    id: '991103000002872067', Account_Name: 'Entain Group',
+    Account_Key: 'entaingroup.com', Website: 'entaingroup.com', Company_Linkedin: null,
+  };
+
   const h = harness(Object.assign({
     fetchActivities: pages([activity()]),
     findTaskByActivityId: null,
     findContactsByLinkedinFragment: [],
     findContactsByEmail: [],
+    findAccountsByWebsite: [existingAccount],
+    findAccountsByKey: [existingAccount],
+    // No create stub: calling one would throw `unexpected call`.
+  }, NO_TEAM));
+
+  const r = await sync.runSync({
+    env: Object.assign({}, ARMED, { LEMLIST_ZOHO_WRITE_ENABLED: 'false' }),
+    deps: h.deps,
+  });
+
+  assert.equal(r.dryRun, true);
+  assert.equal(r.accountsMatchedByDomain, 1, 'the Account resolution still ran');
+  assert.equal(r.wouldCreateContact, 1, 'and it projected the Contact create');
+  assert.equal(r.wouldCreateAccount, 0, 'no Account create was needed');
+  assert.equal(h.countOf('createContactSuppressed'), 0, 'but nothing was written');
+  assert.equal(h.countOf('createAccountSuppressed'), 0);
+});
+
+test('a dry run projects an Account create only after the veto is clean', async () => {
+  const h = harness(Object.assign({
+    fetchActivities: pages([activity()]),
+    findTaskByActivityId: null,
+    findContactsByLinkedinFragment: [],
+    findContactsByEmail: [],
+    findAccountsByWebsite: [],
+    findAccountsByKey: [],
+    findAccountsByName: [],
+  }, NO_TEAM));
+
+  const r = await sync.runSync({
+    env: Object.assign({}, ARMED, { LEMLIST_ZOHO_WRITE_ENABLED: 'false' }),
+    deps: h.deps,
+  });
+
+  assert.equal(r.wouldCreateAccount, 1);
+  assert.equal(r.wouldCreateContact, 0, 'the Contact projection is only reached past the Account');
+  assert.equal(h.countOf('createAccountSuppressed'), 0);
+});
+
+test('a veto hit in dry run projects NOTHING, so the report cannot overstate', async () => {
+  const nameKeyed = { id: '77', Account_Name: 'Flutter UK & Ireland', Account_Key: 'flutter uk & ireland' };
+
+  const h = harness(Object.assign({
+    fetchActivities: pages([activity()]),
+    findTaskByActivityId: null,
+    findContactsByLinkedinFragment: [],
+    findContactsByEmail: [],
+    findAccountsByWebsite: [],
+    findAccountsByKey: (k) => (k === 'flutter uk & ireland' ? [nameKeyed] : []),
+    findAccountsByName: [nameKeyed],
+  }, NO_TEAM));
+
+  const r = await sync.runSync({
+    env: Object.assign({}, ARMED, { LEMLIST_ZOHO_WRITE_ENABLED: 'false' }),
+    deps: h.deps,
+  });
+
+  assert.equal(r.wouldCreateAccount, 0);
+  assert.equal(r.wouldCreateContact, 0);
+  assert.equal(r.skipped.account_create_would_fork, 1);
+});
+
+test('a company with no name at all is refused, matching the live workspace', async () => {
+  // Five of six live activities carry an empty companyName. When the domain also
+  // misses, the activity is unimportable — and refusing is the right direction,
+  // since Accounts.Account_Name is mandatory and the create would fail anyway.
+  const noName = activity();
+  delete noName.lead.variables.companyName;
+  delete noName.leadCompanyName;
+  noName.lead.variables.companyDomain = 'livescoregroup.com';
+
+  const h = harness(Object.assign({
+    fetchActivities: pages([noName]),
+    findTaskByActivityId: null,
+    findContactsByLinkedinFragment: [],
+    findContactsByEmail: [],
+    findAccountsByWebsite: [],
+    findAccountsByKey: [],
+    findAccountsByName: [],
+  }, NO_TEAM));
+
+  const r = await sync.runSync({
+    env: Object.assign({}, ARMED, { LEMLIST_ZOHO_WRITE_ENABLED: 'false' }),
+    deps: h.deps,
+  });
+
+  assert.equal(r.skipped.missing_company_name, 1);
+  assert.equal(r.wouldCreateAccount, 0);
+  assert.equal(r.wouldCreateContact, 0);
+});
+
+test('creation can be disabled independently of Task writes', async () => {
+  // Account resolution still runs — that is deliberate, so the run can report
+  // what creation WOULD have done. Only the writes are gated.
+  const existingAccount = {
+    id: 'acc-1', Account_Name: 'Flutter UK & Ireland',
+    Account_Key: 'flutteruki.com', Website: 'flutteruki.com', Company_Linkedin: null,
+  };
+
+  const h = harness(Object.assign({
+    fetchActivities: pages([activity()]),
+    findTaskByActivityId: null,
+    findContactsByLinkedinFragment: [],
+    findContactsByEmail: [],
+    findAccountsByWebsite: [existingAccount],
+    findAccountsByKey: [existingAccount],
   }, NO_TEAM));
 
   const r = await sync.runSync({
@@ -646,6 +761,7 @@ test('creation can be disabled independently of Task writes', async () => {
 
   assert.equal(r.createEnabled, false);
   assert.equal(r.skipped.creation_disabled, 1);
+  assert.equal(r.wouldCreateContact, 1, 'reported, not performed');
   assert.equal(h.countOf('createAccountSuppressed'), 0);
   assert.equal(h.countOf('createContactSuppressed'), 0);
 });
