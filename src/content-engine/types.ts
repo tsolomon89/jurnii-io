@@ -55,9 +55,10 @@ export interface TocItem {
 }
 
 export interface ContentItem {
-  type: 'file' | 'folder';
+  type?: 'file' | 'folder';
   path: string;
   slug: string;
+  section?: string;
   meta: ContentMeta;
   bodyHtml?: string;
   rawContent?: string;

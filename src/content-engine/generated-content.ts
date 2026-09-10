@@ -728,7 +728,6 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "icon": "route",
       "order": 2,
       "eyebrow": "Jurnii UX",
-      "kicker": "AUTOMATED UX BENCHMARKING",
       "accentClass": "accent-ux",
       "primaryCta": {
         "label": "Book a demo",

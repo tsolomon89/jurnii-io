@@ -11,10 +11,10 @@ export const PersonaList = ({ heading, sub, personas }: { heading: string, sub?:
         </div>
         <div className="persona-grid">
           {personas.map((p, i) => (
-            <div key={i} className="persona-card">
-              <div className="pc-role">{p.role}</div>
-              <div className="pc-q">"{p.question}"</div>
-              <div className="pc-a">{p.answer}</div>
+            <div key={i} className="persona-cell">
+              <h3>{p.role}</h3>
+              <p className="persona-q">"{p.question}"</p>
+              <p>{p.answer}</p>
             </div>
           ))}
         </div>

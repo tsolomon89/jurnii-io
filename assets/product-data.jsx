@@ -71,7 +71,6 @@ window.PRODUCT_DATA = {
 
   ux: {
     eyebrow: 'Jurnii UX',
-    kicker: 'AUTOMATED UX BENCHMARKING',
     accent: 'accent-ux',
     title: 'Replace UX opinion with structured benchmarking.',
     lede: 'Jurnii UX scores every step of every critical journey across your operator and your peer set — so product and design teams ship with evidence, not anecdote.',

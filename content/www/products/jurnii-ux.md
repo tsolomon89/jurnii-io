@@ -7,7 +7,6 @@ category: Automated UX Benchmarking
 order: 2
 icon: route
 eyebrow: Jurnii UX
-kicker: AUTOMATED UX BENCHMARKING
 accentClass: accent-ux
 primaryCta:
   label: Book a demo
