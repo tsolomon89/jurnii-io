@@ -3,7 +3,13 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
+const fs = require('node:fs');
+const path = require('node:path');
+
 const sync = require('../sync');
+
+const SNAPSHOT = JSON.parse(
+  fs.readFileSync(path.join(__dirname, 'fixtures', 'zoho-fields.json'), 'utf8'));
 
 // ---------------------------------------------------------------------------
 // Harness
@@ -31,7 +37,7 @@ function harness(stubs = {}) {
     'findTaskByActivityId', 'findContactsByLinkedinFragment', 'findContactsByEmail',
     'findAccountsByWebsite', 'findAccountsByKey', 'findAccountsByName',
     'findAccountsByCompanyLinkedinFragment',
-    'createAccountSuppressed', 'createContactSuppressed', 'createTask', 'readBack',
+    'createAccountSuppressed', 'createContactSuppressed', 'createTask', 'addTags', 'readBack',
   ];
   const deps = { log: (f) => logs.push(f) };
   for (const name of names) {
@@ -410,6 +416,7 @@ test('a new Contact under an existing Account creates the Contact only', async (
     findAccountsByWebsite: [existingAccount],
     findAccountsByKey: [existingAccount],
     createContactSuppressed: { ok: true, id: '991103000002999001' },
+    addTags: { status: 'success' },
     getInboxMessages: { messages: [], pagination: null },
     createTask: { ok: true, id: 't1' },
     readBack: null,
@@ -427,8 +434,12 @@ test('a new Contact under an existing Account creates the Contact only', async (
   assert.equal(record.First_Name, 'Tuf');
   assert.deepEqual(record.Account_Name, { id: existingAccount.id });
   assert.equal(record.Personal_Linkedin, 'https://www.linkedin.com/in/tuf-gavaz');
-  // No commercial lifecycle state is asserted.
-  for (const k of ['Stage', 'State', 'Status', 'Contact_Role1', 'Lead_Source', 'Marketing_Consent', 'Title']) {
+  // Lead_Source IS written now, and must be an exact live picklist member.
+  assert.equal(record.Lead_Source, 'Linkedin');
+  assert.ok(SNAPSHOT.picklists.Contacts.Lead_Source.includes(record.Lead_Source),
+    'a non-member is INVALID_DATA and would void the ENTIRE create map');
+  // But no commercial lifecycle state is asserted.
+  for (const k of ['Stage', 'State', 'Status', 'Contact_Role1', 'Marketing_Consent', 'Title']) {
     assert.ok(!(k in record), `must not write ${k} on a cold outbound Contact`);
   }
 });
@@ -444,6 +455,7 @@ test('a genuinely new company creates one Account then one Contact, and NO Deal'
     findAccountsByName: [],
     createAccountSuppressed: { ok: true, id: 'acc-new' },
     createContactSuppressed: { ok: true, id: 'con-new' },
+    addTags: { status: 'success' },
     getInboxMessages: { messages: [], pagination: null },
     createTask: { ok: true, id: 't1' },
     readBack: null,
@@ -485,6 +497,7 @@ test('with no domain, Account_Key is the name form and Website is OMITTED', asyn
     findAccountsByKey: [],
     createAccountSuppressed: { ok: true, id: 'acc-new' },
     createContactSuppressed: { ok: true, id: 'con-new' },
+    addTags: { status: 'success' },
     getInboxMessages: { messages: [], pagination: null },
     createTask: { ok: true, id: 't1' },
     readBack: null,
@@ -852,120 +865,112 @@ test('a body carrying a Deluge control marker refuses the payload, not the run',
 // Owner
 // ---------------------------------------------------------------------------
 
-test('LEMLIST_SENDER_MAP maps the sender to a Zoho user, with no API lookup', async () => {
-  // This is the only mapping path that works: verified live, no Lemlist endpoint
-  // exposes a sender email, so /team can never resolve one.
-  const h = harness(Object.assign({
-    fetchActivities: pages([activity({ sendUserId: 'usr_xYvofAcCBx8X7amjL' })]),
+test('every created record and Task is owned by the ONE configured user', async () => {
+  // Ownership is a configured business decision, not something inferred from the
+  // Lemlist sender. One owner for the Contact, the Account and the Task.
+  const MARLON = '991103000002846001';
+  const h = harness({
+    fetchActivities: pages([activity()]),
     findTaskByActivityId: null,
-    findContactsByLinkedinFragment: [EXISTING_CONTACT],
-    findContactsByEmail: [EXISTING_CONTACT],
-    getInboxMessages: { messages: [], pagination: null },
+    findContactsByLinkedinFragment: [],
+    findContactsByEmail: [],
+    findAccountsByWebsite: [],
+    findAccountsByKey: [],
+    findAccountsByName: [],
+    createAccountSuppressed: { ok: true, id: 'acc-new' },
+    createContactSuppressed: { ok: true, id: 'con-new' },
+    addTags: { status: 'success' },
     createTask: { ok: true, id: 't1' },
     readBack: null,
-    // Neither getTeamUsers nor getActiveUsers is stubbed: calling either would
-    // throw `unexpected call`, proving the config path short-circuits both.
-  }, {}));
+  });
 
   const r = await sync.runSync({
-    env: Object.assign({}, ARMED, {
-      LEMLIST_SENDER_MAP: 'usr_xYvofAcCBx8X7amjL:991103000001576001',
-    }),
+    env: Object.assign({}, ARMED, { LEMLIST_DEFAULT_OWNER_ID: MARLON }),
     deps: h.deps,
   });
 
-  assert.equal(r.sendersUnmapped, 0);
-  assert.deepEqual(h.named('createTask')[0].args[0].Owner, { id: '991103000001576001' });
-  assert.equal(h.countOf('getTeamUsers'), 0);
-  assert.equal(h.countOf('getActiveUsers'), 0);
+  assert.equal(r.ownerUnconfigured, 0);
+  assert.deepEqual(h.named('createAccountSuppressed')[0].args[0].Owner, { id: MARLON });
+  assert.deepEqual(h.named('createContactSuppressed')[0].args[0].Owner, { id: MARLON });
+  assert.deepEqual(h.named('createTask')[0].args[0].Owner, { id: MARLON });
 });
 
-test('a malformed sender-map entry is skipped and logged, never guessed at', async () => {
-  const h = harness(Object.assign({
-    fetchActivities: pages([activity({ sendUserId: 'usr_xYvofAcCBx8X7amjL' })]),
+test('the Lemlist sender is recorded in the Description, independent of Owner', async () => {
+  // Ownership can be reassigned freely; this line is the audit trail of who
+  // actually performed the outreach and must survive that.
+  const h = harness({
+    fetchActivities: pages([activity({ sendUserName: 'Fraser Dunk', sendUserId: 'usr_xYvofAcCBx8X7amjL' })]),
     findTaskByActivityId: null,
     findContactsByLinkedinFragment: [EXISTING_CONTACT],
     findContactsByEmail: [EXISTING_CONTACT],
-    getInboxMessages: { messages: [], pagination: null },
     createTask: { ok: true, id: 't1' },
     readBack: null,
-  }, NO_TEAM));
+  });
 
-  const r = await sync.runSync({
-    env: Object.assign({}, ARMED, {
-      // A Zoho id that is not numeric, and an entry with no colon at all.
-      LEMLIST_SENDER_MAP: 'usr_xYvofAcCBx8X7amjL:not-an-id,garbage',
-    }),
+  await sync.runSync({
+    env: Object.assign({}, ARMED, { LEMLIST_DEFAULT_OWNER_ID: '991103000002846001' }),
     deps: h.deps,
   });
 
-  assert.equal(r.sendersUnmapped, 1, 'the bad entry must not map');
-  assert.ok(h.logs.some((l) => l.evt === 'lemlist.sender_map_entry_invalid'));
-  // It falls through to the configured default rather than inventing an owner.
-  assert.deepEqual(h.named('createTask')[0].args[0].Owner, { id: ARMED.LEMLIST_DEFAULT_OWNER_ID });
+  const payload = h.named('createTask')[0].args[0];
+  assert.deepEqual(payload.Owner, { id: '991103000002846001' }, 'owned by the configured user');
+  assert.ok(payload.Description.includes('sender: Fraser Dunk (usr_xYvofAcCBx8X7amjL)'),
+    'but the Description still names who sent it');
 });
 
-test('a mapped sender becomes the Task Owner', async () => {
+test('with no owner configured, Owner is omitted and the gap is counted', async () => {
   const h = harness({
     fetchActivities: pages([activity()]),
     findTaskByActivityId: null,
     findContactsByLinkedinFragment: [EXISTING_CONTACT],
     findContactsByEmail: [EXISTING_CONTACT],
-    getInboxMessages: { messages: [], pagination: null },
-    getTeamUsers: [{ userId: 'usr_EvXz6JqPSJJL9lHkp', email: 'Fraser@Jurnii.io', name: 'Fraser' }],
-    getActiveUsers: [{ id: '991103000002846001', email: 'fraser@jurnii.io' }],
     createTask: { ok: true, id: 't1' },
     readBack: null,
   });
 
-  const r = await sync.runSync({ env: ARMED, deps: h.deps });
-
-  assert.equal(r.sendersUnmapped, 0);
-  assert.deepEqual(h.named('createTask')[0].args[0].Owner, { id: '991103000002846001' });
-  // One call each, cached for the run.
-  assert.equal(h.countOf('getTeamUsers'), 1);
-  assert.equal(h.countOf('getActiveUsers'), 1);
-});
-
-test('an unmapped sender falls back to the configured owner and is counted', async () => {
-  const h = harness(Object.assign({
-    fetchActivities: pages([activity()]),
-    findTaskByActivityId: null,
-    findContactsByLinkedinFragment: [EXISTING_CONTACT],
-    findContactsByEmail: [EXISTING_CONTACT],
-    getInboxMessages: { messages: [], pagination: null },
-    createTask: { ok: true, id: 't1' },
-    readBack: null,
-  }, NO_TEAM));
-
-  const r = await sync.runSync({ env: ARMED, deps: h.deps });
-
-  assert.equal(r.sendersUnmapped, 1);
-  assert.deepEqual(h.named('createTask')[0].args[0].Owner, { id: ARMED.LEMLIST_DEFAULT_OWNER_ID });
-});
-
-test('with no sender map and no default, Owner is omitted rather than guessed', async () => {
-  const h = harness(Object.assign({
-    fetchActivities: pages([activity()]),
-    findTaskByActivityId: null,
-    findContactsByLinkedinFragment: [EXISTING_CONTACT],
-    findContactsByEmail: [EXISTING_CONTACT],
-    getInboxMessages: { messages: [], pagination: null },
-    createTask: { ok: true, id: 't1' },
-    readBack: null,
-  }, NO_TEAM));
-
   const env = Object.assign({}, ARMED);
   delete env.LEMLIST_DEFAULT_OWNER_ID;
+  const r = await sync.runSync({ env, deps: h.deps });
 
-  await sync.runSync({ env, deps: h.deps });
-
-  assert.ok(!('Owner' in h.named('createTask')[0].args[0]));
+  assert.ok(!('Owner' in h.named('createTask')[0].args[0]),
+    'Zoho defaults to the API user; an arbitrary user is never chosen');
+  assert.ok(r.ownerUnconfigured > 0, 'and it is visible rather than silent');
 });
 
-// ---------------------------------------------------------------------------
-// Log hygiene
-// ---------------------------------------------------------------------------
+test('a created Contact is tagged Lemlist, and a tag failure never blocks it', async () => {
+  const base = {
+    fetchActivities: pages([activity()]),
+    findTaskByActivityId: null,
+    findContactsByLinkedinFragment: [],
+    findContactsByEmail: [],
+    findAccountsByWebsite: [],
+    findAccountsByKey: [],
+    findAccountsByName: [],
+    createAccountSuppressed: { ok: true, id: 'acc-new' },
+    createContactSuppressed: { ok: true, id: 'con-new' },
+    createTask: { ok: true, id: 't1' },
+    readBack: null,
+  };
+
+  const ok = harness(Object.assign({}, base, { addTags: { status: 'success' } }));
+  const r1 = await sync.runSync({ env: ARMED, deps: ok.deps });
+  assert.equal(r1.contactsTagged, 1);
+  assert.equal(r1.tagFailures, 0);
+  const call = ok.named('addTags')[0].args;
+  assert.equal(call[0], 'Contacts');
+  assert.equal(call[1], 'con-new');
+  assert.deepEqual(call[2], ['Lemlist']);
+
+  // Tagging is metadata. If it fails the person is still correctly in the CRM.
+  const bad = harness(Object.assign({}, base, {
+    addTags: () => { const e = new Error('x'); e.code = 'zoho_http_500'; throw e; },
+  }));
+  const r2 = await sync.runSync({ env: ARMED, deps: bad.deps });
+  assert.equal(r2.contactsCreated, 1, 'the Contact still landed');
+  assert.equal(r2.tasksCreated, 1, 'and so did the Task');
+  assert.equal(r2.tagFailures, 1, 'the failure is counted, not swallowed');
+  assert.ok(bad.logs.some((l) => l.evt === 'lemlist.contact_tag_failed'));
+});
 
 test('no log line carries an email, a URL, a name or a message body', async () => {
   const h = harness({
@@ -980,6 +985,7 @@ test('no log line carries an email, a URL, a name or a message body', async () =
     getActiveUsers: [],
     createAccountSuppressed: { ok: true, id: 'acc-new' },
     createContactSuppressed: { ok: true, id: 'con-new' },
+    addTags: { status: 'success' },
     getInboxMessages: {
       messages: [{ _id: 'act_x6esGLhoPa2SMHCZ7', message: '<p>Secret body text</p>' }],
       pagination: null,

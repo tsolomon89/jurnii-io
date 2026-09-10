@@ -32,6 +32,12 @@ const I = require('./identity');
 const DEFAULT_LOOKBACK_DAYS = 7;
 const DEFAULT_ACTIVITY_TYPE = 'linkedinSent';
 
+/** A LIVE member of the Lead_Source picklist. Exact, lowercase k. */
+const CONTACT_LEAD_SOURCE = 'Linkedin';
+
+/** Applied to every Contact this integration creates. Must pre-exist in Zoho. */
+const CONTACT_TAG = 'Lemlist';
+
 /** Read a fail-safe flag: only the exact string `true` arms anything. */
 function flag(env, name) {
   return String((env && env[name]) || '').toLowerCase() === 'true';
@@ -80,7 +86,9 @@ function newSummary() {
     wouldCreateContact: 0,
     bodiesResolved: 0,
     bodiesUnavailable: 0,
-    sendersUnmapped: 0,
+    contactsTagged: 0,
+    tagFailures: 0,
+    ownerUnconfigured: 0,
     skipped: {},
     apiFailures: {},
     pagesFetched: 0,
@@ -100,7 +108,6 @@ function defaultDeps() {
   return {
     fetchActivities: lemlist.fetchActivities,
     getInboxMessages: lemlist.getInboxMessages,
-    getTeamUsers: lemlist.getTeamUsers,
     findTaskByActivityId: zoho.findTaskByActivityId,
     findContactsByLinkedinFragment: zoho.findContactsByLinkedinFragment,
     findContactsByEmail: zoho.findContactsByEmail,
@@ -111,125 +118,50 @@ function defaultDeps() {
     createAccountSuppressed: zoho.createAccountSuppressed,
     createContactSuppressed: zoho.createContactSuppressed,
     createTask: zoho.createTask,
+    addTags: zoho.addTags,
     readBack: zoho.readBack,
-    getActiveUsers: zoho.getActiveUsers,
     log,
   };
 }
 
 // ---------------------------------------------------------------------------
-// Sender -> Zoho user
+// Ownership and sender attribution
 // ---------------------------------------------------------------------------
 
 /**
- * `LEMLIST_SENDER_MAP` — the authoritative Lemlist-sender -> Zoho-user mapping.
+ * Ownership and sender attribution — DELIBERATELY SEPARATE CONCERNS.
  *
- * Format: `usr_xYvofAcCBx8X7amjL:991103000001576001,usr_other:99110300000...`
+ * `Owner` on every record this integration creates (Contact, Account, Task) is a
+ * single configured user: `LEMLIST_DEFAULT_OWNER_ID`. That is the person who
+ * WORKS these leads, which is a business decision, not something to infer.
  *
- * WHY THIS IS CONFIG RATHER THAN AN API LOOKUP. Verified live 2026-09-01: there
- * is no API path from a Lemlist `sendUserId` to an email address. `GET /team`
- * returns `userIds` as bare strings, `GET /team/senders` returns
- * `[{userId, campaigns}]`, and neither carries an email — so nothing can be
- * matched against a Zoho user. An operator-curated map is the only deterministic
- * option, and it is a small one: the workspace has a single sender today.
+ * Who actually SENT the message is recorded in the Task `Description` instead,
+ * from `activity.sendUserName` / `sendUserId`. Keeping the two apart matters:
+ * ownership can be reassigned freely without destroying the audit trail of who
+ * performed the outreach.
  *
- * A malformed entry is skipped and logged rather than guessed at.
+ * There is no API path from a Lemlist sender to a Zoho user anyway — verified
+ * live: `GET /team` returns `userIds` as bare strings, `/team/senders` returns
+ * `[{userId, campaigns}]`, and neither carries an email. So an inferred owner
+ * was never available; a configured one is both simpler and more honest.
  */
-function parseSenderMap(env, ctx) {
-  const raw = String((env && env.LEMLIST_SENDER_MAP) || '').trim();
-  const map = new Map();
-  if (!raw) return map;
-  for (const pair of raw.split(',')) {
-    const [lemlistId, zohoId] = pair.split(':').map((s) => (s || '').trim());
-    if (/^usr_[A-Za-z0-9]+$/.test(lemlistId) && /^\d{6,}$/.test(zohoId)) {
-      map.set(lemlistId, zohoId);
-    } else if (pair.trim()) {
-      ctx.deps.log({ evt: 'lemlist.sender_map_entry_invalid' });
-    }
-  }
-  return map;
-}
+function resolveOwner(activity, ctx) {
+  const ownerId = ctx.env.LEMLIST_DEFAULT_OWNER_ID || null;
+  const senderName = (activity && activity.sendUserName) || null;
+  const senderId = (activity && (activity.sendUserId || activity.userId || activity.createdBy)) || null;
 
-/**
- * The Task owner for an activity's sender. Deterministic; never guesses.
- *
- *   LEMLIST_SENDER_MAP[sendUserId]                       -> that Zoho user
- *   -> else a /team email matched to a Zoho active user   (inert today; see above)
- *   -> else LEMLIST_DEFAULT_OWNER_ID
- *   -> else no Owner key at all, and Zoho defaults to the API user. Counted.
- */
-async function buildSenderMap(ctx) {
-  if (ctx.senderMap) return ctx.senderMap;
-  ctx.senderMap = new Map();
-  try {
-    const users = await ctx.deps.getTeamUsers();
-    for (const u of users) {
-      const email = normalizeEmail(u && u.email);
-      if (u && u.userId && email) ctx.senderMap.set(String(u.userId), email);
-    }
-  } catch (err) {
-    // Not fatal: a run can still import with the configured default owner.
-    bump(ctx.summary.apiFailures, err.code || 'sender_map_failed');
-    ctx.deps.log({ evt: 'lemlist.sender_map_failed', code: err.code || 'unknown' });
-  }
-  return ctx.senderMap;
-}
-
-/** Zoho active users, keyed by normalised email. Built once per run. */
-async function buildZohoUserMap(ctx) {
-  if (ctx.zohoUsersByEmail) return ctx.zohoUsersByEmail;
-  ctx.zohoUsersByEmail = new Map();
-  try {
-    const users = await ctx.deps.getActiveUsers();
-    for (const u of users) {
-      const email = normalizeEmail(u && u.email);
-      if (u && u.id && email) ctx.zohoUsersByEmail.set(email, String(u.id));
-    }
-  } catch (err) {
-    // Most likely a missing `ZohoCRM.users.READ` scope. Non-fatal: the run falls
-    // back to the configured default owner. Widening the OAuth scope is not
-    // something this subsystem may do.
-    bump(ctx.summary.apiFailures, err.code || 'zoho_user_map_failed');
-    ctx.deps.log({ evt: 'lemlist.zoho_user_map_failed', code: err.code || 'unknown' });
-  }
-  return ctx.zohoUsersByEmail;
-}
-
-async function resolveOwner(activity, ctx) {
-  const senderId = activity.sendUserId || activity.userId || activity.createdBy || null;
-
-  // 1. The configured map. Authoritative, and the only path that works today.
-  if (!ctx.configuredSenderMap) ctx.configuredSenderMap = parseSenderMap(ctx.env, ctx);
-  if (senderId && ctx.configuredSenderMap.has(String(senderId))) {
-    return {
-      ownerId: ctx.configuredSenderMap.get(String(senderId)),
-      senderEmail: null, mapped: true, via: 'config',
-    };
+  if (!ownerId) {
+    // `Owner` is omitted and Zoho defaults to the API user. An arbitrary user is
+    // never chosen. Counted so it is visible rather than silent.
+    ctx.summary.ownerUnconfigured += 1;
+    ctx.deps.log({ evt: 'lemlist.owner_unconfigured' });
   }
 
-  // 2. An email from /team matched to a Zoho active user. Inert while Lemlist
-  //    returns no emails, but costs nothing and starts working if that changes.
-  const senderMap = await buildSenderMap(ctx);
-  const email = senderId ? senderMap.get(String(senderId)) : null;
-  if (email) {
-    const zohoUsers = await buildZohoUserMap(ctx);
-    if (zohoUsers.has(email)) {
-      return { ownerId: zohoUsers.get(email), senderEmail: email, mapped: true, via: 'team_email' };
-    }
-  }
-
-  // No deterministic match. Use the configured integration owner if there is
-  // one; otherwise omit `Owner` entirely and let Zoho default to the API user.
-  // An arbitrary user is never chosen at any step.
-  // 3/4. The configured integration owner, or nothing at all.
-  const fallback = ctx.env.LEMLIST_DEFAULT_OWNER_ID || null;
-  ctx.summary.sendersUnmapped += 1;
-  ctx.deps.log({
-    evt: 'lemlist.sender_unmapped',
+  return {
+    ownerId,
+    senderName,
     senderId: senderId ? String(senderId) : null,
-    usedDefaultOwner: Boolean(fallback),
-  });
-  return { ownerId: fallback, senderEmail: email || null, mapped: false, via: 'default' };
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -367,7 +299,7 @@ async function importActivity(activity, ctx) {
   }
 
   // ---- 4. owner and body ---------------------------------------------------
-  const owner = await resolveOwner(activity, ctx);
+  const owner = resolveOwner(activity, ctx);
   const body = await resolveBody(activity, ctx);
   if (body.available) s.bodiesResolved += 1; else s.bodiesUnavailable += 1;
 
@@ -385,7 +317,8 @@ async function importActivity(activity, ctx) {
         campaignName: activity.campaignName || activity.name || '',
         campaignId: activity.campaignId || '',
         sequenceStep: Number.isFinite(activity.sequenceStep) ? activity.sequenceStep : undefined,
-        senderEmail: owner.senderEmail,
+        senderName: owner.senderName,
+        senderId: owner.senderId,
         lemlistContactId: activity.contactId || '',
         body: body.text,
         bodyAvailable: body.available,
@@ -570,7 +503,7 @@ async function createPerson(input, ctx) {
     if (companyLinkedinUrl && account.slug) {
       record.Company_Linkedin = `https://www.linkedin.com/company/${account.slug}`;
     }
-    if (ctx.env.LEMLIST_DEFAULT_OWNER_ID) record.Owner = { id: ctx.env.LEMLIST_DEFAULT_OWNER_ID };
+    if (ctx.ownerId) record.Owner = { id: ctx.ownerId };
 
     try {
       const created = await ctx.deps.createAccountSuppressed(record);
@@ -618,14 +551,20 @@ async function createPerson(input, ctx) {
   const jobTitle = I.leadVariable(lead.variables, 'jobTitle');
   if (jobTitle) record.Job_Title_Raw = jobTitle.slice(0, 120);
 
-  if (ctx.env.LEMLIST_DEFAULT_OWNER_ID) record.Owner = { id: ctx.env.LEMLIST_DEFAULT_OWNER_ID };
+  if (ctx.ownerId) record.Owner = { id: ctx.ownerId };
+
+  // `Linkedin` (note the lowercase k) is a LIVE member of the Lead_Source
+  // picklist. It must match exactly: a non-member is INVALID_DATA, which is
+  // terminal and voids the ENTIRE create map rather than just dropping the key.
+  // The tool name goes on a TAG instead, because the picklist has no `Lemlist`
+  // member and adding one is an org-metadata change.
+  record.Lead_Source = CONTACT_LEAD_SOURCE;
 
   // NO commercial lifecycle state is asserted. Stage / State / Status /
   // Contact_Role1 are all omitted — verified optional on the live module. The
   // Contact exists because the person exists, not because a commercial state has
   // been claimed: `Stage = 'Marketing Consent'` would be a false MQL claim about
-  // someone who was cold-messaged on LinkedIn. Lead_Source is omitted too, since
-  // the picklist has no `Lemlist` member and a non-member voids the whole map.
+  // someone who was cold-messaged on LinkedIn.
 
   try {
     const created = await ctx.deps.createContactSuppressed(record);
@@ -637,6 +576,7 @@ async function createPerson(input, ctx) {
     }
     s.contactsCreated += 1;
     ctx.deps.log({ evt: 'lemlist.contact.created', contactId: created.id, hasAccount: Boolean(accountId) });
+    await tagContact(created.id, ctx);
     return { ok: true, contactId: created.id, accountId };
   } catch (err) {
     bump(s.apiFailures, err.code || 'contact_create_failed');
@@ -645,6 +585,30 @@ async function createPerson(input, ctx) {
       code: err.code || 'unknown', detail: describeZohoError(err),
     });
     return { ok: false, reason: 'contact_create_failed' };
+  }
+}
+
+
+/**
+ * Tag a newly created Contact with `Lemlist`.
+ *
+ * Tagging is a SEPARATE call because Zoho tags are not a writable field on the
+ * record — `Contacts.Tag` cannot be set through a create map. So this runs after
+ * the create, and a failure here must NEVER undo or block the Contact: the
+ * person is correctly in the CRM either way, and the tag is metadata. It is
+ * counted so a systematic failure is visible rather than silent.
+ *
+ * The tag is only ever ADDED, never overwritten — `over_write` is not used, so
+ * any tags a human has applied survive.
+ */
+async function tagContact(contactId, ctx) {
+  if (!contactId) return;
+  try {
+    await ctx.deps.addTags('Contacts', contactId, [CONTACT_TAG]);
+    ctx.summary.contactsTagged += 1;
+  } catch (err) {
+    ctx.summary.tagFailures += 1;
+    ctx.deps.log({ evt: 'lemlist.contact_tag_failed', contactId, code: err.code || 'unknown' });
   }
 }
 
@@ -677,6 +641,8 @@ async function runSync({ now = new Date(), query = {}, env = process.env, deps =
     senderMap: null,
     zohoUsersByEmail: null,
     bodyLookupEnabled: flag(env, 'LEMLIST_BODY_LOOKUP_ENABLED'),
+    // One owner for every record this integration creates. See resolveOwner.
+    ownerId: env.LEMLIST_DEFAULT_OWNER_ID || null,
     maxTasksPerRun: Number(env.LEMLIST_MAX_TASKS_PER_RUN || 5),
   };
 

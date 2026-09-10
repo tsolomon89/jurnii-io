@@ -290,8 +290,9 @@ async function getInboxMessages(contactId, { limit = 100, skip = 0 } = {}) {
  * no email — and `GET /users` is not a route.
  *
  * So there is NO API path from a Lemlist `sendUserId` to an email address, and
- * therefore none to a Zoho user. Sender attribution comes from the static
- * `LEMLIST_SENDER_MAP` instead; see `resolveOwner` in sync.js.
+ * therefore none to a Zoho user. Ownership is therefore configured
+ * (`LEMLIST_DEFAULT_OWNER_ID`) and the sender is recorded in the Task
+ * `Description` from `activity.sendUserName`; see `resolveOwner` in sync.js.
  *
  * This function is kept, and still returns only entries that actually carry an
  * email, so that if Lemlist ever populates them the mapping starts working with

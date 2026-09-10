@@ -19,7 +19,8 @@ function description(overrides = {}) {
     campaignName: 'Q3 UK Operators',
     campaignId: 'cam_oxeGg6paG3ZVxjHkH',
     sequenceStep: 3,
-    senderEmail: 'alex.doe@example.com',
+    senderName: 'Fraser Dunk',
+    senderId: 'usr_xYvofAcCBx8X7amjL',
     lemlistContactId: 'ctc_FkeUdQHEfhqG2HMbK',
     body: 'Hi Tuf, saw your work on the sportsbook rebuild.',
     bodyAvailable: true,
@@ -169,7 +170,8 @@ test('machine tokens lead, because truncation cuts from the end', () => {
   const sep = lines.indexOf('--- message ---');
   assert.ok(sep > 0);
   assert.ok(lines.slice(0, sep).some((l) => l.startsWith('campaign: ')));
-  assert.ok(lines.slice(0, sep).some((l) => l.startsWith('sender: ')));
+  assert.ok(lines.slice(0, sep).some((l) => l === 'sender: Fraser Dunk (usr_xYvofAcCBx8X7amjL)'),
+    'who SENT it is recorded independently of who OWNS the record');
   assert.ok(lines.slice(0, sep).some((l) => l.startsWith('lemlist_contact: ')));
 });
 

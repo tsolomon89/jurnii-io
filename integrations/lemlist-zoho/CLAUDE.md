@@ -100,7 +100,9 @@ create; it may never *choose* an Account.
 |---|---|
 | **`activity.text` carries the rendered message as PLAIN TEXT**, on 100% of sampled `linkedinSent` | the documented `/inbox/{contactId}` hop is **not needed**; it is kept only as a fallback. Do not "restore" it to the hot path |
 | The inbox body field is **`text`**, not `message` as the published schema says | both are read, `text` first |
-| **No Lemlist endpoint exposes a sender email.** `GET /team` returns `userIds` as bare strings; `/team/senders` is `[{userId, campaigns}]`; `/users` is not a route | sender attribution is `LEMLIST_SENDER_MAP` config. `getTeamUsers()` deliberately returns `[]` here rather than returning unmappable bare ids |
+| **No Lemlist endpoint exposes a sender email.** `GET /team` returns `userIds` as bare strings; `/team/senders` is `[{userId, campaigns}]`; `/users` is not a route | so an inferred owner was never possible. `Owner` is the single configured `LEMLIST_DEFAULT_OWNER_ID`; the sender goes in the Task `Description`. Keep the two apart — reassigning ownership must not destroy attribution |
+| `Contacts.Tag` is **not writable** through a create map | tagging is a separate `add_tags` call after the create, and a tag failure must never block or undo the Contact |
+| `Lead_Source` has a live `Linkedin` member but **no `Lemlist`** | write `Linkedin` (lowercase k, exact — a non-member voids the whole map); the tool name goes on the tag |
 | LinkedIn-campaign leads carry **no `email`** at all | identity is LinkedIn-slug-only in practice; the email rung is real but inert for this workspace |
 | `companyName` is **empty on 5 of 6** activities | an activity whose domain matches no Account is unimportable. Correct behaviour — `Account_Name` is mandatory — and a Lemlist data fix, not a code one |
 | `companyDomain` can be a **subdomain** (`corporate.novibet.com` vs the `novibet.com` Account) | the company-LinkedIn rung is what rescues these. Exact matching stays exact; never collapse to the apex |

@@ -184,6 +184,22 @@ async function createContactSuppressed(record) {
   return Z.firstWriteResult(res);
 }
 
+/**
+ * Tag a record.
+ *
+ * Zoho tags live in a per-module, org-wide namespace (200 allowed on Contacts,
+ * 10 per record), and `add_tags` is a dedicated action rather than a field on
+ * the record — `Contacts.Tag` cannot be written through a normal create map.
+ * The tag must already exist; this never creates one, because creating a tag is
+ * an org-metadata change and belongs to the owner, not to an import loop.
+ */
+async function addTags(module, recordId, tagNames) {
+  const ids = encodeURIComponent(String(recordId));
+  const names = encodeURIComponent(tagNames.join(','));
+  return Z.requestZoho('POST',
+    `/crm/v6/${module}/actions/add_tags?ids=${ids}&tag_names=${names}`, null);
+}
+
 /** Create the completed activity Task, suppressed. Reuses the booking helper. */
 function createTask(payload) {
   return Z.createTaskSuppressed(payload);
@@ -269,7 +285,7 @@ const BODY_UNAVAILABLE = 'Message body not available from the Lemlist API for th
  */
 function buildDescription({
   activityId, sentAtIso, campaignName, campaignId, sequenceStep,
-  senderEmail, lemlistContactId, body, bodyAvailable,
+  senderName, senderId, lemlistContactId, body, bodyAvailable,
 }) {
   const lines = [`${OUR_DESCRIPTION_TOKEN} ${activityId}`];
   if (sentAtIso) lines.push(`sent_at: ${sentAtIso}`);
@@ -279,7 +295,11 @@ function buildDescription({
     Number.isFinite(sequenceStep) ? `step: ${sequenceStep}` : ''].filter(Boolean).join('   ');
   if (campaignLine) lines.push(campaignLine);
 
-  if (senderEmail) lines.push(`sender: ${senderEmail}`);
+  // WHO SENT IT, recorded independently of who OWNS the record. Ownership is a
+  // configured business decision and can be reassigned; this line is the audit
+  // trail of who actually performed the outreach, and must survive that.
+  const sender = [senderName, senderId ? `(${senderId})` : ''].filter(Boolean).join(' ');
+  if (sender) lines.push(`sender: ${sender}`);
   if (lemlistContactId) lines.push(`lemlist_contact: ${lemlistContactId}`);
 
   lines.push('--- message ---');
@@ -400,6 +420,7 @@ module.exports = {
   createAccountSuppressed,
   createContactSuppressed,
   createTask,
+  addTags,
   getActiveUsers,
   readBack,
   // pure builders

@@ -291,8 +291,7 @@ Secrets are Fly secrets, not Vercel env vars:
 ```bash
 fly secrets set \
   LEMLIST_API_KEY=... \
-  LEMLIST_SENDER_MAP=usr_xxx:991103000001576001 \
-  LEMLIST_DEFAULT_OWNER_ID=991103000001576001 \
+  LEMLIST_DEFAULT_OWNER_ID=991103000002846001 \
   LEMLIST_SYNC_ENABLED=true \
   LEMLIST_ZOHO_WRITE_ENABLED=false
 ```
@@ -331,7 +330,7 @@ The response body and the single `lemlist.sync.complete` log line are identical:
   "typeMismatchDropped": 12, "alreadyImported": 26, "tasksCreated": 3,
   "contactsMatchedByLinkedin": 2, "contactsMatchedByEmail": 1, "contactsCreated": 0,
   "accountsMatchedByDomain": 0, "accountsCreated": 0,
-  "bodiesResolved": 3, "bodiesUnavailable": 0, "sendersUnmapped": 0,
+  "bodiesResolved": 3, "bodiesUnavailable": 0, "contactsTagged": 0, "ownerUnconfigured": 0,
   "skipped": {}, "apiFailures": {}, "window": { "...": "..." }, "durationMs": 8421 }
 ```
 
@@ -362,7 +361,7 @@ was built to survive either answer to.
 | S4 | Is the rendered message body retrievable? | **Yes — better than expected.** `activity.text` carries it as **plain text** directly, so **no inbox request is needed at all**. The inbox also holds it (field `text`, not `message` as documented) and remains a fallback |
 | S5 | `companyDomain` present? | **100%**, all canonicalise cleanly |
 | S6 | Company LinkedIn URL in the payload? | 17% (1 of 6). Domain-only matching for the rest, as designed |
-| S7 | Can a sender be mapped via the API? | **No.** `GET /team` returns `userIds` as bare strings, `/team/senders` returns `[{userId, campaigns}]`, `/users` is not a route — **no endpoint exposes a sender email.** Hence `LEMLIST_SENDER_MAP`. One sender in this workspace |
+| S7 | Can a sender be mapped to a Zoho user via the API? | **No.** `GET /team` returns `userIds` as bare strings, `/team/senders` returns `[{userId, campaigns}]`, `/users` is not a route — **no endpoint exposes a sender email.** So ownership is configured (`LEMLIST_DEFAULT_OWNER_ID`) and the sender is recorded in the Task `Description` instead |
 | S8 | Volume | 6 in 120 days. Comfortably one page |
 | S9 | Zoho scopes | COQL, Tasks read, Contacts read, Accounts read, users read **all pass** on the existing refresh token. CREATE scopes are unprovable without writing — see below |
 
@@ -400,9 +399,11 @@ Three things worth drawing out:
   `LinkedIn Sent` picklist member is an owner action with no correctness impact.
 - **Unresolved activities are invisible in the CRM.** Skips are counted in the run summary and logged;
   deliberately no Manual Review Task is created, because Deluge would adopt it.
-- **Sender attribution is manual config.** No Lemlist endpoint exposes a sender email, so
-  `LEMLIST_SENDER_MAP` must be updated by hand when an SDR is added. A new sender falls back to
-  `LEMLIST_DEFAULT_OWNER_ID` and is counted as `sendersUnmapped`, so it is visible rather than silent.
+- **Ownership is configured, not derived.** Every created record goes to `LEMLIST_DEFAULT_OWNER_ID`
+  regardless of who sent the message — no Lemlist endpoint exposes a sender email, so an owner could never
+  be inferred. The sender is still recorded in the Task `Description`, so attribution is not lost.
+- **The `Lemlist` tag must exist in Zoho.** Creating a tag is org metadata and is not done from code. If
+  it is deleted, tagging fails, the failure is counted as `tagFailures`, and Contacts still import.
 - **Activities with no `companyName` are unimportable** when their domain matches no Account — currently
   the majority. Fixable in Lemlist, not here.
 - **Zoho CREATE scopes are unproven.** Reads all pass on the existing token, but `booking/docs/runbook.md`
