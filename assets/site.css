@@ -291,8 +291,9 @@ h1.display, h1.page-title, .h1-page, .h2-section,
 .logo-bar { padding: var(--spacing-12) 0; border-bottom: 1px solid var(--border); background: var(--background); }
 .logo-bar-label { font-family: var(--font-mono); font-size: var(--text-xs); font-weight: var(--fw-medium); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted-foreground); text-align: center; margin: 0 0 var(--spacing-6); }
 .logo-bar-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--spacing-10) var(--spacing-12); opacity: 0.85; }
-.logo-bar-row svg { height: 24px; width: auto; max-width: 140px; opacity: 0.7; transition: opacity 220ms ease; color: var(--foreground); }
+.logo-bar-row svg { height: 38px; width: auto; max-width: 140px; opacity: 0.75; transition: opacity 220ms ease; color: var(--foreground); }
 .logo-bar-row svg:hover { opacity: 1; }
+
 
 /* ---------- Problem section ---------- */
 .problem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-5); margin-top: var(--spacing-12); }
@@ -1225,6 +1226,8 @@ html.js-gsap .reveal { transition: none; }
 /* Press bar — distinct from operator bar */
 .press-bar { padding: var(--spacing-10) 0 var(--spacing-16); border-top: 0; }
 .press-bar .logo-bar-row { gap: var(--spacing-8) var(--spacing-12); opacity: 0.7; }
+.press-bar .logo-bar-row svg { height: 24px; }
+
 
 /* ============================================================
    LIVE TELEMETRY — Interactive Competitor UX Benchmarking Hub

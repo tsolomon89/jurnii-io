@@ -41,6 +41,27 @@ const contentRoot = path.join(cwd, 'content');
 
 console.log('Compiling content manifest for browser bundle...');
 
+export function isFuturePublishDate(rawDate: any): boolean {
+  if (!rawDate) return false;
+  let dateStr: string;
+  if (rawDate instanceof Date) {
+    dateStr = rawDate.toISOString().split('T')[0];
+  } else {
+    dateStr = String(rawDate).trim();
+  }
+  const match = dateStr.match(/^\d{4}-\d{2}-\d{2}/);
+  if (match) {
+    const pubDay = match[0];
+    const today = new Date().toISOString().split('T')[0];
+    return pubDay > today;
+  }
+  const parsedTime = Date.parse(dateStr);
+  if (!isNaN(parsedTime)) {
+    return parsedTime > Date.now();
+  }
+  return false;
+}
+
 function processDirectory(dirPath: string, categoryKey: string): any[] {
   const absDir = path.join(contentRoot, dirPath);
   if (!fs.existsSync(absDir)) return [];
@@ -70,9 +91,17 @@ function processDirectory(dirPath: string, categoryKey: string): any[] {
       else if (normPath.includes('/content/www/pages/')) section = 'pages';
       else if (normPath.includes('/content/library/')) section = 'library';
 
+      // IFF the publish date in the frontmatter is greater than the current date it shouldn't be published on the site.
+      if (section === 'library') {
+        const rawPublishDate = parsed.data.date || parsed.data.publishDate || parsed.data.publishedAt;
+        if (isFuturePublishDate(rawPublishDate)) {
+          continue;
+        }
+      }
+
       const meta = {
         title: parsed.data.title || slug,
-        date: parsed.data.date || parsed.data.publishedAt || '2026-01-01',
+        date: parsed.data.date || parsed.data.publishDate || parsed.data.publishedAt || '2026-01-01',
         medium: parsed.data.medium || (section === 'library' ? 'Article' : 'Page'),
         excerpt: parsed.data.excerpt || parsed.data.description || '',
         description: parsed.data.description || '',

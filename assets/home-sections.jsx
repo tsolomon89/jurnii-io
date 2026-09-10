@@ -228,16 +228,17 @@ const HeroTicker = () => {
 const LogoBar = () =>
 <section className="logo-bar reveal">
     <div className="container">
-      <div className="logo-bar-label">Operators we work with</div>
+      <div className="logo-bar-label">Trusted by leading businesses</div>
       <div className="logo-bar-row">
-        <BrandWordmark name="Flutter" />
-        <BrandWordmark name="Entain" />
-        <BrandWordmark name="Bet365" />
-        <BrandWordmark name="Kindred" />
+        <BrandWordmark name="Evoke" />
+        <BrandWordmark name="MnS" />
         <BrandWordmark name="LeoVegas" />
+        <BrandWordmark name="DAZN" />
+        <BrandWordmark name="Betsson" />
       </div>
     </div>
   </section>;
+
 
 
 const PressBar = () =>

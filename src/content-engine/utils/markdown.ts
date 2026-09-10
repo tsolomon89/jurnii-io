@@ -57,6 +57,37 @@ export function getPdfUrl(slug: string): string | null {
   return null;
 }
 
+export function isFuturePublishDate(rawDate?: string | Date): boolean {
+  if (!rawDate) return false;
+  let dateStr: string;
+  if (rawDate instanceof Date) {
+    dateStr = rawDate.toISOString().split('T')[0];
+  } else {
+    dateStr = String(rawDate).trim();
+  }
+  const match = dateStr.match(/^\d{4}-\d{2}-\d{2}/);
+  if (match) {
+    const pubDay = match[0];
+    const today = new Date().toISOString().split('T')[0];
+    return pubDay > today;
+  }
+  const parsedTime = Date.parse(dateStr);
+  if (!isNaN(parsedTime)) {
+    return parsedTime > Date.now();
+  }
+  return false;
+}
+
+export function isItemPublished(item: ContentItem): boolean {
+  const normPath = (item.path || '').replace(/\\/g, '/');
+  if (normPath.includes('/content/library/')) {
+    if (isFuturePublishDate(item.meta.date)) {
+      return false;
+    }
+  }
+  return true;
+}
+
 export function getByPath(segments: string[]): ContentItem | null {
   if (segments.length === 0) return null;
 
@@ -72,6 +103,7 @@ export function getByPath(segments: string[]): ContentItem | null {
   if (normSegments.length === 1 && ENTITY_SECTIONS.includes(normSegments[0])) {
     const section = normSegments[0];
     const children = CONTENT_MANIFEST.filter((item) => {
+      if (!isItemPublished(item)) return false;
       const p = item.path.replace(/\\/g, '/');
       return isLibraryPrefix ? p.includes(`/content/library/`) : p.includes(`/content/www/${section}/`);
     });
@@ -102,6 +134,7 @@ export function getByPath(segments: string[]): ContentItem | null {
   const matchedSection = [...normSegments].reverse().find((seg) => ENTITY_SECTIONS.includes(seg));
   if (matchedSection) {
     const match = CONTENT_MANIFEST.find((item) => {
+      if (!isItemPublished(item)) return false;
       const p = item.path.replace(/\\/g, '/');
       return (p.includes(`/content/www/${matchedSection}/`) || p.includes(`/content/library/`)) && item.slug === targetSlug;
     });
@@ -111,6 +144,7 @@ export function getByPath(segments: string[]): ContentItem | null {
   // 3. Prefer library match if path requested library
   if (isLibraryPrefix) {
     const libraryMatch = CONTENT_MANIFEST.find((item) => {
+      if (!isItemPublished(item)) return false;
       const p = item.path.replace(/\\/g, '/');
       return p.includes('/content/library/') && item.slug === targetSlug;
     });
@@ -118,7 +152,7 @@ export function getByPath(segments: string[]): ContentItem | null {
   }
 
   // 4. Global fallback lookup by slug across all CONTENT_MANIFEST items
-  const globalMatch = CONTENT_MANIFEST.find((item) => item.slug === targetSlug);
+  const globalMatch = CONTENT_MANIFEST.find((item) => isItemPublished(item) && item.slug === targetSlug);
   if (globalMatch) return globalMatch;
 
   return null;
@@ -131,6 +165,7 @@ export function getContent(relativePath: string): ContentItem | null {
 
 export function getAllContent(rootFolder: string = 'www'): ContentItem[] {
   return CONTENT_MANIFEST.filter((item) => {
+    if (!isItemPublished(item)) return false;
     const p = item.path.replace(/\\/g, '/');
     if (rootFolder === 'www') return p.includes('/content/www/');
     if (rootFolder === 'library') return p.includes('/content/library/');
@@ -142,6 +177,7 @@ export function getContentBySlug(slug: string, searchFolders: string[] = ['www',
   const cleanSlug = slug.replace(/\.html$/, '');
   return (
     CONTENT_MANIFEST.find((item) => {
+      if (!isItemPublished(item)) return false;
       const p = item.path.replace(/\\/g, '/');
       const matchesFolder = searchFolders.some((f) => p.includes(`/content/${f}/`));
       return matchesFolder && item.slug === cleanSlug;
@@ -156,6 +192,7 @@ export function getContentByRef(
 ): ContentItem[] {
   const cleanVal = refValue.replace(/\.html$/, '');
   return CONTENT_MANIFEST.filter((item) => {
+    if (!isItemPublished(item)) return false;
     const p = item.path.replace(/\\/g, '/');
     const inFolder = searchFolders.some((f) => p.includes(`/content/${f}/`));
     if (!inFolder) return false;

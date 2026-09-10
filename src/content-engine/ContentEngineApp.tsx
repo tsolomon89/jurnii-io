@@ -17,6 +17,7 @@ import { ArticleTemplate } from '../templates/ArticleTemplate';
 import { PaperTemplate } from '../templates/PaperTemplate';
 import { GeneralPageTemplate } from '../templates/GeneralPageTemplate';
 import { SharedSubdomainLayout } from '../templates/SharedSubdomainLayout';
+import { ContactPageTemplate } from '../templates/ContactPageTemplate';
 
 import { processHeadings } from './utils/rich-page-data';
 import { resolveSurface, SURFACES } from '../routing/surface-utils';
@@ -71,7 +72,7 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
     return () => window.removeEventListener('popstate', onPop);
   }, []);
   const [renderState, setRenderState] = useState<{
-    type: 'entity' | 'directory' | 'article' | 'paper' | 'page' | 'library-index' | 'not-found';
+    type: 'entity' | 'directory' | 'article' | 'paper' | 'page' | 'contact' | 'library-index' | 'not-found';
     data?: any;
   }>({ type: 'not-found' });
 
@@ -231,24 +232,37 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
             template: pres.templateClass,
           });
         } else if (p.includes('/content/www/pages/')) {
-          const genModel: GeneralPageModel = {
-            slug: item.slug,
-            title: item.meta.title,
-            description: item.meta.description,
-            excerpt: item.meta.excerpt,
-            category: item.meta.category,
-            bodyHtml: item.bodyHtml || '',
-          };
-          setRenderState({ type: 'page', data: genModel });
-          announce({
-            page_type: 'page',
-            page_title: item.meta.title,
-            description: item.meta.description,
-            content_slug: item.slug,
-            content_category: item.meta.category,
-            content_group: 'home',
-            template: 'GeneralPageTemplate',
-          });
+          if (item.slug === 'contact-us' || item.slug === 'contact' || item.meta?.template === 'contact') {
+            setRenderState({ type: 'contact', data: item });
+            announce({
+              page_type: 'contact',
+              page_title: item.meta.title || 'Contact · Jurnii',
+              description: item.meta.description || 'Book a 30-minute demo or get in touch with the Jurnii team.',
+              content_slug: item.slug,
+              content_category: 'Contact',
+              content_group: 'contact',
+              template: 'ContactPageTemplate',
+            });
+          } else {
+            const genModel: GeneralPageModel = {
+              slug: item.slug,
+              title: item.meta.title,
+              description: item.meta.description,
+              excerpt: item.meta.excerpt,
+              category: item.meta.category,
+              bodyHtml: item.bodyHtml || '',
+            };
+            setRenderState({ type: 'page', data: genModel });
+            announce({
+              page_type: 'page',
+              page_title: item.meta.title,
+              description: item.meta.description,
+              content_slug: item.slug,
+              content_category: item.meta.category,
+              content_group: 'home',
+              template: 'GeneralPageTemplate',
+            });
+          }
         } else {
           // Entity page (product, feature, solution, use-case)
           const matchedSection = (item.section || [...parts].reverse().find((seg) => ['products', 'features', 'solutions', 'use-cases'].includes(seg)) || 'features') as EntityType;
@@ -289,6 +303,8 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
     activeNav = renderState.data.section || renderState.data.sectionPath || 'products';
   } else if (renderState.type === 'article' || renderState.type === 'paper' || renderState.type === 'library-index') {
     activeNav = 'resources';
+  } else if (renderState.type === 'contact') {
+    activeNav = 'contact';
   }
 
   const renderInnerContent = () => {
@@ -330,6 +346,9 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
 
       case 'page':
         return <GeneralPageTemplate data={renderState.data} />;
+
+      case 'contact':
+        return <ContactPageTemplate />;
 
       case 'library-index': {
         const filteredItems = selectedCategory
