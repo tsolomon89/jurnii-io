@@ -85,7 +85,7 @@ async function main() {
       ['S4', 'is a rendered message body retrievable from the inbox?'],
       ['S5', 'is companyDomain present?'],
       ['S6', 'does the payload carry a company LinkedIn URL?'],
-      ['S7', 'does sendUserId map to a team user with an email?'],
+      ['S7', 'can a sender be mapped to a Zoho user? (known: NO)'],
       ['S8', 'what is the actual volume?'],
     ]) record(id, q, 'UNRESOLVED', null);
     // The Zoho probes use a different credential entirely, so a missing Lemlist
@@ -234,17 +234,18 @@ async function main() {
     record('S7', 'does GET /team give userId -> email for every sender?',
       withEmail ? 'YES' : 'NO',
       `${users.length} team users, ${withEmail} with an email. `
-      + '(/team/senders carries no email and is not used.)');
+      + 'Known NO as of 2026-09-03: the live response carries `userIds` as bare '
+      + 'strings. Ownership is therefore configured (LEMLIST_DEFAULT_OWNER_ID) and '
+      + 'the sender is recorded in the Task Description. A YES here would mean '
+      + 'Lemlist changed and per-sender ownership became possible.');
 
     if (typed.length) {
       const ids = new Set(users.map((u) => u && String(u.userId)).filter(Boolean));
       const senders = new Set(typed.map((a) => String(a.sendUserId || a.userId || '')).filter(Boolean));
       const unmapped = [...senders].filter((s) => !ids.has(s));
-      record('S7b', 'does every observed sender appear in /team?',
-        unmapped.length ? 'NO' : 'YES',
-        unmapped.length
-          ? `${unmapped.length} of ${senders.size} sender ids are not in /team — those need LEMLIST_DEFAULT_OWNER_ID`
-          : `all ${senders.size} observed sender ids resolve`);
+      record('S7b', 'how many distinct senders are there?', 'INFO',
+        `${senders.size} distinct sender id(s) observed; ${unmapped.length} absent from /team. `
+        + 'Informational only — ownership does not depend on this.');
     }
   } catch (err) {
     record('S7', 'does GET /team give userId -> email?', 'UNRESOLVED', err.code || err.message);

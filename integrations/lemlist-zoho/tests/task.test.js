@@ -298,6 +298,54 @@ test('the transform is total: never throws, always returns a string', () => {
 // The absence guards that keep this subsystem inside its remit
 // ---------------------------------------------------------------------------
 
+test('add_tags sends the tag list in the BODY, not the query string', () => {
+  // Live-verified 2026-09-10: a null body answers
+  // `INVALID_DATA / expected_data_type: jsonobject` naming "body", and `{}`
+  // answers `MANDATORY_NOT_FOUND` for `$.tags`. Naming the tags in the query
+  // string satisfies neither. This test exists so nobody "simplifies" it back.
+  const src = fs.readFileSync(require.resolve('../zoho.js'), 'utf8');
+  const from = src.indexOf('async function addTags');
+  assert.ok(from > 0, 'addTags must exist');
+  const fn = src.slice(from, src.indexOf(String.fromCharCode(10) + '}', from));
+
+  assert.match(fn, /tags: tagNames\.map/, 'the tag list must be built into a request body');
+  assert.match(fn, /requestZoho\('POST',[\s\S]*?body\)/, 'and that body must reach requestZoho');
+  assert.ok(!fn.includes('tag_names'), 'a query parameter of that name does not satisfy Zoho');
+});
+
+test('the off-layout guard actually has data, not just an empty list', () => {
+  // An off-layout field returns SUCCESS and throws the value away, so this list
+  // is one of the two silent-data-loss mechanisms the fixture exists to catch.
+  // It was briefly INERT: `?type=all` does not carry layout membership, so
+  // deriving it yielded `[]` for every module and the guard passed vacuously.
+  // `Contacts.Title` is known to sit in the bin, so it is the canary.
+  assert.ok(SNAPSHOT.unused && SNAPSHOT.unused.Contacts,
+    'the snapshot must capture the off-layout bin');
+  assert.ok(SNAPSHOT.unused.Contacts.includes('Title'),
+    'Contacts.Title is off-layout live; an empty list here means the detection broke');
+  // And the payload builder must respect it.
+  assert.ok(!Z.TASK_PAYLOAD_FIELDS.includes('Title'));
+});
+
+test('the Lemlist tag is pinned against the live tag list', () => {
+  // A tag must already exist for add_tags to work, and creating one is org
+  // metadata that is never done from code. If someone deletes it, this fails
+  // here rather than silently, per-Contact, at import time.
+  assert.ok(SNAPSHOT.tags && Array.isArray(SNAPSHOT.tags.Contacts),
+    'the field snapshot must capture Contacts tags');
+  assert.ok(SNAPSHOT.tags.Contacts.includes('Lemlist'),
+    'the `Lemlist` tag must exist on the Contacts module');
+});
+
+test('Lead_Source is an exact live picklist member', () => {
+  // A non-member is INVALID_DATA — terminal, and it voids the ENTIRE create map
+  // rather than dropping the key. Note the lowercase k in `Linkedin`.
+  const members = SNAPSHOT.picklists.Contacts.Lead_Source;
+  assert.ok(members.includes('Linkedin'), 'Linkedin must be a live member');
+  assert.ok(!members.includes('Lemlist'),
+    'if Lemlist is ever added as a member, revisit whether it should replace Linkedin');
+});
+
 test('no Deal, Quote or update path exists', () => {
   for (const name of [
     'createDeal', 'createQuote', 'updateDeal', 'updateQuote',

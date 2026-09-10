@@ -197,8 +197,8 @@ async function addTags(module, recordId, tagNames) {
   const ids = encodeURIComponent(String(recordId));
   // The tag list goes in the BODY, not the query string. Verified live: a null
   // body answers `INVALID_DATA / expected_data_type: jsonobject` on "body", and
-  // an empty object answers `MANDATORY_NOT_FOUND` for `$.tags` — regardless of
-  // a `tag_names` query parameter being present.
+  // an empty object answers `MANDATORY_NOT_FOUND` for `$.tags` — and naming the
+  // tags in the query string instead satisfies neither.
   const body = { tags: tagNames.map((name) => ({ name })) };
   return Z.requestZoho('POST', `/crm/v6/${module}/actions/add_tags?ids=${ids}`, body);
 }

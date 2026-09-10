@@ -38,9 +38,19 @@ const MODULES = ['Tasks', 'Contacts', 'Accounts'];
 /** Only the picklists this subsystem reasons about; capturing all of them is noise. */
 const PICKLIST_FIELDS = {
   Tasks: ['Status', 'Task_Type', 'Task_State', 'Task_Status'],
-  Contacts: [],
+  // `Lead_Source` is WRITTEN on every created Contact, so its membership must be
+  // pinned: a non-member is INVALID_DATA, which voids the entire create map.
+  Contacts: ['Lead_Source'],
   Accounts: [],
 };
+
+/**
+ * Tags this subsystem applies. Captured because a tag must already exist for
+ * `add_tags` to work — creating one is org metadata and is never done from code
+ * — so a deleted tag should surface as fixture drift rather than as a silent
+ * per-Contact failure at import time.
+ */
+const TAGGED_MODULES = ['Contacts'];
 
 /** Fields whose maximum length a payload could realistically exceed. */
 const LENGTH_FIELDS = {
@@ -69,12 +79,39 @@ const FIELDS_OF_INTEREST = {
 const OUT = path.join(__dirname, '..', 'tests', 'fixtures', 'zoho-fields.json');
 const CHECK = process.argv.includes('--check');
 
+async function tagsFor(module) {
+  const res = await requestZoho('GET',
+    `/crm/v6/settings/tags?module=${encodeURIComponent(module)}`);
+  const rows = (res && Array.isArray(res.tags)) ? res.tags : [];
+  return rows.map((t) => t.name).sort();
+}
+
 async function fieldsFor(module) {
   const res = await requestZoho('GET',
     `/crm/v6/settings/fields?module=${encodeURIComponent(module)}&type=all`);
   const rows = (res && Array.isArray(res.fields)) ? res.fields : [];
   if (!rows.length) throw new Error(`no fields returned for ${module}`);
   return rows;
+}
+
+/**
+ * Fields sitting in the layout's UNUSED bin — the silent-discard case.
+ *
+ * ⚠ This needs its OWN request. `?type=all` does NOT carry layout membership,
+ * so deriving it from `layout_associations` yields an empty list for every
+ * module and the guard goes quietly inert. `?type=unused` is the dedicated
+ * query and is the only reliable source. `booking/scripts/zoho-field-snapshot.js`
+ * uses the same two-call approach.
+ *
+ * This matters more than it looks: an off-layout field returns SUCCESS and
+ * throws the value away, so a field silently moved to the bin is exactly the
+ * failure this fixture exists to catch.
+ */
+async function unusedFor(module) {
+  const res = await requestZoho('GET',
+    `/crm/v6/settings/fields?module=${encodeURIComponent(module)}&type=unused`);
+  const rows = (res && Array.isArray(res.fields)) ? res.fields : [];
+  return rows.map((f) => f.api_name).sort();
 }
 
 /**
@@ -99,7 +136,12 @@ async function build() {
     unique: {},
     lengths: {},
     picklists: {},
+    tags: {},
   };
+
+  for (const module of TAGGED_MODULES) {
+    snapshot.tags[module] = await tagsFor(module);
+  }
 
   for (const module of MODULES) {
     const rows = await fieldsFor(module);
@@ -111,14 +153,8 @@ async function build() {
     const readOnly = rows.filter((f) => isReadOnly(f)).map((f) => f.api_name).filter(keep).sort();
     if (readOnly.length) snapshot.readOnly[module] = readOnly;
 
-    // An off-layout field is the silent-discard case. Zoho reports it as not
-    // present on any layout section.
-    const unused = rows
-      .filter((f) => f.layout_associations !== undefined
-        ? (Array.isArray(f.layout_associations) && f.layout_associations.length === 0)
-        : false)
-      .map((f) => f.api_name).filter(keep).sort();
-    snapshot.unused[module] = unused;
+    // The off-layout bin, from its own dedicated query. See unusedFor().
+    snapshot.unused[module] = (await unusedFor(module)).filter(keep);
 
     const mandatory = rows.filter((f) => f.system_mandatory === true)
       .map((f) => f.api_name).filter(keep).sort();

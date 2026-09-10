@@ -104,7 +104,14 @@ function inboxPath(contactId, { limit = 100, skip = 0 } = {}) {
   return `/inbox/${encodeURIComponent(contactId)}${queryString({ limit, skip })}`;
 }
 
-/** `GET /team` — carries `users[{userId, name, email, role}]`: the whole sender map in one call. */
+/**
+ * `GET /team`.
+ *
+ * ⚠ The published schema claims `users[{userId, name, email, role}]`. It does
+ * not: the live response is `{_id, userIds, …}` where `userIds` is an array of
+ * bare id strings with NO email. See `getTeamUsers`. Retained for the spike,
+ * which reports that discrepancy rather than assuming it away.
+ */
 function teamPath() {
   return '/team';
 }
