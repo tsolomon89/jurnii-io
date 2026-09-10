@@ -195,9 +195,12 @@ async function createContactSuppressed(record) {
  */
 async function addTags(module, recordId, tagNames) {
   const ids = encodeURIComponent(String(recordId));
-  const names = encodeURIComponent(tagNames.join(','));
-  return Z.requestZoho('POST',
-    `/crm/v6/${module}/actions/add_tags?ids=${ids}&tag_names=${names}`, null);
+  // The tag list goes in the BODY, not the query string. Verified live: a null
+  // body answers `INVALID_DATA / expected_data_type: jsonobject` on "body", and
+  // an empty object answers `MANDATORY_NOT_FOUND` for `$.tags` — regardless of
+  // a `tag_names` query parameter being present.
+  const body = { tags: tagNames.map((name) => ({ name })) };
+  return Z.requestZoho('POST', `/crm/v6/${module}/actions/add_tags?ids=${ids}`, body);
 }
 
 /** Create the completed activity Task, suppressed. Reuses the booking helper. */
