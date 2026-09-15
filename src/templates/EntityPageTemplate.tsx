@@ -284,7 +284,7 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
           case 'method':
             return <Methodology key={index} {...section.data} />;
           case 'testimonials':
-            return <Testimonials key={index} {...section.data} />;
+            return <Testimonials key={index} {...section.data} accentClass={data.accentClass} />;
           case 'testimonial':
             return <TestimonialQuote key={index} {...section.data} />;
           case 'personas':

@@ -70,8 +70,19 @@
 
 /* ---------- Benchmark matrix ---------- */
 .uc-benchmark .container { max-width: 1100px; }
-.uc-table-card { border: 1px solid var(--border); border-radius: var(--radius-xl); overflow: hidden; background: var(--card); box-shadow: 0 1px 2px var(--black-a-4), 0 20px 48px -30px var(--black-a-25); }
-.uc-table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+.uc-table-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  max-width: 100%;
+  background: var(--card);
+  box-shadow: 0 1px 2px var(--black-a-4), 0 20px 48px -30px var(--black-a-25);
+  scrollbar-width: thin;
+}
+.uc-table { width: 100%; min-width: 720px; border-collapse: collapse; font-size: var(--text-sm); }
 .uc-table th, .uc-table td { text-align: left; padding: var(--spacing-4) var(--spacing-5); border-bottom: 1px solid var(--border); }
 .uc-table thead th { font-family: var(--font-mono); font-size: var(--text-xs); font-weight: var(--fw-semibold); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted-foreground); background: var(--accent); }
 .uc-table tbody tr:last-child td { border-bottom: 0; }
@@ -97,7 +108,7 @@
 .uc-dash-live { font-family: var(--font-mono); font-size: var(--text-xs); font-weight: var(--fw-semibold); color: var(--jurnii-300); }
 .uc-dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-3); }
 .uc-dash-card { background: var(--white-a-4); border: 1px solid rgba(255,255,255,0.07); border-radius: var(--radius-lg); padding: var(--spacing-4); }
-.uc-dash-card h4 { font-size: var(--text-xs); font-weight: var(--fw-semibold); color: var(--white-a-80); margin: 0 0 var(--spacing-3); }
+.uc-dash-card h3 { font-size: var(--text-xs); font-weight: var(--fw-semibold); color: var(--white-a-80); margin: 0 0 var(--spacing-3); }
 .uc-idx-row { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--spacing-1); }
 .uc-idx-val { font-size: var(--text-3xl); font-weight: var(--fw-semibold); color: var(--white); letter-spacing: -0.03em; }
 .uc-idx-cmp { font-size: var(--text-xs); font-weight: var(--fw-semibold); color: var(--jurnii-300); }
@@ -126,8 +137,17 @@
 @media (max-width: 640px) { .uc-quote-card { padding: var(--spacing-8); } }
 
 /* ---------- Ecosystem / related ---------- */
-.uc-eco .container { max-width: 1100px; }
-.uc-eco-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-5); }
+.uc-eco-grid {
+  --uc-eco-cols: 3;
+  display: grid;
+  grid-template-columns: repeat(var(--uc-eco-cols), minmax(0, 1fr));
+  gap: var(--spacing-5);
+  width: 100%;
+}
+/* Legacy JSX pages: column count matches direct children (3 ecosystem + optional 4th) */
+.uc-eco-grid:not([style*="--uc-eco-cols"]) {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+}
 .uc-eco-col-label { font-family: var(--font-mono); font-size: var(--text-xs); font-weight: var(--fw-semibold); text-transform: uppercase; letter-spacing: 0.1em; color: var(--jurnii-700); border-bottom: 1px solid var(--border); padding-bottom: var(--spacing-2); margin: 0 0 var(--spacing-4); }
 [data-theme="dark"] .uc-eco-col-label, [data-theme="jurnii-v1"] .uc-eco-col-label { color: var(--jurnii-200); }
 .uc-eco-links { display: flex; flex-direction: column; gap: var(--spacing-3); }
@@ -136,8 +156,12 @@
 [data-theme="dark"] .uc-eco-card:hover, [data-theme="jurnii-v1"] .uc-eco-card:hover { border-color: var(--white-a-22); }
 .uc-eco-card h4 { font-size: var(--text-base); font-weight: var(--fw-semibold); color: var(--foreground); margin: 0 0 var(--spacing-1); }
 .uc-eco-card p { font-size: var(--text-xs); color: var(--muted-foreground); line-height: 1.4; margin: 0; }
-@media (max-width: 860px) { .uc-eco-grid { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 520px) { .uc-eco-grid { grid-template-columns: 1fr; } }
+@media (max-width: 860px) {
+  .uc-eco-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .uc-eco-grid { grid-template-columns: 1fr; }
+}
 
 /* ============================================================
    Archive index + category pages

@@ -85,7 +85,8 @@
   --secondary:            #E3E3E3;
   --secondary-foreground: #3F3E3B;
   --muted:                #E3E3E3;
-  --muted-foreground:     #807F77;
+  /* concrete/600 — AA normal text on --background and --card (500 was ~3.8:1 on F8F8F7) */
+  --muted-foreground:     var(--concrete-600);
   --accent:               #F2F2F1;
   --accent-foreground:    #3F3E3B;
   --border:               #E3E3E3;

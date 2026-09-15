@@ -95,6 +95,7 @@ function copyRuntimeAssets() {
       // these by absolute URL (/assets/library/<slug>/…), so they never pass through
       // Rollup and would otherwise be missing from dist entirely.
       copyDir(path.join(root, 'assets/library'), path.join(root, 'dist/assets/library'));
+      copyDir(path.join(root, 'assets/press'), path.join(root, 'dist/assets/press'));
 
       // KaTeX's stylesheet and fonts, loaded on demand by `Prose` for the maths
       // papers. Its `url(fonts/…)` references are relative, so the directory has to
@@ -177,6 +178,18 @@ export default defineConfig({
   server: {
     port: 5173,
     open: false,
+    watch: {
+      // `.agents` is reference material (legacy HTML dumps, examples). Vite
+      // treats any `.html` change as a full reload, so macOS/Cursor indexing
+      // those files after clone was snapping the preview back to the top.
+      ignored: [
+        '**/.git/**',
+        '**/.agents/**',
+        '**/.claude/**',
+        '**/.cursor/**',
+        '**/screenshots/**',
+      ],
+    },
   },
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-dom/client', 'web-vitals'],

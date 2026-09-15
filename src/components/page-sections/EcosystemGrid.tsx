@@ -14,7 +14,10 @@ export const EcosystemGrid = ({ heading, lede, columns }: { heading: string; led
           <h2 className="h2-section">{heading}</h2>
           {lede && <p className="section-lede">{lede}</p>}
         </div>
-        <div className="uc-eco-grid">
+        <div
+          className="uc-eco-grid"
+          style={{ ['--uc-eco-cols' as string]: columns.length }}
+        >
           {columns.map((col, ci) => (
             <div key={ci}>
               <h3 className="uc-eco-col-label">{col.label}</h3>

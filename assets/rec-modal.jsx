@@ -131,12 +131,12 @@ function RMComposer({ placeholder, onSubmit, compact }) {
   return (
     <div className={`rm-composer${compact ? ' compact' : ''}`} ref={wrapRef}>
       <textarea ref={ta} className="rm-input" rows={compact ? 1 : 2}
-      placeholder={placeholder} value={text}
+      placeholder={placeholder} value={text} aria-label={placeholder}
       onChange={(e) => setText(e.target.value)}
       onKeyDown={(e) => {if (e.key === 'Enter' && !e.shiftKey) {e.preventDefault();submit();}}} />
       <div className="rm-composer-bar">
         <span className="rm-tool-wrap">
-          <button ref={atBtnRef} className={`rm-tool${mentionOpen ? ' is-on' : ''}`} title="Tag someone"
+          <button ref={atBtnRef} className={`rm-tool${mentionOpen ? ' is-on' : ''}`} type="button" title="Tag someone" aria-label="Tag someone"
           onClick={openMention}>
             <RMI.at />
           </button>
@@ -152,7 +152,7 @@ function RMComposer({ placeholder, onSubmit, compact }) {
           }
         </span>
         <span className="rm-tool-wrap">
-          <button ref={emojiBtnRef} className={`rm-tool${emojiOpen ? ' is-on' : ''}`} title="Add emoji"
+          <button ref={emojiBtnRef} className={`rm-tool${emojiOpen ? ' is-on' : ''}`} type="button" title="Add emoji" aria-label="Add emoji"
           onClick={openEmoji}>
             <RMI.smile />
           </button>
@@ -164,8 +164,8 @@ function RMComposer({ placeholder, onSubmit, compact }) {
             </div>
           }
         </span>
-        <button className="rm-tool" title="Attach file"><RMI.paperclip /></button>
-        <button className={`rm-send-btn${canSend ? ' active' : ''}`} onClick={submit} disabled={!canSend}><RMI.send /></button>
+        <button className="rm-tool" type="button" title="Attach file" aria-label="Attach file"><RMI.paperclip /></button>
+        <button className={`rm-send-btn${canSend ? ' active' : ''}`} type="button" onClick={submit} disabled={!canSend} aria-label="Send comment"><RMI.send /></button>
       </div>
     </div>);
 
@@ -227,10 +227,10 @@ function RecommendationModal() {
 
   return (
     <div className="rm-root">
-      <div className="rm-modal">
+      <div className="rm-modal" role="dialog" aria-labelledby="rm-modal-title">
         <div className="rm-modal-hd">
-          <h2 className="rm-modal-title">Recommendation Details</h2>
-          <button className="rm-close-btn"><RMI.x /></button>
+          <h2 id="rm-modal-title" className="rm-modal-title">Recommendation Details</h2>
+          <button className="rm-close-btn" type="button" aria-label="Close recommendation"><RMI.x /></button>
         </div>
         <div className="rm-modal-body">
 
@@ -262,7 +262,7 @@ function RecommendationModal() {
             <div className="rm-sb-block">
               <div className="rm-sb-label">Mark as</div>
               <div className="rm-select-wrap">
-                <select className="rm-select" value={status} onChange={(e) => setStatus(e.target.value)}>
+                <select className="rm-select" value={status} onChange={(e) => setStatus(e.target.value)} aria-label="Recommendation status">
                   <option>Unresolved</option>
                   <option>In Progress</option>
                   <option>Resolved</option>
@@ -288,7 +288,7 @@ function RecommendationModal() {
                 <div className="rm-vote-row">
                   <span className="rm-vote-n">{voters.length}</span>
                   <div className="rm-vote-avs">{voters.map((u) => <RMAvatar key={u} uid={u} sm />)}</div>
-                  <button className={`rm-vote-btn${active ? ' active' : ''}${type === 'dn' ? ' dn' : ''}`} onClick={() => vote(type)}>
+                  <button className={`rm-vote-btn${active ? ' active' : ''}${type === 'dn' ? ' dn' : ''}`} type="button" onClick={() => vote(type)} aria-label={label} aria-pressed={active}>
                     {type === 'up' ? <RMI.chevUp /> : <RMI.chevDn2 />}
                   </button>
                 </div>

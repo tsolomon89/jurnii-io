@@ -489,9 +489,6 @@ function CanvasComments() {
   const [commenting, setCommenting] = useState(false);
   const [hintHidden, setHintHidden] = useState(false);
 
-  // apply accent tweak as CSS var on root
-  const accent = t.accent || '#94FF96';
-
   const dispatch = useCallback((action) => {
     switch (action.type) {
       case 'createFromDraft': {
@@ -571,7 +568,7 @@ function CanvasComments() {
 
   return (
     <div className={'cc-canvas' + (commenting ? ' is-commenting' : '')} data-bg={t.canvas} ref={canvasRef}
-      onClick={onCanvasClick} style={{ '--cc-accent': accent }}>
+      onClick={onCanvasClick}>
 
       {/* the surface being reviewed */}
       <Artboard rect={boardRect} />
@@ -627,7 +624,8 @@ function CanvasComments() {
 
       {/* Hint */}
       <div className={'cc-hint' + (hintHidden ? ' hide' : '')}>
-        <span className="dot" /> Press <b style={{margin:'0 2px'}}>C</b> or hit Comment, then click the canvas to drop a thread
+        <span className="dot" />
+        <span className="cc-hint-copy">Press <b style={{margin:'0 2px'}}>C</b> or hit Comment, then click the canvas to drop a thread</span>
       </div>
 
       <TweaksPanel title="Tweaks">
