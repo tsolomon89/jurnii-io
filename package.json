@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsx scripts/compile-content-manifest.ts && vite build",
+    "build": "tsx scripts/compile-content-manifest.ts && vite build && tsx scripts/generate-seo-files.ts",
     "preview": "vite preview",
     "test": "node --test \"booking/tests/*.test.js\"",
     "test:db": "node --import ./booking/tests/db/_guard.mjs --test \"booking/tests/db/*.test.js\"",

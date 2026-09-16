@@ -7,7 +7,6 @@ category: Marketing Mix Modeling
 icon: sparkles
 order: 3
 eyebrow: Jurnii Cortex
-kicker: iGAMING-NATIVE MEDIA MIX MODELLING
 accentClass: accent-mmm
 primaryCta:
   label: Book a scoping call

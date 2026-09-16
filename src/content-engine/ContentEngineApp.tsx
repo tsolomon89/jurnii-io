@@ -6,7 +6,7 @@ import {
   GeneralPageModel,
   EntityType,
 } from './types';
-import { getByPath, getContentBySlug, getAllContent } from './utils/markdown';
+import { getByPath, getContentBySlug, getAllContent, displaySectionTitle } from './utils/markdown';
 import { resolveRichPageData, estimateReadTime } from './utils/rich-page-data';
 import { resolveMediumPresentation } from '../routing/medium-presentation';
 import { getPdfUrl } from './utils/markdown';
@@ -178,7 +178,7 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
         setRenderState({
           type: 'directory',
           data: {
-            title: item.meta.title || item.slug.toUpperCase(),
+            title: item.meta.title || displaySectionTitle(item.slug),
             description: item.meta.description,
             items,
             sectionPath: item.slug,
@@ -186,7 +186,7 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
         });
         announce({
           page_type: 'directory',
-          page_title: item.meta.title || item.slug.toUpperCase(),
+          page_title: item.meta.title || displaySectionTitle(item.slug),
           description: item.meta.description,
           content_section: item.slug,
           content_group: item.slug,

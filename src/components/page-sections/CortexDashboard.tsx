@@ -25,7 +25,7 @@ export const CortexDashboard: React.FC<CortexDashboardProps> = ({ eyebrow, headi
             </div>
             <div className="uc-dash-grid">
               <div className="uc-dash-card">
-                <h4>Promo Richness Index</h4>
+                <h3>Promo Richness Index</h3>
                 <div className="uc-idx-row">
                   <span className="uc-idx-val">84</span>
                   <span className="uc-idx-cmp">+4.2% vs Market Avg</span>
@@ -37,7 +37,7 @@ export const CortexDashboard: React.FC<CortexDashboardProps> = ({ eyebrow, headi
                 </div>
               </div>
               <div className="uc-dash-card">
-                <h4>Player Onboarding Funnel</h4>
+                <h3>Player Onboarding Funnel</h3>
                 <div className="uc-funnel">
                   <div className="uc-funnel-meta"><span>Registration</span><span>98%</span></div>
                   <div className="uc-funnel-track"><div className="uc-funnel-fill" style={{ width: '98%' }} /></div>

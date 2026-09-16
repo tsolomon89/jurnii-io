@@ -1,27 +1,42 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
-const TmAvatar = ({ author, initials, avatar, color }: any) => (
+interface TestimonialItem {
+  quote: string;
+  author: string;
+  role: string;
+  initials?: string;
+  color?: string;
+  avatar?: string;
+}
+
+interface TestimonialsProps {
+  eyebrow?: string;
+  heading: string;
+  items?: TestimonialItem[];
+  accentClass?: string;
+}
+
+const AVATAR_COLORS = ['green', 'blue', 'orange', 'purple'] as const;
+
+const TmAvatar = ({ author, initials, avatar, color }: Pick<TestimonialItem, 'author' | 'initials' | 'avatar' | 'color'>) => (
   <div className={`tm-avatar tm-av-${color}`} aria-hidden={avatar ? undefined : true}>
     {avatar ? <img src={avatar} alt={author} /> : <span>{initials}</span>}
   </div>
 );
 
-export const Testimonials = ({ eyebrow = 'Testimonials', heading, items = [], accentClass = '' }: any) => {
+export const Testimonials = ({ eyebrow = 'Testimonials', heading, items = [], accentClass = '' }: TestimonialsProps) => {
   const trackRef = useRef<HTMLDivElement>(null);
   const [atStart, setAtStart] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined' && (window as any).lucide) {
-      (window as any).lucide.createIcons();
-    }
-  }, []);
+  const [overflows, setOverflows] = useState(false);
 
   const sync = () => {
     const el = trackRef.current;
     if (!el) return;
     setAtStart(el.scrollLeft <= 2);
     setAtEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 2);
+    setOverflows(el.scrollWidth > el.clientWidth + 2);
   };
 
   useEffect(() => {
@@ -61,44 +76,57 @@ export const Testimonials = ({ eyebrow = 'Testimonials', heading, items = [], ac
     };
   }, []);
 
-  const scrollBy = (dir: number) => {
-    if (trackRef.current) trackRef.current.scrollBy({ left: dir * 400, behavior: 'smooth' });
+  const nudge = (dir: number) => {
+    const el = trackRef.current;
+    if (!el) return;
+    const card = el.querySelector('.tm-card');
+    const step = card instanceof HTMLElement ? card.offsetWidth + 20 : el.clientWidth * 0.8;
+    el.scrollBy({ left: dir * step, behavior: 'smooth' });
   };
 
   if (!items.length) return null;
 
   return (
-    <section className={`section reveal tm-outer ${accentClass}`}>
+    <section className={`section reveal tm-section ${accentClass}`}>
       <div className="container">
-        <div className="tm-head-row">
-          <div>
+        <div className="tm-head">
+          <div className="section-head">
             <p className="eyebrow"><span className="dot" />{eyebrow}</p>
-            <h2 className="h2-section" dangerouslySetInnerHTML={{ __html: heading }}></h2>
+            <h2 className="h2-section" dangerouslySetInnerHTML={{ __html: heading }} />
           </div>
-          <div className="tm-nav">
-            <button className="tm-nav-btn" disabled={atStart} onClick={() => scrollBy(-1)} aria-label="Previous quote">
-              <i data-lucide="arrow-left" style={{ width: 20, height: 20 }} />
-            </button>
-            <button className="tm-nav-btn" disabled={atEnd} onClick={() => scrollBy(1)} aria-label="Next quote">
-              <i data-lucide="arrow-right" style={{ width: 20, height: 20 }} />
-            </button>
-          </div>
-        </div>
-      </div>
-      <div className="tm-track-wrap">
-        <div className="tm-track" ref={trackRef}>
-          {items.map((it: any, i: number) => (
-            <div key={i} className="tm-card">
-              <blockquote>{it.quote}</blockquote>
-              <div className="tm-author-row">
-                <TmAvatar author={it.author} initials={it.initials} avatar={it.avatar} color={it.color} />
-                <div>
-                  <div className="tm-author">{it.author}</div>
-                  <div className="tm-role">{it.role}</div>
-                </div>
-              </div>
+          {overflows ? (
+            <div className="tm-nav">
+              <button className="tm-arrow" onClick={() => nudge(-1)} disabled={atStart} aria-label="Previous testimonials">
+                <ArrowLeft size={18} strokeWidth={2} aria-hidden="true" />
+              </button>
+              <button className="tm-arrow" onClick={() => nudge(1)} disabled={atEnd} aria-label="Next testimonials">
+                <ArrowRight size={18} strokeWidth={2} aria-hidden="true" />
+              </button>
             </div>
-          ))}
+          ) : null}
+        </div>
+
+        <div className="tm-track-wrap">
+          <div className="tm-track" ref={trackRef}>
+            {items.map((t, i) => (
+              <article className="tm-card" key={`${t.author}-${i}`}>
+                <header className="tm-card-head">
+                  <TmAvatar
+                    author={t.author}
+                    initials={t.initials}
+                    avatar={t.avatar}
+                    color={t.color || AVATAR_COLORS[i % AVATAR_COLORS.length]}
+                  />
+                  <div className="tm-id">
+                    <b>{t.author}</b>
+                    <span>{t.role}</span>
+                  </div>
+                </header>
+                <blockquote className="tm-quote">{t.quote}</blockquote>
+              </article>
+            ))}
+          </div>
+          <div className={`tm-fade${atEnd ? ' is-hidden' : ''}`} />
         </div>
       </div>
     </section>

@@ -204,9 +204,9 @@
 /* Light mode overrides — also restore --foreground / --muted-foreground remapped above for the dark surface */
 [data-theme="light"] .rm-root {
   --foreground: var(--concrete-950);
-  --muted-foreground: var(--concrete-500);
+  --muted-foreground: var(--concrete-600);
   --rm-surf: var(--white); --rm-line: var(--concrete-200); --rm-text: var(--concrete-950);
-  --rm-muted: var(--concrete-500); --rm-accent: var(--concrete-950); --rm-accent-i: var(--concrete-50); --rm-red: #DC2626;
+  --rm-muted: var(--concrete-600); --rm-accent: var(--concrete-950); --rm-accent-i: var(--concrete-50); --rm-red: #DC2626;
 }
 [data-theme="light"] .rm-modal { box-shadow: 0 1px 2px var(--black-a-4), 0 14px 40px -18px var(--black-a-16); }
 [data-theme="light"] .rm-sidebar { background: var(--concrete-100); }
@@ -215,15 +215,15 @@
 [data-theme="light"] .rm-input { color: var(--concrete-950); }
 [data-theme="light"] .rm-select { background: var(--white); border-color: var(--concrete-200); color: var(--concrete-950); }
 [data-theme="light"] .rm-root option { background: var(--white); color: var(--concrete-950); }
-[data-theme="light"] .rm-reply-trigger { background: var(--concrete-100); border-color: var(--concrete-200); color: var(--concrete-500); }
+[data-theme="light"] .rm-reply-trigger { background: var(--concrete-100); border-color: var(--concrete-200); color: var(--concrete-600); }
 [data-theme="light"] .rm-reply-trigger:hover { background: var(--concrete-200); }
 [data-theme="light"] .rm-vote-btn { background: var(--concrete-100); border-color: var(--concrete-200); color: var(--concrete-950); }
 [data-theme="light"] .rm-vote-btn:hover { background: var(--concrete-200); }
 [data-theme="light"] .rm-vote-btn.active { background: rgba(0,163,18,.10); border-color: #00A312; color: #00A312; }
 [data-theme="light"] .rm-vote-btn.dn.active { background: rgba(220,38,38,.10); border-color: #DC2626; color: #DC2626; }
-[data-theme="light"] .rm-tool { color: var(--concrete-500); }
+[data-theme="light"] .rm-tool { color: var(--concrete-600); }
 [data-theme="light"] .rm-tool:hover, [data-theme="light"] .rm-tool.is-on { color: var(--concrete-950) !important; background: var(--concrete-200) !important; }
-[data-theme="light"] .rm-send-btn { background: var(--concrete-200); color: var(--concrete-500); }
+[data-theme="light"] .rm-send-btn { background: var(--concrete-200); color: var(--concrete-600); }
 [data-theme="light"] .rm-send-btn.active { background: var(--concrete-950); color: var(--concrete-50); }
 [data-theme="light"] .rm-pop { background: var(--white); border-color: var(--concrete-200); color: var(--concrete-950); box-shadow: 0 4px 16px var(--black-a-12); }
 [data-theme="light"] .rm-pop-item { color: var(--concrete-950); }

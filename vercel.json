@@ -43,7 +43,7 @@
       "destination": "/admin-form.html"
     },
     {
-      "source": "/((?!api/).*)",
+      "source": "/((?!api/|robots\\.txt|sitemap\\.xml).*)",
       "destination": "/index.html"
     }
   ]

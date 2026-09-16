@@ -201,7 +201,7 @@ const TeleScoreCard = ({ b }) => {
 const TeleSummary = () => (
   <div className="tele-pane">
     <div className="tele-pane-head">
-      <h4>Score Summary</h4>
+      <h3>Score Summary</h3>
       <p>Comprehensive UX and performance benchmarking analysis across key operational categories — one Jurnii Rating Card per benchmarked brand.</p>
     </div>
     <div className="tele-legend">
@@ -269,13 +269,13 @@ const TelePerformance = () => {
   return (
     <div className="tele-pane">
       <div className="tele-pane-head">
-        <h4>Performance Audit</h4>
+        <h3>Performance Audit</h3>
         <p>Front-end speed and quality indices, audited per device profile against Google Lighthouse standards.</p>
       </div>
       <div className="tele-perf">
         <aside className="tele-perf-side">
           <div className="tele-seg-label">Device Profile</div>
-          <div className="tele-seg">
+          <div className="tele-seg" role="group" aria-label="Device profile">
             <button className={!mob ? 'on' : ''} onClick={() => setDevice('desktop')}>
               <i data-lucide="monitor" /> Desktop
             </button>
@@ -323,7 +323,7 @@ const TelePerformance = () => {
 const TeleJourneys = () => (
   <div className="tele-pane">
     <div className="tele-pane-head">
-      <h4>Journey Matrix</h4>
+      <h3>Journey Matrix</h3>
       <p>Touchpoint-level scoring across ten core player journeys, benchmarked brand-by-brand against the Jurnii market average.</p>
     </div>
     <div className="tele-matrix-wrap">
@@ -364,7 +364,7 @@ const TeleHeuristics = () => {
   return (
   <div className="tele-pane">
     <div className="tele-pane-head">
-      <h4>Usability Heuristics</h4>
+      <h3>Usability Heuristics</h3>
       <p>Nielsen-derived heuristic evaluation, scored per brand across the dimensions that govern player trust and flow.</p>
     </div>
     <div className="tele-heur" ref={ref}>
@@ -412,15 +412,15 @@ const UXTelemetry = () => {
           <p className="section-lede">Explore real-world competitor scorecards, mobile vs. desktop audits, and multi-brand journey matrices — compiled directly from Jurnii's live iGaming intelligence platform.</p>
         </div>
         <div className="tele-hub">
-          <div className="tele-tabs" role="tablist">
+          <div className="tele-tabs" role="tablist" aria-label="Telemetry views">
             {TELE_TABS.map((t) => (
-              <button key={t.id} role="tab" aria-selected={tab === t.id}
+              <button key={t.id} role="tab" id={`tele-tab-${t.id}`} aria-selected={tab === t.id} aria-controls="tele-tab-panel"
                 className={`tele-tab ${tab === t.id ? 'is-active' : ''}`} onClick={() => setTab(t.id)}>
                 {t.label}
               </button>
             ))}
           </div>
-          <div className="tele-body">
+          <div className="tele-body" id="tele-tab-panel" role="tabpanel" aria-labelledby={`tele-tab-${tab}`}>
             {tab === 'summary' && <TeleSummary />}
             {tab === 'performance' && <TelePerformance />}
             {tab === 'journeys' && <TeleJourneys />}
@@ -428,7 +428,7 @@ const UXTelemetry = () => {
           </div>
           <div className="tele-cta">
             <div>
-              <h4>Benchmark your platform against 300+ competitors</h4>
+              <h3>Benchmark your platform against 300+ competitors</h3>
               <p>Get a comprehensive, automated audit mapping your direct user-experience friction and speed indices against market leaders.</p>
             </div>
             <a href="/contact-us" className="btn accent lg" data-cta-action="demo" data-cta-id="ux-telemetry-band">Explore the full intelligence suite <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" /></a>

@@ -157,11 +157,11 @@ const FAQSection = () => {
         <div className="faq-list">
           {FAQS.map((f, i) =>
           <div key={i} className={`faq-item ${open === i ? 'is-open' : ''}`}>
-              <button className="faq-trigger" onClick={() => setOpen(open === i ? -1 : i)} aria-expanded={open === i}>
+              <button className="faq-trigger" id={`faq-btn-${i}`} aria-expanded={open === i} aria-controls={`faq-panel-${i}`} onClick={() => setOpen(open === i ? -1 : i)}>
                 <span>{f.q}</span>
                 <span className="icon"><i data-lucide="plus" style={{ width: 12, height: 12 }} /></span>
               </button>
-              <div className="faq-body"><div className="faq-body-inner">{f.a}</div></div>
+              <div className="faq-body" id={`faq-panel-${i}`} role="region" aria-labelledby={`faq-btn-${i}`}><div className="faq-body-inner">{f.a}</div></div>
             </div>
           )}
         </div>

@@ -105,17 +105,18 @@ export const SharedSubdomainLayout: React.FC<SharedSubdomainLayoutProps> = ({
     <div className="library-layout" ref={layoutRef}>
       {/* Mobile top bar */}
       <div className="library-mobile-bar">
-        <a href={getHomeHref()} style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
-          <span style={{ color: 'var(--jurnii-400)', fontFamily: 'var(--font-mono)', fontWeight: 'bold', fontSize: '18px' }}>Jurnii</span>
-          <span className="pill" style={{ background: 'var(--concrete-950)', color: 'var(--concrete-300)', borderColor: 'var(--white-a-10)' }}>
-            Library
-          </span>
+        <a href={getHomeHref()} className="library-brand">
+          <span className="library-wordmark">Jurnii</span>
+          <span className="pill library-badge">Library</span>
         </a>
         <button
+          type="button"
+          className="library-mobile-toggle"
           onClick={() => setMobileOpen(!mobileOpen)}
-          style={{ background: 'transparent', border: 'none', color: 'var(--concrete-300)', cursor: 'pointer', padding: '8px' }}
+          aria-label={mobileOpen ? 'Close library menu' : 'Open library menu'}
+          aria-expanded={mobileOpen}
         >
-          <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             {mobileOpen ? (
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             ) : (
@@ -128,22 +129,20 @@ export const SharedSubdomainLayout: React.FC<SharedSubdomainLayoutProps> = ({
       {/* Sidebar navigation */}
       <aside className={`library-sidebar ${mobileOpen ? '' : 'mobile-hidden'}`}>
         <div className="library-sidebar-head">
-          <a href={getHomeHref()} style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', marginBottom: '8px' }}>
-            <span style={{ color: 'var(--jurnii-400)', fontFamily: 'var(--font-mono)', fontWeight: 'bold', fontSize: '24px' }}>Jurnii</span>
-            <span className="pill" style={{ background: 'var(--concrete-950)', color: 'var(--jurnii-200)', borderColor: 'var(--white-a-10)' }}>
-              Library
-            </span>
+          <a href={getHomeHref()} className="library-brand">
+            <span className="library-wordmark">Jurnii</span>
+            <span className="pill library-badge">Library</span>
           </a>
-          <p style={{ fontSize: 'var(--text-xs)', color: 'var(--muted-foreground)', lineHeight: 1.6, margin: 0 }}>
+          <p className="library-sidebar-lede">
             Monographs, benchmarking frameworks, and research papers for iGaming operators.
           </p>
         </div>
 
         {/* Category Filter Pills */}
         {categories.length > 0 && (
-          <div className="library-sidebar-filters">
-            <div className="eyebrow" style={{ marginBottom: '12px' }}>Research Domains</div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+          <div className="library-sidebar-filters" role="group" aria-label="Research domains">
+            <div className="eyebrow">Research Domains</div>
+            <div className="library-domain-pills">
               <CategoryPill href={getHomeHref()} label="All" active={!activeCategory} onSelect={onSelectCategory && (() => onSelectCategory(undefined))} />
               {categories.map((cat) => (
                 <CategoryPill
@@ -159,7 +158,7 @@ export const SharedSubdomainLayout: React.FC<SharedSubdomainLayoutProps> = ({
         )}
 
         {/* Publications Archive */}
-        <nav className="library-nav">
+        <nav className="library-nav" aria-label="Publications">
           <div className="eyebrow library-nav-head">
             <span>Publications</span>
             <span className="library-nav-count">{libraryItems.length}</span>

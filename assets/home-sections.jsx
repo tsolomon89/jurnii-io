@@ -41,8 +41,7 @@ const Hero = () => {
           <h1 className="display" data-no-split="1" style={{ width: '100%', fontWeight: 600, fontSize: '52px' }}>Compete on <span className="ink-muted">experience.</span><br />win on <span className="ink-green">intelligence.</span></h1>
           <p className="lede">Jurnii automates UX benchmarking and competitor proposition tracking at scale — turning manual research and reactive analytics into structured, near-real-time intelligence for iGaming operators.</p>
           <div className="hero-ctas">
-            <a href="/contact-us" className="btn primary lg" data-cta-action="demo" data-cta-id="home-hero">Book a demo <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" /></a>
-            <a href="#products" className="btn ghost lg">See the platform</a>
+            <a href="/contact-us" className="btn primary lg" data-cta-action="demo" data-cta-id="home-hero">See how it works <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" /></a>
           </div>
           <div className="hero-stats">
             <div><div className="n">850+</div><div className="l">Promotions tracked at Cheltenham 2026 across 20+ operators</div></div>
@@ -241,15 +240,35 @@ const LogoBar = () =>
 
 
 
+const PRESS_LOGOS = [
+  { src: '/assets/press/igb.png', alt: 'iGaming Business', frame: 'igb' },
+  { src: '/assets/press/egr.png', alt: 'EGR' },
+  { src: '/assets/press/sigma.png', alt: 'SiGMA', frame: 'light' },
+  { src: '/assets/press/next-io.png', alt: 'Next.io', wide: true },
+];
+
+const PressLogo = ({ src, alt, frame, wide }) => {
+  const img = (
+    <img
+      className={wide ? 'press-logo press-logo--next-io' : 'press-logo'}
+      src={src}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+    />
+  );
+  if (!frame) return img;
+  return <span className={`press-logo-frame press-logo-frame--${frame}`}>{img}</span>;
+};
+
 const PressBar = () =>
 <section className="logo-bar press-bar reveal">
     <div className="container">
       <div className="logo-bar-label">Press we appear in</div>
       <div className="logo-bar-row">
-        <BrandWordmark name="iGamingBusiness" />
-        <BrandWordmark name="SiGMA" />
-        <BrandWordmark name="NextIO" />
-        <BrandWordmark name="EGR" />
+        {PRESS_LOGOS.map((logo) => (
+          <PressLogo key={logo.alt} {...logo} />
+        ))}
       </div>
     </div>
   </section>;
@@ -353,15 +372,15 @@ const ProductTabs = () => {
           <p className="section-lede">Jurnii is built around the three things commercial leadership in iGaming actually decides on: what the player experience feels like, what the market is doing, and where the next pound of marketing goes.</p>
         </div>
         <div className="tabs">
-          <div className="tabs-bar" role="tablist">
+          <div className="tabs-bar" role="tablist" aria-label="Products">
             {PRODUCT_TABS.map((t) =>
-            <button key={t.id} role="tab" aria-selected={active === t.id} className={active === t.id ? 'is-active' : ''} onClick={() => setActive(t.id)}>
+            <button key={t.id} role="tab" id={`product-tab-${t.id}`} aria-selected={active === t.id} aria-controls="product-tab-panel" className={active === t.id ? 'is-active' : ''} onClick={() => setActive(t.id)}>
                 <i data-lucide={t.icon} style={{ width: 16, height: 16 }} />
                 {t.name}
               </button>
             )}
           </div>
-          <div className="tab-panel" role="tabpanel">
+          <div className="tab-panel" role="tabpanel" id="product-tab-panel" aria-labelledby={`product-tab-${active}`}>
             <div>
               <span className="eyebrow"><span className="dot" />{tab.name}</span>
               <h3>{tab.headline}</h3>
@@ -412,10 +431,10 @@ const HowItWorks = () =>
         <p className="section-lede">Jurnii is structured to deliver value before contracts compound. No 12-month implementations.</p>
       </div>
       <div className="how-grid">
-        <div className="how-card"><span className="how-step">01 / Scope</span><div className="how-icon"><i data-lucide="compass" style={{ width: 18, height: 18 }} /></div><h4>Define your competitor set</h4><p>45-min call. We map 5–20 competitor brands, target markets, and the commercial outcomes you care about. Data readiness assessment runs in parallel.</p></div>
-        <div className="how-card"><span className="how-step">02 / Calibrate</span><div className="how-icon"><i data-lucide="settings-2" style={{ width: 18, height: 18 }} /></div><h4>Calibrate the intelligence</h4><p>5–10 days. We baseline against your historic data, configure alert thresholds, and validate the first weekly readout against your team's intuition.</p></div>
-        <div className="how-card"><span className="how-step">03 / Go live</span><div className="how-icon"><i data-lucide="zap" style={{ width: 18, height: 18 }} /></div><h4>Live intelligence + alerts</h4><p>Daily ingest, weekly readouts, real-time alerts on material competitor moves. Dashboard or direct-to-warehouse delivery — your choice.</p></div>
-        <div className="how-card"><span className="how-step">04 / Compound</span><div className="how-icon"><i data-lucide="trending-up" style={{ width: 18, height: 18 }} /></div><h4>Quarterly compounding</h4><p>Models retrain. UX audits feed MMM. 360 feeds MMM. Year 2's decisions are structurally better than year 1's — that's the whole point.</p></div>
+        <div className="how-card"><span className="how-step">01 / Scope</span><div className="how-icon"><i data-lucide="compass" style={{ width: 18, height: 18 }} /></div><h3>Define your competitor set</h3><p>45-min call. We map 5–20 competitor brands, target markets, and the commercial outcomes you care about. Data readiness assessment runs in parallel.</p></div>
+        <div className="how-card"><span className="how-step">02 / Calibrate</span><div className="how-icon"><i data-lucide="settings-2" style={{ width: 18, height: 18 }} /></div><h3>Calibrate the intelligence</h3><p>5–10 days. We baseline against your historic data, configure alert thresholds, and validate the first weekly readout against your team's intuition.</p></div>
+        <div className="how-card"><span className="how-step">03 / Go live</span><div className="how-icon"><i data-lucide="zap" style={{ width: 18, height: 18 }} /></div><h3>Live intelligence + alerts</h3><p>Daily ingest, weekly readouts, real-time alerts on material competitor moves. Dashboard or direct-to-warehouse delivery — your choice.</p></div>
+        <div className="how-card"><span className="how-step">04 / Compound</span><div className="how-icon"><i data-lucide="trending-up" style={{ width: 18, height: 18 }} /></div><h3>Quarterly compounding</h3><p>Models retrain. UX audits feed MMM. 360 feeds MMM. Year 2's decisions are structurally better than year 1's — that's the whole point.</p></div>
       </div>
     </div>
   </section>;
@@ -429,7 +448,7 @@ const ProofSection = () =>
         <p className="eyebrow"><span className="dot" />Proof</p>
         <h2 className="h2-section">Outcomes,<br />not engagement metrics.</h2>
       </div>
-      <div className="proof-grid" style={{ gridTemplateColumns: '1fr 1fr', alignItems: 'stretch' }}>
+      <div className="proof-grid">
         <div className="proof-stats">
           <div className="proof-stat"><div className="n">23<span className="small-suffix">%</span></div><div className="l">Promo waste reduction in Q1 — Tier 1 European operator</div></div>
           <div className="proof-stat"><div className="n">£4.2<span className="small-suffix">M</span></div><div className="l">Annualised NGR uplift from one re-prioritised UX audit</div></div>
@@ -446,7 +465,7 @@ const ProofSection = () =>
           <blockquote className="tm-quote">Jurnii became the only intelligence source our trading, CRM, and product teams agreed on. The arguments stopped being about whose data was right — they became about what to do.</blockquote>
         </article>
         <div className="proof-press">
-          <h4>In the press</h4>
+          <h3>In the press</h3>
           <div className="proof-press-list">
             <div className="proof-press-item"><div><b style={{ fontSize: "16px", fontWeight: 500, color: "var(--foreground)" }}>"Jurnii's promo intelligence is rewriting Cheltenham strategy"</b><span style={{ fontSize: "12px" }}>March 2026 · Feature</span></div><span className="src">iGaming Biz</span></div>
             <div className="proof-press-item"><div><b style={{ fontSize: "16px", color: "var(--foreground)" }}>"How AI is finally being used properly in iGaming"</b><span style={{ fontSize: "12px" }}>Feb 2026 · Op-ed</span></div><span className="src">Next.io</span></div>

@@ -1280,6 +1280,7 @@
       });
       populateCountries();
       bind();
+      decorateSelects();
       restore();
       icons();
       if (internal) { populateLeadSources(); populateBookingHosts(); }
@@ -1308,6 +1309,7 @@
         var hosts = (res.status === 200 && res.data && res.data.hosts) || [];
         if (!hosts.length) {
           sel.innerHTML = '<option value="">Unavailable &mdash; reload to try again</option>';
+          decorateSelect(sel);
           return;
         }
         sel.innerHTML = '<option value="">Select a host&hellip;</option>'
@@ -1319,6 +1321,7 @@
               + escapeHtml(h.label) + (h.configured ? '' : ' (not configured)')
               + '</option>';
           }).join('');
+        decorateSelect(sel);
       });
     }
 
@@ -1340,7 +1343,124 @@
               + (s.value === vals.leadSource ? ' selected' : '') + '>'
               + escapeHtml(s.label) + '</option>';
           }).join('');
+        decorateSelect(sel);
       });
+    }
+
+    function decorateSelects() {
+      if (!root) return;
+      root.querySelectorAll('select.jurnii-select').forEach(decorateSelect);
+    }
+
+    function decorateSelect(sel) {
+      if (!sel) return;
+      var wrap = sel.closest('.jurnii-select-ui');
+      if (wrap) {
+        if (typeof wrap._syncLabel === 'function') wrap._syncLabel();
+        return;
+      }
+      wrap = document.createElement('div');
+      wrap.className = 'jurnii-select-ui';
+      sel.parentNode.insertBefore(wrap, sel);
+      wrap.appendChild(sel);
+      sel.classList.add('is-native-hidden');
+      sel.setAttribute('tabindex', '-1');
+      sel.setAttribute('aria-hidden', 'true');
+
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'jurnii-select-trigger';
+      btn.setAttribute('aria-haspopup', 'listbox');
+      btn.setAttribute('aria-expanded', 'false');
+      if (sel.id) btn.setAttribute('aria-labelledby', sel.id);
+      btn.innerHTML = '<span class="jurnii-select-label"></span>'
+        + '<svg class="jurnii-select-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+      wrap.appendChild(btn);
+
+      var menu = document.createElement('ul');
+      menu.className = 'jurnii-select-menu';
+      menu.setAttribute('role', 'listbox');
+      menu.hidden = true;
+      wrap.appendChild(menu);
+
+      var labelEl = btn.querySelector('.jurnii-select-label');
+      var open = false;
+
+      function syncLabel() {
+        var opt = sel.options[sel.selectedIndex];
+        labelEl.textContent = opt ? opt.textContent : '';
+        btn.classList.toggle('is-placeholder', !sel.value);
+      }
+      wrap._syncLabel = syncLabel;
+
+      function placeMenu() {
+        var r = btn.getBoundingClientRect();
+        menu.style.top = (r.bottom + 6) + 'px';
+        menu.style.left = r.left + 'px';
+        menu.style.width = r.width + 'px';
+      }
+
+      function close() {
+        if (!open) return;
+        open = false;
+        menu.hidden = true;
+        wrap.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+        document.removeEventListener('mousedown', onDocDown);
+        window.removeEventListener('resize', placeMenu);
+        window.removeEventListener('scroll', placeMenu, true);
+        if (menu.parentNode) menu.parentNode.removeChild(menu);
+      }
+
+      function onDocDown(e) {
+        if (!wrap.contains(e.target) && !menu.contains(e.target)) close();
+      }
+
+      function renderMenu() {
+        menu.innerHTML = '';
+        Array.prototype.forEach.call(sel.options, function (opt) {
+          if (opt.disabled && !opt.value) return;
+          var li = document.createElement('li');
+          li.setAttribute('role', 'option');
+          li.className = 'jurnii-select-option' + (opt.selected ? ' is-selected' : '') + (opt.disabled ? ' is-disabled' : '');
+          li.setAttribute('aria-selected', opt.selected ? 'true' : 'false');
+          li.textContent = opt.textContent;
+          if (opt.disabled) return menu.appendChild(li);
+          li.addEventListener('mousedown', function (e) { e.preventDefault(); });
+          li.addEventListener('click', function () {
+            sel.value = opt.value;
+            sel.dispatchEvent(new Event('change', { bubbles: true }));
+            syncLabel();
+            close();
+            btn.focus();
+          });
+          menu.appendChild(li);
+        });
+      }
+
+      function toggle() {
+        if (open) { close(); return; }
+        renderMenu();
+        document.body.appendChild(menu);
+        placeMenu();
+        open = true;
+        menu.hidden = false;
+        wrap.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
+        document.addEventListener('mousedown', onDocDown);
+        window.addEventListener('resize', placeMenu);
+        window.addEventListener('scroll', placeMenu, true);
+      }
+
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        toggle();
+      });
+      wrap.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && open) { e.preventDefault(); close(); btn.focus(); }
+      });
+
+      syncLabel();
     }
 
     function populateCountries() {

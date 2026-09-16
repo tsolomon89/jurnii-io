@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Select } from '../components/Select';
 
 interface ContactFormState {
   first: string;
@@ -19,6 +20,24 @@ const INITIAL_FORM: ContactFormState = {
   interest: '',
   notes: '',
 };
+
+const ROLE_OPTIONS = [
+  { value: 'CEO / MD', label: 'CEO / MD' },
+  { value: 'CMO / Group Marketing', label: 'CMO / Group Marketing' },
+  { value: 'Head of CRM / Promotions', label: 'Head of CRM / Promotions' },
+  { value: 'Head of Product', label: 'Head of Product' },
+  { value: 'Head of Trading', label: 'Head of Trading' },
+  { value: 'Data / Analytics lead', label: 'Data / Analytics lead' },
+  { value: 'Other', label: 'Other' },
+];
+
+const INTEREST_OPTIONS = [
+  { value: 'Jurnii 360 — competitor intelligence', label: 'Jurnii 360 — competitor intelligence' },
+  { value: 'Jurnii UX — UX benchmarking', label: 'Jurnii UX — UX benchmarking' },
+  { value: 'Jurnii MMM — media mix modelling', label: 'Jurnii MMM — media mix modelling' },
+  { value: 'The full 360 product suite', label: 'The full 360 product suite' },
+  { value: 'Partnership / B2B', label: 'Partnership / B2B' },
+];
 
 export const ContactPageTemplate: React.FC = () => {
   const [form, setForm] = useState<ContactFormState>(INITIAL_FORM);
@@ -96,7 +115,6 @@ export const ContactPageTemplate: React.FC = () => {
     <>
       <section className="page-hero">
         <div className="container">
-          <p className="page-hero-kicker">CONTACT</p>
           <p className="eyebrow">
             <span className="dot" />
             Talk to us
@@ -112,14 +130,14 @@ export const ContactPageTemplate: React.FC = () => {
         <div className="container">
           <div className="contact-grid">
             {/* Left Column: Form / Confirmation */}
-            <div>
+            <div className="contact-main">
               {sent ? (
                 <div className="contact-form" style={{ padding: 'var(--spacing-8)' }}>
                   <div className="form-status is-success" style={{ marginBottom: 'var(--spacing-4)' }}>
                     <i data-lucide="check-circle" style={{ width: 18, height: 18 }} />
                     <span>Demo request received</span>
                   </div>
-                  <h3
+                  <h2
                     style={{
                       fontSize: 22,
                       fontWeight: 600,
@@ -129,7 +147,7 @@ export const ContactPageTemplate: React.FC = () => {
                     }}
                   >
                     Thanks — we'll be in touch within a working day.
-                  </h3>
+                  </h2>
                   <p
                     style={{
                       color: 'var(--muted-foreground)',
@@ -178,7 +196,7 @@ export const ContactPageTemplate: React.FC = () => {
                 </div>
               ) : (
                 <form className="contact-form" onSubmit={handleSubmit}>
-                  <div className="row-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                  <div className="row-2">
                     <div className="form-row">
                       <label htmlFor="contact-first">First name</label>
                       <input
@@ -230,46 +248,28 @@ export const ContactPageTemplate: React.FC = () => {
 
                   <div className="form-row">
                     <label htmlFor="contact-role">Role</label>
-                    <select
+                    <Select
                       id="contact-role"
-                      required
                       name="role"
+                      required
                       value={form.role}
-                      onChange={handleChange}
-                      className={!form.role ? 'is-placeholder' : ''}
-                    >
-                      <option value="" disabled>
-                        Select a role…
-                      </option>
-                      <option value="CEO / MD">CEO / MD</option>
-                      <option value="CMO / Group Marketing">CMO / Group Marketing</option>
-                      <option value="Head of CRM / Promotions">Head of CRM / Promotions</option>
-                      <option value="Head of Product">Head of Product</option>
-                      <option value="Head of Trading">Head of Trading</option>
-                      <option value="Data / Analytics lead">Data / Analytics lead</option>
-                      <option value="Other">Other</option>
-                    </select>
+                      placeholder="Select a role…"
+                      options={ROLE_OPTIONS}
+                      onChange={(value) => setForm((prev) => ({ ...prev, role: value }))}
+                    />
                   </div>
 
                   <div className="form-row">
                     <label htmlFor="contact-interest">What are you looking at?</label>
-                    <select
+                    <Select
                       id="contact-interest"
-                      required
                       name="interest"
+                      required
                       value={form.interest}
-                      onChange={handleChange}
-                      className={!form.interest ? 'is-placeholder' : ''}
-                    >
-                      <option value="" disabled>
-                        Select…
-                      </option>
-                      <option value="Jurnii 360 — competitor intelligence">Jurnii 360 — competitor intelligence</option>
-                      <option value="Jurnii UX — UX benchmarking">Jurnii UX — UX benchmarking</option>
-                      <option value="Jurnii MMM — media mix modelling">Jurnii MMM — media mix modelling</option>
-                      <option value="The full 360 product suite">The full 360 product suite</option>
-                      <option value="Partnership / B2B">Partnership / B2B</option>
-                    </select>
+                      placeholder="Select…"
+                      options={INTEREST_OPTIONS}
+                      onChange={(value) => setForm((prev) => ({ ...prev, interest: value }))}
+                    />
                   </div>
 
                   <div className="form-row">
@@ -307,58 +307,43 @@ export const ContactPageTemplate: React.FC = () => {
 
             {/* Right Column: Aside Information */}
             <aside className="contact-aside">
-              <div>
-                <h3>What to expect</h3>
-                <ul>
-                  <li>30 minutes, video call.</li>
-                  <li>Live walkthrough of Jurnii 360 against your competitor set.</li>
-                  <li>If we're not the right fit, we'll tell you in the call.</li>
+              <div className="contact-aside-card">
+                <h2>What to expect</h2>
+                <ul className="contact-expect-list">
+                  <li>
+                    <span className="contact-expect-ico"><i data-lucide="clock" /></span>
+                    <span>30 minutes, video call.</span>
+                  </li>
+                  <li>
+                    <span className="contact-expect-ico"><i data-lucide="play-circle" /></span>
+                    <span>A live demo of our Jurnii products</span>
+                  </li>
+                  <li>
+                    <span className="contact-expect-ico"><i data-lucide="badge-check" /></span>
+                    <span>If we're not the right fit, we'll tell you in the call.</span>
+                  </li>
                 </ul>
-
-                <h3>Direct contact</h3>
-                <p>
-                  <b>Demos &amp; sales</b>
-                  <br />
-                  <a href="mailto:fraser@jurnii.io" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    fraser@jurnii.io
-                  </a>
-                </p>
-                <p>
-                  <b>Partnerships</b>
-                  <br />
-                  <a href="mailto:partnerships@jurnii.io" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    partnerships@jurnii.io
-                  </a>
-                </p>
-                <p>
-                  <b>Press &amp; reports</b>
-                  <br />
-                  <a href="mailto:press@jurnii.io" style={{ textDecoration: 'none', color: 'inherit' }}>
-                    press@jurnii.io
-                  </a>
-                </p>
-
-                <h3>Office</h3>
-                <p>
-                  Jurnii Ltd
-                  <br />
-                  London, United Kingdom
-                </p>
               </div>
 
-              {/* Instant Booking Action Card */}
-              <div
-                className="contact-instant-booking-card"
-                style={{
-                  marginTop: 'var(--spacing-6)',
-                  padding: 'var(--spacing-6)',
-                  background: 'var(--card)',
-                  border: '1px solid var(--border)',
-                  borderRadius: 'var(--radius-xl)',
-                  position: 'relative',
-                  overflow: 'hidden',
-                }}
-              >
+              <div className="contact-aside-card">
+                <h2>Direct contact</h2>
+                <div className="contact-channels">
+                  <p className="contact-channel">
+                    <b>Demos &amp; sales</b>
+                    <a href="mailto:fraser@jurnii.io">fraser@jurnii.io</a>
+                  </p>
+                  <p className="contact-channel">
+                    <b>Partnerships</b>
+                    <a href="mailto:partnerships@jurnii.io">partnerships@jurnii.io</a>
+                  </p>
+                  <p className="contact-channel">
+                    <b>Press &amp; reports</b>
+                    <a href="mailto:press@jurnii.io">press@jurnii.io</a>
+                  </p>
+                </div>
+              </div>
+
+              <div className="contact-instant-booking-card">
                 <div
                   style={{
                     display: 'inline-flex',
@@ -383,7 +368,7 @@ export const ContactPageTemplate: React.FC = () => {
                   />
                   Instant Scheduling
                 </div>
-                <h4
+                <h3
                   style={{
                     fontSize: 'var(--text-lg)',
                     fontWeight: 600,
@@ -392,7 +377,7 @@ export const ContactPageTemplate: React.FC = () => {
                   }}
                 >
                   Prefer to pick a time right now?
-                </h4>
+                </h3>
                 <p
                   style={{
                     fontSize: 'var(--text-sm)',
@@ -405,7 +390,7 @@ export const ContactPageTemplate: React.FC = () => {
                 </p>
                 <button
                   type="button"
-                  className="btn accent"
+                  className="btn primary lg"
                   onClick={() => {
                     if (typeof (window as any).openDemoModal === 'function') {
                       (window as any).openDemoModal('contact-instant-booking');

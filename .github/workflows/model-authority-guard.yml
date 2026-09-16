@@ -75,7 +75,7 @@ jobs:
           set -e
           fail=0
           grep -q "one Account" CLAUDE.md || { echo "::error file=CLAUDE.md::lost the Account-Deal cardinality statement"; fail=1; }
-          grep -q "does NOT implement this yet" CLAUDE.md || { echo "::error file=CLAUDE.md::lost the 'code does not implement this' warning"; fail=1; }
+          grep -q "CORRECTED but NOT PUBLISHED" CLAUDE.md || { echo "::error file=CLAUDE.md::lost the unpublished-drift warning"; fail=1; }
           grep -q "JURNII_AUTHORITATIVE_COMMERCIAL_MODEL" CLAUDE.md || { echo "::error file=CLAUDE.md::lost the authority link"; fail=1; }
           exit $fail
 

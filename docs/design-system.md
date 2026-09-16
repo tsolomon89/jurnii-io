@@ -414,7 +414,7 @@ Canonical implementation: [`assets/global.css`](../assets/global.css). Summary o
   --secondary: #E3E3E3;        /* concrete/200 */
   --secondary-foreground: #3F3E3B;
   --muted: #E3E3E3;
-  --muted-foreground: #807F77; /* concrete/500 */
+  --muted-foreground: #686761; /* concrete/600 — AA on light surfaces (Figma maps 500; site uses 600) */
   --accent: #F2F2F1;           /* concrete/100 */
   --accent-foreground: #3F3E3B;
   --border: #E3E3E3;

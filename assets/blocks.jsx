@@ -176,8 +176,8 @@ const Testimonials = ({ eyebrow = 'Testimonials', heading, items = [], accentCla
             <h2 className="h2-section" dangerouslySetInnerHTML={{ __html: heading }} />
           </div>
           <div className="tm-nav">
-            <button className="tm-arrow" onClick={() => nudge(-1)} disabled={atStart} aria-label="Previous testimonials"><i data-lucide="arrow-left" /></button>
-            <button className="tm-arrow" onClick={() => nudge(1)} disabled={atEnd} aria-label="Next testimonials"><i data-lucide="arrow-right" /></button>
+            <button className="tm-arrow" onClick={() => nudge(-1)} disabled={atStart} aria-label="Previous testimonials"><i data-lucide="arrow-left" aria-hidden="true" /></button>
+            <button className="tm-arrow" onClick={() => nudge(1)} disabled={atEnd} aria-label="Next testimonials"><i data-lucide="arrow-right" aria-hidden="true" /></button>
           </div>
         </div>
 

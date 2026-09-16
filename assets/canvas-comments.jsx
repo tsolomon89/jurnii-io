@@ -39,18 +39,18 @@ const JurniiMark = ({ size = 32 }) => (
 
 /* ---------- Icons ---------- */
 const I = {
-  chat: (p) => <svg width={p?.s||20} height={p?.s||20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>,
-  at: (p) => <svg width={p?.s||20} height={p?.s||20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"/></svg>,
-  smile: (p) => <svg width={p?.s||20} height={p?.s||20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>,
-  paperclip: (p) => <svg width={p?.s||20} height={p?.s||20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>,
-  send: (p) => <svg width={p?.s||19} height={p?.s||19} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>,
-  check: (p) => <svg width={p?.s||19} height={p?.s||19} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>,
-  more: (p) => <svg width={p?.s||19} height={p?.s||19} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><circle cx="5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/></svg>,
-  x: (p) => <svg width={p?.s||18} height={p?.s||18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
-  link: (p) => <svg width={p?.s||16} height={p?.s||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>,
-  edit: (p) => <svg width={p?.s||16} height={p?.s||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>,
-  trash: (p) => <svg width={p?.s||16} height={p?.s||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>,
-  file: (p) => <svg width={p?.s||16} height={p?.s||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>,
+  chat: (p) => <svg width={p?.s||20} height={p?.s||20} viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>,
+  at: (p) => <svg width={p?.s||20} height={p?.s||20} viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"/></svg>,
+  smile: (p) => <svg width={p?.s||20} height={p?.s||20} viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>,
+  paperclip: (p) => <svg width={p?.s||20} height={p?.s||20} viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>,
+  send: (p) => <svg width={p?.s||19} height={p?.s||19} viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>,
+  check: (p) => <svg width={p?.s||19} height={p?.s||19} viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>,
+  more: (p) => <svg width={p?.s||19} height={p?.s||19} viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><circle cx="5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/></svg>,
+  x: (p) => <svg width={p?.s||18} height={p?.s||18} viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
+  link: (p) => <svg width={p?.s||16} height={p?.s||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>,
+  edit: (p) => <svg width={p?.s||16} height={p?.s||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>,
+  trash: (p) => <svg width={p?.s||16} height={p?.s||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>,
+  file: (p) => <svg width={p?.s||16} height={p?.s||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>,
 };
 
 function initials(name) { return name.split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase(); }
@@ -164,17 +164,17 @@ function Composer({ placeholder, allowAttach, autoFocus, onSubmit, compact }) {
       )}
 
       <div className="cc-composer-toolbar">
-        <button className={'cc-tool' + (mentionQuery ? ' is-on' : '')} title="Mention someone"
+        <button className={'cc-tool' + (mentionQuery ? ' is-on' : '')} type="button" title="Mention someone" aria-label="Mention someone"
           onClick={() => { const el = ta.current; const caret = el ? el.selectionStart : text.length; const ins = text.slice(0, caret) + '@' + text.slice(caret); setText(ins); requestAnimationFrame(() => { if (el) { el.focus(); el.setSelectionRange(caret+1, caret+1); setMentionQuery({ start: caret, q: '' }); } }); }}>
           <I.at s={19} />
         </button>
-        <button className={'cc-tool' + (emojiOpen ? ' is-on' : '')} title="Emoji" onClick={() => setEmojiOpen(o => !o)}><I.smile s={19} /></button>
-        {allowAttach && <button className="cc-tool" title="Attach file" onClick={addFakeAttachment}><I.paperclip s={19} /></button>}
-        <button className="cc-send" disabled={!canSend} onClick={submit} title="Send (Enter)"><I.send s={19} /></button>
+        <button className={'cc-tool' + (emojiOpen ? ' is-on' : '')} type="button" title="Emoji" aria-label="Insert emoji" onClick={() => setEmojiOpen(o => !o)}><I.smile s={19} /></button>
+        {allowAttach && <button className="cc-tool" type="button" title="Attach file" aria-label="Attach file" onClick={addFakeAttachment}><I.paperclip s={19} /></button>}
+        <button className="cc-send" type="button" disabled={!canSend} onClick={submit} title="Send (Enter)" aria-label="Send comment"><I.send s={19} /></button>
       </div>
 
       {mentionQuery && matches.length > 0 && (
-        <div className="cc-pop" style={{ left: 14, bottom: 58 }} role="listbox">
+        <div className="cc-pop" style={{ left: 14, bottom: 58 }} role="listbox" aria-label="People">
           {matches.map((u, i) => (
             <button key={u.id} className={'cc-mention-item' + (i === mIdx ? ' active' : '')}
               onMouseEnter={() => setMIdx(i)} onClick={() => pickMention(u)}>
@@ -223,7 +223,7 @@ function Reactions({ reactions, onToggle }) {
 function AddReaction({ open, setOpen, onPick }) {
   return (
     <span style={{ position: 'relative', display: 'inline-flex' }}>
-      <button className="cc-reaction-add" title="Add reaction" onClick={() => setOpen(o => !o)}><I.smile s={16} /></button>
+      <button className="cc-reaction-add" type="button" title="Add reaction" aria-label="Add reaction" onClick={() => setOpen(o => !o)}><I.smile s={16} /></button>
       {open && (
         <div className="cc-pop emoji" style={{ left: 0, bottom: 36 }}>
           <div className="cc-emoji-grid" style={{ gridTemplateColumns: 'repeat(6,1fr)' }}>
@@ -253,10 +253,10 @@ function Comment({ c, isFirst, onResolve, resolved, onReact, onDelete }) {
         </div>
         <div className="cc-head-actions">
           {isFirst && (
-            <button className={'cc-icon-btn' + (resolved ? ' is-on' : '')} title={resolved ? 'Re-open thread' : 'Resolve thread'} onClick={onResolve}><I.check /></button>
+            <button className={'cc-icon-btn' + (resolved ? ' is-on' : '')} type="button" title={resolved ? 'Re-open thread' : 'Resolve thread'} aria-label={resolved ? 'Re-open thread' : 'Resolve thread'} onClick={onResolve}><I.check /></button>
           )}
           <span style={{ position: 'relative', display: 'inline-flex' }}>
-            <button className="cc-icon-btn" title="React" onClick={() => setEmojiOpen(o => !o)}><I.smile /></button>
+            <button className="cc-icon-btn" type="button" title="React" aria-label="Add reaction" onClick={() => setEmojiOpen(o => !o)}><I.smile /></button>
             {emojiOpen && (
               <div className="cc-pop emoji" style={{ right: 0, top: 36 }}>
                 <div className="cc-emoji-grid">{REACT_EMOJI.map(em => <button key={em} onClick={() => { onReact(em); setEmojiOpen(false); }}>{em}</button>)}</div>
@@ -264,7 +264,7 @@ function Comment({ c, isFirst, onResolve, resolved, onReact, onDelete }) {
             )}
           </span>
           <span style={{ position: 'relative', display: 'inline-flex' }}>
-            <button className="cc-icon-btn" title="More" onClick={() => setMenuOpen(o => !o)}><I.more /></button>
+            <button className="cc-icon-btn" type="button" title="More" aria-label="More actions" aria-haspopup="menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(o => !o)}><I.more /></button>
             {menuOpen && (
               <div className="cc-pop menu" style={{ top: 36, right: 0 }} onMouseLeave={() => setMenuOpen(false)}>
                 <button className="cc-menu-item" onClick={() => setMenuOpen(false)}><I.link /> Copy link to comment</button>
@@ -321,7 +321,7 @@ function ComposeWindow({ draft, dispatch, winRef }) {
     <div className="cc-window" ref={winRef}>
       <div className="cc-compose-head">
         <span className="cc-compose-eyebrow">New comment</span>
-        <button className="cc-icon-btn" title="Cancel" onClick={() => dispatch({ type: 'cancelDraft' })}><I.x /></button>
+        <button className="cc-icon-btn" type="button" title="Cancel" aria-label="Cancel comment" onClick={() => dispatch({ type: 'cancelDraft' })}><I.x /></button>
       </div>
       <Composer placeholder="Write a comment…" allowAttach autoFocus
         onSubmit={({ text, attachments }) => dispatch({ type: 'createFromDraft', text, attachments })} />
@@ -489,9 +489,6 @@ function CanvasComments() {
   const [commenting, setCommenting] = useState(false);
   const [hintHidden, setHintHidden] = useState(false);
 
-  // apply accent tweak as CSS var on root
-  const accent = t.accent || '#94FF96';
-
   const dispatch = useCallback((action) => {
     switch (action.type) {
       case 'createFromDraft': {
@@ -571,7 +568,7 @@ function CanvasComments() {
 
   return (
     <div className={'cc-canvas' + (commenting ? ' is-commenting' : '')} data-bg={t.canvas} ref={canvasRef}
-      onClick={onCanvasClick} style={{ '--cc-accent': accent }}>
+      onClick={onCanvasClick}>
 
       {/* the surface being reviewed */}
       <Artboard rect={boardRect} />
@@ -583,8 +580,11 @@ function CanvasComments() {
         const p = abs(th.nx, th.ny);
         return (
           <button key={th.id}
+            type="button"
             className={'cc-pin' + (th.isNew ? ' is-new' : '') + (openId === th.id ? ' is-active' : '') + (th.unread && !th.resolved ? ' is-unread' : '') + (th.resolved ? ' is-resolved' : '')}
             style={{ left: p.x, top: p.y }}
+            aria-label={th.resolved ? 'Resolved comment thread' : `Comment thread${th.comments.length > 1 ? `, ${th.comments.length} comments` : ''}`}
+            aria-expanded={openId === th.id}
             onClick={(e) => { e.stopPropagation(); setHintHidden(true); setThreads(prev => prev.map(x => x.id === th.id ? { ...x, unread: false } : x)); setOpenId(id => id === th.id ? null : th.id); setDraft(null); setCommenting(false); }}>
             <span className="cc-pin-bubble">
               {th.resolved ? <I.check s={18} /> : <I.chat s={18} />}
@@ -627,7 +627,8 @@ function CanvasComments() {
 
       {/* Hint */}
       <div className={'cc-hint' + (hintHidden ? ' hide' : '')}>
-        <span className="dot" /> Press <b style={{margin:'0 2px'}}>C</b> or hit Comment, then click the canvas to drop a thread
+        <span className="dot" />
+        <span className="cc-hint-copy">Press <b style={{margin:'0 2px'}}>C</b> or hit Comment, then click the canvas to drop a thread</span>
       </div>
 
       <TweaksPanel title="Tweaks">
