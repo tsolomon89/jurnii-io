@@ -163,7 +163,6 @@
       "Bash(LEMLIST_API_KEY= ZOHO_REFRESH_TOKEN= npm test)",
       "Bash(grep -v '^\\\\S*: *//')",
       "Bash(python - C:/Users/Audna/AppData/Local/Temp/claude/c--Development-Projects-jurnii/f257f911-9dc6-4250-b485-41f4b5b7d20b/scratchpad/crm-machine-map.html)",
-      "Bash(LEMLIST_API_KEY=2d0c953b54084f0680bd9341c54556a3 node integrations/lemlist-zoho/scripts/spike.js --days 90)",
       "Bash(LEMLIST_API_KEY= node --env-file=.env.production.local integrations/lemlist-zoho/scripts/spike.js --days 1 --zoho)",
       "mcp__claude_ai_Zoho_CRM__getUsers",
       "WebFetch(domain:www.zoho.com)",
