@@ -12,12 +12,12 @@ date: '2025-08-05'
 medium: Article
 category: Market Intelligence
 author: Fraser Dunk
-authorImage: /assets/library/authors/fraser-dunk.jpg
+authorImage: /assets/library/authors/fraser-dunk.png
 tags:
   - Market Intelligence
   - iGaming
   - Intelligence
-coverImage: /assets/library/insights-at-scale-the-ai-path-to-better-cx/cover.png
+coverImage: /assets/library/insights-at-scale-the-ai-path-to-better-cx/cover.svg
 isIndexable: true
 sourceUrl: 'https://www.jurnii.io/post/insights-at-scale-the-ai-path-to-better-cx'
 ---

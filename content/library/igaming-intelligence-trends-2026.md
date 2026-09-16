@@ -20,7 +20,7 @@ productRefs:
   - cortex
 authorImage: /assets/library/authors/mitch-vidler.png
 isIndexable: true
-coverImage: /assets/library/igaming-intelligence-trends-2026/cover.png
+coverImage: /assets/library/igaming-intelligence-trends-2026/cover.svg
 ---
 
 # iGaming Intelligence Trends: 2026 Outlook

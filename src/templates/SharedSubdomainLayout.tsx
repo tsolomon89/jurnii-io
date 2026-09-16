@@ -51,7 +51,7 @@ export const SharedSubdomainLayout: React.FC<SharedSubdomainLayoutProps> = ({
   /**
    * The pinned sidebar has to stop below the site nav, which is itself sticky —
    * parked at the top of the viewport it would slide under that blurred bar and
-   * take the wordmark with it. The nav's height is intrinsic, and some surfaces
+   * take the sidebar title with it. The nav's height is intrinsic, and some surfaces
    * render the library without one at all, so it is measured rather than written
    * down, and re-measured when it reflows.
    */
@@ -105,10 +105,7 @@ export const SharedSubdomainLayout: React.FC<SharedSubdomainLayoutProps> = ({
     <div className="library-layout" ref={layoutRef}>
       {/* Mobile top bar */}
       <div className="library-mobile-bar">
-        <a href={getHomeHref()} className="library-brand">
-          <span className="library-wordmark">Jurnii</span>
-          <span className="pill library-badge">Library</span>
-        </a>
+        <p className="library-sidebar-title">Library</p>
         <button
           type="button"
           className="library-mobile-toggle"
@@ -129,10 +126,7 @@ export const SharedSubdomainLayout: React.FC<SharedSubdomainLayoutProps> = ({
       {/* Sidebar navigation */}
       <aside className={`library-sidebar ${mobileOpen ? '' : 'mobile-hidden'}`}>
         <div className="library-sidebar-head">
-          <a href={getHomeHref()} className="library-brand">
-            <span className="library-wordmark">Jurnii</span>
-            <span className="pill library-badge">Library</span>
-          </a>
+          <p className="library-sidebar-title">Library</p>
           <p className="library-sidebar-lede">
             Monographs, benchmarking frameworks, and research papers for iGaming operators.
           </p>

@@ -17,7 +17,7 @@ tags:
 productRefs:
   - cortex
 isIndexable: true
-coverImage: /assets/library/jurnii-vs-nielsen/cover.png
+coverImage: /assets/library/jurnii-vs-nielsen/cover.svg
 ---
 
 # Jurnii vs Nielsen MMM: what iGaming operators need to know

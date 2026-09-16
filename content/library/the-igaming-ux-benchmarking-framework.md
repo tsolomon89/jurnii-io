@@ -18,7 +18,7 @@ featureRefs:
   - brand-analysis
 solutionRefs:
   - conversion-rate-optimization
-coverImage: /assets/library/the-igaming-ux-benchmarking-framework/cover.png
+coverImage: /assets/library/the-igaming-ux-benchmarking-framework/cover.svg
 ---
 
 # The iGaming UX Benchmarking Framework

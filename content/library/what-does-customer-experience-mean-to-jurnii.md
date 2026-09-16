@@ -10,12 +10,12 @@ date: '2024-11-22'
 medium: Article
 category: Market Intelligence
 author: Fraser Dunk
-authorImage: /assets/library/authors/fraser-dunk.jpg
+authorImage: /assets/library/authors/fraser-dunk.png
 tags:
   - Market Intelligence
   - iGaming
   - Intelligence
-coverImage: /assets/library/what-does-customer-experience-mean-to-jurnii/cover.png
+coverImage: /assets/library/what-does-customer-experience-mean-to-jurnii/cover.svg
 isIndexable: true
 sourceUrl: 'https://www.jurnii.io/post/what-does-customer-experience-mean-to-jurnii'
 ---

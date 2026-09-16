@@ -10,7 +10,7 @@ date: '2025-06-10'
 medium: Article
 category: Market Intelligence
 author: Fraser Dunk
-authorImage: /assets/library/authors/fraser-dunk.jpg
+authorImage: /assets/library/authors/fraser-dunk.png
 tags:
   - Market Intelligence
   - iGaming

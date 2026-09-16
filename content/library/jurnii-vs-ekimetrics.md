@@ -17,7 +17,7 @@ tags:
 productRefs:
   - cortex
 isIndexable: true
-coverImage: /assets/library/jurnii-vs-ekimetrics/cover.png
+coverImage: /assets/library/jurnii-vs-ekimetrics/cover.svg
 ---
 
 # Jurnii vs Ekimetrics: Which MMM is built for iGaming?

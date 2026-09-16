@@ -17,7 +17,7 @@ tags:
   - iGaming
   - Intelligence
 coverImage: /assets/library/experience-is-the-last-defensible-advantage/cover.png
-authorImage: /assets/library/authors/fraser-dunk.jpg
+authorImage: /assets/library/authors/fraser-dunk.png
 isIndexable: true
 ---
 # Experience is the Last Defensible Advantage

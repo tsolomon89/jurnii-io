@@ -10,13 +10,13 @@ date: '2025-06-09'
 medium: Article
 category: Announcement
 author: Fraser Dunk
-authorImage: /assets/library/authors/fraser-dunk.jpg
+authorImage: /assets/library/authors/fraser-dunk.png
 tags:
   - Announcement
   - iGaming
   - Intelligence
 coverImage: >-
-  /assets/library/jurnii-ai-wins-public-choice-award-at-next-igaming-conference/cover.png
+  /assets/library/jurnii-ai-wins-public-choice-award-at-next-igaming-conference/cover.svg
 isIndexable: true
 sourceUrl: >-
   https://www.jurnii.io/post/jurnii-ai-wins-public-choice-award-at-next-igaming-conference

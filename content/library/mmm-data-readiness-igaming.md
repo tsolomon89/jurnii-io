@@ -17,7 +17,7 @@ tags:
 productRefs:
   - cortex
 isIndexable: true
-coverImage: /assets/library/mmm-data-readiness-igaming/cover.png
+coverImage: /assets/library/mmm-data-readiness-igaming/cover.svg
 ---
 
 # Is your data ready for MMM? A self-assessment for iGaming operators

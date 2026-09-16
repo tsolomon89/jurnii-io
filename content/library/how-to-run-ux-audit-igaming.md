@@ -16,9 +16,9 @@ tags:
   - Intelligence
 productRefs:
   - jurnii-ux
-authorImage: /assets/library/authors/fraser-dunk.jpg
+authorImage: /assets/library/authors/fraser-dunk.png
 isIndexable: true
-coverImage: /assets/library/how-to-run-ux-audit-igaming/cover.png
+coverImage: /assets/library/how-to-run-ux-audit-igaming/cover.svg
 ---
 
 # How to run a UX audit for your sportsbook or casino

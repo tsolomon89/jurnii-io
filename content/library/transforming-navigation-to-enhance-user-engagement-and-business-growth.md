@@ -12,7 +12,7 @@ date: '2025-09-26'
 medium: Article
 category: Case Study
 author: Fraser Dunk
-authorImage: /assets/library/authors/fraser-dunk.jpg
+authorImage: /assets/library/authors/fraser-dunk.png
 tags:
   - Case Study
   - iGaming

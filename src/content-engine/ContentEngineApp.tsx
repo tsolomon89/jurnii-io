@@ -23,6 +23,7 @@ import { processHeadings } from './utils/rich-page-data';
 import { resolveSurface, SURFACES } from '../routing/surface-utils';
 import { resolveAliasPath } from '../routing/alias.js';
 import { pushPageContext, pushEvent } from '../analytics/page-context.js';
+import { LibraryCoverImg } from './cover-fallback';
 
 interface ContentEngineAppProps {
   initialPath?: string;
@@ -204,6 +205,8 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
             title: item.meta.title,
             date: item.meta.date,
             author: item.meta.author || 'Jurnii Research',
+            authorImage: item.meta.authorImage,
+            authorRole: item.meta.authorRole,
             category: item.meta.category,
             tags: item.meta.tags || [],
             excerpt: item.meta.excerpt,
@@ -386,18 +389,9 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
                       href={href}
                       className="library-card"
                     >
-                      {/* Eleven library articles were written for this site and never
-                          had Webflow artwork to migrate. They cluster into whole
-                          categories, so without a placeholder a filtered view like
-                          ?cat=Playbook renders as an all-text grid that reads as
-                          broken rather than as deliberate. */}
-                      {item.meta.coverImage ? (
-                        <div className="library-card-cover">
-                          <img src={item.meta.coverImage} alt="" loading="lazy" />
-                        </div>
-                      ) : (
-                        <div className="library-card-cover is-placeholder" aria-hidden="true" />
-                      )}
+                      <div className="library-card-cover">
+                        <LibraryCoverImg src={item.meta.coverImage} />
+                      </div>
                       <div className="library-card-meta">
                         <span className="pill solid">
                           {item.meta.category || 'Paper'}

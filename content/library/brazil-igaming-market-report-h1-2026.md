@@ -22,7 +22,7 @@ tags:
   - UX Benchmarking
   - Regulation
 isIndexable: true
-coverImage: /assets/library/brazil-igaming-market-report-h1-2026/cover.png
+coverImage: /assets/library/brazil-igaming-market-report-h1-2026/cover.svg
 ---
 
 # The Brazil iGaming Market Report, H1 2026

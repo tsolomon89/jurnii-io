@@ -22,7 +22,7 @@ tags:
   - Promotional Intelligence
   - UX Benchmarking
 isIndexable: true
-coverImage: /assets/library/uk-igaming-market-report-h1-2026/cover.png
+coverImage: /assets/library/uk-igaming-market-report-h1-2026/cover.svg
 ---
 
 # The UK iGaming Market Report, H1 2026

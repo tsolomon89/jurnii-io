@@ -18852,8 +18852,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "contentKind": "pages",
       "sections": []
     },
-    "bodyHtml": "<h1>Book a 30-minute demo.</h1>\n<p>We&#39;ll show you live data from your actual competitor set. No slides, no script — just the product.</p>\n<h2>What to expect</h2>\n<ul>\n<li>30 minutes, video call.</li>\n<li>A live demo of our Jurnii products</li>\n<li>If we&#39;re not the right fit, we&#39;ll tell you in the call.</li>\n</ul>\n<h2>Direct contact</h2>\n<ul>\n<li><strong>Demos &amp; sales</strong>: <a href=\"mailto:fraser@jurnii.io\">fraser@jurnii.io</a></li>\n<li><strong>Partnerships</strong>: <a href=\"mailto:partnerships@jurnii.io\">partnerships@jurnii.io</a></li>\n<li><strong>Press &amp; reports</strong>: <a href=\"mailto:press@jurnii.io\">press@jurnii.io</a></li>\n</ul>\n<h2>Office</h2>\n<p>Jurnii Ltd<br>London, United Kingdom</p>\n",
-    "rawContent": "\n# Book a 30-minute demo.\n\nWe'll show you live data from your actual competitor set. No slides, no script — just the product.\n\n## What to expect\n\n- 30 minutes, video call.\n- A live demo of our Jurnii products\n- If we're not the right fit, we'll tell you in the call.\n\n## Direct contact\n\n- **Demos & sales**: fraser@jurnii.io\n- **Partnerships**: partnerships@jurnii.io\n- **Press & reports**: press@jurnii.io\n\n## Office\n\nJurnii Ltd\nLondon, United Kingdom\n\n"
+    "bodyHtml": "<h1>Book a 30-minute demo.</h1>\n<p>We&#39;ll show you live data from your actual competitor set. No slides, no script — just the product.</p>\n<h2>What to expect</h2>\n<ul>\n<li>30 minutes, video call.</li>\n<li>A live demo of our Jurnii products</li>\n<li>If we&#39;re not the right fit, we&#39;ll tell you in the call.</li>\n</ul>\n<h2>Direct contact</h2>\n<ul>\n<li><strong>Demos &amp; sales</strong>: <a href=\"mailto:fraser@jurnii.io\">fraser@jurnii.io</a></li>\n<li><strong>Partnerships</strong>: <a href=\"mailto:partnerships@jurnii.io\">partnerships@jurnii.io</a></li>\n<li><strong>Press &amp; reports</strong>: <a href=\"mailto:press@jurnii.io\">press@jurnii.io</a></li>\n</ul>\n",
+    "rawContent": "\n# Book a 30-minute demo.\n\nWe'll show you live data from your actual competitor set. No slides, no script — just the product.\n\n## What to expect\n\n- 30 minutes, video call.\n- A live demo of our Jurnii products\n- If we're not the right fit, we'll tell you in the call.\n\n## Direct contact\n\n- **Demos & sales**: fraser@jurnii.io\n- **Partnerships**: partnerships@jurnii.io\n- **Press & reports**: press@jurnii.io\n\n"
   },
   {
     "path": "/Users/tristandexter/Desktop/jurnii-website-v2/content/www/pages/privacy.md",
@@ -18918,7 +18918,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "In today’s fast-moving digital landscape, data-driven experimentation is the key to continuous innovation and business optimization.",
       "description": "In today’s fast-moving digital landscape, data-driven experimentation is the key to continuous innovation and business optimization.",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Case Study",
       "tags": [
         "Case Study",
@@ -18950,7 +18951,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "In a recent interview with Casinos.com editor Alan Evans, Fraser talked about why operators are still losing players - \"the problem is not a lack of data but a lack of insight into why customers drop off.”",
       "description": "In a recent interview with Casinos.com editor Alan Evans, Fraser talked about why operators are still losing players - \"the problem is not a lack of data but a lack of insight into why customers drop off.”",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Commercial Strategy",
       "tags": [
         "Commercial Strategy",
@@ -18983,6 +18985,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "description": "Commercial teams in iGaming are wasting valuable resources on manual data collection. In many operator organizations, highly paid commercial analysts, CRM manag...",
       "author": "Mitch Vidler",
       "authorImage": "/assets/library/authors/mitch-vidler.png",
+      "authorRole": "Chief Operating Officer",
       "category": "Competitive Intelligence",
       "tags": [
         "Competitive Intelligence",
@@ -19023,7 +19026,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         "Regulation"
       ],
       "subtitle": "Scale, shared infrastructure, and the experience contest in the first full year of regulation",
-      "coverImage": "/assets/library/brazil-igaming-market-report-h1-2026/cover.png",
+      "coverImage": "/assets/library/brazil-igaming-market-report-h1-2026/cover.svg",
       "order": 99,
       "productRefs": [],
       "featureRefs": [],
@@ -19049,13 +19052,14 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "description": "850+ promotions tracked across 20+ operators. Who blinked first, who held the line, and what it cost.",
       "author": "Mitch Vidler",
       "authorImage": "/assets/library/authors/mitch-vidler.png",
+      "authorRole": "Chief Operating Officer",
       "category": "Market Intelligence",
       "tags": [
         "Market Intelligence",
         "iGaming",
         "Intelligence"
       ],
-      "coverImage": "/assets/library/cheltenham-2026-promotional-intelligence/cover.png",
+      "coverImage": "/assets/library/cheltenham-2026-promotional-intelligence/cover.svg",
       "order": 99,
       "productRefs": [
         "jurnii-360"
@@ -19082,6 +19086,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "A rigorous framework for commercial operators to systematically track, quantify, and counter competitor promotional propositions without diluting margin.",
       "description": "Systematise real-time competitor promotion tracking in iGaming. Eliminate bonus margin waste, defend player share, and quantify commercial market impact.",
       "author": "Fraser Dunk",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Playbook",
       "tags": [
         "Competitive Intelligence",
@@ -19118,7 +19124,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "A deep dive into design fragmentation: discover how Jurnii unified brand experience across multiple products and boosted alignment, cohesion & efficiency.",
       "description": "A deep dive into design fragmentation: discover how Jurnii unified brand experience across multiple products and boosted alignment, cohesion & efficiency.",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Case Study",
       "tags": [
         "Case Study",
@@ -19151,6 +19158,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "description": "Internal design debates frequently delay product roadmaps in iGaming organizations. Product managers, designers, and commercial executives spend hours arguing a...",
       "author": "Tristan Dexter",
       "authorImage": "/assets/library/authors/tristan-dexter.png",
+      "authorRole": "Chief Experience Officer",
       "category": "UX & Product",
       "tags": [
         "UX & Product",
@@ -19182,7 +19190,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "Many iGaming executives are currently making a costly strategic mistake. They are rushing to integrate generic artificial intelligence into their product and ma...",
       "description": "Many iGaming executives are currently making a costly strategic mistake. They are rushing to integrate generic artificial intelligence into their product and ma...",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Commercial Strategy",
       "tags": [
         "Commercial Strategy",
@@ -19214,7 +19223,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "Heuston Gaming Limited is a rapidly growing digital gaming platform that had recently launched its proprietary product to customers.",
       "description": "Heuston Gaming Limited is a rapidly growing digital gaming platform that had recently launched its proprietary product to customers.",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Case Study",
       "tags": [
         "Case Study",
@@ -19246,7 +19256,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "Achieving consistent and effective user experience is a primary goal for digital platforms. Jurnii Studio partnered with Punt.com to audit their recent platform redesigns, identifying opportunities to refine the user…",
       "description": "Achieving consistent and effective user experience is a primary goal for digital platforms. Jurnii Studio partnered with Punt.com to audit their recent platform redesigns, identifying opportunities to refine the user…",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Case Study",
       "tags": [
         "Case Study",
@@ -19286,7 +19297,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         "Marketing"
       ],
       "subtitle": "Incorporating Bonus Mechanics, Sporting Calendars, and Regulatory Shocks",
-      "coverImage": "/assets/library/econometric-media-mix-modeling-with-exogenous-igaming-variables/cover.png",
+      "coverImage": "/assets/library/econometric-media-mix-modeling-with-exogenous-igaming-variables/cover.svg",
       "order": 99,
       "productRefs": [
         "jurnii-mmm"
@@ -19317,7 +19328,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "Jurnii Studio guided a US-based enterprise in transforming its data strategy through a Data Maturity Assessment, strategic recommendations, and a phased roadmap.",
       "description": "Jurnii Studio guided a US-based enterprise in transforming its data strategy through a Data Maturity Assessment, strategic recommendations, and a phased roadmap.",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Case Study",
       "tags": [
         "Case Study",
@@ -19349,7 +19361,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "Jurnii Studio helped Tech4S transform its customer experience by building a data-driven CX framework, streamlining key journeys and aligning improvements with customer feedback.",
       "description": "Jurnii Studio helped Tech4S transform its customer experience by building a data-driven CX framework, streamlining key journeys and aligning improvements with customer feedback.",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Case Study",
       "tags": [
         "Case Study",
@@ -19381,6 +19394,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "A technical and commercial guide to building low-latency competitor offer feeds that empower sportsbook and casino trading desks to defend yield.",
       "description": "Engineer a real-time competitor offer feed for iGaming trading teams. Automate rival bonus detection, counter odds surges, and defend gross gaming yield.",
       "author": "Tristan Dexter",
+      "authorImage": "/assets/library/authors/tristan-dexter.png",
+      "authorRole": "Chief Experience Officer",
       "category": "Playbook",
       "tags": [
         "Competitive Intelligence",
@@ -19417,7 +19432,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "Discover how Jurnii improved customer support operations through optimized reporting — enabling better visibility, faster decision-making, and stronger customer experiences.",
       "description": "Discover how Jurnii improved customer support operations through optimized reporting — enabling better visibility, faster decision-making, and stronger customer experiences.",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Case Study",
       "tags": [
         "Case Study",
@@ -19449,7 +19465,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "Objective and Key Results (OKRs) are essential for driving focus and accountability in any organization. Jurnii partnered with a client to design and implement a comprehensive OKR program that aligned company goals with…",
       "description": "Objective and Key Results (OKRs) are essential for driving focus and accountability in any organization. Jurnii partnered with a client to design and implement a comprehensive OKR program that aligned company goals with…",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Case Study",
       "tags": [
         "Case Study",
@@ -19490,7 +19507,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         "Regulation"
       ],
       "subtitle": "The rising compliance floor and the journey execution that separates operators above it",
-      "coverImage": "/assets/library/europe-igaming-market-report-h1-2026/cover.png",
+      "coverImage": "/assets/library/europe-igaming-market-report-h1-2026/cover.svg",
       "order": 99,
       "productRefs": [],
       "featureRefs": [],
@@ -19515,6 +19532,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "A strategic guide for iGaming leaders to evaluate, benchmark, and counter competitor positioning in an era of commoditised platform technology.",
       "description": "Evaluate competitor positioning in commoditised iGaming markets. Uncover hidden differentiation vectors, counter multi-homing defection, and drive NGR growth.",
       "author": "Fraser Dunk",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Commercial Strategy",
       "tags": [
         "Positioning",
@@ -19551,7 +19570,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "The iGaming market has reached a point of structural commoditisation. In the early days of online gaming, operators competed on technology, licensing, and acces...",
       "description": "The iGaming market has reached a point of structural commoditisation. In the early days of online gaming, operators competed on technology, licensing, and acces...",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Commercial Strategy",
       "tags": [
         "Commercial Strategy",
@@ -19583,7 +19603,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "Flutter Entertainment has cancelled its London Stock Exchange listing to consolidate solely on the NYSE. Here is what the move reveals about capital allocation, market leadership, and commercial intelligence.",
       "description": "Flutter Entertainment has cancelled its London Stock Exchange listing to consolidate solely on the NYSE. Here is what the move reveals about capital allocation, market leadership, and commercial intelligence.",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Commercial Strategy",
       "tags": [
         "iGaming",
@@ -19591,7 +19612,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         "Capital Markets",
         "Market Intelligence"
       ],
-      "coverImage": "/assets/library/flutter-completes-lse-delisting/cover.png",
+      "coverImage": "/assets/library/flutter-completes-lse-delisting/cover.svg",
       "order": 99,
       "productRefs": [],
       "featureRefs": [],
@@ -19616,7 +19637,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "In an exclusive interview with Next.io, Jurnii CEO, Fraser Dunk and company backer, Karolina Pelc share their perspectives on founder mistakes, competitive intelligence, and sustainable growth.",
       "description": "In an exclusive interview with Next.io, Jurnii CEO, Fraser Dunk and company backer, Karolina Pelc share their perspectives on founder mistakes, competitive intelligence, and sustainable growth.",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Conversation",
       "tags": [
         "Conversation",
@@ -19648,7 +19670,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "As automation and AI continue to reshape how data is used across gaming, operators are reassessing the limits of traditional analytics.",
       "description": "As automation and AI continue to reshape how data is used across gaming, operators are reassessing the limits of traditional analytics.",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Commercial Strategy",
       "tags": [
         "Commercial Strategy",
@@ -19681,6 +19704,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "description": "Finding user experience flaws in an online gaming product is relatively straightforward. If you run a standard usability audit, use heatmaps, or conduct user te...",
       "author": "Tristan Dexter",
       "authorImage": "/assets/library/authors/tristan-dexter.png",
+      "authorRole": "Chief Experience Officer",
       "category": "Commercial Strategy",
       "tags": [
         "Commercial Strategy",
@@ -19712,14 +19736,15 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "A practical seven-step framework, with the data points and review cadence we'd use ourselves.",
       "description": "A practical seven-step framework, with the data points and review cadence we'd use ourselves.",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Playbook",
       "tags": [
         "Playbook",
         "iGaming",
         "Intelligence"
       ],
-      "coverImage": "/assets/library/how-to-build-promo-intelligence-framework/cover.png",
+      "coverImage": "/assets/library/how-to-build-promo-intelligence-framework/cover.svg",
       "order": 99,
       "productRefs": [
         "jurnii-360"
@@ -19746,14 +19771,15 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "The five journeys to score, the friction points to look for, and how to weight findings by NGR impact.",
       "description": "The five journeys to score, the friction points to look for, and how to weight findings by NGR impact.",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Playbook",
       "tags": [
         "Playbook",
         "iGaming",
         "Intelligence"
       ],
-      "coverImage": "/assets/library/how-to-run-ux-audit-igaming/cover.png",
+      "coverImage": "/assets/library/how-to-run-ux-audit-igaming/cover.svg",
       "order": 99,
       "productRefs": [
         "jurnii-ux"
@@ -19781,6 +19807,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "description": "A/B testing is the standard tool for conversion rate optimization (CRO) in the online gaming industry. Product and marketing teams routinely launch experiments ...",
       "author": "Tristan Dexter",
       "authorImage": "/assets/library/authors/tristan-dexter.png",
+      "authorRole": "Chief Experience Officer",
       "category": "Commercial Strategy",
       "tags": [
         "Commercial Strategy",
@@ -19813,13 +19840,14 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "description": "Where the smart operators are putting commercial intelligence budget — and where they're cutting back.",
       "author": "Mitch Vidler",
       "authorImage": "/assets/library/authors/mitch-vidler.png",
+      "authorRole": "Chief Operating Officer",
       "category": "Market Intelligence",
       "tags": [
         "Market Intelligence",
         "iGaming",
         "Intelligence"
       ],
-      "coverImage": "/assets/library/igaming-intelligence-trends-2026/cover.png",
+      "coverImage": "/assets/library/igaming-intelligence-trends-2026/cover.svg",
       "order": 99,
       "productRefs": [
         "jurnii-360",
@@ -19848,14 +19876,15 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "The customer experience industry is changing. AI is a key part of this shift, helping businesses deliver faster, more strategic, and impactful customer experiences.",
       "description": "The customer experience industry is changing. AI is a key part of this shift, helping businesses deliver faster, more strategic, and impactful customer experiences.",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Market Intelligence",
       "tags": [
         "Market Intelligence",
         "iGaming",
         "Intelligence"
       ],
-      "coverImage": "/assets/library/insights-at-scale-the-ai-path-to-better-cx/cover.png",
+      "coverImage": "/assets/library/insights-at-scale-the-ai-path-to-better-cx/cover.svg",
       "order": 99,
       "productRefs": [],
       "featureRefs": [],
@@ -19880,14 +19909,15 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "Product leaders face constant pressure to deliver exceptional customer experiences while contending with traditional research methods that are often slow, expensive, and difficult to scale.",
       "description": "Product leaders face constant pressure to deliver exceptional customer experiences while contending with traditional research methods that are often slow, expensive, and difficult to scale.",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Conversation",
       "tags": [
         "Conversation",
         "iGaming",
         "Intelligence"
       ],
-      "coverImage": "/assets/library/is-your-bad-ux-bleeding-customers-unlock-the-secret-to-igaming-retention/cover.png",
+      "coverImage": "/assets/library/is-your-bad-ux-bleeding-customers-unlock-the-secret-to-igaming-retention/cover.svg",
       "order": 99,
       "productRefs": [],
       "featureRefs": [],
@@ -19912,14 +19942,15 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "We're thrilled to share that Jurnii AI was crowned Public Choice Award at NEXT Summit. Read the highlights and watch our winning pitch.",
       "description": "We're thrilled to share that Jurnii AI was crowned Public Choice Award at NEXT Summit. Read the highlights and watch our winning pitch.",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Announcement",
       "tags": [
         "Announcement",
         "iGaming",
         "Intelligence"
       ],
-      "coverImage": "/assets/library/jurnii-ai-wins-public-choice-award-at-next-igaming-conference/cover.png",
+      "coverImage": "/assets/library/jurnii-ai-wins-public-choice-award-at-next-igaming-conference/cover.svg",
       "order": 99,
       "productRefs": [],
       "featureRefs": [],
@@ -19944,7 +19975,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "Effective design is a cornerstone of customer experience, especially in the competitive iGaming industry. Jurnii partnered with a multi-brand iGaming company to develop a design team strategy that aligned with their…",
       "description": "Effective design is a cornerstone of customer experience, especially in the competitive iGaming industry. Jurnii partnered with a multi-brand iGaming company to develop a design team strategy that aligned with their…",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Case Study",
       "tags": [
         "Case Study",
@@ -19976,7 +20008,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "Over the past few weeks, our CEO Fraser Dunk has been speaking with individuals across the iGaming media. Some of the key topics include; exploring how AI-driven UX intelligence can surface problems before players feel…",
       "description": "Over the past few weeks, our CEO Fraser Dunk has been speaking with individuals across the iGaming media. Some of the key topics include; exploring how AI-driven UX intelligence can surface problems before players feel…",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Announcement",
       "tags": [
         "Announcement",
@@ -20008,7 +20041,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "Before we look into 2026, let’s reflect on our key achievement from last year. In February 2025, we launched our first product, Jurnii UX.",
       "description": "Before we look into 2026, let’s reflect on our key achievement from last year. In February 2025, we launched our first product, Jurnii UX.",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Announcement",
       "tags": [
         "Announcement",
@@ -20046,7 +20080,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         "iGaming",
         "Intelligence"
       ],
-      "coverImage": "/assets/library/jurnii-vs-ekimetrics/cover.png",
+      "coverImage": "/assets/library/jurnii-vs-ekimetrics/cover.svg",
       "order": 99,
       "productRefs": [
         "cortex"
@@ -20073,14 +20107,15 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "Two analysts, three spreadsheets, and a quarterly report. We costed it. The number is bigger than you think.",
       "description": "Two analysts, three spreadsheets, and a quarterly report. We costed it. The number is bigger than you think.",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Competitive Analysis",
       "tags": [
         "Competitive Analysis",
         "iGaming",
         "Intelligence"
       ],
-      "coverImage": "/assets/library/jurnii-vs-manual-tracking/cover.png",
+      "coverImage": "/assets/library/jurnii-vs-manual-tracking/cover.svg",
       "order": 99,
       "productRefs": [
         "jurnii-360"
@@ -20113,7 +20148,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         "iGaming",
         "Intelligence"
       ],
-      "coverImage": "/assets/library/jurnii-vs-nielsen/cover.png",
+      "coverImage": "/assets/library/jurnii-vs-nielsen/cover.svg",
       "order": 99,
       "productRefs": [
         "cortex"
@@ -20140,14 +20175,15 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "Agencies do qualitative work brilliantly. They don't scale, and they don't carry NGR weight.",
       "description": "Agencies do qualitative work brilliantly. They don't scale, and they don't carry NGR weight.",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Competitive Analysis",
       "tags": [
         "Competitive Analysis",
         "iGaming",
         "Intelligence"
       ],
-      "coverImage": "/assets/library/jurnii-vs-ux-agencies/cover.png",
+      "coverImage": "/assets/library/jurnii-vs-ux-agencies/cover.svg",
       "order": 99,
       "productRefs": [
         "jurnii-ux"
@@ -20174,7 +20210,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "Jurnii Studio partnered with a leading gaming company to create a complete brand identity for its new venture, Lucky Lagoon.",
       "description": "Jurnii Studio partnered with a leading gaming company to create a complete brand identity for its new venture, Lucky Lagoon.",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Case Study",
       "tags": [
         "Case Study",
@@ -20207,6 +20244,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "description": "iGaming operators spend millions of pounds on player acquisition. They optimize their marketing channels. They bid on expensive keywords. They sign high-profile...",
       "author": "Tristan Dexter",
       "authorImage": "/assets/library/authors/tristan-dexter.png",
+      "authorRole": "Chief Experience Officer",
       "category": "Commercial Strategy",
       "tags": [
         "Commercial Strategy",
@@ -20238,6 +20276,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "A comprehensive guide to constructing rigorous, multi-dimensional comparison matrices that benchmark iGaming competitor performance mathematically.",
       "description": "Master matrix methodologies for iGaming competitor comparison. Remove subjective bias, quantify transaction velocity, and benchmark operational performance.",
       "author": "Fraser Dunk",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Playbook",
       "tags": [
         "Competitive Intelligence",
@@ -20280,7 +20320,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         "iGaming",
         "Intelligence"
       ],
-      "coverImage": "/assets/library/mmm-data-readiness-igaming/cover.png",
+      "coverImage": "/assets/library/mmm-data-readiness-igaming/cover.svg",
       "order": 99,
       "productRefs": [
         "cortex"
@@ -20308,6 +20348,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "description": "Opman’s vision was to create an AI-assisted platform that could handle the entire lifecycle of a marketing campaign, within a single, cohesive interface.",
       "author": "Tristan Dexter",
       "authorImage": "/assets/library/authors/tristan-dexter.png",
+      "authorRole": "Chief Experience Officer",
       "category": "Case Study",
       "tags": [
         "Case Study",
@@ -20339,7 +20380,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "See how Jurnii enhanced the user experience of a leading social casino — improving usability, engagement, and retention through data-driven UX insights and design.",
       "description": "See how Jurnii enhanced the user experience of a leading social casino — improving usability, engagement, and retention through data-driven UX insights and design.",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Case Study",
       "tags": [
         "Case Study",
@@ -20371,7 +20413,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "A leading betting operator needed to understand the true return on a $350k regional marketing campaign. Jurnii Studio partnered with the client to isolate campaign performance, analyse channel efficiency, and link daily…",
       "description": "A leading betting operator needed to understand the true return on a $350k regional marketing campaign. Jurnii Studio partnered with the client to isolate campaign performance, analyse channel efficiency, and link daily…",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Case Study",
       "tags": [
         "Case Study",
@@ -20404,6 +20447,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "description": "In a recent conversation with SiGMA World, our Chief Commercial Officer, Mitch Vidler, discusses the industry trends reshaping operator strategies.",
       "author": "Mitch Vidler",
       "authorImage": "/assets/library/authors/mitch-vidler.png",
+      "authorRole": "Chief Operating Officer",
       "category": "Conversation",
       "tags": [
         "Conversation",
@@ -20435,7 +20479,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "The gap between identifying a market shift and reacting to it determines whether you lead or follow. In the iGaming industry, where product propositions are hig...",
       "description": "The gap between identifying a market shift and reacting to it determines whether you lead or follow. In the iGaming industry, where product propositions are hig...",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Commercial Strategy",
       "tags": [
         "Commercial Strategy",
@@ -20468,6 +20513,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "description": "A slow front-end experience is a direct threat to an operator's bottom line. In the online gaming market, where product offerings are highly commoditised, techn...",
       "author": "Tristan Dexter",
       "authorImage": "/assets/library/authors/tristan-dexter.png",
+      "authorRole": "Chief Experience Officer",
       "category": "UX & Product",
       "tags": [
         "UX & Product",
@@ -20499,6 +20545,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "How modern iGaming operators build automated, enterprise-grade competitor analysis units to transform market noise into commercial advantage.",
       "description": "Build an automated competitor analysis architecture in digital gaming. Replace manual audits with real-time proposition and UX telemetry to protect yield.",
       "author": "Fraser Dunk",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Commercial Strategy",
       "tags": [
         "Competitive Intelligence",
@@ -20535,7 +20583,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "After iGaming’s key figures descended on Barcelona to talk business earlier this year, ICE was the place to take the true pulse of the gaming industry.",
       "description": "After iGaming’s key figures descended on Barcelona to talk business earlier this year, ICE was the place to take the true pulse of the gaming industry.",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Conversation",
       "tags": [
         "Conversation",
@@ -20568,6 +20617,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "description": "For the Chief Financial Officer, user experience (UX) has historically been viewed as a soft, aesthetic cost center. When product and design teams request capit...",
       "author": "Mitch Vidler",
       "authorImage": "/assets/library/authors/mitch-vidler.png",
+      "authorRole": "Chief Operating Officer",
       "category": "Econometrics",
       "tags": [
         "Econometrics",
@@ -20599,14 +20649,15 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "“Customers don’t view UX and CX separately—and neither should you.”",
       "description": "“Customers don’t view UX and CX separately—and neither should you.”",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Market Intelligence",
       "tags": [
         "Market Intelligence",
         "iGaming",
         "Intelligence"
       ],
-      "coverImage": "/assets/library/the-convergence-of-ux-and-cx-how-jurnii-delivers-a-unified-experience-solution/cover.png",
+      "coverImage": "/assets/library/the-convergence-of-ux-and-cx-how-jurnii-delivers-a-unified-experience-solution/cover.svg",
       "order": 99,
       "productRefs": [],
       "featureRefs": [],
@@ -20632,6 +20683,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "description": "In the hyper-competitive iGaming market, competitor promotional campaigns are not just marketing announcements. They are direct promo attacks designed to captur...",
       "author": "Mitch Vidler",
       "authorImage": "/assets/library/authors/mitch-vidler.png",
+      "authorRole": "Chief Operating Officer",
       "category": "Competitive Intelligence",
       "tags": [
         "Competitive Intelligence",
@@ -20664,6 +20716,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "description": "Setting promotional budgets in the online gaming industry is historically a guessing game. Operators allocate millions of pounds to player bonuses, odds boosts,...",
       "author": "Mitch Vidler",
       "authorImage": "/assets/library/authors/mitch-vidler.png",
+      "authorRole": "Chief Operating Officer",
       "category": "Commercial Strategy",
       "tags": [
         "Commercial Strategy",
@@ -20702,7 +20755,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         "iGaming",
         "Product"
       ],
-      "coverImage": "/assets/library/the-igaming-ux-benchmarking-framework/cover.png",
+      "coverImage": "/assets/library/the-igaming-ux-benchmarking-framework/cover.svg",
       "order": 99,
       "productRefs": [
         "jurnii-ux"
@@ -20734,6 +20787,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "description": "Marketing Mix Modeling (MMM) has become the standard framework for budget allocation in the online gaming sector. Operators use these statistical models to dete...",
       "author": "Mitch Vidler",
       "authorImage": "/assets/library/authors/mitch-vidler.png",
+      "authorRole": "Chief Operating Officer",
       "category": "Econometrics",
       "tags": [
         "Econometrics",
@@ -20765,7 +20819,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "Product leaders face constant pressure to deliver exceptional customer experiences while contending with traditional research methods that are often slow, expensive, and difficult to scale.",
       "description": "Product leaders face constant pressure to deliver exceptional customer experiences while contending with traditional research methods that are often slow, expensive, and difficult to scale.",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Market Intelligence",
       "tags": [
         "Market Intelligence",
@@ -20797,7 +20852,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "In the early years of online gaming, player loyalty was a defensible asset. Operators acquired players through marketing campaigns and retained them through hig...",
       "description": "In the early years of online gaming, player loyalty was a defensible asset. Operators acquired players through marketing campaigns and retained them through hig...",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Commercial Strategy",
       "tags": [
         "Commercial Strategy",
@@ -20829,14 +20885,15 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "The rise of AI-Powered Service Agencies We’re witnessing the rise of a new type of agency—AI-powered service providers",
       "description": "The rise of AI-Powered Service Agencies We’re witnessing the rise of a new type of agency—AI-powered service providers",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Market Intelligence",
       "tags": [
         "Market Intelligence",
         "iGaming",
         "Intelligence"
       ],
-      "coverImage": "/assets/library/the-rise-of-ai-powered-service-agencies/cover.png",
+      "coverImage": "/assets/library/the-rise-of-ai-powered-service-agencies/cover.svg",
       "order": 99,
       "productRefs": [],
       "featureRefs": [],
@@ -20861,7 +20918,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "Many iGaming executives operate under a comfortable illusion. They believe they have a clear view of their competitive landscape because they commission a quart...",
       "description": "Many iGaming executives operate under a comfortable illusion. They believe they have a clear view of their competitive landscape because they commission a quart...",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Commercial Strategy",
       "tags": [
         "Commercial Strategy",
@@ -20894,6 +20952,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "description": "Brand trust is not built by multi-million-pound television campaigns, sports sponsorships, or celebrity endorsements. These marketing efforts can drive brand aw...",
       "author": "Tristan Dexter",
       "authorImage": "/assets/library/authors/tristan-dexter.png",
+      "authorRole": "Chief Experience Officer",
       "category": "Commercial Strategy",
       "tags": [
         "Commercial Strategy",
@@ -20926,13 +20985,14 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "description": "Inside the first 90 days: scoping, calibration, and the three reload offers we recommended cutting.",
       "author": "Mitch Vidler",
       "authorImage": "/assets/library/authors/mitch-vidler.png",
+      "authorRole": "Chief Operating Officer",
       "category": "Case Study",
       "tags": [
         "Case Study",
         "iGaming",
         "Intelligence"
       ],
-      "coverImage": "/assets/library/tier-1-operator-promo-waste-reduction/cover.png",
+      "coverImage": "/assets/library/tier-1-operator-promo-waste-reduction/cover.svg",
       "order": 99,
       "productRefs": [
         "jurnii-360"
@@ -20959,7 +21019,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "Discover how Jurnii revamped navigation to drive user engagement and business growth — streamlining user journeys, improving discoverability, and optimizing conversion paths.",
       "description": "Discover how Jurnii revamped navigation to drive user engagement and business growth — streamlining user journeys, improving discoverability, and optimizing conversion paths.",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Case Study",
       "tags": [
         "Case Study",
@@ -21000,7 +21061,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         "UX Benchmarking"
       ],
       "subtitle": "Promotional intensity, margin discipline, and the experience layer in the first duty-compressed year",
-      "coverImage": "/assets/library/uk-igaming-market-report-h1-2026/cover.png",
+      "coverImage": "/assets/library/uk-igaming-market-report-h1-2026/cover.svg",
       "order": 99,
       "productRefs": [],
       "featureRefs": [],
@@ -21025,7 +21086,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "The term 'AI Agent' is everywhere. But for CX, UX, and product leaders, what does it actually mean for your strategy?",
       "description": "The term 'AI Agent' is everywhere. But for CX, UX, and product leaders, what does it actually mean for your strategy?",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Market Intelligence",
       "tags": [
         "Market Intelligence",
@@ -21057,14 +21119,15 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "Learn why vibe coding is the hottest trend for product and UX teams, combining human-AI collaboration, customer experience and AI prompt engineering to build a better digital experience with Jurnii AI.",
       "description": "Learn why vibe coding is the hottest trend for product and UX teams, combining human-AI collaboration, customer experience and AI prompt engineering to build a better digital experience with Jurnii AI.",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Market Intelligence",
       "tags": [
         "Market Intelligence",
         "iGaming",
         "Intelligence"
       ],
-      "coverImage": "/assets/library/unlock-faster-cx-insights-with-vibe-coding-for-human-ai-collaboration/cover.png",
+      "coverImage": "/assets/library/unlock-faster-cx-insights-with-vibe-coding-for-human-ai-collaboration/cover.svg",
       "order": 99,
       "productRefs": [],
       "featureRefs": [],
@@ -21090,6 +21153,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "description": "With the recent legalisation of online gambling in Brazil, the country is set to be a big player in the iGaming industry. Naturally, we got curious.",
       "author": "Tristan Dexter",
       "authorImage": "/assets/library/authors/tristan-dexter.png",
+      "authorRole": "Chief Experience Officer",
       "category": "Market Intelligence",
       "tags": [
         "Market Intelligence",
@@ -21122,6 +21186,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "description": "We recently ran a UX performance report across five leading iGaming brands that operate in Canada: BC.Game, Stake, Shuffle, Betty, and PlayOJO.",
       "author": "Tristan Dexter",
       "authorImage": "/assets/library/authors/tristan-dexter.png",
+      "authorRole": "Chief Experience Officer",
       "category": "Market Intelligence",
       "tags": [
         "Market Intelligence",
@@ -21153,7 +21218,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "The Pareto principle is highly pronounced in the online gaming sector. Across most operator databases, a small cohort of players—approximately 10% of the active...",
       "description": "The Pareto principle is highly pronounced in the online gaming sector. Across most operator databases, a small cohort of players—approximately 10% of the active...",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Commercial Strategy",
       "tags": [
         "Commercial Strategy",
@@ -21185,14 +21251,15 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "Customer Experience is more than just fixing issues, it’s a business enabler that drives growth, efficiency, and customer loyalty.",
       "description": "Customer Experience is more than just fixing issues, it’s a business enabler that drives growth, efficiency, and customer loyalty.",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Market Intelligence",
       "tags": [
         "Market Intelligence",
         "iGaming",
         "Intelligence"
       ],
-      "coverImage": "/assets/library/what-does-customer-experience-mean-to-jurnii/cover.png",
+      "coverImage": "/assets/library/what-does-customer-experience-mean-to-jurnii/cover.svg",
       "order": 99,
       "productRefs": [],
       "featureRefs": [],
@@ -21217,7 +21284,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "excerpt": "Traditional analytics platforms explain the past. They tell you that your registration conversion rate dropped last month. They tell you that player churn incre...",
       "description": "Traditional analytics platforms explain the past. They tell you that your registration conversion rate dropped last month. They tell you that player churn incre...",
       "author": "Fraser Dunk",
-      "authorImage": "/assets/library/authors/fraser-dunk.jpg",
+      "authorImage": "/assets/library/authors/fraser-dunk.png",
+      "authorRole": "CEO / Founder",
       "category": "Commercial Strategy",
       "tags": [
         "Commercial Strategy",

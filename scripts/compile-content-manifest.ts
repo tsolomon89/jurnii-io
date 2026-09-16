@@ -4,6 +4,7 @@ import matter from 'gray-matter';
 import { marked } from 'marked';
 import markedKatex from 'marked-katex-extension';
 import { validateContentSchema } from '../src/content-engine/utils/markdown';
+import { resolveAuthorImage, resolveAuthorRole } from '../src/content-engine/authors';
 
 marked.use(
   { gfm: true, breaks: true },
@@ -38,6 +39,18 @@ marked.use(
 
 const cwd = process.cwd();
 const contentRoot = path.join(cwd, 'content');
+
+/** Drop cover paths that would 404. A missing file plus an <img> is the
+ *  broken-image icon on the resources grid; the card already has a
+ *  placeholder for articles with no artwork. */
+function existingPublicAsset(url: unknown, slug: string): string | undefined {
+  if (typeof url !== 'string' || !url) return undefined;
+  if (!url.startsWith('/')) return url;
+  const abs = path.join(cwd, url.slice(1));
+  if (fs.existsSync(abs)) return url;
+  console.warn(`Missing cover for ${slug}: ${url}`);
+  return undefined;
+}
 
 console.log('Compiling content manifest for browser bundle...');
 
@@ -106,11 +119,12 @@ function processDirectory(dirPath: string, categoryKey: string): any[] {
         excerpt: parsed.data.excerpt || parsed.data.description || '',
         description: parsed.data.description || '',
         author: parsed.data.author || 'Jurnii Research',
-        authorImage: parsed.data.authorImage,
+        authorImage: resolveAuthorImage(parsed.data.author, parsed.data.authorImage),
+        authorRole: resolveAuthorRole(parsed.data.author, parsed.data.authorRole),
         category: parsed.data.category,
         tags: Array.isArray(parsed.data.tags) ? parsed.data.tags : [],
         subtitle: parsed.data.subtitle,
-        coverImage: parsed.data.coverImage || parsed.data.cover_image,
+        coverImage: existingPublicAsset(parsed.data.coverImage || parsed.data.cover_image, slug),
         icon: parsed.data.icon,
         order: typeof parsed.data.order === 'number' ? parsed.data.order : 99,
         eyebrow: parsed.data.eyebrow,
