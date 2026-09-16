@@ -16,9 +16,9 @@ tags:
   - Intelligence
 productRefs:
   - jurnii-360
-authorImage: /assets/library/authors/fraser-dunk.jpg
+authorImage: /assets/library/authors/fraser-dunk.png
 isIndexable: true
-coverImage: /assets/library/jurnii-vs-manual-tracking/cover.png
+coverImage: /assets/library/jurnii-vs-manual-tracking/cover.svg
 ---
 
 # Jurnii 360 vs manual competitor tracking: the real cost

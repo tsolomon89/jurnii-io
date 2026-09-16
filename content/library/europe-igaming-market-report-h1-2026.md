@@ -21,7 +21,7 @@ tags:
   - UX Benchmarking
   - Regulation
 isIndexable: true
-coverImage: /assets/library/europe-igaming-market-report-h1-2026/cover.png
+coverImage: /assets/library/europe-igaming-market-report-h1-2026/cover.svg
 ---
 
 # The Europe iGaming Market Report, H1 2026

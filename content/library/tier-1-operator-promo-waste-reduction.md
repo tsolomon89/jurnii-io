@@ -18,7 +18,7 @@ productRefs:
   - jurnii-360
 authorImage: /assets/library/authors/mitch-vidler.png
 isIndexable: true
-coverImage: /assets/library/tier-1-operator-promo-waste-reduction/cover.png
+coverImage: /assets/library/tier-1-operator-promo-waste-reduction/cover.svg
 ---
 
 # How a Tier 1 European operator reduced promo waste by 23% in Q1

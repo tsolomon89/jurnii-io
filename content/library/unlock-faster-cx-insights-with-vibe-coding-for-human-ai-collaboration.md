@@ -12,13 +12,13 @@ date: '2025-05-12'
 medium: Article
 category: Market Intelligence
 author: Fraser Dunk
-authorImage: /assets/library/authors/fraser-dunk.jpg
+authorImage: /assets/library/authors/fraser-dunk.png
 tags:
   - Market Intelligence
   - iGaming
   - Intelligence
 coverImage: >-
-  /assets/library/unlock-faster-cx-insights-with-vibe-coding-for-human-ai-collaboration/cover.png
+  /assets/library/unlock-faster-cx-insights-with-vibe-coding-for-human-ai-collaboration/cover.svg
 isIndexable: true
 sourceUrl: >-
   https://www.jurnii.io/post/unlock-faster-cx-insights-with-vibe-coding-for-human-ai-collaboration

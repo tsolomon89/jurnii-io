@@ -17,7 +17,7 @@ featureRefs:
 solutionRefs:
   - attribution
 coverImage: >-
-  /assets/library/econometric-media-mix-modeling-with-exogenous-igaming-variables/cover.png
+  /assets/library/econometric-media-mix-modeling-with-exogenous-igaming-variables/cover.svg
 ---
 
 # Abstract

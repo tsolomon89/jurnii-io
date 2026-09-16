@@ -18,7 +18,7 @@ productRefs:
   - jurnii-360
 authorImage: /assets/library/authors/mitch-vidler.png
 isIndexable: true
-coverImage: /assets/library/cheltenham-2026-promotional-intelligence/cover.png
+coverImage: /assets/library/cheltenham-2026-promotional-intelligence/cover.svg
 ---
 
 # Cheltenham 2026: Promotional Intelligence Report

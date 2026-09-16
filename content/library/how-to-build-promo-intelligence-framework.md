@@ -16,9 +16,9 @@ tags:
   - Intelligence
 productRefs:
   - jurnii-360
-authorImage: /assets/library/authors/fraser-dunk.jpg
+authorImage: /assets/library/authors/fraser-dunk.png
 isIndexable: true
-coverImage: /assets/library/how-to-build-promo-intelligence-framework/cover.png
+coverImage: /assets/library/how-to-build-promo-intelligence-framework/cover.svg
 ---
 
 # How to build a competitor promotion intelligence framework

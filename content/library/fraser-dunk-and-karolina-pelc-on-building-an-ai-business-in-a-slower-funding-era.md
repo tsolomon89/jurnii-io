@@ -14,7 +14,7 @@ date: '2026-03-05'
 medium: Article
 category: Conversation
 author: Fraser Dunk
-authorImage: /assets/library/authors/fraser-dunk.jpg
+authorImage: /assets/library/authors/fraser-dunk.png
 tags:
   - Conversation
   - iGaming

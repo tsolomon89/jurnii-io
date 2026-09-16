@@ -25,6 +25,8 @@ export interface ContentMeta {
   excerpt?: string;
   description?: string;
   author?: string;
+  authorImage?: string;
+  authorRole?: string;
   category?: string;
   tags?: string[];
   subtitle?: string;
@@ -98,6 +100,8 @@ export interface EditorialPageModel {
   title: string;
   date?: string;
   author: string;
+  authorImage?: string;
+  authorRole?: string;
   category?: string;
   tags: string[];
   excerpt?: string;

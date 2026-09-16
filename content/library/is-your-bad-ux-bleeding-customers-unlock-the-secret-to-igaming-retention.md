@@ -12,13 +12,13 @@ date: '2025-07-02'
 medium: Article
 category: Conversation
 author: Fraser Dunk
-authorImage: /assets/library/authors/fraser-dunk.jpg
+authorImage: /assets/library/authors/fraser-dunk.png
 tags:
   - Conversation
   - iGaming
   - Intelligence
 coverImage: >-
-  /assets/library/is-your-bad-ux-bleeding-customers-unlock-the-secret-to-igaming-retention/cover.png
+  /assets/library/is-your-bad-ux-bleeding-customers-unlock-the-secret-to-igaming-retention/cover.svg
 isIndexable: true
 sourceUrl: >-
   https://www.jurnii.io/post/is-your-bad-ux-bleeding-customers-unlock-the-secret-to-igaming-retention

@@ -10,7 +10,7 @@ date: '2026-01-22'
 medium: Article
 category: Announcement
 author: Fraser Dunk
-authorImage: /assets/library/authors/fraser-dunk.jpg
+authorImage: /assets/library/authors/fraser-dunk.png
 tags:
   - Announcement
   - iGaming

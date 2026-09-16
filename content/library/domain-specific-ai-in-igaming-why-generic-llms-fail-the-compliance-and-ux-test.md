@@ -19,7 +19,7 @@ tags:
   - iGaming
   - Intelligence
 coverImage: /assets/library/domain-specific-ai-in-igaming-why-generic-llms-fail-the-compliance-and-ux-test/cover.png
-authorImage: /assets/library/authors/fraser-dunk.jpg
+authorImage: /assets/library/authors/fraser-dunk.png
 isIndexable: true
 ---
 # Domain-Specific AI in iGaming: Why Generic LLMs Fail the Compliance and UX Test

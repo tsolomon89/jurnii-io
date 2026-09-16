@@ -8,13 +8,13 @@ date: '2024-12-19'
 medium: Article
 category: Market Intelligence
 author: Fraser Dunk
-authorImage: /assets/library/authors/fraser-dunk.jpg
+authorImage: /assets/library/authors/fraser-dunk.png
 tags:
   - Market Intelligence
   - iGaming
   - Intelligence
 coverImage: >-
-  /assets/library/the-convergence-of-ux-and-cx-how-jurnii-delivers-a-unified-experience-solution/cover.png
+  /assets/library/the-convergence-of-ux-and-cx-how-jurnii-delivers-a-unified-experience-solution/cover.svg
 isIndexable: true
 sourceUrl: >-
   https://www.jurnii.io/post/the-convergence-of-ux-and-cx-how-jurnii-delivers-a-unified-experience-solution

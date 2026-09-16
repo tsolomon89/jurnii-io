@@ -17,7 +17,7 @@ tags:
   - iGaming
   - Intelligence
 coverImage: /assets/library/speed-is-commercial-leverage/cover.png
-authorImage: /assets/library/authors/fraser-dunk.jpg
+authorImage: /assets/library/authors/fraser-dunk.png
 isIndexable: true
 ---
 # Speed is Commercial Leverage

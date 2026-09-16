@@ -16,9 +16,9 @@ tags:
   - Intelligence
 productRefs:
   - jurnii-ux
-authorImage: /assets/library/authors/fraser-dunk.jpg
+authorImage: /assets/library/authors/fraser-dunk.png
 isIndexable: true
-coverImage: /assets/library/jurnii-vs-ux-agencies/cover.png
+coverImage: /assets/library/jurnii-vs-ux-agencies/cover.svg
 ---
 
 # Jurnii UX vs traditional UX agencies: speed, depth, and commercial weight
