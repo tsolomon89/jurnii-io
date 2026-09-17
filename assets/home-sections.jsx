@@ -397,22 +397,7 @@ const ProductTabs = () => {
             <UXScorecard /> :
             active === '360' ?
             <PriceBoostCard /> :
-
-            <div className="tab-visual">
-              <div className="tab-visual-head">
-                <span className="tab-visual-name">{tab.name}</span>
-                <span className="tab-visual-live"><i />Live</span>
-              </div>
-              <div className="tab-visual-stats">
-                {tab.stats.map((s, i) => <div key={i} className="tab-visual-stat"><span className="n">{s.n}</span><span className="l">{s.l}</span></div>)}
-              </div>
-              <div style={{ position: 'relative', zIndex: 1, marginTop: 24 }}>
-                <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--concrete-300)', margin: '0 0 10px' }}>What we track</p>
-                <div className="tab-visual-chips">
-                  {tab.chips.map((c) => <span key={c}>{c}</span>)}
-                </div>
-              </div>
-            </div>
+            <CortexOverviewCard />
             }
           </div>
         </div>
