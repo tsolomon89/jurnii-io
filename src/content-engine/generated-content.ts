@@ -821,6 +821,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
           "type": "features"
         },
         {
+          "type": "renderFlag",
+          "data": "hasUXTakeaways"
+        },
+        {
           "type": "outcomes",
           "data": {
             "heading": "What \"evidence-based UX\" looks like in practice.",

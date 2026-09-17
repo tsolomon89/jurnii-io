@@ -14,6 +14,7 @@ import { PromotionsByVertical } from '../components/page-sections/PromotionsByVe
 import { UXScorecard } from '../components/page-sections/UXScorecard';
 import { UXTelemetry } from '../components/page-sections/UXTelemetry';
 import { CanvasComments } from '../components/page-sections/CanvasComments';
+import { UXTakeaways } from '../components/page-sections/UXTakeaways';
 import { FeatureMetrics } from '../components/page-sections/FeatureMetrics';
 import { FeatureManifesto } from '../components/page-sections/FeatureManifesto';
 import { FeatureChallenge } from '../components/page-sections/FeatureChallenge';
@@ -305,6 +306,7 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
             if (section.data === 'hasPriceBoostTeaser') return <PriceBoostTeaser key={index} />;
             if (section.data === 'hasUXScorecard') return <UXScorecard key={index} />;
             if (section.data === 'hasUXTelemetry') return <UXTelemetry key={index} />;
+            if (section.data === 'hasUXTakeaways') return <UXTakeaways key={index} />;
             if (section.data === 'hasCanvasComments') return (
               <section key={index} className="section reveal collab-canvas-outer">
                 <div className="container">
