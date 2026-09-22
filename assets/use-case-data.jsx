@@ -73,10 +73,10 @@ window.USE_CASE_SHARED = {
     resultNote: 'Jurnii 360 tracks 100% of competitor promotion moves automatically, saving 30+ hours per week across CRM and commercial teams.',
   },
   testimonial: {
-    quote: 'Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.',
-    avatar: 'GM',
-    name: 'General Manager, Europe iGaming Conglomerate',
-    role: 'Integrated Portfolio Operations',
+    quote: "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+    avatar: 'DC',
+    name: 'David Cox',
+    role: 'CX Consultant',
   },
   ecosystem: {
     heading: 'Intelligence Integrations',

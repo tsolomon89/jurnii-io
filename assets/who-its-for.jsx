@@ -21,7 +21,7 @@ const ICPS = [
       'Quarterly board-ready intelligence packs.',
       'Direct API into your warehouse and BI stack.',
     ],
-    quote: { body: '"We replaced two analysts and a quarterly agency engagement. The signal is daily, the cost is a fraction, and the team finally trusts the data."', who: 'Group Director, Tier 1 European operator' },
+    quote: { body: '"I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a ‘first time using ChatGPT’ feeling."', who: 'David Cox, CX Consultant' },
   },
   {
     slug: 'marketing',
@@ -42,7 +42,7 @@ const ICPS = [
       'Competitor pressure variable wired into the model.',
       'Quarterly refresh, not annual deck.',
     ],
-    quote: { body: '"We finally have an answer to \'should we cut TV during the Six Nations\' that isn\'t a vibe. Coefficients we can defend in a board meeting."', who: 'CMO, multi-market operator' },
+    quote: { body: '"This kind of report would have taken three months to generate via usual research processes."', who: 'Ryan Schembri, CPO at Betsson' },
   },
   {
     slug: 'crm-promo',
@@ -63,7 +63,7 @@ const ICPS = [
       'Composite richness index for cross-mechanic comparison.',
       'Slack and email alerts when key competitors move.',
     ],
-    quote: { body: '"We cut three reload offers in 90 days. The CRM team had structured market evidence. The conversation took 20 minutes instead of three weeks."', who: 'Head of Promotions, Tier 1 European operator' },
+    quote: { body: '"I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a ‘first time using ChatGPT’ feeling."', who: 'David Cox, CX Consultant' },
   },
   {
     slug: 'product',
@@ -84,7 +84,7 @@ const ICPS = [
       'NGR-weighted prioritisation built in.',
       'iOS, Android, mobile web, desktop — all four, every time.',
     ],
-    quote: { body: '"The roadmap conversation changed in one quarter. We stopped debating which audit findings to believe and started shipping against a single ranked list."', who: 'CPO, sportsbook + casino operator' },
+    quote: { body: '"This kind of report would have taken three months to generate via usual research processes."', who: 'Ryan Schembri, CPO at Betsson' },
   },
   {
     slug: 'platforms',
@@ -105,7 +105,7 @@ const ICPS = [
       'Multi-tenant deployment for operator clients.',
       'Revenue-share or wholesale licensing models.',
     ],
-    quote: { body: '"It moved us from \'reliable platform\' to \'strategic partner\' in board conversations with three operator clients. That\'s rare."', who: 'Chief Commercial Officer, B2B platform' },
+    quote: { body: '"I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a ‘first time using ChatGPT’ feeling."', who: 'David Cox, CX Consultant' },
   },
   {
     slug: 'data',
@@ -126,7 +126,7 @@ const ICPS = [
       'Warehouse-native delivery — not a CSV every Friday.',
       'Direct ingestion into your existing pipelines.',
     ],
-    quote: { body: '"We got two analysts back. The intelligence layer is now part of our stack, not a side-project. The savings paid for the contract in eight months."', who: 'VP Data & Analytics' },
+    quote: { body: '"This kind of report would have taken three months to generate via usual research processes."', who: 'Ryan Schembri, CPO at Betsson' },
   },
 ];
 window.ICPS = ICPS;

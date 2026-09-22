@@ -1,6 +1,6 @@
 import fs from 'node:fs';
-import path from 'node:path';
 import { getAllContent } from './markdown';
+import { contentRoute, isIndexable } from './content-route';
 
 export interface SitemapEntry {
   url: string;
@@ -26,27 +26,11 @@ export function getDynamicSitemapEntries(
 ): SitemapEntry[] {
   const entries: SitemapEntry[] = [];
 
-  // WWW surface content
   const wwwItems = getAllContent('www');
   for (const item of wwwItems) {
-    if (item.meta.isIndexable === false || item.meta.noindex === true) {
-      continue;
-    }
-
-    const normPath = item.path.replace(/\\/g, '/');
-    let route = '/';
-    if (normPath.includes('/content/www/pages/')) {
-      route = `/${item.slug}`;
-    } else if (normPath.includes('/content/www/products/')) {
-      route = `/products/${item.slug}`;
-    } else if (normPath.includes('/content/www/features/')) {
-      route = `/features/${item.slug}`;
-    } else if (normPath.includes('/content/www/solutions/')) {
-      route = `/solutions/${item.slug}`;
-    } else if (normPath.includes('/content/www/use-cases/')) {
-      route = `/use-cases/${item.slug}`;
-    }
-
+    if (!isIndexable(item)) continue;
+    const route = contentRoute(item);
+    if (!route) continue;
     entries.push({
       url: `${baseUrl}${route}`,
       lastModified: resolveLastModified(item.path, item.meta.date),
@@ -55,15 +39,13 @@ export function getDynamicSitemapEntries(
     });
   }
 
-  // Library surface content
   const libraryItems = getAllContent('library');
   for (const item of libraryItems) {
-    if (item.meta.isIndexable === false || item.meta.noindex === true) {
-      continue;
-    }
-
+    if (!isIndexable(item)) continue;
+    const route = contentRoute(item);
+    if (!route) continue;
     entries.push({
-      url: `${baseUrl}/library/${item.slug}`,
+      url: `${baseUrl}${route}`,
       lastModified: resolveLastModified(item.path, item.meta.date),
       changeFrequency: 'monthly',
       priority: 0.7,

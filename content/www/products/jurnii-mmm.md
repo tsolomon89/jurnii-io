@@ -73,10 +73,8 @@ heroFeatures:
   - title: Competitor pressure variable
     description: Direct integration with Jurnii 360 competitor promo intensity.
 pullQuote: >-
-  Every MMM we had looked at before came from a consultancy that had clearly
-  never run an iGaming P&L. Jurnii's model had the bonus structure right inside
-  the regression.
-pullQuoteAttribution: 'Lukas Brandt, Group Head of Performance'
+  I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.
+pullQuoteAttribution: 'David Cox, CX Consultant'
 deepWorkFeatures:
   - icon: split
     title: FTD vs Reactivation Split
@@ -153,37 +151,16 @@ sections:
       eyebrow: Testimonials
       heading: A model commercial teams believe.
       items:
-        - quote: >-
-            Every MMM we’d looked at before came from a consultancy that had
-            clearly never run an iGaming P&L. Jurnii’s model had the bonus
-            structure right inside the regression. That was the difference.
-          author: Lukas Brandt
-          role: Group Head of Performance · Multi-jurisdiction operator
-          initials: LB
+        - quote: I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.
+          author: David Cox
+          role: CX Consultant
+          initials: DC
           color: green
-        - quote: >-
-            For once the marketing line in the board pack came with confidence
-            bands, not a story. Our CFO actually signed off the increase.
-          author: Rachel Donovan
-          role: VP Finance · Tier 1 European operator
-          initials: RD
+        - quote: This kind of report would have taken three months to generate via usual research processes.
+          author: Ryan Schembri
+          role: CPO at Betsson
+          initials: RS
           color: blue
-        - quote: >-
-            The saturation curves told us paid search was tapped out two
-            quarters before we’d have felt it. We moved the budget and kept the
-            growth.
-          author: Nikhil Rao
-          role: Head of Performance · Multi-market operator
-          initials: NR
-          color: orange
-        - quote: >-
-            It’s the first UX report I’ve been able to take into a board meeting
-            without translating it first. The commercial weight is already in
-            the numbers.
-          author: Hannah Vogel
-          role: Chief Marketing Officer · Tier 2 operator
-          initials: HV
-          color: purple
   - type: personas
     data:
       heading: Who Cortex is built for.

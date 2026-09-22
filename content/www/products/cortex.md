@@ -30,9 +30,8 @@ heroFeatures:
     title: Retention Modelling
     description: Model churn triggers and CRM effectiveness to protect player lifetime value.
 pullQuote: >-
-  Cortex gave us the first causal view of our marketing spend. We stopped
-  guessing and started optimising within six weeks.
-pullQuoteAttribution: 'Director of Commercial Strategy, Tier-1 Operator'
+  I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.
+pullQuoteAttribution: 'David Cox, CX Consultant'
 deepWorkFeatures:
   - icon: git-merge
     title: Causal Decomposition
@@ -98,20 +97,15 @@ sections:
       eyebrow: Testimonials
       heading: A model commercial teams believe.
       items:
-        - quote: >-
-            Cortex replaced three months of agency benchmarking with a single
-            automated feed. The ROI conversation moved from anecdotal to causal
-            within six weeks.
-          author: Director of Commercial Strategy
-          role: Tier-1 European iGaming Operator
-          initials: DS
+        - quote: I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.
+          author: David Cox
+          role: CX Consultant
+          initials: DC
           color: green
-        - quote: >-
-            For once the marketing line in the board pack came with confidence
-            bands, not a story. Our CFO actually signed off the increase.
-          author: VP Finance
-          role: Multi-jurisdiction iGaming Operator
-          initials: VP
+        - quote: This kind of report would have taken three months to generate via usual research processes.
+          author: Ryan Schembri
+          role: CPO at Betsson
+          initials: RS
           color: blue
   - type: personas
     data:

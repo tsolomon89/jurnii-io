@@ -1,11 +1,13 @@
 /**
- * Writes robots.txt and sitemap.xml into the Vite output directory.
- * Without these files, Vercel's SPA fallback serves index.html for both URLs and
- * crawlers / Lighthouse report dozens of robots.txt syntax errors.
+ * Writes robots.txt, sitemap.xml, and llms.txt into the Vite output directory.
+ * Without these files, Vercel's SPA fallback serves index.html for those URLs and
+ * crawlers / Lighthouse report robots.txt syntax errors and a failed agentic-browsing
+ * llms.txt audit.
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import { getDynamicSitemapEntries } from '../src/content-engine/utils/sitemap.ts';
+import { buildLlmsTxt } from '../src/content-engine/utils/llms-txt.ts';
 
 const cwd = process.cwd();
 const outDir = path.resolve(cwd, process.argv[2] || 'dist');
@@ -77,6 +79,7 @@ Disallow: /manage.html
 Disallow: /api/
 
 Sitemap: ${baseUrl}/sitemap.xml
+# Curated site map for AI agents: ${baseUrl}/llms.txt
 `;
 }
 
@@ -87,4 +90,8 @@ if (!fs.existsSync(outDir)) {
 
 fs.writeFileSync(path.join(outDir, 'robots.txt'), buildRobotsTxt(), 'utf-8');
 fs.writeFileSync(path.join(outDir, 'sitemap.xml'), buildSitemapXml(), 'utf-8');
-console.log(`Wrote robots.txt and sitemap.xml (${getDynamicSitemapEntries(baseUrl).length + 1} URLs) → ${outDir}`);
+const llmsTxt = buildLlmsTxt(baseUrl);
+fs.writeFileSync(path.join(outDir, 'llms.txt'), llmsTxt, 'utf-8');
+console.log(
+  `Wrote robots.txt, sitemap.xml (${getDynamicSitemapEntries(baseUrl).length + 1} URLs), and llms.txt (${llmsTxt.length} bytes) → ${outDir}`
+);

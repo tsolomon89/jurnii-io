@@ -11,9 +11,6 @@ accentClass: accent-ux
 primaryCta:
   label: Book a demo
   href: /contact-us
-secondaryCta:
-  label: View a demo report
-  href: /library?cat=thought
 features:
   heading: A clear, comparable view of player experience.
   sub: Built around the journeys that actually move NGR.
@@ -31,8 +28,8 @@ features:
     - icon: monitor-smartphone
       title: Mobile & Desktop
       body: >-
-        iOS, Android, mobile web, desktop web — scored separately, then
-        synthesised into a unified score.
+        Mobile web and desktop web — scored separately, then synthesised into a
+        unified score.
     - icon: trophy
       title: Peer benchmarking
       body: >-
@@ -43,11 +40,12 @@ features:
       body: >-
         We provide you with categorised recommendations that allow you to build
         roadmaps, create optimisation experiments or pick off low-hanging fruits.
-    - icon: refresh-cw
-      title: Recurring assessments
+    - icon: activity
+      title: Change detection
       body: >-
-        See how your releases are affecting your score month-on-month, whilst
-        keeping a close eye on your competition, and closing the gap.
+        Track how yours and competitor releases are affecting scores
+        month-on-month. Receive alerts and notifications for key experience
+        changes found.
 heroFeatures:
   - title: Journey mapping
     description: >-
@@ -59,14 +57,13 @@ heroFeatures:
       competition.
   - title: Mobile & Desktop
     description: >-
-      iOS, Android, mobile web, desktop web — scored separately, then
-      synthesised into a unified score.
+      Mobile web and desktop web — scored separately, then synthesised into a
+      unified score.
   - title: Peer benchmarking
     description: See exactly where you sit vs your competitors on every criterion.
 pullQuote: >-
-  For the first time, our roadmap arguments stopped being "Spotify does it this
-  way" and started being "we lose 4.2 points to the market on this exact step."
-pullQuoteAttribution: 'Sofia Lindqvist, Director of Product'
+  I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.
+pullQuoteAttribution: 'David Cox, CX Consultant'
 productRefs: []
 featureRefs:
   - brand-analysis
@@ -88,7 +85,7 @@ sections:
   - type: outcomes
     data:
       heading: What "evidence-based UX" looks like in practice.
-      sub: Outcomes from operators currently scoring quarterly with Jurnii UX.
+      sub: Outcomes from operators currently scoring monthly with Jurnii UX.
       kpis:
         - num: 60+
           label: Criteria per journey
@@ -99,8 +96,8 @@ sections:
           label: Peer operators
           desc: >-
             Standard scope: your operator + 5 peers, scored side-by-side, every
-            quarter.
-        - num: 12 days
+            month.
+        - num: '<5 days'
           label: Average audit time
           desc: >-
             From scoping call to delivered first audit, including peer-set
@@ -114,18 +111,17 @@ sections:
     data:
       heading: How a Jurnii UX audit runs.
       sub: >-
-        A predictable, repeatable process — designed to fit a quarterly product
+        A predictable, repeatable process — designed to fit a monthly product
         cadence.
       steps:
         - title: Define scope
           body: >-
-            Agree the journeys (typically 5–7), the peer set (typically 5
-            operators), and the platforms (iOS, Android, mobile web, desktop
-            web).
+            Agree the journeys (typically 10–12), the peer set (typically 5
+            operators), and the platforms (mobile web and desktop web).
         - title: Capture & score
           body: >-
-            Our analysts plus our scoring layer walk every journey on every
-            platform. Each step is scored, screenshotted, and timestamped.
+            Our analysts plus our scoring layer walk every journey on mobile web
+            and desktop. Each step is scored, screenshotted, and timestamped.
         - title: Calibrate findings
           body: >-
             Findings are calibrated against your internal product team in a
@@ -135,46 +131,25 @@ sections:
             A structured report (executive summary, journey-level scoring,
             prioritised findings) plus a working dashboard you can re-open any
             time.
-        - title: Re-score quarterly
+        - title: Re-score monthly
           body: >-
-            Each quarter we re-walk the same journeys. You see the impact of
-            what shipped — and where competitors caught up or pulled away.
+            Each month we re-walk the same journeys. You see the impact of what
+            shipped — and where competitors caught up or pulled away.
   - type: testimonials
     data:
       eyebrow: Testimonials
       heading: 'Evidence, not opinion.'
       items:
-        - quote: >-
-            For the first time, our roadmap arguments stopped being “Spotify
-            does it this way” and started being “we lose 4.2 points to the
-            market on this exact step.” That changed the whole conversation.
-          author: Sofia Lindqvist
-          role: Director of Product · Top 5 European sportsbook
-          initials: SL
+        - quote: I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.
+          author: David Cox
+          role: CX Consultant
+          initials: DC
           color: green
-        - quote: >-
-            Every finding came with a screenshot and a score. My designers
-            stopped defending taste and started fixing measured problems.
-          author: Tom Wheeler
-          role: Director of Design · Tier 1 operator
-          initials: TW
+        - quote: This kind of report would have taken three months to generate via usual research processes.
+          author: Ryan Schembri
+          role: CPO at Betsson
+          initials: RS
           color: blue
-        - quote: >-
-            Step-level scoring pointed straight at one screen in our deposit
-            flow. We fixed it in a single sprint and conversion moved the next
-            week.
-          author: Aisha Mansour
-          role: Conversion Lead · Multi-brand casino
-          initials: AM
-          color: orange
-        - quote: >-
-            It’s the first UX report I’ve been able to take into a board meeting
-            without translating it first. The commercial weight is already in
-            the numbers.
-          author: James Okonkwo
-          role: Chief Product Officer · Tier 2 operator
-          initials: JO
-          color: purple
   - type: personas
     data:
       heading: Who Jurnii UX is built for.
@@ -188,7 +163,7 @@ sections:
         - role: Director of Design
           question: 'Are we shipping enough, fast enough?'
           answer: >-
-            Quarterly re-scoring shows whether design throughput is moving the
+            Monthly re-scoring shows whether design throughput is moving the
             metrics that matter — or just shipping new screens.
         - role: Conversion / CRO Lead
           question: Which step is the bottleneck?
@@ -250,7 +225,7 @@ Instantly scan player pathways, map conversion roadblocks, and weight every flaw
 
 ## What Evidence-Based UX Looks Like in Practice
 
-Outcomes from operators currently scoring quarterly with Jurnii UX.
+Outcomes from operators currently scoring monthly with Jurnii UX.
 
 ### 60+ — Criteria per Journey
 
@@ -258,9 +233,9 @@ Every journey decomposed into structured, scoreable criteria — not a single 1�
 
 ### 5 — Peer Operators
 
-Standard scope: your operator + 5 peers, scored side-by-side, every quarter.
+Standard scope: your operator + 5 peers, scored side-by-side, every month.
 
-### 12 Days — Average Audit Time
+### <5 Days — Average Audit Time
 
 From scoping call to delivered first audit, including peer-set calibration.
 
@@ -270,15 +245,15 @@ Average sign-up→FTD lift after addressing top-3 friction points (over 6 audits
 
 ## How a Jurnii UX Audit Runs
 
-A predictable, repeatable process — designed to fit a quarterly product cadence.
+A predictable, repeatable process — designed to fit a monthly product cadence.
 
 ### Step 1: Define scope
 
-Agree the journeys (typically 5–7), the peer set (typically 5 operators), and the platforms (iOS, Android, mobile web, desktop web).
+Agree the journeys (typically 10–12), the peer set (typically 5 operators), and the platforms (mobile web and desktop web).
 
 ### Step 2: Capture & score
 
-Our analysts plus our scoring layer walk every journey on every platform. Each step is scored, screenshotted, and timestamped.
+Our analysts plus our scoring layer walk every journey on mobile web and desktop. Each step is scored, screenshotted, and timestamped.
 
 ### Step 3: Calibrate findings
 
@@ -288,27 +263,20 @@ Findings are calibrated against your internal product team in a half-day worksho
 
 A structured report (executive summary, journey-level scoring, prioritised findings) plus a working dashboard you can re-open any time.
 
-### Step 5: Re-score quarterly
+### Step 5: Re-score monthly
 
-Each quarter we re-walk the same journeys. You see the impact of what shipped — and where competitors caught up or pulled away.
+Each month we re-walk the same journeys. You see the impact of what shipped — and where competitors caught up or pulled away.
 
 ## What Our Clients Say
 
-> "For the first time, our roadmap arguments stopped being 'Spotify does it this way' and started being 'we lose 4.2 points to the market on this exact step.' That changed the whole conversation."
+> "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling."
 >
-> — **Sofia Lindqvist**, Director of Product · Top 5 European sportsbook
+> — **David Cox**, CX Consultant
 
-> "Every finding came with a screenshot and a score. My designers stopped defending taste and started fixing measured problems."
+> "This kind of report would have taken three months to generate via usual research processes."
 >
-> — **Tom Wheeler**, Director of Design · Tier 1 operator
+> — **Ryan Schembri**, CPO at Betsson
 
-> "Step-level scoring pointed straight at one screen in our deposit flow. We fixed it in a single sprint and conversion moved the next week."
->
-> — **Aisha Mansour**, Conversion Lead · Multi-brand casino
-
-> "It's the first UX report I've been able to take into a board meeting without translating it first. The commercial weight is already in the numbers."
->
-> — **James Okonkwo**, Chief Product Officer · Tier 2 operator
 
 ## Who Jurnii UX is Built For
 
@@ -324,7 +292,7 @@ A prioritised list of friction points, ranked by NGR-weighted impact — ready f
 
 **Question**: Are we shipping enough, fast enough?
 
-Quarterly re-scoring shows whether design throughput is moving the metrics that matter — or just shipping new screens.
+Monthly re-scoring shows whether design throughput is moving the metrics that matter — or just shipping new screens.
 
 ### Conversion / CRO Lead
 

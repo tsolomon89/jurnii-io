@@ -26,6 +26,8 @@ import { BeforeAfter } from '../components/page-sections/BeforeAfter';
 import { DecisionMap } from '../components/page-sections/DecisionMap';
 import { CortexDashboard } from '../components/page-sections/CortexDashboard';
 import { TestimonialQuote } from '../components/page-sections/TestimonialQuote';
+import { WorldCupSopvRace } from '../components/page-sections/WorldCupSopvRace';
+import { BoostTrajectoryScatter } from '../components/page-sections/BoostTrajectoryScatter';
 
 interface EntityPageTemplateProps {
   data: EntityPageModel;
@@ -334,6 +336,27 @@ export const EntityPageTemplate: React.FC<EntityPageTemplateProps> = ({ data }) 
               </section>
             );
             return null;
+          case 'snapshot': {
+            const snap = section.data;
+            if (!snap?.id) return null;
+            let chart: React.ReactNode = null;
+            if (snap.id === 'worldCupSopvRace') chart = <WorldCupSopvRace />;
+            if (snap.id === 'boostTrajectoryScatter') chart = <BoostTrajectoryScatter />;
+            if (!chart) return null;
+            return (
+              <section key={index} className="section reveal section-snapshot">
+                <div className="container">
+                  <div className="section-head">
+                    <p className="eyebrow"><span className="dot" />{snap.eyebrow}</p>
+                    <h2 className="h2-section">{snap.heading}</h2>
+                    {snap.lede && <p className="section-lede">{snap.lede}</p>}
+                  </div>
+                  {chart}
+                  {snap.closing && <p className="section-closing">{snap.closing}</p>}
+                </div>
+              </section>
+            );
+          }
           default:
             return null;
         }

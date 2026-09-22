@@ -2,7 +2,7 @@
 title: Jurnii 360
 description: >-
   See every competitor move, the day it happens. Jurnii 360 monitors competitor
-  promotions, segmentation, and proposition changes daily across 20+ operators.
+  promotions, boosts, and proposition changes daily across 20+ operators.
 category: Commercial Intelligence
 order: 1
 icon: radar
@@ -11,9 +11,6 @@ accentClass: accent-360
 primaryCta:
   label: Book a 45-min demo
   href: /contact-us
-secondaryCta:
-  label: See sample report
-  href: /library?cat=report
 features:
   heading: A live intelligence layer for the commercial floor.
   sub: >-
@@ -35,11 +32,11 @@ features:
       body: >-
         A weighted composite score that lets you compare like-for-like across
         operators — beyond headline values.
-    - icon: users
-      title: Segmentation & targeting analysis
+    - icon: percent
+      title: Boost margin intelligence
       body: >-
-        Identify which player segments competitors are targeting, with what
-        message, and at what cadence.
+        Every competitor's boost margin, scored to the tenth of a point — and
+        the margin you concede each time you match or beat it.
     - icon: history
       title: Historical database
       body: >-
@@ -63,15 +60,13 @@ heroFeatures:
     description: >-
       A weighted composite score that lets you compare like-for-like across
       operators — beyond headline values.
-  - title: Segmentation & targeting analysis
+  - title: Boost margin intelligence
     description: >-
-      Identify which player segments competitors are targeting, with what
-      message, and at what cadence.
+      Every competitor's boost margin, scored to the tenth of a point — and the
+      margin you concede each time you match or beat it.
 pullQuote: >-
-  The first quarter alone paid for the platform twice over. We pulled three
-  reload offers that no major competitor had run for nine months — and saw zero
-  churn impact.
-pullQuoteAttribution: 'Marcus Hale, Head of CRM'
+  I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.
+pullQuoteAttribution: 'David Cox, CX Consultant'
 productRefs: []
 featureRefs:
   - competitor-analysis
@@ -118,6 +113,34 @@ sections:
             calibration period.
   - type: renderFlag
     data: hasPromotionsByVertical
+  - type: snapshot
+    data:
+      id: worldCupSopvRace
+      eyebrow: World Cup 2026
+      heading: An example from our tournament analysis.
+      lede: >-
+        Share of promotional voice across the UK and Irish books, week by week
+        through the World Cup. Press play to watch the cumulative table take
+        shape — the same read your commercial team gets from Jurnii 360.
+      closing: >-
+        William Hill did not lead from the front. Betfred opened at 25.4% and
+        finished at 10.2%. The early weeks were tighter; the top three pulled
+        clear together as the group stage filled out. The brands that held
+        richness as the fixture list thinned finished top.
+  - type: snapshot
+    data:
+      id: boostTrajectoryScatter
+      eyebrow: Cheltenham 2026
+      heading: An example of competitive generosity over time.
+      lede: >-
+        Median boost percentage against margin conceded across fifteen weeks —
+        William Hill, Paddy Power, and bet365. Scrub the timeline to watch three
+        strategies separate through Cheltenham and beyond.
+      closing: >-
+        William Hill escalated past the festival and held the new baseline.
+        Paddy Power spiked for Cheltenham and reverted cleanly. bet365 barely
+        moved. By May, William Hill's weekly floor sat above Paddy Power's
+        Cheltenham peak — a bigger headline is not the same as a better price.
   - type: method
     data:
       heading: How Jurnii 360 actually works.
@@ -149,43 +172,6 @@ sections:
           body: >-
             Your account team reviews accuracy with you weekly for the first
             month, then monthly, with a quarterly strategy review.
-  - type: testimonials
-    data:
-      eyebrow: Testimonials
-      heading: Trusted on the<br/>commercial floor.
-      items:
-        - quote: >-
-            The first quarter alone paid for the platform twice over. We pulled
-            three reload offers that no major competitor had run for nine months
-            — and saw zero churn impact.
-          author: Marcus Hale
-          role: Head of CRM · Tier 1 European operator
-          initials: MH
-          color: green
-        - quote: >-
-            We used to find out about a competitor’s price-boost campaign from
-            Twitter. Now it’s a Slack alert before they’ve even finished rolling
-            it out.
-          author: Priya Nadar
-          role: Head of Trading · Multi-market sportsbook
-          initials: PN
-          color: blue
-        - quote: >-
-            It settled an argument we’d been having for two years. The market
-            data was right there on the screen — no more “I think” in the Monday
-            meeting.
-          author: Daniel Okafor
-          role: Group Marketing Director · Tier 1 operator
-          initials: DO
-          color: orange
-        - quote: >-
-            The historical database alone is worth it. We replayed a
-            competitor’s entire seasonal playbook in an afternoon and built our
-            counter off it.
-          author: Elena Rossi
-          role: Head of Casino · Tier 2 European operator
-          initials: ER
-          color: purple
   - type: personas
     data:
       heading: Who 360 is built for.
@@ -220,14 +206,11 @@ sections:
       primary:
         label: Book a demo
         href: /contact-us
-      secondary:
-        label: Read sample report
-        href: /library?cat=report
 ---
 
 # Jurnii 360
 
-See every competitor move, the day it happens. Jurnii 360 monitors competitor promotions, segmentation, and proposition changes daily across 20+ operators.
+See every competitor move, the day it happens. Jurnii 360 monitors competitor promotions, boosts, and proposition changes daily across 20+ operators.
 
 ## Platform Metrics
 
@@ -321,21 +304,14 @@ Your account team reviews accuracy with you weekly for the first month, then mon
 
 ## What Our Clients Say
 
-> "The first quarter alone paid for the platform twice over. We pulled three reload offers that no major competitor had run for nine months — and saw zero churn impact."
+> "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling."
 >
-> — **Marcus Hale**, Head of CRM · Tier 1 European operator
+> — **David Cox**, CX Consultant
 
-> "We used to find out about a competitor's price-boost campaign from Twitter. Now it's a Slack alert before they've even finished rolling it out."
+> "This kind of report would have taken three months to generate via usual research processes."
 >
-> — **Priya Nadar**, Head of Trading · Multi-market sportsbook
+> — **Ryan Schembri**, CPO at Betsson
 
-> "It settled an argument we'd been having for two years. The market data was right there on the screen — no more 'I think' in the Monday meeting."
->
-> — **Daniel Okafor**, Group Marketing Director · Tier 1 operator
-
-> "The historical database alone is worth it. We replayed a competitor's entire seasonal playbook in an afternoon and built our counter off it."
->
-> — **Elena Rossi**, Head of Casino · Tier 2 European operator
 
 ## Who 360 is Built For
 
@@ -400,26 +376,16 @@ testimonials:
   eyebrow: Testimonials
   heading: Trusted on the<br/>commercial floor.
   items:
-    - quote: The first quarter alone paid for the platform twice over. We pulled three reload offers that no major competitor had run for nine months — and saw zero churn impact.
-      author: Marcus Hale
-      role: Head of CRM · Tier 1 European operator
-      initials: MH
+    - quote: I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.
+      author: David Cox
+      role: CX Consultant
+      initials: DC
       color: green
-    - quote: We used to find out about a competitor’s price-boost campaign from Twitter. Now it’s a Slack alert before they’ve even finished rolling it out.
-      author: Priya Nadar
-      role: Head of Trading · Multi-market sportsbook
-      initials: PN
+    - quote: This kind of report would have taken three months to generate via usual research processes.
+      author: Ryan Schembri
+      role: CPO at Betsson
+      initials: RS
       color: blue
-    - quote: It settled an argument we’d been having for two years. The market data was right there on the screen — no more “I think” in the Monday meeting.
-      author: Daniel Okafor
-      role: Group Marketing Director · Tier 1 operator
-      initials: DO
-      color: orange
-    - quote: The historical database alone is worth it. We replayed a competitor’s entire seasonal playbook in an afternoon and built our counter off it.
-      author: Elena Rossi
-      role: Head of Casino · Tier 2 European operator
-      initials: ER
-      color: purple
 personas:
   heading: Who 360 is built for.
   sub: "It's a horizontal tool, but it answers different questions for different roles."
@@ -442,9 +408,6 @@ cta:
   primary:
     label: Book a demo
     href: /contact-us
-  secondary:
-    label: Read sample report
-    href: /library
 renderFlags:
   hasPriceBoostTeaser: true
   hasPromotionsByVertical: true

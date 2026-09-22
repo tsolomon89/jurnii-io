@@ -81,10 +81,10 @@ sections:
       resultNote: "Jurnii 360 tracks 100% of competitor promotion moves automatically, saving 30+ hours per week across CRM and commercial teams."
   - type: testimonial
     data:
-      quote: Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.
-      avatar: GM
-      name: General Manager, Europe iGaming Conglomerate
-      role: Integrated Portfolio Operations
+      quote: This kind of report would have taken three months to generate via usual research processes.
+      name: Ryan Schembri
+      role: CPO at Betsson
+      avatar: RS
   - type: ecosystem
     data:
       heading: Intelligence Integrations

@@ -75,10 +75,10 @@ sections:
       resultNote: Based on 12-month rolling attribution across 35 regulated markets.
   - type: testimonial
     data:
-      quote: Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.
-      name: Director of Commercial Strategy
-      role: Tier-1 European iGaming Operator
-      avatar: DS
+      quote: I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.
+      name: David Cox
+      role: CX Consultant
+      avatar: DC
   - type: ecosystem
     data:
       heading: Connected Intelligence Ecosystem

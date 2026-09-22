@@ -324,7 +324,7 @@ const TeleJourneys = () => (
   <div className="tele-pane">
     <div className="tele-pane-head">
       <h3>Journey Matrix</h3>
-      <p>Touchpoint-level scoring across ten core player journeys, benchmarked brand-by-brand against the Jurnii market average.</p>
+      <p>Touchpoint-level scoring across 10–12 core player journeys, benchmarked brand-by-brand against the Jurnii market average.</p>
     </div>
     <div className="tele-matrix-wrap">
       <table className="tele-matrix">

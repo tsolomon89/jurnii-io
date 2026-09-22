@@ -105,10 +105,10 @@ sections:
       resultNote: Continuous automated scanning prevents competitive blind spots across 35 monitored markets.
   - type: testimonial
     data:
-      quote: Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.
-      avatar: GM
-      name: General Manager, Europe iGaming Conglomerate
-      role: Integrated Portfolio Operations
+      quote: I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.
+      name: David Cox
+      role: CX Consultant
+      avatar: DC
   - type: ecosystem
     data:
       heading: Intelligence Integrations

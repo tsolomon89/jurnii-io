@@ -15,6 +15,13 @@
   },
   "headers": [
     {
+      "source": "/llms.txt",
+      "headers": [
+        { "key": "Content-Type", "value": "text/markdown; charset=utf-8" },
+        { "key": "Cache-Control", "value": "public, max-age=3600" }
+      ]
+    },
+    {
       "source": "/api/(.*)",
       "headers": [
         { "key": "X-Content-Type-Options", "value": "nosniff" },
@@ -43,7 +50,7 @@
       "destination": "/admin-form.html"
     },
     {
-      "source": "/((?!api/|robots\\.txt|sitemap\\.xml).*)",
+      "source": "/((?!api/|robots\\.txt|sitemap\\.xml|llms\\.txt).*)",
       "destination": "/index.html"
     }
   ]
