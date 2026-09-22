@@ -6,18 +6,18 @@ const { useRef: pbUseRef, useEffect: pbUseEffect } = React;
 // Generic monogram tiles — NOT logo recreations. Operator names are the
 // competitive-intelligence point of the product; the tiles are original chips.
 const PB_ROWS = [
-  { op: 'William Hill', m: 'WH', bg: '#0A1A3A', fg: 'var(--white)', sport: 'Football',     event: 'Premier League',          market: 'Acca Boost',              date: '29/09/2025' },
-  { op: 'Bet365',       m: 'B',  bg: '#16713F', fg: 'var(--white)', sport: 'Football',     event: 'Premier League',          market: 'Bet Boost',               date: '29/09/2025' },
-  { op: 'Ladbrokes',    m: 'L',  bg: '#D81F26', fg: 'var(--white)', sport: 'Football',     event: 'Premier League',          market: 'Turbo Boost',             date: '29/09/2025' },
-  { op: 'SkyBet',       m: 'SB', bg: '#102A43', fg: 'var(--white)', sport: 'Football',     event: 'UEFA Champions Leag\u2026', market: 'Price Boost',             date: '29/09/2025' },
-  { op: 'Coral',        m: 'C',  bg: '#155AB0', fg: 'var(--white)', sport: 'Football',     event: 'UEFA Champions Leag\u2026', market: 'Bet Builder + Boost\u2026', date: '29/09/2025' },
-  { op: 'William Hill', m: 'WH', bg: '#0A1A3A', fg: 'var(--white)', sport: 'Football',     event: 'La Liga',                 market: 'Odds Booster \u2013 Foo\u2026', date: '29/09/2025' },
-  { op: 'Bet365',       m: 'B',  bg: '#16713F', fg: 'var(--white)', sport: 'Football',     event: 'Ligue 1',                 market: 'Boost your Acca wit\u2026', date: '29/09/2025' },
-  { op: 'Ladbrokes',    m: 'L',  bg: '#D81F26', fg: 'var(--white)', sport: 'Horse Racing', event: 'Cheltenham Festival',     market: 'Bet Builder Boost',       date: '29/09/2025' },
-  { op: 'SkyBet',       m: 'SB', bg: '#102A43', fg: 'var(--white)', sport: 'Horse Racing', event: 'Cheltenham Festival',     market: 'Price Boost',             date: '29/09/2025' },
-  { op: 'Coral',        m: 'C',  bg: '#155AB0', fg: 'var(--white)', sport: 'Tennis',       event: 'ATP',                     market: 'Get a 25% Winning\u2026', date: '29/09/2025' },
-  { op: 'Bet365',       m: 'B',  bg: '#16713F', fg: 'var(--white)', sport: 'Tennis',       event: 'WTA Tour',                market: 'Acca Insurance',          date: '29/09/2025' },
-  { op: 'William Hill', m: 'WH', bg: '#0A1A3A', fg: 'var(--white)', sport: 'Basketball',   event: 'NBA',                     market: 'Points Boost',           date: '29/09/2025' },
+  { op: 'William Hill', m: 'WH', bg: '#0A1A3A', fg: 'var(--white)', sport: 'Football',     competition: 'Premier League',          type: 'Acca boost',          date: '29/09/2025' },
+  { op: 'Bet365',       m: 'B',  bg: '#16713F', fg: 'var(--white)', sport: 'Football',     competition: 'Premier League',          type: 'Price boost',         date: '29/09/2025' },
+  { op: 'Ladbrokes',    m: 'L',  bg: '#D81F26', fg: 'var(--white)', sport: 'Football',     competition: 'Premier League',          type: 'Hero boost',          date: '29/09/2025' },
+  { op: 'SkyBet',       m: 'SB', bg: '#102A43', fg: 'var(--white)', sport: 'Football',     competition: 'UEFA Champions League',   type: 'Promoted price',      date: '29/09/2025' },
+  { op: 'Coral',        m: 'C',  bg: '#155AB0', fg: 'var(--white)', sport: 'Football',     competition: 'UEFA Champions League',   type: 'Bet builder boost',   date: '29/09/2025' },
+  { op: 'William Hill', m: 'WH', bg: '#0A1A3A', fg: 'var(--white)', sport: 'Football',     competition: 'La Liga',                 type: 'In-play boost',       date: '29/09/2025' },
+  { op: 'Bet365',       m: 'B',  bg: '#16713F', fg: 'var(--white)', sport: 'Football',     competition: 'Ligue 1',                 type: 'Acca boost',          date: '29/09/2025' },
+  { op: 'Ladbrokes',    m: 'L',  bg: '#D81F26', fg: 'var(--white)', sport: 'Horse Racing', competition: 'Cheltenham Festival',     type: 'Bet builder boost',   date: '29/09/2025' },
+  { op: 'SkyBet',       m: 'SB', bg: '#102A43', fg: 'var(--white)', sport: 'Horse Racing', competition: 'Cheltenham Festival',     type: 'Price boost',         date: '29/09/2025' },
+  { op: 'Coral',        m: 'C',  bg: '#155AB0', fg: 'var(--white)', sport: 'Tennis',       competition: 'ATP',                     type: 'Profit boost',        date: '29/09/2025' },
+  { op: 'Bet365',       m: 'B',  bg: '#16713F', fg: 'var(--white)', sport: 'Tennis',       competition: 'WTA Tour',                type: 'Specials',            date: '29/09/2025' },
+  { op: 'William Hill', m: 'WH', bg: '#0A1A3A', fg: 'var(--white)', sport: 'Basketball',   competition: 'NBA',                     type: 'In-play boost',       date: '29/09/2025' },
 ];
 
 const PbSortIco = () => <i data-lucide="arrow-up-down" className="pbt-sort" />;
@@ -64,8 +64,8 @@ const PriceBoostTable = () => {
               <tr>
                 <th className="pbt-th-op"><span>Operator</span><PbSortIco /></th>
                 <th className="pbt-th-sort"><span>Sport</span><PbSortIco /></th>
-                <th>Event</th>
-                <th>Market</th>
+                <th>Competition</th>
+                <th>Type</th>
                 <th>Date</th>
               </tr>
             </thead>
@@ -79,8 +79,8 @@ const PriceBoostTable = () => {
                     </div>
                   </td>
                   <td>{r.sport}</td>
-                  <td>{r.event}</td>
-                  <td>{r.market}</td>
+                  <td>{r.competition}</td>
+                  <td>{r.type}</td>
                   <td className="pbt-date">{r.date}</td>
                 </tr>
               ))}

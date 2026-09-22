@@ -44,9 +44,9 @@ const Hero = () => {
             <a href="/contact-us" className="btn primary lg" data-cta-action="demo" data-cta-id="home-hero">See how it works <i data-lucide="arrow-right" style={{ width: 14, height: 14 }} className="arrow" /></a>
           </div>
           <div className="hero-stats">
-            <div><div className="n">850+</div><div className="l">Promotions tracked at Cheltenham 2026 across 20+ operators</div></div>
-            <div><div className="n">70+</div><div className="l">Ranked UX recommendations per audit, commercially weighted</div></div>
-            <div><div className="n">2.3m+</div><div className="l">Total press reach across iGaming Business, SiGMA, Next.io</div></div>
+            <div><div className="n">1000+</div><div className="l">Offers tracked weekly per market</div></div>
+            <div><div className="n">35</div><div className="l">Markets covered</div></div>
+            <div><div className="n">75</div><div className="l">Recommendations</div></div>
           </div>
         </div>
         <div className="hero-visual" style={{ position: 'relative' }}>
@@ -224,19 +224,36 @@ const HeroTicker = () => {
 };
 
 // ---------- Logo bar ----------
-const LogoBar = () =>
-<section className="logo-bar reveal">
-    <div className="container">
-      <div className="logo-bar-label">Trusted by leading businesses</div>
-      <div className="logo-bar-row">
-        <BrandWordmark name="Evoke" />
-        <BrandWordmark name="MnS" />
-        <BrandWordmark name="LeoVegas" />
-        <BrandWordmark name="DAZN" />
-        <BrandWordmark name="Betsson" />
+const OPERATOR_LOGOS = [
+  'Flutter',
+  'Evoke',
+  'Betsson',
+  'LeoVegas',
+  'Superbet',
+  'Novibet',
+  'ComeOn',
+  'FDJ',
+];
+
+const LogoBar = () => {
+  const loop = [...OPERATOR_LOGOS, ...OPERATOR_LOGOS];
+  return (
+    <section className="logo-bar reveal">
+      <div className="container">
+        <div className="logo-bar-label">Operators we work with</div>
       </div>
-    </div>
-  </section>;
+      <div className="logo-bar-marquee" aria-label="Operators we work with">
+        <div className="logo-bar-track">
+          {loop.map((name, i) => (
+            <div className="logo-bar-item" key={`${name}-${i}`} aria-hidden={i >= OPERATOR_LOGOS.length}>
+              <BrandWordmark name={name} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
 
 
 
@@ -319,7 +336,7 @@ const PRODUCT_TABS = [
   'Usability, brand trust, and friction-point identification',
   'Benchmarked against 20+ competitor operators in your market',
   'Proactive — issues surfaced before they show up in churn data',
-  'Feeds directly into Cortex as a causal variable'],
+  'Feeds directly into Marketing Mix Models as a causal variable'],
 
   stats: [{ n: '70+', l: 'Recommendations' }, { n: '48h', l: 'Turnaround' }, { n: '20+', l: 'Operators benchmarked' }],
   chips: ['Registration', 'Deposit', 'Bet placement', 'Withdrawal', 'Reactivation', 'KYC', 'Mobile-first'],
@@ -333,8 +350,8 @@ const PRODUCT_TABS = [
   'Competitor promotion tracking — every live promo, automatically surfaced',
   'Release timing insights — when and how often competitors launch offers',
   'Offer benchmarking — bonus size, mechanic, targeting, and positioning',
-  'Market segmentation analysis — which player segments are being targeted',
-  'Real-time alerts when a major competitor changes strategy',
+  "Boost margins — showing every competitor's boost percentage and the margin you concede each time you match or beat it",
+  'Competitive data formatted for your MMM, so incremental NGR splits out from market-wide moves',
   'Historical database for seasonal trend analysis'],
 
   stats: [{ n: '850+', l: 'Promos tracked (Cheltenham)' }, { n: 'Daily', l: 'Update frequency' }, { n: '20+', l: 'Operators monitored' }],
@@ -441,20 +458,42 @@ const ProofSection = () =>
         </div>
         <article className="tm-card proof-quote" style={{ flex: 'none', width: 'auto' }}>
           <header className="tm-card-head">
-            <TmAvatar author="Jane Davies" initials="JD" color="green" />
+            <TmAvatar author="David Cox" initials="DC" color="green" />
             <div className="tm-id">
-              <b>Jane Davies</b>
-              <span>Chief Commercial Officer · Tier 1 European operator</span>
+              <b>David Cox</b>
+              <span>CX Consultant</span>
             </div>
           </header>
-          <blockquote className="tm-quote">Jurnii became the only intelligence source our trading, CRM, and product teams agreed on. The arguments stopped being about whose data was right — they became about what to do.</blockquote>
+          <blockquote className="tm-quote">I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.</blockquote>
+        </article>
+        <article className="tm-card proof-quote" style={{ flex: 'none', width: 'auto' }}>
+          <header className="tm-card-head">
+            <TmAvatar author="Ryan Schembri" initials="RS" color="blue" />
+            <div className="tm-id">
+              <b>Ryan Schembri</b>
+              <span>CPO at Betsson</span>
+            </div>
+          </header>
+          <blockquote className="tm-quote">This kind of report would have taken three months to generate via usual research processes.</blockquote>
         </article>
         <div className="proof-press">
-          <h3>In the press</h3>
+          <h3 className="proof-press-label">In the press</h3>
           <div className="proof-press-list">
-            <div className="proof-press-item"><div><b style={{ fontSize: "16px", fontWeight: 500, color: "var(--foreground)" }}>"Jurnii's promo intelligence is rewriting Cheltenham strategy"</b><span style={{ fontSize: "12px" }}>March 2026 · Feature</span></div><span className="src">iGaming Biz</span></div>
-            <div className="proof-press-item"><div><b style={{ fontSize: "16px", color: "var(--foreground)" }}>"How AI is finally being used properly in iGaming"</b><span style={{ fontSize: "12px" }}>Feb 2026 · Op-ed</span></div><span className="src">Next.io</span></div>
-            <div className="proof-press-item"><div><b style={{ fontSize: "16px", color: "var(--foreground)" }}>"The intelligence stack of the Tier 1 operator"</b><span style={{ fontSize: "12px" }}>Jan 2026 · Panel</span></div><span className="src">SiGMA</span></div>
+            <article className="proof-press-item">
+              <span className="src">iGaming Biz</span>
+              <b>Jurnii's promo intelligence is rewriting Cheltenham strategy</b>
+              <span className="meta">March 2026 · Feature</span>
+            </article>
+            <article className="proof-press-item">
+              <span className="src">Next.io</span>
+              <b>How AI is finally being used properly in iGaming</b>
+              <span className="meta">Feb 2026 · Op-ed</span>
+            </article>
+            <article className="proof-press-item">
+              <span className="src">SiGMA</span>
+              <b>The intelligence stack of the Tier 1 operator</b>
+              <span className="meta">Jan 2026 · Panel</span>
+            </article>
           </div>
         </div>
       </div>
@@ -503,11 +542,6 @@ const CompareSection = () =>
             </tbody>
           </table>
         </div>
-      </div>
-      <div style={{ display: 'flex', gap: 12, marginTop: 24, flexWrap: 'wrap' }}>
-        <a className="btn ghost sm" href="/library/compare-ekimetrics">vs Ekimetrics</a>
-        <a className="btn ghost sm" href="/library/compare-nielsen">vs Nielsen</a>
-        <a className="btn ghost sm" href="/library/compare-ux-agencies">vs UX agencies</a>
       </div>
     </div>
   </section>;

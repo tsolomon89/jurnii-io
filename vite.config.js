@@ -143,12 +143,33 @@ function copyRuntimeAssets() {
   };
 }
 
+function serveLlmsTxt() {
+  return {
+    name: 'serve-llms-txt',
+    configureServer(server) {
+      server.middlewares.use(async (req, res, next) => {
+        const url = req.url?.split('?')[0];
+        if (url !== '/llms.txt') return next();
+        try {
+          const { buildLlmsTxt } = await import('./src/content-engine/utils/llms-txt.ts');
+          const body = buildLlmsTxt(process.env.SITE_URL || 'https://jurnii.io');
+          res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+          res.setHeader('Cache-Control', 'no-store');
+          res.end(body);
+        } catch (err) {
+          next(err);
+        }
+      });
+    },
+  };
+}
+
 export default defineConfig({
   define: {
     'process.env.NODE_ENV': JSON.stringify('production'),
     'process.env': '{}',
   },
-  plugins: [legacyJsxGlobals(), babelHtmlBridge(root), fontsMonoAsyncHtml(), react(), copyRuntimeAssets()],
+  plugins: [legacyJsxGlobals(), babelHtmlBridge(root), fontsMonoAsyncHtml(), react(), copyRuntimeAssets(), serveLlmsTxt()],
   resolve: {
     alias: {
       '@assets': path.join(root, 'assets'),

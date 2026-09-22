@@ -1,0 +1,239 @@
+/* ============================================================
+   World Cup SoPV race  (Jurnii 360 snapshot)
+   ============================================================ */
+.wc-race {
+  width: 100%;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.wc-race.is-in {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wc-race {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+.wc-race-card {
+  background: var(--card);
+  color: var(--card-foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-3xl);
+  padding: var(--spacing-10) var(--spacing-12) var(--spacing-8);
+  box-shadow: 0 1px 2px var(--black-a-4), 0 14px 40px -18px var(--black-a-22);
+}
+[data-theme="dark"] .wc-race-card,
+[data-theme="jurnii-v1"] .wc-race-card {
+  box-shadow: 0 1px 2px var(--black-a-12), 0 18px 48px -16px var(--black-a-45);
+}
+
+.wc-race-ctl {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-6);
+}
+
+.wc-race-play {
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-4) var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius-full);
+  background: var(--accent-green);
+  color: var(--concrete-950);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  font-weight: var(--fw-semibold);
+  line-height: 1;
+  transition: filter 0.16s ease, transform 0.16s ease;
+  flex: none;
+}
+.wc-race-play:hover {
+  filter: brightness(1.05);
+}
+.wc-race-play:active {
+  transform: scale(0.98);
+}
+.wc-race-play.is-playing {
+  background: color-mix(in srgb, var(--accent-green) 82%, var(--foreground));
+}
+[data-theme="dark"] .wc-race-play,
+[data-theme="jurnii-v1"] .wc-race-play {
+  color: var(--concrete-950);
+}
+
+.wc-race-scrub {
+  flex: 1;
+  min-width: 140px;
+  height: 4px;
+  appearance: none;
+  background: color-mix(in srgb, var(--card-foreground) 14%, transparent);
+  border-radius: var(--radius-full);
+  outline: none;
+  accent-color: var(--accent-green);
+  cursor: pointer;
+}
+.wc-race-scrub::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  border: 2px solid var(--card);
+  box-shadow: 0 1px 3px var(--black-a-30);
+  cursor: pointer;
+}
+.wc-race-scrub::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  border: 2px solid var(--card);
+  box-shadow: 0 1px 3px var(--black-a-30);
+  cursor: pointer;
+}
+
+.wc-race-week {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: var(--fw-semibold);
+  font-variant-numeric: tabular-nums;
+  color: var(--foreground);
+  min-width: 5.5rem;
+  text-align: right;
+}
+
+.wc-race-chart {
+  position: relative;
+  width: 100%;
+  padding-right: 3.25rem; /* room for % labels past the longest bar */
+}
+
+.wc-race-row {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 32px;
+  display: grid;
+  grid-template-columns: minmax(5.5rem, 7.5rem) 1fr;
+  align-items: center;
+  gap: var(--spacing-3);
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .wc-race-row {
+    transition: none;
+  }
+}
+
+.wc-race-name {
+  font-size: var(--text-sm);
+  font-weight: var(--fw-medium);
+  color: var(--muted-foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: right;
+}
+
+.wc-race-track {
+  position: relative;
+  height: 18px;
+  min-width: 0;
+}
+
+.wc-race-bar {
+  height: 100%;
+  border-radius: 4px;
+  min-width: 2px;
+  transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .wc-race-bar {
+    transition: none;
+  }
+}
+
+.wc-race-val {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 8px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  font-variant-numeric: tabular-nums;
+  color: var(--foreground);
+  transition: left 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  white-space: nowrap;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wc-race-val {
+    transition: none;
+  }
+}
+
+.wc-race-caption {
+  margin: var(--spacing-6) 0 0;
+  padding-top: var(--spacing-4);
+  border-top: 1px solid var(--border);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--muted-foreground);
+  max-width: none;
+  width: 100%;
+}
+
+.section-closing {
+  font-size: var(--text-base);
+  line-height: 1.55;
+  color: var(--foreground);
+  max-width: none;
+  width: 100%;
+  margin: var(--spacing-6) 0 0;
+}
+
+/* Snapshot sections: head / lede / closing span the full content column */
+.section-snapshot .section-head,
+.section-snapshot .section-lede,
+.section-snapshot .section-closing {
+  max-width: none;
+}
+
+@media (max-width: 640px) {
+  .wc-race-card {
+    padding: var(--spacing-5) var(--spacing-5) var(--spacing-5);
+    border-radius: var(--radius-2xl);
+  }
+  .wc-race-row {
+    grid-template-columns: minmax(4.5rem, 5.75rem) 1fr;
+    gap: var(--spacing-2);
+  }
+  .wc-race-name {
+    font-size: var(--text-xs);
+  }
+  .wc-race-week {
+    min-width: 0;
+    width: 100%;
+    text-align: left;
+    order: 3;
+  }
+  .wc-race-scrub {
+    order: 2;
+    width: 100%;
+    flex: 1 1 100%;
+  }
+}

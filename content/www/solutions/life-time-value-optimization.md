@@ -88,10 +88,10 @@ sections:
       resultNote: Continuous automated scanning prevents competitive blind spots across 35 monitored markets.
   - type: testimonial
     data:
-      quote: Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.
-      avatar: GM
-      name: General Manager, Europe iGaming Conglomerate
-      role: Integrated Portfolio Operations
+      quote: This kind of report would have taken three months to generate via usual research processes.
+      name: Ryan Schembri
+      role: CPO at Betsson
+      avatar: RS
   - type: ecosystem
     data:
       heading: Intelligence Integrations

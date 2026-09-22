@@ -85,10 +85,10 @@ sections:
       resultNote: Based on 12-month rolling attribution across 35 regulated markets.
   - type: testimonial
     data:
-      quote: Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.
-      name: Director of Commercial Strategy
-      role: Tier-1 European iGaming Operator
-      avatar: DS
+      quote: This kind of report would have taken three months to generate via usual research processes.
+      name: Ryan Schembri
+      role: CPO at Betsson
+      avatar: RS
   - type: ecosystem
     data:
       heading: Connected Intelligence Ecosystem

@@ -5,9 +5,8 @@ window.PRODUCT_DATA = {
     kicker: '',
     accent: 'accent-360',
     title: 'See every competitor move, the day it happens.',
-    lede: 'Jurnii 360 monitors competitor promotions, segmentation, and proposition changes daily across 20+ operators — so your trading, CRM, and product teams stop running on guesswork.',
+    lede: 'Jurnii 360 monitors competitor promotions, boosts, and proposition changes daily across 20+ operators — so your trading, CRM, and product teams stop running on guesswork.',
     primary: { label: 'Book a 45-min demo', href: '/contact-us' },
-    secondary: { label: 'See sample report', href: '/library?cat=report' },
 
     features: {
       heading: 'A live intelligence layer for the commercial floor.',
@@ -16,7 +15,7 @@ window.PRODUCT_DATA = {
         { icon: 'radar', title: 'Daily promotion capture', body: 'Welcome offers, reload offers, free bets, free spins, cashback — captured daily across the competitor set with full structured metadata.' },
         { icon: 'bell', title: 'Real-time change alerts', body: 'Slack or email alerts the moment a competitor changes a hero offer, lowers a wagering requirement, or launches a campaign.' },
         { icon: 'layers', title: 'Promotion richness index', body: 'A weighted composite score that lets you compare like-for-like across operators — beyond headline values.' },
-        { icon: 'users', title: 'Segmentation & targeting analysis', body: 'Identify which player segments competitors are targeting, with what message, and at what cadence.' },
+        { icon: 'percent', title: 'Boost margin intelligence', body: 'Every competitor\'s boost margin, scored to the tenth of a point — and the margin you concede each time you match or beat it.' },
         { icon: 'history', title: 'Historical database', body: 'Multi-year history of every promotion in the market. Search, filter, and replay any competitor\'s playbook.' },
         { icon: 'plug-zap', title: 'API & BI integration', body: 'REST API, Snowflake / BigQuery / Databricks exports, and ready-made dashboards for Tableau and Looker.' },
       ],
@@ -50,10 +49,8 @@ window.PRODUCT_DATA = {
       eyebrow: 'Testimonials',
       heading: 'Trusted on the<br/>commercial floor.',
       items: [
-        { quote: 'The first quarter alone paid for the platform twice over. We pulled three reload offers that no major competitor had run for nine months — and saw zero churn impact.', author: 'Marcus Hale', role: 'Head of CRM · Tier 1 European operator', initials: 'MH', color: 'green' },
-        { quote: 'We used to find out about a competitor\u2019s price-boost campaign from Twitter. Now it\u2019s a Slack alert before they\u2019ve even finished rolling it out.', author: 'Priya Nadar', role: 'Head of Trading · Multi-market sportsbook', initials: 'PN', color: 'blue' },
-        { quote: 'It settled an argument we\u2019d been having for two years. The market data was right there on the screen — no more \u201CI think\u201D in the Monday meeting.', author: 'Daniel Okafor', role: 'Group Marketing Director · Tier 1 operator', initials: 'DO', color: 'orange' },
-        { quote: 'The historical database alone is worth it. We replayed a competitor\u2019s entire seasonal playbook in an afternoon and built our counter off it.', author: 'Elena Rossi', role: 'Head of Casino · Tier 2 European operator', initials: 'ER', color: 'purple' },
+        { quote: "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.", author: 'David Cox', role: 'CX Consultant', initials: 'DC', color: 'green' },
+        { quote: 'This kind of report would have taken three months to generate via usual research processes.', author: 'Ryan Schembri', role: 'CPO at Betsson', initials: 'RS', color: 'blue' },
       ],
     },
 
@@ -75,7 +72,6 @@ window.PRODUCT_DATA = {
     title: 'Replace UX opinion with structured benchmarking.',
     lede: 'Jurnii UX scores every step of every critical journey across your operator and your peer set — so product and design teams ship with evidence, not anecdote.',
     primary: { label: 'Book a demo', href: '/contact-us' },
-    secondary: { label: 'View a demo report', href: '/library?cat=thought' },
 
     features: {
       heading: 'A clear, comparable view of player experience.',
@@ -83,33 +79,33 @@ window.PRODUCT_DATA = {
       items: [
         { icon: 'route', title: 'Journey mapping', body: 'Sign-up, deposit, first bet, casino-to-sport crossover, withdrawal — each scored against 60+ structured criteria.' },
         { icon: 'gauge', title: 'Performance analysis', body: 'Understand if your product is more or less performant than your competition. If not, use the technical recommendations to rectify.' },
-        { icon: 'monitor-smartphone', title: 'Mobile & Desktop', body: 'iOS, Android, mobile web, desktop web — scored separately, then synthesised into a unified score.' },
+        { icon: 'monitor-smartphone', title: 'Mobile & Desktop', body: 'Mobile web and desktop web — scored separately, then synthesised into a unified score.' },
         { icon: 'trophy', title: 'Peer benchmarking', body: 'See exactly where you sit vs your competitors on every criterion. No vague "industry average" averaging.' },
         { icon: 'list-checks', title: 'Prioritised recommendations', body: 'We provide you with categorised recommendations that allow you to build roadmaps, create optimisation experiments or pick off low-hanging fruits.' },
-        { icon: 'refresh-cw', title: 'Recurring assessments', body: 'See how your releases are affecting your score month-on-month, whilst keeping a close eye on your competition, and closing the gap.' },
+        { icon: 'activity', title: 'Change detection', body: 'Track how yours and competitor releases are affecting scores month-on-month. Receive alerts and notifications for key experience changes found.' },
       ],
     },
 
     outcomes: {
       heading: 'What "evidence-based UX" looks like in practice.',
-      sub: 'Outcomes from operators currently scoring quarterly with Jurnii UX.',
+      sub: 'Outcomes from operators currently scoring monthly with Jurnii UX.',
       kpis: [
         { num: '60+', label: 'Criteria per journey', desc: 'Every journey decomposed into structured, scoreable criteria — not a single 1–10 vibe-check.' },
-        { num: '5', label: 'Peer operators', desc: 'Standard scope: your operator + 5 peers, scored side-by-side, every quarter.' },
-        { num: '12 days', label: 'Average audit time', desc: 'From scoping call to delivered first audit, including peer-set calibration.' },
+        { num: '5', label: 'Peer operators', desc: 'Standard scope: your operator + 5 peers, scored side-by-side, every month.' },
+        { num: '<5 days', label: 'Average audit time', desc: 'From scoping call to delivered first audit, including peer-set calibration.' },
         { num: '+8.4pp', label: 'Avg conversion lift', desc: 'Average sign-up→FTD lift after addressing top-3 friction points (over 6 audits).' },
       ],
     },
 
     method: {
       heading: 'How a Jurnii UX audit runs.',
-      sub: 'A predictable, repeatable process — designed to fit a quarterly product cadence.',
+      sub: 'A predictable, repeatable process — designed to fit a monthly product cadence.',
       steps: [
-        { title: 'Define scope', body: 'Agree the journeys (typically 5–7), the peer set (typically 5 operators), and the platforms (iOS, Android, mobile web, desktop web).' },
-        { title: 'Capture & score', body: 'Our analysts plus our scoring layer walk every journey on every platform. Each step is scored, screenshotted, and timestamped.' },
+        { title: 'Define scope', body: 'Agree the journeys (typically 10–12), the peer set (typically 5 operators), and the platforms (mobile web and desktop web).' },
+        { title: 'Capture & score', body: 'Our analysts plus our scoring layer walk every journey on mobile web and desktop. Each step is scored, screenshotted, and timestamped.' },
         { title: 'Calibrate findings', body: 'Findings are calibrated against your internal product team in a half-day workshop — no surprises in the final report.' },
         { title: 'Deliver the audit', body: 'A structured report (executive summary, journey-level scoring, prioritised findings) plus a working dashboard you can re-open any time.' },
-        { title: 'Re-score quarterly', body: 'Each quarter we re-walk the same journeys. You see the impact of what shipped — and where competitors caught up or pulled away.' },
+        { title: 'Re-score monthly', body: 'Each month we re-walk the same journeys. You see the impact of what shipped — and where competitors caught up or pulled away.' },
       ],
     },
 
@@ -117,10 +113,8 @@ window.PRODUCT_DATA = {
       eyebrow: 'Testimonials',
       heading: 'Evidence, not opinion.',
       items: [
-        { quote: 'For the first time, our roadmap arguments stopped being “Spotify does it this way” and started being “we lose 4.2 points to the market on this exact step.” That changed the whole conversation.', author: 'Sofia Lindqvist', role: 'Director of Product · Top 5 European sportsbook', initials: 'SL', color: 'green' },
-        { quote: 'Every finding came with a screenshot and a score. My designers stopped defending taste and started fixing measured problems.', author: 'Tom Wheeler', role: 'Director of Design · Tier 1 operator', initials: 'TW', color: 'blue' },
-        { quote: 'Step-level scoring pointed straight at one screen in our deposit flow. We fixed it in a single sprint and conversion moved the next week.', author: 'Aisha Mansour', role: 'Conversion Lead · Multi-brand casino', initials: 'AM', color: 'orange' },
-        { quote: 'It’s the first UX report I’ve been able to take into a board meeting without translating it first. The commercial weight is already in the numbers.', author: 'James Okonkwo', role: 'Chief Product Officer · Tier 2 operator', initials: 'JO', color: 'purple' },
+        { quote: "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.", author: 'David Cox', role: 'CX Consultant', initials: 'DC', color: 'green' },
+        { quote: 'This kind of report would have taken three months to generate via usual research processes.', author: 'Ryan Schembri', role: 'CPO at Betsson', initials: 'RS', color: 'blue' },
       ],
     },
 
@@ -129,7 +123,7 @@ window.PRODUCT_DATA = {
       sub: 'A product-and-design tool with commercial weight behind every finding.',
       list: [
         { role: 'Head of Product', question: 'Where is our experience leaking NGR?', answer: 'A prioritised list of friction points, ranked by NGR-weighted impact — ready for the next planning cycle.' },
-        { role: 'Director of Design', question: 'Are we shipping enough, fast enough?', answer: 'Quarterly re-scoring shows whether design throughput is moving the metrics that matter — or just shipping new screens.' },
+        { role: 'Director of Design', question: 'Are we shipping enough, fast enough?', answer: 'Monthly re-scoring shows whether design throughput is moving the metrics that matter — or just shipping new screens.' },
         { role: 'Conversion / CRO Lead', question: 'Which step is the bottleneck?', answer: 'Step-level scoring isolates the single most impactful change for the next sprint.' },
         { role: 'CCO / CMO', question: 'Is product keeping up with marketing?', answer: 'A clear, executive-level view of whether the experience justifies the acquisition spend.' },
       ],
@@ -186,10 +180,8 @@ window.PRODUCT_DATA = {
       eyebrow: 'Testimonials',
       heading: 'A model commercial teams believe.',
       items: [
-        { quote: 'Every MMM we’d looked at before came from a consultancy that had clearly never run an iGaming P&L. Jurnii’s model had the bonus structure right inside the regression. That was the difference.', author: 'Lukas Brandt', role: 'Group Head of Performance · Multi-jurisdiction operator', initials: 'LB', color: 'green' },
-        { quote: 'For once the marketing line in the board pack came with confidence bands, not a story. Our CFO actually signed off the increase.', author: 'Rachel Donovan', role: 'VP Finance · Tier 1 European operator', initials: 'RD', color: 'blue' },
-        { quote: 'The saturation curves told us paid search was tapped out two quarters before we’d have felt it. We moved the budget and kept the growth.', author: 'Nikhil Rao', role: 'Head of Performance · Multi-market operator', initials: 'NR', color: 'orange' },
-        { quote: 'It’s the only model I’ve seen that treats a free-bet campaign and a TV burst in the same framework. That’s how we actually spend.', author: 'Hannah Vogel', role: 'Chief Marketing Officer · Tier 2 operator', initials: 'HV', color: 'purple' },
+        { quote: "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.", author: 'David Cox', role: 'CX Consultant', initials: 'DC', color: 'green' },
+        { quote: 'This kind of report would have taken three months to generate via usual research processes.', author: 'Ryan Schembri', role: 'CPO at Betsson', initials: 'RS', color: 'blue' },
       ],
     },
 

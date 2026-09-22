@@ -51,8 +51,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
           "description": "Simulate budget shifts, new channel experiments, and regulatory shocks before committing real spend."
         }
       ],
-      "pullQuote": "Cortex gave us the first causal view of our marketing spend. We stopped guessing and started optimising within six weeks.",
-      "pullQuoteAttribution": "Director of Commercial Strategy, Tier-1 Operator",
+      "pullQuote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+      "pullQuoteAttribution": "David Cox, CX Consultant",
       "productRefs": [],
       "featureRefs": [
         "competitor-ai-insights",
@@ -131,17 +131,17 @@ export const CONTENT_MANIFEST: ContentItem[] = [
             "heading": "A model commercial teams believe.",
             "items": [
               {
-                "quote": "Cortex replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-                "author": "Director of Commercial Strategy",
-                "role": "Tier-1 European iGaming Operator",
-                "initials": "DS",
+                "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+                "author": "David Cox",
+                "role": "CX Consultant",
+                "initials": "DC",
                 "color": "green"
               },
               {
-                "quote": "For once the marketing line in the board pack came with confidence bands, not a story. Our CFO actually signed off the increase.",
-                "author": "VP Finance",
-                "role": "Multi-jurisdiction iGaming Operator",
-                "initials": "VP",
+                "quote": "This kind of report would have taken three months to generate via usual research processes.",
+                "author": "Ryan Schembri",
+                "role": "CPO at Betsson",
+                "initials": "RS",
                 "color": "blue"
               }
             ]
@@ -198,8 +198,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "title": "Jurnii 360",
       "date": "2026-01-01",
       "medium": "Page",
-      "excerpt": "See every competitor move, the day it happens. Jurnii 360 monitors competitor promotions, segmentation, and proposition changes daily across 20+ operators.",
-      "description": "See every competitor move, the day it happens. Jurnii 360 monitors competitor promotions, segmentation, and proposition changes daily across 20+ operators.",
+      "excerpt": "See every competitor move, the day it happens. Jurnii 360 monitors competitor promotions, boosts, and proposition changes daily across 20+ operators.",
+      "description": "See every competitor move, the day it happens. Jurnii 360 monitors competitor promotions, boosts, and proposition changes daily across 20+ operators.",
       "author": "Jurnii Research",
       "category": "Commercial Intelligence",
       "tags": [],
@@ -210,10 +210,6 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "primaryCta": {
         "label": "Book a 45-min demo",
         "href": "/contact-us"
-      },
-      "secondaryCta": {
-        "label": "See sample report",
-        "href": "/library?cat=report"
       },
       "features": {
         "heading": "A live intelligence layer for the commercial floor.",
@@ -235,9 +231,9 @@ export const CONTENT_MANIFEST: ContentItem[] = [
             "body": "A weighted composite score that lets you compare like-for-like across operators — beyond headline values."
           },
           {
-            "icon": "users",
-            "title": "Segmentation & targeting analysis",
-            "body": "Identify which player segments competitors are targeting, with what message, and at what cadence."
+            "icon": "percent",
+            "title": "Boost margin intelligence",
+            "body": "Every competitor's boost margin, scored to the tenth of a point — and the margin you concede each time you match or beat it."
           },
           {
             "icon": "history",
@@ -265,12 +261,12 @@ export const CONTENT_MANIFEST: ContentItem[] = [
           "description": "A weighted composite score that lets you compare like-for-like across operators — beyond headline values."
         },
         {
-          "title": "Segmentation & targeting analysis",
-          "description": "Identify which player segments competitors are targeting, with what message, and at what cadence."
+          "title": "Boost margin intelligence",
+          "description": "Every competitor's boost margin, scored to the tenth of a point — and the margin you concede each time you match or beat it."
         }
       ],
-      "pullQuote": "The first quarter alone paid for the platform twice over. We pulled three reload offers that no major competitor had run for nine months — and saw zero churn impact.",
-      "pullQuoteAttribution": "Marcus Hale, Head of CRM",
+      "pullQuote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+      "pullQuoteAttribution": "David Cox, CX Consultant",
       "productRefs": [],
       "featureRefs": [
         "competitor-analysis",
@@ -332,6 +328,26 @@ export const CONTENT_MANIFEST: ContentItem[] = [
           "data": "hasPromotionsByVertical"
         },
         {
+          "type": "snapshot",
+          "data": {
+            "id": "worldCupSopvRace",
+            "eyebrow": "World Cup 2026",
+            "heading": "An example from our tournament analysis.",
+            "lede": "Share of promotional voice across the UK and Irish books, week by week through the World Cup. Press play to watch the cumulative table take shape — the same read your commercial team gets from Jurnii 360.",
+            "closing": "William Hill did not lead from the front. Betfred opened at 25.4% and finished at 10.2%. The early weeks were tighter; the top three pulled clear together as the group stage filled out. The brands that held richness as the fixture list thinned finished top."
+          }
+        },
+        {
+          "type": "snapshot",
+          "data": {
+            "id": "boostTrajectoryScatter",
+            "eyebrow": "Cheltenham 2026",
+            "heading": "An example of competitive generosity over time.",
+            "lede": "Median boost percentage against margin conceded across fifteen weeks — William Hill, Paddy Power, and bet365. Scrub the timeline to watch three strategies separate through Cheltenham and beyond.",
+            "closing": "William Hill escalated past the festival and held the new baseline. Paddy Power spiked for Cheltenham and reverted cleanly. bet365 barely moved. By May, William Hill's weekly floor sat above Paddy Power's Cheltenham peak — a bigger headline is not the same as a better price."
+          }
+        },
+        {
           "type": "method",
           "data": {
             "heading": "How Jurnii 360 actually works.",
@@ -360,43 +376,6 @@ export const CONTENT_MANIFEST: ContentItem[] = [
               {
                 "title": "Calibrate weekly",
                 "body": "Your account team reviews accuracy with you weekly for the first month, then monthly, with a quarterly strategy review."
-              }
-            ]
-          }
-        },
-        {
-          "type": "testimonials",
-          "data": {
-            "eyebrow": "Testimonials",
-            "heading": "Trusted on the<br/>commercial floor.",
-            "items": [
-              {
-                "quote": "The first quarter alone paid for the platform twice over. We pulled three reload offers that no major competitor had run for nine months — and saw zero churn impact.",
-                "author": "Marcus Hale",
-                "role": "Head of CRM · Tier 1 European operator",
-                "initials": "MH",
-                "color": "green"
-              },
-              {
-                "quote": "We used to find out about a competitor’s price-boost campaign from Twitter. Now it’s a Slack alert before they’ve even finished rolling it out.",
-                "author": "Priya Nadar",
-                "role": "Head of Trading · Multi-market sportsbook",
-                "initials": "PN",
-                "color": "blue"
-              },
-              {
-                "quote": "It settled an argument we’d been having for two years. The market data was right there on the screen — no more “I think” in the Monday meeting.",
-                "author": "Daniel Okafor",
-                "role": "Group Marketing Director · Tier 1 operator",
-                "initials": "DO",
-                "color": "orange"
-              },
-              {
-                "quote": "The historical database alone is worth it. We replayed a competitor’s entire seasonal playbook in an afternoon and built our counter off it.",
-                "author": "Elena Rossi",
-                "role": "Head of Casino · Tier 2 European operator",
-                "initials": "ER",
-                "color": "purple"
               }
             ]
           }
@@ -438,17 +417,13 @@ export const CONTENT_MANIFEST: ContentItem[] = [
             "primary": {
               "label": "Book a demo",
               "href": "/contact-us"
-            },
-            "secondary": {
-              "label": "Read sample report",
-              "href": "/library?cat=report"
             }
           }
         }
       ]
     },
-    "bodyHtml": "<h1>Jurnii 360</h1>\n<p>See every competitor move, the day it happens. Jurnii 360 monitors competitor promotions, segmentation, and proposition changes daily across 20+ operators.</p>\n<h2>Platform Metrics</h2>\n<ul>\n<li><strong>1,000+</strong> — Competitor Offers Tracked Weekly</li>\n<li><strong>35</strong> — Regulated Markets Monitored</li>\n<li><strong>21</strong> — Feature Areas Scanned</li>\n<li><strong>30+ hours</strong> — Saved per Week vs Manual Monitoring</li>\n</ul>\n<h2>The Commercial Challenge</h2>\n<p>iGaming operators lose millions annually reacting days too late to aggressive competitor promotions and generosity increases, causing sudden acquisition cost spikes.</p>\n<h3>Manual Spreadsheet Lag</h3>\n<p>Relying on manual compliance and product teams to screenshot competitor landing pages and index free spins is highly prone to error. You react days after player cohorts have shifted.</p>\n<h3>Always-On Competitive Guard</h3>\n<p>Our automated scraping engines scan, map, and structure competitor campaigns in minutes, alerting your trading and marketing divisions the moment uncompetitive margins occur.</p>\n<h2>Operational Transformation</h2>\n<h3>Manual Disconnected Grids</h3>\n<ul>\n<li>❌ Screenshot spreadsheets are outdated within hours of deployment.</li>\n<li>❌ Competitor campaigns are missed entirely in foreign or regulated regions.</li>\n<li>❌ Unexplainable CPA spikes are disputed without local promotional proof.</li>\n<li>❌ Dynamic adjustments to pricing margins happen days too late.</li>\n</ul>\n<h3>Defensive Margin Visibility</h3>\n<ul>\n<li>✅ Live offer alerts delivered directly to commercial planning channels.</li>\n<li>✅ Continuous geographical scans across all target regulated spaces.</li>\n<li>✅ Direct competitor promotion feeds link campaign value to cost trends.</li>\n<li>✅ Proactive campaign matching defends margin within hours.</li>\n</ul>\n<h2>Intelligence Feed</h2>\n<p>Get structured competitor intelligence feeds direct to your slack or commercial workspace. See exactly when a competitor alters promotion coefficients or ups a sports boost.</p>\n<ul>\n<li><strong>Competitor Monitoring</strong>: Auto-scraped offer databases.</li>\n<li><strong>Strategic Response</strong>: Map competitor activity directly into defensive campaigns.</li>\n</ul>\n<h2>What Changes for Your Team</h2>\n<p>Numbers from current Tier 1 and Tier 2 deployments. Specific results vary by market and starting maturity.</p>\n<h3>23% — Promo Waste Reduced</h3>\n<p>Average reduction in low-ROI bonus spend after first quarter, by identifying offers competitors abandoned.</p>\n<h3>4.2× — Faster Reaction Time</h3>\n<p>From &quot;competitor changed something&quot; to &quot;we have a response brief&quot; — measured against manual workflows.</p>\n<h3>850+ — Promotions Tracked</h3>\n<p>Captured across our most recent seasonal report (Cheltenham 2026), across 20+ operators.</p>\n<h3>6 Days — Average Go-Live</h3>\n<p>From contract signed to first live intelligence dashboard, including calibration period.</p>\n<h2>How Jurnii 360 Actually Works</h2>\n<p>No black box. Here&#39;s the pipeline, end to end.</p>\n<h3>Step 1: Scope the competitor set</h3>\n<p>Together we agree the brands, markets, and verticals that matter. Typical scope: 5–20 brands across 1–4 jurisdictions.</p>\n<h3>Step 2: Capture, daily</h3>\n<p>Public-facing pages, promo pages, and structured offer pages are captured at agreed frequency. Standard is daily; up to 4× daily for enterprise.</p>\n<h3>Step 3: Structure &amp; enrich</h3>\n<p>Every offer is parsed into a structured schema — value, mechanic, wagering, qualifying odds, eligible games, segment, channel, and more.</p>\n<h3>Step 4: Score &amp; benchmark</h3>\n<p>The promotion richness index normalises across mechanics so a £50 free bet can be compared to a £20 bonus + £10 free spins.</p>\n<h3>Step 5: Surface &amp; alert</h3>\n<p>Insights land in a dashboard, in your Slack, in your email, or directly in your warehouse — whatever your team actually uses.</p>\n<h3>Step 6: Calibrate weekly</h3>\n<p>Your account team reviews accuracy with you weekly for the first month, then monthly, with a quarterly strategy review.</p>\n<h2>What Our Clients Say</h2>\n<blockquote>\n<p>&quot;The first quarter alone paid for the platform twice over. We pulled three reload offers that no major competitor had run for nine months — and saw zero churn impact.&quot;</p>\n<p>— <strong>Marcus Hale</strong>, Head of CRM · Tier 1 European operator</p>\n</blockquote>\n<blockquote>\n<p>&quot;We used to find out about a competitor&#39;s price-boost campaign from Twitter. Now it&#39;s a Slack alert before they&#39;ve even finished rolling it out.&quot;</p>\n<p>— <strong>Priya Nadar</strong>, Head of Trading · Multi-market sportsbook</p>\n</blockquote>\n<blockquote>\n<p>&quot;It settled an argument we&#39;d been having for two years. The market data was right there on the screen — no more &#39;I think&#39; in the Monday meeting.&quot;</p>\n<p>— <strong>Daniel Okafor</strong>, Group Marketing Director · Tier 1 operator</p>\n</blockquote>\n<blockquote>\n<p>&quot;The historical database alone is worth it. We replayed a competitor&#39;s entire seasonal playbook in an afternoon and built our counter off it.&quot;</p>\n<p>— <strong>Elena Rossi</strong>, Head of Casino · Tier 2 European operator</p>\n</blockquote>\n<h2>Who 360 is Built For</h2>\n<p>It&#39;s a horizontal tool, but it answers different questions for different roles.</p>\n<h3>CRM &amp; Promotions</h3>\n<p><strong>Question</strong>: Are we overpaying on reload offers?</p>\n<p>Compare your full offer ladder against the live market. See which competitors have abandoned mechanics you&#39;re still funding.</p>\n<h3>Trading &amp; Sportsbook</h3>\n<p><strong>Question</strong>: Who blinks first on price boosts?</p>\n<p>Track price-boost frequency, depth, and concentration around major events — and time your own boosts off it.</p>\n<h3>Product &amp; Casino</h3>\n<p><strong>Question</strong>: What new game launch tactics work?</p>\n<p>See which providers are getting hero placement at competitors, with what mechanic, and for how long.</p>\n<h3>Head of Marketing</h3>\n<p><strong>Question</strong>: Where is the market actually going?</p>\n<p>Quarterly trend reports surface where mechanics are heating up vs cooling — strategy-grade, not anecdotal.<br>outcomes:<br>  heading: What changes for your team.<br>  sub: Numbers from current Tier 1 and Tier 2 deployments. Specific results vary by market and starting maturity.<br>  kpis:<br>    - num: &#39;23%&#39;<br>      label: Promo waste reduced<br>      desc: Average reduction in low-ROI bonus spend after first quarter, by identifying offers competitors abandoned.<br>    - num: &#39;4.2×&#39;<br>      label: Faster reaction time<br>      desc: From &quot;competitor changed something&quot; to &quot;we have a response brief&quot; — measured against manual workflows.<br>    - num: &#39;850+&#39;<br>      label: Promotions tracked<br>      desc: Captured across our most recent seasonal report (Cheltenham 2026), across 20+ operators.<br>    - num: &#39;6 days&#39;<br>      label: Average go-live<br>      desc: From contract signed to first live intelligence dashboard, including calibration period.<br>method:<br>  heading: How Jurnii 360 actually works.<br>  sub: &quot;No black box. Here&#39;s the pipeline, end to end.&quot;<br>  steps:<br>    - title: Scope the competitor set<br>      body: Together we agree the brands, markets, and verticals that matter. Typical scope 5–20 brands across 1–4 jurisdictions.<br>    - title: &#39;Capture, daily&#39;<br>      body: Public-facing pages, promo pages, and structured offer pages are captured at agreed frequency. Standard is daily; up to 4× daily for enterprise.<br>    - title: Structure &amp; enrich<br>      body: Every offer is parsed into a structured schema — value, mechanic, wagering, qualifying odds, eligible games, segment, channel, and more.<br>    - title: Score &amp; benchmark<br>      body: The promotion richness index normalises across mechanics so a £50 free bet can be compared to a £20 bonus + £10 free spins.<br>    - title: Surface &amp; alert<br>      body: Insights land in a dashboard, in your Slack, in your email, or directly in your warehouse — whatever your team actually uses.<br>    - title: Calibrate weekly<br>      body: Your account team reviews accuracy with you weekly for the first month, then monthly, with a quarterly strategy review.<br>testimonials:<br>  eyebrow: Testimonials<br>  heading: Trusted on the<br/>commercial floor.<br>  items:<br>    - quote: The first quarter alone paid for the platform twice over. We pulled three reload offers that no major competitor had run for nine months — and saw zero churn impact.<br>      author: Marcus Hale<br>      role: Head of CRM · Tier 1 European operator<br>      initials: MH<br>      color: green<br>    - quote: We used to find out about a competitor’s price-boost campaign from Twitter. Now it’s a Slack alert before they’ve even finished rolling it out.<br>      author: Priya Nadar<br>      role: Head of Trading · Multi-market sportsbook<br>      initials: PN<br>      color: blue<br>    - quote: It settled an argument we’d been having for two years. The market data was right there on the screen — no more “I think” in the Monday meeting.<br>      author: Daniel Okafor<br>      role: Group Marketing Director · Tier 1 operator<br>      initials: DO<br>      color: orange<br>    - quote: The historical database alone is worth it. We replayed a competitor’s entire seasonal playbook in an afternoon and built our counter off it.<br>      author: Elena Rossi<br>      role: Head of Casino · Tier 2 European operator<br>      initials: ER<br>      color: purple<br>personas:<br>  heading: Who 360 is built for.<br>  sub: &quot;It&#39;s a horizontal tool, but it answers different questions for different roles.&quot;<br>  list:<br>    - role: CRM &amp; Promotions<br>      question: Are we overpaying on reload offers?<br>      answer: Compare your full offer ladder against the live market. See which competitors have abandoned mechanics you&#39;re still funding.<br>    - role: Trading &amp; Sportsbook<br>      question: Who blinks first on price boosts?<br>      answer: Track price-boost frequency, depth, and concentration around major events — and time your own boosts off it.<br>    - role: Product &amp; Casino<br>      question: What new game launch tactics work?<br>      answer: See which providers are getting hero placement at competitors, with what mechanic, and for how long.<br>    - role: Head of Marketing<br>      question: Where is the market actually going?<br>      answer: Quarterly trend reports surface where mechanics are heating up vs cooling — strategy-grade, not anecdotal.<br>cta:<br>  heading: See your competitor set, live.<br>  sub: A 45-minute demo, with sample data from your actual market.<br>  primary:<br>    label: Book a demo<br>    href: /contact-us<br>  secondary:<br>    label: Read sample report<br>    href: /library<br>renderFlags:<br>  hasPriceBoostTeaser: true<br>  hasPromotionsByVertical: true</p>\n",
-    "rawContent": "\n# Jurnii 360\n\nSee every competitor move, the day it happens. Jurnii 360 monitors competitor promotions, segmentation, and proposition changes daily across 20+ operators.\n\n## Platform Metrics\n\n- **1,000+** — Competitor Offers Tracked Weekly\n- **35** — Regulated Markets Monitored\n- **21** — Feature Areas Scanned\n- **30+ hours** — Saved per Week vs Manual Monitoring\n\n## The Commercial Challenge\n\niGaming operators lose millions annually reacting days too late to aggressive competitor promotions and generosity increases, causing sudden acquisition cost spikes.\n\n### Manual Spreadsheet Lag\n\nRelying on manual compliance and product teams to screenshot competitor landing pages and index free spins is highly prone to error. You react days after player cohorts have shifted.\n\n### Always-On Competitive Guard\n\nOur automated scraping engines scan, map, and structure competitor campaigns in minutes, alerting your trading and marketing divisions the moment uncompetitive margins occur.\n\n## Operational Transformation\n\n### Manual Disconnected Grids\n\n- ❌ Screenshot spreadsheets are outdated within hours of deployment.\n- ❌ Competitor campaigns are missed entirely in foreign or regulated regions.\n- ❌ Unexplainable CPA spikes are disputed without local promotional proof.\n- ❌ Dynamic adjustments to pricing margins happen days too late.\n\n### Defensive Margin Visibility\n\n- ✅ Live offer alerts delivered directly to commercial planning channels.\n- ✅ Continuous geographical scans across all target regulated spaces.\n- ✅ Direct competitor promotion feeds link campaign value to cost trends.\n- ✅ Proactive campaign matching defends margin within hours.\n\n## Intelligence Feed\n\nGet structured competitor intelligence feeds direct to your slack or commercial workspace. See exactly when a competitor alters promotion coefficients or ups a sports boost.\n\n- **Competitor Monitoring**: Auto-scraped offer databases.\n- **Strategic Response**: Map competitor activity directly into defensive campaigns.\n\n## What Changes for Your Team\n\nNumbers from current Tier 1 and Tier 2 deployments. Specific results vary by market and starting maturity.\n\n### 23% — Promo Waste Reduced\n\nAverage reduction in low-ROI bonus spend after first quarter, by identifying offers competitors abandoned.\n\n### 4.2× — Faster Reaction Time\n\nFrom \"competitor changed something\" to \"we have a response brief\" — measured against manual workflows.\n\n### 850+ — Promotions Tracked\n\nCaptured across our most recent seasonal report (Cheltenham 2026), across 20+ operators.\n\n### 6 Days — Average Go-Live\n\nFrom contract signed to first live intelligence dashboard, including calibration period.\n\n## How Jurnii 360 Actually Works\n\nNo black box. Here's the pipeline, end to end.\n\n### Step 1: Scope the competitor set\n\nTogether we agree the brands, markets, and verticals that matter. Typical scope: 5–20 brands across 1–4 jurisdictions.\n\n### Step 2: Capture, daily\n\nPublic-facing pages, promo pages, and structured offer pages are captured at agreed frequency. Standard is daily; up to 4× daily for enterprise.\n\n### Step 3: Structure & enrich\n\nEvery offer is parsed into a structured schema — value, mechanic, wagering, qualifying odds, eligible games, segment, channel, and more.\n\n### Step 4: Score & benchmark\n\nThe promotion richness index normalises across mechanics so a £50 free bet can be compared to a £20 bonus + £10 free spins.\n\n### Step 5: Surface & alert\n\nInsights land in a dashboard, in your Slack, in your email, or directly in your warehouse — whatever your team actually uses.\n\n### Step 6: Calibrate weekly\n\nYour account team reviews accuracy with you weekly for the first month, then monthly, with a quarterly strategy review.\n\n## What Our Clients Say\n\n> \"The first quarter alone paid for the platform twice over. We pulled three reload offers that no major competitor had run for nine months — and saw zero churn impact.\"\n>\n> — **Marcus Hale**, Head of CRM · Tier 1 European operator\n\n> \"We used to find out about a competitor's price-boost campaign from Twitter. Now it's a Slack alert before they've even finished rolling it out.\"\n>\n> — **Priya Nadar**, Head of Trading · Multi-market sportsbook\n\n> \"It settled an argument we'd been having for two years. The market data was right there on the screen — no more 'I think' in the Monday meeting.\"\n>\n> — **Daniel Okafor**, Group Marketing Director · Tier 1 operator\n\n> \"The historical database alone is worth it. We replayed a competitor's entire seasonal playbook in an afternoon and built our counter off it.\"\n>\n> — **Elena Rossi**, Head of Casino · Tier 2 European operator\n\n## Who 360 is Built For\n\nIt's a horizontal tool, but it answers different questions for different roles.\n\n### CRM & Promotions\n\n**Question**: Are we overpaying on reload offers?\n\nCompare your full offer ladder against the live market. See which competitors have abandoned mechanics you're still funding.\n\n### Trading & Sportsbook\n\n**Question**: Who blinks first on price boosts?\n\nTrack price-boost frequency, depth, and concentration around major events — and time your own boosts off it.\n\n### Product & Casino\n\n**Question**: What new game launch tactics work?\n\nSee which providers are getting hero placement at competitors, with what mechanic, and for how long.\n\n### Head of Marketing\n\n**Question**: Where is the market actually going?\n\nQuarterly trend reports surface where mechanics are heating up vs cooling — strategy-grade, not anecdotal.\noutcomes:\n  heading: What changes for your team.\n  sub: Numbers from current Tier 1 and Tier 2 deployments. Specific results vary by market and starting maturity.\n  kpis:\n    - num: '23%'\n      label: Promo waste reduced\n      desc: Average reduction in low-ROI bonus spend after first quarter, by identifying offers competitors abandoned.\n    - num: '4.2×'\n      label: Faster reaction time\n      desc: From \"competitor changed something\" to \"we have a response brief\" — measured against manual workflows.\n    - num: '850+'\n      label: Promotions tracked\n      desc: Captured across our most recent seasonal report (Cheltenham 2026), across 20+ operators.\n    - num: '6 days'\n      label: Average go-live\n      desc: From contract signed to first live intelligence dashboard, including calibration period.\nmethod:\n  heading: How Jurnii 360 actually works.\n  sub: \"No black box. Here's the pipeline, end to end.\"\n  steps:\n    - title: Scope the competitor set\n      body: Together we agree the brands, markets, and verticals that matter. Typical scope 5–20 brands across 1–4 jurisdictions.\n    - title: 'Capture, daily'\n      body: Public-facing pages, promo pages, and structured offer pages are captured at agreed frequency. Standard is daily; up to 4× daily for enterprise.\n    - title: Structure & enrich\n      body: Every offer is parsed into a structured schema — value, mechanic, wagering, qualifying odds, eligible games, segment, channel, and more.\n    - title: Score & benchmark\n      body: The promotion richness index normalises across mechanics so a £50 free bet can be compared to a £20 bonus + £10 free spins.\n    - title: Surface & alert\n      body: Insights land in a dashboard, in your Slack, in your email, or directly in your warehouse — whatever your team actually uses.\n    - title: Calibrate weekly\n      body: Your account team reviews accuracy with you weekly for the first month, then monthly, with a quarterly strategy review.\ntestimonials:\n  eyebrow: Testimonials\n  heading: Trusted on the<br/>commercial floor.\n  items:\n    - quote: The first quarter alone paid for the platform twice over. We pulled three reload offers that no major competitor had run for nine months — and saw zero churn impact.\n      author: Marcus Hale\n      role: Head of CRM · Tier 1 European operator\n      initials: MH\n      color: green\n    - quote: We used to find out about a competitor’s price-boost campaign from Twitter. Now it’s a Slack alert before they’ve even finished rolling it out.\n      author: Priya Nadar\n      role: Head of Trading · Multi-market sportsbook\n      initials: PN\n      color: blue\n    - quote: It settled an argument we’d been having for two years. The market data was right there on the screen — no more “I think” in the Monday meeting.\n      author: Daniel Okafor\n      role: Group Marketing Director · Tier 1 operator\n      initials: DO\n      color: orange\n    - quote: The historical database alone is worth it. We replayed a competitor’s entire seasonal playbook in an afternoon and built our counter off it.\n      author: Elena Rossi\n      role: Head of Casino · Tier 2 European operator\n      initials: ER\n      color: purple\npersonas:\n  heading: Who 360 is built for.\n  sub: \"It's a horizontal tool, but it answers different questions for different roles.\"\n  list:\n    - role: CRM & Promotions\n      question: Are we overpaying on reload offers?\n      answer: Compare your full offer ladder against the live market. See which competitors have abandoned mechanics you're still funding.\n    - role: Trading & Sportsbook\n      question: Who blinks first on price boosts?\n      answer: Track price-boost frequency, depth, and concentration around major events — and time your own boosts off it.\n    - role: Product & Casino\n      question: What new game launch tactics work?\n      answer: See which providers are getting hero placement at competitors, with what mechanic, and for how long.\n    - role: Head of Marketing\n      question: Where is the market actually going?\n      answer: Quarterly trend reports surface where mechanics are heating up vs cooling — strategy-grade, not anecdotal.\ncta:\n  heading: See your competitor set, live.\n  sub: A 45-minute demo, with sample data from your actual market.\n  primary:\n    label: Book a demo\n    href: /contact-us\n  secondary:\n    label: Read sample report\n    href: /library\nrenderFlags:\n  hasPriceBoostTeaser: true\n  hasPromotionsByVertical: true\n"
+    "bodyHtml": "<h1>Jurnii 360</h1>\n<p>See every competitor move, the day it happens. Jurnii 360 monitors competitor promotions, boosts, and proposition changes daily across 20+ operators.</p>\n<h2>Platform Metrics</h2>\n<ul>\n<li><strong>1,000+</strong> — Competitor Offers Tracked Weekly</li>\n<li><strong>35</strong> — Regulated Markets Monitored</li>\n<li><strong>21</strong> — Feature Areas Scanned</li>\n<li><strong>30+ hours</strong> — Saved per Week vs Manual Monitoring</li>\n</ul>\n<h2>The Commercial Challenge</h2>\n<p>iGaming operators lose millions annually reacting days too late to aggressive competitor promotions and generosity increases, causing sudden acquisition cost spikes.</p>\n<h3>Manual Spreadsheet Lag</h3>\n<p>Relying on manual compliance and product teams to screenshot competitor landing pages and index free spins is highly prone to error. You react days after player cohorts have shifted.</p>\n<h3>Always-On Competitive Guard</h3>\n<p>Our automated scraping engines scan, map, and structure competitor campaigns in minutes, alerting your trading and marketing divisions the moment uncompetitive margins occur.</p>\n<h2>Operational Transformation</h2>\n<h3>Manual Disconnected Grids</h3>\n<ul>\n<li>❌ Screenshot spreadsheets are outdated within hours of deployment.</li>\n<li>❌ Competitor campaigns are missed entirely in foreign or regulated regions.</li>\n<li>❌ Unexplainable CPA spikes are disputed without local promotional proof.</li>\n<li>❌ Dynamic adjustments to pricing margins happen days too late.</li>\n</ul>\n<h3>Defensive Margin Visibility</h3>\n<ul>\n<li>✅ Live offer alerts delivered directly to commercial planning channels.</li>\n<li>✅ Continuous geographical scans across all target regulated spaces.</li>\n<li>✅ Direct competitor promotion feeds link campaign value to cost trends.</li>\n<li>✅ Proactive campaign matching defends margin within hours.</li>\n</ul>\n<h2>Intelligence Feed</h2>\n<p>Get structured competitor intelligence feeds direct to your slack or commercial workspace. See exactly when a competitor alters promotion coefficients or ups a sports boost.</p>\n<ul>\n<li><strong>Competitor Monitoring</strong>: Auto-scraped offer databases.</li>\n<li><strong>Strategic Response</strong>: Map competitor activity directly into defensive campaigns.</li>\n</ul>\n<h2>What Changes for Your Team</h2>\n<p>Numbers from current Tier 1 and Tier 2 deployments. Specific results vary by market and starting maturity.</p>\n<h3>23% — Promo Waste Reduced</h3>\n<p>Average reduction in low-ROI bonus spend after first quarter, by identifying offers competitors abandoned.</p>\n<h3>4.2× — Faster Reaction Time</h3>\n<p>From &quot;competitor changed something&quot; to &quot;we have a response brief&quot; — measured against manual workflows.</p>\n<h3>850+ — Promotions Tracked</h3>\n<p>Captured across our most recent seasonal report (Cheltenham 2026), across 20+ operators.</p>\n<h3>6 Days — Average Go-Live</h3>\n<p>From contract signed to first live intelligence dashboard, including calibration period.</p>\n<h2>How Jurnii 360 Actually Works</h2>\n<p>No black box. Here&#39;s the pipeline, end to end.</p>\n<h3>Step 1: Scope the competitor set</h3>\n<p>Together we agree the brands, markets, and verticals that matter. Typical scope: 5–20 brands across 1–4 jurisdictions.</p>\n<h3>Step 2: Capture, daily</h3>\n<p>Public-facing pages, promo pages, and structured offer pages are captured at agreed frequency. Standard is daily; up to 4× daily for enterprise.</p>\n<h3>Step 3: Structure &amp; enrich</h3>\n<p>Every offer is parsed into a structured schema — value, mechanic, wagering, qualifying odds, eligible games, segment, channel, and more.</p>\n<h3>Step 4: Score &amp; benchmark</h3>\n<p>The promotion richness index normalises across mechanics so a £50 free bet can be compared to a £20 bonus + £10 free spins.</p>\n<h3>Step 5: Surface &amp; alert</h3>\n<p>Insights land in a dashboard, in your Slack, in your email, or directly in your warehouse — whatever your team actually uses.</p>\n<h3>Step 6: Calibrate weekly</h3>\n<p>Your account team reviews accuracy with you weekly for the first month, then monthly, with a quarterly strategy review.</p>\n<h2>What Our Clients Say</h2>\n<blockquote>\n<p>&quot;I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a &#39;first time using ChatGPT&#39; feeling.&quot;</p>\n<p>— <strong>David Cox</strong>, CX Consultant</p>\n</blockquote>\n<blockquote>\n<p>&quot;This kind of report would have taken three months to generate via usual research processes.&quot;</p>\n<p>— <strong>Ryan Schembri</strong>, CPO at Betsson</p>\n</blockquote>\n<h2>Who 360 is Built For</h2>\n<p>It&#39;s a horizontal tool, but it answers different questions for different roles.</p>\n<h3>CRM &amp; Promotions</h3>\n<p><strong>Question</strong>: Are we overpaying on reload offers?</p>\n<p>Compare your full offer ladder against the live market. See which competitors have abandoned mechanics you&#39;re still funding.</p>\n<h3>Trading &amp; Sportsbook</h3>\n<p><strong>Question</strong>: Who blinks first on price boosts?</p>\n<p>Track price-boost frequency, depth, and concentration around major events — and time your own boosts off it.</p>\n<h3>Product &amp; Casino</h3>\n<p><strong>Question</strong>: What new game launch tactics work?</p>\n<p>See which providers are getting hero placement at competitors, with what mechanic, and for how long.</p>\n<h3>Head of Marketing</h3>\n<p><strong>Question</strong>: Where is the market actually going?</p>\n<p>Quarterly trend reports surface where mechanics are heating up vs cooling — strategy-grade, not anecdotal.<br>outcomes:<br>  heading: What changes for your team.<br>  sub: Numbers from current Tier 1 and Tier 2 deployments. Specific results vary by market and starting maturity.<br>  kpis:<br>    - num: &#39;23%&#39;<br>      label: Promo waste reduced<br>      desc: Average reduction in low-ROI bonus spend after first quarter, by identifying offers competitors abandoned.<br>    - num: &#39;4.2×&#39;<br>      label: Faster reaction time<br>      desc: From &quot;competitor changed something&quot; to &quot;we have a response brief&quot; — measured against manual workflows.<br>    - num: &#39;850+&#39;<br>      label: Promotions tracked<br>      desc: Captured across our most recent seasonal report (Cheltenham 2026), across 20+ operators.<br>    - num: &#39;6 days&#39;<br>      label: Average go-live<br>      desc: From contract signed to first live intelligence dashboard, including calibration period.<br>method:<br>  heading: How Jurnii 360 actually works.<br>  sub: &quot;No black box. Here&#39;s the pipeline, end to end.&quot;<br>  steps:<br>    - title: Scope the competitor set<br>      body: Together we agree the brands, markets, and verticals that matter. Typical scope 5–20 brands across 1–4 jurisdictions.<br>    - title: &#39;Capture, daily&#39;<br>      body: Public-facing pages, promo pages, and structured offer pages are captured at agreed frequency. Standard is daily; up to 4× daily for enterprise.<br>    - title: Structure &amp; enrich<br>      body: Every offer is parsed into a structured schema — value, mechanic, wagering, qualifying odds, eligible games, segment, channel, and more.<br>    - title: Score &amp; benchmark<br>      body: The promotion richness index normalises across mechanics so a £50 free bet can be compared to a £20 bonus + £10 free spins.<br>    - title: Surface &amp; alert<br>      body: Insights land in a dashboard, in your Slack, in your email, or directly in your warehouse — whatever your team actually uses.<br>    - title: Calibrate weekly<br>      body: Your account team reviews accuracy with you weekly for the first month, then monthly, with a quarterly strategy review.<br>testimonials:<br>  eyebrow: Testimonials<br>  heading: Trusted on the<br/>commercial floor.<br>  items:<br>    - quote: I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a &#39;first time using ChatGPT&#39; feeling.<br>      author: David Cox<br>      role: CX Consultant<br>      initials: DC<br>      color: green<br>    - quote: This kind of report would have taken three months to generate via usual research processes.<br>      author: Ryan Schembri<br>      role: CPO at Betsson<br>      initials: RS<br>      color: blue<br>personas:<br>  heading: Who 360 is built for.<br>  sub: &quot;It&#39;s a horizontal tool, but it answers different questions for different roles.&quot;<br>  list:<br>    - role: CRM &amp; Promotions<br>      question: Are we overpaying on reload offers?<br>      answer: Compare your full offer ladder against the live market. See which competitors have abandoned mechanics you&#39;re still funding.<br>    - role: Trading &amp; Sportsbook<br>      question: Who blinks first on price boosts?<br>      answer: Track price-boost frequency, depth, and concentration around major events — and time your own boosts off it.<br>    - role: Product &amp; Casino<br>      question: What new game launch tactics work?<br>      answer: See which providers are getting hero placement at competitors, with what mechanic, and for how long.<br>    - role: Head of Marketing<br>      question: Where is the market actually going?<br>      answer: Quarterly trend reports surface where mechanics are heating up vs cooling — strategy-grade, not anecdotal.<br>cta:<br>  heading: See your competitor set, live.<br>  sub: A 45-minute demo, with sample data from your actual market.<br>  primary:<br>    label: Book a demo<br>    href: /contact-us<br>renderFlags:<br>  hasPriceBoostTeaser: true<br>  hasPromotionsByVertical: true</p>\n",
+    "rawContent": "\n# Jurnii 360\n\nSee every competitor move, the day it happens. Jurnii 360 monitors competitor promotions, boosts, and proposition changes daily across 20+ operators.\n\n## Platform Metrics\n\n- **1,000+** — Competitor Offers Tracked Weekly\n- **35** — Regulated Markets Monitored\n- **21** — Feature Areas Scanned\n- **30+ hours** — Saved per Week vs Manual Monitoring\n\n## The Commercial Challenge\n\niGaming operators lose millions annually reacting days too late to aggressive competitor promotions and generosity increases, causing sudden acquisition cost spikes.\n\n### Manual Spreadsheet Lag\n\nRelying on manual compliance and product teams to screenshot competitor landing pages and index free spins is highly prone to error. You react days after player cohorts have shifted.\n\n### Always-On Competitive Guard\n\nOur automated scraping engines scan, map, and structure competitor campaigns in minutes, alerting your trading and marketing divisions the moment uncompetitive margins occur.\n\n## Operational Transformation\n\n### Manual Disconnected Grids\n\n- ❌ Screenshot spreadsheets are outdated within hours of deployment.\n- ❌ Competitor campaigns are missed entirely in foreign or regulated regions.\n- ❌ Unexplainable CPA spikes are disputed without local promotional proof.\n- ❌ Dynamic adjustments to pricing margins happen days too late.\n\n### Defensive Margin Visibility\n\n- ✅ Live offer alerts delivered directly to commercial planning channels.\n- ✅ Continuous geographical scans across all target regulated spaces.\n- ✅ Direct competitor promotion feeds link campaign value to cost trends.\n- ✅ Proactive campaign matching defends margin within hours.\n\n## Intelligence Feed\n\nGet structured competitor intelligence feeds direct to your slack or commercial workspace. See exactly when a competitor alters promotion coefficients or ups a sports boost.\n\n- **Competitor Monitoring**: Auto-scraped offer databases.\n- **Strategic Response**: Map competitor activity directly into defensive campaigns.\n\n## What Changes for Your Team\n\nNumbers from current Tier 1 and Tier 2 deployments. Specific results vary by market and starting maturity.\n\n### 23% — Promo Waste Reduced\n\nAverage reduction in low-ROI bonus spend after first quarter, by identifying offers competitors abandoned.\n\n### 4.2× — Faster Reaction Time\n\nFrom \"competitor changed something\" to \"we have a response brief\" — measured against manual workflows.\n\n### 850+ — Promotions Tracked\n\nCaptured across our most recent seasonal report (Cheltenham 2026), across 20+ operators.\n\n### 6 Days — Average Go-Live\n\nFrom contract signed to first live intelligence dashboard, including calibration period.\n\n## How Jurnii 360 Actually Works\n\nNo black box. Here's the pipeline, end to end.\n\n### Step 1: Scope the competitor set\n\nTogether we agree the brands, markets, and verticals that matter. Typical scope: 5–20 brands across 1–4 jurisdictions.\n\n### Step 2: Capture, daily\n\nPublic-facing pages, promo pages, and structured offer pages are captured at agreed frequency. Standard is daily; up to 4× daily for enterprise.\n\n### Step 3: Structure & enrich\n\nEvery offer is parsed into a structured schema — value, mechanic, wagering, qualifying odds, eligible games, segment, channel, and more.\n\n### Step 4: Score & benchmark\n\nThe promotion richness index normalises across mechanics so a £50 free bet can be compared to a £20 bonus + £10 free spins.\n\n### Step 5: Surface & alert\n\nInsights land in a dashboard, in your Slack, in your email, or directly in your warehouse — whatever your team actually uses.\n\n### Step 6: Calibrate weekly\n\nYour account team reviews accuracy with you weekly for the first month, then monthly, with a quarterly strategy review.\n\n## What Our Clients Say\n\n> \"I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.\"\n>\n> — **David Cox**, CX Consultant\n\n> \"This kind of report would have taken three months to generate via usual research processes.\"\n>\n> — **Ryan Schembri**, CPO at Betsson\n\n\n## Who 360 is Built For\n\nIt's a horizontal tool, but it answers different questions for different roles.\n\n### CRM & Promotions\n\n**Question**: Are we overpaying on reload offers?\n\nCompare your full offer ladder against the live market. See which competitors have abandoned mechanics you're still funding.\n\n### Trading & Sportsbook\n\n**Question**: Who blinks first on price boosts?\n\nTrack price-boost frequency, depth, and concentration around major events — and time your own boosts off it.\n\n### Product & Casino\n\n**Question**: What new game launch tactics work?\n\nSee which providers are getting hero placement at competitors, with what mechanic, and for how long.\n\n### Head of Marketing\n\n**Question**: Where is the market actually going?\n\nQuarterly trend reports surface where mechanics are heating up vs cooling — strategy-grade, not anecdotal.\noutcomes:\n  heading: What changes for your team.\n  sub: Numbers from current Tier 1 and Tier 2 deployments. Specific results vary by market and starting maturity.\n  kpis:\n    - num: '23%'\n      label: Promo waste reduced\n      desc: Average reduction in low-ROI bonus spend after first quarter, by identifying offers competitors abandoned.\n    - num: '4.2×'\n      label: Faster reaction time\n      desc: From \"competitor changed something\" to \"we have a response brief\" — measured against manual workflows.\n    - num: '850+'\n      label: Promotions tracked\n      desc: Captured across our most recent seasonal report (Cheltenham 2026), across 20+ operators.\n    - num: '6 days'\n      label: Average go-live\n      desc: From contract signed to first live intelligence dashboard, including calibration period.\nmethod:\n  heading: How Jurnii 360 actually works.\n  sub: \"No black box. Here's the pipeline, end to end.\"\n  steps:\n    - title: Scope the competitor set\n      body: Together we agree the brands, markets, and verticals that matter. Typical scope 5–20 brands across 1–4 jurisdictions.\n    - title: 'Capture, daily'\n      body: Public-facing pages, promo pages, and structured offer pages are captured at agreed frequency. Standard is daily; up to 4× daily for enterprise.\n    - title: Structure & enrich\n      body: Every offer is parsed into a structured schema — value, mechanic, wagering, qualifying odds, eligible games, segment, channel, and more.\n    - title: Score & benchmark\n      body: The promotion richness index normalises across mechanics so a £50 free bet can be compared to a £20 bonus + £10 free spins.\n    - title: Surface & alert\n      body: Insights land in a dashboard, in your Slack, in your email, or directly in your warehouse — whatever your team actually uses.\n    - title: Calibrate weekly\n      body: Your account team reviews accuracy with you weekly for the first month, then monthly, with a quarterly strategy review.\ntestimonials:\n  eyebrow: Testimonials\n  heading: Trusted on the<br/>commercial floor.\n  items:\n    - quote: I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.\n      author: David Cox\n      role: CX Consultant\n      initials: DC\n      color: green\n    - quote: This kind of report would have taken three months to generate via usual research processes.\n      author: Ryan Schembri\n      role: CPO at Betsson\n      initials: RS\n      color: blue\npersonas:\n  heading: Who 360 is built for.\n  sub: \"It's a horizontal tool, but it answers different questions for different roles.\"\n  list:\n    - role: CRM & Promotions\n      question: Are we overpaying on reload offers?\n      answer: Compare your full offer ladder against the live market. See which competitors have abandoned mechanics you're still funding.\n    - role: Trading & Sportsbook\n      question: Who blinks first on price boosts?\n      answer: Track price-boost frequency, depth, and concentration around major events — and time your own boosts off it.\n    - role: Product & Casino\n      question: What new game launch tactics work?\n      answer: See which providers are getting hero placement at competitors, with what mechanic, and for how long.\n    - role: Head of Marketing\n      question: Where is the market actually going?\n      answer: Quarterly trend reports surface where mechanics are heating up vs cooling — strategy-grade, not anecdotal.\ncta:\n  heading: See your competitor set, live.\n  sub: A 45-minute demo, with sample data from your actual market.\n  primary:\n    label: Book a demo\n    href: /contact-us\nrenderFlags:\n  hasPriceBoostTeaser: true\n  hasPromotionsByVertical: true\n"
   },
   {
     "path": "/Users/tristandexter/Desktop/jurnii-website-v2/content/www/products/jurnii-mmm.md",
@@ -541,8 +516,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
           "description": "Channel-level ROI, saturation curves, and budget optimiser respecting real constraints."
         }
       ],
-      "pullQuote": "Every MMM we had looked at before came from a consultancy that had clearly never run an iGaming P&L. Jurnii's model had the bonus structure right inside the regression.",
-      "pullQuoteAttribution": "Lukas Brandt, Group Head of Performance",
+      "pullQuote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+      "pullQuoteAttribution": "David Cox, CX Consultant",
       "productRefs": [],
       "featureRefs": [
         "market-trends",
@@ -632,32 +607,18 @@ export const CONTENT_MANIFEST: ContentItem[] = [
             "heading": "A model commercial teams believe.",
             "items": [
               {
-                "quote": "Every MMM we’d looked at before came from a consultancy that had clearly never run an iGaming P&L. Jurnii’s model had the bonus structure right inside the regression. That was the difference.",
-                "author": "Lukas Brandt",
-                "role": "Group Head of Performance · Multi-jurisdiction operator",
-                "initials": "LB",
+                "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+                "author": "David Cox",
+                "role": "CX Consultant",
+                "initials": "DC",
                 "color": "green"
               },
               {
-                "quote": "For once the marketing line in the board pack came with confidence bands, not a story. Our CFO actually signed off the increase.",
-                "author": "Rachel Donovan",
-                "role": "VP Finance · Tier 1 European operator",
-                "initials": "RD",
+                "quote": "This kind of report would have taken three months to generate via usual research processes.",
+                "author": "Ryan Schembri",
+                "role": "CPO at Betsson",
+                "initials": "RS",
                 "color": "blue"
-              },
-              {
-                "quote": "The saturation curves told us paid search was tapped out two quarters before we’d have felt it. We moved the budget and kept the growth.",
-                "author": "Nikhil Rao",
-                "role": "Head of Performance · Multi-market operator",
-                "initials": "NR",
-                "color": "orange"
-              },
-              {
-                "quote": "It’s the first UX report I’ve been able to take into a board meeting without translating it first. The commercial weight is already in the numbers.",
-                "author": "Hannah Vogel",
-                "role": "Chief Marketing Officer · Tier 2 operator",
-                "initials": "HV",
-                "color": "purple"
               }
             ]
           }
@@ -732,10 +693,6 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         "label": "Book a demo",
         "href": "/contact-us"
       },
-      "secondaryCta": {
-        "label": "View a demo report",
-        "href": "/library?cat=thought"
-      },
       "features": {
         "heading": "A clear, comparable view of player experience.",
         "sub": "Built around the journeys that actually move NGR.",
@@ -753,7 +710,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
           {
             "icon": "monitor-smartphone",
             "title": "Mobile & Desktop",
-            "body": "iOS, Android, mobile web, desktop web — scored separately, then synthesised into a unified score."
+            "body": "Mobile web and desktop web — scored separately, then synthesised into a unified score."
           },
           {
             "icon": "trophy",
@@ -766,9 +723,9 @@ export const CONTENT_MANIFEST: ContentItem[] = [
             "body": "We provide you with categorised recommendations that allow you to build roadmaps, create optimisation experiments or pick off low-hanging fruits."
           },
           {
-            "icon": "refresh-cw",
-            "title": "Recurring assessments",
-            "body": "See how your releases are affecting your score month-on-month, whilst keeping a close eye on your competition, and closing the gap."
+            "icon": "activity",
+            "title": "Change detection",
+            "body": "Track how yours and competitor releases are affecting scores month-on-month. Receive alerts and notifications for key experience changes found."
           }
         ]
       },
@@ -783,15 +740,15 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         },
         {
           "title": "Mobile & Desktop",
-          "description": "iOS, Android, mobile web, desktop web — scored separately, then synthesised into a unified score."
+          "description": "Mobile web and desktop web — scored separately, then synthesised into a unified score."
         },
         {
           "title": "Peer benchmarking",
           "description": "See exactly where you sit vs your competitors on every criterion."
         }
       ],
-      "pullQuote": "For the first time, our roadmap arguments stopped being \"Spotify does it this way\" and started being \"we lose 4.2 points to the market on this exact step.\"",
-      "pullQuoteAttribution": "Sofia Lindqvist, Director of Product",
+      "pullQuote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+      "pullQuoteAttribution": "David Cox, CX Consultant",
       "productRefs": [],
       "featureRefs": [
         "brand-analysis",
@@ -828,7 +785,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
           "type": "outcomes",
           "data": {
             "heading": "What \"evidence-based UX\" looks like in practice.",
-            "sub": "Outcomes from operators currently scoring quarterly with Jurnii UX.",
+            "sub": "Outcomes from operators currently scoring monthly with Jurnii UX.",
             "kpis": [
               {
                 "num": "60+",
@@ -838,10 +795,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
               {
                 "num": "5",
                 "label": "Peer operators",
-                "desc": "Standard scope: your operator + 5 peers, scored side-by-side, every quarter."
+                "desc": "Standard scope: your operator + 5 peers, scored side-by-side, every month."
               },
               {
-                "num": "12 days",
+                "num": "<5 days",
                 "label": "Average audit time",
                 "desc": "From scoping call to delivered first audit, including peer-set calibration."
               },
@@ -857,15 +814,15 @@ export const CONTENT_MANIFEST: ContentItem[] = [
           "type": "method",
           "data": {
             "heading": "How a Jurnii UX audit runs.",
-            "sub": "A predictable, repeatable process — designed to fit a quarterly product cadence.",
+            "sub": "A predictable, repeatable process — designed to fit a monthly product cadence.",
             "steps": [
               {
                 "title": "Define scope",
-                "body": "Agree the journeys (typically 5–7), the peer set (typically 5 operators), and the platforms (iOS, Android, mobile web, desktop web)."
+                "body": "Agree the journeys (typically 10–12), the peer set (typically 5 operators), and the platforms (mobile web and desktop web)."
               },
               {
                 "title": "Capture & score",
-                "body": "Our analysts plus our scoring layer walk every journey on every platform. Each step is scored, screenshotted, and timestamped."
+                "body": "Our analysts plus our scoring layer walk every journey on mobile web and desktop. Each step is scored, screenshotted, and timestamped."
               },
               {
                 "title": "Calibrate findings",
@@ -876,8 +833,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
                 "body": "A structured report (executive summary, journey-level scoring, prioritised findings) plus a working dashboard you can re-open any time."
               },
               {
-                "title": "Re-score quarterly",
-                "body": "Each quarter we re-walk the same journeys. You see the impact of what shipped — and where competitors caught up or pulled away."
+                "title": "Re-score monthly",
+                "body": "Each month we re-walk the same journeys. You see the impact of what shipped — and where competitors caught up or pulled away."
               }
             ]
           }
@@ -889,32 +846,18 @@ export const CONTENT_MANIFEST: ContentItem[] = [
             "heading": "Evidence, not opinion.",
             "items": [
               {
-                "quote": "For the first time, our roadmap arguments stopped being “Spotify does it this way” and started being “we lose 4.2 points to the market on this exact step.” That changed the whole conversation.",
-                "author": "Sofia Lindqvist",
-                "role": "Director of Product · Top 5 European sportsbook",
-                "initials": "SL",
+                "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+                "author": "David Cox",
+                "role": "CX Consultant",
+                "initials": "DC",
                 "color": "green"
               },
               {
-                "quote": "Every finding came with a screenshot and a score. My designers stopped defending taste and started fixing measured problems.",
-                "author": "Tom Wheeler",
-                "role": "Director of Design · Tier 1 operator",
-                "initials": "TW",
+                "quote": "This kind of report would have taken three months to generate via usual research processes.",
+                "author": "Ryan Schembri",
+                "role": "CPO at Betsson",
+                "initials": "RS",
                 "color": "blue"
-              },
-              {
-                "quote": "Step-level scoring pointed straight at one screen in our deposit flow. We fixed it in a single sprint and conversion moved the next week.",
-                "author": "Aisha Mansour",
-                "role": "Conversion Lead · Multi-brand casino",
-                "initials": "AM",
-                "color": "orange"
-              },
-              {
-                "quote": "It’s the first UX report I’ve been able to take into a board meeting without translating it first. The commercial weight is already in the numbers.",
-                "author": "James Okonkwo",
-                "role": "Chief Product Officer · Tier 2 operator",
-                "initials": "JO",
-                "color": "purple"
               }
             ]
           }
@@ -933,7 +876,7 @@ export const CONTENT_MANIFEST: ContentItem[] = [
               {
                 "role": "Director of Design",
                 "question": "Are we shipping enough, fast enough?",
-                "answer": "Quarterly re-scoring shows whether design throughput is moving the metrics that matter — or just shipping new screens."
+                "answer": "Monthly re-scoring shows whether design throughput is moving the metrics that matter — or just shipping new screens."
               },
               {
                 "role": "Conversion / CRO Lead",
@@ -961,8 +904,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         }
       ]
     },
-    "bodyHtml": "<h1>Jurnii UX</h1>\n<p>Replace UX opinion with structured benchmarking. Jurnii UX scores every step of every critical journey across your operator and your peer set.</p>\n<h2>Platform Metrics</h2>\n<ul>\n<li><strong>300+</strong> — Global Brands Scanned</li>\n<li><strong>70+</strong> — Recommendations per Audit</li>\n<li><strong>4</strong> — Core UX Dimensions Analysed</li>\n<li><strong>Mins</strong> — Time to Full Automated Report</li>\n</ul>\n<h2>The Commercial Challenge</h2>\n<p>iGaming operators waste months debating visual tweaks and relying on outdated agency heuristics while players drop off due to silent, unmeasured usability friction.</p>\n<h3>Opinion-Based Roadmaps</h3>\n<p>Product decisions are often dominated by internal design debates rather than quantitative customer journey friction, causing critical deposit leaks to remain unresolved for months.</p>\n<h3>Revenue-Mapped Prioritisation</h3>\n<p>Instantly scan player pathways, map conversion roadblocks, and weight every flaw by revenue consequence, helping product teams deploy high-impact conversion fixes first.</p>\n<h2>Operational Transformation</h2>\n<h3>Subjective Design Debates</h3>\n<ul>\n<li>❌ Roadmaps are dominated by internal speculation and loudest-voice opinions.</li>\n<li>❌ Technical layout flaws like shift layout latency remain unmeasured.</li>\n<li>❌ UX agency audits take weeks to compile and fail to map revenue impact.</li>\n<li>❌ Registration drop-offs are blamed on marketing channel quality.</li>\n</ul>\n<h3>Commercially Prioritised Roadmaps</h3>\n<ul>\n<li>✅ Automated radial scorecards map usability variables in minutes.</li>\n<li>✅ Direct layout shift parsing flags structural deposit leaks.</li>\n<li>✅ Instant recommendations prioritised by commercial risk levels.</li>\n<li>✅ Direct conversion fixes protect engineering capacity.</li>\n</ul>\n<h2>What Evidence-Based UX Looks Like in Practice</h2>\n<p>Outcomes from operators currently scoring quarterly with Jurnii UX.</p>\n<h3>60+ — Criteria per Journey</h3>\n<p>Every journey decomposed into structured, scoreable criteria — not a single 1–10 vibe-check.</p>\n<h3>5 — Peer Operators</h3>\n<p>Standard scope: your operator + 5 peers, scored side-by-side, every quarter.</p>\n<h3>12 Days — Average Audit Time</h3>\n<p>From scoping call to delivered first audit, including peer-set calibration.</p>\n<h3>+8.4pp — Avg Conversion Lift</h3>\n<p>Average sign-up→FTD lift after addressing top-3 friction points (over 6 audits).</p>\n<h2>How a Jurnii UX Audit Runs</h2>\n<p>A predictable, repeatable process — designed to fit a quarterly product cadence.</p>\n<h3>Step 1: Define scope</h3>\n<p>Agree the journeys (typically 5–7), the peer set (typically 5 operators), and the platforms (iOS, Android, mobile web, desktop web).</p>\n<h3>Step 2: Capture &amp; score</h3>\n<p>Our analysts plus our scoring layer walk every journey on every platform. Each step is scored, screenshotted, and timestamped.</p>\n<h3>Step 3: Calibrate findings</h3>\n<p>Findings are calibrated against your internal product team in a half-day workshop — no surprises in the final report.</p>\n<h3>Step 4: Deliver the audit</h3>\n<p>A structured report (executive summary, journey-level scoring, prioritised findings) plus a working dashboard you can re-open any time.</p>\n<h3>Step 5: Re-score quarterly</h3>\n<p>Each quarter we re-walk the same journeys. You see the impact of what shipped — and where competitors caught up or pulled away.</p>\n<h2>What Our Clients Say</h2>\n<blockquote>\n<p>&quot;For the first time, our roadmap arguments stopped being &#39;Spotify does it this way&#39; and started being &#39;we lose 4.2 points to the market on this exact step.&#39; That changed the whole conversation.&quot;</p>\n<p>— <strong>Sofia Lindqvist</strong>, Director of Product · Top 5 European sportsbook</p>\n</blockquote>\n<blockquote>\n<p>&quot;Every finding came with a screenshot and a score. My designers stopped defending taste and started fixing measured problems.&quot;</p>\n<p>— <strong>Tom Wheeler</strong>, Director of Design · Tier 1 operator</p>\n</blockquote>\n<blockquote>\n<p>&quot;Step-level scoring pointed straight at one screen in our deposit flow. We fixed it in a single sprint and conversion moved the next week.&quot;</p>\n<p>— <strong>Aisha Mansour</strong>, Conversion Lead · Multi-brand casino</p>\n</blockquote>\n<blockquote>\n<p>&quot;It&#39;s the first UX report I&#39;ve been able to take into a board meeting without translating it first. The commercial weight is already in the numbers.&quot;</p>\n<p>— <strong>James Okonkwo</strong>, Chief Product Officer · Tier 2 operator</p>\n</blockquote>\n<h2>Who Jurnii UX is Built For</h2>\n<p>A product-and-design tool with commercial weight behind every finding.</p>\n<h3>Head of Product</h3>\n<p><strong>Question</strong>: Where is our experience leaking NGR?</p>\n<p>A prioritised list of friction points, ranked by NGR-weighted impact — ready for the next planning cycle.</p>\n<h3>Director of Design</h3>\n<p><strong>Question</strong>: Are we shipping enough, fast enough?</p>\n<p>Quarterly re-scoring shows whether design throughput is moving the metrics that matter — or just shipping new screens.</p>\n<h3>Conversion / CRO Lead</h3>\n<p><strong>Question</strong>: Which step is the bottleneck?</p>\n<p>Step-level scoring isolates the single most impactful change for the next sprint.</p>\n<h3>CCO / CMO</h3>\n<p><strong>Question</strong>: Is product keeping up with marketing?</p>\n<p>A clear, executive-level view of whether the experience justifies the acquisition spend.</p>\n",
-    "rawContent": "\n# Jurnii UX\n\nReplace UX opinion with structured benchmarking. Jurnii UX scores every step of every critical journey across your operator and your peer set.\n\n## Platform Metrics\n\n- **300+** — Global Brands Scanned\n- **70+** — Recommendations per Audit\n- **4** — Core UX Dimensions Analysed\n- **Mins** — Time to Full Automated Report\n\n## The Commercial Challenge\n\niGaming operators waste months debating visual tweaks and relying on outdated agency heuristics while players drop off due to silent, unmeasured usability friction.\n\n### Opinion-Based Roadmaps\n\nProduct decisions are often dominated by internal design debates rather than quantitative customer journey friction, causing critical deposit leaks to remain unresolved for months.\n\n### Revenue-Mapped Prioritisation\n\nInstantly scan player pathways, map conversion roadblocks, and weight every flaw by revenue consequence, helping product teams deploy high-impact conversion fixes first.\n\n## Operational Transformation\n\n### Subjective Design Debates\n\n- ❌ Roadmaps are dominated by internal speculation and loudest-voice opinions.\n- ❌ Technical layout flaws like shift layout latency remain unmeasured.\n- ❌ UX agency audits take weeks to compile and fail to map revenue impact.\n- ❌ Registration drop-offs are blamed on marketing channel quality.\n\n### Commercially Prioritised Roadmaps\n\n- ✅ Automated radial scorecards map usability variables in minutes.\n- ✅ Direct layout shift parsing flags structural deposit leaks.\n- ✅ Instant recommendations prioritised by commercial risk levels.\n- ✅ Direct conversion fixes protect engineering capacity.\n\n## What Evidence-Based UX Looks Like in Practice\n\nOutcomes from operators currently scoring quarterly with Jurnii UX.\n\n### 60+ — Criteria per Journey\n\nEvery journey decomposed into structured, scoreable criteria — not a single 1–10 vibe-check.\n\n### 5 — Peer Operators\n\nStandard scope: your operator + 5 peers, scored side-by-side, every quarter.\n\n### 12 Days — Average Audit Time\n\nFrom scoping call to delivered first audit, including peer-set calibration.\n\n### +8.4pp — Avg Conversion Lift\n\nAverage sign-up→FTD lift after addressing top-3 friction points (over 6 audits).\n\n## How a Jurnii UX Audit Runs\n\nA predictable, repeatable process — designed to fit a quarterly product cadence.\n\n### Step 1: Define scope\n\nAgree the journeys (typically 5–7), the peer set (typically 5 operators), and the platforms (iOS, Android, mobile web, desktop web).\n\n### Step 2: Capture & score\n\nOur analysts plus our scoring layer walk every journey on every platform. Each step is scored, screenshotted, and timestamped.\n\n### Step 3: Calibrate findings\n\nFindings are calibrated against your internal product team in a half-day workshop — no surprises in the final report.\n\n### Step 4: Deliver the audit\n\nA structured report (executive summary, journey-level scoring, prioritised findings) plus a working dashboard you can re-open any time.\n\n### Step 5: Re-score quarterly\n\nEach quarter we re-walk the same journeys. You see the impact of what shipped — and where competitors caught up or pulled away.\n\n## What Our Clients Say\n\n> \"For the first time, our roadmap arguments stopped being 'Spotify does it this way' and started being 'we lose 4.2 points to the market on this exact step.' That changed the whole conversation.\"\n>\n> — **Sofia Lindqvist**, Director of Product · Top 5 European sportsbook\n\n> \"Every finding came with a screenshot and a score. My designers stopped defending taste and started fixing measured problems.\"\n>\n> — **Tom Wheeler**, Director of Design · Tier 1 operator\n\n> \"Step-level scoring pointed straight at one screen in our deposit flow. We fixed it in a single sprint and conversion moved the next week.\"\n>\n> — **Aisha Mansour**, Conversion Lead · Multi-brand casino\n\n> \"It's the first UX report I've been able to take into a board meeting without translating it first. The commercial weight is already in the numbers.\"\n>\n> — **James Okonkwo**, Chief Product Officer · Tier 2 operator\n\n## Who Jurnii UX is Built For\n\nA product-and-design tool with commercial weight behind every finding.\n\n### Head of Product\n\n**Question**: Where is our experience leaking NGR?\n\nA prioritised list of friction points, ranked by NGR-weighted impact — ready for the next planning cycle.\n\n### Director of Design\n\n**Question**: Are we shipping enough, fast enough?\n\nQuarterly re-scoring shows whether design throughput is moving the metrics that matter — or just shipping new screens.\n\n### Conversion / CRO Lead\n\n**Question**: Which step is the bottleneck?\n\nStep-level scoring isolates the single most impactful change for the next sprint.\n\n### CCO / CMO\n\n**Question**: Is product keeping up with marketing?\n\nA clear, executive-level view of whether the experience justifies the acquisition spend.\n"
+    "bodyHtml": "<h1>Jurnii UX</h1>\n<p>Replace UX opinion with structured benchmarking. Jurnii UX scores every step of every critical journey across your operator and your peer set.</p>\n<h2>Platform Metrics</h2>\n<ul>\n<li><strong>300+</strong> — Global Brands Scanned</li>\n<li><strong>70+</strong> — Recommendations per Audit</li>\n<li><strong>4</strong> — Core UX Dimensions Analysed</li>\n<li><strong>Mins</strong> — Time to Full Automated Report</li>\n</ul>\n<h2>The Commercial Challenge</h2>\n<p>iGaming operators waste months debating visual tweaks and relying on outdated agency heuristics while players drop off due to silent, unmeasured usability friction.</p>\n<h3>Opinion-Based Roadmaps</h3>\n<p>Product decisions are often dominated by internal design debates rather than quantitative customer journey friction, causing critical deposit leaks to remain unresolved for months.</p>\n<h3>Revenue-Mapped Prioritisation</h3>\n<p>Instantly scan player pathways, map conversion roadblocks, and weight every flaw by revenue consequence, helping product teams deploy high-impact conversion fixes first.</p>\n<h2>Operational Transformation</h2>\n<h3>Subjective Design Debates</h3>\n<ul>\n<li>❌ Roadmaps are dominated by internal speculation and loudest-voice opinions.</li>\n<li>❌ Technical layout flaws like shift layout latency remain unmeasured.</li>\n<li>❌ UX agency audits take weeks to compile and fail to map revenue impact.</li>\n<li>❌ Registration drop-offs are blamed on marketing channel quality.</li>\n</ul>\n<h3>Commercially Prioritised Roadmaps</h3>\n<ul>\n<li>✅ Automated radial scorecards map usability variables in minutes.</li>\n<li>✅ Direct layout shift parsing flags structural deposit leaks.</li>\n<li>✅ Instant recommendations prioritised by commercial risk levels.</li>\n<li>✅ Direct conversion fixes protect engineering capacity.</li>\n</ul>\n<h2>What Evidence-Based UX Looks Like in Practice</h2>\n<p>Outcomes from operators currently scoring monthly with Jurnii UX.</p>\n<h3>60+ — Criteria per Journey</h3>\n<p>Every journey decomposed into structured, scoreable criteria — not a single 1–10 vibe-check.</p>\n<h3>5 — Peer Operators</h3>\n<p>Standard scope: your operator + 5 peers, scored side-by-side, every month.</p>\n<h3>&lt;5 Days — Average Audit Time</h3>\n<p>From scoping call to delivered first audit, including peer-set calibration.</p>\n<h3>+8.4pp — Avg Conversion Lift</h3>\n<p>Average sign-up→FTD lift after addressing top-3 friction points (over 6 audits).</p>\n<h2>How a Jurnii UX Audit Runs</h2>\n<p>A predictable, repeatable process — designed to fit a monthly product cadence.</p>\n<h3>Step 1: Define scope</h3>\n<p>Agree the journeys (typically 10–12), the peer set (typically 5 operators), and the platforms (mobile web and desktop web).</p>\n<h3>Step 2: Capture &amp; score</h3>\n<p>Our analysts plus our scoring layer walk every journey on mobile web and desktop. Each step is scored, screenshotted, and timestamped.</p>\n<h3>Step 3: Calibrate findings</h3>\n<p>Findings are calibrated against your internal product team in a half-day workshop — no surprises in the final report.</p>\n<h3>Step 4: Deliver the audit</h3>\n<p>A structured report (executive summary, journey-level scoring, prioritised findings) plus a working dashboard you can re-open any time.</p>\n<h3>Step 5: Re-score monthly</h3>\n<p>Each month we re-walk the same journeys. You see the impact of what shipped — and where competitors caught up or pulled away.</p>\n<h2>What Our Clients Say</h2>\n<blockquote>\n<p>&quot;I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a &#39;first time using ChatGPT&#39; feeling.&quot;</p>\n<p>— <strong>David Cox</strong>, CX Consultant</p>\n</blockquote>\n<blockquote>\n<p>&quot;This kind of report would have taken three months to generate via usual research processes.&quot;</p>\n<p>— <strong>Ryan Schembri</strong>, CPO at Betsson</p>\n</blockquote>\n<h2>Who Jurnii UX is Built For</h2>\n<p>A product-and-design tool with commercial weight behind every finding.</p>\n<h3>Head of Product</h3>\n<p><strong>Question</strong>: Where is our experience leaking NGR?</p>\n<p>A prioritised list of friction points, ranked by NGR-weighted impact — ready for the next planning cycle.</p>\n<h3>Director of Design</h3>\n<p><strong>Question</strong>: Are we shipping enough, fast enough?</p>\n<p>Monthly re-scoring shows whether design throughput is moving the metrics that matter — or just shipping new screens.</p>\n<h3>Conversion / CRO Lead</h3>\n<p><strong>Question</strong>: Which step is the bottleneck?</p>\n<p>Step-level scoring isolates the single most impactful change for the next sprint.</p>\n<h3>CCO / CMO</h3>\n<p><strong>Question</strong>: Is product keeping up with marketing?</p>\n<p>A clear, executive-level view of whether the experience justifies the acquisition spend.</p>\n",
+    "rawContent": "\n# Jurnii UX\n\nReplace UX opinion with structured benchmarking. Jurnii UX scores every step of every critical journey across your operator and your peer set.\n\n## Platform Metrics\n\n- **300+** — Global Brands Scanned\n- **70+** — Recommendations per Audit\n- **4** — Core UX Dimensions Analysed\n- **Mins** — Time to Full Automated Report\n\n## The Commercial Challenge\n\niGaming operators waste months debating visual tweaks and relying on outdated agency heuristics while players drop off due to silent, unmeasured usability friction.\n\n### Opinion-Based Roadmaps\n\nProduct decisions are often dominated by internal design debates rather than quantitative customer journey friction, causing critical deposit leaks to remain unresolved for months.\n\n### Revenue-Mapped Prioritisation\n\nInstantly scan player pathways, map conversion roadblocks, and weight every flaw by revenue consequence, helping product teams deploy high-impact conversion fixes first.\n\n## Operational Transformation\n\n### Subjective Design Debates\n\n- ❌ Roadmaps are dominated by internal speculation and loudest-voice opinions.\n- ❌ Technical layout flaws like shift layout latency remain unmeasured.\n- ❌ UX agency audits take weeks to compile and fail to map revenue impact.\n- ❌ Registration drop-offs are blamed on marketing channel quality.\n\n### Commercially Prioritised Roadmaps\n\n- ✅ Automated radial scorecards map usability variables in minutes.\n- ✅ Direct layout shift parsing flags structural deposit leaks.\n- ✅ Instant recommendations prioritised by commercial risk levels.\n- ✅ Direct conversion fixes protect engineering capacity.\n\n## What Evidence-Based UX Looks Like in Practice\n\nOutcomes from operators currently scoring monthly with Jurnii UX.\n\n### 60+ — Criteria per Journey\n\nEvery journey decomposed into structured, scoreable criteria — not a single 1–10 vibe-check.\n\n### 5 — Peer Operators\n\nStandard scope: your operator + 5 peers, scored side-by-side, every month.\n\n### <5 Days — Average Audit Time\n\nFrom scoping call to delivered first audit, including peer-set calibration.\n\n### +8.4pp — Avg Conversion Lift\n\nAverage sign-up→FTD lift after addressing top-3 friction points (over 6 audits).\n\n## How a Jurnii UX Audit Runs\n\nA predictable, repeatable process — designed to fit a monthly product cadence.\n\n### Step 1: Define scope\n\nAgree the journeys (typically 10–12), the peer set (typically 5 operators), and the platforms (mobile web and desktop web).\n\n### Step 2: Capture & score\n\nOur analysts plus our scoring layer walk every journey on mobile web and desktop. Each step is scored, screenshotted, and timestamped.\n\n### Step 3: Calibrate findings\n\nFindings are calibrated against your internal product team in a half-day workshop — no surprises in the final report.\n\n### Step 4: Deliver the audit\n\nA structured report (executive summary, journey-level scoring, prioritised findings) plus a working dashboard you can re-open any time.\n\n### Step 5: Re-score monthly\n\nEach month we re-walk the same journeys. You see the impact of what shipped — and where competitors caught up or pulled away.\n\n## What Our Clients Say\n\n> \"I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.\"\n>\n> — **David Cox**, CX Consultant\n\n> \"This kind of report would have taken three months to generate via usual research processes.\"\n>\n> — **Ryan Schembri**, CPO at Betsson\n\n\n## Who Jurnii UX is Built For\n\nA product-and-design tool with commercial weight behind every finding.\n\n### Head of Product\n\n**Question**: Where is our experience leaking NGR?\n\nA prioritised list of friction points, ranked by NGR-weighted impact — ready for the next planning cycle.\n\n### Director of Design\n\n**Question**: Are we shipping enough, fast enough?\n\nMonthly re-scoring shows whether design throughput is moving the metrics that matter — or just shipping new screens.\n\n### Conversion / CRO Lead\n\n**Question**: Which step is the bottleneck?\n\nStep-level scoring isolates the single most impactful change for the next sprint.\n\n### CCO / CMO\n\n**Question**: Is product keeping up with marketing?\n\nA clear, executive-level view of whether the experience justifies the acquisition spend.\n"
   },
   {
     "path": "/Users/tristandexter/Desktop/jurnii-website-v2/content/www/features/ai-analytics-assistant.md",
@@ -1111,10 +1054,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -1319,10 +1262,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -1527,10 +1470,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -1753,10 +1696,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -1994,10 +1937,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -2235,10 +2178,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -2475,10 +2418,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -2721,10 +2664,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -2962,10 +2905,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -3203,10 +3146,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -3444,10 +3387,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -3667,10 +3610,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -3893,10 +3836,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -4137,10 +4080,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -4382,10 +4325,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -4623,10 +4566,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -4864,10 +4807,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -5105,10 +5048,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -5346,10 +5289,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -5569,10 +5512,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -5795,10 +5738,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -6018,10 +5961,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -6226,10 +6169,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -6434,10 +6377,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -6713,10 +6656,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -6921,10 +6864,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -7129,10 +7072,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -7337,10 +7280,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -7545,10 +7488,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -7753,10 +7696,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -7961,10 +7904,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -8169,10 +8112,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -8377,10 +8320,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -8585,10 +8528,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -8793,10 +8736,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -9001,10 +8944,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -9209,10 +9152,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -9417,10 +9360,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -9758,10 +9701,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -9983,10 +9926,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -10208,10 +10151,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -10432,10 +10375,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -10657,10 +10600,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -10922,10 +10865,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -11109,10 +11052,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -11319,10 +11262,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -11544,10 +11487,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -11768,10 +11711,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -11993,10 +11936,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -12243,10 +12186,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -12468,10 +12411,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -12693,10 +12636,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -12895,10 +12838,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -13105,10 +13048,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -13307,10 +13250,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -13517,10 +13460,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -13784,10 +13727,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -13994,10 +13937,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -14219,10 +14162,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -14421,10 +14364,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Jurnii replaced three months of agency benchmarking with a single automated feed. The ROI conversation moved from anecdotal to causal within six weeks.",
-            "name": "Director of Commercial Strategy",
-            "role": "Tier-1 European iGaming Operator",
-            "avatar": "DS"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -14630,10 +14573,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -14854,10 +14797,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -15078,10 +15021,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -15302,10 +15245,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -15529,10 +15472,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -15811,10 +15754,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -16035,10 +15978,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -16317,10 +16260,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -16545,10 +16488,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -16769,10 +16712,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -16993,10 +16936,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -17217,10 +17160,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -17441,10 +17384,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -17668,10 +17611,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -17917,10 +17860,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -18141,10 +18084,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -18365,10 +18308,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.",
+            "name": "David Cox",
+            "role": "CX Consultant",
+            "avatar": "DC"
           }
         },
         {
@@ -18705,10 +18648,10 @@ export const CONTENT_MANIFEST: ContentItem[] = [
         {
           "type": "testimonial",
           "data": {
-            "quote": "Before Jurnii, we calibrated our player onboarding bonuses and VIP tiers on subjective guesswork. Having normalized competitive feeds and causal attribution models shifted our growth playbook completely.",
-            "avatar": "GM",
-            "name": "General Manager, Europe iGaming Conglomerate",
-            "role": "Integrated Portfolio Operations"
+            "quote": "This kind of report would have taken three months to generate via usual research processes.",
+            "name": "Ryan Schembri",
+            "role": "CPO at Betsson",
+            "avatar": "RS"
           }
         },
         {
@@ -20341,6 +20284,44 @@ export const CONTENT_MANIFEST: ContentItem[] = [
     "rawContent": "\n# Is your data ready for MMM? A self-assessment for iGaming operators\n\nBy Timothy Solomon\n\n## The Short Version\n\n- 12 checks. Most operators fail 2–3 on the first pass.\n- Failures are fixable, but they take 4–8 weeks of effort before MMM is sensible.\n- Run this assessment before signing any MMM contract — ours or anyone else's.\n\n## The 12 checks\n\n1. 24+ months of clean spend by channel and campaign.\n2. Daily or weekly granularity on KPI data (FTDs, deposits, NGR).\n3. Channel taxonomy that hasn't changed in the last 18 months without a mapping table.\n4. Bonus spend separated from media spend.\n5. CRM-sourced revenue separated from acquisition-sourced revenue.\n6. A documented event calendar (sporting, marketing campaigns, product launches).\n7. Documented regulatory events with start dates.\n8. A workable definition of \"active player\" that hasn't silently changed.\n9. Affiliate spend at a per-affiliate level, not an aggregate line.\n10. TV / OOH spend by region and week, not just monthly aggregate.\n11. Discounting / boost spend tracked separately from bonus spend.\n12. A single point of truth for finance-reconciled spend (not the marketing system's \"best estimate\").\n\n## What fails most often\n\nChecks 4, 5, and 8. Bonus and media commingled, CRM and acquisition commingled, \"active player\" definition that drifted three times in 18 months.\n\nNone of these are fatal. All of them are 4–8 weeks of clean-up work before a model is worth building.\n"
   },
   {
+    "path": "/Users/tristandexter/Desktop/jurnii-website-v2/content/library/monitoring-live-market-dynamics-with-automated-event-feeds.md",
+    "slug": "monitoring-live-market-dynamics-with-automated-event-feeds",
+    "section": "library",
+    "meta": {
+      "title": "Monitoring Live Market Dynamics with Automated iGaming Event Feeds",
+      "date": "2026-09-22",
+      "medium": "Article",
+      "excerpt": "How real-time event feeds and in-play promotional telemetry allow sportsbook operators to navigate live betting volatility and defend commercial margins.",
+      "description": "Monitor live market dynamics with automated iGaming event feeds. Intercept in-play promotional surges, defend trading margins, and retain player liquidity.",
+      "author": "Tristan Dexter",
+      "authorImage": "/assets/library/authors/tristan-dexter.png",
+      "authorRole": "Chief Experience Officer",
+      "category": "Playbook",
+      "tags": [
+        "Live Betting",
+        "Competitive Intelligence",
+        "Sportsbook",
+        "Trading"
+      ],
+      "coverImage": "/assets/library/monitoring-live-market-dynamics-with-automated-event-feeds/cover.png",
+      "order": 99,
+      "productRefs": [
+        "jurnii-360"
+      ],
+      "featureRefs": [
+        "competitor-live-feed"
+      ],
+      "solutionRefs": [],
+      "useCaseValueRefs": [],
+      "useCaseFieldRefs": [],
+      "isIndexable": true,
+      "contentKind": "library",
+      "sections": []
+    },
+    "bodyHtml": "<p>In-play sports betting represents over 70% of total sportsbook turnover across mature European and Latin American markets. The dynamic nature of live sporting events creates an intense, fast-moving transactional environment. During a ninety-minute football match or a live tennis final, match probabilities, player momentum, and market pricing fluctuate by the second.</p>\n<p>For commercial operators, live events represent both the greatest revenue opportunity and the highest operational risk. During live fixtures, competitor actions are highly volatile. Rival bookmakers launch spontaneous in-play odds boosts, roll out flash cash-out incentives, deploy half-time reload concessions, and alter market overrounds dynamically to attract active player balances.</p>\n<p>Trading desks that rely on static pre-match benchmarks operate with significant blind spots during live events. Without real-time market telemetry, operators cannot see when a competitor is systematically aggressively pricing key in-play markets or capturing live accumulator turnover with enhanced terms.</p>\n<p>Deploying an automated <a href=\"/features/competitor-live-feed\">competitor live feed</a> provides continuous visibility into in-play market movements. By streaming live proposition shifts directly to trading desks, operators protect live gross margins and retain player liquidity throughout the duration of sporting events.</p>\n<h2>The Volatility of Live In-Play Market Dynamics</h2>\n<p>To understand the necessity of live event feeds, one must evaluate how player behaviour shifts once a sporting event begins.</p>\n<div class=\"article-table-wrap\"><table class=\"article-table\">\n<thead>\n<tr><th><strong>DIMENSION</strong></th><th><strong>PRE-MATCH BETTING</strong></th><th><strong>IN-PLAY LIVE BETTING</strong></th></tr>\n</thead>\n<tbody>\n<tr><td><strong>Decision Window</strong></td><td>Hours to days</td><td>Seconds to minutes</td></tr>\n<tr><td><strong>Player Mindset</strong></td><td>Calculated, price shopping</td><td>Impulsive, momentum driven</td></tr>\n<tr><td><strong>Pricing Volatility Stable, low tick frequency</strong></td><td>Hyper-volatile, live feeds</td><td>-</td></tr>\n<tr><td><strong>Promotional Style</strong></td><td>Scheduled deposit matches</td><td>Flash boosts, half-time CRM</td></tr>\n<tr><td><strong>Multi-Homing Risk</strong></td><td>Moderate (planned bets)</td><td>Extreme (instant balance hop)</td></tr>\n</tbody>\n</table></div>\n<p>During live events, multi-homing behaviour accelerates. A bettor watching a football match on television with their smartphone in hand does not browse multiple apps leisurely. If an incident occurs (such as a red card, a penalty, or a momentum shift) and a competitor&#39;s app pushes a notification offering &quot;3/1 on the Next Goalscorer&quot; within 45 seconds, the bettor switches apps immediately.</p>\n<p>If an operator is unaware that three major competitors have deployed targeted live concessions, they will observe a sudden, unexplained collapse in live match turnover without understanding the underlying commercial driver.</p>\n<h2>Technical Architecture of an In-Play Live Feed Engine</h2>\n<p>Capturing live event propositions requires a high-throughput, low-latency data architecture capable of handling rapid DOM updates and event-driven notifications:</p>\n<div class=\"article-table-wrap\"><table class=\"article-table\">\n<thead>\n<tr><th><strong>Metric / Dimension</strong></th><th><strong>- Match clock synchronisation (monitors T-0, Half-Time, Final Whistle)</strong></th><th><strong>2. LOW-LATENCY STREAM PROCESSING (KAFKA / REDIS)</strong></th></tr>\n</thead>\n<tbody>\n<tr><td><strong>Match clock synchronisation (monitors T-0, Half-Time, Final Whistle)</strong></td><td>-</td><td>-</td></tr>\n<tr><td><strong>Real-time DOM listeners on competitor in-play lobbies</strong></td><td>-</td><td>-</td></tr>\n<tr><td><strong>Mobile app push notification interception</strong></td><td>-</td><td>-</td></tr>\n<tr><td><strong>Microsecond event parsing and deduplication</strong></td><td>-</td><td>-</td></tr>\n<tr><td><strong>Temporal matching (correlates live promotion with match state)</strong></td><td>-</td><td>-</td></tr>\n<tr><td><strong>Margin overround extraction on active live markets</strong></td><td>-</td><td>-</td></tr>\n<tr><td><strong>------------------------------------------------------------------------</strong></td><td>-</td><td>-</td></tr>\n<tr><td><strong>Detects sudden overround drops (e.g. 108% -&gt; 102% on live match odds)</strong></td><td>-</td><td>-</td></tr>\n<tr><td><strong>Identifies high-generosity flash offers and stake caps</strong></td><td>-</td><td>-</td></tr>\n<tr><td><strong>Real-time Heads-Up Display (HUD) within Jurnii 360</strong></td><td>-</td><td>-</td></tr>\n<tr><td><strong>Sub-second webhook alerts to Slack and Microsoft Teams</strong></td><td>-</td><td>-</td></tr>\n</tbody>\n</table></div>\n<h3>1. Match Clock Synchronisation and Ingestion Triggers</h3>\n<p>Live event feeds do not crawl indiscriminately. They are synchronized with official sporting match clocks and data feeds. Crawl frequencies automatically scale based on match state:</p>\n<ul>\n<li><strong>Pre-Kickoff (T-30 mins)</strong>: Baseline overrounds and pre-match boosts recorded.</li>\n<li><strong>Live Match Action</strong>: High-frequency continuous polling (every 10 to 30 seconds) on in-play match centres.</li>\n<li><strong>Half-Time Interval</strong>: Intense 15-minute polling capturing flash reload offers, second-half specials, and push notifications.</li>\n<li><strong>Post-Match</strong>: Final settlement terms and retention promotions logged.</li>\n</ul>\n<h3>2. Stream Processing and Temporal Correlation</h3>\n<p>Every parsed event is tagged with the precise live match context (e.g., &quot;Minute 67: Score 1-1, Red Card for Home Team&quot;). This allows the analytical engine to determine whether competitor promotions are opportunistic responses to on-pitch events or pre-planned marketing drops.</p>\n<h3>3. Threshold Evaluation and Real-Time HUD</h3>\n<p>The engine filters noise, surfacing only high-impact commercial events to trading desks. Live alerts appear directly within <a href=\"/products/jurnii-360\">Jurnii 360</a> and integrate into existing trading communication channels.</p>\n<h2>Operational Playbooks: Tactical Execution During Live Events</h2>\n<p>When trading teams have access to continuous live feeds, they transition from passive risk managers to proactive commercial operators:</p>\n<div class=\"article-table-wrap\"><table class=\"article-table\">\n<thead>\n<tr><th><strong>LIVE EVENT SCENARIO</strong></th><th><strong>CALCULATED TRADING RESPONSE</strong></th></tr>\n</thead>\n<tbody>\n<tr><td><strong>Competitor drops live 1X2</strong></td><td>Do not compromise single-match margin;</td></tr>\n<tr><td><strong>overround to 102% at 60 mins</strong></td><td>deploy live Bet Builder boost on corners</td></tr>\n<tr><td><strong>Competitor pushes 50% Half-Time</strong></td><td>Trigger automated free-to-play predictive</td></tr>\n<tr><td><strong>Reload Casino bonus</strong></td><td>push to retain mobile screen attention</td></tr>\n<tr><td><strong>Competitor offers early payout</strong></td><td>Highlight superior cash-out execution</td></tr>\n<tr><td><strong>on 2-goal lead</strong></td><td>speed and zero withdrawal delays</td></tr>\n<tr><td><strong>Competitor suspends in-play</strong></td><td>Keep high-liquidity markets open with</td></tr>\n<tr><td><strong>markets during volatility</strong></td><td>wider spreads to capture stranded volume</td></tr>\n</tbody>\n</table></div>\n<h3>1. The Half-Time Screen Attention Battle</h3>\n<p>Half-time in a major football match represents a critical fifteen-minute window where millions of mobile bettors are engaged. Competitors frequently flood player devices with push notifications offering casino free spins, virtual sports specials, or second-half odds boosts.</p>\n<p>With live event monitoring, trading and CRM desks see exactly what rivals are distributing at minute 45. If competitor intelligence reveals that three major operators are pushing live roulette reloads, the commercial desk can deploy a targeted football Bet Builder promotion, keeping player balances focused on the sportsbook vertical.</p>\n<h3>2. Exploiting Competitor In-Play Suspensions</h3>\n<p>During volatile match events (such as VAR reviews or injury delays), conservative bookmakers often suspend in-play betting markets for extended periods, frustrating bettors.</p>\n<p>By tracking competitor market status in real time, agile trading desks can keep core markets open with dynamically managed pricing spreads, capturing significant turnover while competitors are locked in suspension.</p>\n<h3>3. Measuring the True Yield Impact of In-Play Promotions</h3>\n<p>Post-event financial reviews often struggle to explain why live margin fell during a specific fixture. With a recorded timeline of all competitor in-play activities across 35+ monitored jurisdictions within <a href=\"/products/jurnii-360\">Jurnii 360</a>, commercial analysts can review the entire match progression, correlating internal turnover spikes and drops with specific rival promotional deployments.</p>\n<h2>Algorithmic In-Play Margin Modeling and Overround Dynamics</h2>\n<p>To evaluate in-play pricing efficiency with mathematical precision, trading desks track the <strong>In-Play Overround Trajectory (IOT)</strong> across key market tiers:</p>\n<div class=\"article-table-wrap\"><table class=\"article-table\">\n<thead>\n<tr><th><strong>Evaluation Variable</strong></th><th><strong>Benchmark Standard / Impact</strong></th></tr>\n</thead>\n<tbody>\n<tr><td><strong>Item</strong></td><td>t is the discrete match timestamp (e.g. Minute 15, Minute 45, Minute 75)</td></tr>\n<tr><td><strong>Item</strong></td><td>Odds_i(t) represents the decimal odds for selection i at time t</td></tr>\n<tr><td><strong>Premier Tier 1 Standard</strong></td><td>105.5% - 107.0% Overround</td></tr>\n<tr><td><strong>Competitive Live Window</strong></td><td>103.5% - 105.0% Overround</td></tr>\n<tr><td><strong>Aggressive Promo Boost</strong></td><td>100.5% - 102.0% Overround</td></tr>\n<tr><td><strong>Subsidised / Negative Hold</strong></td><td>&lt; 100.0% Overround (Arbitrage Risk)</td></tr>\n</tbody>\n</table></div>\n<p>When an automated feed detects that a competitor&#39;s IOT has dipped below 102.0% during a live broadcast, the trading desk evaluates whether the rival is running an unhedged volume acquisition play or applying strict £10 maximum stake limits behind the scenes.</p>\n<h2>Real-Time Integration: Connecting Jurnii 360 to Algorithmic Desks</h2>\n<p>In modern sportsbook trading rooms, live feeds do not merely feed human dashboards; they stream directly into proprietary algorithmic risk engines via high-frequency webhooks.</p>\n<div class=\"article-table-wrap\"><table class=\"article-table\">\n<thead>\n<tr><th><strong>Pillar / Dimension</strong></th><th><strong>Focus &amp; Mechanics</strong></th><th><strong>Operational / Commercial Impact</strong></th></tr>\n</thead>\n<tbody>\n<tr><td><strong>JURNII 360 LIVE FEED</strong></td><td>Real-time ingestion of live offers across 1,000+ weekly promotions</td><td>Microsecond price parsing and stake restriction extraction</td></tr>\n<tr><td><strong>TRADING ALGO CONNECTOR</strong></td><td>Feeds competitor pricing deltas into internal liability pricing models</td><td>Dynamically recalculates risk-adjusted overrounds</td></tr>\n<tr><td><strong>CRM AUTOMATION BRIDGE</strong></td><td>Triggers localized half-time push notifications in under 3 minutes</td><td>Deploys zero-turnover free-to-play predictors during match lulls</td></tr>\n</tbody>\n</table></div>\n<h2>The Long-Term Commercial Impact of Live Event Intelligence</h2>\n<p>As in-play betting turnover continues to grow as a percentage of total sportsbook revenue, operators cannot afford to treat live market dynamics as an informational black box. In a sector where 75% of players hold accounts across multiple competing apps, real-time awareness is the difference between defending gross gaming margins and bleeding active liquid balances.</p>\n<p>Deploying automated live event feeds delivers three strategic advantages:</p>\n<ul>\n<li><strong>Defended In-Play Turnover</strong>: Preempt player liquidity defection during high-turnover live sports broadcasts by tracking competitor moves within hours rather than days.</li>\n<li><strong>Preserved Gross Gaming Margins</strong>: Prevent unnecessary margin-slashing by identifying which competitor promotions carry restrictive wagering caps and nominal terms.</li>\n<li><strong>Cross-Vertical Engagement</strong>: Retain mobile screen attention during half-time and match intervals with timely, competitive propositions that protect active player yield.</li>\n</ul>\n<p>To discover how Jurnii&#39;s real-time feeds empower sportsbook trading desks, explore our <a href=\"/features/competitor-live-feed\">competitor live feed feature page</a> or request an operational consultation with our commercial strategy team.</p>\n",
+    "rawContent": "\nIn-play sports betting represents over 70% of total sportsbook turnover across mature European and Latin American markets. The dynamic nature of live sporting events creates an intense, fast-moving transactional environment. During a ninety-minute football match or a live tennis final, match probabilities, player momentum, and market pricing fluctuate by the second.\n\nFor commercial operators, live events represent both the greatest revenue opportunity and the highest operational risk. During live fixtures, competitor actions are highly volatile. Rival bookmakers launch spontaneous in-play odds boosts, roll out flash cash-out incentives, deploy half-time reload concessions, and alter market overrounds dynamically to attract active player balances.\n\nTrading desks that rely on static pre-match benchmarks operate with significant blind spots during live events. Without real-time market telemetry, operators cannot see when a competitor is systematically aggressively pricing key in-play markets or capturing live accumulator turnover with enhanced terms.\n\nDeploying an automated [competitor live feed](/features/competitor-live-feed) provides continuous visibility into in-play market movements. By streaming live proposition shifts directly to trading desks, operators protect live gross margins and retain player liquidity throughout the duration of sporting events.\n\n## The Volatility of Live In-Play Market Dynamics\n\nTo understand the necessity of live event feeds, one must evaluate how player behaviour shifts once a sporting event begins.\n\n| **DIMENSION** | **PRE-MATCH BETTING** | **IN-PLAY LIVE BETTING** |\n| --- | --- | --- |\n| **Decision Window** | Hours to days | Seconds to minutes |\n| **Player Mindset** | Calculated, price shopping | Impulsive, momentum driven |\n| **Pricing Volatility Stable, low tick frequency** | Hyper-volatile, live feeds | - |\n| **Promotional Style** | Scheduled deposit matches | Flash boosts, half-time CRM |\n| **Multi-Homing Risk** | Moderate (planned bets) | Extreme (instant balance hop) |\n\nDuring live events, multi-homing behaviour accelerates. A bettor watching a football match on television with their smartphone in hand does not browse multiple apps leisurely. If an incident occurs (such as a red card, a penalty, or a momentum shift) and a competitor's app pushes a notification offering \"3/1 on the Next Goalscorer\" within 45 seconds, the bettor switches apps immediately.\n\nIf an operator is unaware that three major competitors have deployed targeted live concessions, they will observe a sudden, unexplained collapse in live match turnover without understanding the underlying commercial driver.\n\n## Technical Architecture of an In-Play Live Feed Engine\n\nCapturing live event propositions requires a high-throughput, low-latency data architecture capable of handling rapid DOM updates and event-driven notifications:\n\n| **Metric / Dimension** | **- Match clock synchronisation (monitors T-0, Half-Time, Final Whistle)** | **2. LOW-LATENCY STREAM PROCESSING (KAFKA / REDIS)** |\n|---|---|---|\n| **Match clock synchronisation (monitors T-0, Half-Time, Final Whistle)** | - | - |\n| **Real-time DOM listeners on competitor in-play lobbies** | - | - |\n| **Mobile app push notification interception** | - | - |\n| **Microsecond event parsing and deduplication** | - | - |\n| **Temporal matching (correlates live promotion with match state)** | - | - |\n| **Margin overround extraction on active live markets** | - | - |\n| **------------------------------------------------------------------------** | - | - |\n| **Detects sudden overround drops (e.g. 108% -> 102% on live match odds)** | - | - |\n| **Identifies high-generosity flash offers and stake caps** | - | - |\n| **Real-time Heads-Up Display (HUD) within Jurnii 360** | - | - |\n| **Sub-second webhook alerts to Slack and Microsoft Teams** | - | - |\n\n### 1. Match Clock Synchronisation and Ingestion Triggers\n\nLive event feeds do not crawl indiscriminately. They are synchronized with official sporting match clocks and data feeds. Crawl frequencies automatically scale based on match state:\n- **Pre-Kickoff (T-30 mins)**: Baseline overrounds and pre-match boosts recorded.\n- **Live Match Action**: High-frequency continuous polling (every 10 to 30 seconds) on in-play match centres.\n- **Half-Time Interval**: Intense 15-minute polling capturing flash reload offers, second-half specials, and push notifications.\n- **Post-Match**: Final settlement terms and retention promotions logged.\n\n### 2. Stream Processing and Temporal Correlation\n\nEvery parsed event is tagged with the precise live match context (e.g., \"Minute 67: Score 1-1, Red Card for Home Team\"). This allows the analytical engine to determine whether competitor promotions are opportunistic responses to on-pitch events or pre-planned marketing drops.\n\n### 3. Threshold Evaluation and Real-Time HUD\n\nThe engine filters noise, surfacing only high-impact commercial events to trading desks. Live alerts appear directly within [Jurnii 360](/products/jurnii-360) and integrate into existing trading communication channels.\n\n## Operational Playbooks: Tactical Execution During Live Events\n\nWhen trading teams have access to continuous live feeds, they transition from passive risk managers to proactive commercial operators:\n\n| **LIVE EVENT SCENARIO** | **CALCULATED TRADING RESPONSE** |\n| --- | --- |\n| **Competitor drops live 1X2** | Do not compromise single-match margin; |\n| **overround to 102% at 60 mins** | deploy live Bet Builder boost on corners |\n| **Competitor pushes 50% Half-Time** | Trigger automated free-to-play predictive |\n| **Reload Casino bonus** | push to retain mobile screen attention |\n| **Competitor offers early payout** | Highlight superior cash-out execution |\n| **on 2-goal lead** | speed and zero withdrawal delays |\n| **Competitor suspends in-play** | Keep high-liquidity markets open with |\n| **markets during volatility** | wider spreads to capture stranded volume |\n\n### 1. The Half-Time Screen Attention Battle\n\nHalf-time in a major football match represents a critical fifteen-minute window where millions of mobile bettors are engaged. Competitors frequently flood player devices with push notifications offering casino free spins, virtual sports specials, or second-half odds boosts.\n\nWith live event monitoring, trading and CRM desks see exactly what rivals are distributing at minute 45. If competitor intelligence reveals that three major operators are pushing live roulette reloads, the commercial desk can deploy a targeted football Bet Builder promotion, keeping player balances focused on the sportsbook vertical.\n\n### 2. Exploiting Competitor In-Play Suspensions\n\nDuring volatile match events (such as VAR reviews or injury delays), conservative bookmakers often suspend in-play betting markets for extended periods, frustrating bettors.\n\nBy tracking competitor market status in real time, agile trading desks can keep core markets open with dynamically managed pricing spreads, capturing significant turnover while competitors are locked in suspension.\n\n### 3. Measuring the True Yield Impact of In-Play Promotions\n\nPost-event financial reviews often struggle to explain why live margin fell during a specific fixture. With a recorded timeline of all competitor in-play activities across 35+ monitored jurisdictions within [Jurnii 360](/products/jurnii-360), commercial analysts can review the entire match progression, correlating internal turnover spikes and drops with specific rival promotional deployments.\n\n## Algorithmic In-Play Margin Modeling and Overround Dynamics\n\nTo evaluate in-play pricing efficiency with mathematical precision, trading desks track the **In-Play Overround Trajectory (IOT)** across key market tiers:\n\n| **Evaluation Variable** | **Benchmark Standard / Impact** |\n|---|---|\n| **Item** | t is the discrete match timestamp (e.g. Minute 15, Minute 45, Minute 75) |\n| **Item** | Odds_i(t) represents the decimal odds for selection i at time t |\n| **Premier Tier 1 Standard** | 105.5% - 107.0% Overround |\n| **Competitive Live Window** | 103.5% - 105.0% Overround |\n| **Aggressive Promo Boost** | 100.5% - 102.0% Overround |\n| **Subsidised / Negative Hold** | < 100.0% Overround (Arbitrage Risk) |\n\nWhen an automated feed detects that a competitor's IOT has dipped below 102.0% during a live broadcast, the trading desk evaluates whether the rival is running an unhedged volume acquisition play or applying strict £10 maximum stake limits behind the scenes.\n\n## Real-Time Integration: Connecting Jurnii 360 to Algorithmic Desks\n\nIn modern sportsbook trading rooms, live feeds do not merely feed human dashboards; they stream directly into proprietary algorithmic risk engines via high-frequency webhooks.\n\n| **Pillar / Dimension** | **Focus & Mechanics** | **Operational / Commercial Impact** |\n|---|---|---|\n| **JURNII 360 LIVE FEED** | Real-time ingestion of live offers across 1,000+ weekly promotions | Microsecond price parsing and stake restriction extraction |\n| **TRADING ALGO CONNECTOR** | Feeds competitor pricing deltas into internal liability pricing models | Dynamically recalculates risk-adjusted overrounds |\n| **CRM AUTOMATION BRIDGE** | Triggers localized half-time push notifications in under 3 minutes | Deploys zero-turnover free-to-play predictors during match lulls |\n\n## The Long-Term Commercial Impact of Live Event Intelligence\n\nAs in-play betting turnover continues to grow as a percentage of total sportsbook revenue, operators cannot afford to treat live market dynamics as an informational black box. In a sector where 75% of players hold accounts across multiple competing apps, real-time awareness is the difference between defending gross gaming margins and bleeding active liquid balances.\n\nDeploying automated live event feeds delivers three strategic advantages:\n- **Defended In-Play Turnover**: Preempt player liquidity defection during high-turnover live sports broadcasts by tracking competitor moves within hours rather than days.\n- **Preserved Gross Gaming Margins**: Prevent unnecessary margin-slashing by identifying which competitor promotions carry restrictive wagering caps and nominal terms.\n- **Cross-Vertical Engagement**: Retain mobile screen attention during half-time and match intervals with timely, competitive propositions that protect active player yield.\n\nTo discover how Jurnii's real-time feeds empower sportsbook trading desks, explore our [competitor live feed feature page](/features/competitor-live-feed) or request an operational consultation with our commercial strategy team.\n\n"
+  },
+  {
     "path": "/Users/tristandexter/Desktop/jurnii-website-v2/content/library/opman-jurnii-studios-transformation-of-an-early-ai-generated-concept.md",
     "slug": "opman-jurnii-studios-transformation-of-an-early-ai-generated-concept",
     "section": "library",
@@ -20842,8 +20823,8 @@ export const CONTENT_MANIFEST: ContentItem[] = [
       "contentKind": "library",
       "sections": []
     },
-    "bodyHtml": "<h1>The product leader&#39;s guide to AI-powered UX benchmarking</h1>\n<p>By Fraser Dunk, Founder &amp; CEO</p>\n<p>Product leaders face constant pressure to deliver exceptional customer experiences while contending with traditional research methods that are often slow, expensive, and difficult to scale. This guide explores how AI-powered UX benchmarking is changing the way product teams gather insights, make decisions, and stay ahead of the competition, all without draining resources or extending deadlines.</p>\n<h2>The evolving CX landscape for product teams</h2>\n<p>Product teams operate in an increasingly complex environment where customer experience (CX) has become the primary differentiator between success and stagnation. As digital touch points multiply and consumer expectations soar, the ability to deliver exceptional experiences has never been more critical to business outcomes.</p>\n<p>However, product leaders face a significant challenge: traditional UX and CX research methods are struggling to keep pace with the demands of modern product development cycles. These established approaches, while valuable in their depth, present substantial barriers to teams working in agile environments.</p>\n<p>The most pressing issues include lengthy research cycles that can stretch for weeks or months, prohibitive costs that limit how frequently studies can be conducted, and difficulties in scaling research operations to match product growth. This creates immense pressure on product teams to find faster, more cost-efficient tools that don&#39;t compromise on insight quality.</p>\n<p>The direct correlation between slow UX testing and lost revenue becomes increasingly apparent as competitors with more agile research capabilities can iterate and improve their products more rapidly, capturing market share in the process.</p>\n<p>Against this backdrop, we&#39;re witnessing a transformative opportunity. As AI adoption accelerates across industries, it&#39;s creating new possibilities for gathering and processing CX insights at unprecedented speed and scale. This shift introduces the concept of instant UX benchmarking, a new approach that enables product teams to understand and improve digital CX with remarkable efficiency.</p>\n<p>This evolution toward AI-powered insights represents not just an incremental improvement but a fundamental reimagining of how product teams can approach user experience research and customer experience optimisation.</p>\n<h2>The challenges of traditional CX research</h2>\n<p>Traditional UX and customer research methodologies present significant obstacles for product teams seeking to enhance digital experiences. These long-established approaches, while thorough, create bottlenecks that can slow down innovation and delay critical improvements.</p>\n<h3>Time &amp; cost constraints</h3>\n<ul>\n<li>Research cycles typically span weeks or months, requiring substantial budgets for recruitment, facilitation, and analysis.</li>\n<li>For many organisations, this approach is fundamentally unsustainable when scaling operations across multiple products or markets.</li>\n<li>Typical usability studies cost £10,000-£30,000.</li>\n<li>Research cycles often take 4-8 weeks to complete.</li>\n<li>Resource constraints limit the frequency of studies.</li>\n</ul>\n<h3>Limited visibility</h3>\n<ul>\n<li>Product teams frequently struggle with disconnected user journeys and inadequate competitive benchmarking capabilities.</li>\n<li>Conventional methods rarely provide holistic views of the entire customer experience, instead focusing on specific touchpoints.</li>\n<li>Siloed testing of individual features rather than end-to-end journeys.</li>\n<li>Difficulty comparing performance against competitors.</li>\n<li>Challenges in prioritising improvements across multiple areas.</li>\n</ul>\n<h3>Delayed decisions</h3>\n<ul>\n<li>Long-established approaches significantly delay the delivery of insights, restricting the ability to make swift, data-driven decisions.</li>\n<li>This creates a fundamental mismatch with agile development practices.</li>\n<li>Insights often arrive too late to influence development cycles.</li>\n<li>Slow feedback loops hamper iteration speed.</li>\n<li>Opportunity costs accumulate as improvements remain unimplemented.</li>\n</ul>\n<p>These challenges create a perfect storm for product teams, who find themselves needing to move quickly while still maintaining a deep understanding of user needs and experiences. Standard methods force an uncomfortable choice between speed and insight quality; a compromise that ultimately impacts both product performance and team effectiveness.</p>\n<p>The persistence of these challenges has created an environment ripe for disruption, where new approaches that can deliver comparable insights without the associated time and cost burdens have the potential to change how product teams operate and compete.</p>\n<h2>Introducing Jurnii AI: your solution for instant UX benchmarking</h2>\n<p>Jurnii AI represents a breakthrough solution for product teams seeking immediate, actionable CX insights. As an AI-powered CX insight platform specifically designed for digital brands, Jurnii AI fundamentally alters how teams approach benchmarking and optimization.</p>\n<h3>No-Code solution</h3>\n<ul>\n<li>Enter any URL and receive a comprehensive CX report in minutes, eliminating technical barriers to insight generation.</li>\n<li>No integration is required, and setup takes minutes rather than days or weeks, allowing teams to start gaining insights immediately.</li>\n</ul>\n<h3>Automated insights</h3>\n<ul>\n<li>Jurnii AI automatically handles data collection, analysis, and benchmarking, replacing time-consuming manual processes with AI-powered efficiency.</li>\n<li>This automation dramatically reduces the resource burden on product and research teams.</li>\n</ul>\n<h3>Comprehensive metrics</h3>\n<ul>\n<li>Access key metrics covering Usability, Perception, Journey, and Performance, providing a holistic view of your digital experience.</li>\n<li>The Jurnii Score offers a unified CX performance metric that simplifies tracking and reporting.</li>\n</ul>\n<h3>What Jurnii AI delivers</h3>\n<ul>\n<li><strong>Instant Reports:</strong> Unlike traditional methods that take weeks, Jurnii AI delivers comprehensive analysis in minutes, enabling immediate action.</li>\n<li><strong>Competitive Insights:</strong> Easily benchmark your CX against competitors to identify gaps and opportunities, helping prioritize improvements that will create meaningful differentiation in the market.</li>\n<li><strong>Actionable Recommendations:</strong> Each report includes AI-powered recommendations for both quick-win and strategic improvements, prioritized by potential impact.</li>\n<li><strong>Continuous Monitoring:</strong> Track CX performance over time to measure the impact of changes and identify emerging issues before they affect business metrics.</li>\n</ul>\n<p>By eliminating the traditional barriers of time, cost, and technical complexity, Jurnii AI enables product teams to integrate CX insights into their regular workflows. This fundamental shift allows for more frequent testing, faster iteration, and ultimately, more competitive digital experiences.</p>\n<h2>Unlocking competitive advantage through benchmarking</h2>\n<p>Competitive insights have become essential for product leaders aiming to lead their category rather than merely participate in it. Understanding how your digital experience compares to competitors provides crucial context for decision-making and resource allocation.</p>\n<p>Jurnii AI transforms competitive benchmarking from an occasional, resource-intensive activity into an ongoing capability. The platform allows you to systematically benchmark your CX against key competitors and industry standards with unprecedented ease and frequency.</p>\n<p>This capability helps product teams identify specific gaps and opportunities, showing precisely where your product stands and where the most significant gains lie for your customer experience. Rather than relying on subjective assessments or anecdotal feedback, teams can make decisions based on quantified comparisons across multiple dimensions of the experience.</p>\n<p>By moving beyond internal metrics and directly comparing your experience to market alternatives, you gain a strategic advantage that helps prioritize improvements with the greatest competitive impact. This outside-in perspective often reveals blind spots that internal assessments miss; areas where competitors are excelling or where industry standards have evolved beyond your current offering.</p>\n<p>The benchmarking capabilities of Jurnii AI extend beyond simple scoring to include detailed analysis of specific experience elements, from navigation patterns to content presentation to interaction models. This granularity allows product teams to identify not just that they&#39;re lagging in certain areas, but specifically why and how competitors are delivering superior experiences.</p>\n<p>For product leaders, this competitive intelligence reshapes prioritization discussions from opinion-based debates to evidence-based decisions. When resources are limited, as they invariably are, having clear, quantified competitive gaps helps ensure investments flow to the areas with the greatest potential impact on market position.</p>\n<h2>Scaling product insights without more resources</h2>\n<p>One of the most significant advantages of AI-powered UX benchmarking is the ability to dramatically scale insight generation without corresponding increases in team size or budget. For product leaders facing constant pressure to do more with less, this capability represents a fundamental shift in how CX research can be approached.</p>\n<ul>\n<li><strong>Reduced Costs:</strong> Product teams using Jurnii AI report reducing their research costs by thousands, compared to traditional methods, freeing budget for other strategic initiatives.</li>\n<li><strong>Time Savings:</strong> Early adopter agencies reported time savings of up to 90% on CX analysis delivery, allowing a faster response to market changes and customer needs.</li>\n<li><strong>Project Capacity:</strong> Teams can support up to three times more projects without increasing resources, enabling broader coverage across products, markets, and customer segments.</li>\n</ul>\n<p>The automation of data collection, analysis, and benchmarking through Jurnii AI delivers actionable insights in real-time, fundamentally changing the efficiency equation for product teams. This transformation means teams can:</p>\n<ul>\n<li><strong>Expand Research Coverage:</strong> Rather than limiting UX benchmarking to major releases or key journeys, teams can continuously monitor the entire digital experience across all touchpoints.</li>\n<li><strong>Democratise CX Insights:</strong> With insights generated automatically and available on-demand, product teams can extend access beyond UX specialists to include developers, marketers, and business stakeholders.</li>\n<li><strong>Accelerate Development Cycles:</strong> By eliminating research bottlenecks, product teams can incorporate UX insights into each sprint, enabling truly data-informed development cycles.</li>\n<li><strong>Shift from Reactive to Proactive:</strong> Instead of addressing issues after they&#39;ve impacted customers, teams can identify and resolve potential problems before they affect the business.</li>\n</ul>\n<h2>Jurnii Studio: blending automation with expert strategy</h2>\n<p>While AI-powered automation delivers efficiency in UX benchmarking, many product leaders recognise the continued value of expert judgment and strategic guidance. Jurnii Studio addresses this need by providing a human overlay that combines the speed of AI with the contextual understanding of experienced CX professionals.</p>\n<h3>Fractional CX leadership</h3>\n<ul>\n<li>Gain access to top-tier CX, UX, and product leaders on demand, providing strategic guidance without the overhead of full-time hires.</li>\n<li>These experienced professionals bring contextual understanding and industry best practices to complement the data-driven insights from Jurnii AI.</li>\n</ul>\n<h3>Human AI collaboration</h3>\n<ul>\n<li>Receive expert interpretation and prioritization of Jurnii AI outputs, reshaping recommendations into strategic roadmaps aligned with business objectives.</li>\n<li>This human-AI approach adds nuances and contextual insights, ensuring recommendations align with brand values and business constraints.</li>\n</ul>\n<p>This hybrid approach recognizes that while AI excels at pattern recognition, data analysis, and identifying standard best practices, Jurnii Studio experts bring critical capabilities in areas such as:</p>\n<ul>\n<li>Aligning UX improvements with broader business strategy and brand positioning.</li>\n<li>Navigating complex stakeholder environments and organisational politics.</li>\n<li>Balancing competing priorities across different business units or objectives.</li>\n<li>Identifying innovative approaches that go beyond established patterns.</li>\n<li>Providing a contextual understanding of industry-specific constraints and opportunities.</li>\n</ul>\n<p>For product leaders, Jurnii Studio offers the ideal balance, capturing the efficiency gains of AI-powered benchmarking while maintaining access to strategic guidance that reflects the unique context of their business and market. This combination ensures that insights don&#39;t simply identify what needs improvement, but also provide a clear, actionable path forward that accounts for practical implementation considerations.</p>\n<h2>Real-world impact &amp; the future of product CX</h2>\n<p>The true measure of any innovation is its impact in real-world applications. Jurnii&#39;s approach to AI-powered UX benchmarking has demonstrated significant value across diverse organisations, with validated outcomes that speak to its transformative potential.</p>\n<blockquote>\n<p>&quot;This kind of report would have taken our research team three months to generate in-house.&quot;</p>\n</blockquote>\n<p>— Ryan Schembri, CPO at Betsson</p>\n<blockquote>\n<p>&quot;I am blown away by the volume and the richness of the report… gave me a &#39;first time using ChatGPT&#39; feeling.&quot;</p>\n</blockquote>\n<p>— David Cox, CX Lead at Ooredoo</p>\n<ul>\n<li><strong>85% Superior Reports:</strong> Of users rated Jurnii reports as better or much better than previous manual audits in terms of depth, breadth, and actionability.</li>\n<li><strong>&lt;5% Variance:</strong> The difference between Jurnii AI analysis and expert-led analysis, demonstrating the platform&#39;s accuracy and reliability.</li>\n<li><strong>2x Faster Improvement:</strong> Brands using Jurnii AI saw conversion rate improvements twice as quickly due to rapid CX iteration enabled by instant insights.</li>\n</ul>\n<h3>Product CX in the AI era: speed, scale, and insight</h3>\n<p>As we look ahead, it&#39;s clear that AI-powered approaches to UX benchmarking represent not just an incremental improvement but a fundamental shift in how product teams approach customer experience. By delivering speed, scale, cost-efficiency, and competitive insight, Jurnii enables product leaders to:</p>\n<ul>\n<li>Embed CX intelligence into every stage of the product development lifecycle.</li>\n<li>Respond to market changes and customer needs with unprecedented agility.</li>\n<li>Allocate resources more effectively based on quantified impact potential.</li>\n<li>Build a continuous improvement culture supported by consistent feedback.</li>\n</ul>\n<p>With customer expectations rising and digital experiences become even more central to business success, the ability to rapidly assess, benchmark, and improve CX will become a defining competitive advantage.</p>\n",
-    "rawContent": "# The product leader's guide to AI-powered UX benchmarking\n\nBy Fraser Dunk, Founder & CEO\n\nProduct leaders face constant pressure to deliver exceptional customer experiences while contending with traditional research methods that are often slow, expensive, and difficult to scale. This guide explores how AI-powered UX benchmarking is changing the way product teams gather insights, make decisions, and stay ahead of the competition, all without draining resources or extending deadlines.\n\n## The evolving CX landscape for product teams\n\nProduct teams operate in an increasingly complex environment where customer experience (CX) has become the primary differentiator between success and stagnation. As digital touch points multiply and consumer expectations soar, the ability to deliver exceptional experiences has never been more critical to business outcomes.\n\nHowever, product leaders face a significant challenge: traditional UX and CX research methods are struggling to keep pace with the demands of modern product development cycles. These established approaches, while valuable in their depth, present substantial barriers to teams working in agile environments.\n\nThe most pressing issues include lengthy research cycles that can stretch for weeks or months, prohibitive costs that limit how frequently studies can be conducted, and difficulties in scaling research operations to match product growth. This creates immense pressure on product teams to find faster, more cost-efficient tools that don't compromise on insight quality.\n\nThe direct correlation between slow UX testing and lost revenue becomes increasingly apparent as competitors with more agile research capabilities can iterate and improve their products more rapidly, capturing market share in the process.\n\nAgainst this backdrop, we're witnessing a transformative opportunity. As AI adoption accelerates across industries, it's creating new possibilities for gathering and processing CX insights at unprecedented speed and scale. This shift introduces the concept of instant UX benchmarking, a new approach that enables product teams to understand and improve digital CX with remarkable efficiency.\n\nThis evolution toward AI-powered insights represents not just an incremental improvement but a fundamental reimagining of how product teams can approach user experience research and customer experience optimisation.\n\n## The challenges of traditional CX research\n\nTraditional UX and customer research methodologies present significant obstacles for product teams seeking to enhance digital experiences. These long-established approaches, while thorough, create bottlenecks that can slow down innovation and delay critical improvements.\n\n### Time & cost constraints\n\n- Research cycles typically span weeks or months, requiring substantial budgets for recruitment, facilitation, and analysis.\n- For many organisations, this approach is fundamentally unsustainable when scaling operations across multiple products or markets.\n- Typical usability studies cost £10,000-£30,000.\n- Research cycles often take 4-8 weeks to complete.\n- Resource constraints limit the frequency of studies.\n\n### Limited visibility\n\n- Product teams frequently struggle with disconnected user journeys and inadequate competitive benchmarking capabilities.\n- Conventional methods rarely provide holistic views of the entire customer experience, instead focusing on specific touchpoints.\n- Siloed testing of individual features rather than end-to-end journeys.\n- Difficulty comparing performance against competitors.\n- Challenges in prioritising improvements across multiple areas.\n\n### Delayed decisions\n\n- Long-established approaches significantly delay the delivery of insights, restricting the ability to make swift, data-driven decisions.\n- This creates a fundamental mismatch with agile development practices.\n- Insights often arrive too late to influence development cycles.\n- Slow feedback loops hamper iteration speed.\n- Opportunity costs accumulate as improvements remain unimplemented.\n\nThese challenges create a perfect storm for product teams, who find themselves needing to move quickly while still maintaining a deep understanding of user needs and experiences. Standard methods force an uncomfortable choice between speed and insight quality; a compromise that ultimately impacts both product performance and team effectiveness.\n\nThe persistence of these challenges has created an environment ripe for disruption, where new approaches that can deliver comparable insights without the associated time and cost burdens have the potential to change how product teams operate and compete.\n\n## Introducing Jurnii AI: your solution for instant UX benchmarking\n\nJurnii AI represents a breakthrough solution for product teams seeking immediate, actionable CX insights. As an AI-powered CX insight platform specifically designed for digital brands, Jurnii AI fundamentally alters how teams approach benchmarking and optimization.\n\n### No-Code solution\n\n- Enter any URL and receive a comprehensive CX report in minutes, eliminating technical barriers to insight generation.\n- No integration is required, and setup takes minutes rather than days or weeks, allowing teams to start gaining insights immediately.\n\n### Automated insights\n\n- Jurnii AI automatically handles data collection, analysis, and benchmarking, replacing time-consuming manual processes with AI-powered efficiency.\n- This automation dramatically reduces the resource burden on product and research teams.\n\n### Comprehensive metrics\n\n- Access key metrics covering Usability, Perception, Journey, and Performance, providing a holistic view of your digital experience.\n- The Jurnii Score offers a unified CX performance metric that simplifies tracking and reporting.\n\n### What Jurnii AI delivers\n\n- **Instant Reports:** Unlike traditional methods that take weeks, Jurnii AI delivers comprehensive analysis in minutes, enabling immediate action.\n- **Competitive Insights:** Easily benchmark your CX against competitors to identify gaps and opportunities, helping prioritize improvements that will create meaningful differentiation in the market.\n- **Actionable Recommendations:** Each report includes AI-powered recommendations for both quick-win and strategic improvements, prioritized by potential impact.\n- **Continuous Monitoring:** Track CX performance over time to measure the impact of changes and identify emerging issues before they affect business metrics.\n\nBy eliminating the traditional barriers of time, cost, and technical complexity, Jurnii AI enables product teams to integrate CX insights into their regular workflows. This fundamental shift allows for more frequent testing, faster iteration, and ultimately, more competitive digital experiences.\n\n## Unlocking competitive advantage through benchmarking\n\nCompetitive insights have become essential for product leaders aiming to lead their category rather than merely participate in it. Understanding how your digital experience compares to competitors provides crucial context for decision-making and resource allocation.\n\nJurnii AI transforms competitive benchmarking from an occasional, resource-intensive activity into an ongoing capability. The platform allows you to systematically benchmark your CX against key competitors and industry standards with unprecedented ease and frequency.\n\nThis capability helps product teams identify specific gaps and opportunities, showing precisely where your product stands and where the most significant gains lie for your customer experience. Rather than relying on subjective assessments or anecdotal feedback, teams can make decisions based on quantified comparisons across multiple dimensions of the experience.\n\nBy moving beyond internal metrics and directly comparing your experience to market alternatives, you gain a strategic advantage that helps prioritize improvements with the greatest competitive impact. This outside-in perspective often reveals blind spots that internal assessments miss; areas where competitors are excelling or where industry standards have evolved beyond your current offering.\n\nThe benchmarking capabilities of Jurnii AI extend beyond simple scoring to include detailed analysis of specific experience elements, from navigation patterns to content presentation to interaction models. This granularity allows product teams to identify not just that they're lagging in certain areas, but specifically why and how competitors are delivering superior experiences.\n\nFor product leaders, this competitive intelligence reshapes prioritization discussions from opinion-based debates to evidence-based decisions. When resources are limited, as they invariably are, having clear, quantified competitive gaps helps ensure investments flow to the areas with the greatest potential impact on market position.\n\n## Scaling product insights without more resources\n\nOne of the most significant advantages of AI-powered UX benchmarking is the ability to dramatically scale insight generation without corresponding increases in team size or budget. For product leaders facing constant pressure to do more with less, this capability represents a fundamental shift in how CX research can be approached.\n\n- **Reduced Costs:** Product teams using Jurnii AI report reducing their research costs by thousands, compared to traditional methods, freeing budget for other strategic initiatives.\n- **Time Savings:** Early adopter agencies reported time savings of up to 90% on CX analysis delivery, allowing a faster response to market changes and customer needs.\n- **Project Capacity:** Teams can support up to three times more projects without increasing resources, enabling broader coverage across products, markets, and customer segments.\n\nThe automation of data collection, analysis, and benchmarking through Jurnii AI delivers actionable insights in real-time, fundamentally changing the efficiency equation for product teams. This transformation means teams can:\n\n- **Expand Research Coverage:** Rather than limiting UX benchmarking to major releases or key journeys, teams can continuously monitor the entire digital experience across all touchpoints.\n- **Democratise CX Insights:** With insights generated automatically and available on-demand, product teams can extend access beyond UX specialists to include developers, marketers, and business stakeholders.\n- **Accelerate Development Cycles:** By eliminating research bottlenecks, product teams can incorporate UX insights into each sprint, enabling truly data-informed development cycles.\n- **Shift from Reactive to Proactive:** Instead of addressing issues after they've impacted customers, teams can identify and resolve potential problems before they affect the business.\n\n## Jurnii Studio: blending automation with expert strategy\n\nWhile AI-powered automation delivers efficiency in UX benchmarking, many product leaders recognise the continued value of expert judgment and strategic guidance. Jurnii Studio addresses this need by providing a human overlay that combines the speed of AI with the contextual understanding of experienced CX professionals.\n\n### Fractional CX leadership\n\n- Gain access to top-tier CX, UX, and product leaders on demand, providing strategic guidance without the overhead of full-time hires.\n- These experienced professionals bring contextual understanding and industry best practices to complement the data-driven insights from Jurnii AI.\n\n### Human AI collaboration\n\n- Receive expert interpretation and prioritization of Jurnii AI outputs, reshaping recommendations into strategic roadmaps aligned with business objectives.\n- This human-AI approach adds nuances and contextual insights, ensuring recommendations align with brand values and business constraints.\n\nThis hybrid approach recognizes that while AI excels at pattern recognition, data analysis, and identifying standard best practices, Jurnii Studio experts bring critical capabilities in areas such as:\n\n- Aligning UX improvements with broader business strategy and brand positioning.\n- Navigating complex stakeholder environments and organisational politics.\n- Balancing competing priorities across different business units or objectives.\n- Identifying innovative approaches that go beyond established patterns.\n- Providing a contextual understanding of industry-specific constraints and opportunities.\n\nFor product leaders, Jurnii Studio offers the ideal balance, capturing the efficiency gains of AI-powered benchmarking while maintaining access to strategic guidance that reflects the unique context of their business and market. This combination ensures that insights don't simply identify what needs improvement, but also provide a clear, actionable path forward that accounts for practical implementation considerations.\n\n## Real-world impact & the future of product CX\n\nThe true measure of any innovation is its impact in real-world applications. Jurnii's approach to AI-powered UX benchmarking has demonstrated significant value across diverse organisations, with validated outcomes that speak to its transformative potential.\n\n> \"This kind of report would have taken our research team three months to generate in-house.\"\n\n— Ryan Schembri, CPO at Betsson\n\n> \"I am blown away by the volume and the richness of the report… gave me a 'first time using ChatGPT' feeling.\"\n\n— David Cox, CX Lead at Ooredoo\n\n- **85% Superior Reports:** Of users rated Jurnii reports as better or much better than previous manual audits in terms of depth, breadth, and actionability.\n- **<5% Variance:** The difference between Jurnii AI analysis and expert-led analysis, demonstrating the platform's accuracy and reliability.\n- **2x Faster Improvement:** Brands using Jurnii AI saw conversion rate improvements twice as quickly due to rapid CX iteration enabled by instant insights.\n\n### Product CX in the AI era: speed, scale, and insight\n\nAs we look ahead, it's clear that AI-powered approaches to UX benchmarking represent not just an incremental improvement but a fundamental shift in how product teams approach customer experience. By delivering speed, scale, cost-efficiency, and competitive insight, Jurnii enables product leaders to:\n\n- Embed CX intelligence into every stage of the product development lifecycle.\n- Respond to market changes and customer needs with unprecedented agility.\n- Allocate resources more effectively based on quantified impact potential.\n- Build a continuous improvement culture supported by consistent feedback.\n\nWith customer expectations rising and digital experiences become even more central to business success, the ability to rapidly assess, benchmark, and improve CX will become a defining competitive advantage.\n"
+    "bodyHtml": "<h1>The product leader&#39;s guide to AI-powered UX benchmarking</h1>\n<p>By Fraser Dunk, Founder &amp; CEO</p>\n<p>Product leaders face constant pressure to deliver exceptional customer experiences while contending with traditional research methods that are often slow, expensive, and difficult to scale. This guide explores how AI-powered UX benchmarking is changing the way product teams gather insights, make decisions, and stay ahead of the competition, all without draining resources or extending deadlines.</p>\n<h2>The evolving CX landscape for product teams</h2>\n<p>Product teams operate in an increasingly complex environment where customer experience (CX) has become the primary differentiator between success and stagnation. As digital touch points multiply and consumer expectations soar, the ability to deliver exceptional experiences has never been more critical to business outcomes.</p>\n<p>However, product leaders face a significant challenge: traditional UX and CX research methods are struggling to keep pace with the demands of modern product development cycles. These established approaches, while valuable in their depth, present substantial barriers to teams working in agile environments.</p>\n<p>The most pressing issues include lengthy research cycles that can stretch for weeks or months, prohibitive costs that limit how frequently studies can be conducted, and difficulties in scaling research operations to match product growth. This creates immense pressure on product teams to find faster, more cost-efficient tools that don&#39;t compromise on insight quality.</p>\n<p>The direct correlation between slow UX testing and lost revenue becomes increasingly apparent as competitors with more agile research capabilities can iterate and improve their products more rapidly, capturing market share in the process.</p>\n<p>Against this backdrop, we&#39;re witnessing a transformative opportunity. As AI adoption accelerates across industries, it&#39;s creating new possibilities for gathering and processing CX insights at unprecedented speed and scale. This shift introduces the concept of instant UX benchmarking, a new approach that enables product teams to understand and improve digital CX with remarkable efficiency.</p>\n<p>This evolution toward AI-powered insights represents not just an incremental improvement but a fundamental reimagining of how product teams can approach user experience research and customer experience optimisation.</p>\n<h2>The challenges of traditional CX research</h2>\n<p>Traditional UX and customer research methodologies present significant obstacles for product teams seeking to enhance digital experiences. These long-established approaches, while thorough, create bottlenecks that can slow down innovation and delay critical improvements.</p>\n<h3>Time &amp; cost constraints</h3>\n<ul>\n<li>Research cycles typically span weeks or months, requiring substantial budgets for recruitment, facilitation, and analysis.</li>\n<li>For many organisations, this approach is fundamentally unsustainable when scaling operations across multiple products or markets.</li>\n<li>Typical usability studies cost £10,000-£30,000.</li>\n<li>Research cycles often take 4-8 weeks to complete.</li>\n<li>Resource constraints limit the frequency of studies.</li>\n</ul>\n<h3>Limited visibility</h3>\n<ul>\n<li>Product teams frequently struggle with disconnected user journeys and inadequate competitive benchmarking capabilities.</li>\n<li>Conventional methods rarely provide holistic views of the entire customer experience, instead focusing on specific touchpoints.</li>\n<li>Siloed testing of individual features rather than end-to-end journeys.</li>\n<li>Difficulty comparing performance against competitors.</li>\n<li>Challenges in prioritising improvements across multiple areas.</li>\n</ul>\n<h3>Delayed decisions</h3>\n<ul>\n<li>Long-established approaches significantly delay the delivery of insights, restricting the ability to make swift, data-driven decisions.</li>\n<li>This creates a fundamental mismatch with agile development practices.</li>\n<li>Insights often arrive too late to influence development cycles.</li>\n<li>Slow feedback loops hamper iteration speed.</li>\n<li>Opportunity costs accumulate as improvements remain unimplemented.</li>\n</ul>\n<p>These challenges create a perfect storm for product teams, who find themselves needing to move quickly while still maintaining a deep understanding of user needs and experiences. Standard methods force an uncomfortable choice between speed and insight quality; a compromise that ultimately impacts both product performance and team effectiveness.</p>\n<p>The persistence of these challenges has created an environment ripe for disruption, where new approaches that can deliver comparable insights without the associated time and cost burdens have the potential to change how product teams operate and compete.</p>\n<h2>Introducing Jurnii AI: your solution for instant UX benchmarking</h2>\n<p>Jurnii AI represents a breakthrough solution for product teams seeking immediate, actionable CX insights. As an AI-powered CX insight platform specifically designed for digital brands, Jurnii AI fundamentally alters how teams approach benchmarking and optimization.</p>\n<h3>No-Code solution</h3>\n<ul>\n<li>Enter any URL and receive a comprehensive CX report in minutes, eliminating technical barriers to insight generation.</li>\n<li>No integration is required, and setup takes minutes rather than days or weeks, allowing teams to start gaining insights immediately.</li>\n</ul>\n<h3>Automated insights</h3>\n<ul>\n<li>Jurnii AI automatically handles data collection, analysis, and benchmarking, replacing time-consuming manual processes with AI-powered efficiency.</li>\n<li>This automation dramatically reduces the resource burden on product and research teams.</li>\n</ul>\n<h3>Comprehensive metrics</h3>\n<ul>\n<li>Access key metrics covering Usability, Perception, Journey, and Performance, providing a holistic view of your digital experience.</li>\n<li>The Jurnii Score offers a unified CX performance metric that simplifies tracking and reporting.</li>\n</ul>\n<h3>What Jurnii AI delivers</h3>\n<ul>\n<li><strong>Instant Reports:</strong> Unlike traditional methods that take weeks, Jurnii AI delivers comprehensive analysis in minutes, enabling immediate action.</li>\n<li><strong>Competitive Insights:</strong> Easily benchmark your CX against competitors to identify gaps and opportunities, helping prioritize improvements that will create meaningful differentiation in the market.</li>\n<li><strong>Actionable Recommendations:</strong> Each report includes AI-powered recommendations for both quick-win and strategic improvements, prioritized by potential impact.</li>\n<li><strong>Continuous Monitoring:</strong> Track CX performance over time to measure the impact of changes and identify emerging issues before they affect business metrics.</li>\n</ul>\n<p>By eliminating the traditional barriers of time, cost, and technical complexity, Jurnii AI enables product teams to integrate CX insights into their regular workflows. This fundamental shift allows for more frequent testing, faster iteration, and ultimately, more competitive digital experiences.</p>\n<h2>Unlocking competitive advantage through benchmarking</h2>\n<p>Competitive insights have become essential for product leaders aiming to lead their category rather than merely participate in it. Understanding how your digital experience compares to competitors provides crucial context for decision-making and resource allocation.</p>\n<p>Jurnii AI transforms competitive benchmarking from an occasional, resource-intensive activity into an ongoing capability. The platform allows you to systematically benchmark your CX against key competitors and industry standards with unprecedented ease and frequency.</p>\n<p>This capability helps product teams identify specific gaps and opportunities, showing precisely where your product stands and where the most significant gains lie for your customer experience. Rather than relying on subjective assessments or anecdotal feedback, teams can make decisions based on quantified comparisons across multiple dimensions of the experience.</p>\n<p>By moving beyond internal metrics and directly comparing your experience to market alternatives, you gain a strategic advantage that helps prioritize improvements with the greatest competitive impact. This outside-in perspective often reveals blind spots that internal assessments miss; areas where competitors are excelling or where industry standards have evolved beyond your current offering.</p>\n<p>The benchmarking capabilities of Jurnii AI extend beyond simple scoring to include detailed analysis of specific experience elements, from navigation patterns to content presentation to interaction models. This granularity allows product teams to identify not just that they&#39;re lagging in certain areas, but specifically why and how competitors are delivering superior experiences.</p>\n<p>For product leaders, this competitive intelligence reshapes prioritization discussions from opinion-based debates to evidence-based decisions. When resources are limited, as they invariably are, having clear, quantified competitive gaps helps ensure investments flow to the areas with the greatest potential impact on market position.</p>\n<h2>Scaling product insights without more resources</h2>\n<p>One of the most significant advantages of AI-powered UX benchmarking is the ability to dramatically scale insight generation without corresponding increases in team size or budget. For product leaders facing constant pressure to do more with less, this capability represents a fundamental shift in how CX research can be approached.</p>\n<ul>\n<li><strong>Reduced Costs:</strong> Product teams using Jurnii AI report reducing their research costs by thousands, compared to traditional methods, freeing budget for other strategic initiatives.</li>\n<li><strong>Time Savings:</strong> Early adopter agencies reported time savings of up to 90% on CX analysis delivery, allowing a faster response to market changes and customer needs.</li>\n<li><strong>Project Capacity:</strong> Teams can support up to three times more projects without increasing resources, enabling broader coverage across products, markets, and customer segments.</li>\n</ul>\n<p>The automation of data collection, analysis, and benchmarking through Jurnii AI delivers actionable insights in real-time, fundamentally changing the efficiency equation for product teams. This transformation means teams can:</p>\n<ul>\n<li><strong>Expand Research Coverage:</strong> Rather than limiting UX benchmarking to major releases or key journeys, teams can continuously monitor the entire digital experience across all touchpoints.</li>\n<li><strong>Democratise CX Insights:</strong> With insights generated automatically and available on-demand, product teams can extend access beyond UX specialists to include developers, marketers, and business stakeholders.</li>\n<li><strong>Accelerate Development Cycles:</strong> By eliminating research bottlenecks, product teams can incorporate UX insights into each sprint, enabling truly data-informed development cycles.</li>\n<li><strong>Shift from Reactive to Proactive:</strong> Instead of addressing issues after they&#39;ve impacted customers, teams can identify and resolve potential problems before they affect the business.</li>\n</ul>\n<h2>Jurnii Studio: blending automation with expert strategy</h2>\n<p>While AI-powered automation delivers efficiency in UX benchmarking, many product leaders recognise the continued value of expert judgment and strategic guidance. Jurnii Studio addresses this need by providing a human overlay that combines the speed of AI with the contextual understanding of experienced CX professionals.</p>\n<h3>Fractional CX leadership</h3>\n<ul>\n<li>Gain access to top-tier CX, UX, and product leaders on demand, providing strategic guidance without the overhead of full-time hires.</li>\n<li>These experienced professionals bring contextual understanding and industry best practices to complement the data-driven insights from Jurnii AI.</li>\n</ul>\n<h3>Human AI collaboration</h3>\n<ul>\n<li>Receive expert interpretation and prioritization of Jurnii AI outputs, reshaping recommendations into strategic roadmaps aligned with business objectives.</li>\n<li>This human-AI approach adds nuances and contextual insights, ensuring recommendations align with brand values and business constraints.</li>\n</ul>\n<p>This hybrid approach recognizes that while AI excels at pattern recognition, data analysis, and identifying standard best practices, Jurnii Studio experts bring critical capabilities in areas such as:</p>\n<ul>\n<li>Aligning UX improvements with broader business strategy and brand positioning.</li>\n<li>Navigating complex stakeholder environments and organisational politics.</li>\n<li>Balancing competing priorities across different business units or objectives.</li>\n<li>Identifying innovative approaches that go beyond established patterns.</li>\n<li>Providing a contextual understanding of industry-specific constraints and opportunities.</li>\n</ul>\n<p>For product leaders, Jurnii Studio offers the ideal balance, capturing the efficiency gains of AI-powered benchmarking while maintaining access to strategic guidance that reflects the unique context of their business and market. This combination ensures that insights don&#39;t simply identify what needs improvement, but also provide a clear, actionable path forward that accounts for practical implementation considerations.</p>\n<h2>Real-world impact &amp; the future of product CX</h2>\n<p>The true measure of any innovation is its impact in real-world applications. Jurnii&#39;s approach to AI-powered UX benchmarking has demonstrated significant value across diverse organisations, with validated outcomes that speak to its transformative potential.</p>\n<blockquote>\n<p>&quot;This kind of report would have taken three months to generate via usual research processes.&quot;</p>\n</blockquote>\n<p>— Ryan Schembri, CPO at Betsson</p>\n<blockquote>\n<p>&quot;I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a &#39;first time using ChatGPT&#39; feeling.&quot;</p>\n</blockquote>\n<p>— David Cox, CX Consultant</p>\n<ul>\n<li><strong>85% Superior Reports:</strong> Of users rated Jurnii reports as better or much better than previous manual audits in terms of depth, breadth, and actionability.</li>\n<li><strong>&lt;5% Variance:</strong> The difference between Jurnii AI analysis and expert-led analysis, demonstrating the platform&#39;s accuracy and reliability.</li>\n<li><strong>2x Faster Improvement:</strong> Brands using Jurnii AI saw conversion rate improvements twice as quickly due to rapid CX iteration enabled by instant insights.</li>\n</ul>\n<h3>Product CX in the AI era: speed, scale, and insight</h3>\n<p>As we look ahead, it&#39;s clear that AI-powered approaches to UX benchmarking represent not just an incremental improvement but a fundamental shift in how product teams approach customer experience. By delivering speed, scale, cost-efficiency, and competitive insight, Jurnii enables product leaders to:</p>\n<ul>\n<li>Embed CX intelligence into every stage of the product development lifecycle.</li>\n<li>Respond to market changes and customer needs with unprecedented agility.</li>\n<li>Allocate resources more effectively based on quantified impact potential.</li>\n<li>Build a continuous improvement culture supported by consistent feedback.</li>\n</ul>\n<p>With customer expectations rising and digital experiences become even more central to business success, the ability to rapidly assess, benchmark, and improve CX will become a defining competitive advantage.</p>\n",
+    "rawContent": "# The product leader's guide to AI-powered UX benchmarking\n\nBy Fraser Dunk, Founder & CEO\n\nProduct leaders face constant pressure to deliver exceptional customer experiences while contending with traditional research methods that are often slow, expensive, and difficult to scale. This guide explores how AI-powered UX benchmarking is changing the way product teams gather insights, make decisions, and stay ahead of the competition, all without draining resources or extending deadlines.\n\n## The evolving CX landscape for product teams\n\nProduct teams operate in an increasingly complex environment where customer experience (CX) has become the primary differentiator between success and stagnation. As digital touch points multiply and consumer expectations soar, the ability to deliver exceptional experiences has never been more critical to business outcomes.\n\nHowever, product leaders face a significant challenge: traditional UX and CX research methods are struggling to keep pace with the demands of modern product development cycles. These established approaches, while valuable in their depth, present substantial barriers to teams working in agile environments.\n\nThe most pressing issues include lengthy research cycles that can stretch for weeks or months, prohibitive costs that limit how frequently studies can be conducted, and difficulties in scaling research operations to match product growth. This creates immense pressure on product teams to find faster, more cost-efficient tools that don't compromise on insight quality.\n\nThe direct correlation between slow UX testing and lost revenue becomes increasingly apparent as competitors with more agile research capabilities can iterate and improve their products more rapidly, capturing market share in the process.\n\nAgainst this backdrop, we're witnessing a transformative opportunity. As AI adoption accelerates across industries, it's creating new possibilities for gathering and processing CX insights at unprecedented speed and scale. This shift introduces the concept of instant UX benchmarking, a new approach that enables product teams to understand and improve digital CX with remarkable efficiency.\n\nThis evolution toward AI-powered insights represents not just an incremental improvement but a fundamental reimagining of how product teams can approach user experience research and customer experience optimisation.\n\n## The challenges of traditional CX research\n\nTraditional UX and customer research methodologies present significant obstacles for product teams seeking to enhance digital experiences. These long-established approaches, while thorough, create bottlenecks that can slow down innovation and delay critical improvements.\n\n### Time & cost constraints\n\n- Research cycles typically span weeks or months, requiring substantial budgets for recruitment, facilitation, and analysis.\n- For many organisations, this approach is fundamentally unsustainable when scaling operations across multiple products or markets.\n- Typical usability studies cost £10,000-£30,000.\n- Research cycles often take 4-8 weeks to complete.\n- Resource constraints limit the frequency of studies.\n\n### Limited visibility\n\n- Product teams frequently struggle with disconnected user journeys and inadequate competitive benchmarking capabilities.\n- Conventional methods rarely provide holistic views of the entire customer experience, instead focusing on specific touchpoints.\n- Siloed testing of individual features rather than end-to-end journeys.\n- Difficulty comparing performance against competitors.\n- Challenges in prioritising improvements across multiple areas.\n\n### Delayed decisions\n\n- Long-established approaches significantly delay the delivery of insights, restricting the ability to make swift, data-driven decisions.\n- This creates a fundamental mismatch with agile development practices.\n- Insights often arrive too late to influence development cycles.\n- Slow feedback loops hamper iteration speed.\n- Opportunity costs accumulate as improvements remain unimplemented.\n\nThese challenges create a perfect storm for product teams, who find themselves needing to move quickly while still maintaining a deep understanding of user needs and experiences. Standard methods force an uncomfortable choice between speed and insight quality; a compromise that ultimately impacts both product performance and team effectiveness.\n\nThe persistence of these challenges has created an environment ripe for disruption, where new approaches that can deliver comparable insights without the associated time and cost burdens have the potential to change how product teams operate and compete.\n\n## Introducing Jurnii AI: your solution for instant UX benchmarking\n\nJurnii AI represents a breakthrough solution for product teams seeking immediate, actionable CX insights. As an AI-powered CX insight platform specifically designed for digital brands, Jurnii AI fundamentally alters how teams approach benchmarking and optimization.\n\n### No-Code solution\n\n- Enter any URL and receive a comprehensive CX report in minutes, eliminating technical barriers to insight generation.\n- No integration is required, and setup takes minutes rather than days or weeks, allowing teams to start gaining insights immediately.\n\n### Automated insights\n\n- Jurnii AI automatically handles data collection, analysis, and benchmarking, replacing time-consuming manual processes with AI-powered efficiency.\n- This automation dramatically reduces the resource burden on product and research teams.\n\n### Comprehensive metrics\n\n- Access key metrics covering Usability, Perception, Journey, and Performance, providing a holistic view of your digital experience.\n- The Jurnii Score offers a unified CX performance metric that simplifies tracking and reporting.\n\n### What Jurnii AI delivers\n\n- **Instant Reports:** Unlike traditional methods that take weeks, Jurnii AI delivers comprehensive analysis in minutes, enabling immediate action.\n- **Competitive Insights:** Easily benchmark your CX against competitors to identify gaps and opportunities, helping prioritize improvements that will create meaningful differentiation in the market.\n- **Actionable Recommendations:** Each report includes AI-powered recommendations for both quick-win and strategic improvements, prioritized by potential impact.\n- **Continuous Monitoring:** Track CX performance over time to measure the impact of changes and identify emerging issues before they affect business metrics.\n\nBy eliminating the traditional barriers of time, cost, and technical complexity, Jurnii AI enables product teams to integrate CX insights into their regular workflows. This fundamental shift allows for more frequent testing, faster iteration, and ultimately, more competitive digital experiences.\n\n## Unlocking competitive advantage through benchmarking\n\nCompetitive insights have become essential for product leaders aiming to lead their category rather than merely participate in it. Understanding how your digital experience compares to competitors provides crucial context for decision-making and resource allocation.\n\nJurnii AI transforms competitive benchmarking from an occasional, resource-intensive activity into an ongoing capability. The platform allows you to systematically benchmark your CX against key competitors and industry standards with unprecedented ease and frequency.\n\nThis capability helps product teams identify specific gaps and opportunities, showing precisely where your product stands and where the most significant gains lie for your customer experience. Rather than relying on subjective assessments or anecdotal feedback, teams can make decisions based on quantified comparisons across multiple dimensions of the experience.\n\nBy moving beyond internal metrics and directly comparing your experience to market alternatives, you gain a strategic advantage that helps prioritize improvements with the greatest competitive impact. This outside-in perspective often reveals blind spots that internal assessments miss; areas where competitors are excelling or where industry standards have evolved beyond your current offering.\n\nThe benchmarking capabilities of Jurnii AI extend beyond simple scoring to include detailed analysis of specific experience elements, from navigation patterns to content presentation to interaction models. This granularity allows product teams to identify not just that they're lagging in certain areas, but specifically why and how competitors are delivering superior experiences.\n\nFor product leaders, this competitive intelligence reshapes prioritization discussions from opinion-based debates to evidence-based decisions. When resources are limited, as they invariably are, having clear, quantified competitive gaps helps ensure investments flow to the areas with the greatest potential impact on market position.\n\n## Scaling product insights without more resources\n\nOne of the most significant advantages of AI-powered UX benchmarking is the ability to dramatically scale insight generation without corresponding increases in team size or budget. For product leaders facing constant pressure to do more with less, this capability represents a fundamental shift in how CX research can be approached.\n\n- **Reduced Costs:** Product teams using Jurnii AI report reducing their research costs by thousands, compared to traditional methods, freeing budget for other strategic initiatives.\n- **Time Savings:** Early adopter agencies reported time savings of up to 90% on CX analysis delivery, allowing a faster response to market changes and customer needs.\n- **Project Capacity:** Teams can support up to three times more projects without increasing resources, enabling broader coverage across products, markets, and customer segments.\n\nThe automation of data collection, analysis, and benchmarking through Jurnii AI delivers actionable insights in real-time, fundamentally changing the efficiency equation for product teams. This transformation means teams can:\n\n- **Expand Research Coverage:** Rather than limiting UX benchmarking to major releases or key journeys, teams can continuously monitor the entire digital experience across all touchpoints.\n- **Democratise CX Insights:** With insights generated automatically and available on-demand, product teams can extend access beyond UX specialists to include developers, marketers, and business stakeholders.\n- **Accelerate Development Cycles:** By eliminating research bottlenecks, product teams can incorporate UX insights into each sprint, enabling truly data-informed development cycles.\n- **Shift from Reactive to Proactive:** Instead of addressing issues after they've impacted customers, teams can identify and resolve potential problems before they affect the business.\n\n## Jurnii Studio: blending automation with expert strategy\n\nWhile AI-powered automation delivers efficiency in UX benchmarking, many product leaders recognise the continued value of expert judgment and strategic guidance. Jurnii Studio addresses this need by providing a human overlay that combines the speed of AI with the contextual understanding of experienced CX professionals.\n\n### Fractional CX leadership\n\n- Gain access to top-tier CX, UX, and product leaders on demand, providing strategic guidance without the overhead of full-time hires.\n- These experienced professionals bring contextual understanding and industry best practices to complement the data-driven insights from Jurnii AI.\n\n### Human AI collaboration\n\n- Receive expert interpretation and prioritization of Jurnii AI outputs, reshaping recommendations into strategic roadmaps aligned with business objectives.\n- This human-AI approach adds nuances and contextual insights, ensuring recommendations align with brand values and business constraints.\n\nThis hybrid approach recognizes that while AI excels at pattern recognition, data analysis, and identifying standard best practices, Jurnii Studio experts bring critical capabilities in areas such as:\n\n- Aligning UX improvements with broader business strategy and brand positioning.\n- Navigating complex stakeholder environments and organisational politics.\n- Balancing competing priorities across different business units or objectives.\n- Identifying innovative approaches that go beyond established patterns.\n- Providing a contextual understanding of industry-specific constraints and opportunities.\n\nFor product leaders, Jurnii Studio offers the ideal balance, capturing the efficiency gains of AI-powered benchmarking while maintaining access to strategic guidance that reflects the unique context of their business and market. This combination ensures that insights don't simply identify what needs improvement, but also provide a clear, actionable path forward that accounts for practical implementation considerations.\n\n## Real-world impact & the future of product CX\n\nThe true measure of any innovation is its impact in real-world applications. Jurnii's approach to AI-powered UX benchmarking has demonstrated significant value across diverse organisations, with validated outcomes that speak to its transformative potential.\n\n> \"This kind of report would have taken three months to generate via usual research processes.\"\n\n— Ryan Schembri, CPO at Betsson\n\n> \"I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling.\"\n\n— David Cox, CX Consultant\n\n- **85% Superior Reports:** Of users rated Jurnii reports as better or much better than previous manual audits in terms of depth, breadth, and actionability.\n- **<5% Variance:** The difference between Jurnii AI analysis and expert-led analysis, demonstrating the platform's accuracy and reliability.\n- **2x Faster Improvement:** Brands using Jurnii AI saw conversion rate improvements twice as quickly due to rapid CX iteration enabled by instant insights.\n\n### Product CX in the AI era: speed, scale, and insight\n\nAs we look ahead, it's clear that AI-powered approaches to UX benchmarking represent not just an incremental improvement but a fundamental shift in how product teams approach customer experience. By delivering speed, scale, cost-efficiency, and competitive insight, Jurnii enables product leaders to:\n\n- Embed CX intelligence into every stage of the product development lifecycle.\n- Respond to market changes and customer needs with unprecedented agility.\n- Allocate resources more effectively based on quantified impact potential.\n- Build a continuous improvement culture supported by consistent feedback.\n\nWith customer expectations rising and digital experiences become even more central to business success, the ability to rapidly assess, benchmark, and improve CX will become a defining competitive advantage.\n"
   },
   {
     "path": "/Users/tristandexter/Desktop/jurnii-website-v2/content/library/the-psychology-of-the-multi-homing-player-what-triggers-the-switch.md",

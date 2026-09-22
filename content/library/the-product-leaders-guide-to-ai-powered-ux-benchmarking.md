@@ -160,13 +160,13 @@ For product leaders, Jurnii Studio offers the ideal balance, capturing the effic
 
 The true measure of any innovation is its impact in real-world applications. Jurnii's approach to AI-powered UX benchmarking has demonstrated significant value across diverse organisations, with validated outcomes that speak to its transformative potential.
 
-> "This kind of report would have taken our research team three months to generate in-house."
+> "This kind of report would have taken three months to generate via usual research processes."
 
 — Ryan Schembri, CPO at Betsson
 
-> "I am blown away by the volume and the richness of the report… gave me a 'first time using ChatGPT' feeling."
+> "I am blown away by the volume and the richness of the report Jurnii provides. A really powerful tool that gave me a 'first time using ChatGPT' feeling."
 
-— David Cox, CX Lead at Ooredoo
+— David Cox, CX Consultant
 
 - **85% Superior Reports:** Of users rated Jurnii reports as better or much better than previous manual audits in terms of depth, breadth, and actionability.
 - **<5% Variance:** The difference between Jurnii AI analysis and expert-led analysis, demonstrating the platform's accuracy and reliability.

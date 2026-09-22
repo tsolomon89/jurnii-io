@@ -190,6 +190,16 @@ export const BaseEntitySchema = z.object({
       z.object({
         type: z.literal('renderFlag'),
         data: z.string()
+      }),
+      z.object({
+        type: z.literal('snapshot'),
+        data: z.object({
+          id: z.string(),
+          eyebrow: z.string(),
+          heading: z.string(),
+          lede: z.string().optional(),
+          closing: z.string().optional(),
+        }),
       })
     ])
   ).optional(),
