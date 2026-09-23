@@ -2684,6 +2684,15 @@ test('announcing a page sets its own title and description', () => {
   assert.strictEqual(
     win.document.querySelector('meta[name="description"]').getAttribute('content'),
     'Multi-touch attribution for operators.');
+  assert.strictEqual(
+    win.document.querySelector('meta[property="og:title"]').getAttribute('content'),
+    'Attribution · Jurnii');
+  assert.strictEqual(
+    win.document.querySelector('meta[property="og:image"]').getAttribute('content'),
+    pageContext.DEFAULT_OG_IMAGE);
+  assert.strictEqual(
+    win.document.querySelector('meta[name="twitter:image"]').getAttribute('content'),
+    pageContext.DEFAULT_OG_IMAGE);
 });
 
 test('a title that already carries the brand is not double-branded', () => {
