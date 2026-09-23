@@ -84,6 +84,9 @@ function copyRuntimeAssets() {
         'jurnii-icon-dark.svg',
         'jurnii-light-full.svg',
         'jurnii-dark-full.svg',
+        // Default OG/Twitter share image. Referenced by absolute URL from index.html
+        // meta tags — must ship unhashed at /assets/og-default.jpg.
+        'og-default.jpg',
       ];
       const destDir = path.join(root, 'dist/assets');
       fs.mkdirSync(destDir, { recursive: true });

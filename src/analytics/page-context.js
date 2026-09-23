@@ -120,6 +120,19 @@ export function pageTitle(title, fallback) {
   return /jurnii/i.test(base) ? base : base + ' · Jurnii';
 }
 
+/** Production absolute URL for the site-wide default share image (see index.html). */
+export const DEFAULT_OG_IMAGE = 'https://jurnii.io/assets/og-default.jpg';
+
+function upsertMeta(d, attr, key, content) {
+  let tag = d.querySelector('meta[' + attr + '="' + key + '"]');
+  if (!tag) {
+    tag = d.createElement('meta');
+    tag.setAttribute(attr, key);
+    d.head.appendChild(tag);
+  }
+  tag.setAttribute('content', content);
+}
+
 /**
  * Set the document's own identity.
  *
@@ -127,22 +140,29 @@ export function pageTitle(title, fallback) {
  * and screen-reader announcement read the homepage title. Fixing it is a prerequisite
  * for GA4 reporting, but it is a real defect in its own right — hence the meta
  * description alongside it, which has the identical cause and the same one-line fix.
+ *
+ * OG/Twitter title and description are kept in sync for clients that re-read the DOM.
+ * Crawlers still see the static defaults in index.html (they do not run the SPA). The
+ * share image stays the site-wide default on every route.
  */
 export function setPageIdentity(title, description, doc) {
   const d = doc || (typeof document !== 'undefined' ? document : null);
   if (!d) return;
 
-  if (title) d.title = title;
+  if (title) {
+    d.title = title;
+    upsertMeta(d, 'property', 'og:title', title);
+    upsertMeta(d, 'name', 'twitter:title', title);
+  }
 
   if (description) {
-    let tag = d.querySelector('meta[name="description"]');
-    if (!tag) {
-      tag = d.createElement('meta');
-      tag.setAttribute('name', 'description');
-      d.head.appendChild(tag);
-    }
-    tag.setAttribute('content', description);
+    upsertMeta(d, 'name', 'description', description);
+    upsertMeta(d, 'property', 'og:description', description);
+    upsertMeta(d, 'name', 'twitter:description', description);
   }
+
+  upsertMeta(d, 'property', 'og:image', DEFAULT_OG_IMAGE);
+  upsertMeta(d, 'name', 'twitter:image', DEFAULT_OG_IMAGE);
 }
 
 /** Has this document already announced itself? Reset only by a real page load. */
