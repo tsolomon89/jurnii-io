@@ -1,0 +1,23 @@
+{
+  "title": "Invalid 360 Change Detection Near Miss",
+  "medium": "Market Report",
+  "reportLens": "jurnii-360",
+  "reportFormat": "change-detection",
+  "productRefs": ["jurnii-360"],
+  "date": "2026-09-23",
+  "analysisPeriod": {
+    "start": "2026-08-01",
+    "end": "2026-08-31"
+  },
+  "asOf": "2026-09-01",
+  "sourceCapturedAt": "2026-09-23T10:00:00Z",
+  "comparisonMode": "delta",
+  "cohort": {
+    "markets": ["GB"],
+    "comparisonUnits": [{ "brand": "Midnite", "market": "GB" }]
+  },
+  "evidenceManifest": "evidence/manifest.json",
+  "socialPackage": "social/package.json",
+  "dataFreshnessNote": "Testing invalid 360 change detection combination.",
+  "publicationStatus": "draft"
+}

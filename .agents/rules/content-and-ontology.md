@@ -16,3 +16,4 @@
 5. **No SaaS Filler**: Prohibit generic SaaS language ("leverage", "seamless", "synergy"). Rely exclusively on the specific commercial tone defined in the brand guide and writing skill.
 6. **No AI Superlatives**: Banish "revolutionary", "game-changing", "transformative", or "next-generation".
 7. **Consistent Cross-Linking**: Ensure that the relational graph is respected. Features must link to their parent Products, and Solutions must link to the Features they operate on.
+8. **Market Report Routing**: Any content with `medium: Market Report` sits outside the Four Pillars and general Library article workflow. It must strictly route through `.agents/context/market-reports/canonical-specification.md` and the dedicated skills (`jurnii-market-report-research`, `jurnii-market-report-authoring`, `jurnii-market-report-social`). Accidental product mixing is prohibited.

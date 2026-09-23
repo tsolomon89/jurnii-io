@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200">
+  <defs>
+    <style>
+      text {
+        font-family: Geist, ui-sans-serif, system-ui, -apple-system, sans-serif;
+        font-weight: 500;
+        letter-spacing: -0.025em;
+      }
+    </style>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d16"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="cyanAccent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#818cf8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#bgGrad)"/>
+  
+  <!-- Subtle circular grid geometry -->
+  <circle cx="950" cy="600" r="420" fill="none" stroke="rgba(56, 189, 248, 0.15)" stroke-width="2"/>
+  <circle cx="950" cy="600" r="300" fill="none" stroke="rgba(56, 189, 248, 0.1)" stroke-width="1.5"/>
+  <circle cx="950" cy="600" r="180" fill="none" stroke="rgba(56, 189, 248, 0.08)" stroke-width="1"/>
+  
+  <!-- Brand logo mark placeholder -->
+  <circle cx="950" cy="600" r="10" fill="#38bdf8"/>
+  <circle cx="850" cy="500" r="6" fill="#818cf8"/>
+  <circle cx="1020" cy="450" r="5" fill="#38bdf8" opacity="0.6"/>
+
+  <!-- Content typography -->
+  <text x="100" y="380" fill="#38bdf8" font-size="28" font-weight="700" letter-spacing="0.1em">JURNII UX · FULL MARKET BENCHMARK</text>
+  <text x="100" y="470" fill="#f8fafc" font-size="68" font-weight="800">UK Sportsbook</text>
+  <text x="100" y="550" fill="#f8fafc" font-size="68" font-weight="800">UX Benchmark</text>
+  <text x="100" y="640" fill="#94a3b8" font-size="32" font-weight="400">Onboarding, Usability, and Performance Across 7 Brands</text>
+  
+  <rect x="100" y="710" width="340" height="2" fill="url(#cyanAccent)"/>
+  
+  <text x="100" y="770" fill="#64748b" font-size="24">September 2026 · Proprietary Platform Telemetry</text>
+</svg>

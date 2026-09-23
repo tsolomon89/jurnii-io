@@ -1,8 +1,12 @@
-# Quill Library — Report Inventory (igaming international)
+> ⚠️ **HISTORICAL BACKFILL INVENTORY ONLY**:
+> This inventory reflects a 2026-08-03 crawl of Quill under the superseded regional report model.
+> **DO NOT USE AS CURRENT AUTHORITY.** The canonical specification is at [`.agents/context/market-reports/canonical-specification.md`](../market-reports/canonical-specification.md). Current intelligence derives from `https://app.jurnii.io`.
+
+# Quill Library — Report Inventory (Historical Recovery Archive)
 
 Source: https://quill.jurnii.io (Jurnii intelligence workspace, "The Filing Cabinet")
-Crawled: 2026-08-03
-Purpose: Source artifacts for in-depth international/regional igaming research reports (Brazil, UK, LATAM, EU + US).
+Crawled: 2026-08-03 (Historical snapshot)
+Purpose: Recovery and backfill artifacts for longitudinal analysis. Active reports use the 3-lens/7-format system.
 
 ## Extraction method
 Reports render as self-contained "Bundled Page" HTML (JS builds the DOM at runtime) inside a sandboxed `srcdoc` iframe (`sandbox="allow-scripts allow-popups"`, opaque origin). Content is read by removing the sandbox attribute (making the srcdoc same-origin), reloading, and reading `iframe.contentDocument.body.innerText`. Summary metadata (type, date range, tags, regions, versions) comes from the top-document report page.

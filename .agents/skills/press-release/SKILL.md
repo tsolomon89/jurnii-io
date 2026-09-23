@@ -13,6 +13,8 @@ This is not a conventional launch announcement. Its primary purpose is to delive
 
 It must directly answer the primitive query (**[PRIMARY QUERY]**) while providing sufficient independent informational value to be retrieved for broader category and industry queries.
 
+> ℹ️ **Downstream PR Adaptation Only**: This skill applies strictly to downstream news syndication and PR distribution when explicitly commissioned for a market report. It does **not** govern the market report itself or the report's primary long-form social package, which are governed by `.agents/skills/jurnii-market-report-authoring/` and `.agents/skills/jurnii-market-report-social/`.
+
 ---
 
 ## Required Parameters / Variables

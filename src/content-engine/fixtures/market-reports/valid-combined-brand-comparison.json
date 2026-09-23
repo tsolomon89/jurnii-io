@@ -1,0 +1,26 @@
+{
+  "title": "William Hill vs Midnite UK: Acquisition Generosity vs Product Retention",
+  "medium": "Market Report",
+  "reportLens": "combined",
+  "reportFormat": "brand-comparison",
+  "productRefs": ["jurnii-ux", "jurnii-360"],
+  "date": "2026-09-23",
+  "analysisPeriod": {
+    "start": "2026-08-01",
+    "end": "2026-09-23"
+  },
+  "asOf": "2026-09-23",
+  "sourceCapturedAt": "2026-09-23T12:00:00Z",
+  "comparisonMode": "snapshot",
+  "cohort": {
+    "markets": ["GB"],
+    "comparisonUnits": [
+      { "brand": "William Hill", "market": "GB" },
+      { "brand": "Midnite", "market": "GB" }
+    ]
+  },
+  "evidenceManifest": "evidence/combined-wh-midnite-manifest.json",
+  "socialPackage": "social/combined-wh-midnite-social.json",
+  "dataFreshnessNote": "Head-to-head comparison integrating UX benchmarks and promotional intelligence from August-September 2026.",
+  "publicationStatus": "draft"
+}

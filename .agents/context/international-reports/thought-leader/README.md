@@ -1,8 +1,12 @@
-# International iGaming Intelligence, Thought-Leadership Series
+> ⚠️ **HISTORICAL ARTIFACT ONLY**:
+> This series was written under the superseded regional/geography-first research model.
+> **DO NOT IMPLEMENT FROM THIS MODEL.** Active market reports are governed by [`.agents/context/market-reports/canonical-specification.md`](../../market-reports/canonical-specification.md).
+
+# International iGaming Intelligence, Thought-Leadership Series (Historical Archive)
 
 Brand-neutral, region-focused research reports written in the **Jurnii house voice** (per `.agents/context/brand-guide`): calm authority, commercially literate, specific claims with numbers, no hype or UX-softness, "intelligence layer" category framing. Each develops a **single argument** (Pillar 1, *Experience is the battleground*) deeply evidenced from the crawled Quill data in `.agents/context/international-reports/`.
 
-These pieces are about **markets and regions**, not individual operators. Operators appear only as evidence of market patterns, never as the subject, target, or hero.
+These pieces represent historical essays about **markets and regions**, not the active 3-lens and 7-format market report contracts. Operators appear only as evidence of market patterns, never as the subject, target, or hero.
 
 ## The series
 | # | Region | Title | Single argument |

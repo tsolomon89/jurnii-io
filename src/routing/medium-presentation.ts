@@ -1,15 +1,18 @@
 import { ContentMeta } from '../content-engine/types';
 
 export interface MediumPresentation {
-  format: 'article' | 'paper' | 'page';
+  format: 'article' | 'paper' | 'page' | 'report';
   mediumName: string;
-  templateClass: 'ArticleTemplate' | 'PaperTemplate' | 'GeneralPageTemplate';
+  templateClass: 'ArticleTemplate' | 'PaperTemplate' | 'GeneralPageTemplate' | 'MarketReportTemplate';
 }
 
 export function toCanonicalMedium(mediumStr: string = ''): string {
   const m = mediumStr.trim().toLowerCase();
   if (m === 'paper' || m === 'journal' || m === 'proof' || m === 'monograph') {
     return 'Paper';
+  }
+  if (m === 'market report' || m === 'market-report' || m === 'report') {
+    return 'Market Report';
   }
   if (m === 'article' || m === 'essay' || m === 'note' || m === 'post') {
     return 'Article';
@@ -29,6 +32,14 @@ export function resolveMediumPresentation(
       format: 'paper',
       mediumName: 'Paper',
       templateClass: 'PaperTemplate',
+    };
+  }
+
+  if (canonical === 'Market Report') {
+    return {
+      format: 'report',
+      mediumName: 'Market Report',
+      templateClass: 'MarketReportTemplate',
     };
   }
 

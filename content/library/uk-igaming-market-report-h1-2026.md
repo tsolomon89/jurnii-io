@@ -21,11 +21,14 @@ tags:
   - United Kingdom
   - Promotional Intelligence
   - UX Benchmarking
-isIndexable: true
+isIndexable: false
+noindex: true
+isLegacyRegionalReport: true
+supersededBy: /.agents/context/market-reports/canonical-specification.md
 coverImage: /assets/library/uk-igaming-market-report-h1-2026/cover.svg
 ---
 
-# The UK iGaming Market Report, H1 2026
+> ⚠ **Superseded Model — Historical Archive**: This report was produced under Jurnii's superseded regional-report model (Quill crawl, August 2026). It combines Jurnii 360 promotional tracking and Jurnii UX benchmarking across a single market without declaring or adhering to the active Combined contract and taxonomy. It is preserved for historical reference and backfill continuity. For active intelligence, see the [Market Report Canonical Specification](/.agents/context/market-reports/canonical-specification.md).
 
 *Promotional intensity, margin discipline, and the experience layer in the first duty-compressed year.*
 

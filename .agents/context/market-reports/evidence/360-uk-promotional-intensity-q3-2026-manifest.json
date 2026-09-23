@@ -1,0 +1,155 @@
+{
+  "manifestVersion": "1.0.0",
+  "reportSlug": "360-uk-sportsbook-promotional-intensity-and-generosity-q3-2026",
+  "reportLens": "jurnii-360",
+  "reportFormat": "full-market",
+  "sources": [
+    {
+      "id": "SRC-360-001",
+      "system": "app.jurnii.io",
+      "product": "jurnii-360",
+      "reportTitle": "UK Market Coverage Promotional Overview",
+      "stableIdentifier": "c360-uk-coverage-5e9bfde7",
+      "comparisonUnit": { "brand": "UK Market Coverage", "market": "GB" },
+      "market": "GB",
+      "reportDate": "2026-09-23",
+      "analysisPeriod": { "start": "2026-09-01", "end": "2026-09-23" },
+      "captureTimestamp": "2026-09-23T12:24:00Z",
+      "locator": "https://app.jurnii.io/c360/5e9bfde7-0a16-4ec7-ab3f-0ba9ad2cdae3",
+      "metrics": [
+        { "id": "M-360-TOT-VAL", "name": "Total Promotional Market Value", "value": 26820949, "unit": "GBP", "dimension": "Generosity" },
+        { "id": "M-360-AVG-VAL", "name": "Average Promotion Value", "value": 62230, "unit": "GBP", "dimension": "Generosity" },
+        { "id": "M-360-RICH-IDX", "name": "Market Richness Index", "value": 3288.5, "unit": "%", "dimension": "Richness" },
+        { "id": "M-360-TOT-PROMO", "name": "Total Active Promotions", "value": 315, "unit": "count", "dimension": "Volume" },
+        { "id": "M-360-TOT-BOOST", "name": "Total Active Boosts", "value": 1117, "unit": "count", "dimension": "Volume" },
+        { "id": "M-360-AVG-BOOST", "name": "Average Boost Percentage", "value": 26.0, "unit": "%", "dimension": "Generosity" },
+        { "id": "M-360-HIGH-OFFER", "name": "Highest Single Offer Value (Bet365 Drops & Wins)", "value": 490000, "unit": "GBP", "dimension": "Generosity" }
+      ]
+    },
+    {
+      "id": "SRC-360-002",
+      "system": "app.jurnii.io",
+      "product": "jurnii-360",
+      "reportTitle": "UK Brand Promotional Activity Leaderboard",
+      "stableIdentifier": "c360-uk-brand-activity",
+      "comparisonUnit": { "brand": "UK Market Coverage", "market": "GB" },
+      "market": "GB",
+      "reportDate": "2026-09-23",
+      "analysisPeriod": { "start": "2026-09-22", "end": "2026-09-23" },
+      "captureTimestamp": "2026-09-23T12:24:00Z",
+      "locator": "https://app.jurnii.io/c360/5e9bfde7-0a16-4ec7-ab3f-0ba9ad2cdae3/overview",
+      "metrics": [
+        { "id": "M-360-ACT-LAD", "name": "Ladbrokes Active Promotions", "value": 29, "unit": "count", "dimension": "Volume" },
+        { "id": "M-360-ACT-WH", "name": "William Hill Active Promotions", "value": 18, "unit": "count", "dimension": "Volume" },
+        { "id": "M-360-ACT-BF", "name": "Betfair Active Promotions", "value": 15, "unit": "count", "dimension": "Volume" },
+        { "id": "M-360-ACT-PP", "name": "Paddy Power Active Promotions", "value": 13, "unit": "count", "dimension": "Volume" },
+        { "id": "M-360-ACT-B365", "name": "Bet365 Active Promotions", "value": 13, "unit": "count", "dimension": "Volume" },
+        { "id": "M-360-ACT-SKY", "name": "SkyBet Active Promotions", "value": 12, "unit": "count", "dimension": "Volume" },
+        { "id": "M-360-ACT-MID", "name": "Midnite Active Promotions", "value": 8, "unit": "count", "dimension": "Volume" },
+        { "id": "M-360-ALL-LAD", "name": "Ladbrokes Total 24h Offers Detected", "value": 75, "unit": "count", "dimension": "Volume" }
+      ]
+    },
+    {
+      "id": "SRC-360-003",
+      "system": "app.jurnii.io",
+      "product": "jurnii-360",
+      "reportTitle": "UK Boost Feed Market Distribution",
+      "stableIdentifier": "c360-uk-boost-feed",
+      "comparisonUnit": { "brand": "UK Market Coverage", "market": "GB" },
+      "market": "GB",
+      "reportDate": "2026-09-23",
+      "analysisPeriod": { "start": "2026-09-22", "end": "2026-09-23" },
+      "captureTimestamp": "2026-09-23T12:24:00Z",
+      "locator": "https://app.jurnii.io/c360/5e9bfde7-0a16-4ec7-ab3f-0ba9ad2cdae3/boost-feed",
+      "metrics": [
+        { "id": "M-360-BOOST-WH", "name": "William Hill Active Boosts", "value": 368, "unit": "count", "dimension": "Volume" },
+        { "id": "M-360-BOOST-LAD", "name": "Ladbrokes Active Boosts", "value": 230, "unit": "count", "dimension": "Volume" },
+        { "id": "M-360-BOOST-B365", "name": "Bet365 Active Boosts", "value": 198, "unit": "count", "dimension": "Volume" },
+        { "id": "M-360-BOOST-SKY", "name": "SkyBet Active Boosts", "value": 129, "unit": "count", "dimension": "Volume" },
+        { "id": "M-360-BOOST-MID", "name": "Midnite Active Boosts", "value": 101, "unit": "count", "dimension": "Volume" },
+        { "id": "M-360-BOOST-PP", "name": "Paddy Power Active Boosts", "value": 66, "unit": "count", "dimension": "Volume" },
+        { "id": "M-360-BOOST-BF", "name": "Betfair Active Boosts", "value": 25, "unit": "count", "dimension": "Volume" }
+      ]
+    }
+  ],
+  "calculations": [
+    {
+      "id": "CALC-360-001",
+      "name": "William Hill Share of Total Market Boosts",
+      "formula": "(William Hill Boosts [368] / Total Active Boosts [1117]) * 100",
+      "inputs": ["M-360-BOOST-WH", "M-360-TOT-BOOST"],
+      "output": 32.9,
+      "unit": "%"
+    },
+    {
+      "id": "CALC-360-002",
+      "name": "Top 3 Operators Share of Total Market Boosts",
+      "formula": "((William Hill [368] + Ladbrokes [230] + Bet365 [198]) / Total Active Boosts [1117]) * 100",
+      "inputs": ["M-360-BOOST-WH", "M-360-BOOST-LAD", "M-360-BOOST-B365", "M-360-TOT-BOOST"],
+      "output": 71.3,
+      "unit": "%"
+    },
+    {
+      "id": "CALC-360-003",
+      "name": "Ladbrokes vs Midnite Promotional Activity Ratio",
+      "formula": "Ladbrokes Active Promotions [29] / Midnite Active Promotions [8]",
+      "inputs": ["M-360-ACT-LAD", "M-360-ACT-MID"],
+      "output": 3.6,
+      "unit": "ratio"
+    }
+  ],
+  "images": [
+    {
+      "id": "IMG-360-001",
+      "sourceId": "SRC-360-001",
+      "path": "/assets/library/360-uk-sportsbook-promotional-intensity-and-generosity-q3-2026/360-promotional-landscape.svg",
+      "caption": "UK Sportsbook Promotional Intensity & Boost Distribution across Tier-1 Operators (September 2026).",
+      "alt": "Chart showing boost counts led by William Hill (368) and promotional counts led by Ladbrokes (29).",
+      "period": "September 2026",
+      "approvalState": "draft",
+      "isPublicSafe": true
+    }
+  ],
+  "claims": [
+    {
+      "id": "CLM-360-001",
+      "statement": "Total tracked promotional value in the UK market reached £26,820,949 across 315 active campaigns, yielding an overall Market Richness Index of 3,288.5%.",
+      "sourceIds": ["SRC-360-001"],
+      "productProvenance": "jurnii-360",
+      "confidence": "high"
+    },
+    {
+      "id": "CLM-360-002",
+      "statement": "William Hill controls 32.9% of all price and odds boosts in the regulated UK market with 368 active boosts, outstripping its nearest competitor Ladbrokes (230 boosts) by 60%.",
+      "sourceIds": ["SRC-360-001", "SRC-360-003"],
+      "calculationIds": ["CALC-360-001"],
+      "productProvenance": "jurnii-360",
+      "confidence": "high"
+    },
+    {
+      "id": "CLM-360-003",
+      "statement": "The three most aggressive boost providers (William Hill, Ladbrokes, and Bet365) account for 71.3% of all enhanced odds offers active in the UK market.",
+      "sourceIds": ["SRC-360-001", "SRC-360-003"],
+      "calculationIds": ["CALC-360-002"],
+      "productProvenance": "jurnii-360",
+      "confidence": "high"
+    },
+    {
+      "id": "CLM-360-004",
+      "statement": "Ladbrokes leads the market in promotional campaign frequency with 29 active sports promotions and 75 total 24-hour offers, operating at 3.6 times the campaign volume of challenger brand Midnite (8 promotions).",
+      "sourceIds": ["SRC-360-002"],
+      "calculationIds": ["CALC-360-003"],
+      "productProvenance": "jurnii-360",
+      "confidence": "high"
+    },
+    {
+      "id": "CLM-360-005",
+      "statement": "Bet & Get mechanics represent the single most prevalent acquisition structure at 13.4% of all promotions, while Football dominates boost allocation with a 34.8% market share.",
+      "sourceIds": ["SRC-360-001"],
+      "productProvenance": "jurnii-360",
+      "confidence": "high"
+    }
+  ],
+  "limitationsSummary": "Telemetry captured from Jurnii 360 UK Market Coverage across 24 monitored operators in September 2026. Private VIP email concessions and bespoke customer service retention bonuses are excluded.",
+  "approvalState": "draft"
+}

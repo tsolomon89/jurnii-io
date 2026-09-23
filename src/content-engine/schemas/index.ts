@@ -4,3 +4,4 @@ export * from './project.schema';
 export * from './post.schema';
 export * from './page.schema';
 export * from './case-study.schema';
+export * from './market-report.schema';

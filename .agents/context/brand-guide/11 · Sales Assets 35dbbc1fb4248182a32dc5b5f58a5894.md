@@ -88,32 +88,36 @@ Each asset entry covers: what it is, what job it does in the sales process, what
 
 ---
 
-### 1.3 Market intelligence reports (quarterly) 🔴
+### 1.3 Market intelligence reports (quarterly & event-driven) 🔴
 
-**What it is:** A data-led report on a specific iGaming market moment — promotional activity around a major sporting event, UX trends across a vertical, or a regional competitive snapshot — produced quarterly using Jurnii platform data.
+**What it is:** A time-bounded, evidence-led comparative analysis of the iGaming market through a declared Jurnii product lens (`jurnii-ux`, `jurnii-360`, or `combined`), delivered as both an authoritative website report and a linked set of long-form social posts. Governed by the [Market Report Canonical Specification](../market-reports/canonical-specification.md).
 
 **Job in the sales process:** The highest-credibility outreach trigger available. When sent to a named account as the opening message, a market report demonstrates what Jurnii can do — without any product pitch. It generates replies because it's genuinely useful, not because it's promotional. Also used as a PR asset, event leave-behind, and LinkedIn distribution source.
 
+**Analytical lenses and formats:**
+- **Jurnii UX:** `full-market` (leaderboard & journey scorecard), `brand-comparison` (head-to-head journey deep dive), `change-detection` (before/after telemetry over bounded window).
+- **Jurnii 360:** `full-market` (promotional intensity & SoPV), `brand-comparison` (head-to-head proposition & generosity).
+- **Combined:** `full-market` (proposition vs experience alignment), `brand-comparison` (paired commercial radar & UX delivery).
+
 **What it should contain:**
+- Report identity: lens, format, comparison units, observation window, as-of date
+- 3–5 key findings, each pairing specific telemetry with a commercial consequence
+- Format-specific comparative analysis or change-detection scorecard
+- Concrete commercial implications (NGR, FTDs, CAC, hold rate, churn)
+- Methodology note & data freshness disclosures
+- Lens-specific Jurnii CTA (e.g. UX audit walkthrough or 360 competitor radar briefing)
+- Linked social package: at least 2 distinct long-form LinkedIn posts (flagship thesis + focused teardown)
 
-- Methodology note (what was analysed, over what period, which brands)
-- 3–5 key findings, each with a specific data point and a one-sentence commercial implication
-- Market context (what broader trend does this data connect to?)
-- Commercial implications for operators (what should they do?)
-- Jurnii CTA — specific, not generic: "If you want to see how your platform compares to this data, book a demo at [jurnii.io](http://jurnii.io)"
-- Jurnii branding, designed to dark brand template
+**Format:** Digital report on `jurnii.io/library/` and executive PDF. Designed to dark brand template.
 
-**Format:** PDF (print and digital). Also structured for Webflow publication. Under 6 pages.
-
-**Cadence:** Quarterly. Priority events: Cheltenham (Q1), Grand National (Q2), World Cup qualifiers / Euros (Q3), SiGMA / Q4 review (Q4).
+**Cadence:** Quarterly and event-driven. Priority events: Cheltenham (Q1), Grand National (Q2), World Cup / Euros (Q3), SiGMA / Q4 review (Q4).
 
 **Example report titles:**
+- *UK Sportsbook Onboarding Benchmarks: Friction and Defection Across 5 Tier-1 Operators* (UX / full-market)
+- *The UK Promotional Landscape: Cheltenham 2026 — What the Top 10 Operators Offered and What It Cost Them* (360 / full-market)
+- *Betano vs Novibet Brazil: PIX Velocity, Cashier Depth, and the First-Deposit Battleground* (UX / brand-comparison)
 
-- *The UK Promotional Landscape: Cheltenham 2026 — What the Top 10 Operators Offered and What It Cost Them*
-- *Registration Flow Benchmarks: Which UK Sportsbooks Are Losing FTDs Before the First Deposit*
-- *LATAM Emerging Markets: UX Readiness Scores Across 40 Operators Entering the Region*
-
-**Input required:** Jurnii platform data export, Fraser narrative (2–3 sentences on the key argument), brand template.
+**Input required:** Jurnii platform data export (`app.jurnii.io`), evidence ledger, approved screenshot/figure assets, brand template.
 
 ---
 

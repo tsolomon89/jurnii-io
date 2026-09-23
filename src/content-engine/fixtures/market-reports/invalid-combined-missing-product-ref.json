@@ -1,0 +1,27 @@
+{
+  "title": "Invalid Combined Missing Product Ref",
+  "medium": "Market Report",
+  "reportLens": "combined",
+  "reportFormat": "full-market",
+  "productRefs": ["jurnii-ux"],
+  "date": "2026-09-23",
+  "analysisPeriod": {
+    "start": "2026-08-01",
+    "end": "2026-08-31"
+  },
+  "asOf": "2026-09-01",
+  "sourceCapturedAt": "2026-09-23T10:00:00Z",
+  "comparisonMode": "snapshot",
+  "cohort": {
+    "markets": ["GB"],
+    "comparisonUnits": [
+      { "brand": "Midnite", "market": "GB" },
+      { "brand": "Bet365", "market": "GB" },
+      { "brand": "Ladbrokes", "market": "GB" }
+    ]
+  },
+  "evidenceManifest": "evidence/manifest.json",
+  "socialPackage": "social/package.json",
+  "dataFreshnessNote": "Testing invalid combined productRefs missing jurnii-360.",
+  "publicationStatus": "draft"
+}

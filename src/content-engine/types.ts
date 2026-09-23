@@ -114,6 +114,24 @@ export interface EditorialPageModel {
   pdfUrl: string | null;
 }
 
+export interface MarketReportPageModel extends EditorialPageModel {
+  reportLens: 'jurnii-ux' | 'jurnii-360' | 'combined';
+  reportFormat: 'full-market' | 'brand-comparison' | 'change-detection';
+  analysisPeriod?: { start: string; end: string };
+  asOf?: string;
+  sourceCapturedAt?: string;
+  comparisonMode?: string;
+  cohort?: {
+    comparisonUnits: { brand: string; market: string }[];
+    markets: string[];
+  };
+  evidenceManifest?: string;
+  socialPackage?: string;
+  dataFreshnessNote?: string;
+  publicationStatus?: 'draft' | 'approved';
+  isLegacyRegionalReport?: boolean;
+}
+
 export interface GeneralPageModel {
   slug: string;
   title: string;

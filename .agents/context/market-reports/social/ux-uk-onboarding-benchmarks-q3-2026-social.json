@@ -1,0 +1,55 @@
+{
+  "packageVersion": "1.0.0",
+  "reportSlug": "ux-uk-tier-1-sportsbook-onboarding-benchmarks-q3-2026",
+  "reportTitle": "UK Sportsbook UX Benchmark: Journey Integrity and Technical Latency Across 5 Tier-1 Brands",
+  "reportLens": "jurnii-ux",
+  "reportFormat": "full-market",
+  "posts": [
+    {
+      "id": "POST-UX-001",
+      "channel": "linkedin",
+      "postType": "flagship",
+      "angle": "Scale vs journey quality: why challenger UX outpaces incumbent platforms in the UK",
+      "targetAudience": "CPO, Head of Product, CMO, iGaming Leadership",
+      "asOfDate": "September 2026",
+      "body": "In UK sports betting, market share no longer guarantees experience quality.\n\nOur September 2026 UX benchmark across 5 tier-1 UK sportsbooks reveals a 34-point performance spread between the market leader and its heritage peers:\n\n• Midnite leads the tier-1 cohort with an overall Jurnii UX score of 78/100, driven by an 87/100 Performance rating and strong customer sentiment (79/100).\n• Paddy Power achieves 60/100, held back by front-end rendering bottlenecks.\n• SkyCasino records 54/100, with steady usability offset by subdued responsiveness.\n• William Hill registers 49/100, carrying 465 identified UX improvement recommendations.\n• Ladbrokes trails at 44/100, burdened by an acute perception deficit of 15/100.\n\nThe cohort average sits at 57.0/100. That means the typical regulated UK bettor is navigating an experience with substantial friction in core journeys.\n\nWhen player acquisition costs exceed £120 in a 40% Remote Gaming Duty environment, leaking players during onboarding is an unsustainable drain on your operating margin.\n\nExperience is the differentiator you can actually control.\n\nFull benchmark data and journey teardowns linked below.",
+      "claimIds": ["CLM-UX-001", "CLM-UX-002"],
+      "assets": [
+        {
+          "assetId": "IMG-UX-001",
+          "caption": "UK Sportsbook UX Scoreboard (September 2026)",
+          "alt": "Leaderboard chart showing Midnite (78) leading while Ladbrokes (44) trails.",
+          "order": 1
+        }
+      ],
+      "cta": {
+        "text": "Inspect the complete UK UX benchmark and journey scores",
+        "destination": "https://www.jurnii.io/library/ux-uk-tier-1-sportsbook-onboarding-benchmarks-q3-2026"
+      },
+      "status": "draft"
+    },
+    {
+      "id": "POST-UX-002",
+      "channel": "linkedin",
+      "postType": "focused",
+      "angle": "The front-end latency tax: why technical performance is draining tier-1 marketing spend",
+      "targetAudience": "Head of Engineering, Head of UX, Product Directors",
+      "asOfDate": "September 2026",
+      "body": "Most product debates in betting focus on UI layout and typography. The data shows the silent killer is front-end latency.\n\nIn our audit of 5 UK operators, Usability scores averaged 72.4/100. But front-end technical performance collapsed to critical lows for legacy platforms:\n\n1. William Hill scored 34/100 on Performance, accumulating 465 total UX debt items despite an agile 75/100 Journey flow score.\n2. Paddy Power scored 35/100, burdened by heavy render-blocking assets and a Largest Contentful Paint (LCP) between 11.0s and 12.5s.\n3. SkyCasino scored 44/100, suffering from sluggish asset delivery.\n4. By contrast, Midnite achieved 87/100 on Performance, maintaining instantaneous transitions.\n\nWhen mobile load times exceed 3.5 seconds on a cellular connection, abandonment during registration climbs steeply. In sports betting, milliseconds dictate First Time Deposit conversion.\n\nIf your marketing team is spending millions to acquire players who abandon before the cashier even renders, you do not have a marketing problem. You have an infrastructure problem.\n\nFull technical telemetry and recommendations in the report below.",
+      "claimIds": ["CLM-UX-003", "CLM-UX-004"],
+      "assets": [
+        {
+          "assetId": "IMG-UX-001",
+          "caption": "Performance vs Usability across UK Sportsbooks",
+          "alt": "Chart demonstrating technical performance deficits across legacy operators",
+          "order": 1
+        }
+      ],
+      "cta": {
+        "text": "Read the full performance and journey breakdown",
+        "destination": "https://www.jurnii.io/library/ux-uk-tier-1-sportsbook-onboarding-benchmarks-q3-2026"
+      },
+      "status": "draft"
+    }
+  ]
+}

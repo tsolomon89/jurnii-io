@@ -143,8 +143,22 @@ function processDirectory(dirPath: string, categoryKey: string): any[] {
         useCaseValueRefs: Array.isArray(parsed.data.useCaseValueRefs) ? parsed.data.useCaseValueRefs : [],
         useCaseFieldRefs: Array.isArray(parsed.data.useCaseFieldRefs) ? parsed.data.useCaseFieldRefs : [],
         isIndexable: parsed.data.isIndexable !== false,
+        noindex: parsed.data.noindex === true,
         contentKind: parsed.data.contentKind || section,
         sections: Array.isArray(parsed.data.sections) ? parsed.data.sections : [],
+        // Market Report specific fields
+        reportLens: parsed.data.reportLens,
+        reportFormat: parsed.data.reportFormat,
+        analysisPeriod: parsed.data.analysisPeriod,
+        asOf: parsed.data.asOf,
+        sourceCapturedAt: parsed.data.sourceCapturedAt,
+        comparisonMode: parsed.data.comparisonMode,
+        cohort: parsed.data.cohort,
+        evidenceManifest: parsed.data.evidenceManifest,
+        socialPackage: parsed.data.socialPackage,
+        dataFreshnessNote: parsed.data.dataFreshnessNote,
+        publicationStatus: parsed.data.publicationStatus,
+        isLegacyRegionalReport: parsed.data.isLegacyRegionalReport === true,
       };
 
       validateContentSchema(fullPath, meta as any);

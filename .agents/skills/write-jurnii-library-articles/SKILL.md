@@ -9,6 +9,8 @@ Use this skill when drafting, revising, or validating substantive educational ar
 
 Every article corresponds to a distinct public-facing Product Feature, Solution, or Use Case page on the Jurnii platform, providing deep educational value, commercial analysis, and actionable frameworks for iGaming executives and product leaders.
 
+> ⛔ **Scope Exclusion — Market Reports**: Do NOT use this skill for `medium: Market Report`. Market reports are governed strictly by the dedicated Market Report skills (`.agents/skills/jurnii-market-report-research/`, `jurnii-market-report-authoring/`, `jurnii-market-report-social/`) and the canonical specification in `.agents/context/market-reports/canonical-specification.md`. Market reports possess distinct taxonomy, validation, and social output requirements.
+
 ---
 
 ## 1. Prerequisites & Source-of-Truth Hierarchy

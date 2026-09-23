@@ -3,6 +3,7 @@ import {
   ContentItem,
   EntityPageModel,
   EditorialPageModel,
+  MarketReportPageModel,
   GeneralPageModel,
   EntityType,
 } from './types';
@@ -15,6 +16,7 @@ import { EntityPageTemplate } from '../templates/EntityPageTemplate';
 import { EntityDirectoryTemplate } from '../templates/EntityDirectoryTemplate';
 import { ArticleTemplate } from '../templates/ArticleTemplate';
 import { PaperTemplate } from '../templates/PaperTemplate';
+import { MarketReportTemplate } from '../templates/MarketReportTemplate';
 import { GeneralPageTemplate } from '../templates/GeneralPageTemplate';
 import { SharedSubdomainLayout } from '../templates/SharedSubdomainLayout';
 import { ContactPageTemplate } from '../templates/ContactPageTemplate';
@@ -73,7 +75,7 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
     return () => window.removeEventListener('popstate', onPop);
   }, []);
   const [renderState, setRenderState] = useState<{
-    type: 'entity' | 'directory' | 'article' | 'paper' | 'page' | 'contact' | 'library-index' | 'not-found';
+    type: 'entity' | 'directory' | 'article' | 'paper' | 'report' | 'page' | 'contact' | 'library-index' | 'not-found';
     data?: any;
   }>({ type: 'not-found' });
 
@@ -218,12 +220,28 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
             readingTimeMinutes: estimateReadTime(item.bodyHtml || ''),
             pdfUrl: getPdfUrl(item.slug),
           };
+          const isMarketReport = pres.templateClass === 'MarketReportTemplate' || pres.format === 'report';
+          const reportModel: MarketReportPageModel = {
+            ...edModel,
+            reportLens: item.meta.reportLens,
+            reportFormat: item.meta.reportFormat,
+            analysisPeriod: item.meta.analysisPeriod,
+            asOf: item.meta.asOf,
+            sourceCapturedAt: item.meta.sourceCapturedAt,
+            comparisonMode: item.meta.comparisonMode,
+            cohort: item.meta.cohort,
+            evidenceManifest: item.meta.evidenceManifest,
+            socialPackage: item.meta.socialPackage,
+            dataFreshnessNote: item.meta.dataFreshnessNote,
+            publicationStatus: item.meta.publicationStatus,
+            isLegacyRegionalReport: item.meta.isLegacyRegionalReport,
+          };
           setRenderState({
-            type: pres.format === 'paper' ? 'paper' : 'article',
-            data: { model: edModel, libraryItems },
+            type: pres.format === 'paper' ? 'paper' : isMarketReport ? 'report' : 'article',
+            data: { model: isMarketReport ? reportModel : edModel, libraryItems },
           });
           announce({
-            page_type: pres.format === 'paper' ? 'paper' : 'article',
+            page_type: pres.format === 'paper' ? 'paper' : isMarketReport ? 'report' : 'article',
             page_title: item.meta.title,
             description: item.meta.description || item.meta.excerpt,
             content_section: 'library',
@@ -304,7 +322,7 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
   let activeNav = 'home';
   if (renderState.type === 'entity' || renderState.type === 'directory') {
     activeNav = renderState.data.section || renderState.data.sectionPath || 'products';
-  } else if (renderState.type === 'article' || renderState.type === 'paper' || renderState.type === 'library-index') {
+  } else if (renderState.type === 'article' || renderState.type === 'paper' || renderState.type === 'report' || renderState.type === 'library-index') {
     activeNav = 'resources';
   } else if (renderState.type === 'contact') {
     activeNav = 'contact';
@@ -344,6 +362,17 @@ export const ContentEngineApp: React.FC<ContentEngineAppProps> = ({ initialPath 
             activeCategory={renderState.data.model.category}
           >
             <PaperTemplate data={renderState.data.model} />
+          </SharedSubdomainLayout>
+        );
+
+      case 'report':
+        return (
+          <SharedSubdomainLayout
+            libraryItems={renderState.data.libraryItems}
+            currentSlug={renderState.data.model.slug}
+            activeCategory={renderState.data.model.category}
+          >
+            <MarketReportTemplate data={renderState.data.model} />
           </SharedSubdomainLayout>
         );
 

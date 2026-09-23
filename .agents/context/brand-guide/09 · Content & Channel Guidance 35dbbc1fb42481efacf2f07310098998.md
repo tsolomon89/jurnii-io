@@ -72,25 +72,45 @@ Before publishing, score the hook 0–100 on: specificity (does it contain a num
 
 ## Market intelligence reports
 
-### Standard report structure
+> **Authority**: Governed by the [Market Report Canonical Specification](../market-reports/canonical-specification.md). Market reports are product-led and format-specific comparative analyses, never generic regional or country summaries.
 
-1. **Methodology note** — brief (2–3 sentences). What was analysed, over what period, across which brands. Establishes credibility.
-2. **Key findings** — 3–5 findings, each with a specific data point and a commercial implication.
-3. **Market context** — what broader trends does this data connect to?
-4. **Commercial implications** — what should operators do with this information? Specific, not generic.
-5. **Jurnii CTA** — soft, specific. Not “contact us.” “If you want to see how your promotional strategy compares to this data, request a demo.”
+### Analytical lenses and formats
+
+Reports are produced across three product lenses and seven template formats:
+1. **Jurnii UX**: `full-market` (cohort leaderboard & journey scorecard), `brand-comparison` (head-to-head journey deep dive), `change-detection` (before/after telemetry over bounded window).
+2. **Jurnii 360**: `full-market` (promotional intensity, SoPV, and Promo Richness Index across cohort), `brand-comparison` (head-to-head commercial proposition and mechanics).
+3. **Combined**: `full-market` (integrated proposition vs experience analysis), `brand-comparison` (paired commercial radar and UX reality synthesis).
+
+*Note: Accidental mixing of UX and 360 data is prohibited. Combined reports require explicit declaration and product-level claim provenance.*
+
+### Core report structure
+
+Every market report must follow its format-specific template contract:
+1. **Report identity & thesis** — lens, format, comparison units, bounded period, and as-of date.
+2. **Executive findings** — 3–5 findings, each pairing concrete telemetry with a commercial consequence.
+3. **Comparative analysis / scorecard** — format-specific deep dive with dated interface captures or data figures.
+4. **Commercial implications** — specific impact on NGR, FTDs, CAC, hold rate, or churn.
+5. **Methodology & data freshness** — explicit telemetry window, detection parameters, and limitations.
+6. **Lens-specific CTA** — tailored to the product lens (UX audit walkthrough, 360 competitor briefing, or strategic demonstration).
+
+### Linked social content package (mandatory)
+
+Every report must produce a linked social package containing at least two distinct long-form LinkedIn posts:
+1. **Flagship post**: The core thesis and market tension.
+2. **Focused post**: A specific journey teardown, mechanic contrast, or change event.
+Posts must carry traceable claim IDs, explicit as-of dates, approved visual assets, and pass evidence-ledger verification.
 
 ### Cadence
 
-Quarterly. Timed to major sporting events or industry moments (Cheltenham, Grand National, World Cup, Euros, ICE, SBC).
+Quarterly and event-triggered. Timed to major sporting events or industry moments (Cheltenham, Grand National, World Cup, Euros, ICE, SiGMA).
 
 ### Distribution
 
 Primary: Direct outreach to named accounts and warm prospects (the report is the outreach trigger, not a product pitch).
 
-Secondary: PR pitch to relevant trade publications.
+Secondary: PR pitch to relevant trade publications (via separate press-release skill adaptation).
 
-Tertiary: LinkedIn distribution via exec team.
+Tertiary: LinkedIn long-form distribution via exec team using the linked social package.
 
 ---
 

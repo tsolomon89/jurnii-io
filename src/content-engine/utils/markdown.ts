@@ -4,7 +4,7 @@ import {
   ContentKind,
 } from '../types';
 import { CONTENT_MANIFEST } from '../generated-content';
-import { ProductEntitySchema, FeatureEntitySchema, SolutionEntitySchema, UseCaseEntitySchema, PostSchema, PageSchema } from '../schemas';
+import { ProductEntitySchema, FeatureEntitySchema, SolutionEntitySchema, UseCaseEntitySchema, PostSchema, PageSchema, MarketReportSchema } from '../schemas';
 
 export const ENTITY_SECTIONS = ['products', 'features', 'solutions', 'use-cases'];
 
@@ -39,7 +39,9 @@ export function inferKindFromSection(section: string): ContentKind {
 export function validateContentSchema(filePath: string, meta: ContentMeta): void {
   const kind = meta.contentKind;
   let result;
-  if (kind === 'product' || kind === 'products') {
+  if (meta.medium === 'Market Report' && !meta.isLegacyRegionalReport) {
+    result = MarketReportSchema.safeParse(meta);
+  } else if (kind === 'product' || kind === 'products') {
     result = ProductEntitySchema.safeParse(meta);
   } else if (kind === 'feature' || kind === 'features') {
     result = FeatureEntitySchema.safeParse(meta);

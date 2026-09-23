@@ -1,0 +1,28 @@
+{
+  "title": "UK Sportsbook Promotional Intensity & SoPV, September 2026",
+  "medium": "Market Report",
+  "reportLens": "jurnii-360",
+  "reportFormat": "full-market",
+  "productRefs": ["jurnii-360"],
+  "date": "2026-09-23",
+  "analysisPeriod": {
+    "start": "2026-09-01",
+    "end": "2026-09-23"
+  },
+  "asOf": "2026-09-23",
+  "sourceCapturedAt": "2026-09-23T12:00:00Z",
+  "comparisonMode": "trajectory",
+  "cohort": {
+    "markets": ["GB"],
+    "comparisonUnits": [
+      { "brand": "Ladbrokes", "market": "GB" },
+      { "brand": "William Hill", "market": "GB" },
+      { "brand": "Betfair", "market": "GB" },
+      { "brand": "Paddy Power", "market": "GB" }
+    ]
+  },
+  "evidenceManifest": "evidence/360-uk-sopv-manifest.json",
+  "socialPackage": "social/360-uk-sopv-social.json",
+  "dataFreshnessNote": "315 promotions and 1,117 active odds boosts tracked via Jurnii 360 in September 2026.",
+  "publicationStatus": "approved"
+}

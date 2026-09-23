@@ -1,7 +1,12 @@
-# Jurnii International Market Reports — LinkedIn Publishing Schedule (H1 2026)
+> ⚠️ **RETIRED SCHEDULE — SUPERSEDED BY REPORT-SPECIFIC SOCIAL PACKAGES**:
+> This schedule was generated for the superseded regional-report model (H1 2026).
+> Under the corrected Jurnii Market Report System ([`.agents/context/market-reports/canonical-specification.md`](../market-reports/canonical-specification.md)), social content is delivered as a **linked social package** (`social-package.json`) tightly bound to each specific report's evidence ledger via `.agents/skills/jurnii-market-report-social/SKILL.md`.
+> This file is preserved as a historical marketing asset and must not be used to publish active campaigns.
 
-**Publishing Schedule:** 3x per week (Monday, Wednesday, Friday) at **16:00 UK Time** starting **Monday, August 31, 2026**.  
-**Source Materials:**
+# Jurnii International Market Reports — LinkedIn Publishing Schedule (H1 2026, Retired)
+
+**Publishing Schedule:** Historical reference only.
+**Source Materials (Legacy):**
 - `.agents/context/international-reports/market-reports/brazil-igaming-market-report-h1-2026.md`
 - `.agents/context/international-reports/market-reports/europe-igaming-market-report-h1-2026.md`
 - `.agents/context/international-reports/market-reports/uk-igaming-market-report-h1-2026.md`

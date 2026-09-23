@@ -21,11 +21,14 @@ tags:
   - Brazil
   - UX Benchmarking
   - Regulation
-isIndexable: true
+isIndexable: false
+noindex: true
+isLegacyRegionalReport: true
+supersededBy: /.agents/context/market-reports/canonical-specification.md
 coverImage: /assets/library/brazil-igaming-market-report-h1-2026/cover.svg
 ---
 
-# The Brazil iGaming Market Report, H1 2026
+> ⚠ **Superseded Model — Historical Archive**: This report was produced under Jurnii's superseded regional-report model (Quill crawl, August 2026). It presents a geography-first omnibus synthesis that mixes macroeconomic narrative with preliminary product telemetry, without adhering to the active lens-and-format taxonomy (`jurnii-ux`, `jurnii-360`, `combined`). It is preserved for historical reference and backfill continuity. For active intelligence, see the [Market Report Canonical Specification](/.agents/context/market-reports/canonical-specification.md).
 
 *Scale, shared infrastructure, and the experience contest in the first full year of regulation.*
 

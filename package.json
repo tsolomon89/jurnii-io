@@ -11,7 +11,8 @@
     "test:db": "node --import ./booking/tests/db/_guard.mjs --test \"booking/tests/db/*.test.js\"",
     "patch:html": "node scripts/patch-cwv-html.mjs",
     "lighthouse:ci": "node scripts/lighthouse-ci.mjs",
-    "perf:baseline": "node scripts/lighthouse-ci.mjs --baseline"
+    "perf:baseline": "node scripts/lighthouse-ci.mjs --baseline",
+    "validate:reports": "tsx scripts/validate-market-reports.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",

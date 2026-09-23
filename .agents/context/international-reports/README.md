@@ -1,7 +1,13 @@
-# International iGaming Reports — Source Artifacts
+> ⚠️ **LEGACY / RECOVERY MATERIAL ONLY (2026-08-03 Quill Crawl)**:
+> This directory contains historical source artifacts crawled from Quill on 2026-08-03 under the superseded regional/geography-first report model.
+> **DO NOT USE AS CURRENT AUTHORITY.**
+> The active canonical specification for Jurnii Market Reports is at [`.agents/context/market-reports/canonical-specification.md`](../market-reports/canonical-specification.md).
+> The primary authority for current intelligence is authenticated `https://app.jurnii.io`. Quill artifacts are strictly secondary backfill/recovery data.
+
+# International iGaming Reports — Source Artifacts (Historical Archive)
 
 Crawled from **Quill** (https://quill.jurnii.io — Jurnii intelligence workspace) on **2026-08-03**.
-Purpose: structured source material for building in-depth international/regional iGaming research reports (Brazil, UK, LATAM, EU, plus US).
+Purpose: Historical backfill and recovery material for previous regional research. Active reports follow the 3-lens and 7-format taxonomy.
 
 See [`_inventory.md`](_inventory.md) for the full library map and extraction method.
 

@@ -1,0 +1,55 @@
+{
+  "packageVersion": "1.0.0",
+  "reportSlug": "360-uk-sportsbook-promotional-intensity-and-generosity-q3-2026",
+  "reportTitle": "UK Sportsbook Promotional Intelligence: Intensity, Boost Economics, and Richness Across Tier-1 Brands",
+  "reportLens": "jurnii-360",
+  "reportFormat": "full-market",
+  "posts": [
+    {
+      "id": "POST-360-001",
+      "channel": "linkedin",
+      "postType": "flagship",
+      "angle": "Promotional concentration in the UK: how three operators control 71% of all price boosts",
+      "targetAudience": "CMO, Commercial Director, Head of Trading, iGaming Executives",
+      "asOfDate": "September 2026",
+      "body": "In a 40% Remote Gaming Duty market, promotional efficiency is no longer an abstract debate. It is the defining factor in operator margin retention.\n\nOur September 2026 promotional intelligence audit across 24 UK operators reveals an aggressive concentration of promotional volume:\n\n• Across the UK market, total active promotional value stands at £26,820,949 across 315 tracked campaigns, generating a Market Richness Index of 3,288.5%.\n• Ladbrokes leads overall promotional frequency with 29 active sports campaigns (and 75 total offers detected over 24 hours).\n• Three operators: William Hill (368), Ladbrokes (230), and Bet365 (198) account for 71.3% of all active price and odds boosts in the entire UK market.\n• William Hill alone controls nearly one in three active boosts (32.9% market share).\n\nWhen three heritage books flood the market with subsidized pricing to defend share, smaller operators cannot win a pure volume war.\n\nThe strategic question for commercial leaders is straightforward: are your promotional investments driving incremental customer lifetime value, or simply subsidizing margin leakage on outcomes bettors would have backed regardless?\n\nFull promotional tracking data and mechanic breakdowns linked below.",
+      "claimIds": ["CLM-360-001", "CLM-360-002", "CLM-360-003", "CLM-360-004"],
+      "assets": [
+        {
+          "assetId": "IMG-360-001",
+          "caption": "UK Sportsbook Promotional Landscape (September 2026)",
+          "alt": "Chart illustrating boost distribution and campaign frequency across UK operators",
+          "order": 1
+        }
+      ],
+      "cta": {
+        "text": "Explore the complete UK promotional intensity benchmark",
+        "destination": "https://www.jurnii.io/library/360-uk-sportsbook-promotional-intensity-and-generosity-q3-2026"
+      },
+      "status": "draft"
+    },
+    {
+      "id": "POST-360-002",
+      "channel": "linkedin",
+      "postType": "focused",
+      "angle": "The boost subsidy trap: why 1,117 active boosts are eroding sportsbook margin",
+      "targetAudience": "Head of Trading, Commercial Directors, Pricing Analysts",
+      "asOfDate": "September 2026",
+      "body": "Odds boosts have become the default weapon of UK sportsbook acquisition. But at what cost to trading margin?\n\nOur live telemetry from Jurnii 360 tracks 1,117 active boosts across the UK market, with an average enhancement rate of 26.0%:\n\n1. Football represents 34.8% of all boost volume, acting as the primary battlefield for weekend bettor attention.\n2. William Hill operates with unprecedented boost density, offering 368 active boosts compared to 101 at Midnite and 66 at Paddy Power.\n3. Bet & Get structures remain the dominant recurring mechanic, representing 13.4% of all promotions in the catalog.\n\nAn average boost enhancement of 26% significantly flattens the theoretical bookmaker margin. When combined with duty compression, high-frequency boosting without precise staking limits creates systematic margin leakage.\n\nOperators that rely on constant promotional subsidies often do so because their core digital product fails to retain players organically.\n\nSee how your brand compares on promotional richness and boost density in our full report below.",
+      "claimIds": ["CLM-360-002", "CLM-360-005"],
+      "assets": [
+        {
+          "assetId": "IMG-360-001",
+          "caption": "Boost Volume by Brand: William Hill vs Peer Group",
+          "alt": "Comparison of boost volumes across top UK bookmakers",
+          "order": 1
+        }
+      ],
+      "cta": {
+        "text": "Read the full boost economics and generosity analysis",
+        "destination": "https://www.jurnii.io/library/360-uk-sportsbook-promotional-intensity-and-generosity-q3-2026"
+      },
+      "status": "draft"
+    }
+  ]
+}
