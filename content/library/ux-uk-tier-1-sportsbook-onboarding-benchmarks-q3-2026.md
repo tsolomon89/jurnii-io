@@ -48,7 +48,7 @@ cohort:
 analysisPeriod:
   start: '2025-04-01'
   end: '2026-09-23'
-dataFreshnessNote: 'Extracted from live expert UX audits on app.jurnii.io in September 2026.'
+dataFreshnessNote: 'Captured from live expert UX audits across UK tier-1 sportsbooks in September 2026.'
 evidenceManifest: /.agents/context/market-reports/evidence/ux-uk-onboarding-benchmarks-q3-2026-manifest.json
 socialPackage: /.agents/context/market-reports/social/ux-uk-onboarding-benchmarks-q3-2026-social.json
 coverImage: /assets/library/ux-uk-tier-1-sportsbook-onboarding-benchmarks-q3-2026/cover.svg
@@ -161,15 +161,8 @@ Based on the empirical findings of this benchmark, UK sports betting product org
 
 ---
 
-## Data integrity and evidence provenance
+### Benchmark your product experience
 
-This report is compiled exclusively from empirical platform telemetry captured within Jurnii UX (`app.jurnii.io`). All scores, pillar ratings, and recommendation counts are verifiable via the canonical evidence manifest:
+Jurnii UX gives product leaders continuous visibility into competitive journey performance across 300+ operators. Identify registration bottlenecks, payment friction, and retention hurdles before they impact your NGR.
 
-- **Evidence Manifest**: `/.agents/context/market-reports/evidence/ux-uk-onboarding-benchmarks-q3-2026-manifest.json`
-- **Social Package**: `/.agents/context/market-reports/social/ux-uk-onboarding-benchmarks-q3-2026-social.json`
-- **Audited URLs**:
-  - Midnite: `https://app.jurnii.io/user-reports/expert/81b4aa08-1280-45fb-9728-d8b692432789`
-  - Paddy Power: `https://app.jurnii.io/user-reports/expert/3f3b19c5-3ac9-462b-b768-74409a9b580c`
-  - SkyCasino: `https://app.jurnii.io/user-reports/expert/aa9b9e72-aa34-473c-9d52-869ccc9fc214`
-  - William Hill: `https://app.jurnii.io/user-reports/expert/222f8407-d66e-4468-92e8-5e6580aea143`
-  - Ladbrokes: `https://app.jurnii.io/user-reports/expert/af3918ab-a0c7-4627-a396-af00e7a526cb`
+[**Request a UX Audit Walkthrough**](/contact) · [Explore Jurnii UX](/products/jurnii-ux)

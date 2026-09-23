@@ -52,7 +52,7 @@ cohort:
 analysisPeriod:
   start: '2026-09-01'
   end: '2026-09-23'
-dataFreshnessNote: 'Extracted from Jurnii 360 UK Market Coverage live feed on app.jurnii.io in September 2026.'
+dataFreshnessNote: 'Captured from live promotional intelligence tracking across 24 UK regulated sportsbooks in September 2026.'
 evidenceManifest: /.agents/context/market-reports/evidence/360-uk-promotional-intensity-q3-2026-manifest.json
 socialPackage: /.agents/context/market-reports/social/360-uk-promotional-intensity-q3-2026-social.json
 coverImage: /assets/library/360-uk-sportsbook-promotional-intensity-and-generosity-q3-2026/cover.svg
@@ -161,12 +161,8 @@ For commercial leadership navigating the UK's duty-compressed landscape, the Jur
 
 ---
 
-## Data integrity and evidence provenance
+### Monitor every competitor promotion in real time
 
-This report is compiled from verified promotional telemetry extracted from Jurnii 360 (`app.jurnii.io/c360`):
+Jurnii 360 tracks live promotional activity, odds boosts, creative messaging, and generosity metrics across the market. Never again be two weeks behind a competitor move.
 
-- **Evidence Manifest**: `/.agents/context/market-reports/evidence/360-uk-promotional-intensity-q3-2026-manifest.json`
-- **Social Package**: `/.agents/context/market-reports/social/360-uk-promotional-intensity-q3-2026-social.json`
-- **Platform Ingestion Point**: `https://app.jurnii.io/c360/5e9bfde7-0a16-4ec7-ab3f-0ba9ad2cdae3`
-- **Capture Timestamp**: September 23, 2026 at 12:24 BST
-- **Monitored Group**: UK Market Coverage (24 Regulated Operators)
+[**Request a 360 Intelligence Briefing**](/contact) · [Explore Jurnii 360](/products/jurnii-360)

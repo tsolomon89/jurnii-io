@@ -267,3 +267,11 @@ Combined Jurnii intelligence connects what competitors launch with how your digi
 4. **No Unicode Em Dashes (`—`)**: Use standard hyphens (`-`), colons, commas, or parentheses.
 5. **No Unsupported Superlatives or Buzzwords**: Prohibit "revolutionary", "game-changing", "seamless", "delightful", "leverage" (as verb), "holistic", "best-in-class".
 6. **No Vague Dates**: Never write "recently", "current", "latest", or "last month" without explicit date bounds (e.g. "Between 1 July and 31 July 2026").
+7. **Strict Separation of Public Body vs Internal Manifest (CRITICAL)**:
+   - Public-facing report Markdown in `content/library/` must read like a premier executive publication (e.g. McKinsey, Gartner, H2 Gambling Capital).
+   - **NEVER** include sections like "Data integrity and evidence provenance", "Audited URLs", or "Internal Telemetry".
+   - **NEVER** print internal repository paths (e.g. `/.agents/context/...`, `.json` manifests, or social packages) in the Markdown body.
+   - **NEVER** leak internal authentication URLs or app locators (e.g. `https://app.jurnii.io/user-reports/expert/...`, internal UUIDs, or raw scraping endpoints).
+   - Evidence manifests and social packages belong solely in YAML frontmatter for programmatic validation.
+   - Footers and methodology sections must describe professional industry methodology (e.g. Lighthouse synthetic testing on 4G cellular connections, Nielsen heuristic principles, promo catalog indexing), not internal file locations or developer mechanics.
+   - Conclude every report with the approved Lens-Specific Call-to-Action (Section 3).

@@ -187,7 +187,7 @@ if (fs.existsSync(libraryDir)) {
         } else {
           reportPass(`Social package conforms to SocialPackageSchema (${loadedSocial.posts.length} posts): ${socialRel}`);
 
-          // Validate each post claims map to evidence manifest
+          // Validate each post claims map to evidence manifest and contains no internal leaks
           loadedSocial.posts.forEach((post: any, pIdx: number) => {
             const unmappedClaims = post.claimIds.filter((cid: string) => !claimIdsInManifest.has(cid));
             if (unmappedClaims.length > 0 && claimIdsInManifest.size > 0) {
@@ -196,6 +196,19 @@ if (fs.existsSync(libraryDir)) {
               );
             } else {
               reportPass(`Social post ${post.id} claims cleanly map to evidence manifest`);
+            }
+
+            // Check no internal leaks in social post body or cta destination
+            const postLeakPatterns = [/\.agents\//i, /app\.jurnii\.io/i, /quill\.jurnii\.io/i];
+            let postHasLeak = false;
+            for (const pattern of postLeakPatterns) {
+              if (pattern.test(post.body) || pattern.test(post.cta?.destination || '')) {
+                reportFail(`Social post ${post.id} contains internal leak pattern "${pattern.source}" in body or CTA destination.`);
+                postHasLeak = true;
+              }
+            }
+            if (!postHasLeak) {
+              reportPass(`Social post ${post.id} has no internal leaks`);
             }
           });
         }
@@ -224,6 +237,28 @@ if (fs.existsSync(libraryDir)) {
       }
       if (!hasProhibited) {
         reportPass(`Clean editorial prose (no prohibited buzzwords or em dashes) in ${file}`);
+      }
+
+      // Check Prohibited Internal Scaffolding Leaks in Public Body
+      const INTERNAL_LEAK_PATTERNS = [
+        /\.agents\//i,
+        /evidenceManifest/i,
+        /socialPackage/i,
+        /app\.jurnii\.io/i,
+        /quill\.jurnii\.io/i,
+        /data integrity and evidence provenance/i,
+        /audited urls/i,
+      ];
+
+      let hasInternalLeak = false;
+      for (const pattern of INTERNAL_LEAK_PATTERNS) {
+        if (pattern.test(parsed.content)) {
+          reportFail(`Internal scaffolding or platform locator leak in public body: pattern "${pattern.source}" found in ${file}. Remove internal repo paths, evidence provenance dumps, and app URLs from the public article body.`);
+          hasInternalLeak = true;
+        }
+      }
+      if (!hasInternalLeak) {
+        reportPass(`No internal scaffolding or platform locator leaks in ${file}`);
       }
 
       // Check Unbounded Date Terms

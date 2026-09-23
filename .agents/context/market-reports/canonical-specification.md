@@ -61,14 +61,17 @@ market: string   # ISO 3166-1 alpha-2 or approved code, e.g. "GB", "BR"
 2. **Secondary / Backfill Source**: `https://quill.jurnii.io` and the historical Quill repository artifacts (`.agents/context/international-reports/`). Quill is strictly for historical backfill, time-series extension, or recovery when noted. It must **never** be presented as current live telemetry.
 3. **External Context**: Primary public regulatory filings, corporate announcements, or operator earnings reports. External sources may provide macroeconomic or regulatory context but **cannot** replace Jurnii product telemetry.
 
-### Provenance Tracking
-Every data point in a report must record:
+### Provenance Tracking (Internal Evidence Manifest)
+Every data point in a report must be recorded in the machine-readable `.agents/context/market-reports/evidence/<slug>-manifest.json`:
 - `sourceId`: Unique reference (e.g. `SRC-001`).
 - `system`: `app.jurnii.io`, `quill.jurnii.io` (marked `isBackfill: true`), or `external`.
 - `product`: `jurnii-ux` or `jurnii-360`.
 - `captureTimestamp`: ISO-8601 timestamp of extraction.
 - `analysisPeriod`: Defined start and end dates (`YYYY-MM-DD`).
 - `locator`: Safe URL path (free of session tokens, passwords, or temporary parameters).
+
+> [!IMPORTANT]
+> **Strict Content Boundary**: The evidence manifest and raw locator URLs are internal data contracts. They must **NEVER** be leaked, linked, or summarized under headings like "Data integrity and evidence provenance" in the public Markdown report body (`content/library/<slug>.md`). Public reports present clean, authoritative industry intelligence and conclude with the approved Lens-Specific Call-to-Action.
 
 ---
 

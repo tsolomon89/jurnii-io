@@ -70,7 +70,8 @@ Verify the combination is one of the seven allowed pairs:
 1. Select the format template from `.agents/skills/jurnii-market-report-authoring/SKILL.md`.
 2. Draft the report in `content/library/<slug>.md`.
 3. Adhere to British English, calm authority, no body H1, no Unicode em dashes, and explicit date bounds.
-4. Include the lens-specific CTA.
+4. **Strict Content Boundary**: Do **NEVER** include internal repo paths (e.g. `/.agents/context/...`), manifest dumps, or authenticated platform URLs in the Markdown body. Public reports present executive-facing industry intelligence and conclude with the approved lens-specific commercial CTA.
+5. Include the lens-specific CTA (Section 3 of authoring skill).
 
 ### Step 9: Process Public-Safe Visual Assets
 1. Place approved images into `assets/library/<slug>/`.

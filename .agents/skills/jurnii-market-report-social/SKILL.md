@@ -27,6 +27,7 @@ Every market report must produce a linked social package containing **at least t
 - ❌ **NO Generic Launch Clichés**: "We are excited to announce", "Thrilled to share", "Hot off the press", "Check out our latest report".
 - ❌ **NO Hashtag Spam**: Maximum 2 relevant industry hashtags (e.g. `#iGaming #ProductDesign` or `#SportsBetting`).
 - ❌ **NO Unsupported Claims**: Every statistic must link to a valid `claimId` in the report's evidence manifest.
+- ❌ **NO Internal Scaffolding or Locators**: Never mention internal repository paths (`.agents/...`), internal manifest names, or authenticated app URLs (`app.jurnii.io/user-reports/...`). External links must point exclusively to public production URLs (`https://www.jurnii.io/library/<slug>`).
 
 ---
 

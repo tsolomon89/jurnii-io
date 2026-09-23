@@ -54,5 +54,5 @@
   <text x="560" y="346" fill="#94a3b8" font-size="12">Perf: 45 · Usability: 68 · Journey: 57 · Percept: 15</text>
 
   <!-- Footer note -->
-  <text x="40" y="405" fill="#64748b" font-size="11">Source: Jurnii UX Platform (app.jurnii.io) · Expert UX Audits (Performance, Usability, Journey, Perception)</text>
+  <text x="40" y="405" fill="#64748b" font-size="11">Source: Jurnii UX Benchmark Engine · Expert Journey Audits (Performance, Usability, Journey, Perception)</text>
 </svg>

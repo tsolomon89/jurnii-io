@@ -67,6 +67,6 @@
   <rect x="80" y="520" width="1040" height="3" fill="url(#brandLine360)"/>
 
   <!-- Footer Metadata -->
-  <text x="80" y="560" fill="#64748b" font-size="13">Q3 2026 · Source: app.jurnii.io · UK Market Coverage Live Feed &amp; Boost Telemetry</text>
+  <text x="80" y="560" fill="#64748b" font-size="13">Q3 2026 · Source: Jurnii 360 · UK Market Coverage Live Feed &amp; Boost Telemetry</text>
   <text x="1120" y="560" fill="#64748b" font-size="13" text-anchor="end">Jurnii Commercial Intelligence</text>
 </svg>
